@@ -73,10 +73,10 @@ class OscillatingObstacle final : public gz::sim::System,
 
     const gz::math::Pose3d pose{x, this->y, this->z, 0.0, 0.0, 0.0};
     gz::msgs::Pose msg;
-    const auto seconds = std::chrono::duration_cast<std::chrono::seconds>(_info.simTime);
-    const auto nanoseconds = std::chrono::duration_cast<std::chrono::nanoseconds>(_info.simTime - seconds);
-    msg.mutable_header()->mutable_stamp()->set_sec(seconds.count());
-    msg.mutable_header()->mutable_stamp()->set_nsec(nanoseconds.count());
+    const auto sim_sec = std::chrono::duration_cast<std::chrono::seconds>(_info.simTime);
+    const auto sim_nsec = std::chrono::duration_cast<std::chrono::nanoseconds>(_info.simTime - sim_sec);
+    msg.mutable_header()->mutable_stamp()->set_sec(sim_sec.count());
+    msg.mutable_header()->mutable_stamp()->set_nsec(sim_nsec.count());
     msg.mutable_position()->set_x(x);
     msg.mutable_position()->set_y(this->y);
     msg.mutable_position()->set_z(this->z);

@@ -6,6 +6,7 @@ import re
 import signal
 import subprocess
 import sys
+import time
 
 TOPIC = "/dynamic_obstacle/pose"
 parser = argparse.ArgumentParser()
@@ -78,12 +79,11 @@ try:
                 continue
 
         if line == "}" and not inside_position:
-            if (
-                sec is not None
-                and nsec is not None
-                and obstacle_x is not None
-            ):
-                sim_time = sec + nsec * 1e-9
+            if obstacle_x is not None:
+                if sec is not None and nsec is not None:
+                    sim_time = sec + nsec * 1e-9
+                else:
+                    sim_time = time.time()
 
                 writer.writerow([
                     f"{sim_time:.9f}",
@@ -94,6 +94,8 @@ try:
 
             obstacle_x = None
             obstacle_y = 0.0
+            sec = None
+            nsec = None
 
 finally:
     process.terminate()

@@ -38,7 +38,7 @@ GOAL_YAW="${GOAL_YAW:-0.0}"
 GOAL_TOLERANCE="${GOAL_TOLERANCE:-0.15}"
 
 TRIAL_TIMEOUT_S="${TRIAL_TIMEOUT_S:-180}"
-READY_TIMEOUT_S="${READY_TIMEOUT_S:-45}"
+READY_TIMEOUT_S="${READY_TIMEOUT_S:-60}"
 
 ANALYZER="${ANALYZER:-$ROOT/analyze_baseline.py}"
 
@@ -483,22 +483,31 @@ run_trial() {
 
     local nav_deadline=$((SECONDS + READY_TIMEOUT_S))
 
-    while (( SECONDS < nav_deadline )); do
-        local all_active=true
+    local all_active=false
 
+    while (( SECONDS < nav_deadline )); do
+        # Check if both localization and navigation lifecycle managers confirmed active
+        if grep -q "lifecycle_manager_localization.*Managed nodes are active" "$nav_log" &&
+           grep -q "lifecycle_manager_navigation.*Managed nodes are active" "$nav_log"; then
+            echo "[READY] Nav2 stack ACTIVE (confirmed via lifecycle managers)"
+            all_active=true
+            break
+        fi
+
+        local nodes_ok=true
         for node in "${nav_nodes[@]}"; do
             local state=""
-
-            state="$(timeout 2s ros2 lifecycle get "$node" 2>/dev/null || true)"
+            state="$(timeout 3s ros2 lifecycle get "$node" 2>/dev/null || true)"
 
             if ! grep -Eq '^active[[:space:]]*\[[0-9]+\]' <<< "$state"; then
-                all_active=false
+                nodes_ok=false
                 break
             fi
         done
 
-        if [[ "$all_active" == true ]]; then
+        if [[ "$nodes_ok" == true ]]; then
             echo "[READY] Nav2 stack ACTIVE"
+            all_active=true
             break
         fi
 
@@ -552,22 +561,35 @@ run_trial() {
 
     echo "[WAIT] Waiting for AMCL pose..."
 
+    local amcl_ready=false
     local amcl_deadline=$((SECONDS + READY_TIMEOUT_S))
 
     while (( SECONDS < amcl_deadline )); do
-        if timeout 3s ros2 topic echo \
-            /amcl_pose \
-            --once \
-            >/dev/null 2>&1
-        then
-            echo "[READY] AMCL pose available"
+        # 1. Check if AMCL has processed initial pose and set it
+        if grep -q "Setting pose" "$nav_log"; then
+            echo "[READY] AMCL pose confirmed (Setting pose active in nav2 log)"
+            amcl_ready=true
+            break
+        fi
+
+        # 2. Check if /amcl_pose message can be received
+        if timeout 2s ros2 topic echo /amcl_pose --once >/dev/null 2>&1; then
+            echo "[READY] AMCL pose available via /amcl_pose"
+            amcl_ready=true
+            break
+        fi
+
+        # 3. Check if map -> odom TF is published by AMCL
+        if timeout 2s ros2 run tf2_ros tf2_echo map odom >/dev/null 2>&1; then
+            echo "[READY] AMCL transform map -> odom available"
+            amcl_ready=true
             break
         fi
 
         sleep 1
     done
 
-    if (( SECONDS >= amcl_deadline )); then
+    if [[ "$amcl_ready" != true ]]; then
         echo "[ERROR] AMCL did not publish pose"
 
         status="INVALID"
@@ -727,11 +749,16 @@ run_trial() {
 
     echo "[8/8] Stopping recording..."
 
-    stop_capture "$bag_pid" INT
+    stop_capture "$bag_pid" TERM
     bag_pid=""
 
     stop_capture "$recorder_pid" TERM
     recorder_pid=""
+
+    if [[ -d "$trial_dir" && ! -f "$trial_dir/metadata.yaml" ]]; then
+        echo "[REINDEX] Reindexing rosbag metadata..."
+        ros2 bag reindex -s mcap "$trial_dir" >/dev/null 2>&1 || true
+    fi
 
 
     # --------------------------------------------------
