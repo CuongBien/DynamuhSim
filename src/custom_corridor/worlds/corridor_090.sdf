@@ -1,0 +1,304 @@
+<?xml version="1.0"?>
+<sdf version="1.9">
+  <world name="corridor_0.90">
+
+    <gravity>0 0 -9.81</gravity>
+
+    <light name="sun" type="directional">
+      <cast_shadows>true</cast_shadows>
+      <pose>0 0 10 0 0 0</pose>
+      <diffuse>0.8 0.8 0.8 1</diffuse>
+      <specular>0.2 0.2 0.2 1</specular>
+      <attenuation>
+        <range>1000</range>
+        <constant>0.9</constant>
+        <linear>0.01</linear>
+        <quadratic>0.001</quadratic>
+      </attenuation>
+      <direction>-0.5 0.1 -0.9</direction>
+    </light>
+
+    <!-- Physics -->
+    <plugin
+        filename="gz-sim-physics-system"
+        name="gz::sim::systems::Physics"/>
+
+    <plugin
+        filename="gz-sim-user-commands-system"
+        name="gz::sim::systems::UserCommands"/>
+
+    <plugin
+        filename="gz-sim-scene-broadcaster-system"
+        name="gz::sim::systems::SceneBroadcaster"/>
+
+    <!-- Sensors -->
+    <plugin
+        filename="gz-sim-sensors-system"
+        name="gz::sim::systems::Sensors">
+      <render_engine>ogre2</render_engine>
+    </plugin>
+
+
+    <!-- Ground -->
+    <model name="ground">
+      <static>true</static>
+
+      <link name="link">
+        <collision name="collision">
+          <geometry>
+            <box>
+              <size>34.0 10.0 0.1</size>
+            </box>
+          </geometry>
+        </collision>
+
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>34.0 10.0 0.1</size>
+            </box>
+          </geometry>
+
+          <material>
+            <ambient>0.7 0.7 0.7 1</ambient>
+            <diffuse>0.7 0.7 0.7 1</diffuse>
+          </material>
+        </visual>
+      </link>
+
+      <pose>0.0 0.0 -0.05 0 0 0</pose>
+    </model>
+
+
+    <!-- Left continuous wall -->
+    <model name="left_wall">
+      <static>true</static>
+
+      <link name="link">
+        <collision name="collision">
+          <geometry>
+            <box>
+              <size>30.0 0.1 2.0</size>
+            </box>
+          </geometry>
+        </collision>
+
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>30.0 0.1 2.0</size>
+            </box>
+          </geometry>
+
+          <material>
+            <ambient>0.7 0.7 0.7 1</ambient>
+            <diffuse>0.7 0.7 0.7 1</diffuse>
+          </material>
+        </visual>
+      </link>
+
+      <pose>0.0 -0.5 1.0 0 0 0</pose>
+    </model>
+
+
+    <!-- Right wall: segment before recess -->
+    <model name="right_wall_front">
+      <static>true</static>
+
+      <link name="link">
+        <collision name="collision">
+          <geometry>
+            <box>
+              <size>16.4 0.1 2.0</size>
+            </box>
+          </geometry>
+        </collision>
+
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>16.4 0.1 2.0</size>
+            </box>
+          </geometry>
+
+          <material>
+            <ambient>0.7 0.7 0.7 1</ambient>
+            <diffuse>0.7 0.7 0.7 1</diffuse>
+          </material>
+        </visual>
+      </link>
+
+      <pose>-6.800000000000001 0.5 1.0 0 0 0</pose>
+    </model>
+
+
+    <!-- Right wall: segment after recess -->
+    <model name="right_wall_back">
+      <static>true</static>
+
+      <link name="link">
+        <collision name="collision">
+          <geometry>
+            <box>
+              <size>12.4 0.1 2.0</size>
+            </box>
+          </geometry>
+        </collision>
+
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>12.4 0.1 2.0</size>
+            </box>
+          </geometry>
+
+          <material>
+            <ambient>0.7 0.7 0.7 1</ambient>
+            <diffuse>0.7 0.7 0.7 1</diffuse>
+          </material>
+        </visual>
+      </link>
+
+      <pose>8.8 0.5 1.0 0 0 0</pose>
+    </model>
+
+
+    <!-- Recess side walls -->
+    <model name="recess_side_left">
+      <static>true</static>
+
+      <link name="link">
+        <collision name="collision">
+          <geometry>
+            <box>
+              <size>0.1 0.6 2.0</size>
+            </box>
+          </geometry>
+        </collision>
+
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>0.1 0.6 2.0</size>
+            </box>
+          </geometry>
+
+          <material>
+            <ambient>0.7 0.7 0.7 1</ambient>
+            <diffuse>0.7 0.7 0.7 1</diffuse>
+          </material>
+        </visual>
+      </link>
+
+      <pose>1.3499999999999999 0.75 1.0 0 0 0</pose>
+    </model>
+
+
+    <model name="recess_side_right">
+      <static>true</static>
+
+      <link name="link">
+        <collision name="collision">
+          <geometry>
+            <box>
+              <size>0.1 0.6 2.0</size>
+            </box>
+          </geometry>
+        </collision>
+
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>0.1 0.6 2.0</size>
+            </box>
+          </geometry>
+
+          <material>
+            <ambient>0.7 0.7 0.7 1</ambient>
+            <diffuse>0.7 0.7 0.7 1</diffuse>
+          </material>
+        </visual>
+      </link>
+
+      <pose>2.65 0.75 1.0 0 0 0</pose>
+    </model>
+
+
+    <!-- Recess back wall -->
+    <model name="recess_back">
+      <static>true</static>
+
+      <link name="link">
+        <collision name="collision">
+          <geometry>
+            <box>
+              <size>1.4 0.1 2.0</size>
+            </box>
+          </geometry>
+        </collision>
+
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>1.4 0.1 2.0</size>
+            </box>
+          </geometry>
+
+          <material>
+            <ambient>0.7 0.7 0.7 1</ambient>
+            <diffuse>0.7 0.7 0.7 1</diffuse>
+          </material>
+        </visual>
+      </link>
+
+      <pose>2.0 1.1 1.0 0 0 0</pose>
+    </model>
+
+
+    <!-- ===================================================== -->
+    <!-- Dynamic obstacle for testing                          -->
+    <!-- ===================================================== -->
+    <model name="dynamic_obstacle">
+      <pose>-1.0 0.0 0.35 0 0 0</pose>
+      <self_collide>false</self_collide>
+
+      <link name="link">
+        <!-- The plugin writes its pose every simulation tick. -->
+        <gravity>false</gravity>
+        <kinematic>true</kinematic>
+
+        <collision name="collision">
+          <geometry>
+            <cylinder>
+              <radius>0.20</radius>
+              <length>0.70</length>
+            </cylinder>
+          </geometry>
+        </collision>
+
+        <visual name="visual">
+          <geometry>
+            <cylinder>
+              <radius>0.20</radius>
+              <length>0.70</length>
+            </cylinder>
+          </geometry>
+          <material>
+            <diffuse>0.9 0.1 0.1 1</diffuse>
+            <ambient>0.9 0.1 0.1 1</ambient>
+          </material>
+        </visual>
+      </link>
+
+      <plugin filename="liboscillating_obstacle_system.so"
+              name="custom_corridor::OscillatingObstacle">
+        <min_x>-1.0</min_x>
+        <max_x>5.0</max_x>
+        <speed>1.0</speed>
+        <y>0.0</y>
+        <z>0.35</z>
+      </plugin>
+    </model>
+
+  </world>
+</sdf>
