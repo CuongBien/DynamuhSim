@@ -256,37 +256,34 @@
 
 
     <!-- ===================================================== -->
-    <!-- Dynamic obstacle for testing                          -->
+    <!-- Dynamic human pedestrian for social navigation        -->
     <!-- ===================================================== -->
     <model name="dynamic_obstacle">
-      <pose>-1.0 0.0 0.35 0 0 0</pose>
+      <pose>-1.0 0.0 0.0 0 0 0</pose>
       <self_collide>false</self_collide>
 
       <link name="link">
-        <!-- The plugin writes its pose every simulation tick. -->
         <gravity>false</gravity>
         <kinematic>true</kinematic>
 
         <collision name="collision">
+          <pose>0 0 0.85 0 0 0</pose>
           <geometry>
             <cylinder>
-              <radius>0.20</radius>
-              <length>0.70</length>
+              <radius>0.22</radius>
+              <length>1.70</length>
             </cylinder>
           </geometry>
         </collision>
 
         <visual name="visual">
+          <pose>0 0 0.0 0 0 1.5708</pose>
           <geometry>
-            <cylinder>
-              <radius>0.20</radius>
-              <length>0.70</length>
-            </cylinder>
+            <mesh>
+              <uri>model://human/meshes/walk.dae</uri>
+              <scale>1.0 1.0 1.0</scale>
+            </mesh>
           </geometry>
-          <material>
-            <diffuse>0.9 0.1 0.1 1</diffuse>
-            <ambient>0.9 0.1 0.1 1</ambient>
-          </material>
         </visual>
       </link>
 
@@ -294,9 +291,9 @@
               name="custom_corridor::OscillatingObstacle">
         <min_x>-1.0</min_x>
         <max_x>5.0</max_x>
-        <speed>1.0</speed>
+        <speed>0.8</speed>
         <y>0.0</y>
-        <z>0.35</z>
+        <z>0.0</z>
       </plugin>
     </model>
 

@@ -67,11 +67,13 @@ class OscillatingObstacle final : public gz::sim::System,
     const double span = this->maxX - this->minX;
     const double periodDistance = 2.0 * span;
     const double travelled = std::fmod(seconds * this->speed, periodDistance);
-    const double x = (travelled <= span)
+    const bool forward = (travelled <= span);
+    const double x = forward
       ? this->minX + travelled
       : this->maxX - (travelled - span);
+    const double yaw = forward ? 0.0 : M_PI;
 
-    const gz::math::Pose3d pose{x, this->y, this->z, 0.0, 0.0, 0.0};
+    const gz::math::Pose3d pose{x, this->y, this->z, 0.0, 0.0, yaw};
     gz::msgs::Pose msg;
     const auto sim_sec = std::chrono::duration_cast<std::chrono::seconds>(_info.simTime);
     const auto sim_nsec = std::chrono::duration_cast<std::chrono::nanoseconds>(_info.simTime - sim_sec);
@@ -81,10 +83,11 @@ class OscillatingObstacle final : public gz::sim::System,
     msg.mutable_position()->set_y(this->y);
     msg.mutable_position()->set_z(this->z);
 
-    msg.mutable_orientation()->set_x(0.0);
-    msg.mutable_orientation()->set_y(0.0);
-    msg.mutable_orientation()->set_z(0.0);
-    msg.mutable_orientation()->set_w(1.0);
+    const gz::math::Quaterniond q(0.0, 0.0, yaw);
+    msg.mutable_orientation()->set_x(q.X());
+    msg.mutable_orientation()->set_y(q.Y());
+    msg.mutable_orientation()->set_z(q.Z());
+    msg.mutable_orientation()->set_w(q.W());
 
     this->posePub.Publish(msg);
     if (_ecm.Component<gz::sim::components::WorldPoseCmd>(this->modelEntity) == nullptr)
