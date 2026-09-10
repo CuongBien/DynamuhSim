@@ -256,10 +256,157 @@
 
 
     <!-- ===================================================== -->
-    <!-- Dynamic human pedestrian for social navigation        -->
+    <!-- Realistic 3D Animated Walking Human Pedestrian        -->
     <!-- ===================================================== -->
+    <actor name="human_actor">
+      <skin>
+        <filename>model://human/meshes/walk.dae</filename>
+        <scale>1.0</scale>
+      </skin>
+      <animation name="walk">
+        <filename>model://human/meshes/walk.dae</filename>
+        <interpolate_x>true</interpolate_x>
+      </animation>
+      <script>
+        <loop>true</loop>
+        <delay_start>0.000000</delay_start>
+        <auto_start>true</auto_start>
+        <trajectory id="0" type="walk" tension="1.0">
+          <!-- Forward walk: 5.0 -> -1.0 at 0.8 m/s (t = 0.0 to 7.5s, strictly yaw = 3.14159) -->
+          <waypoint>
+            <time>0.0</time>
+            <pose>5.0 0.0 1.0 0 0 3.14159</pose>
+          </waypoint>
+          <waypoint>
+            <time>1.0</time>
+            <pose>4.2 0.0 1.0 0 0 3.14159</pose>
+          </waypoint>
+          <waypoint>
+            <time>2.0</time>
+            <pose>3.4 0.0 1.0 0 0 3.14159</pose>
+          </waypoint>
+          <waypoint>
+            <time>3.0</time>
+            <pose>2.6 0.0 1.0 0 0 3.14159</pose>
+          </waypoint>
+          <waypoint>
+            <time>4.0</time>
+            <pose>1.8 0.0 1.0 0 0 3.14159</pose>
+          </waypoint>
+          <waypoint>
+            <time>5.0</time>
+            <pose>1.0 0.0 1.0 0 0 3.14159</pose>
+          </waypoint>
+          <waypoint>
+            <time>6.0</time>
+            <pose>0.2 0.0 1.0 0 0 3.14159</pose>
+          </waypoint>
+          <waypoint>
+            <time>7.0</time>
+            <pose>-0.6 0.0 1.0 0 0 3.14159</pose>
+          </waypoint>
+          <waypoint>
+            <time>7.5</time>
+            <pose>-1.0 0.0 1.0 0 0 3.14159</pose>
+          </waypoint>
+          <waypoint>
+            <time>7.6</time>
+            <pose>-1.0 0.0 1.0 0 0 3.14159</pose>
+          </waypoint>
+          <!-- Smooth turnaround in place at x = -1.0 (t = 7.6 to 8.9s) -->
+          <waypoint>
+            <time>7.9</time>
+            <pose>-1.0 0.0 1.0 0 0 2.3562</pose>
+          </waypoint>
+          <waypoint>
+            <time>8.2</time>
+            <pose>-1.0 0.0 1.0 0 0 1.5708</pose>
+          </waypoint>
+          <waypoint>
+            <time>8.5</time>
+            <pose>-1.0 0.0 1.0 0 0 0.7854</pose>
+          </waypoint>
+          <waypoint>
+            <time>8.8</time>
+            <pose>-1.0 0.0 1.0 0 0 0.0</pose>
+          </waypoint>
+          <waypoint>
+            <time>8.9</time>
+            <pose>-1.0 0.0 1.0 0 0 0.0</pose>
+          </waypoint>
+          <waypoint>
+            <time>9.0</time>
+            <pose>-1.0 0.0 1.0 0 0 0.0</pose>
+          </waypoint>
+          <!-- Return walk: -1.0 -> 5.0 at 0.8 m/s (t = 9.0 to 16.5s, strictly yaw = 0.0) -->
+          <waypoint>
+            <time>10.0</time>
+            <pose>-0.2 0.0 1.0 0 0 0.0</pose>
+          </waypoint>
+          <waypoint>
+            <time>11.0</time>
+            <pose>0.6 0.0 1.0 0 0 0.0</pose>
+          </waypoint>
+          <waypoint>
+            <time>12.0</time>
+            <pose>1.4 0.0 1.0 0 0 0.0</pose>
+          </waypoint>
+          <waypoint>
+            <time>13.0</time>
+            <pose>2.2 0.0 1.0 0 0 0.0</pose>
+          </waypoint>
+          <waypoint>
+            <time>14.0</time>
+            <pose>3.0 0.0 1.0 0 0 0.0</pose>
+          </waypoint>
+          <waypoint>
+            <time>15.0</time>
+            <pose>3.8 0.0 1.0 0 0 0.0</pose>
+          </waypoint>
+          <waypoint>
+            <time>16.0</time>
+            <pose>4.6 0.0 1.0 0 0 0.0</pose>
+          </waypoint>
+          <waypoint>
+            <time>16.5</time>
+            <pose>5.0 0.0 1.0 0 0 0.0</pose>
+          </waypoint>
+          <waypoint>
+            <time>16.6</time>
+            <pose>5.0 0.0 1.0 0 0 0.0</pose>
+          </waypoint>
+          <!-- Smooth turnaround in place at x = 5.0 (t = 16.6 to 17.9s) -->
+          <waypoint>
+            <time>16.9</time>
+            <pose>5.0 0.0 1.0 0 0 0.7854</pose>
+          </waypoint>
+          <waypoint>
+            <time>17.2</time>
+            <pose>5.0 0.0 1.0 0 0 1.5708</pose>
+          </waypoint>
+          <waypoint>
+            <time>17.5</time>
+            <pose>5.0 0.0 1.0 0 0 2.3562</pose>
+          </waypoint>
+          <waypoint>
+            <time>17.8</time>
+            <pose>5.0 0.0 1.0 0 0 3.14159</pose>
+          </waypoint>
+          <waypoint>
+            <time>17.9</time>
+            <pose>5.0 0.0 1.0 0 0 3.14159</pose>
+          </waypoint>
+          <waypoint>
+            <time>18.0</time>
+            <pose>5.0 0.0 1.0 0 0 3.14159</pose>
+          </waypoint>
+        </trajectory>
+      </script>
+    </actor>
+
+    <!-- Physical collision & ground-truth tracking for Nav2 / LiDAR -->
     <model name="dynamic_obstacle">
-      <pose>-1.0 0.0 0.0 0 0 0</pose>
+      <pose>5.0 0.0 0.85 0 0 3.14159</pose>
       <self_collide>false</self_collide>
 
       <link name="link">
@@ -267,7 +414,6 @@
         <kinematic>true</kinematic>
 
         <collision name="collision">
-          <pose>0 0 0.85 0 0 0</pose>
           <geometry>
             <cylinder>
               <radius>0.22</radius>
@@ -277,13 +423,13 @@
         </collision>
 
         <visual name="visual">
-          <pose>0 0 0.0 0 0 1.5708</pose>
           <geometry>
-            <mesh>
-              <uri>model://human/meshes/walk.dae</uri>
-              <scale>1.0 1.0 1.0</scale>
-            </mesh>
+            <cylinder>
+              <radius>0.001</radius>
+              <length>0.001</length>
+            </cylinder>
           </geometry>
+          <transparency>1.0</transparency>
         </visual>
       </link>
 
@@ -293,7 +439,7 @@
         <max_x>5.0</max_x>
         <speed>0.8</speed>
         <y>0.0</y>
-        <z>0.0</z>
+        <z>0.85</z>
       </plugin>
     </model>
 

@@ -60,18 +60,43 @@ class OscillatingObstacle final : public gz::sim::System,
     if (_info.paused || this->modelEntity == gz::sim::kNullEntity)
       return;
 
-    // Triangle wave: minX -> maxX -> minX.  It derives solely from sim time,
-    // so pauses and resets cannot accumulate pose or velocity error.
+    // Synchronized motion matching human_actor trajectory (18s periodic loop):
+    // 0.0s -> 7.5s:  Walk forward from maxX to minX (yaw = PI)
+    // 7.5s -> 9.0s:  Turn in place at minX (yaw PI -> 0)
+    // 9.0s -> 16.5s: Walk back from minX to maxX (yaw = 0)
+    // 16.5s -> 18.0s: Turn in place at maxX (yaw 0 -> PI)
     const double seconds = std::max(
       0.0, std::chrono::duration<double>(_info.simTime).count());
     const double span = this->maxX - this->minX;
-    const double periodDistance = 2.0 * span;
-    const double travelled = std::fmod(seconds * this->speed, periodDistance);
-    const bool forward = (travelled <= span);
-    const double x = forward
-      ? this->minX + travelled
-      : this->maxX - (travelled - span);
-    const double yaw = forward ? 0.0 : M_PI;
+    const double walkDuration = span / this->speed;
+    const double turnDuration = 1.5;
+    const double halfPeriod = walkDuration + turnDuration;
+    const double totalPeriod = 2.0 * halfPeriod;
+    const double t = std::fmod(seconds, totalPeriod);
+
+    double x = this->minX;
+    double yaw = 0.0;
+
+    if (t < walkDuration)
+    {
+      x = this->maxX - t * this->speed;
+      yaw = M_PI;
+    }
+    else if (t < halfPeriod)
+    {
+      x = this->minX;
+      yaw = M_PI - ((t - walkDuration) / turnDuration) * M_PI;
+    }
+    else if (t < halfPeriod + walkDuration)
+    {
+      x = this->minX + (t - halfPeriod) * this->speed;
+      yaw = 0.0;
+    }
+    else
+    {
+      x = this->maxX;
+      yaw = ((t - (halfPeriod + walkDuration)) / turnDuration) * M_PI;
+    }
 
     const gz::math::Pose3d pose{x, this->y, this->z, 0.0, 0.0, yaw};
     gz::msgs::Pose msg;
