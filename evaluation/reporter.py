@@ -3,17 +3,30 @@ from __future__ import annotations
 
 import csv
 import json
+import math
 from pathlib import Path
 from typing import Any, Dict, List, Sequence, Tuple
 
 from evaluation.types import format_num
 
 
+def sanitize_for_json(data: Any) -> Any:
+    """Recursively convert non-finite floats (inf, -inf, nan) to None for JSON compliance."""
+    if isinstance(data, dict):
+        return {k: sanitize_for_json(v) for k, v in data.items()}
+    if isinstance(data, (list, tuple)):
+        return [sanitize_for_json(v) for v in data]
+    if isinstance(data, float) and not math.isfinite(data):
+        return None
+    return data
+
+
 def write_summary_json(report: Dict[str, Any], output_path: Path) -> None:
     """Export complete trial metrics dictionary to JSON."""
     output_path.parent.mkdir(parents=True, exist_ok=True)
+    clean_report = sanitize_for_json(report)
     with output_path.open("w", encoding="utf-8") as f:
-        json.dump(report, f, indent=2, allow_nan=False)
+        json.dump(clean_report, f, indent=2, allow_nan=False)
         f.write("\n")
 
 
