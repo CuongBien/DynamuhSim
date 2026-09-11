@@ -198,8 +198,8 @@ def compute_psi_metrics(
         intimate_time_ratio=intimate_ratio,
         total_personal_time_s=personal_time,
         personal_time_ratio=personal_ratio,
-        minimum_distance_m=min_dist,
-        minimum_clearance_m=min_clearance,
+        minimum_distance_m=min_dist if math.isfinite(min_dist) else None,
+        minimum_clearance_m=min_clearance if math.isfinite(min_clearance) else None,
         time_at_min_distance_s=time_at_min,
         intimate_intrusions_count=intimate_events,
     )

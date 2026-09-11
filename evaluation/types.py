@@ -72,8 +72,8 @@ class PSIMetrics:
     intimate_time_ratio: float = 0.0
     total_personal_time_s: float = 0.0
     personal_time_ratio: float = 0.0
-    minimum_distance_m: float = float("inf")
-    minimum_clearance_m: float = float("inf")
+    minimum_distance_m: Optional[float] = None
+    minimum_clearance_m: Optional[float] = None
     time_at_min_distance_s: Optional[float] = None
     intimate_intrusions_count: int = 0
 
