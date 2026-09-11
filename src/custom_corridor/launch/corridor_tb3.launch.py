@@ -23,24 +23,28 @@ def launch_setup(context):
     width = LaunchConfiguration('width').perform(context)
     obstacle = LaunchConfiguration('obstacle').perform(context).lower().strip()
 
-    try:
-        width = f"{float(width):.2f}"
-    except ValueError:
-        raise RuntimeError(
-            f"Invalid width '{width}'. "
-            "Allowed values: 0.70, 0.90, 1.20"
-        )
-
     world_map = {
         '0.70': 'corridor_070.sdf',
         '0.90': 'corridor_090.sdf',
         '1.20': 'corridor_120.sdf',
+        'arena': 'arena_obstacle.sdf',
     }
+
+    if width.lower() in ['arena', 'open', 'big', 'wide']:
+        width = 'arena'
+    else:
+        try:
+            width = f"{float(width):.2f}"
+        except ValueError:
+            raise RuntimeError(
+                f"Invalid width '{width}'. "
+                "Allowed values: 0.70, 0.90, 1.20, arena"
+            )
 
     if width not in world_map:
         raise RuntimeError(
             f"Invalid width '{width}'. "
-            "Allowed values: 0.70, 0.90, 1.20"
+            "Allowed values: 0.70, 0.90, 1.20, arena"
         )
 
     # ---------------------------------------------------------
@@ -130,13 +134,14 @@ def launch_setup(context):
     # ---------------------------------------------------------
     # Gazebo
     # ---------------------------------------------------------
+    gui = LaunchConfiguration('gui').perform(context).lower().strip()
+    gz_cmd = ['gz', 'sim', '-r']
+    if gui in ['false', '0', 'no', 'headless']:
+        gz_cmd.append('-s')
+    gz_cmd.append(world_file)
+
     gazebo = ExecuteProcess(
-        cmd=[
-            'gz',
-            'sim',
-            '-r',
-            world_file,
-        ],
+        cmd=gz_cmd,
         output='screen',
         additional_env={
             'GZ_OBSTACLE_TYPE': obstacle,
@@ -258,8 +263,8 @@ def generate_launch_description():
         'width',
         default_value='0.90',
         description=(
-            'Corridor width. '
-            'Allowed values: 0.70, 0.90, 1.20'
+            'Corridor width or environment type. '
+            'Allowed values: 0.70, 0.90, 1.20, arena'
         ),
     )
 
@@ -271,6 +276,12 @@ def generate_launch_description():
             'Allowed values: human (people/pedestrian), object (industrial cylinder/box), none'
         ),
         choices=['human', 'object', 'none', 'people', 'pedestrian', 'box', 'cylinder'],
+    )
+
+    gui_arg = DeclareLaunchArgument(
+        'gui',
+        default_value='true',
+        description='Set to false to run Gazebo in headless mode (server only, much faster)',
     )
 
     # ---------------------------------------------------------
@@ -349,6 +360,7 @@ def generate_launch_description():
 
      width_arg,
      obstacle_arg,
+     gui_arg,
      resource_path,
      system_plugin_path,
      OpaqueFunction(function=launch_setup),

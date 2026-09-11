@@ -92,10 +92,10 @@ try:
                 ])
                 csv_file.flush()
 
-            obstacle_x = None
-            obstacle_y = 0.0
-            sec = None
-            nsec = None
+                obstacle_x = None
+                obstacle_y = 0.0
+                sec = None
+                nsec = None
 
 finally:
     process.terminate()

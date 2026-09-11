@@ -41,6 +41,8 @@ GOAL_TOLERANCE="${GOAL_TOLERANCE:-0.20}"
 TRIAL_TIMEOUT_S="${TRIAL_TIMEOUT_S:-180}"
 READY_TIMEOUT_S="${READY_TIMEOUT_S:-60}"
 
+CONTROLLER="${CONTROLLER:-dwb}"
+
 ANALYZER="${ANALYZER:-$ROOT/analyze_baseline.py}"
 
 
@@ -448,6 +450,7 @@ run_trial() {
     setsid ros2 launch \
         custom_corridor \
         nav2_corridor.launch.py \
+        controller:="$CONTROLLER" \
         >"$nav_log" 2>&1 &
 
     local nav_pid="$!"
@@ -853,6 +856,7 @@ echo "=========================================="
 echo "AUTOMATED TRIAL RUNNER"
 echo "=========================================="
 echo "Baseline       : $BASELINE_DIR"
+echo "Controller     : $CONTROLLER"
 echo "Width          : $WIDTH"
 echo "Trials         : $TRIAL_COUNT"
 echo "Start          : $START_TRIAL"

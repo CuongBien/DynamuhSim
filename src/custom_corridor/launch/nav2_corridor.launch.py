@@ -3,40 +3,45 @@ import os
 from ament_index_python.packages import get_package_share_directory
 
 from launch import LaunchDescription
-from launch.actions import SetEnvironmentVariable, TimerAction
+from launch.actions import DeclareLaunchArgument, OpaqueFunction, SetEnvironmentVariable, TimerAction
+from launch.substitutions import LaunchConfiguration
 from launch_ros.actions import Node
 
 
-def generate_launch_description():
+def launch_setup(context, *args, **kwargs):
     package_share = get_package_share_directory("custom_corridor")
 
-    nav2_params = os.path.join(
-        package_share,
-        "config",
-        "nav2_corridor.yaml",
-    )
+    controller = LaunchConfiguration("controller").perform(context).lower().strip()
+    custom_params = LaunchConfiguration("params_file").perform(context).strip()
 
-    rmw_implementation = SetEnvironmentVariable(
-        name="RMW_IMPLEMENTATION",
-        value="rmw_fastrtps_cpp",
-    )
+    if custom_params and os.path.exists(custom_params):
+        nav2_params = custom_params
+    elif controller == "mppi":
+        nav2_params = os.path.join(package_share, "config", "nav2_mppi.yaml")
+    else:
+        nav2_params = os.path.join(package_share, "config", "nav2_corridor.yaml")
 
-    fastdds_transport = SetEnvironmentVariable(
-        name="FASTDDS_BUILTIN_TRANSPORTS",
-        value="UDPv4",
-    )
+    map_name = LaunchConfiguration("map").perform(context).strip()
+    map_override = {}
+    if map_name:
+        if os.path.isabs(map_name) and os.path.exists(map_name):
+            map_override["yaml_filename"] = map_name
+        else:
+            cand1 = os.path.join(package_share, "maps", f"{map_name}.yaml")
+            cand2 = os.path.join(package_share, "maps", map_name)
+            if os.path.exists(cand1):
+                map_override["yaml_filename"] = cand1
+            elif os.path.exists(cand2):
+                map_override["yaml_filename"] = cand2
 
-    ros_domain = SetEnvironmentVariable(
-        name="ROS_DOMAIN_ID",
-        value="0",
-    )
+    map_server_params = [nav2_params, map_override] if map_override else [nav2_params]
 
     map_server = Node(
         package="nav2_map_server",
         executable="map_server",
         name="map_server",
         output="screen",
-        parameters=[nav2_params],
+        parameters=map_server_params,
     )
 
     amcl = Node(
@@ -87,21 +92,27 @@ def generate_launch_description():
         parameters=[nav2_params],
     )
 
-    amcl_lifecycle_manager = Node(
-        package="nav2_lifecycle_manager",
-        executable="lifecycle_manager",
-        name="lifecycle_manager_localization",
-        output="screen",
-        parameters=[
-            {
-                "use_sim_time": True,
-                "autostart": True,
-                "bond_timeout": 30.0,
-                "node_names": [
-                    "map_server",
-                    "amcl",
+    amcl_lifecycle_manager = TimerAction(
+        period=2.0,
+        actions=[
+            Node(
+                package="nav2_lifecycle_manager",
+                executable="lifecycle_manager",
+                name="lifecycle_manager_localization",
+                output="screen",
+                parameters=[
+                    {
+                        "use_sim_time": True,
+                        "autostart": True,
+                        "bond_timeout": 30.0,
+                        "attempt_respawn_reconnection": True,
+                        "node_names": [
+                            "map_server",
+                            "amcl",
+                        ],
+                    }
                 ],
-            }
+            )
         ],
     )
 
@@ -118,6 +129,7 @@ def generate_launch_description():
                         "use_sim_time": True,
                         "autostart": True,
                         "bond_timeout": 30.0,
+                        "attempt_respawn_reconnection": True,
                         "node_names": [
                             "planner_server",
                             "controller_server",
@@ -139,22 +151,62 @@ def generate_launch_description():
         parameters=[{"use_sim_time": True}],
     )
 
+    return [
+        map_server,
+        amcl,
+        planner_server,
+        controller_server,
+        bt_navigator,
+        behavior_server,
+        waypoint_follower,
+        amcl_lifecycle_manager,
+        navigation_lifecycle_manager,
+        goal_pose_bridge,
+    ]
+
+
+def generate_launch_description():
+    rmw_implementation = SetEnvironmentVariable(
+        name="RMW_IMPLEMENTATION",
+        value="rmw_fastrtps_cpp",
+    )
+
+    fastdds_transport = SetEnvironmentVariable(
+        name="FASTDDS_BUILTIN_TRANSPORTS",
+        value="UDPv4",
+    )
+
+    ros_domain = SetEnvironmentVariable(
+        name="ROS_DOMAIN_ID",
+        value="0",
+    )
+
+    controller_arg = DeclareLaunchArgument(
+        "controller",
+        default_value="dwb",
+        description="Nav2 local controller plugin: dwb or mppi",
+    )
+
+    params_file_arg = DeclareLaunchArgument(
+        "params_file",
+        default_value="",
+        description="Full path to custom Nav2 params yaml file (overrides controller choice)",
+    )
+
+    map_arg = DeclareLaunchArgument(
+        "map",
+        default_value="",
+        description="Name or path of map yaml file (e.g. arena_obstacle or corridor_090)",
+    )
+
     return LaunchDescription(
         [
             rmw_implementation,
             fastdds_transport,
             ros_domain,
-
-            map_server,
-            amcl,
-            planner_server,
-            controller_server,
-            bt_navigator,
-            behavior_server,
-            waypoint_follower,
-
-            amcl_lifecycle_manager,
-            navigation_lifecycle_manager,
-            goal_pose_bridge,
+            controller_arg,
+            params_file_arg,
+            map_arg,
+            OpaqueFunction(function=launch_setup),
         ]
     )
