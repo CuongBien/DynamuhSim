@@ -26,6 +26,7 @@ TRIAL_COUNT="${1:-1}"
 START_TRIAL="${START_TRIAL:-3}"
 
 WIDTH="${WIDTH:-0.90}"
+OBSTACLE_TYPE="${OBSTACLE_TYPE:-human}"
 
 # MAP-frame coordinates, NOT Gazebo/world coordinates.
 MAP_INITIAL_X="${MAP_INITIAL_X:-0.0}"
@@ -418,6 +419,7 @@ run_trial() {
         custom_corridor \
         corridor_tb3.launch.py \
         width:="$WIDTH" \
+        obstacle:="$OBSTACLE_TYPE" \
         >"$launch_log" 2>&1 &
 
     local launch_pid="$!"

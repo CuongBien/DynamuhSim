@@ -21,6 +21,7 @@ def launch_setup(context):
     # Corridor width
     # ---------------------------------------------------------
     width = LaunchConfiguration('width').perform(context)
+    obstacle = LaunchConfiguration('obstacle').perform(context).lower().strip()
 
     try:
         width = f"{float(width):.2f}"
@@ -67,11 +68,40 @@ def launch_setup(context):
     # ---------------------------------------------------------
     # World
     # ---------------------------------------------------------
-    world_file = os.path.join(
+    raw_world_file = os.path.join(
         corridor_share,
         'worlds',
         world_map[width]
     )
+
+    world_file = raw_world_file
+    if obstacle in ['object', 'cylinder', 'box', 'none', 'clean', 'empty']:
+        with open(raw_world_file, 'r') as f:
+            content = f.read()
+        import re
+        filtered_content = re.sub(r'<actor name="human_actor">.*?</actor>', '', content, flags=re.DOTALL)
+        if obstacle in ['object', 'cylinder', 'box']:
+            filtered_content = filtered_content.replace(
+                '<pose>5.0 0.0 -50.0 0 0 3.14159</pose>',
+                '<pose>5.0 0.0 0.85 0 0 3.14159</pose>'
+            )
+            filtered_content = filtered_content.replace(
+                '<default_mode>human</default_mode>',
+                '<default_mode>object</default_mode>'
+            )
+        elif obstacle in ['none', 'clean', 'empty']:
+            filtered_content = filtered_content.replace(
+                '<pose>5.0 0.0 0.85 0 0 3.14159</pose>',
+                '<pose>5.0 0.0 -50.0 0 0 3.14159</pose>'
+            )
+            filtered_content = filtered_content.replace(
+                '<default_mode>human</default_mode>',
+                '<default_mode>none</default_mode>'
+            )
+        active_world = f"/tmp/corridor_{width}_{obstacle}.sdf"
+        with open(active_world, 'w') as f:
+            f.write(filtered_content)
+        world_file = active_world
 
     # ---------------------------------------------------------
     # LOCAL TurtleBot3 Burger model
@@ -108,6 +138,9 @@ def launch_setup(context):
             world_file,
         ],
         output='screen',
+        additional_env={
+            'GZ_OBSTACLE_TYPE': obstacle,
+        },
     )
 
     # ---------------------------------------------------------
@@ -144,10 +177,19 @@ def launch_setup(context):
     bridge = Node(
         package='ros_gz_bridge',
         executable='parameter_bridge',
+        parameters=[{
+            'config_file': bridge_config,
+        }],
+        output='screen',
+    )
+
+    obstacle_bridge = Node(
+        package='ros_gz_bridge',
+        executable='parameter_bridge',
+        name='obstacle_type_bridge',
         arguments=[
-            '--ros-args',
-            '-p',
-            f'config_file:={bridge_config}',
+            '/obstacle_type@std_msgs/msg/String]gz.msgs.StringMsg',
+            '/obstacle_type/status@std_msgs/msg/String[gz.msgs.StringMsg',
         ],
         output='screen',
     )
@@ -188,6 +230,7 @@ def launch_setup(context):
         gazebo,
         spawn_robot,
         bridge,
+        obstacle_bridge,
 	robot_state_publisher,
         rviz,
     ]
@@ -218,6 +261,16 @@ def generate_launch_description():
             'Corridor width. '
             'Allowed values: 0.70, 0.90, 1.20'
         ),
+    )
+
+    obstacle_arg = DeclareLaunchArgument(
+        'obstacle',
+        default_value='human',
+        description=(
+            'Dynamic obstacle type. '
+            'Allowed values: human (people/pedestrian), object (industrial cylinder/box), none'
+        ),
+        choices=['human', 'object', 'none', 'people', 'pedestrian', 'box', 'cylinder'],
     )
 
     # ---------------------------------------------------------
@@ -295,7 +348,8 @@ def generate_launch_description():
      ros_domain,
 
      width_arg,
+     obstacle_arg,
      resource_path,
-    system_plugin_path,
+     system_plugin_path,
      OpaqueFunction(function=launch_setup),
     ])
