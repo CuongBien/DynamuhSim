@@ -7,6 +7,16 @@
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 source /opt/ros/jazzy/setup.bash
+if [[ ! -f "$ROOT/install/setup.bash" ]]; then
+    echo "[ERROR] Workspace has not been built:"
+    echo "        $ROOT/install/setup.bash not found"
+    echo
+    echo "Run:"
+    echo "  cd \"$ROOT\""
+    echo "  colcon build --symlink-install"
+    exit 1
+fi
+
 source "$ROOT/install/setup.bash"
 
 export RMW_IMPLEMENTATION=rmw_fastrtps_cpp

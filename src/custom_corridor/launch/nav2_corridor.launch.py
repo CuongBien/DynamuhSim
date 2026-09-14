@@ -195,7 +195,7 @@ def generate_launch_description():
 
     map_arg = DeclareLaunchArgument(
         "map",
-        default_value="",
+        default_value="corridor_090",
         description="Name or path of map yaml file (e.g. arena_obstacle or corridor_090)",
     )
 
