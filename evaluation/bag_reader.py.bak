@@ -156,20 +156,9 @@ def read_bag_data(bag_path: Path, topics: Optional[Set[str]] = None) -> Dict[str
                 data["odom"].append((t, float(pos.x), float(pos.y), speed))
 
         elif topic == "/cmd_vel":
-            # ROS 2 / Nav2 may publish either:
-            #   geometry_msgs/msg/Twist
-            # or
-            #   geometry_msgs/msg/TwistStamped
-            #
-            # TwistStamped stores velocity inside msg.twist.
-            cmd = msg.twist if hasattr(msg, "twist") else msg
-
-            linear = cmd.linear
-            angular = cmd.angular
-
-            data["cmd_raw"].append(
-                (storage_t, float(linear.x), float(angular.z))
-            )
+            linear = msg.linear
+            angular = msg.angular
+            data["cmd_raw"].append((storage_t, float(linear.x), float(angular.z)))
 
         elif topic == "/scan":
             t = header_seconds(msg)

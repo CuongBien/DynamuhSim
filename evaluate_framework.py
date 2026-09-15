@@ -39,10 +39,10 @@ import sys
 from pathlib import Path
 from typing import Any
 
+PROJECT_ROOT = Path(__file__).resolve().parent
 
-DEFAULT_ROOT = Path("~/nav_ws/experiments/corridor_090").expanduser()
-DEFAULT_ANALYZER = Path("~/nav_ws/analyze_baseline.py").expanduser()
-
+DEFAULT_ROOT = PROJECT_ROOT / "experiments" / "corridor_090"
+DEFAULT_ANALYZER = PROJECT_ROOT / "analyze_baseline.py"
 
 def load_json(path: Path) -> dict[str, Any]:
     return json.loads(path.read_text(encoding="utf-8"))

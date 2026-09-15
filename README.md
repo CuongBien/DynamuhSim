@@ -70,6 +70,8 @@ cd ~/nav_ws
 
 ### 3. Install ROS 2 Dependencies
 ```bash
+run: `source setup_env.sh` để setup enviroment cho ROS 2 Jazzy và DynamuhSim workspace
+
 source /opt/ros/jazzy/setup.bash
 sudo apt-get update
 sudo apt-get install -y \

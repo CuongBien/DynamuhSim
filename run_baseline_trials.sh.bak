@@ -30,6 +30,7 @@ set -Eeuo pipefail
 # Configuration
 # ------------------------------------------------------
 
+BASELINE_DIR="${BASELINE_DIR:-$ROOT/experiments/corridor_090/baseline_01}"
 
 TRIAL_COUNT="${1:-1}"
 START_TRIAL="${START_TRIAL:-3}"
@@ -51,41 +52,6 @@ TRIAL_TIMEOUT_S="${TRIAL_TIMEOUT_S:-180}"
 READY_TIMEOUT_S="${READY_TIMEOUT_S:-60}"
 
 CONTROLLER="${CONTROLLER:-dwb}"
-
-# Automatic experiment output separation
-case "${WIDTH,,}" in
-    0.70|0.7)
-        EXPERIMENT_NAME="corridor_070"
-        ;;
-    0.90|0.9)
-        EXPERIMENT_NAME="corridor_090"
-        ;;
-    1.20|1.2)
-        EXPERIMENT_NAME="corridor_120"
-        ;;
-    arena|open|big|wide)
-        EXPERIMENT_NAME="arena"
-        ;;
-    *)
-        echo "[ERROR] Invalid WIDTH='$WIDTH'"
-        echo "Allowed: 0.70, 0.90, 1.20, arena"
-        exit 2
-        ;;
-esac
-
-CONTROLLER="${CONTROLLER,,}"
-
-case "$CONTROLLER" in
-    dwb|mppi)
-        ;;
-    *)
-        echo "[ERROR] Invalid CONTROLLER='$CONTROLLER'"
-        echo "Allowed: dwb, mppi"
-        exit 2
-        ;;
-esac
-
-BASELINE_DIR="${BASELINE_DIR:-$ROOT/experiments/$EXPERIMENT_NAME/$CONTROLLER/baseline_01}"
 
 ANALYZER="${ANALYZER:-$ROOT/analyze_baseline.py}"
 
