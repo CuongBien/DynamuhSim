@@ -30,7 +30,6 @@ set -Eeuo pipefail
 # Configuration
 # ------------------------------------------------------
 
-BASELINE_DIR="${BASELINE_DIR:-$ROOT/experiments/corridor_090/baseline_01}"
 
 TRIAL_COUNT="${1:-1}"
 START_TRIAL="${START_TRIAL:-3}"
@@ -52,6 +51,41 @@ TRIAL_TIMEOUT_S="${TRIAL_TIMEOUT_S:-180}"
 READY_TIMEOUT_S="${READY_TIMEOUT_S:-60}"
 
 CONTROLLER="${CONTROLLER:-dwb}"
+
+# Automatic experiment output separation
+case "${WIDTH,,}" in
+    0.70|0.7)
+        EXPERIMENT_NAME="corridor_070"
+        ;;
+    0.90|0.9)
+        EXPERIMENT_NAME="corridor_090"
+        ;;
+    1.20|1.2)
+        EXPERIMENT_NAME="corridor_120"
+        ;;
+    arena|open|big|wide)
+        EXPERIMENT_NAME="arena"
+        ;;
+    *)
+        echo "[ERROR] Invalid WIDTH='$WIDTH'"
+        echo "Allowed: 0.70, 0.90, 1.20, arena"
+        exit 2
+        ;;
+esac
+
+CONTROLLER="${CONTROLLER,,}"
+
+case "$CONTROLLER" in
+    dwb|mppi)
+        ;;
+    *)
+        echo "[ERROR] Invalid CONTROLLER='$CONTROLLER'"
+        echo "Allowed: dwb, mppi"
+        exit 2
+        ;;
+esac
+
+BASELINE_DIR="${BASELINE_DIR:-$ROOT/experiments/$EXPERIMENT_NAME/$CONTROLLER/baseline_01}"
 
 ANALYZER="${ANALYZER:-$ROOT/analyze_baseline.py}"
 
@@ -455,30 +489,34 @@ run_trial() {
     # 2. Nav2
     # --------------------------------------------------
 
+    # --------------------------------------------------
+    # 2. Nav2
+    # --------------------------------------------------
+    
     echo "[2/8] Starting Nav2..."
-
+    
+    if [[ "$CONTROLLER" == "mppi" ]]; then
+        NAV2_PARAMS="$ROOT/src/custom_corridor/config/nav2_mppi.yaml"
+    else
+        NAV2_PARAMS="$ROOT/src/custom_corridor/config/nav2_corridor.yaml"
+    fi
+    
+    if [[ "${WIDTH,,}" == "arena" ]]; then
+        NAV2_MAP="arena_obstacle"
+    else
+        NAV2_MAP="corridor_090"
+    fi
+    
+    echo "[NAV2] Params : $NAV2_PARAMS"
+    echo "[NAV2] Map    : $NAV2_MAP"
+    
     setsid ros2 launch \
         custom_corridor \
         nav2_corridor.launch.py \
         controller:="$CONTROLLER" \
+        params_file:="$NAV2_PARAMS" \
+        map:="$NAV2_MAP" \
         >"$nav_log" 2>&1 &
-
-    local nav_pid="$!"
-    PIDS+=("$nav_pid")
-
-    if ! wait_for_nav2_nodes; then
-        status="INVALID"
-        reason="NAV2_NODES_NOT_READY"
-
-        write_invalid_result \
-            "$result_json" \
-            "$trial_name" \
-            "$status" \
-            "$reason"
-
-        return 0
-    fi
-
 
     # --------------------------------------------------
     # 3. Nav2 lifecycle readiness
