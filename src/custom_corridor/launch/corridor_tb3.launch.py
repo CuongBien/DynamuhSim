@@ -1,4 +1,5 @@
 import os
+import tempfile
 import xacro
 
 from launch_ros.actions import Node
@@ -102,7 +103,8 @@ def launch_setup(context):
                 '<default_mode>human</default_mode>',
                 '<default_mode>none</default_mode>'
             )
-        active_world = f"/tmp/corridor_{width}_{obstacle}.sdf"
+        uid = getattr(os, 'getuid', lambda: 1000)()
+        active_world = os.path.join(tempfile.gettempdir(), f"corridor_{uid}_{width}_{obstacle}.sdf")
         with open(active_world, 'w') as f:
             f.write(filtered_content)
         world_file = active_world
@@ -216,7 +218,10 @@ def launch_setup(context):
           '-d',
           rviz_config,
     	],
-    output='screen',
+        parameters=[{
+            'use_sim_time': True,
+        }],
+        output='screen',
     )
     
     robot_state_publisher = Node(
@@ -231,14 +236,17 @@ def launch_setup(context):
         ],
         output='screen',
     )
-    return [
+    rviz_enabled = LaunchConfiguration('rviz').perform(context).lower().strip()
+    nodes = [
         gazebo,
         spawn_robot,
         bridge,
         obstacle_bridge,
-	robot_state_publisher,
-        rviz,
+        robot_state_publisher,
     ]
+    if rviz_enabled not in ['false', '0', 'no']:
+        nodes.append(rviz)
+    return nodes
 
 
 def generate_launch_description():
@@ -280,8 +288,14 @@ def generate_launch_description():
 
     gui_arg = DeclareLaunchArgument(
         'gui',
+        default_value='false',
+        description='Set to true to show Gazebo GUI window, false for headless Gazebo (server only)',
+    )
+
+    rviz_arg = DeclareLaunchArgument(
+        'rviz',
         default_value='true',
-        description='Set to false to run Gazebo in headless mode (server only, much faster)',
+        description='Set to true to launch RViz2 (default true), false to disable',
     )
 
     # ---------------------------------------------------------
@@ -348,7 +362,12 @@ def generate_launch_description():
 
     ros_domain = SetEnvironmentVariable(
      name='ROS_DOMAIN_ID',
-     value='0'
+     value=os.environ.get('ROS_DOMAIN_ID', '0')
+    )
+
+    discovery_range = SetEnvironmentVariable(
+     name='ROS_AUTOMATIC_DISCOVERY_RANGE',
+     value=os.environ.get('ROS_AUTOMATIC_DISCOVERY_RANGE', 'LOCALHOST')
     )
     # ---------------------------------------------------------
     # Launch description
@@ -357,10 +376,12 @@ def generate_launch_description():
      rmw_implementation,
      fastdds_transport,
      ros_domain,
+     discovery_range,
 
      width_arg,
      obstacle_arg,
      gui_arg,
+     rviz_arg,
      resource_path,
      system_plugin_path,
      OpaqueFunction(function=launch_setup),
