@@ -82,8 +82,8 @@ def read_bag_data(bag_path: Path, topics: Optional[Set[str]] = None) -> Dict[str
         from rosidl_runtime_py.utilities import get_message  # type: ignore
     except ImportError as exc:
         raise RuntimeError(
-            "ROS 2 Python libraries are not sourced. Please run:\n"
-            "source /opt/ros/jazzy/setup.bash (and source your workspace install/setup.bash).\n"
+            "ROS 2 Python libraries are not sourced. Please source your ROS 2 environment\n"
+            "(e.g. source /opt/ros/$ROS_DISTRO/setup.bash and source your workspace install/setup.bash).\n"
             f"Error details: {exc}"
         ) from exc
 

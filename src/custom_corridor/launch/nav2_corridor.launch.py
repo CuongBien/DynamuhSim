@@ -34,7 +34,10 @@ def launch_setup(context, *args, **kwargs):
             elif os.path.exists(cand2):
                 map_override["yaml_filename"] = cand2
 
-    map_server_params = [nav2_params, map_override] if map_override else [nav2_params]
+    if "yaml_filename" not in map_override:
+        map_override["yaml_filename"] = os.path.join(package_share, "maps", "corridor_090.yaml")
+
+    map_server_params = [nav2_params, map_override]
 
     map_server = Node(
         package="nav2_map_server",
@@ -68,12 +71,25 @@ def launch_setup(context, *args, **kwargs):
         parameters=[nav2_params],
     )
 
+    bt_override = {}
+    try:
+        bt_share = get_package_share_directory("nav2_bt_navigator")
+        default_bt_xml = os.path.join(
+            bt_share, "behavior_trees", "navigate_to_pose_w_replanning_and_recovery.xml"
+        )
+        if os.path.exists(default_bt_xml):
+            bt_override["default_nav_to_pose_bt_xml"] = default_bt_xml
+    except Exception:
+        pass
+
+    bt_navigator_params = [nav2_params, bt_override] if bt_override else [nav2_params]
+
     bt_navigator = Node(
         package="nav2_bt_navigator",
         executable="bt_navigator",
         name="bt_navigator",
         output="screen",
-        parameters=[nav2_params],
+        parameters=bt_navigator_params,
     )
 
     behavior_server = Node(
@@ -178,7 +194,12 @@ def generate_launch_description():
 
     ros_domain = SetEnvironmentVariable(
         name="ROS_DOMAIN_ID",
-        value="0",
+        value=os.environ.get("ROS_DOMAIN_ID", "0"),
+    )
+
+    discovery_range = SetEnvironmentVariable(
+        name="ROS_AUTOMATIC_DISCOVERY_RANGE",
+        value=os.environ.get("ROS_AUTOMATIC_DISCOVERY_RANGE", "LOCALHOST"),
     )
 
     controller_arg = DeclareLaunchArgument(
@@ -204,6 +225,7 @@ def generate_launch_description():
             rmw_implementation,
             fastdds_transport,
             ros_domain,
+            discovery_range,
             controller_arg,
             params_file_arg,
             map_arg,

@@ -11,12 +11,22 @@ DYNAMUHSIM_ROOT="$(
 
 export DYNAMUHSIM_ROOT
 
-if [[ ! -f /opt/ros/jazzy/setup.bash ]]; then
-    echo "[ERROR] ROS 2 Jazzy not found"
-    return 1 2>/dev/null || exit 1
+# Auto-detect ROS 2 distribution if not already set or sourced
+if [[ -z "${ROS_DISTRO:-}" ]]; then
+    for distro in jazzy humble iron rolling; do
+        if [[ -f "/opt/ros/$distro/setup.bash" ]]; then
+            ROS_DISTRO="$distro"
+            break
+        fi
+    done
 fi
 
-source /opt/ros/jazzy/setup.bash
+if [[ -n "${ROS_DISTRO:-}" && -f "/opt/ros/$ROS_DISTRO/setup.bash" ]]; then
+    source "/opt/ros/$ROS_DISTRO/setup.bash"
+elif ! command -v ros2 &>/dev/null; then
+    echo "[ERROR] No ROS 2 installation found in /opt/ros or PATH."
+    return 1 2>/dev/null || exit 1
+fi
 
 if [[ ! -f "$DYNAMUHSIM_ROOT/install/setup.bash" ]]; then
     echo "[ERROR] DynamuhSim workspace is not built."
@@ -31,8 +41,10 @@ source "$DYNAMUHSIM_ROOT/install/setup.bash"
 
 export RMW_IMPLEMENTATION=rmw_fastrtps_cpp
 export FASTDDS_BUILTIN_TRANSPORTS=UDPv4
-export ROS_DOMAIN_ID=0
+export ROS_DOMAIN_ID="${ROS_DOMAIN_ID:-0}"
+export ROS_AUTOMATIC_DISCOVERY_RANGE="${DYNAMUHSIM_DISCOVERY_RANGE:-LOCALHOST}"
 
 echo "[DynamuhSim environment]"
 echo "ROOT      : $DYNAMUHSIM_ROOT"
-echo "ROS_DISTRO: $ROS_DISTRO"
+echo "ROS_DISTRO: ${ROS_DISTRO:-unknown}"
+echo "DISCOVERY : $ROS_AUTOMATIC_DISCOVERY_RANGE"
