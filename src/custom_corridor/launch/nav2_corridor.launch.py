@@ -4,7 +4,7 @@ from ament_index_python.packages import get_package_share_directory
 
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument, OpaqueFunction, SetEnvironmentVariable, TimerAction
-from launch.substitutions import LaunchConfiguration
+from launch.substitutions import EnvironmentVariable, LaunchConfiguration
 from launch_ros.actions import Node
 
 
@@ -166,19 +166,9 @@ def launch_setup(context, *args, **kwargs):
 
 
 def generate_launch_description():
-    rmw_implementation = SetEnvironmentVariable(
-        name="RMW_IMPLEMENTATION",
-        value="rmw_fastrtps_cpp",
-    )
-
-    fastdds_transport = SetEnvironmentVariable(
-        name="FASTDDS_BUILTIN_TRANSPORTS",
-        value="UDPv4",
-    )
-
     ros_domain = SetEnvironmentVariable(
         name="ROS_DOMAIN_ID",
-        value="0",
+        value=EnvironmentVariable("ROS_DOMAIN_ID", default_value="42"),
     )
 
     controller_arg = DeclareLaunchArgument(
@@ -195,14 +185,12 @@ def generate_launch_description():
 
     map_arg = DeclareLaunchArgument(
         "map",
-        default_value="",
+        default_value="corridor_090",
         description="Name or path of map yaml file (e.g. arena_obstacle or corridor_090)",
     )
 
     return LaunchDescription(
         [
-            rmw_implementation,
-            fastdds_transport,
             ros_domain,
             controller_arg,
             params_file_arg,

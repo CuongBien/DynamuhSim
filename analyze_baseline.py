@@ -25,8 +25,14 @@ from typing import Optional
 from evaluation import CorridorTrialAnalyzer, FailureType, SocialSpace, TrialMetrics
 from evaluation.spatial_alignment import DEFAULT_SPAWN_X, DEFAULT_SPAWN_Y
 
-DEFAULT_BASE = "~/nav_ws/experiments/corridor_090/baseline_01"
+PROJECT_ROOT = Path(__file__).resolve().parent
 
+DEFAULT_BASE = (
+    PROJECT_ROOT
+    / "experiments"
+    / "corridor_090"
+    / "baseline_01"
+)
 
 def build_parser() -> argparse.ArgumentParser:
     p = argparse.ArgumentParser(
@@ -37,19 +43,19 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument(
         "--bag",
         type=Path,
-        default=Path(DEFAULT_BASE).expanduser() / "trial_02",
+        default=DEFAULT_BASE / "trial_02",
         help="rosbag2 MCAP directory",
     )
     p.add_argument(
         "--ground-truth",
         type=Path,
-        default=Path(DEFAULT_BASE).expanduser() / "obstacle_ground_truth_02.csv",
+        default=DEFAULT_BASE / "obstacle_ground_truth_02.csv",
         help="CSV with simulation time, obstacle x, obstacle y",
     )
     p.add_argument(
         "--output",
         type=Path,
-        default=Path(DEFAULT_BASE).expanduser() / "baseline_analysis",
+        default=DEFAULT_BASE / "baseline_analysis",
         help="output directory for analysis reports, CSVs, and plots",
     )
 
