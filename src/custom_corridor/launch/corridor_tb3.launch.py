@@ -11,8 +11,8 @@ from launch.actions import (
     OpaqueFunction,
     SetEnvironmentVariable,
 )
-from launch.substitutions import LaunchConfiguration
-from launch_ros.actions import Node
+from launch.conditions import IfCondition
+from launch.substitutions import EnvironmentVariable, LaunchConfiguration
 
 
 def launch_setup(context):
@@ -203,22 +203,23 @@ def launch_setup(context):
     # RViz
     # ---------------------------------------------------------
     rviz_config = os.path.join(
-    	corridor_share,
-    	'rviz',
-    	'corridor.rviz',
+        corridor_share,
+        'rviz',
+        'corridor.rviz',
     )
 
     rviz = Node(
-    	package='rviz2',
-    	executable='rviz2',
-    	name='rviz2',
-    	arguments=[
-          '-d',
-          rviz_config,
-    	],
-    output='screen',
+        package='rviz2',
+        executable='rviz2',
+        name='rviz2',
+        arguments=[
+            '-d',
+            rviz_config,
+        ],
+        output='screen',
+        condition=IfCondition(LaunchConfiguration('rviz')),
     )
-    
+
     robot_state_publisher = Node(
         package='robot_state_publisher',
         executable='robot_state_publisher',
@@ -236,7 +237,7 @@ def launch_setup(context):
         spawn_robot,
         bridge,
         obstacle_bridge,
-	robot_state_publisher,
+        robot_state_publisher,
         rviz,
     ]
 
@@ -282,6 +283,12 @@ def generate_launch_description():
         'gui',
         default_value='true',
         description='Set to false to run Gazebo in headless mode (server only, much faster)',
+    )
+
+    rviz_arg = DeclareLaunchArgument(
+        'rviz',
+        default_value='true',
+        description='Set to false to disable RViz2',
     )
 
     # ---------------------------------------------------------
@@ -335,33 +342,22 @@ def generate_launch_description():
             + os.environ.get('GZ_SIM_SYSTEM_PLUGIN_PATH', '')
         ),
     )
-    
-    rmw_implementation = SetEnvironmentVariable(
-     name='RMW_IMPLEMENTATION',
-     value='rmw_fastrtps_cpp'
-    )
-
-    fastdds_transport = SetEnvironmentVariable(
-     name='FASTDDS_BUILTIN_TRANSPORTS',
-     value='UDPv4'
-    )
 
     ros_domain = SetEnvironmentVariable(
-     name='ROS_DOMAIN_ID',
-     value='0'
+        name='ROS_DOMAIN_ID',
+        value=EnvironmentVariable('ROS_DOMAIN_ID', default_value='42'),
     )
+
     # ---------------------------------------------------------
     # Launch description
     # ---------------------------------------------------------
     return LaunchDescription([
-     rmw_implementation,
-     fastdds_transport,
-     ros_domain,
-
-     width_arg,
-     obstacle_arg,
-     gui_arg,
-     resource_path,
-     system_plugin_path,
-     OpaqueFunction(function=launch_setup),
+        width_arg,
+        obstacle_arg,
+        gui_arg,
+        rviz_arg,
+        resource_path,
+        system_plugin_path,
+        ros_domain,
+        OpaqueFunction(function=launch_setup),
     ])

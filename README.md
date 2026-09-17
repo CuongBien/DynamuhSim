@@ -104,6 +104,7 @@ source install/setup.bash
 ```bash
 source /opt/ros/jazzy/setup.bash
 source ~/nav_ws/install/setup.bash
+export ROS_DOMAIN_ID=42
 
 # width options: 0.70, 0.90 (default), 1.20, arena
 # obstacle options: human (default), object, none
@@ -115,6 +116,7 @@ ros2 launch custom_corridor corridor_tb3.launch.py width:=0.90 obstacle:=human
 ```bash
 source /opt/ros/jazzy/setup.bash
 source ~/nav_ws/install/setup.bash
+export ROS_DOMAIN_ID=42
 
 # controller options: dwb (default), mppi
 ros2 launch custom_corridor nav2_corridor.launch.py controller:=dwb
@@ -125,14 +127,16 @@ ros2 launch custom_corridor nav2_corridor.launch.py controller:=dwb
 ```bash
 source /opt/ros/jazzy/setup.bash
 source ~/nav_ws/install/setup.bash
+export ROS_DOMAIN_ID=42
 
-ros2 launch custom_corridor corridor_tb3.launch.py width:=arena obstacle:=human gui:=false
+ros2 launch custom_corridor corridor_tb3.launch.py width:=arena obstacle:=human gui:=false rviz:=false
 ```
 
 **Terminal 2 — Start Nav2 with MPPI Controller & Arena Map:**
 ```bash
 source /opt/ros/jazzy/setup.bash
 source ~/nav_ws/install/setup.bash
+export ROS_DOMAIN_ID=42
 
 ros2 launch custom_corridor nav2_corridor.launch.py controller:=mppi map:=arena_obstacle
 ```
@@ -141,6 +145,7 @@ ros2 launch custom_corridor nav2_corridor.launch.py controller:=mppi map:=arena_
 ```bash
 source /opt/ros/jazzy/setup.bash
 source ~/nav_ws/install/setup.bash
+export ROS_DOMAIN_ID=42
 
 rviz2 -d ~/nav_ws/src/custom_corridor/rviz/corridor.rviz
 ```
