@@ -6,7 +6,23 @@
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
-source /opt/ros/jazzy/setup.bash
+# Auto-detect ROS 2 distribution if not already set or sourced
+if [[ -z "${ROS_DISTRO:-}" ]]; then
+    for distro in jazzy humble iron rolling; do
+        if [[ -f "/opt/ros/$distro/setup.bash" ]]; then
+            ROS_DISTRO="$distro"
+            break
+        fi
+    done
+fi
+
+if [[ -n "${ROS_DISTRO:-}" && -f "/opt/ros/$ROS_DISTRO/setup.bash" ]]; then
+    source "/opt/ros/$ROS_DISTRO/setup.bash"
+elif ! command -v ros2 &>/dev/null; then
+    echo "[ERROR] No ROS 2 installation found in /opt/ros or PATH."
+    exit 1
+fi
+
 if [[ ! -f "$ROOT/install/setup.bash" ]]; then
     echo "[ERROR] Workspace has not been built:"
     echo "        $ROOT/install/setup.bash not found"
@@ -21,7 +37,8 @@ source "$ROOT/install/setup.bash"
 
 export RMW_IMPLEMENTATION=rmw_fastrtps_cpp
 export FASTDDS_BUILTIN_TRANSPORTS=UDPv4
-export ROS_DOMAIN_ID=0
+export ROS_DOMAIN_ID="${ROS_DOMAIN_ID:-0}"
+export ROS_AUTOMATIC_DISCOVERY_RANGE="${DYNAMUHSIM_DISCOVERY_RANGE:-LOCALHOST}"
 
 set -Eeuo pipefail
 
@@ -51,6 +68,34 @@ TRIAL_TIMEOUT_S="${TRIAL_TIMEOUT_S:-180}"
 READY_TIMEOUT_S="${READY_TIMEOUT_S:-60}"
 
 CONTROLLER="${CONTROLLER:-dwb}"
+
+# UI Mode options:
+#   "rviz" (default) : Only RViz2 (no Gazebo 3D GUI)
+#   "none"           : Absolute no UI (fastest, no Gazebo, no RViz2)
+#   "full"           : Both Gazebo 3D GUI and RViz2
+UI_MODE="${UI_MODE:-${UI:-rviz}}"
+case "${UI_MODE,,}" in
+    none|headless|no|false|no_ui|0)
+        GUI="false"
+        RVIZ="false"
+        UI_MODE="none (absolute no UI)"
+        ;;
+    rviz|rviz_only|only_rviz)
+        GUI="false"
+        RVIZ="true"
+        UI_MODE="rviz (only RViz2, headless Gazebo)"
+        ;;
+    full|all|both|true|1)
+        GUI="true"
+        RVIZ="true"
+        UI_MODE="full (Gazebo 3D + RViz2)"
+        ;;
+    *)
+        GUI="${GUI:-false}"
+        RVIZ="${RVIZ:-true}"
+        UI_MODE="custom (Gazebo: $GUI, RViz: $RVIZ)"
+        ;;
+esac
 
 # Automatic experiment output separation
 case "${WIDTH,,}" in
@@ -132,39 +177,45 @@ cleanup_processes() {
 kill_stale_ros_processes() {
     echo "[CLEANUP] Removing stale processes..."
 
-    pkill -TERM -x amcl 2>/dev/null || true
-    pkill -TERM -x map_server 2>/dev/null || true
-    pkill -TERM -x planner_server 2>/dev/null || true
-    pkill -TERM -x controller_server 2>/dev/null || true
-    pkill -TERM -x bt_navigator 2>/dev/null || true
-    pkill -TERM -x behavior_server 2>/dev/null || true
-    pkill -TERM -x waypoint_follower 2>/dev/null || true
-    pkill -TERM -x lifecycle_manager 2>/dev/null || true
-    pkill -TERM -x parameter_bridge 2>/dev/null || true
-    pkill -TERM -x robot_state_publisher 2>/dev/null || true
-    pkill -TERM -x rviz2 2>/dev/null || true
+    pkill -TERM -f 'nav2_lifecycle_manager' 2>/dev/null || true
+    pkill -TERM -f 'controller_server' 2>/dev/null || true
+    pkill -TERM -f 'waypoint_follower' 2>/dev/null || true
+    pkill -TERM -f 'goal_pose_bridge.py' 2>/dev/null || true
+    pkill -TERM -f 'parameter_bridge' 2>/dev/null || true
+    pkill -TERM -f 'robot_state_publisher' 2>/dev/null || true
+    pkill -TERM -f 'planner_server' 2>/dev/null || true
+    pkill -TERM -f 'bt_navigator' 2>/dev/null || true
+    pkill -TERM -f 'behavior_server' 2>/dev/null || true
+    pkill -TERM -f 'map_server' 2>/dev/null || true
+    pkill -TERM -f 'amcl' 2>/dev/null || true
+    pkill -TERM -f 'rviz2' 2>/dev/null || true
     pkill -TERM -f 'ros2 bag record' 2>/dev/null || true
     pkill -TERM -f 'record_obstacle.py' 2>/dev/null || true
     pkill -TERM -f 'gz sim' 2>/dev/null || true
+    pkill -TERM -f 'nav2_corridor.launch.py' 2>/dev/null || true
+    pkill -TERM -f 'corridor_tb3.launch.py' 2>/dev/null || true
 
     sleep 2
 
-    pkill -KILL -x amcl 2>/dev/null || true
-    pkill -KILL -x map_server 2>/dev/null || true
-    pkill -KILL -x planner_server 2>/dev/null || true
-    pkill -KILL -x controller_server 2>/dev/null || true
-    pkill -KILL -x bt_navigator 2>/dev/null || true
-    pkill -KILL -x behavior_server 2>/dev/null || true
-    pkill -KILL -x waypoint_follower 2>/dev/null || true
-    pkill -KILL -x lifecycle_manager 2>/dev/null || true
-    pkill -KILL -x parameter_bridge 2>/dev/null || true
-    pkill -KILL -x robot_state_publisher 2>/dev/null || true
-    pkill -KILL -x rviz2 2>/dev/null || true
+    pkill -KILL -f 'nav2_lifecycle_manager' 2>/dev/null || true
+    pkill -KILL -f 'controller_server' 2>/dev/null || true
+    pkill -KILL -f 'waypoint_follower' 2>/dev/null || true
+    pkill -KILL -f 'goal_pose_bridge.py' 2>/dev/null || true
+    pkill -KILL -f 'parameter_bridge' 2>/dev/null || true
+    pkill -KILL -f 'robot_state_publisher' 2>/dev/null || true
+    pkill -KILL -f 'planner_server' 2>/dev/null || true
+    pkill -KILL -f 'bt_navigator' 2>/dev/null || true
+    pkill -KILL -f 'behavior_server' 2>/dev/null || true
+    pkill -KILL -f 'map_server' 2>/dev/null || true
+    pkill -KILL -f 'amcl' 2>/dev/null || true
+    pkill -KILL -f 'rviz2' 2>/dev/null || true
     pkill -KILL -f 'ros2 bag record' 2>/dev/null || true
     pkill -KILL -f 'record_obstacle.py' 2>/dev/null || true
     pkill -KILL -f 'gz sim' 2>/dev/null || true
+    pkill -KILL -f 'nav2_corridor.launch.py' 2>/dev/null || true
+    pkill -KILL -f 'corridor_tb3.launch.py' 2>/dev/null || true
 
-    sleep 2
+    sleep 1
 }
 
 
@@ -290,6 +341,7 @@ publish_initial_pose() {
         "import math; print(math.cos(float('$MAP_INITIAL_YAW') / 2.0))")"
 
     ros2 topic pub \
+        --use-sim-time \
         --rate 2 \
         /initialpose \
         geometry_msgs/msg/PoseWithCovarianceStamped \
@@ -466,6 +518,8 @@ run_trial() {
         corridor_tb3.launch.py \
         width:="$WIDTH" \
         obstacle:="$OBSTACLE_TYPE" \
+        gui:="$GUI" \
+        rviz:="$RVIZ" \
         >"$launch_log" 2>&1 &
 
     local launch_pid="$!"
@@ -517,6 +571,9 @@ run_trial() {
         params_file:="$NAV2_PARAMS" \
         map:="$NAV2_MAP" \
         >"$nav_log" 2>&1 &
+
+    local nav_pid="$!"
+    PIDS+=("$nav_pid")
 
     # --------------------------------------------------
     # 3. Nav2 lifecycle readiness
@@ -910,6 +967,7 @@ echo "Trials         : $TRIAL_COUNT"
 echo "Start          : $START_TRIAL"
 echo "Map initial    : ($MAP_INITIAL_X, $MAP_INITIAL_Y, $MAP_INITIAL_YAW)"
 echo "Goal           : ($GOAL_X, $GOAL_Y)"
+echo "UI Mode        : $UI_MODE"
 echo "Timeout        : ${TRIAL_TIMEOUT_S}s"
 echo "=========================================="
 echo
