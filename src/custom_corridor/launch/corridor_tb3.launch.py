@@ -126,8 +126,8 @@ def launch_setup(context):
     # Bridge configuration
     # ---------------------------------------------------------
     bridge_config = os.path.join(
-        turtlebot_share,
-        'params',
+        corridor_share,
+        'config',
         'turtlebot3_burger_bridge.yaml'
     )
 
@@ -188,6 +188,65 @@ def launch_setup(context):
         output='screen',
     )
 
+    # ros_gz_image provides efficient RGB and float depth image conversion.
+    # Names follow the RealSense ROS convention and both images are aligned.
+    image_bridge = Node(
+        package='ros_gz_image',
+        executable='image_bridge',
+        name='camera_image_bridge',
+        arguments=['/camera/image', '/camera/depth_image'],
+        remappings=[
+            ('/camera/image', '/camera/color/image_raw'),
+            ('/camera/depth_image', '/camera/depth/image_rect_raw'),
+        ],
+        parameters=[{'use_sim_time': True}],
+        output='screen',
+    )
+
+    # The installed Burger URDF has no camera frames, so publish the fixed
+    # transforms here. The optical frame follows the ROS camera convention:
+    # +Z forward, +X right, +Y down.
+    camera_link_tf = Node(
+        package='tf2_ros',
+        executable='static_transform_publisher',
+        name='camera_link_tf',
+        arguments=[
+            '--x', '0.08', '--y', '0.0', '--z', '0.20',
+            '--roll', '0.0', '--pitch', '0.0', '--yaw', '0.0',
+            '--frame-id', 'base_link',
+            '--child-frame-id', 'camera_link',
+        ],
+        output='screen',
+    )
+
+    camera_optical_tf = Node(
+        package='tf2_ros',
+        executable='static_transform_publisher',
+        name='camera_optical_tf',
+        arguments=[
+            '--x', '0.0', '--y', '0.0', '--z', '0.0',
+            '--roll', '-1.57079632679', '--pitch', '0.0',
+            '--yaw', '-1.57079632679',
+            '--frame-id', 'camera_link',
+            '--child-frame-id', 'camera_optical_frame',
+        ],
+        output='screen',
+    )
+
+    camera_imu_tf = Node(
+        package='tf2_ros',
+        executable='static_transform_publisher',
+        name='camera_imu_tf',
+        arguments=[
+            '--x', '0.0', '--y', '0.0', '--z', '0.0',
+            '--roll', '0.0', '--pitch', '0.0', '--yaw', '0.0',
+            '--frame-id', 'camera_link',
+            '--child-frame-id', 'camera_imu_frame',
+        ],
+        parameters=[{'use_sim_time': True}],
+        output='screen',
+    )
+
     obstacle_bridge = Node(
         package='ros_gz_bridge',
         executable='parameter_bridge',
@@ -228,6 +287,7 @@ def launch_setup(context):
             {
                 'robot_description': robot_description,
                 'use_sim_time': True,
+                'ignore_timestamp': True,
             }
         ],
         output='screen',
@@ -236,6 +296,10 @@ def launch_setup(context):
         gazebo,
         spawn_robot,
         bridge,
+        image_bridge,
+        camera_link_tf,
+        camera_optical_tf,
+        camera_imu_tf,
         obstacle_bridge,
         robot_state_publisher,
         rviz,

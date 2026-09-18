@@ -19,11 +19,23 @@ fi
 
 source "$ROOT/install/setup.bash"
 
-export RMW_IMPLEMENTATION=rmw_fastrtps_cpp
-export FASTDDS_BUILTIN_TRANSPORTS=UDPv4
-export ROS_DOMAIN_ID=0
+# Keep automated trials isolated from unrelated ROS/Gazebo sessions. Callers can
+# still select a different domain by exporting ROS_DOMAIN_ID before this script.
+export RMW_IMPLEMENTATION="${RMW_IMPLEMENTATION:-rmw_fastrtps_cpp}"
+export FASTDDS_BUILTIN_TRANSPORTS="${FASTDDS_BUILTIN_TRANSPORTS:-UDPv4}"
+export ROS_DOMAIN_ID="${ROS_DOMAIN_ID:-42}"
+export ROS_AUTOMATIC_DISCOVERY_RANGE="${ROS_AUTOMATIC_DISCOVERY_RANGE:-LOCALHOST}"
 
 set -Eeuo pipefail
+
+PIDS=()
+
+LOCK_FILE="/tmp/custom_corridor_trials_${UID}_${ROS_DOMAIN_ID}.lock"
+exec 9>"$LOCK_FILE"
+if ! flock -n 9; then
+    echo "[ERROR] Another trial runner is already using ROS domain $ROS_DOMAIN_ID."
+    exit 1
+fi
 
 
 # ------------------------------------------------------
@@ -36,6 +48,8 @@ START_TRIAL="${START_TRIAL:-3}"
 
 WIDTH="${WIDTH:-0.90}"
 OBSTACLE_TYPE="${OBSTACLE_TYPE:-human}"
+GUI="${GUI:-false}"
+RVIZ="${RVIZ:-false}"
 
 # MAP-frame coordinates, NOT Gazebo/world coordinates.
 MAP_INITIAL_X="${MAP_INITIAL_X:-0.0}"
@@ -48,7 +62,8 @@ GOAL_YAW="${GOAL_YAW:-0.0}"
 GOAL_TOLERANCE="${GOAL_TOLERANCE:-0.20}"
 
 TRIAL_TIMEOUT_S="${TRIAL_TIMEOUT_S:-180}"
-READY_TIMEOUT_S="${READY_TIMEOUT_S:-60}"
+READY_TIMEOUT_S="${READY_TIMEOUT_S:-240}"
+DOMAIN_IDLE_TIMEOUT_S="${DOMAIN_IDLE_TIMEOUT_S:-30}"
 
 CONTROLLER="${CONTROLLER:-dwb}"
 
@@ -104,71 +119,99 @@ ANALYZER="${ANALYZER:-$ROOT/analyze_baseline.py}"
     exit 2
 }
 
+case "${GUI,,}" in
+    true|false) ;;
+    *)
+        echo "ERROR: GUI must be true or false"
+        exit 2
+        ;;
+esac
+
+case "${RVIZ,,}" in
+    true|false) ;;
+    *)
+        echo "ERROR: RVIZ must be true or false"
+        exit 2
+        ;;
+esac
+
 cleanup_processes() {
     local pid
+    local tracked_pids=("${PIDS[@]:-}")
+    local attempt
+    local any_alive
 
-    for pid in "${PIDS[@]:-}"; do
-        if kill -0 "$pid" 2>/dev/null; then
-            kill -TERM -- "-$pid" 2>/dev/null ||
-            kill -TERM "$pid" 2>/dev/null ||
-            true
-        fi
+    PIDS=()
+
+    for pid in "${tracked_pids[@]}"; do
+        kill -TERM -- "-$pid" 2>/dev/null ||
+        kill -TERM "$pid" 2>/dev/null ||
+        true
     done
 
-    sleep 1
+    # Give launch processes and their children time to dispose their DDS
+    # participants. Killing them immediately leaves stale ROS graph entries.
+    for attempt in {1..40}; do
+        any_alive=false
+        for pid in "${tracked_pids[@]}"; do
+            if kill -0 -- "-$pid" 2>/dev/null || kill -0 "$pid" 2>/dev/null; then
+                any_alive=true
+                break
+            fi
+        done
 
-    for pid in "${PIDS[@]:-}"; do
-        if kill -0 "$pid" 2>/dev/null; then
+        [[ "$any_alive" == false ]] && break
+        sleep 0.25
+    done
+
+    for pid in "${tracked_pids[@]}"; do
+        if kill -0 -- "-$pid" 2>/dev/null || kill -0 "$pid" 2>/dev/null; then
             kill -KILL -- "-$pid" 2>/dev/null ||
             kill -KILL "$pid" 2>/dev/null ||
             true
         fi
+        wait "$pid" 2>/dev/null || true
     done
 
-    PIDS=()
+    # ros2cli caches discovery data in a domain-specific daemon. Refresh it so
+    # the next trial cannot see endpoints from the process group just stopped.
+    timeout 10s ros2 daemon stop >/dev/null 2>&1 || true
 }
 
 
-kill_stale_ros_processes() {
-    echo "[CLEANUP] Removing stale processes..."
+ensure_domain_is_idle() {
+    local clock_publishers
+    local deadline=$((SECONDS + DOMAIN_IDLE_TIMEOUT_S))
+    local announced_wait=false
 
-    pkill -TERM -x amcl 2>/dev/null || true
-    pkill -TERM -x map_server 2>/dev/null || true
-    pkill -TERM -x planner_server 2>/dev/null || true
-    pkill -TERM -x controller_server 2>/dev/null || true
-    pkill -TERM -x bt_navigator 2>/dev/null || true
-    pkill -TERM -x behavior_server 2>/dev/null || true
-    pkill -TERM -x waypoint_follower 2>/dev/null || true
-    pkill -TERM -x lifecycle_manager 2>/dev/null || true
-    pkill -TERM -x parameter_bridge 2>/dev/null || true
-    pkill -TERM -x robot_state_publisher 2>/dev/null || true
-    pkill -TERM -x rviz2 2>/dev/null || true
-    pkill -TERM -f 'ros2 bag record' 2>/dev/null || true
-    pkill -TERM -f 'record_obstacle.py' 2>/dev/null || true
-    pkill -TERM -f 'gz sim' 2>/dev/null || true
+    while (( SECONDS < deadline )); do
+        clock_publishers="$(
+            timeout 5s ros2 topic info /clock --no-daemon --spin-time 1 \
+                2>/dev/null | sed -n 's/^Publisher count: //p' || true
+        )"
 
-    sleep 2
+        if [[ ! "$clock_publishers" =~ ^[1-9][0-9]*$ ]]; then
+            return 0
+        fi
 
-    pkill -KILL -x amcl 2>/dev/null || true
-    pkill -KILL -x map_server 2>/dev/null || true
-    pkill -KILL -x planner_server 2>/dev/null || true
-    pkill -KILL -x controller_server 2>/dev/null || true
-    pkill -KILL -x bt_navigator 2>/dev/null || true
-    pkill -KILL -x behavior_server 2>/dev/null || true
-    pkill -KILL -x waypoint_follower 2>/dev/null || true
-    pkill -KILL -x lifecycle_manager 2>/dev/null || true
-    pkill -KILL -x parameter_bridge 2>/dev/null || true
-    pkill -KILL -x robot_state_publisher 2>/dev/null || true
-    pkill -KILL -x rviz2 2>/dev/null || true
-    pkill -KILL -f 'ros2 bag record' 2>/dev/null || true
-    pkill -KILL -f 'record_obstacle.py' 2>/dev/null || true
-    pkill -KILL -f 'gz sim' 2>/dev/null || true
+        if [[ "$announced_wait" == false ]]; then
+            echo "[WAIT] ROS domain $ROS_DOMAIN_ID still has $clock_publishers /clock publisher(s)..."
+            announced_wait=true
+        fi
+        sleep 1
+    done
 
-    sleep 2
+    if [[ "$clock_publishers" =~ ^[1-9][0-9]*$ ]]; then
+        echo "[ERROR] ROS domain $ROS_DOMAIN_ID already has $clock_publishers /clock publisher(s)."
+        echo "        Stop that simulator or select another ROS_DOMAIN_ID."
+        return 1
+    fi
 }
 
 
-trap cleanup_processes EXIT INT TERM
+trap cleanup_processes EXIT
+trap 'exit 130' INT
+trap 'exit 143' TERM
 
 
 # ------------------------------------------------------
@@ -182,14 +225,32 @@ wait_for_gazebo_ready() {
     while (( SECONDS < deadline )); do
 
         local topics
-        topics="$(timeout 5s ros2 topic list 2>/dev/null || true)"
+        topics="$(
+            timeout 5s ros2 topic list --no-daemon --spin-time 0.5 \
+                2>/dev/null || true
+        )"
 
-        if grep -qx "/clock" <<< "$topics" &&
-           grep -qx "/scan" <<< "$topics" &&
-           grep -qx "/tf" <<< "$topics"
-        then
-            echo "[READY] Gazebo topics detected"
-            return 0
+        if grep -qx "/clock" <<< "$topics"; then
+            local clock_publishers
+            clock_publishers="$(
+                timeout 5s ros2 topic info /clock --no-daemon --spin-time 0.5 \
+                    2>/dev/null |
+                    sed -n 's/^Publisher count: //p'
+            )"
+
+            if [[ "$clock_publishers" =~ ^[0-9]+$ ]] &&
+               (( clock_publishers > 1 )); then
+                echo "[ERROR] Multiple /clock publishers detected: $clock_publishers"
+                echo "        Use a unique ROS_DOMAIN_ID and stop duplicate simulators."
+                return 2
+            fi
+
+            if [[ "$clock_publishers" == "1" ]] &&
+               grep -qx "/scan" <<< "$topics" &&
+               grep -qx "/tf" <<< "$topics"; then
+                echo "[READY] Gazebo topics detected (single /clock publisher)"
+                return 0
+            fi
         fi
 
         sleep 1
@@ -207,7 +268,10 @@ wait_for_nav2_nodes() {
 
     while (( SECONDS < deadline )); do
         local nodes
-        nodes="$(timeout 2s ros2 node list 2>/dev/null || true)"
+        nodes="$(
+            timeout 3s ros2 node list --no-daemon --spin-time 0.5 \
+                2>/dev/null || true
+        )"
 
         if grep -qx "/map_server" <<< "$nodes" \
             && grep -qx "/amcl" <<< "$nodes" \
@@ -452,7 +516,7 @@ run_trial() {
     : > "$nav_log"
     : > "$goal_log"
 
-    kill_stale_ros_processes
+    ensure_domain_is_idle
 
 
     # --------------------------------------------------
@@ -466,6 +530,8 @@ run_trial() {
         corridor_tb3.launch.py \
         width:="$WIDTH" \
         obstacle:="$OBSTACLE_TYPE" \
+        gui:="$GUI" \
+        rviz:="$RVIZ" \
         >"$launch_log" 2>&1 &
 
     local launch_pid="$!"
@@ -518,48 +584,23 @@ run_trial() {
         map:="$NAV2_MAP" \
         >"$nav_log" 2>&1 &
 
+    local nav_pid="$!"
+    PIDS+=("$nav_pid")
+
     # --------------------------------------------------
     # 3. Nav2 lifecycle readiness
     # --------------------------------------------------
 
     echo "[3/8] Waiting for Nav2 lifecycle manager..."
 
-    local nav_nodes=(
-        /map_server
-        /amcl
-        /planner_server
-        /controller_server
-        /bt_navigator
-        /behavior_server
-        /waypoint_follower
-    )
-
     local nav_deadline=$((SECONDS + READY_TIMEOUT_S))
 
     local all_active=false
 
     while (( SECONDS < nav_deadline )); do
-        # Check if both localization and navigation lifecycle managers confirmed active
         if grep -q "lifecycle_manager_localization.*Managed nodes are active" "$nav_log" &&
            grep -q "lifecycle_manager_navigation.*Managed nodes are active" "$nav_log"; then
             echo "[READY] Nav2 stack ACTIVE (confirmed via lifecycle managers)"
-            all_active=true
-            break
-        fi
-
-        local nodes_ok=true
-        for node in "${nav_nodes[@]}"; do
-            local state=""
-            state="$(timeout 3s ros2 lifecycle get "$node" 2>/dev/null || true)"
-
-            if ! grep -Eq '^active[[:space:]]*\[[0-9]+\]' <<< "$state"; then
-                nodes_ok=false
-                break
-            fi
-        done
-
-        if [[ "$nodes_ok" == true ]]; then
-            echo "[READY] Nav2 stack ACTIVE"
             all_active=true
             break
         fi
@@ -906,6 +947,9 @@ echo "=========================================="
 echo "Baseline       : $BASELINE_DIR"
 echo "Controller     : $CONTROLLER"
 echo "Width          : $WIDTH"
+echo "ROS domain     : $ROS_DOMAIN_ID"
+echo "Gazebo GUI     : $GUI"
+echo "RViz           : $RVIZ"
 echo "Trials         : $TRIAL_COUNT"
 echo "Start          : $START_TRIAL"
 echo "Map initial    : ($MAP_INITIAL_X, $MAP_INITIAL_Y, $MAP_INITIAL_YAW)"
@@ -925,7 +969,6 @@ for ((offset=0; offset<TRIAL_COUNT; offset++)); do
     echo "[BATCH] Cleaning up after trial $trial_id..."
 
     cleanup_processes
-    kill_stale_ros_processes
 
     echo "[BATCH] Trial $trial_id finished."
     echo

@@ -23,6 +23,7 @@ install(
 install(
   PROGRAMS
     scripts/goal_pose_bridge.py
+    scripts/d435i_viewer.py
   DESTINATION lib/${PROJECT_NAME}
 )
 
