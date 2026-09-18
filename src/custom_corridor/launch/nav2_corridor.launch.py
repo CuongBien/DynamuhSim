@@ -102,7 +102,8 @@ def launch_setup(context, *args, **kwargs):
                 output="screen",
                 parameters=[
                     {
-                        "use_sim_time": True,
+                        # Lifecycle supervision must not accelerate with Gazebo.
+                        "use_sim_time": False,
                         "autostart": True,
                         "bond_timeout": 30.0,
                         "attempt_respawn_reconnection": True,
@@ -126,7 +127,8 @@ def launch_setup(context, *args, **kwargs):
                 output="screen",
                 parameters=[
                     {
-                        "use_sim_time": True,
+                        # MPPI configuration can be CPU-heavy in headless trials.
+                        "use_sim_time": False,
                         "autostart": True,
                         "bond_timeout": 30.0,
                         "attempt_respawn_reconnection": True,

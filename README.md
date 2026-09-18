@@ -166,6 +166,7 @@ Run automated end-to-end trials with automated launch, AMCL pose convergence, ba
 cd ~/nav_ws
 source /opt/ros/jazzy/setup.bash
 source install/setup.bash
+export ROS_DOMAIN_ID=42
 
 # Run 1 trial with DWB controller in 0.90m corridor
 START_TRIAL=1 CONTROLLER=dwb ./run_baseline_trials.sh 1
@@ -183,12 +184,18 @@ START_TRIAL=1 WIDTH=arena CONTROLLER=mppi GOAL_X=15.0 ./run_baseline_trials.sh 3
 | `CONTROLLER` | `dwb` | Local trajectory planner plugin (`dwb` or `mppi`) |
 | `WIDTH` | `0.90` | Environment selection (`0.70`, `0.90`, `1.20`, `arena`) |
 | `OBSTACLE_TYPE` | `human` | Dynamic obstacle type (`human`, `object`, `none`) |
+| `ROS_DOMAIN_ID` | `42` | ROS domain used to isolate the batch from other simulators |
+| `ROS_AUTOMATIC_DISCOVERY_RANGE` | `LOCALHOST` | Prevent discovery of ROS sessions on other machines |
+| `FASTDDS_BUILTIN_TRANSPORTS` | `UDPv4` | Avoid Fast DDS shared-memory service stalls during bringup |
+| `GUI` | `false` | Enable or disable the Gazebo GUI during automated trials |
+| `RVIZ` | `false` | Enable or disable RViz2 during automated trials |
 | `START_TRIAL` | `3` | Starting trial index |
 | `GOAL_X` | `20.0` | Target X coordinate in map frame (meters) |
 | `GOAL_Y` | `0.0` | Target Y coordinate in map frame (meters) |
 | `GOAL_TOLERANCE`| `0.20` | Goal acceptance tolerance (meters) |
 | `TRIAL_TIMEOUT_S`| `180` | Maximum navigation duration (seconds) |
-| `READY_TIMEOUT_S`| `60` | Maximum stack bringup waiting time (seconds) |
+| `READY_TIMEOUT_S`| `240` | Maximum stack bringup waiting time (seconds) |
+| `DOMAIN_IDLE_TIMEOUT_S` | `30` | Wait for old DDS endpoints to leave the selected domain |
 
 Each trial outputs:
 - `trial_XX/`: MCAP rosbag recording (`/cmd_vel`, `/odom`, `/scan`, `/tf`, `/plan`, `/local_plan`, etc.)
