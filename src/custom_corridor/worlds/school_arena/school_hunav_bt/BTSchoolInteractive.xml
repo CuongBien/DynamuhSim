@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root BTCPP_format="4">
+  <TreeNodesModel>
+    <Condition ID="IsRobotClose">
+      <input_port name="agent_id" type="int">identifier of the agent</input_port>
+      <input_port name="threshold" type="double">trigger distance in metres</input_port>
+    </Condition>
+    <Action ID="AvoidRobot">
+      <input_port name="agent_id" type="int">identifier of the agent</input_port>
+      <input_port name="time_step" type="double">simulation step in seconds</input_port>
+      <input_port name="safe_distance" type="double">desired clearance in metres</input_port>
+      <input_port name="runaway_vel" type="double">yielding speed in m/s</input_port>
+      <input_port name="duration" type="double">maximum reaction duration</input_port>
+    </Action>
+  </TreeNodesModel>
+
+  <include path="BTRegularNav.xml"/>
+
+  <BehaviorTree ID="SchoolInteractiveTree">
+    <Fallback name="SchoolPedestrianFallback">
+      <!-- In a narrow corridor, yield briefly when the robot violates the
+           pedestrian's personal space.  AvoidRobot is a native HuNav node. -->
+      <Sequence name="YieldToCloseRobot">
+        <IsRobotClose agent_id="{id}" threshold="0.95"/>
+        <AvoidRobot agent_id="{id}" time_step="{dt}"
+                    safe_distance="1.10" runaway_vel="0.75"
+                    duration="0.80"/>
+      </Sequence>
+      <Sequence name="NormalSocialForceNavigation">
+        <SetBlackboard output_key="agentid" value="{id}"/>
+        <SetBlackboard output_key="timestep" value="{dt}"/>
+        <SubTree ID="RegularNavTree" id="{agentid}" dt="{timestep}"/>
+      </Sequence>
+    </Fallback>
+  </BehaviorTree>
+</root>
