@@ -73,6 +73,37 @@ def generate_launch_description():
             output="screen",
         )],
     )
+    # Resolve the physical model by name through the Gazebo GUI service.
+    camera_follow = TimerAction(
+        period=5.0,
+        actions=[ExecuteProcess(
+            cmd=[
+                "gz", "service", "-s", "/gui/follow",
+                "--reqtype", "gz.msgs.StringMsg",
+                "--reptype", "gz.msgs.Boolean",
+                "--timeout", "3000", "--req", 'data: "robot"',
+            ],
+            condition=IfCondition(LaunchConfiguration("gui")),
+            output="screen",
+        )],
+    )
+    camera_follow_view = TimerAction(
+        period=5.5,
+        actions=[ExecuteProcess(
+            cmd=[
+                "gz", "topic", "-t", "/gui/track",
+                "-m", "gz.msgs.CameraTrack", "-p",
+                (
+                    'track_mode: USE_LAST '
+                    'follow_offset {x: -2.5 y: 0.0 z: 2.2} '
+                    'follow_pgain: 0.08 track_pgain: 0.08'
+                ),
+            ],
+            condition=IfCondition(LaunchConfiguration("gui")),
+            output="screen",
+        )],
+    )
+
     nav2 = TimerAction(
         period=6.0,
         actions=[IncludeLaunchDescription(
@@ -121,6 +152,7 @@ def generate_launch_description():
         SetEnvironmentVariable("FASTDDS_BUILTIN_TRANSPORTS", "UDPv4"),
         SetEnvironmentVariable("GZ_PARTITION", "school_hunav"),
         SetEnvironmentVariable("GZ_SIM_RESOURCE_PATH", resource_path),
-        gazebo_gui, gazebo_headless, bridge_node, rsp, spawn, nav2, applier, sync, rviz,
+        gazebo_gui, gazebo_headless, bridge_node, rsp, spawn, camera_follow, camera_follow_view,
+        nav2, applier, sync, rviz,
     ])
 
