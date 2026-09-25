@@ -1,0 +1,78 @@
+hunav_loader:
+  ros__parameters:
+    yaml_base_name: demo_1_hunav
+    simulator: Gazebo Fortress
+    map: school_arena
+    publish_people: true
+    global_goals:
+      1:
+        x: -13.53
+        y: -8.9
+      2:
+        x: -13.53
+        y: -8.6
+      3:
+        x: -13.53
+        y: -8.15
+      4:
+        x: -14.0
+        y: -8.15
+      5:
+        x: -10.0
+        y: -7.85
+      6:
+        x: -5.0
+        y: -8.15
+      7:
+        x: -2.0
+        y: -8.18
+      8:
+        x: 0.0
+        y: -7.85
+      9:
+        x: 1.17
+        y: -8.15
+      10:
+        x: 1.17
+        y: -7.4
+      11:
+        x: 1.17
+        y: -7.1
+      12:
+        x: 2.15
+        y: -5.4
+    agents:
+    - demo_primary
+    demo_primary:
+      id: 1
+      group_id: -1
+      skin: 0
+      max_vel: 0.85
+      radius: 0.22
+      goal_radius: 0.25
+      cyclic_goals: false
+      init_pose:
+        x: -12.55
+        y: -10.6
+        z: 0.0
+        h: 0.0
+      behavior:
+        type: Regular
+        configuration: 0
+        goal_force_factor: 2.0
+        obstacle_force_factor: 10.0
+        social_force_factor: 5.0
+        other_force_factor: 20.0
+      goals:
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+      - 6
+      - 7
+      - 8
+      - 9
+      - 10
+      - 11
+      - 12
