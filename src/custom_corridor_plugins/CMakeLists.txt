@@ -20,4 +20,6 @@ install(TARGETS oscillating_obstacle_system
   LIBRARY DESTINATION lib
 )
 
+ament_environment_hooks()
+
 ament_package()

@@ -23,6 +23,7 @@ install(
 install(
   PROGRAMS
     scripts/goal_pose_bridge.py
+    scripts/hospital_auto_route.py
   DESTINATION lib/${PROJECT_NAME}
 )
 
