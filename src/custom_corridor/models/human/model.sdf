@@ -1,0 +1,40 @@
+<?xml version="1.0" ?>
+<sdf version="1.6">
+  <model name="human">
+    <static>false</static>
+
+    <link name="human_link">
+      <gravity>false</gravity>
+      <kinematic>true</kinematic>
+
+      <!-- Visual: sử dụng model người của Cường -->
+      <visual name="human_visual">
+        <geometry>
+          <mesh>
+            <uri>model://human/meshes/walk.dae</uri>
+            <scale>1 1 1</scale>
+          </mesh>
+        </geometry>
+      </visual>
+
+      <!-- Collision: hình trụ đơn giản bao quanh người -->
+      <collision name="human_collision">
+        <geometry>
+          <cylinder>
+            <radius>0.28</radius>
+            <length>1.70</length>
+          </cylinder>
+        </geometry>
+
+        <pose>0 0 0.85 0 0 0</pose>
+
+        <surface>
+          <contact>
+            <collide_without_contact>false</collide_without_contact>
+          </contact>
+        </surface>
+      </collision>
+
+    </link>
+  </model>
+</sdf>
