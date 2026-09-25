@@ -30,6 +30,10 @@ Ngày chạy: 2026-09-25
   `(17.60, 7.30)` và action trả về `SUCCEEDED`.
 - PASS: `/demo/gazebo_robot_pose`, `/demo/gazebo_robot_path` và
   `/demo/pose_sync_error` đồng bộ để đối chiếu trực tiếp trong RViz.
+- PASS: Gazebo GUI resolve `robot` qua `/gui/follow` (`data: true`) và camera
+  tự bám model thay vì đứng lại tại điểm spawn.
+- PASS: test `/cmd_vel` làm pose Gazebo đổi từ `(-13.51, -8.15)` thành
+  `(-13.23, -8.15)`; sai lệch Gazebo–TF sau test là 0,007 m.
 
 Baseline dùng `school_floor_baseline.world`, cùng static geometry với world
 chính nhưng bỏ proxy HuNav để actor chưa được điều khiển không chắn costmap.

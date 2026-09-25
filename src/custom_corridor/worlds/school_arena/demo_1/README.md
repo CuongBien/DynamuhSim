@@ -110,6 +110,7 @@ Launch sẽ:
 
 1. Mở `school_floor_baseline.world` (cùng geometry, bỏ proxy người để test robot).
 2. Spawn `demo_robot.sdf` màu cam tại `(-13.5, -8.15)` và camera Gazebo nhìn sẵn vào vị trí này.
+   Sau khi spawn, launch tự gọi `/gui/follow` và đặt camera bám model vật lý `robot`.
 3. Bridge `/clock`, `/tf`, `/odom`, `/scan`, `/cmd_vel` và camera.
 4. Chạy robot state publisher.
 5. Chạy map server, AMCL, SmacPlanner2D, controller và BT Navigator.
@@ -135,12 +136,18 @@ ros2 topic echo /demo/pose_sync_error --once
 Trong RViz: global plan màu xanh lá, local plan màu xanh dương, actual trail
 màu cam, mũi tên cam là pose thật Gazebo, hai polygon là footprint. Các điểm
 đỏ mang tên `Laser hits (red points, not a path)` là laser scan, không phải
-đường robot. Trong Gazebo robot có vỏ cam và thanh chỉ hướng xanh. Sai lệch
+đường robot. Trong Gazebo robot có vỏ cam và thanh chỉ hướng xanh. Camera Gazebo tự bám
+robot; có thể kéo chuột để đổi góc nhìn nhưng target follow vẫn là model vật
+lý. Sai lệch
 `/demo/pose_sync_error` nên dưới 0,20 m.
 
 Không chạy đồng thời script cũ `../hunav_gz8_pose_applier.py`; hai pose
 applier cùng ghi model là một nguyên nhân gây nhảy hoặc xuyên tường. Hai launch
 trong demo này chỉ dùng `collision_safe_pose_applier.py`.
+
+Không mở hai `school_demo.launch.py`/`school_hunav_demo.launch.py` cùng lúc vì
+các phiên dùng chung `GZ_PARTITION=school_hunav`; chạy trùng sẽ trộn `/clock`,
+`/tf` và làm Gazebo UI có vẻ lệch RViz.
 
 Terminal 2 — kiểm tra sáu plan live trước (chạy nhanh):
 
