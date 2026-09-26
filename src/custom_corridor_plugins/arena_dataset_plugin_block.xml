@@ -1,0 +1,25 @@
+<!-- Add this WORLD plugin inside <world name="arena_dataset"> ... </world>.
+     Recommended: place it near the other world-level system plugins. -->
+<plugin
+    filename="libmulti_human_scenario_system.so"
+    name="custom_corridor::MultiHumanScenarioSystem">
+
+  <human_count>4</human_count>
+
+  <scenario_topic>/multi_human/scenario</scenario_topic>
+  <command_topic>/multi_human/command</command_topic>
+
+  <!-- Actor mesh origin / proxy cylinder center heights -->
+  <visual_z>1.0</visual_z>
+  <proxy_z>0.85</proxy_z>
+
+  <!-- Used for humans omitted from an episode -->
+  <hidden_z>-50.0</hidden_z>
+
+  <!-- Must match <animation name="walk"> in each actor -->
+  <animation_name>walk</animation_name>
+
+  <!-- Important for fair C0..C4 comparison:
+       load scenario -> READY, then collector explicitly sends reset_start -->
+  <auto_start_on_scenario>false</auto_start_on_scenario>
+</plugin>
