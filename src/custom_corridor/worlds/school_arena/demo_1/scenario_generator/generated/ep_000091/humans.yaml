@@ -1,0 +1,170 @@
+hunav_loader:
+  ros__parameters:
+    yaml_base_name: scenario_same_direction_low_43
+    simulator: Gazebo Fortress
+    map: school_arena
+    publish_people: true
+    global_goals:
+      1:
+        x: 0.0
+        y: -7.85
+      2:
+        x: -2.0
+        y: -8.18
+      3:
+        x: -5.0
+        y: -8.15
+      4:
+        x: -10.0
+        y: -7.85
+      5:
+        x: -14.0
+        y: -8.15
+      6:
+        x: 15.9
+        y: 10.8733
+      7:
+        x: 15.6
+        y: 10.8733
+      8:
+        x: 15.0
+        y: 10.8733
+      9:
+        x: 15.0
+        y: 10.65
+      10:
+        x: 15.0
+        y: 9.8
+      11:
+        x: 15.0
+        y: 8.0
+      12:
+        x: 15.0
+        y: 3.5
+      13:
+        x: 15.0
+        y: 2.55
+      14:
+        x: 15.0
+        y: 0.0
+      15:
+        x: 7.0
+        y: 0.0
+      16:
+        x: 7.0
+        y: -2.0
+      17:
+        x: 7.0
+        y: -4.0
+      18:
+        x: 15.0
+        y: -4.0
+      19:
+        x: 15.0
+        y: -8.15
+      20:
+        x: 10.0
+        y: -8.15
+      21:
+        x: 5.0
+        y: -8.15
+      22:
+        x: 2.6
+        y: -8.15
+      23:
+        x: 0.0
+        y: -7.85
+      24:
+        x: -2.0
+        y: -8.18
+      25:
+        x: -5.0
+        y: -8.15
+      26:
+        x: -3.73
+        y: -8.15
+      27:
+        x: -3.73
+        y: -8.6
+      28:
+        x: -3.73
+        y: -8.9
+      29:
+        x: -2.75
+        y: -10.6
+    agents:
+    - event_agent_1
+    - background_agent_1
+    event_agent_1:
+      id: 1
+      group_id: -1
+      skin: 0
+      max_vel: 0.3073
+      radius: 0.22
+      goal_radius: 0.25
+      cyclic_goals: false
+      init_pose:
+        x: 2.60604
+        y: -8.09769
+        z: 0.0
+        h: 3.026716
+      behavior:
+        type: Surprised
+        configuration: 0
+        goal_force_factor: 2.0
+        obstacle_force_factor: 10.0
+        social_force_factor: 5.0
+        other_force_factor: 20.0
+      goals:
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+      start_delay: 1.8838
+    background_agent_1:
+      id: 2
+      group_id: -1
+      skin: 1
+      max_vel: 0.5861
+      radius: 0.22
+      goal_radius: 0.25
+      cyclic_goals: false
+      init_pose:
+        x: 17.6
+        y: 11.7667
+        z: 0.0
+        h: -2.657731
+      behavior:
+        type: Regular
+        configuration: 0
+        goal_force_factor: 2.0
+        obstacle_force_factor: 10.0
+        social_force_factor: 5.0
+        other_force_factor: 20.0
+      goals:
+      - 6
+      - 7
+      - 8
+      - 9
+      - 10
+      - 11
+      - 12
+      - 13
+      - 14
+      - 15
+      - 16
+      - 17
+      - 18
+      - 19
+      - 20
+      - 21
+      - 22
+      - 23
+      - 24
+      - 25
+      - 26
+      - 27
+      - 28
+      - 29
+      start_delay: 0.6317

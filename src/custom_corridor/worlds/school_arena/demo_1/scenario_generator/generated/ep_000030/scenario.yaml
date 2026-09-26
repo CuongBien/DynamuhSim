@@ -1,0 +1,51 @@
+dataset_version: v1.0
+seed: 842874844
+scenario_family: crossing
+density: low
+map: school_floor_01
+robot:
+  start_zone: corridor_f
+  goal_zone: corridor_f
+  start_node: corridor_f_lower_before_bin
+  goal_node: corridor_f_before_upper_bin
+  start_pose:
+    x: 15.0
+    y: 2.55
+    heading: 1.570796
+  route:
+  - corridor_f_lower_before_bin
+  - corridor_f_lower_after_bin
+  - corridor_f_mid
+  - corridor_f_before_upper_bin
+  heading: 1.570796
+event:
+  room: room14
+  doorway: room14_door
+  corridor: corridor_f
+  conflict_node: corridor_f_mid
+  time_tolerance: 1.5
+  crossing_mode: room_to_room
+humans:
+- name: event_agent_1
+  role: event_agent
+  start_node: room14_center
+  goal_node: room12_center
+  route:
+  - room14_center
+  - room14_predoor
+  - room14_door
+  - room14_approach
+  - corridor_f_mid
+  - room12_approach
+  - room12_door
+  - room12_predoor
+  - room12_center
+  spawn:
+    x: 12.4
+    y: 6.95
+    heading: -0.505099
+  speed: 0.8743
+  start_delay: 4.1384
+  lateral_offset: 0.0
+  behavior: regular
+  group_id: -1

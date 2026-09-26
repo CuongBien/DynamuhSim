@@ -1,0 +1,111 @@
+dataset_version: v1.0
+seed: 218
+scenario_family: crossing
+density: low
+map: school_floor_01
+robot:
+  start_zone: corridor_a
+  goal_zone: corridor_a
+  start_node: corridor_a_2
+  goal_node: corridor_a_locker_south
+  start_pose:
+    x: -5.0
+    y: -8.15
+    heading: -0.01
+  route:
+  - corridor_a_2
+  - corridor_a_backpack_south
+  - corridor_a_3
+  - corridor_a_locker_south
+  heading: -0.01
+event:
+  room: room10
+  doorway: room10_door
+  corridor: corridor_a
+  conflict_node: corridor_a_3
+  time_tolerance: 1.5
+  crossing_mode: room_to_room
+humans:
+- name: event_agent_1
+  role: event_agent
+  start_node: room10_center
+  goal_node: room04_center
+  route:
+  - room10_center
+  - room10_predoor
+  - room10_door
+  - room10_approach
+  - corridor_a_3
+  - room04_approach
+  - room04_door
+  - room04_predoor
+  - room04_center
+  spawn:
+    x: 2.15
+    y: -5.4
+    heading: -2.093735
+  speed: 0.6987
+  start_delay: 2.8993
+  lateral_offset: 0.0
+  behavior: regular
+  group_id: -1
+- name: background_agent_1
+  role: background_agent
+  start_node: room09_center
+  goal_node: room11_center
+  route:
+  - room09_center
+  - room09_predoor
+  - room09_door
+  - room09_approach
+  - corridor_a_2
+  - corridor_a_backpack_south
+  - corridor_a_3
+  - corridor_a_locker_south
+  - corridor_a_4
+  - corridor_a_5
+  - junction_ab
+  - junction_bc
+  - junction_cd
+  - stair_entrance
+  - junction_de
+  - junction_ef
+  - corridor_f_lower_before_bin
+  - room11_approach
+  - room11_door
+  - room11_predoor
+  - room11_center
+  spawn:
+    x: -2.75
+    y: -5.4
+    heading: -2.093735
+  speed: 0.846
+  start_delay: 4.1244
+  lateral_offset: 0.0
+  behavior: regular
+  group_id: -1
+- name: background_agent_2
+  role: background_agent
+  start_node: room01_center
+  goal_node: room03_center
+  route:
+  - room01_center
+  - room01_predoor
+  - room01_door
+  - room01_approach
+  - corridor_a_west
+  - corridor_a_1
+  - corridor_a_2
+  - room03_approach
+  - room03_door
+  - room03_predoor
+  - room03_center
+  spawn:
+    x: -12.55
+    y: -10.6
+    heading: 2.093735
+  speed: 0.9373
+  start_delay: 2.5754
+  lateral_offset: 0.0
+  behavior: regular
+  group_id: -1

@@ -1,0 +1,33 @@
+dataset_version: v1.0
+map_name: school_floor_01
+source:
+  zones: ../../zones.yaml
+  graph: ../../human_navigation_graph.yaml
+  map: ../../map.yaml
+  hunav: ../../hunav_one_human.yaml
+  world: ../../school_floor.world
+max_attempts: 100
+robot:
+  radius: 0.22
+  nominal_speed: 0.55
+human:
+  radius: 0.22
+  goal_radius: 0.25
+  speed: [0.55, 1.0]
+  start_delay: [0.0, 2.0]
+  spawn_clearance: 0.55
+  lateral_offset: [-0.06, 0.06]
+behavior_probability:
+  regular: 0.70
+  impassive: 0.10
+  surprised: 0.05
+  scared: 0.05
+  curious: 0.05
+  threatening: 0.05
+density:
+  low:
+    background_humans: [0, 2]
+  medium:
+    background_humans: [3, 6]
+  high:
+    background_humans: [7, 12]

@@ -1,0 +1,45 @@
+dataset_version: v1.0
+seed: 916242483
+scenario_family: head_on
+density: low
+map: school_floor_01
+robot:
+  start_zone: corridor_a
+  goal_zone: corridor_a
+  start_node: corridor_a_locker_south
+  goal_node: corridor_a_west
+  start_pose:
+    x: 2.6
+    y: -8.15
+    heading: 3.026716
+  route:
+  - corridor_a_locker_south
+  - corridor_a_3
+  - corridor_a_backpack_south
+  - corridor_a_2
+  - corridor_a_1
+  - corridor_a_west
+  heading: 3.026716
+event:
+  corridor: corridor_a
+humans:
+- name: event_agent_1
+  role: event_agent
+  start_node: corridor_a_west
+  goal_node: corridor_a_locker_south
+  route:
+  - corridor_a_west
+  - corridor_a_1
+  - corridor_a_2
+  - corridor_a_backpack_south
+  - corridor_a_3
+  - corridor_a_locker_south
+  spawn:
+    x: -14.0043
+    y: -8.09266
+    heading: 0.07486
+  speed: 0.9143
+  start_delay: 1.531
+  lateral_offset: 0.0575
+  behavior: scared
+  group_id: -1

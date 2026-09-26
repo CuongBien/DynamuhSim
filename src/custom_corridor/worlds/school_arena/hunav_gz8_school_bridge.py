@@ -177,6 +177,7 @@ class SchoolHuNavBridge(Node):
         self.cfg = self._load_scenario(scenario_path)
         self.agent_names = list(self.cfg['agents'])
         self.agent_cfg = {name: self.cfg[name] for name in self.agent_names}
+        self.episode_start_monotonic = time.monotonic()
         self.goals = {int(k): v for k, v in self.cfg['global_goals'].items()}
         self.obstacles = StaticObstacleMap(sdf_path, set(self.agent_names))
         self.routes = {
@@ -226,7 +227,11 @@ class SchoolHuNavBridge(Node):
     def _load_scenario(path):
         with open(path, 'r', encoding='utf-8') as f:
             doc = yaml.safe_load(f)
-        return doc['hunav_loader']['ros__parameters']
+        cfg = doc['hunav_loader']['ros__parameters']
+        # ROS 2 parameter YAML omits empty lists/maps for episodes without humans.
+        cfg.setdefault('agents', [])
+        cfg.setdefault('global_goals', {})
+        return cfg
 
     def _route_points(self, name):
         config = self.agent_cfg[name]
@@ -279,6 +284,8 @@ class SchoolHuNavBridge(Node):
                 found_named_transform = True
 
         if found_named_transform:
+            return
+        if not self.agent_names:
             return
 
         # Gazebo Sim 8 -> ROS Jazzy maps Pose_V poses to TransformStamped, but
@@ -549,6 +556,12 @@ class SchoolHuNavBridge(Node):
 
         for a in agents_msg.agents:
             if a.name not in self.agent_cfg:
+                continue
+            if time.monotonic() - self.episode_start_monotonic < float(
+                self.agent_cfg[a.name].get('start_delay', 0.0)
+            ):
+                # Keep the configured initial pose and the original goals until
+                # this agent is scheduled to begin walking.
                 continue
 
             # HuNav rotates / removes reached goals in the returned Agent. Keep
