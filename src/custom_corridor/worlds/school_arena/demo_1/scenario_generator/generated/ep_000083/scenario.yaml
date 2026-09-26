@@ -1,0 +1,25 @@
+dataset_version: v1.0
+seed: 916242497
+scenario_family: empty
+density: low
+map: school_floor_01
+robot:
+  start_zone: corridor_f
+  goal_zone: corridor_f
+  start_node: corridor_f_lower_after_bin
+  goal_node: corridor_f_north
+  start_pose:
+    x: 15.0
+    y: 3.5
+    heading: 1.570796
+  route:
+  - corridor_f_lower_after_bin
+  - corridor_f_mid
+  - corridor_f_before_upper_bin
+  - corridor_f_after_upper_bin
+  - corridor_f_upper
+  - corridor_f_north
+  heading: 1.570796
+event:
+  corridor: corridor_f
+humans: []

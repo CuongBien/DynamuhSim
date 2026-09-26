@@ -1,0 +1,63 @@
+hunav_loader:
+  ros__parameters:
+    yaml_base_name: scenario_crossing_low_842874849
+    simulator: Gazebo Fortress
+    map: school_arena
+    publish_people: true
+    global_goals:
+      1:
+        x: 14.1
+        y: 10.71
+      2:
+        x: 14.4
+        y: 10.71
+      3:
+        x: 15.0
+        y: 10.71
+      4:
+        x: 15.0
+        y: 10.65
+      5:
+        x: 15.0
+        y: 10.8733
+      6:
+        x: 15.6
+        y: 10.8733
+      7:
+        x: 15.9
+        y: 10.8733
+      8:
+        x: 17.6
+        y: 11.7667
+    agents:
+    - event_agent_1
+    event_agent_1:
+      id: 1
+      group_id: -1
+      skin: 0
+      max_vel: 0.613
+      radius: 0.22
+      goal_radius: 0.25
+      cyclic_goals: false
+      init_pose:
+        x: 12.4
+        y: 11.65
+        z: 0.0
+        h: -0.505099
+      behavior:
+        type: Impassive
+        configuration: 0
+        goal_force_factor: 2.0
+        obstacle_force_factor: 10.0
+        social_force_factor: 5.0
+        other_force_factor: 20.0
+      goals:
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+      - 6
+      - 7
+      - 8
+      start_delay: 0.6707

@@ -1,0 +1,253 @@
+hunav_loader:
+  ros__parameters:
+    yaml_base_name: scenario_head_on_low_114
+    simulator: Gazebo Fortress
+    map: school_arena
+    publish_people: true
+    global_goals:
+      1:
+        x: 5.0
+        y: -8.15
+      2:
+        x: 2.6
+        y: -8.15
+      3:
+        x: 0.0
+        y: -7.85
+      4:
+        x: -2.0
+        y: -8.18
+      5:
+        x: -5.0
+        y: -8.15
+      6:
+        x: -3.73
+        y: -8.9
+      7:
+        x: -3.73
+        y: -8.6
+      8:
+        x: -3.73
+        y: -8.15
+      9:
+        x: -5.0
+        y: -8.15
+      10:
+        x: -2.0
+        y: -8.18
+      11:
+        x: 0.0
+        y: -7.85
+      12:
+        x: 2.6
+        y: -8.15
+      13:
+        x: 5.0
+        y: -8.15
+      14:
+        x: 10.0
+        y: -8.15
+      15:
+        x: 15.0
+        y: -8.15
+      16:
+        x: 15.0
+        y: -4.0
+      17:
+        x: 7.0
+        y: -4.0
+      18:
+        x: 7.0
+        y: -2.0
+      19:
+        x: 7.0
+        y: 0.0
+      20:
+        x: 15.0
+        y: 0.0
+      21:
+        x: 15.0
+        y: 2.55
+      22:
+        x: 15.0
+        y: 1.94
+      23:
+        x: 15.6
+        y: 1.94
+      24:
+        x: 15.9
+        y: 1.94
+      25:
+        x: 17.6
+        y: 2.8333
+      26:
+        x: 15.9
+        y: 10.8733
+      27:
+        x: 15.6
+        y: 10.8733
+      28:
+        x: 15.0
+        y: 10.8733
+      29:
+        x: 15.0
+        y: 10.65
+      30:
+        x: 15.0
+        y: 9.8
+      31:
+        x: 15.0
+        y: 8.0
+      32:
+        x: 15.0
+        y: 3.5
+      33:
+        x: 15.0
+        y: 2.55
+      34:
+        x: 15.0
+        y: 0.0
+      35:
+        x: 7.0
+        y: 0.0
+      36:
+        x: 7.0
+        y: -2.0
+      37:
+        x: 7.0
+        y: -4.0
+      38:
+        x: 15.0
+        y: -4.0
+      39:
+        x: 15.0
+        y: -8.15
+      40:
+        x: 10.0
+        y: -8.15
+      41:
+        x: 10.97
+        y: -8.15
+      42:
+        x: 10.97
+        y: -8.6
+      43:
+        x: 10.97
+        y: -8.9
+      44:
+        x: 11.95
+        y: -10.6
+    agents:
+    - event_agent_1
+    - background_agent_1
+    - background_agent_2
+    event_agent_1:
+      id: 1
+      group_id: -1
+      skin: 0
+      max_vel: 0.6596
+      radius: 0.22
+      goal_radius: 0.25
+      cyclic_goals: false
+      init_pose:
+        x: 10.0
+        y: -8.16991
+        z: 0.0
+        h: 3.141593
+      behavior:
+        type: Regular
+        configuration: 0
+        goal_force_factor: 2.0
+        obstacle_force_factor: 10.0
+        social_force_factor: 5.0
+        other_force_factor: 20.0
+      goals:
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+      start_delay: 1.2485
+    background_agent_1:
+      id: 2
+      group_id: -1
+      skin: 1
+      max_vel: 0.9868
+      radius: 0.22
+      goal_radius: 0.25
+      cyclic_goals: false
+      init_pose:
+        x: -2.75
+        y: -10.6
+        z: 0.0
+        h: 2.093735
+      behavior:
+        type: Regular
+        configuration: 0
+        goal_force_factor: 2.0
+        obstacle_force_factor: 10.0
+        social_force_factor: 5.0
+        other_force_factor: 20.0
+      goals:
+      - 6
+      - 7
+      - 8
+      - 9
+      - 10
+      - 11
+      - 12
+      - 13
+      - 14
+      - 15
+      - 16
+      - 17
+      - 18
+      - 19
+      - 20
+      - 21
+      - 22
+      - 23
+      - 24
+      - 25
+      start_delay: 3.7581
+    background_agent_2:
+      id: 3
+      group_id: -1
+      skin: 2
+      max_vel: 0.9928
+      radius: 0.22
+      goal_radius: 0.25
+      cyclic_goals: false
+      init_pose:
+        x: 17.6
+        y: 11.7667
+        z: 0.0
+        h: -2.657731
+      behavior:
+        type: Regular
+        configuration: 0
+        goal_force_factor: 2.0
+        obstacle_force_factor: 10.0
+        social_force_factor: 5.0
+        other_force_factor: 20.0
+      goals:
+      - 26
+      - 27
+      - 28
+      - 29
+      - 30
+      - 31
+      - 32
+      - 33
+      - 34
+      - 35
+      - 36
+      - 37
+      - 38
+      - 39
+      - 40
+      - 41
+      - 42
+      - 43
+      - 44
+      start_delay: 2.6308

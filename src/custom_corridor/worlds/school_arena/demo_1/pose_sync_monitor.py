@@ -7,7 +7,7 @@ import time
 
 import rclpy
 from geometry_msgs.msg import PoseStamped
-from nav_msgs.msg import Path
+from nav_msgs.msg import Odometry, Path
 from rclpy.executors import ExternalShutdownException
 from rclpy.node import Node
 from std_msgs.msg import Float32
@@ -22,17 +22,21 @@ class PoseSyncMonitor(Node):
         self.declare_parameter("world_frame", "map")
         self.declare_parameter("initial_x", -13.5)
         self.declare_parameter("initial_y", -8.15)
+        self.declare_parameter("spawn_match_radius", 0.4)
         self.robot_name = str(self.get_parameter("robot_name").value).strip("/")
         self.world_frame = str(self.get_parameter("world_frame").value)
         self.initial_xy = (float(self.get_parameter("initial_x").value),
                            float(self.get_parameter("initial_y").value))
+        self.spawn_match_radius = float(self.get_parameter("spawn_match_radius").value)
         self.last_gazebo_xy = None
+        self.have_robot_odom = False
         self.pose_pub = self.create_publisher(PoseStamped, "/demo/gazebo_robot_pose", 10)
         self.path_pub = self.create_publisher(Path, "/demo/gazebo_robot_path", 10)
         self.error_pub = self.create_publisher(Float32, "/demo/pose_sync_error", 10)
         self.create_subscription(
             TFMessage, "/world/school_arena/dynamic_pose/info", self._pose_cb, 10
         )
+        self.create_subscription(Odometry, "/odom", self._odom_cb, 10)
         self.tf_buffer = Buffer()
         self.tf_listener = TransformListener(self.tf_buffer, self)
         self.path = Path()
@@ -54,12 +58,18 @@ class PoseSyncMonitor(Node):
             return 1
         return 0
 
+    def _odom_cb(self, msg: Odometry) -> None:
+        if msg.child_frame_id.strip("/") == "base_footprint":
+            self.have_robot_odom = True
+
     def _pose_cb(self, msg: TFMessage) -> None:
         named = [t for t in msg.transforms if self._candidate_score(t.child_frame_id)]
         # Gazebo Sim 8 -> TFMessage currently drops Pose_V entity names. In
         # that case, associate the model pose by nearest-neighbour tracking
         # from the known spawn pose. Link-local transforms near (0, 0) are
         # therefore never mistaken for the robot model.
+        if not named and not self.have_robot_odom:
+            return
         reference = self.last_gazebo_xy or self.initial_xy
         candidates = named or [
             t for t in msg.transforms
@@ -84,6 +94,14 @@ class PoseSyncMonitor(Node):
                     item.transform.translation.y - reference[1],
                 ),
             )
+        if not named:
+            distance = math.hypot(
+                transform.transform.translation.x - reference[0],
+                transform.transform.translation.y - reference[1],
+            )
+            limit = 1.0 if self.last_gazebo_xy is not None else self.spawn_match_radius
+            if distance > limit:
+                return
         stamp = self.get_clock().now().to_msg()
         pose = PoseStamped()
         pose.header.frame_id = self.world_frame

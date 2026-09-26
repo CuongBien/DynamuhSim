@@ -3,7 +3,11 @@ import os
 from ament_index_python.packages import get_package_share_directory
 
 from launch import LaunchDescription
-from launch.actions import DeclareLaunchArgument, OpaqueFunction, SetEnvironmentVariable, TimerAction
+from launch.actions import (
+    DeclareLaunchArgument, ExecuteProcess, OpaqueFunction, RegisterEventHandler,
+    SetEnvironmentVariable, TimerAction,
+)
+from launch.event_handlers import OnProcessExit
 from launch.substitutions import EnvironmentVariable, LaunchConfiguration
 from launch_ros.actions import Node
 
@@ -35,6 +39,7 @@ def launch_setup(context, *args, **kwargs):
                 map_override["yaml_filename"] = cand2
 
     map_server_params = [nav2_params, map_override] if map_override else [nav2_params]
+    episode_mode = LaunchConfiguration("episode_initial_pose").perform(context).lower() == "true"
 
     map_server = Node(
         package="nav2_map_server",
@@ -49,7 +54,7 @@ def launch_setup(context, *args, **kwargs):
         executable="amcl",
         name="amcl",
         output="screen",
-        parameters=[nav2_params],
+        parameters=[nav2_params, {"set_initial_pose": False}] if episode_mode else [nav2_params],
     )
 
     planner_server = Node(
@@ -102,8 +107,7 @@ def launch_setup(context, *args, **kwargs):
                 output="screen",
                 parameters=[
                     {
-                        # Lifecycle supervision must not accelerate with Gazebo.
-                        "use_sim_time": False,
+                        "use_sim_time": True,
                         "autostart": True,
                         "bond_timeout": 30.0,
                         "attempt_respawn_reconnection": True,
@@ -117,10 +121,7 @@ def launch_setup(context, *args, **kwargs):
         ],
     )
 
-    navigation_lifecycle_manager = TimerAction(
-        period=5.0,
-        actions=[
-            Node(
+    navigation_lifecycle_manager = Node(
                 package="nav2_lifecycle_manager",
                 executable="lifecycle_manager",
                 name="lifecycle_manager_navigation",
@@ -128,7 +129,7 @@ def launch_setup(context, *args, **kwargs):
                 parameters=[
                     {
                         # MPPI configuration can be CPU-heavy in headless trials.
-                        "use_sim_time": False,
+                        "use_sim_time": True,
                         "autostart": True,
                         "bond_timeout": 30.0,
                         "attempt_respawn_reconnection": True,
@@ -142,8 +143,27 @@ def launch_setup(context, *args, **kwargs):
                     }
                 ],
             )
-        ],
-    )
+
+    if episode_mode:
+        pose_gate = ExecuteProcess(
+            cmd=["python3", os.path.join(os.path.dirname(__file__),
+                                         "publish_episode_initial_pose.py"),
+                 "--params-file", nav2_params, "--ros-args",
+                 "-p", "use_sim_time:=true"],
+            output="screen",
+        )
+        navigation_actions = [
+            RegisterEventHandler(OnProcessExit(
+                target_action=pose_gate,
+                on_exit=lambda event, context: [navigation_lifecycle_manager]
+                if event.returncode == 0 else [],
+            )),
+            pose_gate,
+        ]
+    else:
+        navigation_actions = [TimerAction(
+            period=5.0, actions=[navigation_lifecycle_manager]
+        )]
 
     goal_pose_bridge = Node(
         package="custom_corridor",
@@ -162,7 +182,7 @@ def launch_setup(context, *args, **kwargs):
         behavior_server,
         waypoint_follower,
         amcl_lifecycle_manager,
-        navigation_lifecycle_manager,
+        *navigation_actions,
         goal_pose_bridge,
     ]
 
@@ -185,6 +205,11 @@ def generate_launch_description():
         description="Full path to custom Nav2 params yaml file (overrides controller choice)",
     )
 
+    episode_pose_arg = DeclareLaunchArgument(
+        "episode_initial_pose", default_value="false",
+        description="Publish episode AMCL pose and gate navigation on scan-time TF",
+    )
+
     map_arg = DeclareLaunchArgument(
         "map",
         default_value="corridor_090",
@@ -197,6 +222,7 @@ def generate_launch_description():
             controller_arg,
             params_file_arg,
             map_arg,
+            episode_pose_arg,
             OpaqueFunction(function=launch_setup),
         ]
     )
