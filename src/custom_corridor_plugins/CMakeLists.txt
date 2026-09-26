@@ -20,4 +20,6 @@ install(TARGETS oscillating_obstacle_system
   LIBRARY DESTINATION lib
 )
 
+include(${CMAKE_CURRENT_SOURCE_DIR}/CMakeLists_multi_human_snippet.txt)
+
 ament_package()

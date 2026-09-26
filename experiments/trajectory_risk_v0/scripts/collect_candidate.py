@@ -9,9 +9,10 @@ import numpy as np
 import rclpy
 
 from rclpy.node import Node
-from geometry_msgs.msg import Twist
+from geometry_msgs.msg import TwistStamped
 from nav_msgs.msg import Odometry
 from sensor_msgs.msg import LaserScan
+from rclpy.qos import qos_profile_sensor_data
 
 
 BASE_DIR = Path.home() / "nav_ws/experiments/trajectory_risk_v0"
@@ -54,7 +55,7 @@ class Collector(Node):
         super().__init__("trajectory_risk_collector")
 
         self.cmd_pub = self.create_publisher(
-            Twist,
+            TwistStamped,
             CMD_TOPIC,
             10
         )
@@ -70,7 +71,7 @@ class Collector(Node):
             LaserScan,
             SCAN_TOPIC,
             self.scan_callback,
-            10
+            qos_profile_sensor_data
         )
 
         self.odom = None
@@ -210,7 +211,8 @@ class Collector(Node):
 
     def stop_robot(self):
 
-        msg = Twist()
+        msg = TwistStamped()
+        msg.header.stamp = self.get_clock().now().to_msg()
 
         for _ in range(10):
 
@@ -230,16 +232,20 @@ class Collector(Node):
         duration
     ):
 
-        cmd = Twist()
+        cmd = TwistStamped()
 
-        cmd.linear.x = float(v)
-        cmd.angular.z = float(w)
+        cmd.header.stamp = self.get_clock().now().to_msg()
+
+        cmd.twist.linear.x = float(v)
+        cmd.twist.angular.z = float(w)
 
         self.rollout_min_range = float("inf")
 
         start = time.monotonic()
 
         while time.monotonic() - start < duration:
+
+            cmd.header.stamp = self.get_clock().now().to_msg()
 
             self.cmd_pub.publish(cmd)
 
