@@ -29,23 +29,27 @@ def launch_setup(context):
         '0.90': 'corridor_090.sdf',
         '1.20': 'corridor_120.sdf',
         'arena': 'arena_obstacle.sdf',
+        'dataset': 'arena_dataset.sdf',
     }
 
-    if width.lower() in ['arena', 'open', 'big', 'wide']:
-        width = 'arena'
+    if width.lower() in ['arena', 'open', 'big', 'wide', 'dataset']:
+        if width.lower() == 'dataset':
+            width = 'dataset'
+        elif width.lower() in ['arena', 'open', 'big', 'wide']:
+            width = 'arena'
     else:
         try:
             width = f"{float(width):.2f}"
         except ValueError:
             raise RuntimeError(
                 f"Invalid width '{width}'. "
-                "Allowed values: 0.70, 0.90, 1.20, arena"
+                "Allowed values: 0.70, 0.90, 1.20, arena, dataset"
             )
 
     if width not in world_map:
         raise RuntimeError(
             f"Invalid width '{width}'. "
-            "Allowed values: 0.70, 0.90, 1.20, arena"
+            "Allowed values: 0.70, 0.90, 1.20, arena, dataset"
         )
 
     # ---------------------------------------------------------
@@ -312,7 +316,6 @@ def launch_setup(context):
         nodes.append(rviz)
     return nodes
 
-
 def generate_launch_description():
 
     # ---------------------------------------------------------
@@ -336,7 +339,7 @@ def generate_launch_description():
         default_value='0.90',
         description=(
             'Corridor width or environment type. '
-            'Allowed values: 0.70, 0.90, 1.20, arena'
+            'Allowed values: 0.70, 0.90, 1.20, arena, dataset'
         ),
     )
 

@@ -1,0 +1,113 @@
+{
+  "episode_id": 1,
+  "pass": true,
+  "checks": {
+    "lidar_finite": true,
+    "path_length": true,
+    "progress_ratio_consistent": true,
+    "same_initial_state": {
+      "pass": true,
+      "max_xy_error_m": 0.0013774928322227709,
+      "max_z_error_m": 0.0009777853143712045,
+      "max_yaw_error_rad": 0.00022058146132231116
+    },
+    "trace_rows": {
+      "pass": true,
+      "counts": {
+        "C0": 31,
+        "C1": 31,
+        "C2": 31,
+        "C3": 31,
+        "C4": 31
+      }
+    }
+  },
+  "candidates": {
+    "C0": {
+      "lidar": {
+        "rollout_front_min": 3.357506513595581,
+        "rollout_left_min": 3.2409026622772217,
+        "rollout_right_min": 3.5,
+        "scan_samples": 15,
+        "pass": true
+      },
+      "path": {
+        "actual_m": 0.8690901640901783,
+        "expected_m": 0.8999999999999999,
+        "ratio": 0.965655737877976,
+        "saved_progress_ratio": 0.965655737877976,
+        "path_pass": true,
+        "ratio_consistent": true
+      }
+    },
+    "C1": {
+      "lidar": {
+        "rollout_front_min": 3.169990062713623,
+        "rollout_left_min": 3.5,
+        "rollout_right_min": 3.5,
+        "scan_samples": 15,
+        "pass": true
+      },
+      "path": {
+        "actual_m": 0.8551894153052584,
+        "expected_m": 0.8999999999999999,
+        "ratio": 0.9502104614502872,
+        "saved_progress_ratio": 0.9502104614502872,
+        "path_pass": true,
+        "ratio_consistent": true
+      }
+    },
+    "C2": {
+      "lidar": {
+        "rollout_front_min": 3.1747584342956543,
+        "rollout_left_min": 3.3672986030578613,
+        "rollout_right_min": 3.5,
+        "scan_samples": 15,
+        "pass": true
+      },
+      "path": {
+        "actual_m": 0.8495999999923585,
+        "expected_m": 0.8999999999999999,
+        "ratio": 0.9439999999915095,
+        "saved_progress_ratio": 0.9439999999915095,
+        "path_pass": true,
+        "ratio_consistent": true
+      }
+    },
+    "C3": {
+      "lidar": {
+        "rollout_front_min": 3.5,
+        "rollout_left_min": 3.1769347190856934,
+        "rollout_right_min": 3.5,
+        "scan_samples": 15,
+        "pass": true
+      },
+      "path": {
+        "actual_m": 0.8562655460683797,
+        "expected_m": 0.8999999999999999,
+        "ratio": 0.9514061622981997,
+        "saved_progress_ratio": 0.9514061622981997,
+        "path_pass": true,
+        "ratio_consistent": true
+      }
+    },
+    "C4": {
+      "lidar": {
+        "rollout_front_min": 3.5,
+        "rollout_left_min": 3.27347731590271,
+        "rollout_right_min": 3.5,
+        "scan_samples": 15,
+        "pass": true
+      },
+      "path": {
+        "actual_m": 0.8514133988549892,
+        "expected_m": 0.8999999999999999,
+        "ratio": 0.9460148876166548,
+        "saved_progress_ratio": 0.9460148876166548,
+        "path_pass": true,
+        "ratio_consistent": true
+      }
+    }
+  },
+  "errors": []
+}
