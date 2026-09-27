@@ -6,7 +6,7 @@ import cv2
 import numpy as np
 import rclpy
 from cv_bridge import CvBridge
-from geometry_msgs.msg import Twist
+from geometry_msgs.msg import TwistStamped
 from rclpy.node import Node
 from ros_gz_interfaces.srv import ControlWorld
 from sensor_msgs.msg import Image
@@ -35,7 +35,7 @@ class CameraTeleop(Node):
         self.last_unpause_attempt = 0.0
         self.linear = 0.0
         self.angular = 0.0
-        self.publisher = self.create_publisher(Twist, cmd_topic, 10)
+        self.publisher = self.create_publisher(TwistStamped, cmd_topic, 10)
         self.control_client = self.create_client(
             ControlWorld, '/world/school_arena/control'
         )
@@ -56,9 +56,11 @@ class CameraTeleop(Node):
             self.last_image_time = time.monotonic()
 
     def _publish_cmd(self):
-        msg = Twist()
-        msg.linear.x = self.linear
-        msg.angular.z = self.angular
+        msg = TwistStamped()
+        msg.header.stamp = self.get_clock().now().to_msg()
+        msg.header.frame_id = 'base_link'
+        msg.twist.linear.x = self.linear
+        msg.twist.angular.z = self.angular
         self.publisher.publish(msg)
         self._ensure_world_running()
 
