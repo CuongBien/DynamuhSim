@@ -12,7 +12,7 @@ amcl:
     global_frame_id: "map"
     odom_frame_id: "odom"
 
-    transform_tolerance: 0.1
+    transform_tolerance: 1.0
     update_min_d: 0.05
     update_min_a: 0.05
 
@@ -77,7 +77,7 @@ controller_server:
     # ros_gz_bridge subscribes to geometry_msgs/msg/TwistStamped.
     # This must be configured at controller_server level,
     # NOT inside FollowPath.
-    enable_stamped_cmd_vel: false
+    enable_stamped_cmd_vel: true
 
     controller_frequency: 10.0
     costmap_update_timeout: 0.30
@@ -269,7 +269,7 @@ behavior_server:
     use_sim_time: True
 
     # Keep recovery commands compatible with ros_gz_bridge.
-    enable_stamped_cmd_vel: false
+    enable_stamped_cmd_vel: true
 
     global_frame: map
     robot_base_frame: base_footprint
