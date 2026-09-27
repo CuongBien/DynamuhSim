@@ -28,6 +28,7 @@
 #include <cctype>
 #include <cmath>
 #include <cstdint>
+#include <fstream>
 #include <iomanip>
 #include <memory>
 #include <mutex>
@@ -51,6 +52,7 @@
 #include <gz/sim/components/Actor.hh>
 #include <gz/sim/components/Model.hh>
 #include <gz/sim/components/Name.hh>
+#include <gz/sim/components/Pose.hh>
 #include <gz/transport/Node.hh>
 #include <nlohmann/json.hpp>
 #include <sdf/Element.hh>
@@ -60,6 +62,57 @@ namespace custom_corridor
 namespace
 {
 using json = nlohmann::json;
+
+constexpr const char *kDefaultScenarioJson = R"({
+  "episode_id": 1,
+  "humans": [
+    {
+      "id": 1,
+      "mode": "scripted",
+      "behavior": "head_on",
+      "start": {
+        "x": -11.4,
+        "y": 0.0,
+        "yaw": 3.141592653589793
+      },
+      "speed": 0.35,
+      "duration": 4.0
+    },
+    {
+      "id": 2,
+      "mode": "scripted",
+      "behavior": "crossing",
+      "start": {
+        "x": -12.2,
+        "y": -1.2,
+        "yaw": 1.5707963267948966
+      },
+      "speed": 0.4,
+      "duration": 4.0
+    },
+    {
+      "id": 3,
+      "mode": "autonomous",
+      "speed": 0.3,
+      "loop": true,
+      "waypoints": [
+        [-10.0, 2.0],
+        [-7.0, 2.0],
+        [-7.0, -2.0],
+        [-10.0, -2.0]
+      ]
+    },
+    {
+      "id": 4,
+      "mode": "stationary",
+      "start": {
+        "x": -9.5,
+        "y": 1.2,
+        "yaw": 0.0
+      }
+    }
+  ]
+})";
 
 constexpr double kPi = 3.14159265358979323846;
 constexpr double kEps = 1e-9;
@@ -416,7 +469,12 @@ class MultiHumanScenarioSystem:
           SdfValueOr<bool>(
               _sdf,
               "auto_start_on_scenario",
-              false);
+              true);
+      this->defaultScenarioFile_ =
+          SdfValueOr<std::string>(
+              _sdf,
+              "default_scenario_file",
+              "default");
 
       if (this->humanCount_ <= 0)
       {
@@ -463,6 +521,47 @@ class MultiHumanScenarioSystem:
               << this->commandTopic_ << "\n";
       }
 
+      if (!this->defaultScenarioFile_.empty() && this->defaultScenarioFile_ != "none")
+      {
+        std::string jsonPayload;
+        if (this->defaultScenarioFile_ == "default")
+        {
+          jsonPayload = kDefaultScenarioJson;
+        }
+        else
+        {
+          std::ifstream ifs(this->defaultScenarioFile_);
+          if (ifs.is_open())
+          {
+            jsonPayload.assign(
+                (std::istreambuf_iterator<char>(ifs)),
+                (std::istreambuf_iterator<char>()));
+          }
+          else
+          {
+            gzwarn << "[MultiHumanScenarioSystem] Cannot read file: "
+                   << this->defaultScenarioFile_
+                   << ", using default scenario.\n";
+            jsonPayload = kDefaultScenarioJson;
+          }
+        }
+
+        try
+        {
+          this->LoadScenarioJson(jsonPayload);
+          this->scenarioLoaded_ = true;
+          this->running_ = this->autoStartOnScenario_;
+          gzmsg << "[MultiHumanScenarioSystem] Default scenario loaded: episode "
+                << this->episodeId_ << " with " << this->ActiveHumanCount()
+                << " humans (" << (this->running_ ? "RUNNING" : "READY") << ").\n";
+        }
+        catch (const std::exception &e)
+        {
+          gzerr << "[MultiHumanScenarioSystem] Failed to load default scenario: "
+                << e.what() << "\n";
+        }
+      }
+
       gzmsg << "[MultiHumanScenarioSystem] Configured.\n"
             << "  human_count    : " << this->humanCount_ << "\n"
             << "  scenario_topic : " << this->scenarioTopic_ << "\n"
@@ -488,14 +587,18 @@ class MultiHumanScenarioSystem:
       this->ResolveEntities(_ecm);
       this->ProcessPendingMessages(_ecm);
 
+      if (this->entitiesJustResolved_)
+      {
+        if (this->scenarioLoaded_)
+        {
+          this->ResetScenarioRuntime();
+        }
+        this->ApplyAllPoses(_ecm);
+        this->entitiesJustResolved_ = false;
+      }
+
       if (!this->scenarioLoaded_)
       {
-        // Still keep hidden pairs hidden if entities were just resolved.
-        if (this->entitiesJustResolved_)
-        {
-          this->ApplyAllPoses(_ecm);
-          this->entitiesJustResolved_ = false;
-        }
         return;
       }
 
@@ -905,6 +1008,23 @@ class MultiHumanScenarioSystem:
           }
         }
 
+        if (!this->scenarioLoaded_)
+        {
+          const auto *poseComp =
+              _ecm.Component<gz::sim::components::Pose>(proxyEntity);
+          if (poseComp && poseComp->Data().Pos().Z() > 0.0)
+          {
+            human.initialX = poseComp->Data().Pos().X();
+            human.initialY = poseComp->Data().Pos().Y();
+            human.initialYaw = poseComp->Data().Rot().Yaw();
+            human.x = human.initialX;
+            human.y = human.initialY;
+            human.yaw = human.initialYaw;
+            human.active = true;
+            human.mode = HumanMode::Stationary;
+          }
+        }
+
         anyNew = true;
 
         gzmsg << "[MultiHumanScenarioSystem] Bound H"
@@ -1265,6 +1385,9 @@ class MultiHumanScenarioSystem:
 
   private:
     bool autoStartOnScenario_{false};
+
+  private:
+    std::string defaultScenarioFile_{"default"};
 
   private:
     std::vector<HumanState> humans_;
