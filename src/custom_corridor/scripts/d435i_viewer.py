@@ -27,11 +27,15 @@ class D435iViewer(Node):
         super().__init__('d435i_viewer')
 
         self.declare_parameter('show_gui', True)
+        self.declare_parameter('color_topic', '/camera/color/image_raw')
+        self.declare_parameter('depth_topic', '/camera/depth/image_rect_raw')
         self.declare_parameter('linear_speed', 0.15)
         self.declare_parameter('angular_speed', 0.8)
         self.declare_parameter('detection_max_range', 3.0)
 
         self.show_gui = bool(self.get_parameter('show_gui').value)
+        self.color_topic = str(self.get_parameter('color_topic').value)
+        self.depth_topic = str(self.get_parameter('depth_topic').value)
         self.linear_speed = float(self.get_parameter('linear_speed').value)
         self.angular_speed = float(self.get_parameter('angular_speed').value)
         self.detection_max_range = float(
@@ -48,10 +52,15 @@ class D435iViewer(Node):
         self.stop_sent = True
 
         self.create_subscription(
-            Image, '/camera/color/image_raw', self.on_color,
+            Image, self.color_topic, self.on_color,
             qos_profile_sensor_data)
+        if self.color_topic != '/robot/camera/image_raw':
+            self.create_subscription(
+                Image, '/robot/camera/image_raw', self.on_color,
+                qos_profile_sensor_data)
+
         self.create_subscription(
-            Image, '/camera/depth/image_rect_raw', self.on_depth,
+            Image, self.depth_topic, self.on_depth,
             qos_profile_sensor_data)
 
         self.range_pub = self.create_publisher(
@@ -205,6 +214,22 @@ class D435iViewer(Node):
 
     def draw_ui(self, detection):
         if self.color_frame is None:
+            canvas = np.zeros((480, 848, 3), dtype=np.uint8)
+            cv2.rectangle(canvas, (0, 0), (848, 76), (25, 25, 25), -1)
+            cv2.putText(
+                canvas, 'Intel RealSense D435i simulation | Standby',
+                (14, 27), cv2.FONT_HERSHEY_SIMPLEX, 0.66, (255, 255, 255), 2)
+            cv2.putText(
+                canvas, f'Waiting for camera on {self.color_topic}...',
+                (40, 220), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (0, 215, 255), 2)
+            cv2.putText(
+                canvas, 'Please ensure Gazebo simulation is running.',
+                (40, 265), cv2.FONT_HERSHEY_SIMPLEX, 0.58, (180, 180, 180), 1)
+            cv2.putText(
+                canvas, 'Press W/A/S/D to drive, Q to quit.',
+                (40, 310), cv2.FONT_HERSHEY_SIMPLEX, 0.52, (120, 220, 120), 1)
+            cv2.imshow('D435i RGB-D + Teleop', canvas)
+            self.handle_key(cv2.waitKey(1) & 0xFF)
             return
 
         frame = self.color_frame.copy()
