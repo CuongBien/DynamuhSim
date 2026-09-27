@@ -1,0 +1,111 @@
+dataset_version: v1.0
+seed: 842874852
+scenario_family: head_on
+density: low
+map: school_floor_01
+robot:
+  start_zone: corridor_a
+  goal_zone: corridor_a
+  start_node: corridor_a_5
+  goal_node: corridor_a_west
+  start_pose:
+    x: 10.0
+    y: -8.15
+    heading: 3.141593
+  route:
+  - corridor_a_5
+  - corridor_a_4
+  - corridor_a_locker_south
+  - corridor_a_3
+  - corridor_a_backpack_south
+  - corridor_a_2
+  - corridor_a_1
+  - corridor_a_west
+  heading: 3.141593
+event:
+  corridor: corridor_a
+humans:
+- name: event_agent_1
+  role: event_agent
+  start_node: corridor_a_west
+  goal_node: corridor_a_5
+  route:
+  - corridor_a_west
+  - corridor_a_1
+  - corridor_a_2
+  - corridor_a_backpack_south
+  - corridor_a_3
+  - corridor_a_locker_south
+  - corridor_a_4
+  - corridor_a_5
+  spawn:
+    x: -14.00385
+    y: -8.09871
+    heading: 0.07486
+  speed: 0.5967
+  start_delay: 1.2985
+  lateral_offset: 0.05144
+  behavior: regular
+  group_id: -1
+- name: background_agent_1
+  role: background_agent
+  start_node: room07_center
+  goal_node: room02_center
+  route:
+  - room07_center
+  - room07_predoor
+  - room07_door
+  - room07_approach
+  - corridor_a_west
+  - corridor_a_1
+  - room02_approach
+  - room02_door
+  - room02_predoor
+  - room02_center
+  spawn:
+    x: -12.55
+    y: -5.4
+    heading: -2.093735
+  speed: 0.9031
+  start_delay: 1.635
+  lateral_offset: 0.0
+  behavior: regular
+  group_id: -1
+- name: background_agent_2
+  role: background_agent
+  start_node: room02_center
+  goal_node: room12_center
+  route:
+  - room02_center
+  - room02_predoor
+  - room02_door
+  - room02_approach
+  - corridor_a_1
+  - corridor_a_2
+  - corridor_a_backpack_south
+  - corridor_a_3
+  - corridor_a_locker_south
+  - corridor_a_4
+  - corridor_a_5
+  - junction_ab
+  - junction_bc
+  - junction_cd
+  - stair_entrance
+  - junction_de
+  - junction_ef
+  - corridor_f_lower_before_bin
+  - corridor_f_lower_after_bin
+  - corridor_f_mid
+  - room12_approach
+  - room12_door
+  - room12_predoor
+  - room12_center
+  spawn:
+    x: -7.65
+    y: -10.6
+    heading: 2.093735
+  speed: 0.9108
+  start_delay: 2.5514
+  lateral_offset: 0.0
+  behavior: regular
+  group_id: -1

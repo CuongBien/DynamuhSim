@@ -1,0 +1,47 @@
+hunav_loader:
+  ros__parameters:
+    yaml_base_name: scenario_same_direction_low_916242484
+    simulator: Gazebo Fortress
+    map: school_arena
+    publish_people: true
+    global_goals:
+      1:
+        x: -2.0
+        y: -8.18
+      2:
+        x: -5.0
+        y: -8.15
+      3:
+        x: -10.0
+        y: -7.85
+      4:
+        x: -14.0
+        y: -8.15
+    agents:
+    - event_agent_1
+    event_agent_1:
+      id: 1
+      group_id: -1
+      skin: 0
+      max_vel: 0.3439
+      radius: 0.22
+      goal_radius: 0.25
+      cyclic_goals: false
+      init_pose:
+        x: 0.00903
+        y: -7.90474
+        z: 0.0
+        h: -2.978066
+      behavior:
+        type: Threatening
+        configuration: 0
+        goal_force_factor: 2.0
+        obstacle_force_factor: 10.0
+        social_force_factor: 5.0
+        other_force_factor: 20.0
+      goals:
+      - 1
+      - 2
+      - 3
+      - 4
+      start_delay: 1.6738

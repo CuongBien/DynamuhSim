@@ -1,0 +1,213 @@
+hunav_loader:
+  ros__parameters:
+    yaml_base_name: scenario_exit_room_low_209
+    simulator: Gazebo Fortress
+    map: school_arena
+    publish_people: true
+    global_goals:
+      1:
+        x: 6.07
+        y: -8.9
+      2:
+        x: 6.07
+        y: -8.6
+      3:
+        x: 6.07
+        y: -8.15
+      4:
+        x: 5.0
+        y: -8.15
+      5:
+        x: 10.0
+        y: -8.15
+      6:
+        x: -3.73
+        y: -7.1
+      7:
+        x: -3.73
+        y: -7.4
+      8:
+        x: -3.73
+        y: -8.15
+      9:
+        x: -5.0
+        y: -8.15
+      10:
+        x: -10.0
+        y: -7.85
+      11:
+        x: -8.63
+        y: -8.15
+      12:
+        x: -8.63
+        y: -8.6
+      13:
+        x: -8.63
+        y: -8.9
+      14:
+        x: -7.65
+        y: -10.6
+      15:
+        x: 1.17
+        y: -7.1
+      16:
+        x: 1.17
+        y: -7.4
+      17:
+        x: 1.17
+        y: -8.15
+      18:
+        x: 0.0
+        y: -7.85
+      19:
+        x: 2.6
+        y: -8.15
+      20:
+        x: 5.0
+        y: -8.15
+      21:
+        x: 10.0
+        y: -8.15
+      22:
+        x: 15.0
+        y: -8.15
+      23:
+        x: 15.0
+        y: -4.0
+      24:
+        x: 7.0
+        y: -4.0
+      25:
+        x: 7.0
+        y: -2.0
+      26:
+        x: 7.0
+        y: 0.0
+      27:
+        x: 15.0
+        y: 0.0
+      28:
+        x: 15.0
+        y: 2.55
+      29:
+        x: 15.0
+        y: 3.5
+      30:
+        x: 15.0
+        y: 8.0
+      31:
+        x: 15.0
+        y: 6.4067
+      32:
+        x: 15.6
+        y: 6.4067
+      33:
+        x: 15.9
+        y: 6.4067
+      34:
+        x: 17.6
+        y: 7.3
+    agents:
+    - event_agent_1
+    - background_agent_1
+    - background_agent_2
+    event_agent_1:
+      id: 1
+      group_id: -1
+      skin: 0
+      max_vel: 0.6262
+      radius: 0.22
+      goal_radius: 0.25
+      cyclic_goals: false
+      init_pose:
+        x: 7.05
+        y: -10.6
+        z: 0.0
+        h: 2.093735
+      behavior:
+        type: Regular
+        configuration: 0
+        goal_force_factor: 2.0
+        obstacle_force_factor: 10.0
+        social_force_factor: 5.0
+        other_force_factor: 20.0
+      goals:
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+      start_delay: 3.1424
+    background_agent_1:
+      id: 2
+      group_id: -1
+      skin: 1
+      max_vel: 0.6106
+      radius: 0.22
+      goal_radius: 0.25
+      cyclic_goals: false
+      init_pose:
+        x: -2.75
+        y: -5.4
+        z: 0.0
+        h: -2.093735
+      behavior:
+        type: Regular
+        configuration: 0
+        goal_force_factor: 2.0
+        obstacle_force_factor: 10.0
+        social_force_factor: 5.0
+        other_force_factor: 20.0
+      goals:
+      - 6
+      - 7
+      - 8
+      - 9
+      - 10
+      - 11
+      - 12
+      - 13
+      - 14
+      start_delay: 0.1403
+    background_agent_2:
+      id: 3
+      group_id: -1
+      skin: 2
+      max_vel: 0.5956
+      radius: 0.22
+      goal_radius: 0.25
+      cyclic_goals: false
+      init_pose:
+        x: 2.15
+        y: -5.4
+        z: 0.0
+        h: -2.093735
+      behavior:
+        type: Regular
+        configuration: 0
+        goal_force_factor: 2.0
+        obstacle_force_factor: 10.0
+        social_force_factor: 5.0
+        other_force_factor: 20.0
+      goals:
+      - 15
+      - 16
+      - 17
+      - 18
+      - 19
+      - 20
+      - 21
+      - 22
+      - 23
+      - 24
+      - 25
+      - 26
+      - 27
+      - 28
+      - 29
+      - 30
+      - 31
+      - 32
+      - 33
+      - 34
+      start_delay: 1.6281

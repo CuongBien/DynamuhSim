@@ -11,7 +11,7 @@ Defaults preserve the corridor setup and use trials starting at `trial_03`:
 - `WIDTH=0.90`
 - `GOAL_X=11.74`, `GOAL_Y=0.0`
 - `TRIAL_TIMEOUT_S=180`
-- `READY_TIMEOUT_S=45`
+- `READY_TIMEOUT_S=240`
 
 Override the start number or goal without editing the script:
 
