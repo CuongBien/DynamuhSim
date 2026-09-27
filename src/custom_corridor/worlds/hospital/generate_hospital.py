@@ -1207,9 +1207,9 @@ def generate_world():
         </plugin>
 
     <physics name="default_physics" type="ode">
-      <max_step_size>0.001</max_step_size>
-      <real_time_factor>1</real_time_factor>
-      <real_time_update_rate>1000</real_time_update_rate>
+      <max_step_size>0.004</max_step_size>
+      <real_time_factor>1.0</real_time_factor>
+      <real_time_update_rate>250</real_time_update_rate>
     </physics>
 
 
@@ -1220,7 +1220,7 @@ def generate_world():
     <scene>
       <ambient>0.55 0.55 0.55 1</ambient>
       <background>0.75 0.75 0.75 1</background>
-      <shadows>true</shadows>
+      <shadows>false</shadows>
     </scene>
 
     <light name="hospital_sun"
@@ -1241,7 +1241,7 @@ def generate_world():
         <quadratic>0.001</quadratic>
       </attenuation>
 
-      <cast_shadows>true</cast_shadows>
+      <cast_shadows>false</cast_shadows>
 
     </light>
 
