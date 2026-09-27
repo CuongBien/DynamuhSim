@@ -1,0 +1,25 @@
+simulator:
+  startup_timeout_sec: 30.0
+  shutdown_timeout_sec: 10.0
+  kill_timeout_sec: 2.0
+  poll_interval_sec: 0.2
+  probe_interval_sec: 1.0
+  probe_timeout_sec: 5.0
+  probe_attempts: 2
+  gui: false
+  rviz: false
+hunav:
+  container_name: hunavsim_gz_fortress
+  startup_timeout_sec: 30.0
+  service_timeout_sec: 15.0
+  shutdown_timeout_sec: 10.0
+  kill_timeout_sec: 2.0
+  install_timeout_sec: 30.0
+  command_timeout_sec: 8.0
+  poll_interval_sec: 0.2
+nav2:
+  startup_timeout_sec: 60.0
+  service_timeout_sec: 2.0
+  goal_response_timeout_sec: 10.0
+  cancel_timeout_sec: 5.0
+  poll_interval_sec: 0.2
