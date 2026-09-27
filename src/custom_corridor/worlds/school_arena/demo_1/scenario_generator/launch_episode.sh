@@ -9,6 +9,31 @@ EPISODE="$(realpath "$1")"
 shift
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 DEMO="$(dirname "$HERE")"
+WS_ROOT="$(cd "$HERE/../../../../../.." && pwd)"
+ROS_SETUP="/opt/ros/jazzy/setup.bash"
+WS_SETUP="$WS_ROOT/install/setup.bash"
+if [[ ! -f "$ROS_SETUP" ]]; then
+  echo "ROS 2 Jazzy setup not found: $ROS_SETUP" >&2
+  exit 1
+fi
+if [[ ! -f "$WS_SETUP" ]]; then
+  echo "Workspace setup not found: $WS_SETUP" >&2
+  echo "Build custom_corridor first:" >&2
+  echo "  cd $WS_ROOT" >&2
+  echo "  colcon build --symlink-install --packages-select custom_corridor" >&2
+  exit 1
+fi
+set +u
+source "$ROS_SETUP"
+source "$WS_SETUP"
+set -u
+if ! ros2 pkg prefix custom_corridor >/dev/null 2>&1; then
+  echo "custom_corridor is not built/available." >&2
+  echo "Run:" >&2
+  echo "  cd $WS_ROOT" >&2
+  echo "  colcon build --symlink-install --packages-select custom_corridor" >&2
+  exit 1
+fi
 read -r ROBOT_X ROBOT_Y ROBOT_YAW < <(python3 - "$EPISODE/metadata.yaml" <<'PY'
 import sys
 import yaml
