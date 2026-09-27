@@ -1,0 +1,62 @@
+{
+  "episode_id": 1,
+  "humans": [
+    {
+      "id": 1,
+      "mode": "scripted",
+      "behavior": "head_on",
+      "start": {
+        "x": -11.4,
+        "y": 0.0,
+        "yaw": 3.141592653589793
+      },
+      "speed": 0.35,
+      "duration": 4.0
+    },
+    {
+      "id": 2,
+      "mode": "scripted",
+      "behavior": "crossing",
+      "start": {
+        "x": -12.2,
+        "y": -1.2,
+        "yaw": 1.5707963267948966
+      },
+      "speed": 0.4,
+      "duration": 4.0
+    },
+    {
+      "id": 3,
+      "mode": "autonomous",
+      "speed": 0.3,
+      "loop": true,
+      "waypoints": [
+        [
+          -10.0,
+          2.0
+        ],
+        [
+          -7.0,
+          2.0
+        ],
+        [
+          -7.0,
+          -2.0
+        ],
+        [
+          -10.0,
+          -2.0
+        ]
+      ]
+    },
+    {
+      "id": 4,
+      "mode": "stationary",
+      "start": {
+        "x": -9.5,
+        "y": 1.2,
+        "yaw": 0.0
+      }
+    }
+  ]
+}
