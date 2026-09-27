@@ -420,6 +420,16 @@ def generate_launch_description():
         ),
     )
 
+    rmw_implementation = SetEnvironmentVariable(
+        name='RMW_IMPLEMENTATION',
+        value='rmw_fastrtps_cpp'
+    )
+
+    fastdds_transport = SetEnvironmentVariable(
+        name='FASTDDS_BUILTIN_TRANSPORTS',
+        value='UDPv4'
+    )
+
     ros_domain = SetEnvironmentVariable(
      name='ROS_DOMAIN_ID',
      value=os.environ.get('ROS_DOMAIN_ID', '0')
