@@ -28,6 +28,11 @@
           </box>
         </geometry>
       </collision>
+      <sensor name="pbl6_contact_base_link" type="contact">
+        <contact><collision>base_collision</collision><topic>/robot/contacts/base_link</topic></contact>
+        <always_on>true</always_on>
+        <update_rate>50</update_rate>
+      </sensor>
 
       <!-- Primitive shell stays visible even if TurtleBot mesh resources are missing. -->
       <visual name="demo_orange_shell">
@@ -129,6 +134,11 @@
           </cylinder>
         </geometry>
       </collision>
+      <sensor name="pbl6_contact_base_scan" type="contact">
+        <contact><collision>lidar_sensor_collision</collision><topic>/robot/contacts/base_scan</topic></contact>
+        <always_on>true</always_on>
+        <update_rate>50</update_rate>
+      </sensor>
 
       <visual name="lidar_sensor_visual">
         <pose>-0.032 0 0.171 0 0 0</pose>
@@ -220,6 +230,11 @@
           </contact>
         </surface>
       </collision>
+      <sensor name="pbl6_contact_wheel_left_link" type="contact">
+        <contact><collision>wheel_left_collision</collision><topic>/robot/contacts/wheel_left_link</topic></contact>
+        <always_on>true</always_on>
+        <update_rate>50</update_rate>
+      </sensor>
 
       <visual name="wheel_left_visual">
         <pose>0 0.08 0.023 0 0 0</pose>
@@ -282,6 +297,11 @@
           </contact>
         </surface>
       </collision>
+      <sensor name="pbl6_contact_wheel_right_link" type="contact">
+        <contact><collision>wheel_right_collision</collision><topic>/robot/contacts/wheel_right_link</topic></contact>
+        <always_on>true</always_on>
+        <update_rate>50</update_rate>
+      </sensor>
 
       <visual name="wheel_right_visual">
         <pose>0.0 -0.08 0.023 0 0 0</pose>
@@ -330,6 +350,11 @@
           </contact>
         </surface>
       </collision>
+      <sensor name="pbl6_contact_caster_back_link" type="contact">
+        <contact><collision>collision</collision><topic>/robot/contacts/caster_back_link</topic></contact>
+        <always_on>true</always_on>
+        <update_rate>50</update_rate>
+      </sensor>
     </link>
 
     <link name="camera_link">

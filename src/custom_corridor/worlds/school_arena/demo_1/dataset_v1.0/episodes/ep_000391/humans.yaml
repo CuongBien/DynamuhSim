@@ -1,0 +1,122 @@
+hunav_loader:
+  ros__parameters:
+    yaml_base_name: scenario_narrow_passing_low_502790344
+    simulator: Gazebo Fortress
+    map: school_arena
+    publish_people: true
+    global_goals:
+      1:
+        x: -10.0
+        y: -7.85
+      2:
+        x: -14.0
+        y: -8.15
+      3:
+        x: 10.97
+        y: -8.9
+      4:
+        x: 10.97
+        y: -8.6
+      5:
+        x: 10.97
+        y: -8.15
+      6:
+        x: 10.0
+        y: -8.15
+      7:
+        x: 5.0
+        y: -8.15
+      8:
+        x: 2.6
+        y: -8.15
+      9:
+        x: 0.0
+        y: -7.85
+      10:
+        x: -2.0
+        y: -8.18
+      11:
+        x: -5.0
+        y: -8.15
+      12:
+        x: -10.0
+        y: -7.85
+      13:
+        x: -14.0
+        y: -8.15
+      14:
+        x: -13.53
+        y: -8.15
+      15:
+        x: -13.53
+        y: -8.6
+      16:
+        x: -13.53
+        y: -8.9
+      17:
+        x: -12.55
+        y: -10.6
+    agents:
+    - event_agent_1
+    - background_agent_1
+    event_agent_1:
+      id: 1
+      group_id: -1
+      skin: 0
+      max_vel: 0.7503
+      radius: 0.22
+      goal_radius: 0.25
+      cyclic_goals: false
+      init_pose:
+        x: -5.00222
+        y: -8.18693
+        z: 0.0
+        h: 3.081664
+      behavior:
+        type: Regular
+        configuration: 0
+        goal_force_factor: 2.0
+        obstacle_force_factor: 10.0
+        social_force_factor: 5.0
+        other_force_factor: 20.0
+      goals:
+      - 1
+      - 2
+      start_delay: 0.4984
+    background_agent_1:
+      id: 2
+      group_id: -1
+      skin: 1
+      max_vel: 0.5569
+      radius: 0.22
+      goal_radius: 0.25
+      cyclic_goals: false
+      init_pose:
+        x: 11.95
+        y: -10.6
+        z: 0.0
+        h: 2.093735
+      behavior:
+        type: Regular
+        configuration: 0
+        goal_force_factor: 2.0
+        obstacle_force_factor: 10.0
+        social_force_factor: 5.0
+        other_force_factor: 20.0
+      goals:
+      - 3
+      - 4
+      - 5
+      - 6
+      - 7
+      - 8
+      - 9
+      - 10
+      - 11
+      - 12
+      - 13
+      - 14
+      - 15
+      - 16
+      - 17
+      start_delay: 1.5382

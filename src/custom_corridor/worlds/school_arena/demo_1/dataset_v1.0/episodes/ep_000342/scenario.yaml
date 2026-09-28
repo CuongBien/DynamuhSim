@@ -1,0 +1,72 @@
+dataset_version: v1.0
+seed: 1796825407
+scenario_family: blind_corner
+density: low
+map: school_floor_01
+robot:
+  start_zone: turn_bc
+  goal_zone: turn_bc
+  start_node: corridor_a_5
+  goal_node: junction_cd
+  start_pose:
+    x: 10.0
+    y: -8.15
+    heading: 0.0
+  route:
+  - corridor_a_5
+  - junction_ab
+  - junction_bc
+  - junction_cd
+  heading: 0.0
+event:
+  corner: junction_bc
+  corner_zone: turn_bc
+  robot_incoming: junction_ab
+  human_incoming: junction_cd
+  conflict_node: junction_bc
+  time_tolerance: 1.2
+humans:
+- name: event_agent_1
+  role: event_agent
+  start_node: junction_cd
+  goal_node: junction_ab
+  route:
+  - junction_cd
+  - junction_bc
+  - junction_ab
+  spawn:
+    x: 7.0
+    y: -4.0
+    heading: 0.0
+  speed: 0.7851
+  start_delay: 6.2801
+  lateral_offset: 0.0
+  behavior: impassive
+  group_id: -1
+- name: background_agent_1
+  role: background_agent
+  start_node: room03_center
+  goal_node: room05_center
+  route:
+  - room03_center
+  - room03_predoor
+  - room03_door
+  - room03_approach
+  - corridor_a_2
+  - corridor_a_backpack_south
+  - corridor_a_3
+  - corridor_a_locker_south
+  - corridor_a_4
+  - room05_approach
+  - room05_door
+  - room05_predoor
+  - room05_center
+  spawn:
+    x: -2.75
+    y: -10.6
+    heading: 2.093735
+  speed: 0.5852
+  start_delay: 0.2608
+  lateral_offset: 0.0
+  behavior: regular
+  group_id: -1

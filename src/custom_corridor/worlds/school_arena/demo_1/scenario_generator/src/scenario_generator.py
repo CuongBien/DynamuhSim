@@ -18,7 +18,14 @@ from .validators import OccupancyMap, ValidationError, validate_episode
 from .zone_sampler import ZoneSampler, contains
 
 ROOT = Path(__file__).resolve().parents[1]
-FAMILIES = ("empty", "head_on", "same_direction", "crossing", "exit_room")
+FAMILIES = (
+    "empty", "head_on", "same_direction", "crossing", "exit_room",
+    "enter_room", "merge", "diverge", "overtake_robot", "robot_overtake",
+    "stop_resume", "waiting_person", "sudden_entry", "blind_corner",
+    "door_bottleneck", "narrow_passing", "walking_group", "opposing_group",
+    "crossing_group", "conversation_group", "bidirectional_flow",
+    "multi_crossing", "class_change_burst", "mixed_interaction",
+)
 TEMPLATE_FILES = {family: ROOT / "templates" / f"S{i:02d}_{family}.yaml"
                   for i, family in enumerate(FAMILIES)}
 
@@ -33,6 +40,8 @@ class ScenarioGenerator:
         self.occupancy = OccupancyMap(self.inputs)
         self.templates = {family: read_yaml(path)
                           for family, path in TEMPLATE_FILES.items()}
+        if set(self.inputs.config["scenario_weights"]) - set(FAMILIES):
+            raise GenerationError("scenario_weights contains unknown family")
         for family, template in self.templates.items():
             if template.get("family") != family:
                 raise GenerationError(f"Template family mismatch: {family}")
@@ -41,6 +50,13 @@ class ScenarioGenerator:
         rng = random.Random(seed)
         routes = RouteSampler(self.inputs, rng)
         return rng, routes, ZoneSampler(self.inputs, rng), HumanSampler(self.inputs, routes, rng)
+
+    def weighted_family(self, seed: int) -> str:
+        """Select a configured family reproducibly without generating an episode."""
+        weights = self.inputs.config["scenario_weights"]
+        return random.Random(seed).choices(
+            list(weights), weights=list(weights.values()), k=1
+        )[0]
 
     def _robot(self, route: list[str], routes: RouteSampler, corridor: str) -> dict:
         a, b = (self.inputs.nodes[route[0]], self.inputs.nodes[route[-1]])
@@ -189,10 +205,18 @@ class ScenarioGenerator:
             try:
                 if family in {"empty", "head_on", "same_direction"}:
                     robot, event_agents, detail = self._corridor_event(family, routes, humans, rng)
-                else:
+                elif family in {"crossing", "exit_room"}:
                     robot, event_agents, detail = self._timed_event(family, routes, humans, rng)
+                elif family in FAMILIES[5:16]:
+                    from .individual_temporal import build_event
+                    robot, event_agents, detail = build_event(self, family, routes, humans, rng)
+                else:
+                    from .group_mixed import build_event
+                    robot, event_agents, detail = build_event(self, family, routes, humans, rng, density)
                 limits = self.inputs.config["density"][density]["background_humans"]
-                background_count = 0 if family == "empty" else rng.randint(*limits)
+                background_count = (0 if family == "empty" else
+                                    max(2 if family == "mixed_interaction" else 0,
+                                        rng.randint(*limits) - max(0, len(event_agents)-1)))
                 all_humans = event_agents + self._background(background_count, event_agents,
                                                                robot, routes, humans, rng)
                 scenario = {"dataset_version": self.inputs.config["dataset_version"],
@@ -259,7 +283,7 @@ class ScenarioGenerator:
 
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--scenario", choices=(*FAMILIES, "all"), required=True)
+    parser.add_argument("--scenario", choices=(*FAMILIES, "all", "weighted"), required=True)
     parser.add_argument("--seed", type=int)
     parser.add_argument("--seed-start", type=int)
     parser.add_argument("--num-episodes", type=int, default=1)
@@ -280,7 +304,9 @@ def main(argv: list[str] | None = None) -> int:
                 if p.is_dir() and (match := re.fullmatch(r"ep_(\d{6})", p.name))]
     next_id = max(existing, default=0) + 1
     for index in range(args.num_episodes):
-        family = FAMILIES[index % len(FAMILIES)] if args.scenario == "all" else args.scenario
+        family = (FAMILIES[index % len(FAMILIES)] if args.scenario == "all" else
+                  generator.weighted_family(root_seed+index) if args.scenario == "weighted" else
+                  args.scenario)
         episode = generator.sample(family, root_seed+index, args.density)
         episode_id = f"ep_{next_id+index:06d}"
         output = generator.write(episode, args.output / episode_id, episode_id)

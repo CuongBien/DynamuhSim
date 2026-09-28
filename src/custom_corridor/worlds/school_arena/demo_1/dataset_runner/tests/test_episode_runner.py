@@ -11,6 +11,7 @@ DEMO = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(DEMO))
 
 from dataset_runner.nav2_manager import Nav2Error
+from dataset_runner.readiness_checker import ReadinessError
 
 from dataset_runner import (
     EpisodeHooks, EpisodeLoader, EpisodeRunner, EpisodeState, EpisodeStatus,
@@ -115,6 +116,10 @@ class FakeSimulator:
 class FakeHuNav:
     def __init__(self, events):
         self.events = events
+        self.actual_count = 1
+
+    def reset(self, context):
+        self.events.append("hunav_reset")
 
     def load_scenario(self, context):
         self.events.append("load_hunav")
@@ -130,6 +135,9 @@ class FakeNav2:
     def __init__(self, events):
         self.events = events
 
+    def cancel_goal(self):
+        self.events.append("cancel_previous_goal")
+
     def wait_ready(self, context):
         self.events.append("nav_ready")
 
@@ -138,6 +146,17 @@ class FakeNav2:
 
     def finalize(self, context):
         self.events.append("nav_finalize")
+
+
+class FakeReadiness:
+    def __init__(self, events):
+        self.events = events
+
+    def wait_ready(self, context):
+        self.events.append("sensor_tf_pose_ready")
+
+    def finalize(self, context):
+        self.events.append("readiness_finalize")
 
 
 class FakeMonitor:
@@ -168,7 +187,7 @@ class RunnerTests(Fixture):
         return EpisodeRunner(
             loader=self.loader(), simulator_manager=FakeSimulator(events),
             hunav_manager=FakeHuNav(events), nav2_manager=FakeNav2(events),
-            monitor=FakeMonitor(events), hooks=RecordingHooks(events),
+            readiness_checker=FakeReadiness(events), monitor=FakeMonitor(events), hooks=RecordingHooks(events),
         )
 
     def test_state_order_and_hooks(self):
@@ -180,12 +199,81 @@ class RunnerTests(Fixture):
         self.assertEqual(result.termination_reason, "nav_goal_reached")
         self.assertEqual(result.transitions, tuple(EpisodeState))
         self.assertEqual(events, [
-            "hook_prepare", "reset", "load_hunav", "sim_ready", "hunav_ready",
+            "hook_prepare", "cancel_previous_goal", "hunav_reset", "reset",
+            "load_hunav", "sim_ready", "hunav_ready", "sensor_tf_pose_ready",
             "nav_ready", "send_goal", "hook_start", "monitor", "nav_finalize",
-            "hunav_finalize", "sim_finalize", "hook_end",
+            "readiness_finalize", "hunav_finalize", "sim_finalize", "hook_end",
         ])
         for state in EpisodeState:
             self.assertTrue(any(f"[{state.name}]" in line for line in logs.output))
+
+    def test_each_readiness_failure_blocks_start_and_cleans_up(self):
+        cases = (
+            ("simulator_manager", "wait_ready", RuntimeError("sim unavailable")),
+            ("hunav_manager", "wait_ready", RuntimeError("human_count_mismatch")),
+            ("readiness_checker", "wait_ready", ReadinessError("odom_unavailable", "no odom")),
+            ("readiness_checker", "wait_ready", ReadinessError("scan_unavailable", "no scan")),
+            ("readiness_checker", "wait_ready", ReadinessError("tf_unavailable", "no TF")),
+            ("readiness_checker", "wait_ready", ReadinessError("robot_pose_invalid", "wrong pose")),
+            ("nav2_manager", "wait_ready", Nav2Error("lifecycle_not_active", "inactive")),
+        )
+        for component, method, failure in cases:
+            with self.subTest(component=component, failure=str(failure)):
+                events = []
+                runner = self.make_runner(events)
+                def fail(context):
+                    raise failure
+                setattr(getattr(runner, component), method, fail)
+                with self.assertLogs("dataset_runner.episode_runner", logging.ERROR):
+                    result = runner.run(self.episode)
+                self.assertEqual(result.status, EpisodeStatus.SIM_FAILURE)
+                self.assertIn(str(failure), result.termination_reason)
+                self.assertNotIn("send_goal", events)
+                self.assertNotIn("hook_start", events)
+                self.assertEqual(result.transitions[-1], EpisodeState.FINALIZE)
+                self.assertEqual(events[-5:], ["nav_finalize", "readiness_finalize",
+                                              "hunav_finalize", "sim_finalize", "hook_end"])
+
+    def test_second_episode_resets_previous_state_before_relaunch(self):
+        events = []
+        runner = self.make_runner(events)
+        with self.assertLogs("dataset_runner.episode_runner", logging.INFO):
+            first = runner.run(self.episode)
+            boundary = len(events)
+            second = runner.run(self.episode)
+        self.assertEqual((first.status, second.status),
+                         (EpisodeStatus.SUCCESS, EpisodeStatus.SUCCESS))
+        second_events = events[boundary:]
+        self.assertEqual(second_events[:4],
+                         ["hook_prepare", "cancel_previous_goal", "hunav_reset", "reset"])
+        self.assertLess(second_events.index("sensor_tf_pose_ready"),
+                        second_events.index("send_goal"))
+
+    def test_previous_goal_cancel_failure_blocks_new_runtime(self):
+        events = []
+        runner = self.make_runner(events)
+        def fail():
+            events.append("cancel_previous_goal")
+            raise Nav2Error("goal_cancel_failed", "no acknowledgement")
+        runner.nav2_manager.cancel_goal = fail
+        with self.assertLogs("dataset_runner.episode_runner", logging.ERROR):
+            result = runner.run(self.episode)
+        self.assertEqual(result.status, EpisodeStatus.SIM_FAILURE)
+        self.assertNotIn("reset", events)
+        self.assertNotIn("send_goal", events)
+
+    def test_goal_context_is_unchanged(self):
+        events = []
+        runner = self.make_runner(events)
+        observed = []
+        def send(context):
+            observed.append(context.goal_pose)
+            events.append("send_goal")
+        runner.nav2_manager.send_goal = send
+        with self.assertLogs("dataset_runner.episode_runner", logging.INFO):
+            result = runner.run(self.episode)
+        self.assertEqual(result.status, EpisodeStatus.SUCCESS)
+        self.assertEqual(observed, [result.context.goal_pose])
 
     def test_invalid_transition_is_guarded(self):
         runner = self.make_runner([])

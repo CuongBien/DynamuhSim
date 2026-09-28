@@ -1,0 +1,43 @@
+dataset_version: v1.0
+master_seed: 20260928
+split_seed: 20261001
+generator_config: ../scenario_generator/configs/generator.yaml
+output_dir: ../dataset_v1.0
+max_seed_attempts: 10000
+max_infrastructure_retries: 2
+max_replacement_rounds: 2
+production_backend: dataset_production.runtime_backend:run
+target_episodes:
+  S00: 20
+  S01: 25
+  S02: 25
+  S03: 25
+  S04: 25
+  S05: 25
+  S06: 25
+  S07: 25
+  S08: 25
+  S09: 25
+  S10: 25
+  S11: 25
+  S12: 25
+  S13: 25
+  S14: 25
+  S15: 25
+  S16: 25
+  S17: 25
+  S18: 25
+  S19: 25
+  S20: 25
+  S21: 25
+  S22: 30
+  S23: 30
+densities: [low, medium, high]
+split_ratios:
+  train: 0.70
+  val: 0.15
+  test: 0.15
+balance:
+  min_episodes_per_scenario: 20
+  min_seeds_per_scenario: 20
+  min_behavior_count: 5

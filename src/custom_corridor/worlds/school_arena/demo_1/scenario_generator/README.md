@@ -1,10 +1,42 @@
 # Scenario Generator V1 — lệnh chạy và kiểm thử
 
 Scenario Generator dùng zones.yaml, human_navigation_graph.yaml, map.pgm và
-world của Demo 1. Family hỗ trợ: empty, head_on, same_direction, crossing,
-exit_room. Generator đặt episode vào generated/ep_xxxxxx; ID tăng theo các
+world của Demo 1. Family hỗ trợ S00–S23: empty, head_on, same_direction, crossing,
+exit_room, enter_room, merge, diverge, overtake_robot, robot_overtake,
+stop_resume, waiting_person, sudden_entry, blind_corner, door_bottleneck,
+narrow_passing, walking_group, opposing_group, crossing_group,
+conversation_group, bidirectional_flow, multi_crossing, class_change_burst,
+mixed_interaction. Generator đặt episode vào generated/ep_xxxxxx; ID tăng theo các
 thư mục đã tồn tại. Hãy dùng ID in ra sau lệnh generate, không giả định luôn
 là ep_000001.
+
+## Bước 4 — Dataset V1 coverage
+
+Sinh một lượt đầy đủ theo density, với seed cố định:
+
+~~~bash
+python3 scenario_generator.py --scenario all --num-episodes 24 --seed-start 42000 --density low --output generated_v1
+python3 scenario_generator.py --scenario all --num-episodes 24 --seed-start 43000 --density medium --output generated_v1
+python3 scenario_generator.py --scenario all --num-episodes 24 --seed-start 44000 --density high --output generated_v1
+python3 scenario_coverage.py --input generated_v1 --output .
+~~~
+
+`scenario_coverage.csv` và `.yaml` đếm episode, density, behavior, human, seed,
+PASS/FAIL của kiểm tra cấu hình. Cột `runtime_*` chỉ được điền khi truyền
+`--runtime-results runtime_smoke_v1.csv`; timeout, collision, stuck vẫn có thể
+được tính runtime PASS nếu hạ tầng load và dọn sạch đúng.
+
+Smoke qua `EpisodeRunner` hiện tại; timeout ngắn kiểm tra hạ tầng, không đo
+khả năng tới goal. Cần source ROS Jazzy và workspace, cùng container HuNav:
+
+~~~bash
+python3 runtime_smoke_v1.py generated_v1/ep_0000{01..24} --observe-sec 3 --results runtime_smoke_v1.csv
+python3 runtime_smoke_v1.py generated_v1/ep_0000{26,28,38,39,41,45,47,50,52,62,63,65,69,71} --observe-sec 3 --results runtime_smoke_v1.csv --append
+python3 scenario_coverage.py --input generated_v1 --output . --runtime-results runtime_smoke_v1.csv
+~~~
+
+S10 chuyển `pause_after_sec` và `pause_duration_sec` qua `humans.yaml` tới
+school bridge hiện có; pause được tính từ `start_delay`.
 
 ## 1. Chuẩn bị trên host
 
@@ -54,7 +86,9 @@ python3 scenario_generator.py --scenario all --num-episodes 20 --seed-start 200
 python3 scenario_generator.py --help
 ~~~
 
-all luân phiên năm family. Nếu bỏ --seed và --seed-start, generator tự
+all luân phiên 24 family. `--scenario weighted` lấy xác suất từ
+`configs/generator.yaml:scenario_weights`; có thể đặt weight bằng 0 để bỏ
+qua family trong batch weighted. Nếu bỏ --seed và --seed-start, generator tự
 chọn seed và in seed đã dùng. Có thể dùng --config configs/generator.yaml
 hoặc --output <thư_mục>.
 
@@ -143,7 +177,7 @@ Chạy không GUI bằng gui:=false rviz:=false. Đợi Nav2 active trước khi
 goal. Không chạy school_demo.launch.py hoặc school_hunav_demo.launch.py khác
 cùng lúc.
 
-Với bốn family có human, mở ba terminal Docker riêng. Trong mỗi terminal:
+Với các family có human khi chạy thủ công, mở ba terminal Docker riêng. Trong mỗi terminal:
 
 ~~~bash
 docker exec -it hunavsim_gz_fortress bash
@@ -205,8 +239,8 @@ ros2 param get /amcl initial_pose.y
 ros2 param get /amcl initial_pose.yaw
 ~~~
 
-Robot goal nằm ở robot.goal_node trong scenario.yaml. V1 chưa tự gửi Nav2
-goal hoặc ghi dataset.
+Robot goal nằm ở robot.goal_node trong scenario.yaml. Lệnh generator chỉ
+sinh cấu hình; dataset_runner là bước gửi goal và chạy episode.
 
 ## 7. Chỉ kiểm tra parser trong Docker
 

@@ -1,0 +1,114 @@
+dataset_version: v1.0
+seed: 749132475
+scenario_family: walking_group
+density: medium
+map: school_floor_01
+robot:
+  start_zone: corridor_a
+  goal_zone: corridor_a
+  start_node: corridor_a_backpack_south
+  goal_node: corridor_a_west
+  start_pose:
+    x: -2.0
+    y: -8.18
+    heading: 3.131593
+  route:
+  - corridor_a_backpack_south
+  - corridor_a_2
+  - corridor_a_1
+  - corridor_a_west
+  heading: 3.131593
+event:
+  corridor: corridor_a
+  group_id: 1
+  group_size: 4
+  formation: column
+  interaction_node: corridor_a_2
+humans:
+- name: event_agent_1
+  role: event_agent
+  start_node: corridor_a_2
+  goal_node: corridor_a_west
+  route: &id001
+  - corridor_a_2
+  - corridor_a_1
+  - corridor_a_west
+  spawn:
+    x: -4.99906
+    y: -8.13427
+    heading: 3.081664
+  speed: 0.3248
+  start_delay: 0.4174
+  lateral_offset: -0.01576
+  behavior: regular
+  group_id: 1
+- name: event_agent_2
+  role: event_agent
+  start_node: corridor_a_2
+  goal_node: corridor_a_west
+  route: *id001
+  spawn:
+    x: -5.58885
+    y: -8.09708
+    heading: 3.081664
+  speed: 0.3248
+  start_delay: 0.4174
+  lateral_offset: -0.01755
+  behavior: regular
+  group_id: 1
+- name: event_agent_3
+  role: event_agent
+  start_node: corridor_a_2
+  goal_node: corridor_a_west
+  route: *id001
+  spawn:
+    x: -6.17889
+    y: -8.06419
+    heading: 3.081664
+  speed: 0.3248
+  start_delay: 0.4174
+  lateral_offset: -0.01504
+  behavior: regular
+  group_id: 1
+- name: event_agent_4
+  role: event_agent
+  start_node: corridor_a_2
+  goal_node: corridor_a_west
+  route: *id001
+  spawn:
+    x: -6.77025
+    y: -8.05314
+    heading: 3.081664
+  speed: 0.3248
+  start_delay: 0.4174
+  lateral_offset: 0.00934
+  behavior: regular
+  group_id: 1
+- name: background_agent_1
+  role: background_agent
+  start_node: room09_center
+  goal_node: room06_center
+  route:
+  - room09_center
+  - room09_predoor
+  - room09_door
+  - room09_approach
+  - corridor_a_2
+  - corridor_a_backpack_south
+  - corridor_a_3
+  - corridor_a_locker_south
+  - corridor_a_4
+  - corridor_a_5
+  - room06_approach
+  - room06_door
+  - room06_predoor
+  - room06_center
+  spawn:
+    x: -2.75
+    y: -5.4
+    heading: -2.093735
+  speed: 0.7318
+  start_delay: 3.3024
+  lateral_offset: 0.0
+  behavior: regular
+  group_id: -1

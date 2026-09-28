@@ -1,0 +1,69 @@
+dataset_version: v1.0
+seed: 374753432
+scenario_family: waiting_person
+density: low
+map: school_floor_01
+robot:
+  start_zone: corridor_f
+  goal_zone: corridor_f
+  start_node: corridor_f_lower_after_bin
+  goal_node: corridor_f_before_upper_bin
+  start_pose:
+    x: 15.0
+    y: 3.5
+    heading: 1.570796
+  route:
+  - corridor_f_lower_after_bin
+  - corridor_f_mid
+  - corridor_f_before_upper_bin
+  heading: 1.570796
+event:
+  room: room12
+  doorway: room12_door
+  corridor: corridor_f
+  waiting_node: room12_predoor
+  wait_duration_sec: 12.1578
+humans:
+- name: event_agent_1
+  role: event_agent
+  start_node: room12_predoor
+  goal_node: corridor_f_before_upper_bin
+  route:
+  - room12_predoor
+  - room12_door
+  - room12_approach
+  - corridor_f_mid
+  - corridor_f_before_upper_bin
+  spawn:
+    x: 15.9
+    y: 6.4067
+    heading: 3.141593
+  speed: 0.8215
+  start_delay: 12.1578
+  lateral_offset: 0.0
+  behavior: regular
+  group_id: -1
+- name: background_agent_1
+  role: background_agent
+  start_node: room09_center
+  goal_node: room08_center
+  route:
+  - room09_center
+  - room09_predoor
+  - room09_door
+  - room09_approach
+  - corridor_a_2
+  - corridor_a_1
+  - room08_approach
+  - room08_door
+  - room08_predoor
+  - room08_center
+  spawn:
+    x: -2.75
+    y: -5.4
+    heading: -2.093735
+  speed: 0.8197
+  start_delay: 3.0693
+  lateral_offset: 0.0
+  behavior: regular
+  group_id: -1

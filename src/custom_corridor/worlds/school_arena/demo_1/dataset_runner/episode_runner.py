@@ -8,9 +8,10 @@ from typing import Protocol
 
 from .episode_loader import EpisodeLoader, EpisodeValidationError
 from .nav2_manager import Nav2Error
+from .readiness_checker import ReadinessError
 from .episode_types import (
     EpisodeContext, EpisodeHooks, EpisodeResult, EpisodeState,
-    EpisodeStatus, EpisodeTermination,
+    EpisodeStatus, EpisodeTermination, MonitorResult,
 )
 
 
@@ -39,6 +40,11 @@ class Nav2Manager(Protocol):
     def finalize(self, context: EpisodeContext) -> None: ...
 
 
+class ReadinessChecker(Protocol):
+    def wait_ready(self, context: EpisodeContext) -> None: ...
+    def finalize(self, context: EpisodeContext) -> None: ...
+
+
 class EpisodeMonitor(Protocol):
     def run(self, context: EpisodeContext) -> EpisodeTermination: ...
 
@@ -64,6 +70,7 @@ class EpisodeRunner:
         self, *, simulator_manager: SimulatorManager | None = None,
         hunav_manager: HuNavManager | None = None,
         nav2_manager: Nav2Manager | None = None,
+        readiness_checker: ReadinessChecker | None = None,
         monitor: EpisodeMonitor | None = None,
         loader: EpisodeLoader | None = None,
         hooks: EpisodeHooks | None = None,
@@ -72,6 +79,7 @@ class EpisodeRunner:
         self.simulator_manager = simulator_manager
         self.hunav_manager = hunav_manager
         self.nav2_manager = nav2_manager
+        self.readiness_checker = readiness_checker
         self.monitor = monitor
         self.loader = loader or EpisodeLoader()
         self.hooks = hooks or EpisodeHooks()
@@ -95,7 +103,8 @@ class EpisodeRunner:
 
     def _configured(self) -> None:
         missing = [name for name in (
-            "simulator_manager", "hunav_manager", "nav2_manager", "monitor"
+            "simulator_manager", "hunav_manager", "nav2_manager",
+            "readiness_checker", "monitor"
         ) if getattr(self, name) is None]
         if missing:
             raise RuntimeError(f"Runtime managers not configured: {', '.join(missing)}")
@@ -108,6 +117,7 @@ class EpisodeRunner:
         status = EpisodeStatus.SIM_FAILURE
         reason = "episode did not start"
         started = time.monotonic()
+        termination: EpisodeTermination | None = None
         self.transition(EpisodeState.PREPARE)
         try:
             context = self.loader.load(episode_dir)
@@ -121,14 +131,22 @@ class EpisodeRunner:
             self._configured()
 
             self.transition(EpisodeState.RESET)
+            self.nav2_manager.cancel_goal()
+            self.hunav_manager.reset(context)
             self.simulator_manager.reset(context)
+            self.logger.info("[RESET] previous goal/HuNav/runtime cleaned; simulator launched")
 
             self.transition(EpisodeState.LOAD_SCENARIO)
             self.hunav_manager.load_scenario(context)
 
             self.transition(EpisodeState.WAIT_READY)
             self.simulator_manager.wait_ready(context)
+            self.logger.info("[SIM READY]")
             self.hunav_manager.wait_ready(context)
+            self.logger.info("[HUNAV READY] expected=%s actual=%s",
+                             context.metadata["humans"]["total"],
+                             self.hunav_manager.actual_count)
+            self.readiness_checker.wait_ready(context)
             self.nav2_manager.wait_ready(context)
 
             self.transition(EpisodeState.START)
@@ -145,6 +163,9 @@ class EpisodeRunner:
         except EpisodeValidationError as exc:
             status, reason = EpisodeStatus.INVALID_EPISODE, str(exc)
             self.logger.error("Invalid episode: %s", exc)
+        except ReadinessError as exc:
+            status, reason = EpisodeStatus.SIM_FAILURE, str(exc)
+            self.logger.error("Readiness failed: %s", exc)
         except Nav2Error as exc:
             status = (EpisodeStatus.NAV_FAILURE if exc.code in
                       {"goal_rejected", "goal_send_failed", "goal_aborted"}
@@ -157,7 +178,7 @@ class EpisodeRunner:
         finally:
             self.transition(EpisodeState.FINALIZE)
             if context is not None:
-                for name in ("nav2_manager", "hunav_manager", "simulator_manager"):
+                for name in ("nav2_manager", "readiness_checker", "hunav_manager", "simulator_manager"):
                     manager = getattr(self, name)
                     if manager is None:
                         continue
@@ -173,6 +194,7 @@ class EpisodeRunner:
                 status=status, termination_reason=reason,
                 duration_sec=time.monotonic() - started,
                 transitions=tuple(self.transitions), context=context,
+                monitor_result=termination if isinstance(termination, MonitorResult) else None,
             )
             try:
                 self.hooks.on_episode_end(context, result)
@@ -184,6 +206,7 @@ class EpisodeRunner:
                         termination_reason=f"on_episode_end failed: {exc}",
                         duration_sec=result.duration_sec,
                         transitions=result.transitions, context=context,
+                        monitor_result=result.monitor_result,
                     )
             self.logger.info("[TERMINATED: %s] %s", result.status.value.upper(),
                              result.termination_reason)

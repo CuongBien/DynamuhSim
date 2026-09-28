@@ -206,6 +206,7 @@ class SchoolHuNavBridge(Node):
         self.commanded_humans = {}
         self.agent_goals = {}
         self.behavior_states = {}
+        self.paused_names = set()
         self.last_missing_log = 0.0
         self.pending_compute = None
 
@@ -563,6 +564,21 @@ class SchoolHuNavBridge(Node):
                 # Keep the configured initial pose and the original goals until
                 # this agent is scheduled to begin walking.
                 continue
+
+            pause_after = self.agent_cfg[a.name].get('pause_after_sec')
+            if pause_after is not None:
+                elapsed = time.monotonic() - self.episode_start_monotonic
+                pause_start = float(self.agent_cfg[a.name].get('start_delay', 0.0)) + float(pause_after)
+                pause_end = pause_start + float(self.agent_cfg[a.name].get('pause_duration_sec', 0.0))
+                if pause_start <= elapsed < pause_end:
+                    if a.name not in self.paused_names:
+                        self.get_logger().info(f"PAUSE {a.name} elapsed={elapsed:.2f}")
+                        self.paused_names.add(a.name)
+                    # Retain the current pose and goals until walking resumes.
+                    continue
+                if a.name in self.paused_names:
+                    self.get_logger().info(f"RESUME {a.name} elapsed={elapsed:.2f}")
+                    self.paused_names.remove(a.name)
 
             # HuNav rotates / removes reached goals in the returned Agent. Keep
             # that state for the next request, as the official Gazebo wrapper

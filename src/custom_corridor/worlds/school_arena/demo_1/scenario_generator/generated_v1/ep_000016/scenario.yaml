@@ -1,0 +1,41 @@
+dataset_version: v1.0
+seed: 42015
+scenario_family: narrow_passing
+density: low
+map: school_floor_01
+robot:
+  start_zone: corridor_a
+  goal_zone: corridor_a
+  start_node: corridor_a_west
+  goal_node: corridor_a_2
+  start_pose:
+    x: -14.0
+    y: -8.15
+    heading: 0.07486
+  route:
+  - corridor_a_west
+  - corridor_a_1
+  - corridor_a_2
+  heading: 0.07486
+event:
+  corridor: corridor_a
+  bottleneck_zone: bench_bottleneck_west
+  bottleneck_node: corridor_a_1
+humans:
+- name: event_agent_1
+  role: event_agent
+  start_node: corridor_a_2
+  goal_node: corridor_a_west
+  route:
+  - corridor_a_2
+  - corridor_a_1
+  - corridor_a_west
+  spawn:
+    x: -5.00096
+    y: -8.16606
+    heading: 3.081664
+  speed: 0.6686
+  start_delay: 0.111
+  lateral_offset: 0.01609
+  behavior: threatening
+  group_id: -1

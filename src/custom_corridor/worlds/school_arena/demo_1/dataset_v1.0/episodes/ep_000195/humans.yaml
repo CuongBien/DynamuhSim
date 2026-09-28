@@ -1,0 +1,122 @@
+hunav_loader:
+  ros__parameters:
+    yaml_base_name: scenario_diverge_low_787073008
+    simulator: Gazebo Fortress
+    map: school_arena
+    publish_people: true
+    global_goals:
+      1:
+        x: 15.0
+        y: 8.0
+      2:
+        x: 15.0
+        y: 6.01
+      3:
+        x: 14.4
+        y: 6.01
+      4:
+        x: 14.1
+        y: 6.01
+      5:
+        x: 12.4
+        y: 6.95
+      6:
+        x: 15.9
+        y: 1.94
+      7:
+        x: 15.6
+        y: 1.94
+      8:
+        x: 15.0
+        y: 1.94
+      9:
+        x: 15.0
+        y: 2.55
+      10:
+        x: 15.0
+        y: 3.5
+      11:
+        x: 15.0
+        y: 8.0
+      12:
+        x: 15.0
+        y: 9.8
+      13:
+        x: 15.0
+        y: 10.65
+      14:
+        x: 15.0
+        y: 10.71
+      15:
+        x: 14.4
+        y: 10.71
+      16:
+        x: 14.1
+        y: 10.71
+      17:
+        x: 12.4
+        y: 11.65
+    agents:
+    - event_agent_1
+    - background_agent_1
+    event_agent_1:
+      id: 1
+      group_id: -1
+      skin: 0
+      max_vel: 0.3711
+      radius: 0.22
+      goal_radius: 0.25
+      cyclic_goals: false
+      init_pose:
+        x: 15.0
+        y: 3.5
+        z: 0.0
+        h: 1.570796
+      behavior:
+        type: Threatening
+        configuration: 0
+        goal_force_factor: 2.0
+        obstacle_force_factor: 10.0
+        social_force_factor: 5.0
+        other_force_factor: 20.0
+      goals:
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+      start_delay: 0.7847
+    background_agent_1:
+      id: 2
+      group_id: -1
+      skin: 1
+      max_vel: 0.8058
+      radius: 0.22
+      goal_radius: 0.25
+      cyclic_goals: false
+      init_pose:
+        x: 17.6
+        y: 2.8333
+        z: 0.0
+        h: -2.657777
+      behavior:
+        type: Scared
+        configuration: 0
+        goal_force_factor: 2.0
+        obstacle_force_factor: 10.0
+        social_force_factor: 5.0
+        other_force_factor: 20.0
+      goals:
+      - 6
+      - 7
+      - 8
+      - 9
+      - 10
+      - 11
+      - 12
+      - 13
+      - 14
+      - 15
+      - 16
+      - 17
+      start_delay: 3.7932
