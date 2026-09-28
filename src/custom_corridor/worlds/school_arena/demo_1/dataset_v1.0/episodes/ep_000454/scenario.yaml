@@ -1,0 +1,95 @@
+dataset_version: v1.0
+seed: 23433931
+scenario_family: crossing_group
+density: low
+map: school_floor_01
+robot:
+  start_zone: corridor_a
+  goal_zone: corridor_a
+  start_node: corridor_a_2
+  goal_node: corridor_a_locker_south
+  start_pose:
+    x: -5.0
+    y: -8.15
+    heading: -0.01
+  route:
+  - corridor_a_2
+  - corridor_a_backpack_south
+  - corridor_a_3
+  - corridor_a_locker_south
+  heading: -0.01
+event:
+  corridor: corridor_a
+  group_id: 1
+  group_size: 2
+  source_room: room10
+  goal_room: room04
+  conflict_node: corridor_a_3
+  time_tolerance: 2.5
+humans:
+- name: event_agent_1
+  role: event_agent
+  start_node: room10_center
+  goal_node: room04_center
+  route: &id001
+  - room10_center
+  - room10_predoor
+  - room10_door
+  - room10_approach
+  - corridor_a_3
+  - room04_approach
+  - room04_door
+  - room04_predoor
+  - room04_center
+  spawn:
+    x: 2.13233
+    y: -5.38981
+    heading: -2.093735
+  speed: 0.8087
+  start_delay: 3.8641
+  lateral_offset: -0.0204
+  behavior: curious
+  group_id: 1
+- name: event_agent_2
+  role: event_agent
+  start_node: room10_center
+  goal_node: room04_center
+  route: *id001
+  spawn:
+    x: 1.85628
+    y: -5.9516
+    heading: -2.093735
+  speed: 0.8087
+  start_delay: 3.8641
+  lateral_offset: 0.02102
+  behavior: threatening
+  group_id: 1
+- name: background_agent_1
+  role: background_agent
+  start_node: room02_center
+  goal_node: room06_center
+  route:
+  - room02_center
+  - room02_predoor
+  - room02_door
+  - room02_approach
+  - corridor_a_1
+  - corridor_a_2
+  - corridor_a_backpack_south
+  - corridor_a_3
+  - corridor_a_locker_south
+  - corridor_a_4
+  - corridor_a_5
+  - room06_approach
+  - room06_door
+  - room06_predoor
+  - room06_center
+  spawn:
+    x: -7.65
+    y: -10.6
+    heading: 2.093735
+  speed: 0.5738
+  start_delay: 0.3055
+  lateral_offset: 0.0
+  behavior: scared
+  group_id: -1

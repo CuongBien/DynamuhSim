@@ -1,0 +1,16 @@
+[Unit]
+Description=PBL6 Dataset V1.0 production
+ConditionPathExists=/home/haduckien/nav_ws/src/custom_corridor/worlds/school_arena/demo_1/configs/dataset_v1.yaml
+
+[Service]
+Type=simple
+WorkingDirectory=/home/haduckien/nav_ws/src/custom_corridor/worlds/school_arena/demo_1
+ExecStartPre=/usr/bin/python3 -m dataset_production.service_preflight
+ExecStart=/usr/bin/python3 /home/haduckien/nav_ws/src/custom_corridor/worlds/school_arena/demo_1/produce_dataset_v1.py --config /home/haduckien/nav_ws/src/custom_corridor/worlds/school_arena/demo_1/configs/dataset_v1.yaml --resume
+StandardOutput=append:/home/haduckien/nav_ws/src/custom_corridor/worlds/school_arena/demo_1/dataset_v1.0/production.log
+StandardError=append:/home/haduckien/nav_ws/src/custom_corridor/worlds/school_arena/demo_1/dataset_v1.0/production.log
+KillSignal=SIGINT
+TimeoutStopSec=60
+
+[Install]
+WantedBy=default.target

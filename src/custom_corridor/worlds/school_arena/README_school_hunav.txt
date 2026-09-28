@@ -68,7 +68,7 @@ Start these long-running commands in separate terminals:
   cd ~/nav_ws/src/custom_corridor/worlds/school_arena
   ./run_school_arena.sh
 
-2. Docker - loader:
+2. Docker - loader: (docker exec -it hunavsim_gz_fortress bash)
 
   ros2 run hunav_agent_manager hunav_loader --ros-args --params-file \
     /home/hunav_gz_fortress_ws/src/hunav_gazebo_fortress_wrapper/scenarios/school_agents.yaml

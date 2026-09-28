@@ -1,0 +1,49 @@
+dataset_version: v1.0
+seed: 979445878
+scenario_family: door_bottleneck
+density: low
+map: school_floor_01
+robot:
+  start_zone: corridor_a
+  goal_zone: corridor_a
+  start_node: corridor_a_west
+  goal_node: room08_center
+  start_pose:
+    x: -14.0
+    y: -8.15
+    heading: 0.07486
+  route:
+  - corridor_a_west
+  - corridor_a_1
+  - room08_approach
+  - room08_door
+  - room08_predoor
+  - room08_center
+  heading: 0.07486
+event:
+  room: room08
+  doorway: room08_door
+  corridor: corridor_a
+  conflict_node: room08_door
+  time_tolerance: 1.2
+humans:
+- name: event_agent_1
+  role: event_agent
+  start_node: room08_center
+  goal_node: corridor_a_2
+  route:
+  - room08_center
+  - room08_predoor
+  - room08_door
+  - room08_approach
+  - corridor_a_1
+  - corridor_a_2
+  spawn:
+    x: -7.65
+    y: -5.4
+    heading: -2.093735
+  speed: 0.8154
+  start_delay: 8.7413
+  lateral_offset: 0.0
+  behavior: regular
+  group_id: -1

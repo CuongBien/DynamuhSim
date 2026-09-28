@@ -1,0 +1,45 @@
+dataset_version: v1.0
+seed: 1404733991
+scenario_family: waiting_person
+density: low
+map: school_floor_01
+robot:
+  start_zone: corridor_a
+  goal_zone: corridor_a
+  start_node: corridor_a_backpack_south
+  goal_node: corridor_a_locker_south
+  start_pose:
+    x: -2.0
+    y: -8.18
+    heading: 0.163527
+  route:
+  - corridor_a_backpack_south
+  - corridor_a_3
+  - corridor_a_locker_south
+  heading: 0.163527
+event:
+  room: room04
+  doorway: room04_door
+  corridor: corridor_a
+  waiting_node: room04_predoor
+  wait_duration_sec: 8.5024
+humans:
+- name: event_agent_1
+  role: event_agent
+  start_node: room04_predoor
+  goal_node: corridor_a_locker_south
+  route:
+  - room04_predoor
+  - room04_door
+  - room04_approach
+  - corridor_a_3
+  - corridor_a_locker_south
+  spawn:
+    x: 1.17
+    y: -8.9
+    heading: 1.570796
+  speed: 0.8036
+  start_delay: 8.5024
+  lateral_offset: 0.0
+  behavior: regular
+  group_id: -1

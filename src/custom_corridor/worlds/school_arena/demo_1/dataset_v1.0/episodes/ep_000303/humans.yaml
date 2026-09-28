@@ -1,0 +1,110 @@
+hunav_loader:
+  ros__parameters:
+    yaml_base_name: scenario_sudden_entry_low_304472905
+    simulator: Gazebo Fortress
+    map: school_arena
+    publish_people: true
+    global_goals:
+      1:
+        x: -3.73
+        y: -7.4
+      2:
+        x: -3.73
+        y: -8.15
+      3:
+        x: -5.0
+        y: -8.15
+      4:
+        x: -2.0
+        y: -8.18
+      5:
+        x: 14.1
+        y: 6.01
+      6:
+        x: 14.4
+        y: 6.01
+      7:
+        x: 15.0
+        y: 6.01
+      8:
+        x: 15.0
+        y: 8.0
+      9:
+        x: 15.0
+        y: 3.5
+      10:
+        x: 15.0
+        y: 2.55
+      11:
+        x: 15.0
+        y: 1.94
+      12:
+        x: 15.6
+        y: 1.94
+      13:
+        x: 15.9
+        y: 1.94
+      14:
+        x: 17.6
+        y: 2.8333
+    agents:
+    - event_agent_1
+    - background_agent_1
+    event_agent_1:
+      id: 1
+      group_id: -1
+      skin: 0
+      max_vel: 0.7332
+      radius: 0.22
+      goal_radius: 0.25
+      cyclic_goals: false
+      init_pose:
+        x: -3.73
+        y: -7.1
+        z: 0.0
+        h: -1.570796
+      behavior:
+        type: Curious
+        configuration: 0
+        goal_force_factor: 2.0
+        obstacle_force_factor: 10.0
+        social_force_factor: 5.0
+        other_force_factor: 20.0
+      goals:
+      - 1
+      - 2
+      - 3
+      - 4
+      start_delay: 6.0944
+    background_agent_1:
+      id: 2
+      group_id: -1
+      skin: 1
+      max_vel: 0.6344
+      radius: 0.22
+      goal_radius: 0.25
+      cyclic_goals: false
+      init_pose:
+        x: 12.4
+        y: 6.95
+        z: 0.0
+        h: -0.505099
+      behavior:
+        type: Threatening
+        configuration: 0
+        goal_force_factor: 2.0
+        obstacle_force_factor: 10.0
+        social_force_factor: 5.0
+        other_force_factor: 20.0
+      goals:
+      - 5
+      - 6
+      - 7
+      - 8
+      - 9
+      - 10
+      - 11
+      - 12
+      - 13
+      - 14
+      start_delay: 3.1283

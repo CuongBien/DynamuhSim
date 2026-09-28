@@ -1,0 +1,115 @@
+dataset_version: v1.0
+seed: 1003794280
+scenario_family: bidirectional_flow
+density: medium
+map: school_floor_01
+robot:
+  start_zone: corridor_a
+  goal_zone: corridor_a
+  start_node: corridor_a_west
+  goal_node: corridor_a_5
+  start_pose:
+    x: -14.0
+    y: -8.15
+    heading: 0.07486
+  route:
+  - corridor_a_west
+  - corridor_a_1
+  - corridor_a_2
+  - corridor_a_backpack_south
+  - corridor_a_3
+  - corridor_a_locker_south
+  - corridor_a_4
+  - corridor_a_5
+  heading: 0.07486
+event:
+  corridor: corridor_a
+  flow_counts:
+    forward: 3
+    reverse: 2
+humans:
+- name: event_agent_1
+  role: event_agent
+  start_node: corridor_a_1
+  goal_node: corridor_a_west
+  route:
+  - corridor_a_1
+  - corridor_a_west
+  spawn:
+    x: -10.0
+    y: -7.85
+    heading: -3.066733
+  speed: 0.9198
+  start_delay: 1.84
+  lateral_offset: 0.0
+  behavior: regular
+  group_id: -1
+- name: event_agent_2
+  role: event_agent
+  start_node: corridor_a_2
+  goal_node: corridor_a_west
+  route:
+  - corridor_a_2
+  - corridor_a_1
+  - corridor_a_west
+  spawn:
+    x: -5.0
+    y: -8.15
+    heading: 3.081664
+  speed: 0.9158
+  start_delay: 0.4975
+  lateral_offset: 0.0
+  behavior: threatening
+  group_id: -1
+- name: event_agent_3
+  role: event_agent
+  start_node: corridor_a_backpack_south
+  goal_node: corridor_a_5
+  route:
+  - corridor_a_backpack_south
+  - corridor_a_3
+  - corridor_a_locker_south
+  - corridor_a_4
+  - corridor_a_5
+  spawn:
+    x: -2.0
+    y: -8.18
+    heading: 0.163527
+  speed: 0.6597
+  start_delay: 0.1642
+  lateral_offset: 0.0
+  behavior: regular
+  group_id: -1
+- name: event_agent_4
+  role: event_agent
+  start_node: corridor_a_locker_south
+  goal_node: corridor_a_5
+  route:
+  - corridor_a_locker_south
+  - corridor_a_4
+  - corridor_a_5
+  spawn:
+    x: 2.6
+    y: -8.15
+    heading: 0.0
+  speed: 0.8536
+  start_delay: 0.7186
+  lateral_offset: 0.0
+  behavior: regular
+  group_id: -1
+- name: event_agent_5
+  role: event_agent
+  start_node: corridor_a_4
+  goal_node: corridor_a_5
+  route:
+  - corridor_a_4
+  - corridor_a_5
+  spawn:
+    x: 5.0
+    y: -8.15
+    heading: 0.0
+  speed: 0.8572
+  start_delay: 0.1323
+  lateral_offset: 0.0
+  behavior: surprised
+  group_id: -1

@@ -48,6 +48,7 @@ class GoalObservation:
     status_code: int | None = None
     error_code: int | None = None
     error_msg: str = ""
+    distance_remaining: float | None = None
 
     @property
     def failure_code(self) -> str | None:
@@ -105,6 +106,7 @@ class RosNav2Backend:
         self.action = ActionClient(self.node, NavigateToPose, "/navigate_to_pose")
         self.services = {}
         self.results = {}
+        self.distance_remaining = None
 
     def tick(self, seconds: float):
         self.executor.spin_once(timeout_sec=seconds)
@@ -142,7 +144,12 @@ class RosNav2Backend:
         goal.pose.pose.position.y = pose.y
         goal.pose.pose.orientation.z = math.sin(pose.heading / 2)
         goal.pose.pose.orientation.w = math.cos(pose.heading / 2)
-        future = self.action.send_goal_async(goal)
+        self.distance_remaining = None
+        def feedback(message):
+            value = message.feedback.distance_remaining
+            if math.isfinite(value) and value >= 0:
+                self.distance_remaining = float(value)
+        future = self.action.send_goal_async(goal, feedback_callback=feedback)
         self._await(future, timeout)
         if not future.done():
             raise Nav2Error("goal_send_failed", "Nav2 goal response timed out")
@@ -166,7 +173,7 @@ class RosNav2Backend:
                 GoalStatus.STATUS_CANCELED: GoalState.CANCELED,
             }
             return GoalObservation(states.get(status, GoalState.EXECUTING), status,
-                                   result.error_code, result.error_msg)
+                                   result.error_code, result.error_msg, self.distance_remaining)
         status = handle.status
         if status == GoalStatus.STATUS_ACCEPTED:
             state = GoalState.ACCEPTED
@@ -180,7 +187,7 @@ class RosNav2Backend:
             state = GoalState.SUCCEEDED
         else:
             state = GoalState.ACCEPTED
-        return GoalObservation(state, status)
+        return GoalObservation(state, status, distance_remaining=self.distance_remaining)
 
     def cancel_goal(self, handle, timeout: float) -> bool:
         future = handle.cancel_goal_async()
@@ -261,7 +268,7 @@ class Nav2Manager:
         self.handle = handle
         self.episode_id = context.episode_id
         self.observation = GoalObservation(GoalState.ACCEPTED, 1)
-        self.logger.info("[NAV2 GOAL ACCEPTED] episode=%s x=%.3f y=%.3f yaw=%.3f",
+        self.logger.info("[GOAL ACCEPTED] episode=%s x=%.3f y=%.3f yaw=%.3f",
                          context.episode_id, context.goal_pose.x, context.goal_pose.y,
                          context.goal_pose.heading)
         return self.observation

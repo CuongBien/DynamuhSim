@@ -77,7 +77,9 @@ class SimulatorManagerTests(unittest.TestCase):
         self.episode = root / "ep_000001"
         self.episode.mkdir()
         for name in ("school_floor.world", "nav2_school.yaml"):
-            (self.episode / name).write_text("fixture\n", encoding="utf-8")
+            (self.episode / name).write_text(
+                "<sdf><world name=\"school_arena\"/></sdf>" if name.endswith(".world") else "fixture\n",
+                encoding="utf-8")
         self.launch = root / "school_hunav_demo.launch.py"
         self.launch.write_text("fixture\n", encoding="utf-8")
         self.context = EpisodeContext(
@@ -112,15 +114,20 @@ class SimulatorManagerTests(unittest.TestCase):
         command, kwargs = event[2], event[3]
         self.assertEqual(command[:3], ["ros2", "launch", str(self.launch)])
         for arg in (
-            f"episode_world:={self.episode / 'school_floor.world'}",
+            f"episode_world:={self.episode.parent / 'logs' / 'ep_000001.contact.world'}",
             f"nav_params_file:={self.episode / 'nav2_school.yaml'}",
             "robot_x:=3.25", "robot_y:=-8.15", "robot_yaw:=1.57",
+            "robot_in_world:=true",
             "gui:=false", "rviz:=false",
         ):
             self.assertIn(arg, command)
         self.assertTrue(kwargs["start_new_session"])
         self.assertEqual(kwargs["env"]["GZ_PARTITION"], "school_hunav")
         self.assertTrue((self.episode.parent / "logs/ep_000001.simulator.log").is_file())
+        staged = self.episode.parent / "logs/ep_000001.contact.world"
+        self.assertIn("gz::sim::systems::Contact", staged.read_text())
+        self.assertIn("3.25 -8.15 0.01 0 0 1.57", staged.read_text())
+        manager.check_health(self.context)
         manager.wait_ready(self.context)
         manager.finalize(self.context)
         self.assertIsNone(manager.process)

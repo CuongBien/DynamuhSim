@@ -325,6 +325,11 @@ class HuNavManager:
             if code is not None:
                 raise HuNavError("hunav_runtime_exited", f"{process.role} exited with code {code}")
 
+    def check_health(self, context: EpisodeContext) -> None:
+        if self.episode_id != context.episode_id:
+            raise HuNavError("hunav_runtime_exited", "no owned HuNav runtime for episode")
+        self._check_processes()
+
     def wait_ready(self, context: EpisodeContext) -> None:
         if self.episode_id != context.episode_id or self.expected_names is None:
             raise HuNavError("hunav_not_ready", "episode HuNav scenario was not loaded")

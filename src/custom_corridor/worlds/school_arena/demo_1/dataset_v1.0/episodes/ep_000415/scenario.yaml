@@ -1,0 +1,125 @@
+dataset_version: v1.0
+seed: 1876723061
+scenario_family: walking_group
+density: medium
+map: school_floor_01
+robot:
+  start_zone: corridor_a
+  goal_zone: corridor_a
+  start_node: corridor_a_backpack_south
+  goal_node: corridor_a_5
+  start_pose:
+    x: -2.0
+    y: -8.18
+    heading: 0.163527
+  route:
+  - corridor_a_backpack_south
+  - corridor_a_3
+  - corridor_a_locker_south
+  - corridor_a_4
+  - corridor_a_5
+  heading: 0.163527
+event:
+  corridor: corridor_a
+  group_id: 1
+  group_size: 4
+  formation: column
+  interaction_node: corridor_a_3
+humans:
+- name: event_agent_1
+  role: event_agent
+  start_node: corridor_a_3
+  goal_node: corridor_a_5
+  route: &id001
+  - corridor_a_3
+  - corridor_a_locker_south
+  - corridor_a_4
+  - corridor_a_5
+  spawn:
+    x: -0.00266
+    y: -7.87304
+    heading: -0.114877
+  speed: 0.394
+  start_delay: 0.4418
+  lateral_offset: -0.0232
+  behavior: impassive
+  group_id: 1
+- name: event_agent_2
+  role: event_agent
+  start_node: corridor_a_3
+  goal_node: corridor_a_5
+  route: *id001
+  spawn:
+    x: 0.59372
+    y: -7.91757
+    heading: -0.114877
+  speed: 0.394
+  start_delay: 0.4418
+  lateral_offset: 0.00093
+  behavior: regular
+  group_id: 1
+- name: event_agent_3
+  role: event_agent
+  start_node: corridor_a_3
+  goal_node: corridor_a_5
+  route: *id001
+  spawn:
+    x: 1.1884
+    y: -7.97682
+    heading: -0.114877
+  speed: 0.394
+  start_delay: 0.4418
+  lateral_offset: 0.01024
+  behavior: curious
+  group_id: 1
+- name: event_agent_4
+  role: event_agent
+  start_node: corridor_a_3
+  goal_node: corridor_a_5
+  route: *id001
+  spawn:
+    x: 1.78076
+    y: -8.05616
+    heading: -0.114877
+  speed: 0.394
+  start_delay: 0.4418
+  lateral_offset: -0.00069
+  behavior: regular
+  group_id: 1
+- name: background_agent_1
+  role: background_agent
+  start_node: room11_center
+  goal_node: room01_center
+  route:
+  - room11_center
+  - room11_predoor
+  - room11_door
+  - room11_approach
+  - corridor_f_lower_before_bin
+  - junction_ef
+  - junction_de
+  - stair_entrance
+  - junction_cd
+  - junction_bc
+  - junction_ab
+  - corridor_a_5
+  - corridor_a_4
+  - corridor_a_locker_south
+  - corridor_a_3
+  - corridor_a_backpack_south
+  - corridor_a_2
+  - corridor_a_1
+  - corridor_a_west
+  - room01_approach
+  - room01_door
+  - room01_predoor
+  - room01_center
+  spawn:
+    x: 17.6
+    y: 2.8333
+    heading: -2.657777
+  speed: 0.6849
+  start_delay: 4.2174
+  lateral_offset: 0.0
+  behavior: surprised
+  group_id: -1

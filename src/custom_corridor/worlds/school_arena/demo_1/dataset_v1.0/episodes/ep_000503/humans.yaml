@@ -1,0 +1,412 @@
+hunav_loader:
+  ros__parameters:
+    yaml_base_name: scenario_bidirectional_flow_high_1076206857
+    simulator: Gazebo Fortress
+    map: school_arena
+    publish_people: true
+    global_goals:
+      1:
+        x: 10.0
+        y: -8.15
+      2:
+        x: 0.0
+        y: -7.85
+      3:
+        x: -2.0
+        y: -8.18
+      4:
+        x: -5.0
+        y: -8.15
+      5:
+        x: -10.0
+        y: -7.85
+      6:
+        x: -14.0
+        y: -8.15
+      7:
+        x: 2.6
+        y: -8.15
+      8:
+        x: 5.0
+        y: -8.15
+      9:
+        x: 10.0
+        y: -8.15
+      10:
+        x: 0.0
+        y: -7.85
+      11:
+        x: 2.6
+        y: -8.15
+      12:
+        x: 5.0
+        y: -8.15
+      13:
+        x: 10.0
+        y: -8.15
+      14:
+        x: -2.0
+        y: -8.18
+      15:
+        x: 0.0
+        y: -7.85
+      16:
+        x: 2.6
+        y: -8.15
+      17:
+        x: 5.0
+        y: -8.15
+      18:
+        x: 10.0
+        y: -8.15
+      19:
+        x: -14.0
+        y: -8.15
+      20:
+        x: -3.73
+        y: -8.9
+      21:
+        x: -3.73
+        y: -8.6
+      22:
+        x: -3.73
+        y: -8.15
+      23:
+        x: -5.0
+        y: -8.15
+      24:
+        x: -2.0
+        y: -8.18
+      25:
+        x: 0.0
+        y: -7.85
+      26:
+        x: 2.6
+        y: -8.15
+      27:
+        x: 5.0
+        y: -8.15
+      28:
+        x: 10.0
+        y: -8.15
+      29:
+        x: 15.0
+        y: -8.15
+      30:
+        x: 15.0
+        y: -4.0
+      31:
+        x: 7.0
+        y: -4.0
+      32:
+        x: 7.0
+        y: -2.0
+      33:
+        x: 7.0
+        y: 0.0
+      34:
+        x: 15.0
+        y: 0.0
+      35:
+        x: 15.0
+        y: 2.55
+      36:
+        x: 15.0
+        y: 3.5
+      37:
+        x: 15.0
+        y: 8.0
+      38:
+        x: 15.0
+        y: 9.8
+      39:
+        x: 15.0
+        y: 10.65
+      40:
+        x: 15.0
+        y: 10.71
+      41:
+        x: 14.4
+        y: 10.71
+      42:
+        x: 14.1
+        y: 10.71
+      43:
+        x: 12.4
+        y: 11.65
+      44:
+        x: 1.17
+        y: -7.1
+      45:
+        x: 1.17
+        y: -7.4
+      46:
+        x: 1.17
+        y: -8.15
+      47:
+        x: 0.0
+        y: -7.85
+      48:
+        x: -2.0
+        y: -8.18
+      49:
+        x: -5.0
+        y: -8.15
+      50:
+        x: -10.0
+        y: -7.85
+      51:
+        x: -14.0
+        y: -8.15
+      52:
+        x: -13.53
+        y: -8.15
+      53:
+        x: -13.53
+        y: -7.4
+      54:
+        x: -13.53
+        y: -7.1
+      55:
+        x: -12.55
+        y: -5.4
+    agents:
+    - event_agent_1
+    - event_agent_2
+    - event_agent_3
+    - event_agent_4
+    - event_agent_5
+    - event_agent_6
+    - background_agent_1
+    - background_agent_2
+    event_agent_1:
+      id: 1
+      group_id: -1
+      skin: 0
+      max_vel: 0.6909
+      radius: 0.22
+      goal_radius: 0.25
+      cyclic_goals: false
+      init_pose:
+        x: 5.0
+        y: -8.15
+        z: 0.0
+        h: 0.0
+      behavior:
+        type: Regular
+        configuration: 0
+        goal_force_factor: 2.0
+        obstacle_force_factor: 10.0
+        social_force_factor: 5.0
+        other_force_factor: 20.0
+      goals:
+      - 1
+      start_delay: 1.6302
+    event_agent_2:
+      id: 2
+      group_id: -1
+      skin: 1
+      max_vel: 0.8583
+      radius: 0.22
+      goal_radius: 0.25
+      cyclic_goals: false
+      init_pose:
+        x: 2.6
+        y: -8.15
+        z: 0.0
+        h: 3.026716
+      behavior:
+        type: Curious
+        configuration: 0
+        goal_force_factor: 2.0
+        obstacle_force_factor: 10.0
+        social_force_factor: 5.0
+        other_force_factor: 20.0
+      goals:
+      - 2
+      - 3
+      - 4
+      - 5
+      - 6
+      start_delay: 0.5378
+    event_agent_3:
+      id: 3
+      group_id: -1
+      skin: 2
+      max_vel: 0.721
+      radius: 0.22
+      goal_radius: 0.25
+      cyclic_goals: false
+      init_pose:
+        x: 0.0
+        y: -7.85
+        z: 0.0
+        h: -0.114877
+      behavior:
+        type: Regular
+        configuration: 0
+        goal_force_factor: 2.0
+        obstacle_force_factor: 10.0
+        social_force_factor: 5.0
+        other_force_factor: 20.0
+      goals:
+      - 7
+      - 8
+      - 9
+      start_delay: 1.3251
+    event_agent_4:
+      id: 4
+      group_id: -1
+      skin: 3
+      max_vel: 0.9603
+      radius: 0.22
+      goal_radius: 0.25
+      cyclic_goals: false
+      init_pose:
+        x: -2.0
+        y: -8.18
+        z: 0.0
+        h: 0.163527
+      behavior:
+        type: Regular
+        configuration: 0
+        goal_force_factor: 2.0
+        obstacle_force_factor: 10.0
+        social_force_factor: 5.0
+        other_force_factor: 20.0
+      goals:
+      - 10
+      - 11
+      - 12
+      - 13
+      start_delay: 0.021
+    event_agent_5:
+      id: 5
+      group_id: -1
+      skin: 0
+      max_vel: 0.7944
+      radius: 0.22
+      goal_radius: 0.25
+      cyclic_goals: false
+      init_pose:
+        x: -5.0
+        y: -8.15
+        z: 0.0
+        h: -0.01
+      behavior:
+        type: Regular
+        configuration: 0
+        goal_force_factor: 2.0
+        obstacle_force_factor: 10.0
+        social_force_factor: 5.0
+        other_force_factor: 20.0
+      goals:
+      - 14
+      - 15
+      - 16
+      - 17
+      - 18
+      start_delay: 0.9765
+    event_agent_6:
+      id: 6
+      group_id: -1
+      skin: 1
+      max_vel: 0.989
+      radius: 0.22
+      goal_radius: 0.25
+      cyclic_goals: false
+      init_pose:
+        x: -10.0
+        y: -7.85
+        z: 0.0
+        h: -3.066733
+      behavior:
+        type: Regular
+        configuration: 0
+        goal_force_factor: 2.0
+        obstacle_force_factor: 10.0
+        social_force_factor: 5.0
+        other_force_factor: 20.0
+      goals:
+      - 19
+      start_delay: 1.2709
+    background_agent_1:
+      id: 7
+      group_id: -1
+      skin: 2
+      max_vel: 0.8842
+      radius: 0.22
+      goal_radius: 0.25
+      cyclic_goals: false
+      init_pose:
+        x: -2.75
+        y: -10.6
+        z: 0.0
+        h: 2.093735
+      behavior:
+        type: Regular
+        configuration: 0
+        goal_force_factor: 2.0
+        obstacle_force_factor: 10.0
+        social_force_factor: 5.0
+        other_force_factor: 20.0
+      goals:
+      - 20
+      - 21
+      - 22
+      - 23
+      - 24
+      - 25
+      - 26
+      - 27
+      - 28
+      - 29
+      - 30
+      - 31
+      - 32
+      - 33
+      - 34
+      - 35
+      - 36
+      - 37
+      - 38
+      - 39
+      - 40
+      - 41
+      - 42
+      - 43
+      start_delay: 1.53
+    background_agent_2:
+      id: 8
+      group_id: -1
+      skin: 3
+      max_vel: 0.9099
+      radius: 0.22
+      goal_radius: 0.25
+      cyclic_goals: false
+      init_pose:
+        x: 2.15
+        y: -5.4
+        z: 0.0
+        h: -2.093735
+      behavior:
+        type: Regular
+        configuration: 0
+        goal_force_factor: 2.0
+        obstacle_force_factor: 10.0
+        social_force_factor: 5.0
+        other_force_factor: 20.0
+      goals:
+      - 44
+      - 45
+      - 46
+      - 47
+      - 48
+      - 49
+      - 50
+      - 51
+      - 52
+      - 53
+      - 54
+      - 55
+      start_delay: 2.0937

@@ -1,0 +1,117 @@
+dataset_version: v1.0
+seed: 43019
+scenario_family: conversation_group
+density: medium
+map: school_floor_01
+robot:
+  start_zone: corridor_f
+  goal_zone: corridor_f
+  start_node: corridor_f_lower_before_bin
+  goal_node: corridor_f_north
+  start_pose:
+    x: 15.0
+    y: 2.55
+    heading: 1.570796
+  route:
+  - corridor_f_lower_before_bin
+  - corridor_f_lower_after_bin
+  - corridor_f_mid
+  - corridor_f_before_upper_bin
+  - corridor_f_after_upper_bin
+  - corridor_f_upper
+  - corridor_f_north
+  heading: 1.570796
+event:
+  corridor: corridor_f
+  group_id: 1
+  group_size: 3
+  social_obstacle_node: room12_approach
+  waiting_zone: waiting_area_north
+humans:
+- name: event_agent_1
+  role: event_agent
+  start_node: room12_approach
+  goal_node: corridor_f_north
+  route: &id001
+  - room12_approach
+  - corridor_f_mid
+  - corridor_f_before_upper_bin
+  - corridor_f_after_upper_bin
+  - corridor_f_upper
+  - corridor_f_north
+  spawn:
+    x: 14.98537
+    y: 5.82994
+    heading: 1.570796
+  speed: 0.5774
+  start_delay: 36.4514
+  lateral_offset: 0.0
+  behavior: impassive
+  group_id: 1
+- name: event_agent_2
+  role: event_agent
+  start_node: room12_approach
+  goal_node: corridor_f_north
+  route: *id001
+  spawn:
+    x: 14.97618
+    y: 6.4
+    heading: 1.570796
+  speed: 0.5989
+  start_delay: 37.0583
+  lateral_offset: 0.0
+  behavior: scared
+  group_id: 1
+- name: event_agent_3
+  role: event_agent
+  start_node: room12_approach
+  goal_node: corridor_f_north
+  route: *id001
+  spawn:
+    x: 14.98829
+    y: 6.97006
+    heading: 1.570796
+  speed: 0.9663
+  start_delay: 43.7502
+  lateral_offset: 0.0
+  behavior: regular
+  group_id: 1
+- name: background_agent_1
+  role: background_agent
+  start_node: room07_center
+  goal_node: room14_center
+  route:
+  - room07_center
+  - room07_predoor
+  - room07_door
+  - room07_approach
+  - corridor_a_west
+  - corridor_a_1
+  - corridor_a_2
+  - corridor_a_backpack_south
+  - corridor_a_3
+  - corridor_a_locker_south
+  - corridor_a_4
+  - corridor_a_5
+  - junction_ab
+  - junction_bc
+  - junction_cd
+  - stair_entrance
+  - junction_de
+  - junction_ef
+  - corridor_f_lower_before_bin
+  - corridor_f_lower_after_bin
+  - corridor_f_mid
+  - room14_approach
+  - room14_door
+  - room14_predoor
+  - room14_center
+  spawn:
+    x: -12.55
+    y: -5.4
+    heading: -2.093735
+  speed: 0.7937
+  start_delay: 4.5563
+  lateral_offset: 0.0
+  behavior: regular
+  group_id: -1

@@ -1,0 +1,48 @@
+dataset_version: v1.0
+seed: 1940905355
+scenario_family: same_direction
+density: low
+map: school_floor_01
+robot:
+  start_zone: corridor_a
+  goal_zone: corridor_a
+  start_node: corridor_a_5
+  goal_node: corridor_a_west
+  start_pose:
+    x: 10.0
+    y: -8.15
+    heading: 3.141593
+  route:
+  - corridor_a_5
+  - corridor_a_4
+  - corridor_a_locker_south
+  - corridor_a_3
+  - corridor_a_backpack_south
+  - corridor_a_2
+  - corridor_a_1
+  - corridor_a_west
+  heading: 3.141593
+event:
+  corridor: corridor_a
+  initial_gap_m: 7.4
+humans:
+- name: event_agent_1
+  role: event_agent
+  start_node: corridor_a_locker_south
+  goal_node: corridor_a_west
+  route:
+  - corridor_a_locker_south
+  - corridor_a_3
+  - corridor_a_backpack_south
+  - corridor_a_2
+  - corridor_a_1
+  - corridor_a_west
+  spawn:
+    x: 2.5941
+    y: -8.20115
+    heading: 3.026716
+  speed: 0.3071
+  start_delay: 1.2657
+  lateral_offset: 0.05148
+  behavior: curious
+  group_id: -1
