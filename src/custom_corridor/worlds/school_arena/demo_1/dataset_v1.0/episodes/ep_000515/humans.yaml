@@ -1,0 +1,219 @@
+hunav_loader:
+  ros__parameters:
+    yaml_base_name: scenario_bidirectional_flow_medium_1322862117
+    simulator: Gazebo Fortress
+    map: school_arena
+    publish_people: true
+    global_goals:
+      1:
+        x: -5.0
+        y: -8.15
+      2:
+        x: -2.0
+        y: -8.18
+      3:
+        x: 0.0
+        y: -7.85
+      4:
+        x: 2.6
+        y: -8.15
+      5:
+        x: 5.0
+        y: -8.15
+      6:
+        x: 10.0
+        y: -8.15
+      7:
+        x: -2.0
+        y: -8.18
+      8:
+        x: 0.0
+        y: -7.85
+      9:
+        x: 2.6
+        y: -8.15
+      10:
+        x: 5.0
+        y: -8.15
+      11:
+        x: 10.0
+        y: -8.15
+      12:
+        x: -5.0
+        y: -8.15
+      13:
+        x: -10.0
+        y: -7.85
+      14:
+        x: -14.0
+        y: -8.15
+      15:
+        x: -2.0
+        y: -8.18
+      16:
+        x: -5.0
+        y: -8.15
+      17:
+        x: -10.0
+        y: -7.85
+      18:
+        x: -14.0
+        y: -8.15
+      19:
+        x: 2.6
+        y: -8.15
+      20:
+        x: 0.0
+        y: -7.85
+      21:
+        x: -2.0
+        y: -8.18
+      22:
+        x: -5.0
+        y: -8.15
+      23:
+        x: -10.0
+        y: -7.85
+      24:
+        x: -14.0
+        y: -8.15
+    agents:
+    - event_agent_1
+    - event_agent_2
+    - event_agent_3
+    - event_agent_4
+    - event_agent_5
+    event_agent_1:
+      id: 1
+      group_id: -1
+      skin: 0
+      max_vel: 0.654
+      radius: 0.22
+      goal_radius: 0.25
+      cyclic_goals: false
+      init_pose:
+        x: -10.0
+        y: -7.85
+        z: 0.0
+        h: -0.059928
+      behavior:
+        type: Regular
+        configuration: 0
+        goal_force_factor: 2.0
+        obstacle_force_factor: 10.0
+        social_force_factor: 5.0
+        other_force_factor: 20.0
+      goals:
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+      - 6
+      start_delay: 2.048
+    event_agent_2:
+      id: 2
+      group_id: -1
+      skin: 1
+      max_vel: 0.5712
+      radius: 0.22
+      goal_radius: 0.25
+      cyclic_goals: false
+      init_pose:
+        x: -5.0
+        y: -8.15
+        z: 0.0
+        h: -0.01
+      behavior:
+        type: Regular
+        configuration: 0
+        goal_force_factor: 2.0
+        obstacle_force_factor: 10.0
+        social_force_factor: 5.0
+        other_force_factor: 20.0
+      goals:
+      - 7
+      - 8
+      - 9
+      - 10
+      - 11
+      start_delay: 0.7494
+    event_agent_3:
+      id: 3
+      group_id: -1
+      skin: 2
+      max_vel: 0.8225
+      radius: 0.22
+      goal_radius: 0.25
+      cyclic_goals: false
+      init_pose:
+        x: -2.0
+        y: -8.18
+        z: 0.0
+        h: 3.131593
+      behavior:
+        type: Regular
+        configuration: 0
+        goal_force_factor: 2.0
+        obstacle_force_factor: 10.0
+        social_force_factor: 5.0
+        other_force_factor: 20.0
+      goals:
+      - 12
+      - 13
+      - 14
+      start_delay: 1.0904
+    event_agent_4:
+      id: 4
+      group_id: -1
+      skin: 3
+      max_vel: 0.7404
+      radius: 0.22
+      goal_radius: 0.25
+      cyclic_goals: false
+      init_pose:
+        x: 0.0
+        y: -7.85
+        z: 0.0
+        h: -2.978066
+      behavior:
+        type: Threatening
+        configuration: 0
+        goal_force_factor: 2.0
+        obstacle_force_factor: 10.0
+        social_force_factor: 5.0
+        other_force_factor: 20.0
+      goals:
+      - 15
+      - 16
+      - 17
+      - 18
+      start_delay: 1.7689
+    event_agent_5:
+      id: 5
+      group_id: -1
+      skin: 0
+      max_vel: 0.9931
+      radius: 0.22
+      goal_radius: 0.25
+      cyclic_goals: false
+      init_pose:
+        x: 5.0
+        y: -8.15
+        z: 0.0
+        h: 3.141593
+      behavior:
+        type: Regular
+        configuration: 0
+        goal_force_factor: 2.0
+        obstacle_force_factor: 10.0
+        social_force_factor: 5.0
+        other_force_factor: 20.0
+      goals:
+      - 19
+      - 20
+      - 21
+      - 22
+      - 23
+      - 24
+      start_delay: 0.1395

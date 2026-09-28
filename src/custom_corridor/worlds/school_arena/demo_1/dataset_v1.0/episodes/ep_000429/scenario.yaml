@@ -1,0 +1,80 @@
+dataset_version: v1.0
+seed: 2056388246
+scenario_family: opposing_group
+density: low
+map: school_floor_01
+robot:
+  start_zone: corridor_a
+  goal_zone: corridor_a
+  start_node: corridor_a_west
+  goal_node: corridor_a_5
+  start_pose:
+    x: -14.0
+    y: -8.15
+    heading: 0.07486
+  route:
+  - corridor_a_west
+  - corridor_a_1
+  - corridor_a_2
+  - corridor_a_backpack_south
+  - corridor_a_3
+  - corridor_a_locker_south
+  - corridor_a_4
+  - corridor_a_5
+  heading: 0.07486
+event:
+  corridor: corridor_a
+  group_id: 1
+  group_size: 3
+  formation: column
+  interaction_node: corridor_a_4
+humans:
+- name: event_agent_1
+  role: event_agent
+  start_node: corridor_a_4
+  goal_node: corridor_a_west
+  route: &id001
+  - corridor_a_4
+  - corridor_a_locker_south
+  - corridor_a_3
+  - corridor_a_backpack_south
+  - corridor_a_2
+  - corridor_a_1
+  - corridor_a_west
+  spawn:
+    x: 5.0
+    y: -8.17186
+    heading: 3.141593
+  speed: 0.9213
+  start_delay: 0.5482
+  lateral_offset: 0.02186
+  behavior: regular
+  group_id: 1
+- name: event_agent_2
+  role: event_agent
+  start_node: corridor_a_4
+  goal_node: corridor_a_west
+  route: *id001
+  spawn:
+    x: 4.38098
+    y: -8.12781
+    heading: 3.141593
+  speed: 0.9213
+  start_delay: 0.5482
+  lateral_offset: -0.02219
+  behavior: regular
+  group_id: 1
+- name: event_agent_3
+  role: event_agent
+  start_node: corridor_a_4
+  goal_node: corridor_a_west
+  route: *id001
+  spawn:
+    x: 3.76197
+    y: -8.14437
+    heading: 3.141593
+  speed: 0.9213
+  start_delay: 0.5482
+  lateral_offset: -0.00563
+  behavior: scared
+  group_id: 1

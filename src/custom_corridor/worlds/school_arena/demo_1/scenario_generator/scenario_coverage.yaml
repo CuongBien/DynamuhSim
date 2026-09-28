@@ -1,0 +1,614 @@
+validation_scope: PASS/FAIL validate generated artifacts; runtime fields use Runner
+  results when supplied
+scenarios:
+- scenario_family: empty
+  episode_count: 3
+  density_distribution:
+    high: 1
+    low: 1
+    medium: 1
+  behavior_distribution: {}
+  PASS: 3
+  FAIL: 0
+  runtime_PASS: 1
+  runtime_FAIL: 0
+  runtime_NOT_RUN: 2
+  runtime_status_distribution:
+    timeout: 1
+  runtime_attempts: 1
+  runtime_failed_attempts: 0
+  seed_count: 3
+  human_count:
+    min: 0
+    mean: 0
+    max: 0
+- scenario_family: head_on
+  episode_count: 3
+  density_distribution:
+    high: 1
+    low: 1
+    medium: 1
+  behavior_distribution:
+    impassive: 1
+    regular: 11
+    scared: 3
+    threatening: 1
+  PASS: 3
+  FAIL: 0
+  runtime_PASS: 3
+  runtime_FAIL: 0
+  runtime_NOT_RUN: 0
+  runtime_status_distribution:
+    timeout: 3
+  runtime_attempts: 3
+  runtime_failed_attempts: 0
+  seed_count: 3
+  human_count:
+    min: 3
+    mean: 5.333
+    max: 8
+- scenario_family: same_direction
+  episode_count: 3
+  density_distribution:
+    high: 1
+    low: 1
+    medium: 1
+  behavior_distribution:
+    regular: 12
+    scared: 1
+    surprised: 2
+    threatening: 2
+  PASS: 3
+  FAIL: 0
+  runtime_PASS: 1
+  runtime_FAIL: 0
+  runtime_NOT_RUN: 2
+  runtime_status_distribution:
+    timeout: 1
+  runtime_attempts: 1
+  runtime_failed_attempts: 0
+  seed_count: 3
+  human_count:
+    min: 1
+    mean: 5.667
+    max: 9
+- scenario_family: crossing
+  episode_count: 3
+  density_distribution:
+    high: 1
+    low: 1
+    medium: 1
+  behavior_distribution:
+    curious: 2
+    impassive: 1
+    regular: 9
+    scared: 1
+    threatening: 2
+  PASS: 3
+  FAIL: 0
+  runtime_PASS: 3
+  runtime_FAIL: 0
+  runtime_NOT_RUN: 0
+  runtime_status_distribution:
+    timeout: 3
+  runtime_attempts: 3
+  runtime_failed_attempts: 0
+  seed_count: 3
+  human_count:
+    min: 2
+    mean: 5
+    max: 9
+- scenario_family: exit_room
+  episode_count: 3
+  density_distribution:
+    high: 1
+    low: 1
+    medium: 1
+  behavior_distribution:
+    impassive: 6
+    regular: 10
+    scared: 1
+    threatening: 1
+  PASS: 3
+  FAIL: 0
+  runtime_PASS: 1
+  runtime_FAIL: 0
+  runtime_NOT_RUN: 2
+  runtime_status_distribution:
+    timeout: 1
+  runtime_attempts: 1
+  runtime_failed_attempts: 0
+  seed_count: 3
+  human_count:
+    min: 3
+    mean: 6
+    max: 8
+- scenario_family: enter_room
+  episode_count: 3
+  density_distribution:
+    high: 1
+    low: 1
+    medium: 1
+  behavior_distribution:
+    impassive: 1
+    regular: 17
+  PASS: 3
+  FAIL: 0
+  runtime_PASS: 1
+  runtime_FAIL: 0
+  runtime_NOT_RUN: 2
+  runtime_status_distribution:
+    timeout: 1
+  runtime_attempts: 1
+  runtime_failed_attempts: 0
+  seed_count: 3
+  human_count:
+    min: 3
+    mean: 6
+    max: 8
+- scenario_family: merge
+  episode_count: 3
+  density_distribution:
+    high: 1
+    low: 1
+    medium: 1
+  behavior_distribution:
+    curious: 1
+    impassive: 1
+    regular: 15
+    scared: 2
+    surprised: 1
+    threatening: 1
+  PASS: 3
+  FAIL: 0
+  runtime_PASS: 1
+  runtime_FAIL: 0
+  runtime_NOT_RUN: 2
+  runtime_status_distribution:
+    timeout: 1
+  runtime_attempts: 1
+  runtime_failed_attempts: 0
+  seed_count: 3
+  human_count:
+    min: 2
+    mean: 7
+    max: 13
+- scenario_family: diverge
+  episode_count: 3
+  density_distribution:
+    high: 1
+    low: 1
+    medium: 1
+  behavior_distribution:
+    impassive: 2
+    regular: 12
+    scared: 2
+    surprised: 1
+  PASS: 3
+  FAIL: 0
+  runtime_PASS: 1
+  runtime_FAIL: 0
+  runtime_NOT_RUN: 2
+  runtime_status_distribution:
+    timeout: 1
+  runtime_attempts: 1
+  runtime_failed_attempts: 0
+  seed_count: 3
+  human_count:
+    min: 3
+    mean: 5.667
+    max: 9
+- scenario_family: overtake_robot
+  episode_count: 3
+  density_distribution:
+    high: 1
+    low: 1
+    medium: 1
+  behavior_distribution:
+    impassive: 2
+    regular: 14
+    scared: 1
+    surprised: 2
+    threatening: 2
+  PASS: 3
+  FAIL: 0
+  runtime_PASS: 1
+  runtime_FAIL: 0
+  runtime_NOT_RUN: 2
+  runtime_status_distribution:
+    timeout: 1
+  runtime_attempts: 1
+  runtime_failed_attempts: 0
+  seed_count: 3
+  human_count:
+    min: 3
+    mean: 7
+    max: 12
+- scenario_family: robot_overtake
+  episode_count: 3
+  density_distribution:
+    high: 1
+    low: 1
+    medium: 1
+  behavior_distribution:
+    curious: 1
+    impassive: 1
+    regular: 15
+    threatening: 2
+  PASS: 3
+  FAIL: 0
+  runtime_PASS: 1
+  runtime_FAIL: 0
+  runtime_NOT_RUN: 2
+  runtime_status_distribution:
+    timeout: 1
+  runtime_attempts: 1
+  runtime_failed_attempts: 0
+  seed_count: 3
+  human_count:
+    min: 2
+    mean: 6.333
+    max: 12
+- scenario_family: stop_resume
+  episode_count: 3
+  density_distribution:
+    high: 1
+    low: 1
+    medium: 1
+  behavior_distribution:
+    curious: 1
+    regular: 12
+    scared: 2
+    threatening: 1
+  PASS: 3
+  FAIL: 0
+  runtime_PASS: 1
+  runtime_FAIL: 0
+  runtime_NOT_RUN: 2
+  runtime_status_distribution:
+    timeout: 1
+  runtime_attempts: 2
+  runtime_failed_attempts: 0
+  seed_count: 3
+  human_count:
+    min: 2
+    mean: 5.333
+    max: 9
+- scenario_family: waiting_person
+  episode_count: 3
+  density_distribution:
+    high: 1
+    low: 1
+    medium: 1
+  behavior_distribution:
+    curious: 1
+    impassive: 2
+    regular: 9
+    surprised: 2
+    threatening: 1
+  PASS: 3
+  FAIL: 0
+  runtime_PASS: 1
+  runtime_FAIL: 0
+  runtime_NOT_RUN: 2
+  runtime_status_distribution:
+    timeout: 1
+  runtime_attempts: 1
+  runtime_failed_attempts: 0
+  seed_count: 3
+  human_count:
+    min: 1
+    mean: 5
+    max: 9
+- scenario_family: sudden_entry
+  episode_count: 3
+  density_distribution:
+    high: 1
+    low: 1
+    medium: 1
+  behavior_distribution:
+    curious: 1
+    impassive: 4
+    regular: 12
+    scared: 1
+    surprised: 1
+    threatening: 1
+  PASS: 3
+  FAIL: 0
+  runtime_PASS: 1
+  runtime_FAIL: 0
+  runtime_NOT_RUN: 2
+  runtime_status_distribution:
+    timeout: 1
+  runtime_attempts: 1
+  runtime_failed_attempts: 0
+  seed_count: 3
+  human_count:
+    min: 3
+    mean: 6.667
+    max: 12
+- scenario_family: blind_corner
+  episode_count: 3
+  density_distribution:
+    high: 1
+    low: 1
+    medium: 1
+  behavior_distribution:
+    impassive: 4
+    regular: 14
+    scared: 2
+    surprised: 1
+  PASS: 3
+  FAIL: 0
+  runtime_PASS: 3
+  runtime_FAIL: 0
+  runtime_NOT_RUN: 0
+  runtime_status_distribution:
+    timeout: 3
+  runtime_attempts: 3
+  runtime_failed_attempts: 0
+  seed_count: 3
+  human_count:
+    min: 1
+    mean: 7
+    max: 13
+- scenario_family: door_bottleneck
+  episode_count: 3
+  density_distribution:
+    high: 1
+    low: 1
+    medium: 1
+  behavior_distribution:
+    curious: 1
+    impassive: 1
+    regular: 18
+    scared: 1
+    threatening: 2
+  PASS: 3
+  FAIL: 0
+  runtime_PASS: 3
+  runtime_FAIL: 0
+  runtime_NOT_RUN: 0
+  runtime_status_distribution:
+    timeout: 3
+  runtime_attempts: 3
+  runtime_failed_attempts: 0
+  seed_count: 3
+  human_count:
+    min: 3
+    mean: 7.667
+    max: 13
+- scenario_family: narrow_passing
+  episode_count: 3
+  density_distribution:
+    high: 1
+    low: 1
+    medium: 1
+  behavior_distribution:
+    curious: 1
+    impassive: 2
+    regular: 11
+    threatening: 2
+  PASS: 3
+  FAIL: 0
+  runtime_PASS: 1
+  runtime_FAIL: 0
+  runtime_NOT_RUN: 2
+  runtime_status_distribution:
+    timeout: 1
+  runtime_attempts: 2
+  runtime_failed_attempts: 1
+  seed_count: 3
+  human_count:
+    min: 1
+    mean: 5.333
+    max: 8
+- scenario_family: walking_group
+  episode_count: 3
+  density_distribution:
+    high: 1
+    low: 1
+    medium: 1
+  behavior_distribution:
+    curious: 1
+    impassive: 4
+    regular: 12
+    scared: 1
+    threatening: 2
+  PASS: 3
+  FAIL: 0
+  runtime_PASS: 3
+  runtime_FAIL: 0
+  runtime_NOT_RUN: 0
+  runtime_status_distribution:
+    timeout: 3
+  runtime_attempts: 3
+  runtime_failed_attempts: 0
+  seed_count: 3
+  human_count:
+    min: 3
+    mean: 6.667
+    max: 11
+- scenario_family: opposing_group
+  episode_count: 3
+  density_distribution:
+    high: 1
+    low: 1
+    medium: 1
+  behavior_distribution:
+    curious: 2
+    impassive: 2
+    regular: 13
+    scared: 2
+    surprised: 2
+  PASS: 3
+  FAIL: 0
+  runtime_PASS: 1
+  runtime_FAIL: 0
+  runtime_NOT_RUN: 2
+  runtime_status_distribution:
+    timeout: 1
+  runtime_attempts: 1
+  runtime_failed_attempts: 0
+  seed_count: 3
+  human_count:
+    min: 3
+    mean: 7
+    max: 11
+- scenario_family: crossing_group
+  episode_count: 3
+  density_distribution:
+    high: 1
+    low: 1
+    medium: 1
+  behavior_distribution:
+    curious: 1
+    impassive: 2
+    regular: 11
+    scared: 1
+    surprised: 1
+  PASS: 3
+  FAIL: 0
+  runtime_PASS: 1
+  runtime_FAIL: 0
+  runtime_NOT_RUN: 2
+  runtime_status_distribution:
+    timeout: 1
+  runtime_attempts: 1
+  runtime_failed_attempts: 0
+  seed_count: 3
+  human_count:
+    min: 2
+    mean: 5.333
+    max: 9
+- scenario_family: conversation_group
+  episode_count: 3
+  density_distribution:
+    high: 1
+    low: 1
+    medium: 1
+  behavior_distribution:
+    impassive: 4
+    regular: 13
+    scared: 1
+    surprised: 1
+    threatening: 1
+  PASS: 3
+  FAIL: 0
+  runtime_PASS: 1
+  runtime_FAIL: 0
+  runtime_NOT_RUN: 2
+  runtime_status_distribution:
+    timeout: 1
+  runtime_attempts: 1
+  runtime_failed_attempts: 0
+  seed_count: 3
+  human_count:
+    min: 3
+    mean: 6.667
+    max: 13
+- scenario_family: bidirectional_flow
+  episode_count: 3
+  density_distribution:
+    high: 1
+    low: 1
+    medium: 1
+  behavior_distribution:
+    curious: 1
+    impassive: 2
+    regular: 12
+    scared: 1
+    surprised: 2
+  PASS: 3
+  FAIL: 0
+  runtime_PASS: 3
+  runtime_FAIL: 0
+  runtime_NOT_RUN: 0
+  runtime_status_distribution:
+    timeout: 3
+  runtime_attempts: 3
+  runtime_failed_attempts: 0
+  seed_count: 3
+  human_count:
+    min: 4
+    mean: 6
+    max: 9
+- scenario_family: multi_crossing
+  episode_count: 3
+  density_distribution:
+    high: 1
+    low: 1
+    medium: 1
+  behavior_distribution:
+    impassive: 2
+    regular: 16
+    scared: 2
+    surprised: 1
+    threatening: 1
+  PASS: 3
+  FAIL: 0
+  runtime_PASS: 1
+  runtime_FAIL: 0
+  runtime_NOT_RUN: 2
+  runtime_status_distribution:
+    timeout: 1
+  runtime_attempts: 2
+  runtime_failed_attempts: 0
+  seed_count: 3
+  human_count:
+    min: 2
+    mean: 7.333
+    max: 13
+- scenario_family: class_change_burst
+  episode_count: 3
+  density_distribution:
+    high: 1
+    low: 1
+    medium: 1
+  behavior_distribution:
+    curious: 1
+    impassive: 6
+    regular: 9
+    scared: 1
+    surprised: 1
+  PASS: 3
+  FAIL: 0
+  runtime_PASS: 3
+  runtime_FAIL: 0
+  runtime_NOT_RUN: 0
+  runtime_status_distribution:
+    timeout: 3
+  runtime_attempts: 3
+  runtime_failed_attempts: 0
+  seed_count: 3
+  human_count:
+    min: 3
+    mean: 6
+    max: 9
+- scenario_family: mixed_interaction
+  episode_count: 3
+  density_distribution:
+    high: 1
+    low: 1
+    medium: 1
+  behavior_distribution:
+    curious: 2
+    impassive: 3
+    regular: 11
+    surprised: 2
+    threatening: 1
+  PASS: 3
+  FAIL: 0
+  runtime_PASS: 1
+  runtime_FAIL: 0
+  runtime_NOT_RUN: 2
+  runtime_status_distribution:
+    timeout: 1
+  runtime_attempts: 1
+  runtime_failed_attempts: 0
+  seed_count: 3
+  human_count:
+    min: 3
+    mean: 6.333
+    max: 11
+unclassified_failures: []

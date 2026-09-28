@@ -1,0 +1,100 @@
+dataset_version: v1.0
+seed: 1739005387
+scenario_family: enter_room
+density: low
+map: school_floor_01
+robot:
+  start_zone: corridor_f
+  goal_zone: corridor_f
+  start_node: corridor_f_mid
+  goal_node: corridor_f_upper
+  start_pose:
+    x: 15.0
+    y: 8.0
+    heading: 1.570796
+  route:
+  - corridor_f_mid
+  - corridor_f_before_upper_bin
+  - corridor_f_after_upper_bin
+  - corridor_f_upper
+  heading: 1.570796
+event:
+  room: room13
+  doorway: room13_door
+  corridor: corridor_f
+  conflict_node: corridor_f_after_upper_bin
+  time_tolerance: 1.2
+humans:
+- name: event_agent_1
+  role: event_agent
+  start_node: corridor_f_upper
+  goal_node: room13_center
+  route:
+  - corridor_f_upper
+  - corridor_f_after_upper_bin
+  - room13_approach
+  - room13_door
+  - room13_predoor
+  - room13_center
+  spawn:
+    x: 15.0
+    y: 12.3
+    heading: -1.570796
+  speed: 0.8557
+  start_delay: 2.6877
+  lateral_offset: 0.0
+  behavior: regular
+  group_id: -1
+- name: background_agent_1
+  role: background_agent
+  start_node: room09_center
+  goal_node: room01_center
+  route:
+  - room09_center
+  - room09_predoor
+  - room09_door
+  - room09_approach
+  - corridor_a_2
+  - corridor_a_1
+  - corridor_a_west
+  - room01_approach
+  - room01_door
+  - room01_predoor
+  - room01_center
+  spawn:
+    x: -2.75
+    y: -5.4
+    heading: -2.093735
+  speed: 0.7903
+  start_delay: 0.2598
+  lateral_offset: 0.0
+  behavior: regular
+  group_id: -1
+- name: background_agent_2
+  role: background_agent
+  start_node: room02_center
+  goal_node: room05_center
+  route:
+  - room02_center
+  - room02_predoor
+  - room02_door
+  - room02_approach
+  - corridor_a_1
+  - corridor_a_2
+  - corridor_a_backpack_south
+  - corridor_a_3
+  - corridor_a_locker_south
+  - corridor_a_4
+  - room05_approach
+  - room05_door
+  - room05_predoor
+  - room05_center
+  spawn:
+    x: -7.65
+    y: -10.6
+    heading: 2.093735
+  speed: 0.6761
+  start_delay: 2.4588
+  lateral_offset: 0.0
+  behavior: regular
+  group_id: -1

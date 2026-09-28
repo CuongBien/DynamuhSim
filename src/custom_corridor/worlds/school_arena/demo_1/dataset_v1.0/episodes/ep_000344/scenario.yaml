@@ -1,0 +1,114 @@
+dataset_version: v1.0
+seed: 2050186244
+scenario_family: blind_corner
+density: low
+map: school_floor_01
+robot:
+  start_zone: turn_bc
+  goal_zone: turn_bc
+  start_node: corridor_a_5
+  goal_node: junction_cd
+  start_pose:
+    x: 10.0
+    y: -8.15
+    heading: 0.0
+  route:
+  - corridor_a_5
+  - junction_ab
+  - junction_bc
+  - junction_cd
+  heading: 0.0
+event:
+  corner: junction_bc
+  corner_zone: turn_bc
+  robot_incoming: junction_ab
+  human_incoming: junction_cd
+  conflict_node: junction_bc
+  time_tolerance: 1.2
+humans:
+- name: event_agent_1
+  role: event_agent
+  start_node: junction_cd
+  goal_node: junction_ab
+  route:
+  - junction_cd
+  - junction_bc
+  - junction_ab
+  spawn:
+    x: 7.0
+    y: -4.0
+    heading: 0.0
+  speed: 0.8163
+  start_delay: 7.0373
+  lateral_offset: 0.0
+  behavior: regular
+  group_id: -1
+- name: background_agent_1
+  role: background_agent
+  start_node: room06_center
+  goal_node: room12_center
+  route:
+  - room06_center
+  - room06_predoor
+  - room06_door
+  - room06_approach
+  - corridor_a_5
+  - junction_ab
+  - junction_bc
+  - junction_cd
+  - stair_entrance
+  - junction_de
+  - junction_ef
+  - corridor_f_lower_before_bin
+  - corridor_f_lower_after_bin
+  - corridor_f_mid
+  - room12_approach
+  - room12_door
+  - room12_predoor
+  - room12_center
+  spawn:
+    x: 11.95
+    y: -10.6
+    heading: 2.093735
+  speed: 0.8445
+  start_delay: 3.225
+  lateral_offset: 0.0
+  behavior: impassive
+  group_id: -1
+- name: background_agent_2
+  role: background_agent
+  start_node: room09_center
+  goal_node: room14_center
+  route:
+  - room09_center
+  - room09_predoor
+  - room09_door
+  - room09_approach
+  - corridor_a_2
+  - corridor_a_backpack_south
+  - corridor_a_3
+  - corridor_a_locker_south
+  - corridor_a_4
+  - corridor_a_5
+  - junction_ab
+  - junction_bc
+  - junction_cd
+  - stair_entrance
+  - junction_de
+  - junction_ef
+  - corridor_f_lower_before_bin
+  - corridor_f_lower_after_bin
+  - corridor_f_mid
+  - room14_approach
+  - room14_door
+  - room14_predoor
+  - room14_center
+  spawn:
+    x: -2.75
+    y: -5.4
+    heading: -2.093735
+  speed: 0.7967
+  start_delay: 4.0401
+  lateral_offset: 0.0
+  behavior: threatening
+  group_id: -1

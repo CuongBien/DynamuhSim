@@ -23,3 +23,36 @@ nav2:
   goal_response_timeout_sec: 10.0
   cancel_timeout_sec: 5.0
   poll_interval_sec: 0.2
+readiness:
+  timeout_sec: 30.0
+  poll_interval_sec: 0.2
+  topics:
+    odom: /odom
+    scan: /scan
+    rgb: /robot/camera/image_raw
+    depth: null
+    gazebo_pose: /demo/gazebo_robot_pose
+  rgb_required: true
+  depth_required: false
+  tf:
+    parent: odom
+    child: base_footprint
+    pose_frame: map
+  robot_start:
+    position_tolerance_m: 0.15
+    yaw_tolerance_rad: 0.20
+episode:
+  timeout_sec: 120.0
+  poll_interval_sec: 0.2
+stuck:
+  enabled: true
+  window_sec: 5.0
+  min_displacement_m: 0.05
+  near_goal_distance_m: 0.3
+collision:
+  topics:
+    - /robot/contacts/base_link
+    - /robot/contacts/base_scan
+    - /robot/contacts/wheel_left_link
+    - /robot/contacts/wheel_right_link
+    - /robot/contacts/caster_back_link

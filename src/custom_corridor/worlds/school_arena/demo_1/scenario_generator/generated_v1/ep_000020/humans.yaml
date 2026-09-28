@@ -1,0 +1,157 @@
+hunav_loader:
+  ros__parameters:
+    yaml_base_name: scenario_conversation_group_low_42019
+    simulator: Gazebo Fortress
+    map: school_arena
+    publish_people: true
+    global_goals:
+      1:
+        x: 15.0
+        y: 8.0
+      2:
+        x: 15.0
+        y: 9.8
+      3:
+        x: 15.0
+        y: 10.65
+      4:
+        x: 15.0
+        y: 12.3
+      5:
+        x: 15.0
+        y: 13.5
+      6:
+        x: 15.0
+        y: 8.0
+      7:
+        x: 15.0
+        y: 9.8
+      8:
+        x: 15.0
+        y: 10.65
+      9:
+        x: 15.0
+        y: 12.3
+      10:
+        x: 15.0
+        y: 13.5
+      11:
+        x: -3.73
+        y: -8.9
+      12:
+        x: -3.73
+        y: -8.6
+      13:
+        x: -3.73
+        y: -8.15
+      14:
+        x: -5.0
+        y: -8.15
+      15:
+        x: -10.0
+        y: -7.85
+      16:
+        x: -14.0
+        y: -8.15
+      17:
+        x: -13.53
+        y: -8.15
+      18:
+        x: -13.53
+        y: -7.4
+      19:
+        x: -13.53
+        y: -7.1
+      20:
+        x: -12.55
+        y: -5.4
+    agents:
+    - event_agent_1
+    - event_agent_2
+    - background_agent_1
+    event_agent_1:
+      id: 1
+      group_id: 1
+      skin: 0
+      max_vel: 0.7847
+      radius: 0.22
+      goal_radius: 0.25
+      cyclic_goals: false
+      init_pose:
+        x: 15.01035
+        y: 6.10927
+        z: 0.0
+        h: 1.570796
+      behavior:
+        type: Regular
+        configuration: 0
+        goal_force_factor: 2.0
+        obstacle_force_factor: 10.0
+        social_force_factor: 5.0
+        other_force_factor: 20.0
+      goals:
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+      start_delay: 39.0337
+    event_agent_2:
+      id: 2
+      group_id: 1
+      skin: 1
+      max_vel: 0.7843
+      radius: 0.22
+      goal_radius: 0.25
+      cyclic_goals: false
+      init_pose:
+        x: 14.9768
+        y: 6.69073
+        z: 0.0
+        h: 1.570796
+      behavior:
+        type: Regular
+        configuration: 0
+        goal_force_factor: 2.0
+        obstacle_force_factor: 10.0
+        social_force_factor: 5.0
+        other_force_factor: 20.0
+      goals:
+      - 6
+      - 7
+      - 8
+      - 9
+      - 10
+      start_delay: 43.4933
+    background_agent_1:
+      id: 3
+      group_id: -1
+      skin: 2
+      max_vel: 0.6307
+      radius: 0.22
+      goal_radius: 0.25
+      cyclic_goals: false
+      init_pose:
+        x: -2.75
+        y: -10.6
+        z: 0.0
+        h: 2.093735
+      behavior:
+        type: Impassive
+        configuration: 0
+        goal_force_factor: 2.0
+        obstacle_force_factor: 10.0
+        social_force_factor: 5.0
+        other_force_factor: 20.0
+      goals:
+      - 11
+      - 12
+      - 13
+      - 14
+      - 15
+      - 16
+      - 17
+      - 18
+      - 19
+      - 20
+      start_delay: 0.5575

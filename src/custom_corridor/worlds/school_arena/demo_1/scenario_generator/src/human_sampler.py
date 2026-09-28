@@ -68,6 +68,9 @@ class HumanSampler:
                                   "y": human["spawn"]["y"], "z": 0.0,
                                   "h": human["spawn"]["heading"]}
             agent["behavior"]["type"] = labels[human["behavior"]]
+            if "pause_after_sec" in human:
+                agent["pause_after_sec"] = human["pause_after_sec"]
+                agent["pause_duration_sec"] = human["pause_duration_sec"]
             agent["goals"] = []
             for node_id in human["route"][1:]:
                 node = self.inputs.nodes[node_id]
