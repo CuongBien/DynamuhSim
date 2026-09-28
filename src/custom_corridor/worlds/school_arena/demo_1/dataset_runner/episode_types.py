@@ -55,6 +55,23 @@ class EpisodeTermination:
 
 
 @dataclass(frozen=True)
+class MonitorResult(EpisodeTermination):
+    duration_sec: float = 0.0
+    navigation_status: str | None = None
+    navigation_status_code: int | None = None
+    navigation_result_code: int | None = None
+    navigation_error_msg: str = ""
+    collision_occurred: bool = False
+    collision_kind: str | None = None
+    collision_pair: tuple[str, str] | None = None
+    stuck_displacement_m: float | None = None
+
+    @property
+    def termination_reason(self) -> str:
+        return self.reason
+
+
+@dataclass(frozen=True)
 class EpisodeResult:
     episode_id: str
     status: EpisodeStatus
@@ -62,6 +79,7 @@ class EpisodeResult:
     duration_sec: float
     transitions: tuple[EpisodeState, ...]
     context: EpisodeContext | None = None
+    monitor_result: MonitorResult | None = None
 
 
 class EpisodeHooks:

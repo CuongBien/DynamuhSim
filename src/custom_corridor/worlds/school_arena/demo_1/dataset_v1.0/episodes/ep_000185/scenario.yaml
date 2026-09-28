@@ -1,0 +1,166 @@
+dataset_version: v1.0
+seed: 511254709
+scenario_family: diverge
+density: medium
+map: school_floor_01
+robot:
+  start_zone: corridor_a
+  goal_zone: corridor_a
+  start_node: corridor_a_west
+  goal_node: corridor_a_3
+  start_pose:
+    x: -14.0
+    y: -8.15
+    heading: 0.07486
+  route:
+  - corridor_a_west
+  - corridor_a_1
+  - corridor_a_2
+  - corridor_a_backpack_south
+  - corridor_a_3
+  heading: 0.07486
+event:
+  room: room03
+  doorway: room03_door
+  corridor: corridor_a
+  diverge_node: corridor_a_2
+  shared_upstream:
+  - corridor_a_1
+  - corridor_a_2
+humans:
+- name: event_agent_1
+  role: event_agent
+  start_node: corridor_a_1
+  goal_node: room03_center
+  route:
+  - corridor_a_1
+  - corridor_a_2
+  - room03_approach
+  - room03_door
+  - room03_predoor
+  - room03_center
+  spawn:
+    x: -10.0
+    y: -7.85
+    heading: -0.059928
+  speed: 0.3963
+  start_delay: 0.767
+  lateral_offset: 0.0
+  behavior: curious
+  group_id: -1
+- name: background_agent_1
+  role: background_agent
+  start_node: room13_center
+  goal_node: room12_center
+  route:
+  - room13_center
+  - room13_predoor
+  - room13_door
+  - room13_approach
+  - corridor_f_after_upper_bin
+  - corridor_f_before_upper_bin
+  - corridor_f_mid
+  - room12_approach
+  - room12_door
+  - room12_predoor
+  - room12_center
+  spawn:
+    x: 17.6
+    y: 11.7667
+    heading: -2.657731
+  speed: 0.8852
+  start_delay: 4.8262
+  lateral_offset: 0.0
+  behavior: regular
+  group_id: -1
+- name: background_agent_2
+  role: background_agent
+  start_node: room10_center
+  goal_node: room11_center
+  route:
+  - room10_center
+  - room10_predoor
+  - room10_door
+  - room10_approach
+  - corridor_a_3
+  - corridor_a_locker_south
+  - corridor_a_4
+  - corridor_a_5
+  - junction_ab
+  - junction_bc
+  - junction_cd
+  - stair_entrance
+  - junction_de
+  - junction_ef
+  - corridor_f_lower_before_bin
+  - room11_approach
+  - room11_door
+  - room11_predoor
+  - room11_center
+  spawn:
+    x: 2.15
+    y: -5.4
+    heading: -2.093735
+  speed: 0.9085
+  start_delay: 0.0277
+  lateral_offset: 0.0
+  behavior: regular
+  group_id: -1
+- name: background_agent_3
+  role: background_agent
+  start_node: room05_center
+  goal_node: room08_center
+  route:
+  - room05_center
+  - room05_predoor
+  - room05_door
+  - room05_approach
+  - corridor_a_4
+  - corridor_a_locker_south
+  - corridor_a_3
+  - corridor_a_backpack_south
+  - corridor_a_2
+  - corridor_a_1
+  - room08_approach
+  - room08_door
+  - room08_predoor
+  - room08_center
+  spawn:
+    x: 7.05
+    y: -10.6
+    heading: 2.093735
+  speed: 0.607
+  start_delay: 4.0346
+  lateral_offset: 0.0
+  behavior: threatening
+  group_id: -1
+- name: background_agent_4
+  role: background_agent
+  start_node: room06_center
+  goal_node: room07_center
+  route:
+  - room06_center
+  - room06_predoor
+  - room06_door
+  - room06_approach
+  - corridor_a_5
+  - corridor_a_4
+  - corridor_a_locker_south
+  - corridor_a_3
+  - corridor_a_backpack_south
+  - corridor_a_2
+  - corridor_a_1
+  - corridor_a_west
+  - room07_approach
+  - room07_door
+  - room07_predoor
+  - room07_center
+  spawn:
+    x: 11.95
+    y: -10.6
+    heading: 2.093735
+  speed: 0.8788
+  start_delay: 4.9277
+  lateral_offset: 0.0
+  behavior: threatening
+  group_id: -1

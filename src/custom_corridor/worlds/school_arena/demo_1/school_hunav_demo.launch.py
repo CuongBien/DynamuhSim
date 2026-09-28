@@ -72,11 +72,18 @@ def generate_launch_description():
             ],
             output="screen",
     )
-    spawn = TimerAction(period=3.0, actions=[spawn_process])
+    spawn = TimerAction(
+        period=3.0, actions=[spawn_process],
+        condition=UnlessCondition(LaunchConfiguration("robot_in_world")),
+    )
     wait_robot = ExecuteProcess(
         cmd=["python3", os.path.join(here, "wait_for_robot_tf.py"),
              "--ros-args", "-p", "use_sim_time:=true"],
         output="screen",
+    )
+    world_robot_ready = TimerAction(
+        period=3.0, actions=[wait_robot],
+        condition=IfCondition(LaunchConfiguration("robot_in_world")),
     )
     # Resolve the physical model by name through the Gazebo GUI service.
     camera_follow = TimerAction(
@@ -166,6 +173,7 @@ def generate_launch_description():
         DeclareLaunchArgument("robot_x", default_value="-13.5"),
         DeclareLaunchArgument("robot_y", default_value="-8.15"),
         DeclareLaunchArgument("robot_yaw", default_value="0.0"),
+        DeclareLaunchArgument("robot_in_world", default_value="false"),
         DeclareLaunchArgument("gui", default_value="true"),
         SetEnvironmentVariable("ROS_DOMAIN_ID", "0"),
         SetEnvironmentVariable("RMW_IMPLEMENTATION", "rmw_fastrtps_cpp"),
@@ -173,7 +181,8 @@ def generate_launch_description():
         SetEnvironmentVariable("GZ_PARTITION", "school_hunav"),
         SetEnvironmentVariable("GZ_SIM_RESOURCE_PATH", resource_path),
         spawn_then_ready, ready_then_nav2,
-        gazebo_gui, gazebo_headless, bridge_node, rsp, spawn, camera_follow, camera_follow_view,
+        gazebo_gui, gazebo_headless, bridge_node, rsp, spawn, world_robot_ready,
+        camera_follow, camera_follow_view,
         applier, sync, rviz,
     ])
 

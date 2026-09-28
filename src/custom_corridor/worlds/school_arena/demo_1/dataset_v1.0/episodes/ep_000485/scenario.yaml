@@ -1,0 +1,64 @@
+dataset_version: v1.0
+seed: 1444285702
+scenario_family: conversation_group
+density: low
+map: school_floor_01
+robot:
+  start_zone: corridor_f
+  goal_zone: corridor_f
+  start_node: corridor_f_lower_before_bin
+  goal_node: corridor_f_north
+  start_pose:
+    x: 15.0
+    y: 2.55
+    heading: 1.570796
+  route:
+  - corridor_f_lower_before_bin
+  - corridor_f_lower_after_bin
+  - corridor_f_mid
+  - corridor_f_before_upper_bin
+  - corridor_f_after_upper_bin
+  - corridor_f_upper
+  - corridor_f_north
+  heading: 1.570796
+event:
+  corridor: corridor_f
+  group_id: 1
+  group_size: 2
+  social_obstacle_node: room12_approach
+  waiting_zone: waiting_area_north
+humans:
+- name: event_agent_1
+  role: event_agent
+  start_node: room12_approach
+  goal_node: corridor_f_north
+  route: &id001
+  - room12_approach
+  - corridor_f_mid
+  - corridor_f_before_upper_bin
+  - corridor_f_after_upper_bin
+  - corridor_f_upper
+  - corridor_f_north
+  spawn:
+    x: 15.01815
+    y: 6.11156
+    heading: 1.570796
+  speed: 0.9645
+  start_delay: 43.1543
+  lateral_offset: 0.0
+  behavior: threatening
+  group_id: 1
+- name: event_agent_2
+  role: event_agent
+  start_node: room12_approach
+  goal_node: corridor_f_north
+  route: *id001
+  spawn:
+    x: 14.98591
+    y: 6.68844
+    heading: 1.570796
+  speed: 0.9674
+  start_delay: 35.9361
+  lateral_offset: 0.0
+  behavior: impassive
+  group_id: 1

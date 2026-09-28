@@ -1,0 +1,274 @@
+hunav_loader:
+  ros__parameters:
+    yaml_base_name: scenario_walking_group_medium_341917791
+    simulator: Gazebo Fortress
+    map: school_arena
+    publish_people: true
+    global_goals:
+      1:
+        x: -10.0
+        y: -7.85
+      2:
+        x: -14.0
+        y: -8.15
+      3:
+        x: -10.0
+        y: -7.85
+      4:
+        x: -14.0
+        y: -8.15
+      5:
+        x: -10.0
+        y: -7.85
+      6:
+        x: -14.0
+        y: -8.15
+      7:
+        x: -10.0
+        y: -7.85
+      8:
+        x: -14.0
+        y: -8.15
+      9:
+        x: -3.73
+        y: -8.9
+      10:
+        x: -3.73
+        y: -8.6
+      11:
+        x: -3.73
+        y: -8.15
+      12:
+        x: -5.0
+        y: -8.15
+      13:
+        x: -2.0
+        y: -8.18
+      14:
+        x: 0.0
+        y: -7.85
+      15:
+        x: 2.6
+        y: -8.15
+      16:
+        x: 5.0
+        y: -8.15
+      17:
+        x: 6.07
+        y: -8.15
+      18:
+        x: 6.07
+        y: -8.6
+      19:
+        x: 6.07
+        y: -8.9
+      20:
+        x: 7.05
+        y: -10.6
+      21:
+        x: 1.17
+        y: -7.1
+      22:
+        x: 1.17
+        y: -7.4
+      23:
+        x: 1.17
+        y: -8.15
+      24:
+        x: 0.0
+        y: -7.85
+      25:
+        x: -2.0
+        y: -8.18
+      26:
+        x: -5.0
+        y: -8.15
+      27:
+        x: -10.0
+        y: -7.85
+      28:
+        x: -14.0
+        y: -8.15
+      29:
+        x: -13.53
+        y: -8.15
+      30:
+        x: -13.53
+        y: -8.6
+      31:
+        x: -13.53
+        y: -8.9
+      32:
+        x: -12.55
+        y: -10.6
+    agents:
+    - event_agent_1
+    - event_agent_2
+    - event_agent_3
+    - event_agent_4
+    - background_agent_1
+    - background_agent_2
+    event_agent_1:
+      id: 1
+      group_id: 1
+      skin: 0
+      max_vel: 0.3037
+      radius: 0.22
+      goal_radius: 0.25
+      cyclic_goals: false
+      init_pose:
+        x: -4.9988
+        y: -8.13008
+        z: 0.0
+        h: 3.081664
+      behavior:
+        type: Threatening
+        configuration: 0
+        goal_force_factor: 2.0
+        obstacle_force_factor: 10.0
+        social_force_factor: 5.0
+        other_force_factor: 20.0
+      goals:
+      - 1
+      - 2
+      start_delay: 0.2254
+    event_agent_2:
+      id: 2
+      group_id: 1
+      skin: 1
+      max_vel: 0.3037
+      radius: 0.22
+      goal_radius: 0.25
+      cyclic_goals: false
+      init_pose:
+        x: -5.61778
+        y: -8.13628
+        z: 0.0
+        h: 3.081664
+      behavior:
+        type: Regular
+        configuration: 0
+        goal_force_factor: 2.0
+        obstacle_force_factor: 10.0
+        social_force_factor: 5.0
+        other_force_factor: 20.0
+      goals:
+      - 3
+      - 4
+      start_delay: 0.2254
+    event_agent_3:
+      id: 3
+      group_id: 1
+      skin: 2
+      max_vel: 0.3037
+      radius: 0.22
+      goal_radius: 0.25
+      cyclic_goals: false
+      init_pose:
+        x: -6.23391
+        y: -8.09509
+        z: 0.0
+        h: 3.081664
+      behavior:
+        type: Regular
+        configuration: 0
+        goal_force_factor: 2.0
+        obstacle_force_factor: 10.0
+        social_force_factor: 5.0
+        other_force_factor: 20.0
+      goals:
+      - 5
+      - 6
+      start_delay: 0.2254
+    event_agent_4:
+      id: 4
+      group_id: 1
+      skin: 3
+      max_vel: 0.3037
+      radius: 0.22
+      goal_radius: 0.25
+      cyclic_goals: false
+      init_pose:
+        x: -6.85056
+        y: -8.06247
+        z: 0.0
+        h: 3.081664
+      behavior:
+        type: Regular
+        configuration: 0
+        goal_force_factor: 2.0
+        obstacle_force_factor: 10.0
+        social_force_factor: 5.0
+        other_force_factor: 20.0
+      goals:
+      - 7
+      - 8
+      start_delay: 0.2254
+    background_agent_1:
+      id: 5
+      group_id: -1
+      skin: 0
+      max_vel: 0.8158
+      radius: 0.22
+      goal_radius: 0.25
+      cyclic_goals: false
+      init_pose:
+        x: -2.75
+        y: -10.6
+        z: 0.0
+        h: 2.093735
+      behavior:
+        type: Regular
+        configuration: 0
+        goal_force_factor: 2.0
+        obstacle_force_factor: 10.0
+        social_force_factor: 5.0
+        other_force_factor: 20.0
+      goals:
+      - 9
+      - 10
+      - 11
+      - 12
+      - 13
+      - 14
+      - 15
+      - 16
+      - 17
+      - 18
+      - 19
+      - 20
+      start_delay: 4.1573
+    background_agent_2:
+      id: 6
+      group_id: -1
+      skin: 1
+      max_vel: 0.6165
+      radius: 0.22
+      goal_radius: 0.25
+      cyclic_goals: false
+      init_pose:
+        x: 2.15
+        y: -5.4
+        z: 0.0
+        h: -2.093735
+      behavior:
+        type: Regular
+        configuration: 0
+        goal_force_factor: 2.0
+        obstacle_force_factor: 10.0
+        social_force_factor: 5.0
+        other_force_factor: 20.0
+      goals:
+      - 21
+      - 22
+      - 23
+      - 24
+      - 25
+      - 26
+      - 27
+      - 28
+      - 29
+      - 30
+      - 31
+      - 32
+      start_delay: 4.515

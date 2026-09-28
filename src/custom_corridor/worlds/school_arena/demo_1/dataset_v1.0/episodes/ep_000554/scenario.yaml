@@ -1,0 +1,111 @@
+dataset_version: v1.0
+seed: 640652415
+scenario_family: class_change_burst
+density: low
+map: school_floor_01
+robot:
+  start_zone: corridor_a
+  goal_zone: corridor_a
+  start_node: corridor_a_5
+  goal_node: corridor_a_west
+  start_pose:
+    x: 10.0
+    y: -8.15
+    heading: 3.141593
+  route:
+  - corridor_a_5
+  - corridor_a_4
+  - corridor_a_locker_south
+  - corridor_a_3
+  - corridor_a_backpack_south
+  - corridor_a_2
+  - corridor_a_1
+  - corridor_a_west
+  heading: 3.141593
+event:
+  corridor: corridor_a
+  source_rooms:
+  - room02
+  - room10
+  - room05
+  exit_delays:
+  - 0.8334
+  - 6.4914
+  - 4.3134
+  burst_window:
+  - 4.0
+  - 7.0
+humans:
+- name: event_agent_1
+  role: event_agent
+  start_node: room02_center
+  goal_node: corridor_a_5
+  route:
+  - room02_center
+  - room02_predoor
+  - room02_door
+  - room02_approach
+  - corridor_a_1
+  - corridor_a_2
+  - corridor_a_backpack_south
+  - corridor_a_3
+  - corridor_a_locker_south
+  - corridor_a_4
+  - corridor_a_5
+  spawn:
+    x: -7.65
+    y: -10.6
+    heading: 2.093735
+  speed: 0.8041
+  start_delay: 0.8334
+  lateral_offset: 0.0
+  behavior: regular
+  group_id: -1
+- name: event_agent_2
+  role: event_agent
+  start_node: room10_center
+  goal_node: corridor_a_west
+  route:
+  - room10_center
+  - room10_predoor
+  - room10_door
+  - room10_approach
+  - corridor_a_3
+  - corridor_a_backpack_south
+  - corridor_a_2
+  - corridor_a_1
+  - corridor_a_west
+  spawn:
+    x: 2.15
+    y: -5.4
+    heading: -2.093735
+  speed: 0.5523
+  start_delay: 6.4914
+  lateral_offset: 0.0
+  behavior: regular
+  group_id: -1
+- name: event_agent_3
+  role: event_agent
+  start_node: room05_center
+  goal_node: corridor_a_west
+  route:
+  - room05_center
+  - room05_predoor
+  - room05_door
+  - room05_approach
+  - corridor_a_4
+  - corridor_a_locker_south
+  - corridor_a_3
+  - corridor_a_backpack_south
+  - corridor_a_2
+  - corridor_a_1
+  - corridor_a_west
+  spawn:
+    x: 7.05
+    y: -10.6
+    heading: 2.093735
+  speed: 0.7214
+  start_delay: 4.3134
+  lateral_offset: 0.0
+  behavior: regular
+  group_id: -1

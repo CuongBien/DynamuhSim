@@ -1,0 +1,106 @@
+dataset_version: v1.0
+seed: 1368635798
+scenario_family: same_direction
+density: low
+map: school_floor_01
+robot:
+  start_zone: corridor_a
+  goal_zone: corridor_a
+  start_node: corridor_a_locker_south
+  goal_node: corridor_a_west
+  start_pose:
+    x: 2.6
+    y: -8.15
+    heading: 3.026716
+  route:
+  - corridor_a_locker_south
+  - corridor_a_3
+  - corridor_a_backpack_south
+  - corridor_a_2
+  - corridor_a_1
+  - corridor_a_west
+  heading: 3.026716
+event:
+  corridor: corridor_a
+  initial_gap_m: 4.644
+humans:
+- name: event_agent_1
+  role: event_agent
+  start_node: corridor_a_backpack_south
+  goal_node: corridor_a_west
+  route:
+  - corridor_a_backpack_south
+  - corridor_a_2
+  - corridor_a_1
+  - corridor_a_west
+  spawn:
+    x: -1.99943
+    y: -8.12263
+    heading: 3.131593
+  speed: 0.3042
+  start_delay: 1.1793
+  lateral_offset: -0.05738
+  behavior: regular
+  group_id: -1
+- name: background_agent_1
+  role: background_agent
+  start_node: room04_center
+  goal_node: room05_center
+  route:
+  - room04_center
+  - room04_predoor
+  - room04_door
+  - room04_approach
+  - corridor_a_3
+  - corridor_a_locker_south
+  - corridor_a_4
+  - room05_approach
+  - room05_door
+  - room05_predoor
+  - room05_center
+  spawn:
+    x: 2.15
+    y: -10.6
+    heading: 2.093735
+  speed: 0.6138
+  start_delay: 2.4196
+  lateral_offset: 0.0
+  behavior: regular
+  group_id: -1
+- name: background_agent_2
+  role: background_agent
+  start_node: room12_center
+  goal_node: room09_center
+  route:
+  - room12_center
+  - room12_predoor
+  - room12_door
+  - room12_approach
+  - corridor_f_mid
+  - corridor_f_lower_after_bin
+  - corridor_f_lower_before_bin
+  - junction_ef
+  - junction_de
+  - stair_entrance
+  - junction_cd
+  - junction_bc
+  - junction_ab
+  - corridor_a_5
+  - corridor_a_4
+  - corridor_a_locker_south
+  - corridor_a_3
+  - corridor_a_backpack_south
+  - corridor_a_2
+  - room09_approach
+  - room09_door
+  - room09_predoor
+  - room09_center
+  spawn:
+    x: 17.6
+    y: 7.3
+    heading: -2.657777
+  speed: 0.7167
+  start_delay: 1.8219
+  lateral_offset: 0.0
+  behavior: regular
+  group_id: -1

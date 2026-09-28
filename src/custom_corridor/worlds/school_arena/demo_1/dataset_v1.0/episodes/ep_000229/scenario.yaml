@@ -1,0 +1,46 @@
+dataset_version: v1.0
+seed: 452217248
+scenario_family: robot_overtake
+density: low
+map: school_floor_01
+robot:
+  start_zone: corridor_a
+  goal_zone: corridor_a
+  start_node: corridor_a_locker_south
+  goal_node: corridor_a_west
+  start_pose:
+    x: 2.6
+    y: -8.15
+    heading: 3.026716
+  route:
+  - corridor_a_locker_south
+  - corridor_a_3
+  - corridor_a_backpack_south
+  - corridor_a_2
+  - corridor_a_1
+  - corridor_a_west
+  heading: 3.026716
+event:
+  corridor: corridor_a
+  initial_gap_m: 2.617
+  catch_distance_m: 6.211
+humans:
+- name: event_agent_1
+  role: event_agent
+  start_node: corridor_a_3
+  goal_node: corridor_a_west
+  route:
+  - corridor_a_3
+  - corridor_a_backpack_south
+  - corridor_a_2
+  - corridor_a_1
+  - corridor_a_west
+  spawn:
+    x: 0.00475
+    y: -7.87879
+    heading: -2.978066
+  speed: 0.3182
+  start_delay: 0.1262
+  lateral_offset: 0.02917
+  behavior: regular
+  group_id: -1

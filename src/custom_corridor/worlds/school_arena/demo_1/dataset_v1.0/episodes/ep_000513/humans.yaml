@@ -1,0 +1,230 @@
+hunav_loader:
+  ros__parameters:
+    yaml_base_name: scenario_bidirectional_flow_medium_1848988548
+    simulator: Gazebo Fortress
+    map: school_arena
+    publish_people: true
+    global_goals:
+      1:
+        x: 10.0
+        y: -8.15
+      2:
+        x: 0.0
+        y: -7.85
+      3:
+        x: -2.0
+        y: -8.18
+      4:
+        x: -5.0
+        y: -8.15
+      5:
+        x: -10.0
+        y: -7.85
+      6:
+        x: -14.0
+        y: -8.15
+      7:
+        x: 2.6
+        y: -8.15
+      8:
+        x: 5.0
+        y: -8.15
+      9:
+        x: 10.0
+        y: -8.15
+      10:
+        x: -5.0
+        y: -8.15
+      11:
+        x: -10.0
+        y: -7.85
+      12:
+        x: -14.0
+        y: -8.15
+      13:
+        x: -14.0
+        y: -8.15
+      14:
+        x: 14.1
+        y: 6.01
+      15:
+        x: 14.4
+        y: 6.01
+      16:
+        x: 15.0
+        y: 6.01
+      17:
+        x: 15.0
+        y: 8.0
+      18:
+        x: 15.0
+        y: 6.4067
+      19:
+        x: 15.6
+        y: 6.4067
+      20:
+        x: 15.9
+        y: 6.4067
+      21:
+        x: 17.6
+        y: 7.3
+    agents:
+    - event_agent_1
+    - event_agent_2
+    - event_agent_3
+    - event_agent_4
+    - event_agent_5
+    - background_agent_1
+    event_agent_1:
+      id: 1
+      group_id: -1
+      skin: 0
+      max_vel: 0.9173
+      radius: 0.22
+      goal_radius: 0.25
+      cyclic_goals: false
+      init_pose:
+        x: 5.0
+        y: -8.15
+        z: 0.0
+        h: 0.0
+      behavior:
+        type: Regular
+        configuration: 0
+        goal_force_factor: 2.0
+        obstacle_force_factor: 10.0
+        social_force_factor: 5.0
+        other_force_factor: 20.0
+      goals:
+      - 1
+      start_delay: 0.6757
+    event_agent_2:
+      id: 2
+      group_id: -1
+      skin: 1
+      max_vel: 0.9896
+      radius: 0.22
+      goal_radius: 0.25
+      cyclic_goals: false
+      init_pose:
+        x: 2.6
+        y: -8.15
+        z: 0.0
+        h: 3.026716
+      behavior:
+        type: Regular
+        configuration: 0
+        goal_force_factor: 2.0
+        obstacle_force_factor: 10.0
+        social_force_factor: 5.0
+        other_force_factor: 20.0
+      goals:
+      - 2
+      - 3
+      - 4
+      - 5
+      - 6
+      start_delay: 2.8055
+    event_agent_3:
+      id: 3
+      group_id: -1
+      skin: 2
+      max_vel: 0.7815
+      radius: 0.22
+      goal_radius: 0.25
+      cyclic_goals: false
+      init_pose:
+        x: 0.0
+        y: -7.85
+        z: 0.0
+        h: -0.114877
+      behavior:
+        type: Regular
+        configuration: 0
+        goal_force_factor: 2.0
+        obstacle_force_factor: 10.0
+        social_force_factor: 5.0
+        other_force_factor: 20.0
+      goals:
+      - 7
+      - 8
+      - 9
+      start_delay: 0.804
+    event_agent_4:
+      id: 4
+      group_id: -1
+      skin: 3
+      max_vel: 0.5597
+      radius: 0.22
+      goal_radius: 0.25
+      cyclic_goals: false
+      init_pose:
+        x: -2.0
+        y: -8.18
+        z: 0.0
+        h: 3.131593
+      behavior:
+        type: Regular
+        configuration: 0
+        goal_force_factor: 2.0
+        obstacle_force_factor: 10.0
+        social_force_factor: 5.0
+        other_force_factor: 20.0
+      goals:
+      - 10
+      - 11
+      - 12
+      start_delay: 2.3256
+    event_agent_5:
+      id: 5
+      group_id: -1
+      skin: 0
+      max_vel: 0.9691
+      radius: 0.22
+      goal_radius: 0.25
+      cyclic_goals: false
+      init_pose:
+        x: -10.0
+        y: -7.85
+        z: 0.0
+        h: -3.066733
+      behavior:
+        type: Regular
+        configuration: 0
+        goal_force_factor: 2.0
+        obstacle_force_factor: 10.0
+        social_force_factor: 5.0
+        other_force_factor: 20.0
+      goals:
+      - 13
+      start_delay: 2.5519
+    background_agent_1:
+      id: 6
+      group_id: -1
+      skin: 1
+      max_vel: 0.8621
+      radius: 0.22
+      goal_radius: 0.25
+      cyclic_goals: false
+      init_pose:
+        x: 12.4
+        y: 6.95
+        z: 0.0
+        h: -0.505099
+      behavior:
+        type: Regular
+        configuration: 0
+        goal_force_factor: 2.0
+        obstacle_force_factor: 10.0
+        social_force_factor: 5.0
+        other_force_factor: 20.0
+      goals:
+      - 14
+      - 15
+      - 16
+      - 17
+      - 18
+      - 19
+      - 20
+      - 21
+      start_delay: 3.0255

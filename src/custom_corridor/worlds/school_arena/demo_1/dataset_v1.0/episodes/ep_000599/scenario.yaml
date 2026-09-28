@@ -1,0 +1,97 @@
+dataset_version: v1.0
+seed: 1788264710
+scenario_family: mixed_interaction
+density: low
+map: school_floor_01
+robot:
+  start_zone: corridor_f
+  goal_zone: corridor_f
+  start_node: corridor_f_before_upper_bin
+  goal_node: corridor_f_lower_before_bin
+  start_pose:
+    x: 15.0
+    y: 9.8
+    heading: -1.570796
+  route:
+  - corridor_f_before_upper_bin
+  - corridor_f_mid
+  - corridor_f_lower_after_bin
+  - corridor_f_lower_before_bin
+  heading: -1.570796
+event:
+  corridor: corridor_f
+  primary_interaction: head_on
+  conflict_node: corridor_f_mid
+  minimum_background: 2
+humans:
+- name: event_agent_1
+  role: event_agent
+  start_node: corridor_f_lower_before_bin
+  goal_node: corridor_f_before_upper_bin
+  route:
+  - corridor_f_lower_before_bin
+  - corridor_f_lower_after_bin
+  - corridor_f_mid
+  - corridor_f_before_upper_bin
+  spawn:
+    x: 14.95973
+    y: 2.55
+    heading: 1.570796
+  speed: 0.8948
+  start_delay: 0.4829
+  lateral_offset: 0.04027
+  behavior: scared
+  group_id: -1
+- name: background_agent_1
+  role: background_agent
+  start_node: room11_center
+  goal_node: room06_center
+  route:
+  - room11_center
+  - room11_predoor
+  - room11_door
+  - room11_approach
+  - corridor_f_lower_before_bin
+  - junction_ef
+  - junction_de
+  - stair_entrance
+  - junction_cd
+  - junction_bc
+  - junction_ab
+  - corridor_a_5
+  - room06_approach
+  - room06_door
+  - room06_predoor
+  - room06_center
+  spawn:
+    x: 17.6
+    y: 2.8333
+    heading: -2.657777
+  speed: 0.8068
+  start_delay: 2.4111
+  lateral_offset: 0.0
+  behavior: regular
+  group_id: -1
+- name: background_agent_2
+  role: background_agent
+  start_node: room12_center
+  goal_node: room14_center
+  route:
+  - room12_center
+  - room12_predoor
+  - room12_door
+  - room12_approach
+  - corridor_f_mid
+  - room14_approach
+  - room14_door
+  - room14_predoor
+  - room14_center
+  spawn:
+    x: 17.6
+    y: 7.3
+    heading: -2.657777
+  speed: 0.9133
+  start_delay: 3.1672
+  lateral_offset: 0.0
+  behavior: regular
+  group_id: -1

@@ -1,0 +1,551 @@
+[INFO] [launch]: All log files can be found below /home/haduckien/.ros/log/2026-09-28-08-34-14-293068-Raccoon2005-41853
+[INFO] [launch]: Default logging verbosity is set to INFO
+[INFO] [gz-1]: process started with pid [42136]
+[INFO] [parameter_bridge-2]: process started with pid [42137]
+[INFO] [robot_state_publisher-3]: process started with pid [42138]
+[INFO] [python3-4]: process started with pid [42139]
+[INFO] [python3-5]: process started with pid [42140]
+[robot_state_publisher-3] [INFO] [1790559254.437830153] [robot_state_publisher]: Robot initialized
+[python3-4] [INFO] [1790559254.957643114] [school_collision_safe_pose_applier]: Wall guard active: map=/home/haduckien/nav_ws/src/custom_corridor/worlds/school_arena/demo_1/map.yaml, radius=0.22 m, topic=/school_hunav/target_poses
+[python3-5] [INFO] [1790559255.133858668] [school_pose_sync_monitor]: Gazebo/RViz sync monitor active: orange pose=/demo/gazebo_robot_pose
+[gz-1] [1;33mWarning [Utils.cc:132][0m [/sdf/world[@name="school_arena"]/model[@name="robot"]/link[@name="base_scan"]/sensor[@name="hls_lfcd_lds"]/gz_frame_id:/home/haduckien/nav_ws/src/custom_corridor/worlds/school_arena/demo_1/dataset_v1.0/episodes/ep_000006/runtime_logs/ep_000006.contact.world:L3501]: XML Element[gz_frame_id], child of element[sensor], not defined in SDF. Copying[gz_frame_id] as children of [sensor].
+[parameter_bridge-2] [INFO] [1790559255.479422052] [ros_gz_bridge]: Creating GZ->ROS Bridge: [/clock (gz.msgs.Clock) -> /clock (rosgraph_msgs/msg/Clock)] (Lazy 0)
+[parameter_bridge-2] [INFO] [1790559255.480663084] [ros_gz_bridge]: Creating GZ->ROS Bridge: [/joint_states (gz.msgs.Model) -> /joint_states (sensor_msgs/msg/JointState)] (Lazy 0)
+[parameter_bridge-2] [INFO] [1790559255.484364331] [ros_gz_bridge]: Creating GZ->ROS Bridge: [/odom (gz.msgs.Odometry) -> /odom (nav_msgs/msg/Odometry)] (Lazy 0)
+[parameter_bridge-2] [INFO] [1790559255.485979870] [ros_gz_bridge]: Creating GZ->ROS Bridge: [/tf (gz.msgs.Pose_V) -> /tf (tf2_msgs/msg/TFMessage)] (Lazy 0)
+[parameter_bridge-2] [INFO] [1790559255.488485833] [ros_gz_bridge]: Creating GZ->ROS Bridge: [/scan (gz.msgs.LaserScan) -> /scan (sensor_msgs/msg/LaserScan)] (Lazy 0)
+[parameter_bridge-2] [INFO] [1790559255.489225960] [ros_gz_bridge]: Creating ROS->GZ Bridge: [/cmd_vel (geometry_msgs/msg/Twist) -> /cmd_vel (gz.msgs.Twist)] (Lazy 0)
+[parameter_bridge-2] [INFO] [1790559255.489988312] [ros_gz_bridge]: Creating GZ->ROS Bridge: [/world/school_arena/dynamic_pose/info (gz.msgs.Pose_V) -> /world/school_arena/dynamic_pose/info (tf2_msgs/msg/TFMessage)] (Lazy 0)
+[parameter_bridge-2] [INFO] [1790559255.490399797] [ros_gz_bridge]: Creating ROS->GZ service bridge [/world/school_arena/set_pose (ros_gz_interfaces/srv/SetEntityPose -> gz.msgs.Pose/gz.msgs.Boolean)]
+[parameter_bridge-2] [INFO] [1790559255.491160766] [ros_gz_bridge]: Creating ROS->GZ service bridge [/world/school_arena/control (ros_gz_interfaces/srv/ControlWorld -> gz.msgs.WorldControl/gz.msgs.Boolean)]
+[parameter_bridge-2] [INFO] [1790559255.491472960] [ros_gz_bridge]: Creating GZ->ROS Bridge: [/robot/camera/image_raw (gz.msgs.Image) -> /robot/camera/image_raw (sensor_msgs/msg/Image)] (Lazy 0)
+[INFO] [python3-6]: process started with pid [42579]
+[python3-6] [INFO] [1790559258.243849023] [school_wait_for_robot_tf]: Robot odom/TF and simulation clock ready
+[INFO] [python3-6]: process has finished cleanly [pid 42579]
+[INFO] [map_server-7]: process started with pid [42600]
+[INFO] [amcl-8]: process started with pid [42601]
+[INFO] [planner_server-9]: process started with pid [42602]
+[INFO] [controller_server-10]: process started with pid [42603]
+[INFO] [bt_navigator-11]: process started with pid [42606]
+[INFO] [behavior_server-12]: process started with pid [42608]
+[INFO] [waypoint_follower-13]: process started with pid [42609]
+[INFO] [python3-14]: process started with pid [42610]
+[INFO] [goal_pose_bridge.py-15]: process started with pid [42611]
+[planner_server-9] [INFO] [1790559258.524873184] [planner_server]: 
+[planner_server-9] 	planner_server lifecycle node launched. 
+[planner_server-9] 	Waiting on external lifecycle transitions to activate
+[planner_server-9] 	See https://design.ros2.org/articles/node_lifecycle.html for more information.
+[planner_server-9] [INFO] [1790559258.526904234] [planner_server]: Creating
+[behavior_server-12] [INFO] [1790559258.531920530] [behavior_server]: 
+[behavior_server-12] 	behavior_server lifecycle node launched. 
+[behavior_server-12] 	Waiting on external lifecycle transitions to activate
+[behavior_server-12] 	See https://design.ros2.org/articles/node_lifecycle.html for more information.
+[amcl-8] [INFO] [1790559258.544004144] [amcl]: 
+[amcl-8] 	amcl lifecycle node launched. 
+[amcl-8] 	Waiting on external lifecycle transitions to activate
+[amcl-8] 	See https://design.ros2.org/articles/node_lifecycle.html for more information.
+[amcl-8] [INFO] [1790559258.545621071] [amcl]: Creating
+[map_server-7] [INFO] [1790559258.552927719] [map_server]: 
+[map_server-7] 	map_server lifecycle node launched. 
+[map_server-7] 	Waiting on external lifecycle transitions to activate
+[map_server-7] 	See https://design.ros2.org/articles/node_lifecycle.html for more information.
+[map_server-7] [INFO] [1790559258.553132414] [map_server]: Creating
+[planner_server-9] [INFO] [1790559258.563372403] [global_costmap.global_costmap]: 
+[planner_server-9] 	global_costmap lifecycle node launched. 
+[planner_server-9] 	Waiting on external lifecycle transitions to activate
+[planner_server-9] 	See https://design.ros2.org/articles/node_lifecycle.html for more information.
+[planner_server-9] [INFO] [1790559258.566193191] [global_costmap.global_costmap]: Creating Costmap
+[waypoint_follower-13] [INFO] [1790559258.569294728] [waypoint_follower]: 
+[waypoint_follower-13] 	waypoint_follower lifecycle node launched. 
+[waypoint_follower-13] 	Waiting on external lifecycle transitions to activate
+[waypoint_follower-13] 	See https://design.ros2.org/articles/node_lifecycle.html for more information.
+[waypoint_follower-13] [INFO] [1790559258.570904603] [waypoint_follower]: Creating
+[controller_server-10] [INFO] [1790559258.576989022] [controller_server]: 
+[controller_server-10] 	controller_server lifecycle node launched. 
+[controller_server-10] 	Waiting on external lifecycle transitions to activate
+[controller_server-10] 	See https://design.ros2.org/articles/node_lifecycle.html for more information.
+[bt_navigator-11] [INFO] [1790559258.582143615] [bt_navigator]: 
+[bt_navigator-11] 	bt_navigator lifecycle node launched. 
+[bt_navigator-11] 	Waiting on external lifecycle transitions to activate
+[bt_navigator-11] 	See https://design.ros2.org/articles/node_lifecycle.html for more information.
+[bt_navigator-11] [INFO] [1790559258.583513667] [bt_navigator]: Creating
+[controller_server-10] [INFO] [1790559258.586180397] [controller_server]: Creating controller server
+[controller_server-10] [INFO] [1790559258.629653023] [local_costmap.local_costmap]: 
+[controller_server-10] 	local_costmap lifecycle node launched. 
+[controller_server-10] 	Waiting on external lifecycle transitions to activate
+[controller_server-10] 	See https://design.ros2.org/articles/node_lifecycle.html for more information.
+[controller_server-10] [INFO] [1790559258.630275498] [local_costmap.local_costmap]: Creating Costmap
+[goal_pose_bridge.py-15] [INFO] [1790559259.488167890] [goal_pose_bridge]: GoalPoseBridge started: listening on /goal_pose -> forwarding to /navigate_to_pose
+[INFO] [lifecycle_manager-16]: process started with pid [43012]
+[lifecycle_manager-16] [INFO] [1790559260.521715482] [lifecycle_manager_localization]: Creating
+[lifecycle_manager-16] [INFO] [1790559260.525180315] [lifecycle_manager_localization]: [34m[1mCreating and initializing lifecycle service clients[0m[0m
+[WARNING] [launch]: user interrupted with ctrl-c (SIGINT)
+[behavior_server-12] [INFO] [1790559261.676206363] [rclcpp]: signal_handler(SIGINT/SIGTERM)
+[behavior_server-12] [INFO] [1790559261.676417656] [behavior_server]: Running Nav2 LifecycleNode rcl preshutdown (behavior_server)
+[behavior_server-12] [INFO] [1790559261.676495018] [behavior_server]: Destroying bond (behavior_server) to lifecycle manager.
+[waypoint_follower-13] [INFO] [1790559261.676206218] [rclcpp]: signal_handler(SIGINT/SIGTERM)
+[waypoint_follower-13] [INFO] [1790559261.676417574] [waypoint_follower]: Running Nav2 LifecycleNode rcl preshutdown (waypoint_follower)
+[waypoint_follower-13] [INFO] [1790559261.676496334] [waypoint_follower]: Destroying bond (waypoint_follower) to lifecycle manager.
+[parameter_bridge-2] [INFO] [1790559261.676246785] [rclcpp]: signal_handler(SIGINT/SIGTERM)
+[controller_server-10] [INFO] [1790559261.676254151] [rclcpp]: signal_handler(SIGINT/SIGTERM)
+[controller_server-10] [INFO] [1790559261.676418039] [controller_server]: Running Nav2 LifecycleNode rcl preshutdown (controller_server)
+[controller_server-10] [INFO] [1790559261.676496085] [controller_server]: Destroying bond (controller_server) to lifecycle manager.
+[INFO] [lifecycle_manager-16]: sending signal 'SIGINT' to process[lifecycle_manager-16]
+[INFO] [goal_pose_bridge.py-15]: sending signal 'SIGINT' to process[goal_pose_bridge.py-15]
+[INFO] [python3-14]: sending signal 'SIGINT' to process[python3-14]
+[INFO] [waypoint_follower-13]: sending signal 'SIGINT' to process[waypoint_follower-13]
+[INFO] [behavior_server-12]: sending signal 'SIGINT' to process[behavior_server-12]
+[INFO] [bt_navigator-11]: sending signal 'SIGINT' to process[bt_navigator-11]
+[INFO] [controller_server-10]: sending signal 'SIGINT' to process[controller_server-10]
+[ERROR] [waypoint_follower-13]: process has died [pid 42609, exit code -2, cmd '/opt/ros/jazzy/lib/nav2_waypoint_follower/waypoint_follower --ros-args -r __node:=waypoint_follower --params-file /home/haduckien/nav_ws/src/custom_corridor/worlds/school_arena/demo_1/dataset_v1.0/episodes/ep_000006/nav2_school.yaml'].
+[INFO] [planner_server-9]: sending signal 'SIGINT' to process[planner_server-9]
+[ERROR] [behavior_server-12]: process has died [pid 42608, exit code -2, cmd '/opt/ros/jazzy/lib/nav2_behaviors/behavior_server --ros-args -r __node:=behavior_server --params-file /home/haduckien/nav_ws/src/custom_corridor/worlds/school_arena/demo_1/dataset_v1.0/episodes/ep_000006/nav2_school.yaml'].
+[INFO] [amcl-8]: sending signal 'SIGINT' to process[amcl-8]
+[ERROR] [bt_navigator-11]: process has died [pid 42606, exit code -2, cmd '/opt/ros/jazzy/lib/nav2_bt_navigator/bt_navigator --ros-args -r __node:=bt_navigator --params-file /home/haduckien/nav_ws/src/custom_corridor/worlds/school_arena/demo_1/dataset_v1.0/episodes/ep_000006/nav2_school.yaml'].
+[INFO] [map_server-7]: sending signal 'SIGINT' to process[map_server-7]
+[ERROR] [controller_server-10]: process has died [pid 42603, exit code -2, cmd '/opt/ros/jazzy/lib/nav2_controller/controller_server --ros-args -r __node:=controller_server --params-file /home/haduckien/nav_ws/src/custom_corridor/worlds/school_arena/demo_1/dataset_v1.0/episodes/ep_000006/nav2_school.yaml'].
+[INFO] [python3-5]: sending signal 'SIGINT' to process[python3-5]
+[ERROR] [amcl-8]: process has died [pid 42601, exit code -2, cmd '/opt/ros/jazzy/lib/nav2_amcl/amcl --ros-args -r __node:=amcl --params-file /home/haduckien/nav_ws/src/custom_corridor/worlds/school_arena/demo_1/dataset_v1.0/episodes/ep_000006/nav2_school.yaml --params-file /tmp/launch_params_0j8rk7ob'].
+[ERROR] [planner_server-9]: process has died [pid 42602, exit code -2, cmd '/opt/ros/jazzy/lib/nav2_planner/planner_server --ros-args -r __node:=planner_server --params-file /home/haduckien/nav_ws/src/custom_corridor/worlds/school_arena/demo_1/dataset_v1.0/episodes/ep_000006/nav2_school.yaml'].
+[INFO] [python3-4]: sending signal 'SIGINT' to process[python3-4]
+[ERROR] [map_server-7]: process has died [pid 42600, exit code -2, cmd '/opt/ros/jazzy/lib/nav2_map_server/map_server --ros-args -r __node:=map_server --params-file /home/haduckien/nav_ws/src/custom_corridor/worlds/school_arena/demo_1/dataset_v1.0/episodes/ep_000006/nav2_school.yaml --params-file /tmp/launch_params_0bec33y6'].
+[INFO] [robot_state_publisher-3]: sending signal 'SIGINT' to process[robot_state_publisher-3]
+[INFO] [parameter_bridge-2]: sending signal 'SIGINT' to process[parameter_bridge-2]
+[ERROR] [python3-5]: process has died [pid 42140, exit code -2, cmd 'python3 /home/haduckien/nav_ws/src/custom_corridor/worlds/school_arena/demo_1/pose_sync_monitor.py --ros-args -p use_sim_time:=true -p robot_name:=robot -p world_frame:=map -p initial_x:=-14.0 -p initial_y:=-8.15'].
+[INFO] [gz-1]: sending signal 'SIGINT' to process[gz-1]
+[ERROR] [robot_state_publisher-3]: process has died [pid 42138, exit code -2, cmd '/opt/ros/jazzy/lib/robot_state_publisher/robot_state_publisher --ros-args --params-file /tmp/launch_params_dijwpbtz'].
+[bt_navigator-11] [INFO] [1790559261.676271503] [rclcpp]: signal_handler(SIGINT/SIGTERM)
+[bt_navigator-11] [INFO] [1790559261.676418160] [bt_navigator]: Running Nav2 LifecycleNode rcl preshutdown (bt_navigator)
+[bt_navigator-11] [INFO] [1790559261.676494820] [bt_navigator]: Destroying bond (bt_navigator) to lifecycle manager.
+[ERROR] [python3-4]: process has died [pid 42139, exit code -2, cmd 'python3 /home/haduckien/nav_ws/src/custom_corridor/worlds/school_arena/demo_1/collision_safe_pose_applier.py --ros-args -p use_sim_time:=true -p world_name:=school_arena -p target_topic:=/school_hunav/target_poses -p map_yaml:=/home/haduckien/nav_ws/src/custom_corridor/worlds/school_arena/demo_1/map.yaml -p agent_radius:=0.22 -p apply_hz:=20.0 -p ground_z:=0.0'].
+[robot_state_publisher-3] [INFO] [1790559261.676270443] [rclcpp]: signal_handler(SIGINT/SIGTERM)
+[map_server-7] [INFO] [1790559261.676318721] [rclcpp]: signal_handler(SIGINT/SIGTERM)
+[map_server-7] [INFO] [1790559261.676432864] [map_server]: Running Nav2 LifecycleNode rcl preshutdown (map_server)
+[map_server-7] [INFO] [1790559261.676494198] [map_server]: Destroying bond (map_server) to lifecycle manager.
+[planner_server-9] [INFO] [1790559261.676662672] [rclcpp]: signal_handler(SIGINT/SIGTERM)
+[planner_server-9] [INFO] [1790559261.676755823] [planner_server]: Running Nav2 LifecycleNode rcl preshutdown (planner_server)
+[planner_server-9] [INFO] [1790559261.676801082] [planner_server]: Destroying bond (planner_server) to lifecycle manager.
+[planner_server-9] [INFO] [1790559261.679510904] [global_costmap.global_costmap]: Destroying
+[lifecycle_manager-16] [INFO] [1790559261.677084317] [rclcpp]: signal_handler(SIGINT/SIGTERM)
+[lifecycle_manager-16] [INFO] [1790559261.677182788] [lifecycle_manager_localization]: Running Nav2 LifecycleManager rcl preshutdown (lifecycle_manager_localization)
+[lifecycle_manager-16] [INFO] [1790559261.679757648] [lifecycle_manager_localization]: Waiting for service map_server/get_state...
+[lifecycle_manager-16] [INFO] [1790559261.679793226] [lifecycle_manager_localization]: Waiting for service map_server/get_state...
+[lifecycle_manager-16] terminate called after throwing an instance of 'std::runtime_error'
+[lifecycle_manager-16]   what():  context cannot be slept with because it's invalid
+[amcl-8] [INFO] [1790559261.677224748] [rclcpp]: signal_handler(SIGINT/SIGTERM)
+[amcl-8] [INFO] [1790559261.677376771] [amcl]: Running Nav2 LifecycleNode rcl preshutdown (amcl)
+[amcl-8] [INFO] [1790559261.677426214] [amcl]: Destroying bond (amcl) to lifecycle manager.
+[amcl-8] [INFO] [1790559261.680029941] [amcl]: Destroying
+[bt_navigator-11] [INFO] [1790559261.677649484] [bt_navigator]: Destroying
+[map_server-7] [INFO] [1790559261.677846197] [map_server]: Destroying
+[behavior_server-12] [INFO] [1790559261.679590701] [behavior_server]: Destroying
+[waypoint_follower-13] [INFO] [1790559261.680627057] [waypoint_follower]: Destroying
+[controller_server-10] [INFO] [1790559261.681465789] [local_costmap.local_costmap]: Destroying
+[goal_pose_bridge.py-15] Traceback (most recent call last):
+[goal_pose_bridge.py-15]   File "/home/haduckien/nav_ws/install/custom_corridor/lib/custom_corridor/goal_pose_bridge.py", line 88, in <module>
+[goal_pose_bridge.py-15]     main()
+[goal_pose_bridge.py-15]   File "/home/haduckien/nav_ws/install/custom_corridor/lib/custom_corridor/goal_pose_bridge.py", line 82, in main
+[goal_pose_bridge.py-15]     node.destroy_node()
+[goal_pose_bridge.py-15]   File "/opt/ros/jazzy/lib/python3.12/site-packages/rclpy/node.py", line 1962, in destroy_node
+[goal_pose_bridge.py-15]     self.destroy_service(self._services[0])
+[goal_pose_bridge.py-15]   File "/opt/ros/jazzy/lib/python3.12/site-packages/rclpy/node.py", line 1886, in destroy_service
+[goal_pose_bridge.py-15]     service.destroy()
+[goal_pose_bridge.py-15]   File "/opt/ros/jazzy/lib/python3.12/site-packages/rclpy/service.py", line 123, in destroy
+[goal_pose_bridge.py-15]     self.__service.destroy_when_not_in_use()
+[goal_pose_bridge.py-15] KeyboardInterrupt
+[python3-14] Traceback (most recent call last):
+[python3-14]   File "/home/haduckien/nav_ws/install/custom_corridor/share/custom_corridor/launch/publish_episode_initial_pose.py", line 84, in main
+[python3-14]     rclpy.spin_once(node, timeout_sec=0.1)
+[python3-14]   File "/opt/ros/jazzy/lib/python3.12/site-packages/rclpy/__init__.py", line 226, in spin_once
+[python3-14]     executor.spin_once(timeout_sec=timeout_sec)
+[python3-14]   File "/opt/ros/jazzy/lib/python3.12/site-packages/rclpy/executors.py", line 926, in spin_once
+[python3-14]     self._spin_once_impl(timeout_sec)
+[python3-14]   File "/opt/ros/jazzy/lib/python3.12/site-packages/rclpy/executors.py", line 907, in _spin_once_impl
+[python3-14]     handler, entity, node = self.wait_for_ready_callbacks(
+[python3-14]                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[python3-14]   File "/opt/ros/jazzy/lib/python3.12/site-packages/rclpy/executors.py", line 877, in wait_for_ready_callbacks
+[python3-14]     return next(self._cb_iter)
+[python3-14]            ^^^^^^^^^^^^^^^^^^^
+[python3-14]   File "/opt/ros/jazzy/lib/python3.12/site-packages/rclpy/executors.py", line 781, in _wait_for_ready_callbacks
+[python3-14]     wait_set.wait(timeout_nsec)
+[python3-14] KeyboardInterrupt
+[python3-14] 
+[python3-14] During handling of the above exception, another exception occurred:
+[python3-14] 
+[python3-14] Traceback (most recent call last):
+[python3-14]   File "/home/haduckien/nav_ws/install/custom_corridor/share/custom_corridor/launch/publish_episode_initial_pose.py", line 115, in <module>
+[python3-14]     raise SystemExit(main())
+[python3-14]                      ^^^^^^
+[python3-14]   File "/home/haduckien/nav_ws/install/custom_corridor/share/custom_corridor/launch/publish_episode_initial_pose.py", line 110, in main
+[python3-14]     node.destroy_node()
+[python3-14]   File "/opt/ros/jazzy/lib/python3.12/site-packages/rclpy/node.py", line 1968, in destroy_node
+[python3-14]     self.__node.destroy_when_not_in_use()
+[python3-14] KeyboardInterrupt
+[controller_server-10] [INFO] [1790559261.704421648] [controller_server]: Destroying
+[planner_server-9] [INFO] [1790559261.708629639] [planner_server]: Destroying
+[parameter_bridge-2] [INFO] [1790559261.726637926] [rclcpp]: signal_handler(SIGINT/SIGTERM)
+[INFO] [parameter_bridge-2]: process has finished cleanly [pid 42137]
+[ERROR] [python3-14]: process has died [pid 42610, exit code -2, cmd 'python3 /home/haduckien/nav_ws/install/custom_corridor/share/custom_corridor/launch/publish_episode_initial_pose.py --params-file /home/haduckien/nav_ws/src/custom_corridor/worlds/school_arena/demo_1/dataset_v1.0/episodes/ep_000006/nav2_school.yaml --ros-args -p use_sim_time:=true'].
+[ERROR] [goal_pose_bridge.py-15]: process has died [pid 42611, exit code -2, cmd '/home/haduckien/nav_ws/install/custom_corridor/lib/custom_corridor/goal_pose_bridge.py --ros-args -r __node:=goal_pose_bridge --params-file /tmp/launch_params_lpkru1jd'].
+[INFO] [gz-1]: process has finished cleanly [pid 42136]
+[ERROR] [lifecycle_manager-16]: process has died [pid 43012, exit code -6, cmd '/opt/ros/jazzy/lib/nav2_lifecycle_manager/lifecycle_manager --ros-args -r __node:=lifecycle_manager_localization --params-file /tmp/launch_params_9rw3w2mz'].
+[INFO] [launch]: All log files can be found below /home/haduckien/.ros/log/2026-09-28-08-42-13-348695-Raccoon2005-59163
+[INFO] [launch]: Default logging verbosity is set to INFO
+[INFO] [gz-1]: process started with pid [59442]
+[INFO] [parameter_bridge-2]: process started with pid [59443]
+[INFO] [robot_state_publisher-3]: process started with pid [59444]
+[INFO] [python3-4]: process started with pid [59445]
+[INFO] [python3-5]: process started with pid [59446]
+[robot_state_publisher-3] [INFO] [1790559733.471891883] [robot_state_publisher]: Robot initialized
+[python3-4] [INFO] [1790559733.865033164] [school_collision_safe_pose_applier]: Wall guard active: map=/home/haduckien/nav_ws/src/custom_corridor/worlds/school_arena/demo_1/map.yaml, radius=0.22 m, topic=/school_hunav/target_poses
+[python3-5] [INFO] [1790559734.013160761] [school_pose_sync_monitor]: Gazebo/RViz sync monitor active: orange pose=/demo/gazebo_robot_pose
+[gz-1] [1;33mWarning [Utils.cc:132][0m [/sdf/world[@name="school_arena"]/model[@name="robot"]/link[@name="base_scan"]/sensor[@name="hls_lfcd_lds"]/gz_frame_id:/home/haduckien/nav_ws/src/custom_corridor/worlds/school_arena/demo_1/dataset_v1.0/episodes/ep_000006/runtime_logs/ep_000006.contact.world:L3501]: XML Element[gz_frame_id], child of element[sensor], not defined in SDF. Copying[gz_frame_id] as children of [sensor].
+[parameter_bridge-2] [INFO] [1790559734.503987203] [ros_gz_bridge]: Creating GZ->ROS Bridge: [/clock (gz.msgs.Clock) -> /clock (rosgraph_msgs/msg/Clock)] (Lazy 0)
+[parameter_bridge-2] [INFO] [1790559734.505277771] [ros_gz_bridge]: Creating GZ->ROS Bridge: [/joint_states (gz.msgs.Model) -> /joint_states (sensor_msgs/msg/JointState)] (Lazy 0)
+[parameter_bridge-2] [INFO] [1790559734.508314826] [ros_gz_bridge]: Creating GZ->ROS Bridge: [/odom (gz.msgs.Odometry) -> /odom (nav_msgs/msg/Odometry)] (Lazy 0)
+[parameter_bridge-2] [INFO] [1790559734.510198364] [ros_gz_bridge]: Creating GZ->ROS Bridge: [/tf (gz.msgs.Pose_V) -> /tf (tf2_msgs/msg/TFMessage)] (Lazy 0)
+[parameter_bridge-2] [INFO] [1790559734.511399264] [ros_gz_bridge]: Creating GZ->ROS Bridge: [/scan (gz.msgs.LaserScan) -> /scan (sensor_msgs/msg/LaserScan)] (Lazy 0)
+[parameter_bridge-2] [INFO] [1790559734.511839278] [ros_gz_bridge]: Creating ROS->GZ Bridge: [/cmd_vel (geometry_msgs/msg/Twist) -> /cmd_vel (gz.msgs.Twist)] (Lazy 0)
+[parameter_bridge-2] [INFO] [1790559734.512382458] [ros_gz_bridge]: Creating GZ->ROS Bridge: [/world/school_arena/dynamic_pose/info (gz.msgs.Pose_V) -> /world/school_arena/dynamic_pose/info (tf2_msgs/msg/TFMessage)] (Lazy 0)
+[parameter_bridge-2] [INFO] [1790559734.512750773] [ros_gz_bridge]: Creating ROS->GZ service bridge [/world/school_arena/set_pose (ros_gz_interfaces/srv/SetEntityPose -> gz.msgs.Pose/gz.msgs.Boolean)]
+[parameter_bridge-2] [INFO] [1790559734.513464926] [ros_gz_bridge]: Creating ROS->GZ service bridge [/world/school_arena/control (ros_gz_interfaces/srv/ControlWorld -> gz.msgs.WorldControl/gz.msgs.Boolean)]
+[parameter_bridge-2] [INFO] [1790559734.513752319] [ros_gz_bridge]: Creating GZ->ROS Bridge: [/robot/camera/image_raw (gz.msgs.Image) -> /robot/camera/image_raw (sensor_msgs/msg/Image)] (Lazy 0)
+[INFO] [python3-6]: process started with pid [59876]
+[python3-6] [INFO] [1790559737.103156644] [school_wait_for_robot_tf]: Robot odom/TF and simulation clock ready
+[INFO] [python3-6]: process has finished cleanly [pid 59876]
+[INFO] [map_server-7]: process started with pid [59939]
+[INFO] [amcl-8]: process started with pid [59940]
+[INFO] [planner_server-9]: process started with pid [59941]
+[INFO] [controller_server-10]: process started with pid [59942]
+[INFO] [bt_navigator-11]: process started with pid [59943]
+[INFO] [behavior_server-12]: process started with pid [59944]
+[INFO] [waypoint_follower-13]: process started with pid [59945]
+[INFO] [python3-14]: process started with pid [59946]
+[INFO] [goal_pose_bridge.py-15]: process started with pid [59947]
+[bt_navigator-11] [INFO] [1790559737.355664481] [bt_navigator]: 
+[bt_navigator-11] 	bt_navigator lifecycle node launched. 
+[bt_navigator-11] 	Waiting on external lifecycle transitions to activate
+[bt_navigator-11] 	See https://design.ros2.org/articles/node_lifecycle.html for more information.
+[bt_navigator-11] [INFO] [1790559737.356936838] [bt_navigator]: Creating
+[amcl-8] [INFO] [1790559737.359169435] [amcl]: 
+[amcl-8] 	amcl lifecycle node launched. 
+[amcl-8] 	Waiting on external lifecycle transitions to activate
+[amcl-8] 	See https://design.ros2.org/articles/node_lifecycle.html for more information.
+[amcl-8] [INFO] [1790559737.359806509] [amcl]: Creating
+[controller_server-10] [INFO] [1790559737.363036980] [controller_server]: 
+[controller_server-10] 	controller_server lifecycle node launched. 
+[controller_server-10] 	Waiting on external lifecycle transitions to activate
+[controller_server-10] 	See https://design.ros2.org/articles/node_lifecycle.html for more information.
+[controller_server-10] [INFO] [1790559737.367705051] [controller_server]: Creating controller server
+[waypoint_follower-13] [INFO] [1790559737.391616578] [waypoint_follower]: 
+[waypoint_follower-13] 	waypoint_follower lifecycle node launched. 
+[waypoint_follower-13] 	Waiting on external lifecycle transitions to activate
+[waypoint_follower-13] 	See https://design.ros2.org/articles/node_lifecycle.html for more information.
+[planner_server-9] [INFO] [1790559737.392289046] [planner_server]: 
+[planner_server-9] 	planner_server lifecycle node launched. 
+[planner_server-9] 	Waiting on external lifecycle transitions to activate
+[planner_server-9] 	See https://design.ros2.org/articles/node_lifecycle.html for more information.
+[planner_server-9] [INFO] [1790559737.393341299] [planner_server]: Creating
+[waypoint_follower-13] [INFO] [1790559737.392469426] [waypoint_follower]: Creating
+[behavior_server-12] [INFO] [1790559737.395028932] [behavior_server]: 
+[behavior_server-12] 	behavior_server lifecycle node launched. 
+[behavior_server-12] 	Waiting on external lifecycle transitions to activate
+[behavior_server-12] 	See https://design.ros2.org/articles/node_lifecycle.html for more information.
+[map_server-7] [INFO] [1790559737.396156644] [map_server]: 
+[map_server-7] 	map_server lifecycle node launched. 
+[map_server-7] 	Waiting on external lifecycle transitions to activate
+[map_server-7] 	See https://design.ros2.org/articles/node_lifecycle.html for more information.
+[map_server-7] [INFO] [1790559737.396377027] [map_server]: Creating
+[controller_server-10] [INFO] [1790559737.419257943] [local_costmap.local_costmap]: 
+[controller_server-10] 	local_costmap lifecycle node launched. 
+[controller_server-10] 	Waiting on external lifecycle transitions to activate
+[controller_server-10] 	See https://design.ros2.org/articles/node_lifecycle.html for more information.
+[controller_server-10] [INFO] [1790559737.419981638] [local_costmap.local_costmap]: Creating Costmap
+[planner_server-9] [INFO] [1790559737.429933173] [global_costmap.global_costmap]: 
+[planner_server-9] 	global_costmap lifecycle node launched. 
+[planner_server-9] 	Waiting on external lifecycle transitions to activate
+[planner_server-9] 	See https://design.ros2.org/articles/node_lifecycle.html for more information.
+[planner_server-9] [INFO] [1790559737.430461112] [global_costmap.global_costmap]: Creating Costmap
+[goal_pose_bridge.py-15] [INFO] [1790559738.165617847] [goal_pose_bridge]: GoalPoseBridge started: listening on /goal_pose -> forwarding to /navigate_to_pose
+[INFO] [lifecycle_manager-16]: process started with pid [60117]
+[lifecycle_manager-16] [INFO] [1790559739.343759976] [lifecycle_manager_localization]: Creating
+[lifecycle_manager-16] [INFO] [1790559739.347257722] [lifecycle_manager_localization]: [34m[1mCreating and initializing lifecycle service clients[0m[0m
+[lifecycle_manager-16] [INFO] [1790559741.036251505] [lifecycle_manager_localization]: [34m[1mStarting managed nodes bringup...[0m[0m
+[lifecycle_manager-16] [INFO] [1790559741.036305013] [lifecycle_manager_localization]: [34m[1mConfiguring map_server[0m[0m
+[map_server-7] [INFO] [1790559741.036808920] [map_server]: Configuring
+[map_server-7] [INFO] [1790559741.036918924] [map_io]: Loading yaml file: /home/haduckien/nav_ws/src/custom_corridor/worlds/school_arena/demo_1/map.yaml
+[map_server-7] [INFO] [1790559741.037267041] [map_io]: resolution: 0.05
+[map_server-7] [INFO] [1790559741.037284341] [map_io]: origin[0]: -16
+[map_server-7] [INFO] [1790559741.037291772] [map_io]: origin[1]: -14
+[map_server-7] [INFO] [1790559741.037296558] [map_io]: origin[2]: 0
+[map_server-7] [INFO] [1790559741.037301439] [map_io]: free_thresh: 0.25
+[map_server-7] [INFO] [1790559741.037306062] [map_io]: occupied_thresh: 0.65
+[map_server-7] [INFO] [1790559741.037312619] [map_io]: mode: trinary
+[map_server-7] [INFO] [1790559741.037317875] [map_io]: negate: 0
+[map_server-7] [INFO] [1790559741.037543906] [map_io]: Loading image_file: /home/haduckien/nav_ws/src/custom_corridor/worlds/school_arena/demo_1/map.pgm
+[map_server-7] [INFO] [1790559741.044992556] [map_io]: Read map /home/haduckien/nav_ws/src/custom_corridor/worlds/school_arena/demo_1/map.pgm: 730 X 580 map @ 0.05 m/cell
+[lifecycle_manager-16] [INFO] [1790559741.058242548] [lifecycle_manager_localization]: [34m[1mConfiguring amcl[0m[0m
+[amcl-8] [INFO] [1790559741.058547728] [amcl]: Configuring
+[amcl-8] [INFO] [1790559741.058692481] [amcl]: initTransforms
+[amcl-8] [INFO] [1790559741.072724899] [amcl]: initPubSub
+[amcl-8] [INFO] [1790559741.084809854] [amcl]: Subscribed to map topic.
+[lifecycle_manager-16] [INFO] [1790559741.090665892] [lifecycle_manager_localization]: [34m[1mActivating map_server[0m[0m
+[map_server-7] [INFO] [1790559741.090903597] [map_server]: Activating
+[map_server-7] [INFO] [1790559741.091840327] [map_server]: Creating bond (map_server) to lifecycle manager.
+[amcl-8] [INFO] [1790559741.102923669] [amcl]: Received a 730 X 580 map @ 0.050 m/pix
+[lifecycle_manager-16] [INFO] [1790559741.198436937] [lifecycle_manager_localization]: Server map_server connected with bond.
+[lifecycle_manager-16] [INFO] [1790559741.198490931] [lifecycle_manager_localization]: [34m[1mActivating amcl[0m[0m
+[amcl-8] [INFO] [1790559741.198717779] [amcl]: Activating
+[amcl-8] [INFO] [1790559741.198763357] [amcl]: Creating bond (amcl) to lifecycle manager.
+[amcl-8] [INFO] [1790559741.203627847] [amcl]: initialPoseReceived
+[amcl-8] [INFO] [1790559741.203858981] [amcl]: Setting pose (4.784000): -14.000 -8.150 0.075
+[python3-14] [INFO] [1790559741.217529380] [school_episode_initial_pose]: Published /initialpose from episode: -14.000, -8.150, 0.075
+[amcl-8] [INFO] [1790559741.249116087] [amcl]: createLaserObject
+[lifecycle_manager-16] [INFO] [1790559741.307547349] [lifecycle_manager_localization]: Server amcl connected with bond.
+[lifecycle_manager-16] [INFO] [1790559741.307608610] [lifecycle_manager_localization]: [34m[1mManaged nodes are active[0m[0m
+[lifecycle_manager-16] [INFO] [1790559741.307625527] [lifecycle_manager_localization]: [34m[1mCreating bond timer...[0m[0m
+[python3-5] [INFO] [1790559741.785735466] [school_pose_sync_monitor]: Gazebo↔RViz pose error=0.015 m (gz=-14.00,-8.15; tf=-14.01,-8.16)
+[python3-14] [INFO] [1790559741.916914481] [school_episode_initial_pose]: AMCL map->odom is available at scan and current simulation timestamps
+[INFO] [python3-14]: process has finished cleanly [pid 59946]
+[INFO] [lifecycle_manager-17]: process started with pid [60159]
+[lifecycle_manager-17] [INFO] [1790559742.177653885] [lifecycle_manager_navigation]: Creating
+[lifecycle_manager-17] [INFO] [1790559742.183986504] [lifecycle_manager_navigation]: [34m[1mCreating and initializing lifecycle service clients[0m[0m
+[lifecycle_manager-17] [INFO] [1790559744.126828341] [lifecycle_manager_navigation]: [34m[1mStarting managed nodes bringup...[0m[0m
+[lifecycle_manager-17] [INFO] [1790559744.126880615] [lifecycle_manager_navigation]: [34m[1mConfiguring planner_server[0m[0m
+[planner_server-9] [INFO] [1790559744.127370413] [planner_server]: Configuring
+[planner_server-9] [INFO] [1790559744.127501261] [global_costmap.global_costmap]: Configuring
+[planner_server-9] [INFO] [1790559744.140435174] [global_costmap.global_costmap]: Using plugin "static_layer"
+[planner_server-9] [INFO] [1790559744.145225227] [global_costmap.global_costmap]: Subscribing to the map topic (/map) with transient local durability
+[planner_server-9] [INFO] [1790559744.147948832] [global_costmap.global_costmap]: Initialized plugin "static_layer"
+[planner_server-9] [INFO] [1790559744.147996669] [global_costmap.global_costmap]: Using plugin "obstacle_layer"
+[planner_server-9] [INFO] [1790559744.149245661] [global_costmap.global_costmap]: Subscribed to Topics: scan
+[planner_server-9] [INFO] [1790559744.158085483] [global_costmap.global_costmap]: Initialized plugin "obstacle_layer"
+[planner_server-9] [INFO] [1790559744.158146385] [global_costmap.global_costmap]: Using plugin "inflation_layer"
+[planner_server-9] [INFO] [1790559744.159733909] [global_costmap.global_costmap]: Initialized plugin "inflation_layer"
+[planner_server-9] [INFO] [1790559744.199996720] [global_costmap.global_costmap]: StaticLayer: Resizing costmap to 730 X 580 at 0.050000 m/pix
+[planner_server-9] [INFO] [1790559744.204550038] [planner_server]: Created global planner plugin GridBased of type nav2_smac_planner::SmacPlanner2D
+[planner_server-9] [INFO] [1790559744.204681627] [planner_server]: Configuring GridBased of type SmacPlanner2D
+[planner_server-9] [ERROR] [1790559744.206359241] [planner_server]: Inflation layer either not found or inflation is not set sufficiently for optimized non-circular collision checking capabilities. It is HIGHLY recommended to set the inflation radius to be at MINIMUM half of the robot's largest cross-section. See github.com/ros-planning/navigation2/tree/main/nav2_smac_planner#potential-fields for full instructions. This will substantially impact run-time performance.
+[planner_server-9] [INFO] [1790559744.208062140] [planner_server]: Configured plugin GridBased of type SmacPlanner2D with tolerance 0.15, maximum iterations 1000000, max on approach iterations 1000, and not allowing unknown traversal.
+[planner_server-9] [INFO] [1790559744.208118677] [planner_server]: Planner Server has GridBased  planners available.
+[lifecycle_manager-17] [INFO] [1790559744.223574635] [lifecycle_manager_navigation]: [34m[1mConfiguring controller_server[0m[0m
+[controller_server-10] [INFO] [1790559744.223954195] [controller_server]: Configuring controller interface
+[controller_server-10] [INFO] [1790559744.224012715] [controller_server]: getting progress checker plugins..
+[controller_server-10] [INFO] [1790559744.224214102] [controller_server]: getting goal checker plugins..
+[controller_server-10] [INFO] [1790559744.224459083] [controller_server]: Controller frequency set to 10.0000Hz
+[controller_server-10] [INFO] [1790559744.224506535] [local_costmap.local_costmap]: Configuring
+[controller_server-10] [INFO] [1790559744.235182498] [local_costmap.local_costmap]: Using plugin "obstacle_layer"
+[controller_server-10] [INFO] [1790559744.241385907] [local_costmap.local_costmap]: Subscribed to Topics: scan
+[controller_server-10] [INFO] [1790559744.245821789] [local_costmap.local_costmap]: Initialized plugin "obstacle_layer"
+[controller_server-10] [INFO] [1790559744.245852181] [local_costmap.local_costmap]: Using plugin "inflation_layer"
+[controller_server-10] [INFO] [1790559744.246389173] [local_costmap.local_costmap]: Initialized plugin "inflation_layer"
+[controller_server-10] [INFO] [1790559744.273699270] [controller_server]: Created progress_checker : progress_checker of type nav2_controller::SimpleProgressChecker
+[controller_server-10] [INFO] [1790559744.274006660] [controller_server]: Controller Server has progress_checker  progress checkers available.
+[controller_server-10] [INFO] [1790559744.274364493] [controller_server]: Created goal checker : goal_checker of type nav2_controller::SimpleGoalChecker
+[controller_server-10] [INFO] [1790559744.274909155] [controller_server]: Controller Server has goal_checker  goal checkers available.
+[controller_server-10] [INFO] [1790559744.276487658] [controller_server]: Created controller : FollowPath of type dwb_core::DWBLocalPlanner
+[controller_server-10] [INFO] [1790559744.277507793] [controller_server]: Setting transform_tolerance to 0.100000
+[controller_server-10] [INFO] [1790559744.290724685] [controller_server]: Using critic "RotateToGoal" (dwb_critics::RotateToGoalCritic)
+[controller_server-10] [INFO] [1790559744.291352891] [controller_server]: Critic plugin initialized
+[controller_server-10] [INFO] [1790559744.291491355] [controller_server]: Using critic "Oscillation" (dwb_critics::OscillationCritic)
+[controller_server-10] [INFO] [1790559744.291880509] [controller_server]: Critic plugin initialized
+[controller_server-10] [INFO] [1790559744.291980504] [controller_server]: Using critic "BaseObstacle" (dwb_critics::BaseObstacleCritic)
+[controller_server-10] [INFO] [1790559744.292143245] [controller_server]: Critic plugin initialized
+[controller_server-10] [INFO] [1790559744.292223871] [controller_server]: Using critic "GoalAlign" (dwb_critics::GoalAlignCritic)
+[controller_server-10] [INFO] [1790559744.292508416] [controller_server]: Critic plugin initialized
+[controller_server-10] [INFO] [1790559744.292609654] [controller_server]: Using critic "PathAlign" (dwb_critics::PathAlignCritic)
+[controller_server-10] [INFO] [1790559744.292879700] [controller_server]: Critic plugin initialized
+[controller_server-10] [INFO] [1790559744.292993643] [controller_server]: Using critic "PathDist" (dwb_critics::PathDistCritic)
+[controller_server-10] [INFO] [1790559744.293647289] [controller_server]: Critic plugin initialized
+[controller_server-10] [INFO] [1790559744.293801969] [controller_server]: Using critic "GoalDist" (dwb_critics::GoalDistCritic)
+[controller_server-10] [INFO] [1790559744.294080419] [controller_server]: Critic plugin initialized
+[controller_server-10] [INFO] [1790559744.294100268] [controller_server]: Controller Server has FollowPath  controllers available.
+[lifecycle_manager-17] [INFO] [1790559744.310067137] [lifecycle_manager_navigation]: [34m[1mConfiguring bt_navigator[0m[0m
+[bt_navigator-11] [INFO] [1790559744.310477713] [bt_navigator]: Configuring
+[bt_navigator-11] [INFO] [1790559744.320934171] [bt_navigator]: Creating navigator id navigate_to_pose of type nav2_bt_navigator::NavigateToPoseNavigator
+[bt_navigator-11] [WARN] [1790559744.327742918] [bt_navigator]: Error_code parameters were not set. Using default values of: follow_path_error_code compute_path_error_code
+[bt_navigator-11] Make sure these match your BT and there are not other sources of error codes youreported to your application
+[bt_navigator-11] [INFO] [1790559744.425674033] [bt_navigator]: Creating navigator id navigate_through_poses of type nav2_bt_navigator::NavigateThroughPosesNavigator
+[lifecycle_manager-17] [INFO] [1790559744.460880870] [lifecycle_manager_navigation]: [34m[1mConfiguring behavior_server[0m[0m
+[behavior_server-12] [INFO] [1790559744.461136368] [behavior_server]: Configuring
+[behavior_server-12] [INFO] [1790559744.469473553] [behavior_server]: Creating behavior plugin spin of type nav2_behaviors::Spin
+[behavior_server-12] [INFO] [1790559744.471471050] [behavior_server]: Creating behavior plugin backup of type nav2_behaviors::BackUp
+[behavior_server-12] [INFO] [1790559744.473400253] [behavior_server]: Creating behavior plugin wait of type nav2_behaviors::Wait
+[behavior_server-12] [INFO] [1790559744.486452965] [behavior_server]: Configuring spin
+[behavior_server-12] [INFO] [1790559744.501703198] [behavior_server]: Configuring backup
+[behavior_server-12] [INFO] [1790559744.510780599] [behavior_server]: Configuring wait
+[lifecycle_manager-17] [INFO] [1790559744.518646986] [lifecycle_manager_navigation]: [34m[1mConfiguring waypoint_follower[0m[0m
+[waypoint_follower-13] [INFO] [1790559744.518978095] [waypoint_follower]: Configuring
+[waypoint_follower-13] [INFO] [1790559744.553858694] [waypoint_follower]: Created waypoint_task_executor : wait_at_waypoint of type nav2_waypoint_follower::WaitAtWaypoint
+[waypoint_follower-13] [INFO] [1790559744.554228754] [waypoint_follower]: Waypoint pause duration is set to zero, disabling task executor plugin.
+[lifecycle_manager-17] [INFO] [1790559744.554927429] [lifecycle_manager_navigation]: [34m[1mActivating planner_server[0m[0m
+[planner_server-9] [INFO] [1790559744.555336665] [planner_server]: Activating
+[planner_server-9] [INFO] [1790559744.555398665] [global_costmap.global_costmap]: Activating
+[planner_server-9] [INFO] [1790559744.555416152] [global_costmap.global_costmap]: Checking transform
+[planner_server-9] [INFO] [1790559744.555516172] [global_costmap.global_costmap]: Timed out waiting for transform from base_footprint to map to become available, tf error: Lookup would require extrapolation at time 7.780000, but only time 8.100000 is in the buffer, when looking up transform from frame [base_footprint] to frame [map]
+[planner_server-9] [INFO] [1790559745.055734520] [global_costmap.global_costmap]: start
+[planner_server-9] [INFO] [1790559745.607396521] [planner_server]: Activating plugin GridBased of type SmacPlanner2D
+[planner_server-9] [INFO] [1790559745.609412771] [planner_server]: Creating bond (planner_server) to lifecycle manager.
+[lifecycle_manager-17] [INFO] [1790559745.718457913] [lifecycle_manager_navigation]: Server planner_server connected with bond.
+[lifecycle_manager-17] [INFO] [1790559745.718520200] [lifecycle_manager_navigation]: [34m[1mActivating controller_server[0m[0m
+[controller_server-10] [INFO] [1790559745.718844802] [controller_server]: Activating
+[controller_server-10] [INFO] [1790559745.718897400] [local_costmap.local_costmap]: Activating
+[controller_server-10] [INFO] [1790559745.718911228] [local_costmap.local_costmap]: Checking transform
+[controller_server-10] [INFO] [1790559745.719081817] [local_costmap.local_costmap]: start
+[controller_server-10] [INFO] [1790559745.920887553] [controller_server]: Creating bond (controller_server) to lifecycle manager.
+[lifecycle_manager-17] [INFO] [1790559746.028691496] [lifecycle_manager_navigation]: Server controller_server connected with bond.
+[lifecycle_manager-17] [INFO] [1790559746.028742879] [lifecycle_manager_navigation]: [34m[1mActivating bt_navigator[0m[0m
+[bt_navigator-11] [INFO] [1790559746.029105078] [bt_navigator]: Activating
+[bt_navigator-11] [INFO] [1790559746.136443764] [bt_navigator]: Creating bond (bt_navigator) to lifecycle manager.
+[lifecycle_manager-17] [INFO] [1790559746.245214476] [lifecycle_manager_navigation]: Server bt_navigator connected with bond.
+[lifecycle_manager-17] [INFO] [1790559746.245281416] [lifecycle_manager_navigation]: [34m[1mActivating behavior_server[0m[0m
+[behavior_server-12] [INFO] [1790559746.245659947] [behavior_server]: Activating
+[behavior_server-12] [INFO] [1790559746.245686601] [behavior_server]: Activating spin
+[behavior_server-12] [INFO] [1790559746.245695168] [behavior_server]: Activating backup
+[behavior_server-12] [INFO] [1790559746.245701583] [behavior_server]: Activating wait
+[behavior_server-12] [INFO] [1790559746.245711072] [behavior_server]: Creating bond (behavior_server) to lifecycle manager.
+[bt_navigator-11] [INFO] [1790559746.251634190] [bt_navigator]: Begin navigating from current location (-14.01, -8.16) to (10.00, -8.15)
+[controller_server-10] [INFO] [1790559746.283599882] [controller_server]: Received a goal, begin computing control effort.
+[controller_server-10] [WARN] [1790559746.283666861] [controller_server]: No goal checker was specified in parameter 'current_goal_checker'. Server will use only plugin loaded goal_checker . This warning will appear once.
+[controller_server-10] [WARN] [1790559746.283691523] [controller_server]: No progress checker was specified in parameter 'current_progress_checker'. Server will use only plugin loaded progress_checker . This warning will appear once.
+[parameter_bridge-2] [INFO] [1790559746.287592603] [ros_gz_bridge]: Passing message from ROS geometry_msgs/msg/Twist to Gazebo gz.msgs.Twist (showing msg only once per type)
+[lifecycle_manager-17] [INFO] [1790559746.354873604] [lifecycle_manager_navigation]: Server behavior_server connected with bond.
+[lifecycle_manager-17] [INFO] [1790559746.355056043] [lifecycle_manager_navigation]: [34m[1mActivating waypoint_follower[0m[0m
+[waypoint_follower-13] [INFO] [1790559746.356066333] [waypoint_follower]: Activating
+[waypoint_follower-13] [INFO] [1790559746.356171334] [waypoint_follower]: Creating bond (waypoint_follower) to lifecycle manager.
+[lifecycle_manager-17] [INFO] [1790559746.465970489] [lifecycle_manager_navigation]: Server waypoint_follower connected with bond.
+[lifecycle_manager-17] [INFO] [1790559746.466026438] [lifecycle_manager_navigation]: [34m[1mManaged nodes are active[0m[0m
+[lifecycle_manager-17] [INFO] [1790559746.466039635] [lifecycle_manager_navigation]: [34m[1mCreating bond timer...[0m[0m
+[python3-5] [INFO] [1790559746.789415761] [school_pose_sync_monitor]: Gazebo↔RViz pose error=0.016 m (gz=-13.98,-8.15; tf=-13.97,-8.15)
+[controller_server-10] [INFO] [1790559747.384099467] [controller_server]: Passing new path to controller.
+[controller_server-10] [INFO] [1790559748.384080113] [controller_server]: Passing new path to controller.
+[planner_server-9] [WARN] [1790559749.359914862] [planner_server]: GridBased plugin failed to plan from (-13.63, -8.06) to (10.00, -8.15): "no valid path found"
+[planner_server-9] [WARN] [1790559749.360012729] [planner_server]: [compute_path_to_pose] [ActionServer] Aborting handle.
+[planner_server-9] [INFO] [1790559749.372552554] [global_costmap.global_costmap]: Received request to clear entirely the global_costmap
+[planner_server-9] [WARN] [1790559749.576696233] [planner_server]: Planner loop missed its desired rate of 10.0000 Hz. Current loop rate is 5.2083 Hz
+[controller_server-10] [INFO] [1790559749.684759617] [controller_server]: Passing new path to controller.
+[controller_server-10] [INFO] [1790559750.684027477] [controller_server]: Passing new path to controller.
+[controller_server-10] [INFO] [1790559751.684085041] [controller_server]: Passing new path to controller.
+[python3-5] [INFO] [1790559751.793307182] [school_pose_sync_monitor]: Gazebo↔RViz pose error=0.082 m (gz=-13.14,-7.98; tf=-13.19,-8.04)
+[controller_server-10] [INFO] [1790559752.684090330] [controller_server]: Passing new path to controller.
+[controller_server-10] [INFO] [1790559753.784085388] [controller_server]: Passing new path to controller.
+[controller_server-10] [INFO] [1790559754.784151086] [controller_server]: Passing new path to controller.
+[controller_server-10] [INFO] [1790559755.784140433] [controller_server]: Passing new path to controller.
+[python3-5] [INFO] [1790559756.809029058] [school_pose_sync_monitor]: Gazebo↔RViz pose error=0.050 m (gz=-12.54,-7.89; tf=-12.56,-7.93)
+[controller_server-10] [INFO] [1790559756.884100274] [controller_server]: Passing new path to controller.
+[controller_server-10] [INFO] [1790559757.884141195] [controller_server]: Passing new path to controller.
+[controller_server-10] [INFO] [1790559758.884083878] [controller_server]: Passing new path to controller.
+[controller_server-10] [INFO] [1790559759.984083742] [controller_server]: Passing new path to controller.
+[controller_server-10] [INFO] [1790559760.384079423] [controller_server]: Cancellation was successful. Stopping the robot.
+[controller_server-10] [INFO] [1790559760.384138115] [controller_server]: [follow_path] [ActionServer] Client requested to cancel the goal. Cancelling.
+[bt_navigator-11] [INFO] [1790559760.384634231] [bt_navigator]: [navigate_to_pose] [ActionServer] Client requested to cancel the goal. Cancelling.
+[bt_navigator-11] [INFO] [1790559760.385003354] [bt_navigator]: Goal canceled
+[python3-5] [INFO] [1790559761.811475151] [school_pose_sync_monitor]: Gazebo↔RViz pose error=0.056 m (gz=-12.53,-7.88; tf=-12.56,-7.93)
+[WARNING] [launch]: user interrupted with ctrl-c (SIGINT)
+[INFO] [lifecycle_manager-17]: sending signal 'SIGINT' to process[lifecycle_manager-17]
+[INFO] [lifecycle_manager-16]: sending signal 'SIGINT' to process[lifecycle_manager-16]
+[INFO] [goal_pose_bridge.py-15]: sending signal 'SIGINT' to process[goal_pose_bridge.py-15]
+[INFO] [waypoint_follower-13]: sending signal 'SIGINT' to process[waypoint_follower-13]
+[INFO] [behavior_server-12]: sending signal 'SIGINT' to process[behavior_server-12]
+[INFO] [bt_navigator-11]: sending signal 'SIGINT' to process[bt_navigator-11]
+[INFO] [controller_server-10]: sending signal 'SIGINT' to process[controller_server-10]
+[INFO] [planner_server-9]: sending signal 'SIGINT' to process[planner_server-9]
+[INFO] [amcl-8]: sending signal 'SIGINT' to process[amcl-8]
+[INFO] [map_server-7]: sending signal 'SIGINT' to process[map_server-7]
+[INFO] [python3-5]: sending signal 'SIGINT' to process[python3-5]
+[INFO] [python3-4]: sending signal 'SIGINT' to process[python3-4]
+[INFO] [robot_state_publisher-3]: sending signal 'SIGINT' to process[robot_state_publisher-3]
+[ERROR] [amcl-8]: process has died [pid 59940, exit code -2, cmd '/opt/ros/jazzy/lib/nav2_amcl/amcl --ros-args -r __node:=amcl --params-file /home/haduckien/nav_ws/src/custom_corridor/worlds/school_arena/demo_1/dataset_v1.0/episodes/ep_000006/nav2_school.yaml --params-file /tmp/launch_params_84it2y5h'].
+[INFO] [parameter_bridge-2]: sending signal 'SIGINT' to process[parameter_bridge-2]
+[ERROR] [goal_pose_bridge.py-15]: process has died [pid 59947, exit code -2, cmd '/home/haduckien/nav_ws/install/custom_corridor/lib/custom_corridor/goal_pose_bridge.py --ros-args -r __node:=goal_pose_bridge --params-file /tmp/launch_params_6tflcxeq'].
+[ERROR] [map_server-7]: process has died [pid 59939, exit code -2, cmd '/opt/ros/jazzy/lib/nav2_map_server/map_server --ros-args -r __node:=map_server --params-file /home/haduckien/nav_ws/src/custom_corridor/worlds/school_arena/demo_1/dataset_v1.0/episodes/ep_000006/nav2_school.yaml --params-file /tmp/launch_params_k3mn7q8y'].
+[INFO] [gz-1]: sending signal 'SIGINT' to process[gz-1]
+[ERROR] [robot_state_publisher-3]: process has died [pid 59444, exit code -2, cmd '/opt/ros/jazzy/lib/robot_state_publisher/robot_state_publisher --ros-args --params-file /tmp/launch_params_488grwz4'].
+[amcl-8] [INFO] [1790559762.413049394] [rclcpp]: signal_handler(SIGINT/SIGTERM)
+[amcl-8] [INFO] [1790559762.413144881] [amcl]: Running Nav2 LifecycleNode rcl preshutdown (amcl)
+[amcl-8] [INFO] [1790559762.413203652] [amcl]: Deactivating
+[amcl-8] [INFO] [1790559762.413225044] [amcl]: Destroying bond (amcl) to lifecycle manager.
+[ERROR] [python3-5]: process has died [pid 59446, exit code -2, cmd 'python3 /home/haduckien/nav_ws/src/custom_corridor/worlds/school_arena/demo_1/pose_sync_monitor.py --ros-args -p use_sim_time:=true -p robot_name:=robot -p world_frame:=map -p initial_x:=-14.0 -p initial_y:=-8.15'].
+[waypoint_follower-13] [INFO] [1790559762.413049112] [rclcpp]: signal_handler(SIGINT/SIGTERM)
+[waypoint_follower-13] [INFO] [1790559762.413154872] [waypoint_follower]: Running Nav2 LifecycleNode rcl preshutdown (waypoint_follower)
+[waypoint_follower-13] [INFO] [1790559762.413202980] [waypoint_follower]: Deactivating
+[waypoint_follower-13] [INFO] [1790559762.413225585] [waypoint_follower]: Destroying bond (waypoint_follower) to lifecycle manager.
+[ERROR] [python3-4]: process has died [pid 59445, exit code -2, cmd 'python3 /home/haduckien/nav_ws/src/custom_corridor/worlds/school_arena/demo_1/collision_safe_pose_applier.py --ros-args -p use_sim_time:=true -p world_name:=school_arena -p target_topic:=/school_hunav/target_poses -p map_yaml:=/home/haduckien/nav_ws/src/custom_corridor/worlds/school_arena/demo_1/map.yaml -p agent_radius:=0.22 -p apply_hz:=20.0 -p ground_z:=0.0'].
+[map_server-7] [INFO] [1790559762.413049227] [rclcpp]: signal_handler(SIGINT/SIGTERM)
+[map_server-7] [INFO] [1790559762.413157969] [map_server]: Running Nav2 LifecycleNode rcl preshutdown (map_server)
+[map_server-7] [INFO] [1790559762.413208494] [map_server]: Deactivating
+[map_server-7] [INFO] [1790559762.413223460] [map_server]: Destroying bond (map_server) to lifecycle manager.
+[lifecycle_manager-16] [INFO] [1790559762.413051439] [rclcpp]: signal_handler(SIGINT/SIGTERM)
+[lifecycle_manager-16] [INFO] [1790559762.413160014] [lifecycle_manager_localization]: Running Nav2 LifecycleManager rcl preshutdown (lifecycle_manager_localization)
+[lifecycle_manager-16] [INFO] [1790559762.413203383] [lifecycle_manager_localization]: [34m[1mTerminating bond timer...[0m[0m
+[planner_server-9] [INFO] [1790559762.413052996] [rclcpp]: signal_handler(SIGINT/SIGTERM)
+[planner_server-9] [INFO] [1790559762.413130006] [planner_server]: Running Nav2 LifecycleNode rcl preshutdown (planner_server)
+[planner_server-9] [INFO] [1790559762.413203310] [planner_server]: Deactivating
+[planner_server-9] [INFO] [1790559762.413262162] [global_costmap.global_costmap]: Deactivating
+[controller_server-10] [INFO] [1790559762.413069845] [rclcpp]: signal_handler(SIGINT/SIGTERM)
+[controller_server-10] [INFO] [1790559762.413140103] [controller_server]: Running Nav2 LifecycleNode rcl preshutdown (controller_server)
+[controller_server-10] [INFO] [1790559762.413204569] [controller_server]: Deactivating
+[controller_server-10] [INFO] [1790559762.413265589] [local_costmap.local_costmap]: Deactivating
+[lifecycle_manager-17] [INFO] [1790559762.413307916] [rclcpp]: signal_handler(SIGINT/SIGTERM)
+[lifecycle_manager-17] [INFO] [1790559762.413398818] [lifecycle_manager_navigation]: Running Nav2 LifecycleManager rcl preshutdown (lifecycle_manager_navigation)
+[lifecycle_manager-17] [INFO] [1790559762.413442766] [lifecycle_manager_navigation]: [34m[1mTerminating bond timer...[0m[0m
+[bt_navigator-11] [INFO] [1790559762.413316447] [rclcpp]: signal_handler(SIGINT/SIGTERM)
+[bt_navigator-11] [INFO] [1790559762.413375021] [bt_navigator]: Running Nav2 LifecycleNode rcl preshutdown (bt_navigator)
+[bt_navigator-11] [INFO] [1790559762.413428913] [bt_navigator]: Deactivating
+[bt_navigator-11] [INFO] [1790559762.413461978] [bt_navigator]: Destroying bond (bt_navigator) to lifecycle manager.
+[bt_navigator-11] [INFO] [1790559762.424756274] [bt_navigator]: Cleaning up
+[behavior_server-12] [INFO] [1790559762.413493729] [rclcpp]: signal_handler(SIGINT/SIGTERM)
+[behavior_server-12] [INFO] [1790559762.413562358] [behavior_server]: Running Nav2 LifecycleNode rcl preshutdown (behavior_server)
+[behavior_server-12] [INFO] [1790559762.413605706] [behavior_server]: Deactivating
+[behavior_server-12] [INFO] [1790559762.413628914] [behavior_server]: Destroying bond (behavior_server) to lifecycle manager.
+[behavior_server-12] [INFO] [1790559762.424301660] [behavior_server]: Cleaning up
+[parameter_bridge-2] [INFO] [1790559762.413824987] [rclcpp]: signal_handler(SIGINT/SIGTERM)
+[robot_state_publisher-3] [INFO] [1790559762.418114384] [rclcpp]: signal_handler(SIGINT/SIGTERM)
+[map_server-7] [INFO] [1790559762.423833174] [map_server]: Cleaning up
+[map_server-7] [INFO] [1790559762.424463594] [map_server]: Destroying bond (map_server) to lifecycle manager.
+[amcl-8] [INFO] [1790559762.423835773] [amcl]: Cleaning up
+[waypoint_follower-13] [INFO] [1790559762.424535764] [waypoint_follower]: Cleaning up
+[behavior_server-12] [INFO] [1790559762.432081442] [behavior_server]: Destroying bond (behavior_server) to lifecycle manager.
+[amcl-8] [INFO] [1790559762.435018864] [amcl]: Destroying bond (amcl) to lifecycle manager.
+[map_server-7] [INFO] [1790559762.438091042] [map_server]: Destroying
+[amcl-8] [INFO] [1790559762.441906980] [amcl]: Destroying
+[lifecycle_manager-16] [INFO] [1790559762.442925774] [rclcpp]: signal_handler(SIGINT/SIGTERM)
+[lifecycle_manager-16] [INFO] [1790559762.445564132] [lifecycle_manager_localization]: Destroying lifecycle_manager_localization
+[behavior_server-12] [INFO] [1790559762.446063749] [rclcpp]: signal_handler(SIGINT/SIGTERM)
+[waypoint_follower-13] [INFO] [1790559762.453836620] [waypoint_follower]: Destroying bond (waypoint_follower) to lifecycle manager.
+[waypoint_follower-13] [INFO] [1790559762.454748999] [rclcpp]: signal_handler(SIGINT/SIGTERM)
+[waypoint_follower-13] [INFO] [1790559762.454963407] [waypoint_follower]: Destroying
+[behavior_server-12] [INFO] [1790559762.463471979] [behavior_server]: Destroying
+[parameter_bridge-2] [INFO] [1790559762.470586261] [rclcpp]: signal_handler(SIGINT/SIGTERM)
+[lifecycle_manager-17] [INFO] [1790559762.482052445] [rclcpp]: signal_handler(SIGINT/SIGTERM)
+[lifecycle_manager-17] [INFO] [1790559762.483432011] [lifecycle_manager_navigation]: Destroying lifecycle_manager_navigation
+[bt_navigator-11] [INFO] [1790559762.499418055] [bt_navigator]: Completed Cleaning up
+[bt_navigator-11] [INFO] [1790559762.499471253] [bt_navigator]: Destroying bond (bt_navigator) to lifecycle manager.
+[bt_navigator-11] [INFO] [1790559762.500041182] [rclcpp]: signal_handler(SIGINT/SIGTERM)
+[bt_navigator-11] [INFO] [1790559762.505781873] [bt_navigator]: Destroying
+[controller_server-10] [INFO] [1790559762.519433769] [controller_server]: Destroying bond (controller_server) to lifecycle manager.
+[controller_server-10] [INFO] [1790559762.529622642] [controller_server]: Cleaning up
+[controller_server-10] [INFO] [1790559762.529769433] [local_costmap.local_costmap]: Cleaning up
+[controller_server-10] [INFO] [1790559762.536457519] [controller_server]: Destroying bond (controller_server) to lifecycle manager.
+[controller_server-10] [INFO] [1790559762.538554510] [rclcpp]: signal_handler(SIGINT/SIGTERM)
+[controller_server-10] [INFO] [1790559762.542489324] [local_costmap.local_costmap]: Destroying
+[INFO] [parameter_bridge-2]: process has finished cleanly [pid 59443]
+[controller_server-10] [INFO] [1790559762.546183797] [controller_server]: Destroying
+[planner_server-9] [INFO] [1790559762.556529939] [planner_server]: Deactivating plugin GridBased of type SmacPlanner2D
+[planner_server-9] [INFO] [1790559762.556581167] [planner_server]: Destroying bond (planner_server) to lifecycle manager.
+[planner_server-9] [INFO] [1790559762.566830332] [planner_server]: Cleaning up
+[planner_server-9] [INFO] [1790559762.571066028] [global_costmap.global_costmap]: Cleaning up
+[INFO] [lifecycle_manager-16]: process has finished cleanly [pid 60117]
+[planner_server-9] [INFO] [1790559762.574781180] [planner_server]: Cleaning up plugin GridBased of type SmacPlanner2D
+[planner_server-9] [INFO] [1790559762.575188677] [planner_server]: Destroying plugin GridBased of type SmacPlanner2D
+[INFO] [waypoint_follower-13]: process has finished cleanly [pid 59945]
+[planner_server-9] [INFO] [1790559762.579857511] [planner_server]: Destroying bond (planner_server) to lifecycle manager.
+[planner_server-9] [INFO] [1790559762.580831905] [rclcpp]: signal_handler(SIGINT/SIGTERM)
+[INFO] [behavior_server-12]: process has finished cleanly [pid 59944]
+[planner_server-9] [INFO] [1790559762.582386029] [global_costmap.global_costmap]: Destroying
+[planner_server-9] [INFO] [1790559762.585682688] [planner_server]: Destroying
+[INFO] [lifecycle_manager-17]: process has finished cleanly [pid 60159]
+[INFO] [bt_navigator-11]: process has finished cleanly [pid 59943]
+[INFO] [controller_server-10]: process has finished cleanly [pid 59942]
+[INFO] [planner_server-9]: process has finished cleanly [pid 59941]
+[INFO] [gz-1]: process has finished cleanly [pid 59442]

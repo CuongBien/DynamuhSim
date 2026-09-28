@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+import math
 from pathlib import Path
 from typing import Any
 
@@ -99,6 +100,13 @@ def load_inputs(config_path: Path) -> Inputs:
             raise ConfigError(f"Invalid behavior probability {name}={prob}")
     if abs(sum(cfg["behavior_probability"].values()) - 1.0) > 1e-8:
         raise ConfigError("Behavior probabilities must sum to 1")
+    weights = cfg.get("scenario_weights")
+    if (not isinstance(weights, dict) or not weights
+            or any(not isinstance(name, str) or not isinstance(weight, (int, float))
+                   or isinstance(weight, bool) or weight < 0 or not math.isfinite(weight)
+                   for name, weight in weights.items())
+            or sum(weights.values()) <= 0):
+        raise ConfigError("Invalid scenario_weights")
     for label, item in cfg["density"].items():
         _interval(item["background_humans"], f"density.{label}")
         if any(int(v) != v for v in item["background_humans"]):

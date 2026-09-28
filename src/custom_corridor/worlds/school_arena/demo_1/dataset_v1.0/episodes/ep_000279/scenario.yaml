@@ -1,0 +1,143 @@
+dataset_version: v1.0
+seed: 90792683
+scenario_family: waiting_person
+density: medium
+map: school_floor_01
+robot:
+  start_zone: corridor_f
+  goal_zone: corridor_f
+  start_node: corridor_f_before_upper_bin
+  goal_node: corridor_f_upper
+  start_pose:
+    x: 15.0
+    y: 9.8
+    heading: 1.570796
+  route:
+  - corridor_f_before_upper_bin
+  - corridor_f_after_upper_bin
+  - corridor_f_upper
+  heading: 1.570796
+event:
+  room: room15
+  doorway: room15_door
+  corridor: corridor_f
+  waiting_node: room15_predoor
+  wait_duration_sec: 13.8893
+humans:
+- name: event_agent_1
+  role: event_agent
+  start_node: room15_predoor
+  goal_node: corridor_f_upper
+  route:
+  - room15_predoor
+  - room15_door
+  - room15_approach
+  - corridor_f_after_upper_bin
+  - corridor_f_upper
+  spawn:
+    x: 14.1
+    y: 10.71
+    heading: 0.0
+  speed: 0.9268
+  start_delay: 13.8893
+  lateral_offset: 0.0
+  behavior: regular
+  group_id: -1
+- name: background_agent_1
+  role: background_agent
+  start_node: room04_center
+  goal_node: room10_center
+  route:
+  - room04_center
+  - room04_predoor
+  - room04_door
+  - room04_approach
+  - corridor_a_3
+  - room10_approach
+  - room10_door
+  - room10_predoor
+  - room10_center
+  spawn:
+    x: 2.15
+    y: -10.6
+    heading: 2.093735
+  speed: 0.6929
+  start_delay: 4.716
+  lateral_offset: 0.0
+  behavior: impassive
+  group_id: -1
+- name: background_agent_2
+  role: background_agent
+  start_node: room08_center
+  goal_node: room15_center
+  route:
+  - room08_center
+  - room08_predoor
+  - room08_door
+  - room08_approach
+  - corridor_a_1
+  - corridor_a_2
+  - corridor_a_backpack_south
+  - corridor_a_3
+  - corridor_a_locker_south
+  - corridor_a_4
+  - corridor_a_5
+  - junction_ab
+  - junction_bc
+  - junction_cd
+  - stair_entrance
+  - junction_de
+  - junction_ef
+  - corridor_f_lower_before_bin
+  - corridor_f_lower_after_bin
+  - corridor_f_mid
+  - corridor_f_before_upper_bin
+  - corridor_f_after_upper_bin
+  - room15_approach
+  - room15_door
+  - room15_predoor
+  - room15_center
+  spawn:
+    x: -7.65
+    y: -5.4
+    heading: -2.093735
+  speed: 0.6984
+  start_delay: 3.6352
+  lateral_offset: 0.0
+  behavior: regular
+  group_id: -1
+- name: background_agent_3
+  role: background_agent
+  start_node: room15_center
+  goal_node: room05_center
+  route:
+  - room15_center
+  - room15_predoor
+  - room15_door
+  - room15_approach
+  - corridor_f_after_upper_bin
+  - corridor_f_before_upper_bin
+  - corridor_f_mid
+  - corridor_f_lower_after_bin
+  - corridor_f_lower_before_bin
+  - junction_ef
+  - junction_de
+  - stair_entrance
+  - junction_cd
+  - junction_bc
+  - junction_ab
+  - corridor_a_5
+  - corridor_a_4
+  - room05_approach
+  - room05_door
+  - room05_predoor
+  - room05_center
+  spawn:
+    x: 12.4
+    y: 11.65
+    heading: -0.505099
+  speed: 0.5928
+  start_delay: 3.631
+  lateral_offset: 0.0
+  behavior: regular
+  group_id: -1

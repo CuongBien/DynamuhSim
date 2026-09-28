@@ -54,7 +54,10 @@ def launch_setup(context, *args, **kwargs):
         executable="amcl",
         name="amcl",
         output="screen",
-        parameters=[nav2_params, {"set_initial_pose": False}] if episode_mode else [nav2_params],
+        # The school laser scans at 5 Hz. AMCL's 0.1 s episode YAML value
+        # expires between scans; post-date map->odom beyond one scan period.
+        parameters=[nav2_params, {"set_initial_pose": False, "transform_tolerance": 0.5}]
+        if episode_mode else [nav2_params],
     )
 
     planner_server = Node(

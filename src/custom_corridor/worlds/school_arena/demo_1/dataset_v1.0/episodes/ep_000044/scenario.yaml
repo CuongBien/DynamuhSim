@@ -1,0 +1,88 @@
+dataset_version: v1.0
+seed: 226984004
+scenario_family: head_on
+density: low
+map: school_floor_01
+robot:
+  start_zone: corridor_f
+  goal_zone: corridor_f
+  start_node: corridor_f_before_upper_bin
+  goal_node: corridor_f_lower_before_bin
+  start_pose:
+    x: 15.0
+    y: 9.8
+    heading: -1.570796
+  route:
+  - corridor_f_before_upper_bin
+  - corridor_f_mid
+  - corridor_f_lower_after_bin
+  - corridor_f_lower_before_bin
+  heading: -1.570796
+event:
+  corridor: corridor_f
+humans:
+- name: event_agent_1
+  role: event_agent
+  start_node: corridor_f_lower_before_bin
+  goal_node: corridor_f_before_upper_bin
+  route:
+  - corridor_f_lower_before_bin
+  - corridor_f_lower_after_bin
+  - corridor_f_mid
+  - corridor_f_before_upper_bin
+  spawn:
+    x: 14.96221
+    y: 2.55
+    heading: 1.570796
+  speed: 0.9562
+  start_delay: 1.4742
+  lateral_offset: 0.03779
+  behavior: regular
+  group_id: -1
+- name: background_agent_1
+  role: background_agent
+  start_node: room06_center
+  goal_node: room05_center
+  route:
+  - room06_center
+  - room06_predoor
+  - room06_door
+  - room06_approach
+  - corridor_a_5
+  - corridor_a_4
+  - room05_approach
+  - room05_door
+  - room05_predoor
+  - room05_center
+  spawn:
+    x: 11.95
+    y: -10.6
+    heading: 2.093735
+  speed: 0.7652
+  start_delay: 0.6914
+  lateral_offset: 0.0
+  behavior: surprised
+  group_id: -1
+- name: background_agent_2
+  role: background_agent
+  start_node: room08_center
+  goal_node: room02_center
+  route:
+  - room08_center
+  - room08_predoor
+  - room08_door
+  - room08_approach
+  - corridor_a_1
+  - room02_approach
+  - room02_door
+  - room02_predoor
+  - room02_center
+  spawn:
+    x: -7.65
+    y: -5.4
+    heading: -2.093735
+  speed: 0.7662
+  start_delay: 2.7619
+  lateral_offset: 0.0
+  behavior: impassive
+  group_id: -1

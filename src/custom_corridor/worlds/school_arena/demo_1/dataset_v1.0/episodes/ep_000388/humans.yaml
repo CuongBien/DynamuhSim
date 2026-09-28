@@ -1,0 +1,134 @@
+hunav_loader:
+  ros__parameters:
+    yaml_base_name: scenario_narrow_passing_low_2121476861
+    simulator: Gazebo Fortress
+    map: school_arena
+    publish_people: true
+    global_goals:
+      1:
+        x: -10.0
+        y: -7.85
+      2:
+        x: -14.0
+        y: -8.15
+      3:
+        x: 6.07
+        y: -8.9
+      4:
+        x: 6.07
+        y: -8.6
+      5:
+        x: 6.07
+        y: -8.15
+      6:
+        x: 5.0
+        y: -8.15
+      7:
+        x: 10.0
+        y: -8.15
+      8:
+        x: 15.0
+        y: -8.15
+      9:
+        x: 15.0
+        y: -4.0
+      10:
+        x: 7.0
+        y: -4.0
+      11:
+        x: 7.0
+        y: -2.0
+      12:
+        x: 7.0
+        y: 0.0
+      13:
+        x: 15.0
+        y: 0.0
+      14:
+        x: 15.0
+        y: 2.55
+      15:
+        x: 15.0
+        y: 3.5
+      16:
+        x: 15.0
+        y: 8.0
+      17:
+        x: 15.0
+        y: 6.4067
+      18:
+        x: 15.6
+        y: 6.4067
+      19:
+        x: 15.9
+        y: 6.4067
+      20:
+        x: 17.6
+        y: 7.3
+    agents:
+    - event_agent_1
+    - background_agent_1
+    event_agent_1:
+      id: 1
+      group_id: -1
+      skin: 0
+      max_vel: 0.9897
+      radius: 0.22
+      goal_radius: 0.25
+      cyclic_goals: false
+      init_pose:
+        x: -4.99667
+        y: -8.09445
+        z: 0.0
+        h: 3.081664
+      behavior:
+        type: Regular
+        configuration: 0
+        goal_force_factor: 2.0
+        obstacle_force_factor: 10.0
+        social_force_factor: 5.0
+        other_force_factor: 20.0
+      goals:
+      - 1
+      - 2
+      start_delay: 0.6349
+    background_agent_1:
+      id: 2
+      group_id: -1
+      skin: 1
+      max_vel: 0.8747
+      radius: 0.22
+      goal_radius: 0.25
+      cyclic_goals: false
+      init_pose:
+        x: 7.05
+        y: -10.6
+        z: 0.0
+        h: 2.093735
+      behavior:
+        type: Regular
+        configuration: 0
+        goal_force_factor: 2.0
+        obstacle_force_factor: 10.0
+        social_force_factor: 5.0
+        other_force_factor: 20.0
+      goals:
+      - 3
+      - 4
+      - 5
+      - 6
+      - 7
+      - 8
+      - 9
+      - 10
+      - 11
+      - 12
+      - 13
+      - 14
+      - 15
+      - 16
+      - 17
+      - 18
+      - 19
+      - 20
+      start_delay: 1.3086

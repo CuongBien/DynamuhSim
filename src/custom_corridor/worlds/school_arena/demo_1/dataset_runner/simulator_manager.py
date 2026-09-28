@@ -11,6 +11,7 @@ import os
 import signal
 import subprocess
 import time
+import xml.etree.ElementTree as ET
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Callable
@@ -188,18 +189,69 @@ class SimulatorManager:
             self.episode_id = None
             self._launch_time = None
 
+    def _contact_world(self, context: EpisodeContext, source: Path) -> Path:
+        """Stage a runtime world with Gazebo's verified Contact system plugin."""
+        try:
+            tree = ET.parse(source)
+            world = tree.getroot().find("world")
+            if world is None:
+                raise ValueError("SDF has no world element")
+            if not any(p.get("name") == "gz::sim::systems::Contact"
+                       for p in world.findall("plugin")):
+                plugin = ET.Element("plugin", {
+                    "filename": "gz-sim-contact-system",
+                    "name": "gz::sim::systems::Contact",
+                })
+                physics_plugin = next((i for i, element in enumerate(world)
+                                       if element.tag == "plugin" and element.get("name") == "gz::sim::systems::Physics"), -1)
+                world.insert(physics_plugin + 1, plugin)
+            # Load the same robot SDF in the staged world at the generated
+            # start pose. Initial-world contact sensors are advertised by the
+            # Gazebo Contact system; dynamically spawned ones are not here.
+            robot_sdf = Path(__file__).resolve().parents[1] / "demo_robot.sdf"
+            robot = ET.parse(robot_sdf).getroot().find("model")
+            if robot is None:
+                raise ValueError(f"Robot SDF has no model: {robot_sdf}")
+            if any(m.get("name") == "robot" for m in world.findall("model")):
+                raise ValueError("Episode world already contains robot model")
+            robot.set("name", "robot")
+            pose = robot.find("pose")
+            if pose is None:
+                pose = ET.SubElement(robot, "pose")
+            pose.text = (f"{context.start_pose.x} {context.start_pose.y} 0.01 "
+                         f"0 0 {context.start_pose.heading}")
+            world.append(robot)
+            output_dir = self.log_dir or context.episode_dir.parent / "logs"
+            output_dir.mkdir(parents=True, exist_ok=True)
+            staged = output_dir / f"{context.episode_id}.contact.world"
+            tree.write(staged, encoding="utf-8", xml_declaration=True)
+            return staged
+        except (OSError, ET.ParseError, ValueError) as exc:
+            raise SimulatorError("launch_failed", f"Cannot prepare contact world {source}: {exc}") from exc
+
+    def check_health(self, context: EpisodeContext) -> None:
+        if self.process is None or self.episode_id != context.episode_id:
+            raise SimulatorError("simulator_process_exited", "no owned runtime for episode")
+        code = self.process.poll()
+        if code is not None:
+            raise SimulatorError("simulator_process_exited", f"launch exited with code {code}")
+        if self.pgid is None or not self._group_alive(self.pgid):
+            raise SimulatorError("simulator_process_exited", "owned process group exited")
+
     def _command(self, context: EpisodeContext) -> list[str]:
-        world = context.episode_dir / "school_floor.world"
+        source_world = context.episode_dir / "school_floor.world"
         nav_params = context.episode_dir / "nav2_school.yaml"
-        for path in (self.launch_file, world, nav_params):
+        for path in (self.launch_file, source_world, nav_params):
             if not path.is_file():
                 raise SimulatorError("launch_failed", f"Missing launch input: {path}")
+        world = self._contact_world(context, source_world)
         pose = context.start_pose
         return [
             "ros2", "launch", str(self.launch_file),
             f"episode_world:={world}", f"nav_params_file:={nav_params}",
             f"robot_x:={pose.x}", f"robot_y:={pose.y}",
             f"robot_yaw:={pose.heading}",
+            "robot_in_world:=true",
             f"gui:={str(self.config.gui).lower()}",
             f"rviz:={str(self.config.rviz).lower()}",
         ]

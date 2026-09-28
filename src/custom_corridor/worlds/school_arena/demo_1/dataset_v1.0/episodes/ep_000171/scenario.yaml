@@ -1,0 +1,76 @@
+dataset_version: v1.0
+seed: 1651707234
+scenario_family: diverge
+density: low
+map: school_floor_01
+robot:
+  start_zone: corridor_f
+  goal_zone: corridor_f
+  start_node: corridor_f_mid
+  goal_node: corridor_f_north
+  start_pose:
+    x: 15.0
+    y: 8.0
+    heading: 1.570796
+  route:
+  - corridor_f_mid
+  - corridor_f_before_upper_bin
+  - corridor_f_after_upper_bin
+  - corridor_f_upper
+  - corridor_f_north
+  heading: 1.570796
+event:
+  room: room15
+  doorway: room15_door
+  corridor: corridor_f
+  diverge_node: corridor_f_after_upper_bin
+  shared_upstream:
+  - corridor_f_before_upper_bin
+  - corridor_f_after_upper_bin
+humans:
+- name: event_agent_1
+  role: event_agent
+  start_node: corridor_f_before_upper_bin
+  goal_node: room15_center
+  route:
+  - corridor_f_before_upper_bin
+  - corridor_f_after_upper_bin
+  - room15_approach
+  - room15_door
+  - room15_predoor
+  - room15_center
+  spawn:
+    x: 15.0
+    y: 9.8
+    heading: 1.570796
+  speed: 0.343
+  start_delay: 0.135
+  lateral_offset: 0.0
+  behavior: regular
+  group_id: -1
+- name: background_agent_1
+  role: background_agent
+  start_node: room06_center
+  goal_node: room04_center
+  route:
+  - room06_center
+  - room06_predoor
+  - room06_door
+  - room06_approach
+  - corridor_a_5
+  - corridor_a_4
+  - corridor_a_locker_south
+  - corridor_a_3
+  - room04_approach
+  - room04_door
+  - room04_predoor
+  - room04_center
+  spawn:
+    x: 11.95
+    y: -10.6
+    heading: 2.093735
+  speed: 0.6673
+  start_delay: 3.4989
+  lateral_offset: 0.0
+  behavior: regular
+  group_id: -1
