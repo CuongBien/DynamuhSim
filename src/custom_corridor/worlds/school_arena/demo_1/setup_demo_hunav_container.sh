@@ -17,5 +17,7 @@ docker cp "$PARENT/school_hunav_bt/BTRegularNav.xml" "$CONTAINER:$BT/"
 docker cp "$PARENT/school_hunav_bt/BTSchoolInteractive.xml" "$CONTAINER:$BT/"
 docker cp "$PARENT/hunav_gz8_school_bridge.py" "$CONTAINER:$RUNTIME/"
 docker cp "$HERE/school_floor.world" "$CONTAINER:$RUNTIME/demo_1_school_floor.world"
+docker cp "$HERE/run_hunav_inside.sh" "$CONTAINER:$RUNTIME/"
+docker exec "$CONTAINER" chmod +x "$RUNTIME/run_hunav_inside.sh"
 echo "Installed demo_1 HuNav scenarios into $CONTAINER"
 
