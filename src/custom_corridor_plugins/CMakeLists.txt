@@ -38,6 +38,21 @@ install(TARGETS multi_human_scenario_system
   LIBRARY DESTINATION lib
 )
 
+add_library(hospital_yielding_system SHARED
+  src/hospital_yielding_system.cc
+)
+
+target_compile_features(hospital_yielding_system PRIVATE cxx_std_17)
+
+target_link_libraries(hospital_yielding_system PRIVATE
+  gz-sim8::gz-sim8
+  gz-plugin2::gz-plugin2
+)
+
+install(TARGETS hospital_yielding_system
+  LIBRARY DESTINATION lib
+)
+
 ament_environment_hooks()
 
 ament_package()
