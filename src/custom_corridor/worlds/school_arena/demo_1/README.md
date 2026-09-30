@@ -32,6 +32,8 @@ Các file hỗ trợ:
 - `hunav_one_human.yaml`: một người Room01 → corridor → Room10.
 - `hunav_social_test.yaml`: thêm người đi ngang để quan sát human-human force.
 - `setup_demo_hunav_container.sh`: cài scenario/BT/bridge vào Docker.
+- `start_hunav_agents.sh`: khởi chạy toàn bộ ngăn xếp HuNav tự động qua Docker với 1 lệnh.
+- `JOB_DONE_REPORT.md`: tài liệu tổng kết tối ưu CPU/RAM, sửa lỗi DDS/Entity Tree và vận hành chuẩn.
 
 ## 1. Sinh lại world, map, zones và graph
 
