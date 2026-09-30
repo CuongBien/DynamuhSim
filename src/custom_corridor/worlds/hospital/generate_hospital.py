@@ -32,6 +32,7 @@ Hospital Easy layout
 - Low walls for easy visualization in Gazebo
 """
 
+import argparse
 from pathlib import Path
 
 
@@ -577,7 +578,7 @@ def generate_doors():
 # BENCHES
 # ============================================================
 
-def generate_benches():
+def generate_benches(solid_base=False):
     """
     Generate waiting benches beside each room entrance.
 
@@ -662,29 +663,43 @@ def generate_benches():
             color="0.10 0.25 0.55 1.0",
         )
 
-        # Left leg
-        result += box_model(
-            name=f"{name_prefix}_leg_left",
-            x=x - BENCH_LENGTH * 0.35,
-            y=y,
-            z=leg_height / 2.0,
-            sx=0.10,
-            sy=0.10,
-            sz=leg_height,
-            color="0.35 0.35 0.35 1.0",
-        )
+        if solid_base:
+            # From z=0 to the underside of the seat (0.36 m). The robot's
+            # horizontal LiDAR at z~=0.17 m now sees a continuous obstacle.
+            base_height = BENCH_HEIGHT - seat_thickness / 2.0
+            result += box_model(
+                name=f"{name_prefix}_base",
+                x=x,
+                y=y,
+                z=base_height / 2.0,
+                sx=BENCH_LENGTH,
+                sy=BENCH_WIDTH,
+                sz=base_height,
+                color="0.18 0.23 0.33 1.0",
+            )
+        else:
+            # Keep the original two-legged bench in Hospital Easy.
+            result += box_model(
+                name=f"{name_prefix}_leg_left",
+                x=x - BENCH_LENGTH * 0.35,
+                y=y,
+                z=leg_height / 2.0,
+                sx=0.10,
+                sy=0.10,
+                sz=leg_height,
+                color="0.35 0.35 0.35 1.0",
+            )
 
-        # Right leg
-        result += box_model(
-            name=f"{name_prefix}_leg_right",
-            x=x + BENCH_LENGTH * 0.35,
-            y=y,
-            z=leg_height / 2.0,
-            sx=0.10,
-            sy=0.10,
-            sz=leg_height,
-            color="0.35 0.35 0.35 1.0",
-        )
+            result += box_model(
+                name=f"{name_prefix}_leg_right",
+                x=x + BENCH_LENGTH * 0.35,
+                y=y,
+                z=leg_height / 2.0,
+                sx=0.10,
+                sy=0.10,
+                sz=leg_height,
+                color="0.35 0.35 0.35 1.0",
+            )
 
         return result
 
@@ -1156,7 +1171,245 @@ def generate_third_walking_human():
 # WORLD GENERATION
 # ============================================================
 
-def generate_world():
+def generate_medium_single_walker():
+    """Walker 1 takes the opposite lane through the trolley route.
+
+    Planned avoidance: transition before entering the cart's swept region.
+    This is not perception-driven social avoidance.
+    """
+    points = [(0, -10, 0, 3.14159), (8, -16, 0, 3.14159),
+              (10, -17, -1.3, 3.14159), (22, -26, -1.3, 3.14159),
+              (24, -26, -1.3, 0), (36, -17, -1.3, 0),
+              (38, -16, 0, 0), (46, -10, 0, 0),
+              (48, -10, 0, 3.14159)]
+    waypoints = "".join(f"<waypoint><time>{time}</time><pose>{x} {y} 1 0 0 {yaw}</pose></waypoint>"
+                        for time, x, y, yaw in points)
+    return f"""
+    <actor name="medium_walker_01">
+      <skin><filename>model://human/meshes/walk.dae</filename><scale>1</scale></skin>
+      <animation name="walk"><filename>model://human/meshes/walk.dae</filename><interpolate_x>true</interpolate_x></animation>
+      <script><loop>true</loop><delay_start>0</delay_start><auto_start>true</auto_start>
+        <trajectory id="0" type="walk" tension="0">{waypoints}</trajectory>
+      </script>
+    </actor>
+"""
+
+
+def generate_medium_head_on_walker():
+    """Medium actor 2: walk westward on the corridor and return."""
+    return """
+    <actor name="medium_walker_02_head_on">
+      <skin>
+        <filename>model://human/meshes/walk.dae</filename>
+        <scale>1.0</scale>
+      </skin>
+      <animation name="walk">
+        <filename>model://human/meshes/walk.dae</filename>
+        <interpolate_x>true</interpolate_x>
+      </animation>
+      <script>
+        <loop>true</loop>
+        <delay_start>0.0</delay_start>
+        <auto_start>true</auto_start>
+        <trajectory id="0" type="walk" tension="0.0">
+          <waypoint><time>0.0</time><pose>8.0 0.0 1.0 0 0 3.14159</pose></waypoint>
+          <waypoint><time>8.0</time><pose>2.0 0.0 1.0 0 0 3.14159</pose></waypoint>
+          <waypoint><time>10.0</time><pose>2.0 0.0 1.0 0 0 0</pose></waypoint>
+          <waypoint><time>18.0</time><pose>8.0 0.0 1.0 0 0 0</pose></waypoint>
+          <waypoint><time>20.0</time><pose>8.0 0.0 1.0 0 0 3.14159</pose></waypoint>
+        </trajectory>
+      </script>
+    </actor>
+"""
+
+
+def generate_medium_room_crossing_walker():
+    """Medium actor 3: cross the corridor through south/north room 5 doors."""
+    room_x = room_centers()[4]
+    waypoints = [
+        (0.0, -4.0, 1.57080),
+        (2.0, -4.0, 1.57080),
+        (10.0, 2.0, 1.57080),
+        (12.0, 4.0, 1.57080),
+        (14.0, 4.0, -1.57080),
+        (24.0, -4.0, -1.57080),
+        (26.0, -4.0, 1.57080),
+    ]
+    waypoint_xml = "\n".join(
+        f"<waypoint><time>{t:.1f}</time>"
+        f"<pose>{room_x:.3f} {y:.3f} 1.0 0 0 {yaw:.5f}</pose></waypoint>"
+        for t, y, yaw in waypoints
+    )
+    return f"""
+    <actor name="medium_walker_03_room_crossing">
+      <skin>
+        <filename>model://human/meshes/walk.dae</filename>
+        <scale>1.0</scale>
+      </skin>
+      <animation name="walk">
+        <filename>model://human/meshes/walk.dae</filename>
+        <interpolate_x>true</interpolate_x>
+      </animation>
+      <script>
+        <loop>true</loop>
+        <delay_start>0.0</delay_start>
+        <auto_start>true</auto_start>
+        <trajectory id="0" type="walk" tension="0.0">
+          {waypoint_xml}
+        </trajectory>
+      </script>
+    </actor>
+"""
+
+
+def generate_medium_same_direction_walker():
+    """Medium actor 4: an eastbound pedestrian in a separate corridor segment."""
+    return """
+    <actor name="medium_walker_04_same_direction">
+      <skin>
+        <filename>model://human/meshes/walk.dae</filename>
+        <scale>1.0</scale>
+      </skin>
+      <animation name="walk">
+        <filename>model://human/meshes/walk.dae</filename>
+        <interpolate_x>true</interpolate_x>
+      </animation>
+      <script>
+        <loop>true</loop>
+        <delay_start>0.0</delay_start>
+        <auto_start>true</auto_start>
+        <trajectory id="0" type="walk" tension="0.0">
+          <waypoint><time>0.0</time><pose>11.0 0.0 1.0 0 0 0</pose></waypoint>
+          <waypoint><time>8.0</time><pose>17.0 0.0 1.0 0 0 0</pose></waypoint>
+          <waypoint><time>10.0</time><pose>17.0 0.0 1.0 0 0 3.14159</pose></waypoint>
+          <waypoint><time>18.0</time><pose>11.0 0.0 1.0 0 0 3.14159</pose></waypoint>
+          <waypoint><time>20.0</time><pose>11.0 0.0 1.0 0 0 0</pose></waypoint>
+        </trajectory>
+      </script>
+    </actor>
+"""
+
+
+def generate_medium_wait_then_cross_walker():
+    """Medium actor 5: wait in south room 9, then cross to north room 9."""
+    room_x = room_centers()[8]
+    waypoints = [
+        (0.0, -4.0, 1.57080),
+        (8.0, -4.0, 1.57080),
+        (12.0, -1.0, 1.57080),
+        (16.0, 2.0, 1.57080),
+        (18.7, 4.0, 1.57080),
+        (20.7, 4.0, -1.57080),
+        (31.4, -4.0, -1.57080),
+        (33.4, -4.0, 1.57080),
+    ]
+    waypoint_xml = "\n".join(
+        f"<waypoint><time>{t:.1f}</time>"
+        f"<pose>{room_x:.3f} {y:.3f} 1.0 0 0 {yaw:.5f}</pose></waypoint>"
+        for t, y, yaw in waypoints
+    )
+    return f"""
+    <actor name="medium_walker_05_wait_then_cross">
+      <skin>
+        <filename>model://human/meshes/walk.dae</filename>
+        <scale>1.0</scale>
+      </skin>
+      <animation name="walk">
+        <filename>model://human/meshes/walk.dae</filename>
+        <interpolate_x>true</interpolate_x>
+      </animation>
+      <script>
+        <loop>true</loop>
+        <delay_start>0.0</delay_start>
+        <auto_start>true</auto_start>
+        <trajectory id="0" type="walk" tension="0.0">
+          {waypoint_xml}
+        </trajectory>
+      </script>
+    </actor>
+"""
+
+
+def generate_medium_trolley_pusher():
+    """New human and rigid three-shelf cart with identical timed trajectories.
+
+    Visual scripted motion only, as with the other Medium walking actors.
+    Cart geometry is offset ahead of its actor origin; the root stays level.
+    """
+    waypoints = [(0, -24, 0), (12, -18, 0), (16, -18, 3.14159),
+                 (28, -24, 3.14159), (32, -24, 0)]
+    result = ""
+    for name, mesh in [("medium_walker_06_trolley_pusher", "push_trolley.dae"),
+                       ("medium_trolley_06", "trolley.dae")]:
+        points = "".join(f"<waypoint><time>{t}</time><pose>{x} 0.6 1 0 0 {yaw}</pose></waypoint>"
+                         for t, x, yaw in waypoints)
+        result += f"""
+    <actor name="{name}">
+      <skin><filename>model://human/meshes/{mesh}</filename><scale>1</scale></skin>
+      <animation name="push"><filename>model://human/meshes/{mesh}</filename><interpolate_x>false</interpolate_x></animation>
+      <script><loop>true</loop><delay_start>0</delay_start><auto_start>true</auto_start>
+        <trajectory id="0" type="push" tension="0">{points}</trajectory>
+      </script>
+    </actor>
+"""
+    return result
+
+
+def generate_medium_yielding_walker():
+    """Actor 7 is driven by a Medium-only reactive robot-yielding plugin."""
+    return """
+    <actor name="medium_walker_07_yielding">
+      <pose>0 0 0 0 0 0</pose>
+      <skin><filename>model://human/meshes/walk.dae</filename><scale>1</scale></skin>
+      <animation name="walk"><filename>model://human/meshes/walk.dae</filename><interpolate_x>false</interpolate_x></animation>
+      <script><loop>false</loop><delay_start>0</delay_start><auto_start>false</auto_start>
+        <trajectory id="0" type="walk" tension="0">
+          <waypoint><time>0</time><pose>0 -1.35 1 0 0 1.570796</pose></waypoint>
+          <waypoint><time>1</time><pose>0 -1.35 1 0 0 1.570796</pose></waypoint>
+        </trajectory>
+      </script>
+    </actor>
+    <plugin filename="libhospital_yielding_system.so" name="custom_corridor::HospitalYieldingSystem">
+      <robot_name>burger</robot_name>
+    </plugin>
+"""
+
+
+def generate_medium_standing_people():
+    """Three new Medium-only people at the right of selected entrances.
+
+    Right means the observer faces the room from the corridor. All positions
+    are in the corridor, with clearance to the doorway, benches and wall.
+    """
+    centers = room_centers()
+    placements = [
+        ("medium_standing_room_04_south", centers[3] - 1.0, -1.0, 0.0),
+        ("medium_standing_room_07_north", centers[6] + 1.0, 1.0, 3.14159),
+        ("medium_standing_room_08_south", centers[7] - 1.0, -1.0, 0.0),
+    ]
+    models = ""
+    for name, x, y, yaw in placements:
+        models += f"""
+    <model name="{name}">
+      <static>true</static>
+      <pose>{x:.3f} {y:.3f} 1.0 0 0 {yaw:.5f}</pose>
+      <link name="body">
+        <visual name="standing_person">
+          <geometry><mesh><uri>model://human/meshes/stand.dae</uri></mesh></geometry>
+        </visual>
+        <collision name="body_collision">
+          <pose>0 0 -0.15 0 0 0</pose>
+          <geometry><cylinder><radius>0.28</radius><length>1.70</length></cylinder></geometry>
+        </collision>
+      </link>
+    </model>
+"""
+    return models
+
+
+def generate_world(difficulty="easy"):
+    if difficulty not in ("easy", "medium"):
+        raise ValueError(f"Unsupported hospital difficulty: {difficulty}")
 
     models = ""
 
@@ -1174,20 +1427,32 @@ def generate_world():
 
     models += generate_doors()
 
-    models += generate_benches()
+    models += generate_benches(solid_base=difficulty == "medium")
 
-    models += generate_room_markers()
+    # The markers are solid boxes centered in the doorways. Keep the original
+    # Easy world unchanged, but leave every Medium doorway unobstructed.
+    if difficulty == "easy":
+        models += generate_room_markers()
 
-    models += generate_static_humans()
-
-    models += generate_walking_human()
-    models += generate_second_walking_human()
-    models += generate_third_walking_human()
+    if difficulty == "easy":
+        models += generate_static_humans()
+        models += generate_walking_human()
+        models += generate_second_walking_human()
+        models += generate_third_walking_human()
+    else:
+        models += generate_medium_single_walker()
+        models += generate_medium_head_on_walker()
+        models += generate_medium_room_crossing_walker()
+        models += generate_medium_same_direction_walker()
+        models += generate_medium_wait_then_cross_walker()
+        models += generate_medium_standing_people()
+        models += generate_medium_trolley_pusher()
+        models += generate_medium_yielding_walker()
     return f"""<?xml version="1.0" ?>
 
 <sdf version="1.9">
 
-  <world name="hospital_easy">
+  <world name="hospital_{difficulty}">
 
     <!-- ================================================== -->
     <!-- WORLD SETTINGS -->
@@ -1263,19 +1528,23 @@ def generate_world():
 # ============================================================
 
 def main():
+    parser = argparse.ArgumentParser(description="Generate a hospital Gazebo world")
+    parser.add_argument("--difficulty", choices=("easy", "medium"), default="easy")
+    args = parser.parse_args()
 
-    sdf_content = generate_world()
+    sdf_content = generate_world(args.difficulty)
+    output_file = OUTPUT_FILE.with_name(f"hospital_{args.difficulty}.sdf")
 
-    OUTPUT_FILE.write_text(
+    output_file.write_text(
         sdf_content,
         encoding="utf-8",
     )
 
     print()
     print("=" * 60)
-    print("Hospital Easy generated successfully")
+    print(f"Hospital {args.difficulty.capitalize()} generated successfully")
     print("=" * 60)
-    print(f"Output : {OUTPUT_FILE}")
+    print(f"Output : {output_file}")
     print()
     print("Layout:")
     print(f"  Rooms per side : {ROOM_COUNT_PER_SIDE}")
