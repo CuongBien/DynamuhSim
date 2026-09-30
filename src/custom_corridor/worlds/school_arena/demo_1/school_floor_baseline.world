@@ -2,7 +2,7 @@
 <sdf version="1.9">
   <world name="school_arena">
     <physics name="school_physics" type="ignored">
-      <max_step_size>0.001</max_step_size>
+      <max_step_size>0.004</max_step_size>
       <real_time_factor>1.0</real_time_factor>
     </physics>
     <plugin filename="gz-sim-physics-system" name="gz::sim::systems::Physics" />
@@ -14,9 +14,10 @@
     <scene>
       <ambient>0.75 0.75 0.78 1</ambient>
       <background>0.92 0.95 1.0 1</background>
-      <shadows>true</shadows>
+      <shadows>false</shadows>
     </scene>
     <light type="directional" name="sun">
+      <cast_shadows>false</cast_shadows>
       <pose>0 0 20 0 0 0</pose>
       <direction>-0.4 0.2 -1</direction>
       <diffuse>0.9 0.9 0.9 1</diffuse>
