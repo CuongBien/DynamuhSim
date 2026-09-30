@@ -22,12 +22,13 @@ def launch_setup(context):
 
     world_map = {
         "easy": "hospital_easy.sdf",
+        "medium": "hospital_medium.sdf",
     }
 
     if difficulty not in world_map:
         raise RuntimeError(
             f"Invalid difficulty '{difficulty}'. "
-            "Allowed values: easy, medium, hard"
+            "Allowed values: easy, medium"
         )
 
     # ---------------------------------------------------------
@@ -225,7 +226,7 @@ def generate_launch_description():
         "difficulty",
         default_value="easy",
         description=(
-            "Hospital difficulty: easy, medium, or hard"
+            "Hospital difficulty: easy or medium"
         ),
     )
 
