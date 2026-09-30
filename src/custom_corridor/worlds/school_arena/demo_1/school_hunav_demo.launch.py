@@ -173,7 +173,7 @@ def generate_launch_description():
         DeclareLaunchArgument("robot_x", default_value="-13.5"),
         DeclareLaunchArgument("robot_y", default_value="-8.15"),
         DeclareLaunchArgument("robot_yaw", default_value="0.0"),
-        DeclareLaunchArgument("robot_in_world", default_value="false"),
+        DeclareLaunchArgument("robot_in_world", default_value="true"),
         DeclareLaunchArgument("gui", default_value="true"),
         SetEnvironmentVariable("ROS_DOMAIN_ID", "0"),
         SetEnvironmentVariable("RMW_IMPLEMENTATION", "rmw_fastrtps_cpp"),
