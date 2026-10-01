@@ -14,7 +14,7 @@
     <plugin
         filename="libmulti_human_scenario_system.so"
         name="custom_corridor::MultiHumanScenarioSystem">
-      <human_count>4</human_count>
+      <human_count>24</human_count>
       <scenario_topic>/multi_human/scenario</scenario_topic>
       <command_topic>/multi_human/command</command_topic>
       <visual_z>1.0</visual_z>
@@ -23,6 +23,10 @@
       <animation_name>walk</animation_name>
       <use_actor_visuals>false</use_actor_visuals>
       <auto_start_on_scenario>false</auto_start_on_scenario>
+      <!-- Runtime static-obstacle guard for kinematic human proxies. -->
+      <human_radius>0.22</human_radius>
+      <safety_margin>0.05</safety_margin>
+      <collision_check_resolution>0.05</collision_check_resolution>
     </plugin>
 
     <!-- Scene and Physics Optimization -->
@@ -461,6 +465,1449 @@
 
     </model>
 <model name="human_04_proxy">
+
+      <pose>0 0 -50 0 0 0</pose>
+
+      <static>false</static>
+      <self_collide>false</self_collide>
+
+      <link name="body">
+
+        <gravity>false</gravity>
+
+        <kinematic>true</kinematic>
+
+        <collision name="collision">
+          <geometry>
+            <cylinder>
+              <radius>0.22</radius>
+              <length>1.70</length>
+            </cylinder>
+          </geometry>
+        </collision>
+
+        
+        <!-- V4 visible human marker: body + head + heading marker.
+             These visuals belong to the collision proxy itself, therefore
+             what Gazebo shows is exactly what LiDAR / physics use. -->
+        <visual name="body_visual">
+          <pose>0 0 -0.08 0 0 0</pose>
+          <geometry>
+            <cylinder>
+              <radius>0.20</radius>
+              <length>1.10</length>
+            </cylinder>
+          </geometry>
+          <material>
+            <ambient>0.65 0.35 0.80 1</ambient>
+            <diffuse>0.65 0.35 0.80 1</diffuse>
+          </material>
+        </visual>
+
+        <visual name="head_visual">
+          <pose>0 0 0.62 0 0 0</pose>
+          <geometry>
+            <sphere>
+              <radius>0.18</radius>
+            </sphere>
+          </geometry>
+          <material>
+            <ambient>0.95 0.75 0.58 1</ambient>
+            <diffuse>0.95 0.75 0.58 1</diffuse>
+          </material>
+        </visual>
+
+        <!-- Small forward marker so heading is visible in Gazebo.
+             +X of the model is the walking direction. -->
+        <visual name="heading_marker">
+          <pose>0.25 0 0.15 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.18 0.08 0.08</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.95 0.95 0.10 1</ambient>
+            <diffuse>0.95 0.95 0.10 1</diffuse>
+          </material>
+        </visual>
+
+
+      </link>
+
+    </model>
+
+
+    <!-- Extra proxy capacity for crowded episodes: human_05 ... human_24 -->
+<model name="human_05_proxy">
+
+      <pose>0 0 -50 0 0 0</pose>
+
+      <static>false</static>
+      <self_collide>false</self_collide>
+
+      <link name="body">
+
+        <gravity>false</gravity>
+
+        <kinematic>true</kinematic>
+
+        <collision name="collision">
+          <geometry>
+            <cylinder>
+              <radius>0.22</radius>
+              <length>1.70</length>
+            </cylinder>
+          </geometry>
+        </collision>
+
+        
+        <!-- V4 visible human marker: body + head + heading marker.
+             These visuals belong to the collision proxy itself, therefore
+             what Gazebo shows is exactly what LiDAR / physics use. -->
+        <visual name="body_visual">
+          <pose>0 0 -0.08 0 0 0</pose>
+          <geometry>
+            <cylinder>
+              <radius>0.20</radius>
+              <length>1.10</length>
+            </cylinder>
+          </geometry>
+          <material>
+            <ambient>0.15 0.45 0.90 1</ambient>
+            <diffuse>0.15 0.45 0.90 1</diffuse>
+          </material>
+        </visual>
+
+        <visual name="head_visual">
+          <pose>0 0 0.62 0 0 0</pose>
+          <geometry>
+            <sphere>
+              <radius>0.18</radius>
+            </sphere>
+          </geometry>
+          <material>
+            <ambient>0.95 0.75 0.58 1</ambient>
+            <diffuse>0.95 0.75 0.58 1</diffuse>
+          </material>
+        </visual>
+
+        <!-- Small forward marker so heading is visible in Gazebo.
+             +X of the model is the walking direction. -->
+        <visual name="heading_marker">
+          <pose>0.25 0 0.15 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.18 0.08 0.08</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.95 0.95 0.10 1</ambient>
+            <diffuse>0.95 0.95 0.10 1</diffuse>
+          </material>
+        </visual>
+
+
+      </link>
+
+    </model>
+<model name="human_06_proxy">
+
+      <pose>0 0 -50 0 0 0</pose>
+
+      <static>false</static>
+      <self_collide>false</self_collide>
+
+      <link name="body">
+
+        <gravity>false</gravity>
+
+        <kinematic>true</kinematic>
+
+        <collision name="collision">
+          <geometry>
+            <cylinder>
+              <radius>0.22</radius>
+              <length>1.70</length>
+            </cylinder>
+          </geometry>
+        </collision>
+
+        
+        <!-- V4 visible human marker: body + head + heading marker.
+             These visuals belong to the collision proxy itself, therefore
+             what Gazebo shows is exactly what LiDAR / physics use. -->
+        <visual name="body_visual">
+          <pose>0 0 -0.08 0 0 0</pose>
+          <geometry>
+            <cylinder>
+              <radius>0.20</radius>
+              <length>1.10</length>
+            </cylinder>
+          </geometry>
+          <material>
+            <ambient>0.90 0.35 0.20 1</ambient>
+            <diffuse>0.90 0.35 0.20 1</diffuse>
+          </material>
+        </visual>
+
+        <visual name="head_visual">
+          <pose>0 0 0.62 0 0 0</pose>
+          <geometry>
+            <sphere>
+              <radius>0.18</radius>
+            </sphere>
+          </geometry>
+          <material>
+            <ambient>0.95 0.75 0.58 1</ambient>
+            <diffuse>0.95 0.75 0.58 1</diffuse>
+          </material>
+        </visual>
+
+        <!-- Small forward marker so heading is visible in Gazebo.
+             +X of the model is the walking direction. -->
+        <visual name="heading_marker">
+          <pose>0.25 0 0.15 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.18 0.08 0.08</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.95 0.95 0.10 1</ambient>
+            <diffuse>0.95 0.95 0.10 1</diffuse>
+          </material>
+        </visual>
+
+
+      </link>
+
+    </model>
+<model name="human_07_proxy">
+
+      <pose>0 0 -50 0 0 0</pose>
+
+      <static>false</static>
+      <self_collide>false</self_collide>
+
+      <link name="body">
+
+        <gravity>false</gravity>
+
+        <kinematic>true</kinematic>
+
+        <collision name="collision">
+          <geometry>
+            <cylinder>
+              <radius>0.22</radius>
+              <length>1.70</length>
+            </cylinder>
+          </geometry>
+        </collision>
+
+        
+        <!-- V4 visible human marker: body + head + heading marker.
+             These visuals belong to the collision proxy itself, therefore
+             what Gazebo shows is exactly what LiDAR / physics use. -->
+        <visual name="body_visual">
+          <pose>0 0 -0.08 0 0 0</pose>
+          <geometry>
+            <cylinder>
+              <radius>0.20</radius>
+              <length>1.10</length>
+            </cylinder>
+          </geometry>
+          <material>
+            <ambient>0.25 0.70 0.35 1</ambient>
+            <diffuse>0.25 0.70 0.35 1</diffuse>
+          </material>
+        </visual>
+
+        <visual name="head_visual">
+          <pose>0 0 0.62 0 0 0</pose>
+          <geometry>
+            <sphere>
+              <radius>0.18</radius>
+            </sphere>
+          </geometry>
+          <material>
+            <ambient>0.95 0.75 0.58 1</ambient>
+            <diffuse>0.95 0.75 0.58 1</diffuse>
+          </material>
+        </visual>
+
+        <!-- Small forward marker so heading is visible in Gazebo.
+             +X of the model is the walking direction. -->
+        <visual name="heading_marker">
+          <pose>0.25 0 0.15 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.18 0.08 0.08</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.95 0.95 0.10 1</ambient>
+            <diffuse>0.95 0.95 0.10 1</diffuse>
+          </material>
+        </visual>
+
+
+      </link>
+
+    </model>
+<model name="human_08_proxy">
+
+      <pose>0 0 -50 0 0 0</pose>
+
+      <static>false</static>
+      <self_collide>false</self_collide>
+
+      <link name="body">
+
+        <gravity>false</gravity>
+
+        <kinematic>true</kinematic>
+
+        <collision name="collision">
+          <geometry>
+            <cylinder>
+              <radius>0.22</radius>
+              <length>1.70</length>
+            </cylinder>
+          </geometry>
+        </collision>
+
+        
+        <!-- V4 visible human marker: body + head + heading marker.
+             These visuals belong to the collision proxy itself, therefore
+             what Gazebo shows is exactly what LiDAR / physics use. -->
+        <visual name="body_visual">
+          <pose>0 0 -0.08 0 0 0</pose>
+          <geometry>
+            <cylinder>
+              <radius>0.20</radius>
+              <length>1.10</length>
+            </cylinder>
+          </geometry>
+          <material>
+            <ambient>0.65 0.35 0.80 1</ambient>
+            <diffuse>0.65 0.35 0.80 1</diffuse>
+          </material>
+        </visual>
+
+        <visual name="head_visual">
+          <pose>0 0 0.62 0 0 0</pose>
+          <geometry>
+            <sphere>
+              <radius>0.18</radius>
+            </sphere>
+          </geometry>
+          <material>
+            <ambient>0.95 0.75 0.58 1</ambient>
+            <diffuse>0.95 0.75 0.58 1</diffuse>
+          </material>
+        </visual>
+
+        <!-- Small forward marker so heading is visible in Gazebo.
+             +X of the model is the walking direction. -->
+        <visual name="heading_marker">
+          <pose>0.25 0 0.15 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.18 0.08 0.08</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.95 0.95 0.10 1</ambient>
+            <diffuse>0.95 0.95 0.10 1</diffuse>
+          </material>
+        </visual>
+
+
+      </link>
+
+    </model>
+<model name="human_09_proxy">
+
+      <pose>0 0 -50 0 0 0</pose>
+
+      <static>false</static>
+      <self_collide>false</self_collide>
+
+      <link name="body">
+
+        <gravity>false</gravity>
+
+        <kinematic>true</kinematic>
+
+        <collision name="collision">
+          <geometry>
+            <cylinder>
+              <radius>0.22</radius>
+              <length>1.70</length>
+            </cylinder>
+          </geometry>
+        </collision>
+
+        
+        <!-- V4 visible human marker: body + head + heading marker.
+             These visuals belong to the collision proxy itself, therefore
+             what Gazebo shows is exactly what LiDAR / physics use. -->
+        <visual name="body_visual">
+          <pose>0 0 -0.08 0 0 0</pose>
+          <geometry>
+            <cylinder>
+              <radius>0.20</radius>
+              <length>1.10</length>
+            </cylinder>
+          </geometry>
+          <material>
+            <ambient>0.15 0.45 0.90 1</ambient>
+            <diffuse>0.15 0.45 0.90 1</diffuse>
+          </material>
+        </visual>
+
+        <visual name="head_visual">
+          <pose>0 0 0.62 0 0 0</pose>
+          <geometry>
+            <sphere>
+              <radius>0.18</radius>
+            </sphere>
+          </geometry>
+          <material>
+            <ambient>0.95 0.75 0.58 1</ambient>
+            <diffuse>0.95 0.75 0.58 1</diffuse>
+          </material>
+        </visual>
+
+        <!-- Small forward marker so heading is visible in Gazebo.
+             +X of the model is the walking direction. -->
+        <visual name="heading_marker">
+          <pose>0.25 0 0.15 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.18 0.08 0.08</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.95 0.95 0.10 1</ambient>
+            <diffuse>0.95 0.95 0.10 1</diffuse>
+          </material>
+        </visual>
+
+
+      </link>
+
+    </model>
+<model name="human_10_proxy">
+
+      <pose>0 0 -50 0 0 0</pose>
+
+      <static>false</static>
+      <self_collide>false</self_collide>
+
+      <link name="body">
+
+        <gravity>false</gravity>
+
+        <kinematic>true</kinematic>
+
+        <collision name="collision">
+          <geometry>
+            <cylinder>
+              <radius>0.22</radius>
+              <length>1.70</length>
+            </cylinder>
+          </geometry>
+        </collision>
+
+        
+        <!-- V4 visible human marker: body + head + heading marker.
+             These visuals belong to the collision proxy itself, therefore
+             what Gazebo shows is exactly what LiDAR / physics use. -->
+        <visual name="body_visual">
+          <pose>0 0 -0.08 0 0 0</pose>
+          <geometry>
+            <cylinder>
+              <radius>0.20</radius>
+              <length>1.10</length>
+            </cylinder>
+          </geometry>
+          <material>
+            <ambient>0.90 0.35 0.20 1</ambient>
+            <diffuse>0.90 0.35 0.20 1</diffuse>
+          </material>
+        </visual>
+
+        <visual name="head_visual">
+          <pose>0 0 0.62 0 0 0</pose>
+          <geometry>
+            <sphere>
+              <radius>0.18</radius>
+            </sphere>
+          </geometry>
+          <material>
+            <ambient>0.95 0.75 0.58 1</ambient>
+            <diffuse>0.95 0.75 0.58 1</diffuse>
+          </material>
+        </visual>
+
+        <!-- Small forward marker so heading is visible in Gazebo.
+             +X of the model is the walking direction. -->
+        <visual name="heading_marker">
+          <pose>0.25 0 0.15 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.18 0.08 0.08</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.95 0.95 0.10 1</ambient>
+            <diffuse>0.95 0.95 0.10 1</diffuse>
+          </material>
+        </visual>
+
+
+      </link>
+
+    </model>
+<model name="human_11_proxy">
+
+      <pose>0 0 -50 0 0 0</pose>
+
+      <static>false</static>
+      <self_collide>false</self_collide>
+
+      <link name="body">
+
+        <gravity>false</gravity>
+
+        <kinematic>true</kinematic>
+
+        <collision name="collision">
+          <geometry>
+            <cylinder>
+              <radius>0.22</radius>
+              <length>1.70</length>
+            </cylinder>
+          </geometry>
+        </collision>
+
+        
+        <!-- V4 visible human marker: body + head + heading marker.
+             These visuals belong to the collision proxy itself, therefore
+             what Gazebo shows is exactly what LiDAR / physics use. -->
+        <visual name="body_visual">
+          <pose>0 0 -0.08 0 0 0</pose>
+          <geometry>
+            <cylinder>
+              <radius>0.20</radius>
+              <length>1.10</length>
+            </cylinder>
+          </geometry>
+          <material>
+            <ambient>0.25 0.70 0.35 1</ambient>
+            <diffuse>0.25 0.70 0.35 1</diffuse>
+          </material>
+        </visual>
+
+        <visual name="head_visual">
+          <pose>0 0 0.62 0 0 0</pose>
+          <geometry>
+            <sphere>
+              <radius>0.18</radius>
+            </sphere>
+          </geometry>
+          <material>
+            <ambient>0.95 0.75 0.58 1</ambient>
+            <diffuse>0.95 0.75 0.58 1</diffuse>
+          </material>
+        </visual>
+
+        <!-- Small forward marker so heading is visible in Gazebo.
+             +X of the model is the walking direction. -->
+        <visual name="heading_marker">
+          <pose>0.25 0 0.15 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.18 0.08 0.08</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.95 0.95 0.10 1</ambient>
+            <diffuse>0.95 0.95 0.10 1</diffuse>
+          </material>
+        </visual>
+
+
+      </link>
+
+    </model>
+<model name="human_12_proxy">
+
+      <pose>0 0 -50 0 0 0</pose>
+
+      <static>false</static>
+      <self_collide>false</self_collide>
+
+      <link name="body">
+
+        <gravity>false</gravity>
+
+        <kinematic>true</kinematic>
+
+        <collision name="collision">
+          <geometry>
+            <cylinder>
+              <radius>0.22</radius>
+              <length>1.70</length>
+            </cylinder>
+          </geometry>
+        </collision>
+
+        
+        <!-- V4 visible human marker: body + head + heading marker.
+             These visuals belong to the collision proxy itself, therefore
+             what Gazebo shows is exactly what LiDAR / physics use. -->
+        <visual name="body_visual">
+          <pose>0 0 -0.08 0 0 0</pose>
+          <geometry>
+            <cylinder>
+              <radius>0.20</radius>
+              <length>1.10</length>
+            </cylinder>
+          </geometry>
+          <material>
+            <ambient>0.65 0.35 0.80 1</ambient>
+            <diffuse>0.65 0.35 0.80 1</diffuse>
+          </material>
+        </visual>
+
+        <visual name="head_visual">
+          <pose>0 0 0.62 0 0 0</pose>
+          <geometry>
+            <sphere>
+              <radius>0.18</radius>
+            </sphere>
+          </geometry>
+          <material>
+            <ambient>0.95 0.75 0.58 1</ambient>
+            <diffuse>0.95 0.75 0.58 1</diffuse>
+          </material>
+        </visual>
+
+        <!-- Small forward marker so heading is visible in Gazebo.
+             +X of the model is the walking direction. -->
+        <visual name="heading_marker">
+          <pose>0.25 0 0.15 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.18 0.08 0.08</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.95 0.95 0.10 1</ambient>
+            <diffuse>0.95 0.95 0.10 1</diffuse>
+          </material>
+        </visual>
+
+
+      </link>
+
+    </model>
+<model name="human_13_proxy">
+
+      <pose>0 0 -50 0 0 0</pose>
+
+      <static>false</static>
+      <self_collide>false</self_collide>
+
+      <link name="body">
+
+        <gravity>false</gravity>
+
+        <kinematic>true</kinematic>
+
+        <collision name="collision">
+          <geometry>
+            <cylinder>
+              <radius>0.22</radius>
+              <length>1.70</length>
+            </cylinder>
+          </geometry>
+        </collision>
+
+        
+        <!-- V4 visible human marker: body + head + heading marker.
+             These visuals belong to the collision proxy itself, therefore
+             what Gazebo shows is exactly what LiDAR / physics use. -->
+        <visual name="body_visual">
+          <pose>0 0 -0.08 0 0 0</pose>
+          <geometry>
+            <cylinder>
+              <radius>0.20</radius>
+              <length>1.10</length>
+            </cylinder>
+          </geometry>
+          <material>
+            <ambient>0.15 0.45 0.90 1</ambient>
+            <diffuse>0.15 0.45 0.90 1</diffuse>
+          </material>
+        </visual>
+
+        <visual name="head_visual">
+          <pose>0 0 0.62 0 0 0</pose>
+          <geometry>
+            <sphere>
+              <radius>0.18</radius>
+            </sphere>
+          </geometry>
+          <material>
+            <ambient>0.95 0.75 0.58 1</ambient>
+            <diffuse>0.95 0.75 0.58 1</diffuse>
+          </material>
+        </visual>
+
+        <!-- Small forward marker so heading is visible in Gazebo.
+             +X of the model is the walking direction. -->
+        <visual name="heading_marker">
+          <pose>0.25 0 0.15 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.18 0.08 0.08</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.95 0.95 0.10 1</ambient>
+            <diffuse>0.95 0.95 0.10 1</diffuse>
+          </material>
+        </visual>
+
+
+      </link>
+
+    </model>
+<model name="human_14_proxy">
+
+      <pose>0 0 -50 0 0 0</pose>
+
+      <static>false</static>
+      <self_collide>false</self_collide>
+
+      <link name="body">
+
+        <gravity>false</gravity>
+
+        <kinematic>true</kinematic>
+
+        <collision name="collision">
+          <geometry>
+            <cylinder>
+              <radius>0.22</radius>
+              <length>1.70</length>
+            </cylinder>
+          </geometry>
+        </collision>
+
+        
+        <!-- V4 visible human marker: body + head + heading marker.
+             These visuals belong to the collision proxy itself, therefore
+             what Gazebo shows is exactly what LiDAR / physics use. -->
+        <visual name="body_visual">
+          <pose>0 0 -0.08 0 0 0</pose>
+          <geometry>
+            <cylinder>
+              <radius>0.20</radius>
+              <length>1.10</length>
+            </cylinder>
+          </geometry>
+          <material>
+            <ambient>0.90 0.35 0.20 1</ambient>
+            <diffuse>0.90 0.35 0.20 1</diffuse>
+          </material>
+        </visual>
+
+        <visual name="head_visual">
+          <pose>0 0 0.62 0 0 0</pose>
+          <geometry>
+            <sphere>
+              <radius>0.18</radius>
+            </sphere>
+          </geometry>
+          <material>
+            <ambient>0.95 0.75 0.58 1</ambient>
+            <diffuse>0.95 0.75 0.58 1</diffuse>
+          </material>
+        </visual>
+
+        <!-- Small forward marker so heading is visible in Gazebo.
+             +X of the model is the walking direction. -->
+        <visual name="heading_marker">
+          <pose>0.25 0 0.15 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.18 0.08 0.08</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.95 0.95 0.10 1</ambient>
+            <diffuse>0.95 0.95 0.10 1</diffuse>
+          </material>
+        </visual>
+
+
+      </link>
+
+    </model>
+<model name="human_15_proxy">
+
+      <pose>0 0 -50 0 0 0</pose>
+
+      <static>false</static>
+      <self_collide>false</self_collide>
+
+      <link name="body">
+
+        <gravity>false</gravity>
+
+        <kinematic>true</kinematic>
+
+        <collision name="collision">
+          <geometry>
+            <cylinder>
+              <radius>0.22</radius>
+              <length>1.70</length>
+            </cylinder>
+          </geometry>
+        </collision>
+
+        
+        <!-- V4 visible human marker: body + head + heading marker.
+             These visuals belong to the collision proxy itself, therefore
+             what Gazebo shows is exactly what LiDAR / physics use. -->
+        <visual name="body_visual">
+          <pose>0 0 -0.08 0 0 0</pose>
+          <geometry>
+            <cylinder>
+              <radius>0.20</radius>
+              <length>1.10</length>
+            </cylinder>
+          </geometry>
+          <material>
+            <ambient>0.25 0.70 0.35 1</ambient>
+            <diffuse>0.25 0.70 0.35 1</diffuse>
+          </material>
+        </visual>
+
+        <visual name="head_visual">
+          <pose>0 0 0.62 0 0 0</pose>
+          <geometry>
+            <sphere>
+              <radius>0.18</radius>
+            </sphere>
+          </geometry>
+          <material>
+            <ambient>0.95 0.75 0.58 1</ambient>
+            <diffuse>0.95 0.75 0.58 1</diffuse>
+          </material>
+        </visual>
+
+        <!-- Small forward marker so heading is visible in Gazebo.
+             +X of the model is the walking direction. -->
+        <visual name="heading_marker">
+          <pose>0.25 0 0.15 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.18 0.08 0.08</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.95 0.95 0.10 1</ambient>
+            <diffuse>0.95 0.95 0.10 1</diffuse>
+          </material>
+        </visual>
+
+
+      </link>
+
+    </model>
+<model name="human_16_proxy">
+
+      <pose>0 0 -50 0 0 0</pose>
+
+      <static>false</static>
+      <self_collide>false</self_collide>
+
+      <link name="body">
+
+        <gravity>false</gravity>
+
+        <kinematic>true</kinematic>
+
+        <collision name="collision">
+          <geometry>
+            <cylinder>
+              <radius>0.22</radius>
+              <length>1.70</length>
+            </cylinder>
+          </geometry>
+        </collision>
+
+        
+        <!-- V4 visible human marker: body + head + heading marker.
+             These visuals belong to the collision proxy itself, therefore
+             what Gazebo shows is exactly what LiDAR / physics use. -->
+        <visual name="body_visual">
+          <pose>0 0 -0.08 0 0 0</pose>
+          <geometry>
+            <cylinder>
+              <radius>0.20</radius>
+              <length>1.10</length>
+            </cylinder>
+          </geometry>
+          <material>
+            <ambient>0.65 0.35 0.80 1</ambient>
+            <diffuse>0.65 0.35 0.80 1</diffuse>
+          </material>
+        </visual>
+
+        <visual name="head_visual">
+          <pose>0 0 0.62 0 0 0</pose>
+          <geometry>
+            <sphere>
+              <radius>0.18</radius>
+            </sphere>
+          </geometry>
+          <material>
+            <ambient>0.95 0.75 0.58 1</ambient>
+            <diffuse>0.95 0.75 0.58 1</diffuse>
+          </material>
+        </visual>
+
+        <!-- Small forward marker so heading is visible in Gazebo.
+             +X of the model is the walking direction. -->
+        <visual name="heading_marker">
+          <pose>0.25 0 0.15 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.18 0.08 0.08</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.95 0.95 0.10 1</ambient>
+            <diffuse>0.95 0.95 0.10 1</diffuse>
+          </material>
+        </visual>
+
+
+      </link>
+
+    </model>
+<model name="human_17_proxy">
+
+      <pose>0 0 -50 0 0 0</pose>
+
+      <static>false</static>
+      <self_collide>false</self_collide>
+
+      <link name="body">
+
+        <gravity>false</gravity>
+
+        <kinematic>true</kinematic>
+
+        <collision name="collision">
+          <geometry>
+            <cylinder>
+              <radius>0.22</radius>
+              <length>1.70</length>
+            </cylinder>
+          </geometry>
+        </collision>
+
+        
+        <!-- V4 visible human marker: body + head + heading marker.
+             These visuals belong to the collision proxy itself, therefore
+             what Gazebo shows is exactly what LiDAR / physics use. -->
+        <visual name="body_visual">
+          <pose>0 0 -0.08 0 0 0</pose>
+          <geometry>
+            <cylinder>
+              <radius>0.20</radius>
+              <length>1.10</length>
+            </cylinder>
+          </geometry>
+          <material>
+            <ambient>0.15 0.45 0.90 1</ambient>
+            <diffuse>0.15 0.45 0.90 1</diffuse>
+          </material>
+        </visual>
+
+        <visual name="head_visual">
+          <pose>0 0 0.62 0 0 0</pose>
+          <geometry>
+            <sphere>
+              <radius>0.18</radius>
+            </sphere>
+          </geometry>
+          <material>
+            <ambient>0.95 0.75 0.58 1</ambient>
+            <diffuse>0.95 0.75 0.58 1</diffuse>
+          </material>
+        </visual>
+
+        <!-- Small forward marker so heading is visible in Gazebo.
+             +X of the model is the walking direction. -->
+        <visual name="heading_marker">
+          <pose>0.25 0 0.15 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.18 0.08 0.08</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.95 0.95 0.10 1</ambient>
+            <diffuse>0.95 0.95 0.10 1</diffuse>
+          </material>
+        </visual>
+
+
+      </link>
+
+    </model>
+<model name="human_18_proxy">
+
+      <pose>0 0 -50 0 0 0</pose>
+
+      <static>false</static>
+      <self_collide>false</self_collide>
+
+      <link name="body">
+
+        <gravity>false</gravity>
+
+        <kinematic>true</kinematic>
+
+        <collision name="collision">
+          <geometry>
+            <cylinder>
+              <radius>0.22</radius>
+              <length>1.70</length>
+            </cylinder>
+          </geometry>
+        </collision>
+
+        
+        <!-- V4 visible human marker: body + head + heading marker.
+             These visuals belong to the collision proxy itself, therefore
+             what Gazebo shows is exactly what LiDAR / physics use. -->
+        <visual name="body_visual">
+          <pose>0 0 -0.08 0 0 0</pose>
+          <geometry>
+            <cylinder>
+              <radius>0.20</radius>
+              <length>1.10</length>
+            </cylinder>
+          </geometry>
+          <material>
+            <ambient>0.90 0.35 0.20 1</ambient>
+            <diffuse>0.90 0.35 0.20 1</diffuse>
+          </material>
+        </visual>
+
+        <visual name="head_visual">
+          <pose>0 0 0.62 0 0 0</pose>
+          <geometry>
+            <sphere>
+              <radius>0.18</radius>
+            </sphere>
+          </geometry>
+          <material>
+            <ambient>0.95 0.75 0.58 1</ambient>
+            <diffuse>0.95 0.75 0.58 1</diffuse>
+          </material>
+        </visual>
+
+        <!-- Small forward marker so heading is visible in Gazebo.
+             +X of the model is the walking direction. -->
+        <visual name="heading_marker">
+          <pose>0.25 0 0.15 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.18 0.08 0.08</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.95 0.95 0.10 1</ambient>
+            <diffuse>0.95 0.95 0.10 1</diffuse>
+          </material>
+        </visual>
+
+
+      </link>
+
+    </model>
+<model name="human_19_proxy">
+
+      <pose>0 0 -50 0 0 0</pose>
+
+      <static>false</static>
+      <self_collide>false</self_collide>
+
+      <link name="body">
+
+        <gravity>false</gravity>
+
+        <kinematic>true</kinematic>
+
+        <collision name="collision">
+          <geometry>
+            <cylinder>
+              <radius>0.22</radius>
+              <length>1.70</length>
+            </cylinder>
+          </geometry>
+        </collision>
+
+        
+        <!-- V4 visible human marker: body + head + heading marker.
+             These visuals belong to the collision proxy itself, therefore
+             what Gazebo shows is exactly what LiDAR / physics use. -->
+        <visual name="body_visual">
+          <pose>0 0 -0.08 0 0 0</pose>
+          <geometry>
+            <cylinder>
+              <radius>0.20</radius>
+              <length>1.10</length>
+            </cylinder>
+          </geometry>
+          <material>
+            <ambient>0.25 0.70 0.35 1</ambient>
+            <diffuse>0.25 0.70 0.35 1</diffuse>
+          </material>
+        </visual>
+
+        <visual name="head_visual">
+          <pose>0 0 0.62 0 0 0</pose>
+          <geometry>
+            <sphere>
+              <radius>0.18</radius>
+            </sphere>
+          </geometry>
+          <material>
+            <ambient>0.95 0.75 0.58 1</ambient>
+            <diffuse>0.95 0.75 0.58 1</diffuse>
+          </material>
+        </visual>
+
+        <!-- Small forward marker so heading is visible in Gazebo.
+             +X of the model is the walking direction. -->
+        <visual name="heading_marker">
+          <pose>0.25 0 0.15 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.18 0.08 0.08</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.95 0.95 0.10 1</ambient>
+            <diffuse>0.95 0.95 0.10 1</diffuse>
+          </material>
+        </visual>
+
+
+      </link>
+
+    </model>
+<model name="human_20_proxy">
+
+      <pose>0 0 -50 0 0 0</pose>
+
+      <static>false</static>
+      <self_collide>false</self_collide>
+
+      <link name="body">
+
+        <gravity>false</gravity>
+
+        <kinematic>true</kinematic>
+
+        <collision name="collision">
+          <geometry>
+            <cylinder>
+              <radius>0.22</radius>
+              <length>1.70</length>
+            </cylinder>
+          </geometry>
+        </collision>
+
+        
+        <!-- V4 visible human marker: body + head + heading marker.
+             These visuals belong to the collision proxy itself, therefore
+             what Gazebo shows is exactly what LiDAR / physics use. -->
+        <visual name="body_visual">
+          <pose>0 0 -0.08 0 0 0</pose>
+          <geometry>
+            <cylinder>
+              <radius>0.20</radius>
+              <length>1.10</length>
+            </cylinder>
+          </geometry>
+          <material>
+            <ambient>0.65 0.35 0.80 1</ambient>
+            <diffuse>0.65 0.35 0.80 1</diffuse>
+          </material>
+        </visual>
+
+        <visual name="head_visual">
+          <pose>0 0 0.62 0 0 0</pose>
+          <geometry>
+            <sphere>
+              <radius>0.18</radius>
+            </sphere>
+          </geometry>
+          <material>
+            <ambient>0.95 0.75 0.58 1</ambient>
+            <diffuse>0.95 0.75 0.58 1</diffuse>
+          </material>
+        </visual>
+
+        <!-- Small forward marker so heading is visible in Gazebo.
+             +X of the model is the walking direction. -->
+        <visual name="heading_marker">
+          <pose>0.25 0 0.15 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.18 0.08 0.08</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.95 0.95 0.10 1</ambient>
+            <diffuse>0.95 0.95 0.10 1</diffuse>
+          </material>
+        </visual>
+
+
+      </link>
+
+    </model>
+<model name="human_21_proxy">
+
+      <pose>0 0 -50 0 0 0</pose>
+
+      <static>false</static>
+      <self_collide>false</self_collide>
+
+      <link name="body">
+
+        <gravity>false</gravity>
+
+        <kinematic>true</kinematic>
+
+        <collision name="collision">
+          <geometry>
+            <cylinder>
+              <radius>0.22</radius>
+              <length>1.70</length>
+            </cylinder>
+          </geometry>
+        </collision>
+
+        
+        <!-- V4 visible human marker: body + head + heading marker.
+             These visuals belong to the collision proxy itself, therefore
+             what Gazebo shows is exactly what LiDAR / physics use. -->
+        <visual name="body_visual">
+          <pose>0 0 -0.08 0 0 0</pose>
+          <geometry>
+            <cylinder>
+              <radius>0.20</radius>
+              <length>1.10</length>
+            </cylinder>
+          </geometry>
+          <material>
+            <ambient>0.15 0.45 0.90 1</ambient>
+            <diffuse>0.15 0.45 0.90 1</diffuse>
+          </material>
+        </visual>
+
+        <visual name="head_visual">
+          <pose>0 0 0.62 0 0 0</pose>
+          <geometry>
+            <sphere>
+              <radius>0.18</radius>
+            </sphere>
+          </geometry>
+          <material>
+            <ambient>0.95 0.75 0.58 1</ambient>
+            <diffuse>0.95 0.75 0.58 1</diffuse>
+          </material>
+        </visual>
+
+        <!-- Small forward marker so heading is visible in Gazebo.
+             +X of the model is the walking direction. -->
+        <visual name="heading_marker">
+          <pose>0.25 0 0.15 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.18 0.08 0.08</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.95 0.95 0.10 1</ambient>
+            <diffuse>0.95 0.95 0.10 1</diffuse>
+          </material>
+        </visual>
+
+
+      </link>
+
+    </model>
+<model name="human_22_proxy">
+
+      <pose>0 0 -50 0 0 0</pose>
+
+      <static>false</static>
+      <self_collide>false</self_collide>
+
+      <link name="body">
+
+        <gravity>false</gravity>
+
+        <kinematic>true</kinematic>
+
+        <collision name="collision">
+          <geometry>
+            <cylinder>
+              <radius>0.22</radius>
+              <length>1.70</length>
+            </cylinder>
+          </geometry>
+        </collision>
+
+        
+        <!-- V4 visible human marker: body + head + heading marker.
+             These visuals belong to the collision proxy itself, therefore
+             what Gazebo shows is exactly what LiDAR / physics use. -->
+        <visual name="body_visual">
+          <pose>0 0 -0.08 0 0 0</pose>
+          <geometry>
+            <cylinder>
+              <radius>0.20</radius>
+              <length>1.10</length>
+            </cylinder>
+          </geometry>
+          <material>
+            <ambient>0.90 0.35 0.20 1</ambient>
+            <diffuse>0.90 0.35 0.20 1</diffuse>
+          </material>
+        </visual>
+
+        <visual name="head_visual">
+          <pose>0 0 0.62 0 0 0</pose>
+          <geometry>
+            <sphere>
+              <radius>0.18</radius>
+            </sphere>
+          </geometry>
+          <material>
+            <ambient>0.95 0.75 0.58 1</ambient>
+            <diffuse>0.95 0.75 0.58 1</diffuse>
+          </material>
+        </visual>
+
+        <!-- Small forward marker so heading is visible in Gazebo.
+             +X of the model is the walking direction. -->
+        <visual name="heading_marker">
+          <pose>0.25 0 0.15 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.18 0.08 0.08</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.95 0.95 0.10 1</ambient>
+            <diffuse>0.95 0.95 0.10 1</diffuse>
+          </material>
+        </visual>
+
+
+      </link>
+
+    </model>
+<model name="human_23_proxy">
+
+      <pose>0 0 -50 0 0 0</pose>
+
+      <static>false</static>
+      <self_collide>false</self_collide>
+
+      <link name="body">
+
+        <gravity>false</gravity>
+
+        <kinematic>true</kinematic>
+
+        <collision name="collision">
+          <geometry>
+            <cylinder>
+              <radius>0.22</radius>
+              <length>1.70</length>
+            </cylinder>
+          </geometry>
+        </collision>
+
+        
+        <!-- V4 visible human marker: body + head + heading marker.
+             These visuals belong to the collision proxy itself, therefore
+             what Gazebo shows is exactly what LiDAR / physics use. -->
+        <visual name="body_visual">
+          <pose>0 0 -0.08 0 0 0</pose>
+          <geometry>
+            <cylinder>
+              <radius>0.20</radius>
+              <length>1.10</length>
+            </cylinder>
+          </geometry>
+          <material>
+            <ambient>0.25 0.70 0.35 1</ambient>
+            <diffuse>0.25 0.70 0.35 1</diffuse>
+          </material>
+        </visual>
+
+        <visual name="head_visual">
+          <pose>0 0 0.62 0 0 0</pose>
+          <geometry>
+            <sphere>
+              <radius>0.18</radius>
+            </sphere>
+          </geometry>
+          <material>
+            <ambient>0.95 0.75 0.58 1</ambient>
+            <diffuse>0.95 0.75 0.58 1</diffuse>
+          </material>
+        </visual>
+
+        <!-- Small forward marker so heading is visible in Gazebo.
+             +X of the model is the walking direction. -->
+        <visual name="heading_marker">
+          <pose>0.25 0 0.15 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.18 0.08 0.08</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.95 0.95 0.10 1</ambient>
+            <diffuse>0.95 0.95 0.10 1</diffuse>
+          </material>
+        </visual>
+
+
+      </link>
+
+    </model>
+<model name="human_24_proxy">
 
       <pose>0 0 -50 0 0 0</pose>
 
