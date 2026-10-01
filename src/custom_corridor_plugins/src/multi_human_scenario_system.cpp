@@ -438,7 +438,7 @@ class MultiHumanScenarioSystem:
       this->worldEntity_ = _entity;
 
       this->humanCount_ =
-          SdfValueOr<int>(_sdf, "human_count", 4);
+          SdfValueOr<int>(_sdf, "human_count", 24);
       this->scenarioTopic_ =
           SdfValueOr<std::string>(
               _sdf,
@@ -475,6 +475,12 @@ class MultiHumanScenarioSystem:
               _sdf,
               "default_scenario_file",
               "default");
+      this->humanRadius_ =
+          SdfValueOr<double>(_sdf, "human_radius", 0.22);
+      this->safetyMargin_ =
+          SdfValueOr<double>(_sdf, "safety_margin", 0.05);
+      this->collisionCheckResolution_ =
+          SdfValueOr<double>(_sdf, "collision_check_resolution", 0.05);
 
       if (this->humanCount_ <= 0)
       {
@@ -571,8 +577,10 @@ class MultiHumanScenarioSystem:
             << "  actor_visuals  : "
             << (this->useActorVisuals_ ? "true" : "false") << "\n"
             << "  auto_start     : "
-            << (this->autoStartOnScenario_ ? "true" : "false")
-            << "\n";
+            << (this->autoStartOnScenario_ ? "true" : "false") << "\n"
+            << "  human_radius   : " << this->humanRadius_ << "\n"
+            << "  safety_margin  : " << this->safetyMargin_ << "\n"
+            << "  static_guard   : enabled\n";
     }
 
   public:
@@ -1056,6 +1064,104 @@ class MultiHumanScenarioSystem:
     }
 
   private:
+    bool IsPositionValid(double _x, double _y) const
+    {
+      // arena_dataset.sdf geometry, expressed in the XY plane.
+      // Human proxy collision radius is inflated by a small safety margin.
+      const double clearance = this->humanRadius_ + this->safetyMargin_;
+
+      // Inner faces of perimeter walls:
+      // west=-14.9, east=4.9, south=-4.9, north=4.9.
+      if (_x < -14.9 + clearance ||
+          _x > 4.9 - clearance ||
+          _y < -4.9 + clearance ||
+          _y > 4.9 - clearance)
+      {
+        return false;
+      }
+
+      // static_box_A: center (-9.0, 1.8), size (1.2, 1.2).
+      if (std::abs(_x + 9.0) <= 0.60 + clearance &&
+          std::abs(_y - 1.8) <= 0.60 + clearance)
+      {
+        return false;
+      }
+
+      // static_cylinder_B: center (-8.0, -2.2), radius 0.4.
+      if (Distance(_x, _y, -8.0, -2.2) <= 0.40 + clearance)
+      {
+        return false;
+      }
+
+      // static_box_C: center (-3.0, -2.0), size (1.5, 0.8).
+      if (std::abs(_x + 3.0) <= 0.75 + clearance &&
+          std::abs(_y + 2.0) <= 0.40 + clearance)
+      {
+        return false;
+      }
+
+      // static_cylinder_D: center (-2.0, 2.0), radius 0.4.
+      if (Distance(_x, _y, -2.0, 2.0) <= 0.40 + clearance)
+      {
+        return false;
+      }
+
+      return true;
+    }
+
+  private:
+    bool IsMotionValid(
+        double _x0,
+        double _y0,
+        double _x1,
+        double _y1) const
+    {
+      const double distance = Distance(_x0, _y0, _x1, _y1);
+      const double resolution =
+          std::max(0.01, this->collisionCheckResolution_);
+      const int samples =
+          std::max(1, static_cast<int>(std::ceil(distance / resolution)));
+
+      // Sample the whole segment, not only its endpoint. This prevents
+      // tunneling if dt or human speed is increased later.
+      for (int i = 1; i <= samples; ++i)
+      {
+        const double alpha =
+            static_cast<double>(i) / static_cast<double>(samples);
+        const double x = _x0 + alpha * (_x1 - _x0);
+        const double y = _y0 + alpha * (_y1 - _y0);
+
+        if (!this->IsPositionValid(x, y))
+          return false;
+      }
+
+      return true;
+    }
+
+  private:
+    bool TryMoveHuman(
+        HumanState &_human,
+        double _nextX,
+        double _nextY)
+    {
+      if (!this->IsMotionValid(
+              _human.x,
+              _human.y,
+              _nextX,
+              _nextY))
+      {
+        // Kinematic proxies are commanded directly with SetWorldPoseCmd(),
+        // therefore Gazebo contacts alone cannot reliably stop penetration.
+        // Rejecting the candidate pose keeps the proxy outside static geometry.
+        return false;
+      }
+
+      _human.x = _nextX;
+      _human.y = _nextY;
+      return true;
+    }
+
+  private:
     void UpdateHuman(
         HumanState &_human,
         double _dt)
@@ -1148,10 +1254,12 @@ class MultiHumanScenarioSystem:
       const double step =
           std::min(_human.speed * _dt, d);
 
-      _human.x +=
-          step * std::cos(_human.yaw);
-      _human.y +=
-          step * std::sin(_human.yaw);
+      const double nextX =
+          _human.x + step * std::cos(_human.yaw);
+      const double nextY =
+          _human.y + step * std::sin(_human.yaw);
+
+      this->TryMoveHuman(_human, nextX, nextY);
     }
 
   private:
@@ -1174,10 +1282,12 @@ class MultiHumanScenarioSystem:
       if (_human.speed <= kEps)
         return;
 
-      _human.x +=
-          _human.speed * _dt * std::cos(_human.yaw);
-      _human.y +=
-          _human.speed * _dt * std::sin(_human.yaw);
+      const double nextX =
+          _human.x + _human.speed * _dt * std::cos(_human.yaw);
+      const double nextY =
+          _human.y + _human.speed * _dt * std::sin(_human.yaw);
+
+      this->TryMoveHuman(_human, nextX, nextY);
     }
 
   private:
@@ -1206,10 +1316,12 @@ class MultiHumanScenarioSystem:
         _human.yaw =
             NormalizeAngle(seg.heading);
 
-        _human.x +=
-            seg.speed * useDt * std::cos(_human.yaw);
-        _human.y +=
-            seg.speed * useDt * std::sin(_human.yaw);
+        const double nextX =
+            _human.x + seg.speed * useDt * std::cos(_human.yaw);
+        const double nextY =
+            _human.y + seg.speed * useDt * std::sin(_human.yaw);
+
+        this->TryMoveHuman(_human, nextX, nextY);
 
         _human.segmentElapsed += useDt;
         remainingDt -= useDt;
@@ -1360,7 +1472,7 @@ class MultiHumanScenarioSystem:
     gz::sim::Entity worldEntity_{gz::sim::kNullEntity};
 
   private:
-    int humanCount_{4};
+    int humanCount_{24};
 
   private:
     std::string scenarioTopic_{"/multi_human/scenario"};
@@ -1386,8 +1498,16 @@ class MultiHumanScenarioSystem:
   private:
     bool autoStartOnScenario_{false};
 
-  private:
     std::string defaultScenarioFile_{"default"};
+
+  private:
+    double humanRadius_{0.22};
+
+  private:
+    double safetyMargin_{0.05};
+
+  private:
+    double collisionCheckResolution_{0.05};
 
   private:
     std::vector<HumanState> humans_;
