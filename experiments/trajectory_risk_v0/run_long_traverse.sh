@@ -6,7 +6,7 @@ SCENARIO=$EXP/scenarios_v1/scenario_014.json
 STAMP=$(date +%Y%m%d_%H%M%S)
 OUT=$EXP/data_long_traverse/episode_${STAMP}
 TIMEOUT_SEC=${TIMEOUT_SEC:-120}
-GOAL_X=${GOAL_X:-10}
+GOAL_X=${GOAL_X:-4.5}
 GOAL_Y=${GOAL_Y:-0.0}
 TIMEOUT_SEC=${TIMEOUT_SEC:-120}
 mkdir -p "$OUT"
