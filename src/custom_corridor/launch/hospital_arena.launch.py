@@ -1,4 +1,6 @@
 import os
+import uuid
+import xml.etree.ElementTree as ET
 
 from ament_index_python.packages import (
     get_package_prefix,
@@ -6,7 +8,7 @@ from ament_index_python.packages import (
 )
 
 from launch import LaunchDescription
-from launch.actions import DeclareLaunchArgument, ExecuteProcess, OpaqueFunction, SetEnvironmentVariable
+from launch.actions import DeclareLaunchArgument, ExecuteProcess, LogInfo, OpaqueFunction, SetEnvironmentVariable
 from launch.substitutions import LaunchConfiguration
 from launch_ros.actions import Node
 
@@ -23,12 +25,13 @@ def launch_setup(context):
     world_map = {
         "easy": "hospital_easy.sdf",
         "medium": "hospital_medium.sdf",
+        "hard": "hospital_hard.sdf",
     }
 
     if difficulty not in world_map:
         raise RuntimeError(
             f"Invalid difficulty '{difficulty}'. "
-            "Allowed values: easy, medium"
+            "Allowed values: easy, medium, hard"
         )
 
     # ---------------------------------------------------------
@@ -45,6 +48,30 @@ def launch_setup(context):
         raise RuntimeError(
             f"Hospital world does not exist: {world_file}"
         )
+
+    # Validate the actual installed SDF before opening any processes.
+    world = ET.parse(world_file).getroot().find("world")
+    expected_world = f"hospital_{difficulty}"
+    if world is None or world.get("name") != expected_world:
+        raise RuntimeError(
+            f"Selected {difficulty}, but SDF world name does not match "
+            f"{expected_world}: {world_file}. Regenerate worlds and rebuild custom_corridor."
+        )
+    actors = world.findall("actor")
+    expected_actor_count = {"easy": 3, "medium": 8, "hard": 16}[difficulty]
+    if len(actors) != expected_actor_count:
+        raise RuntimeError(
+            f"{expected_world} has {len(actors)} actor tags; expected "
+            f"{expected_actor_count} for this version (carts included): {world_file}"
+        )
+    if difficulty != "hard" and any(
+        actor.get("name", "").startswith("hard_") for actor in actors
+    ):
+        raise RuntimeError(f"Hard actors found in {difficulty}: {world_file}")
+
+    # All children share this partition. A fresh partition prevents this GUI,
+    # spawn request and bridge discovering an older Gazebo hospital server.
+    gz_partition = f"hospital_{difficulty}_{uuid.uuid4().hex}"
 
     plugin_prefix = get_package_prefix("custom_corridor_plugins")
     plugin_path = os.path.join(plugin_prefix, "lib")
@@ -192,6 +219,10 @@ def launch_setup(context):
     )
 
     nodes = [
+        LogInfo(msg=f"[Hospital] difficulty={difficulty}; world={expected_world}; actors={len(actors)}"),
+        LogInfo(msg=f"[Hospital] SDF={os.path.realpath(world_file)}"),
+        LogInfo(msg=f"[Hospital] GZ_PARTITION={gz_partition}"),
+        SetEnvironmentVariable(name="GZ_PARTITION", value=gz_partition),
         SetEnvironmentVariable(
             name="GZ_SIM_SYSTEM_PLUGIN_PATH",
             value=os.pathsep.join(
@@ -226,7 +257,7 @@ def generate_launch_description():
         "difficulty",
         default_value="easy",
         description=(
-            "Hospital difficulty: easy or medium"
+            "Hospital difficulty: easy, medium or hard"
         ),
     )
 
