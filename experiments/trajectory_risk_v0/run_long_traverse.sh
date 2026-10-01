@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 set -eo pipefail
-WS=/home/thaonhi/nav_ws
-EXP=$WS/experiments/trajectory_risk_v0
-SCENARIO=$EXP/scenarios_v1/scenario_014.json
+WS="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
+EXP="$WS/experiments/trajectory_risk_v0"
+SCENARIO="$EXP/scenarios_v1/scenario_014.json"
 STAMP=$(date +%Y%m%d_%H%M%S)
 OUT=$EXP/data_long_traverse/episode_${STAMP}
 TIMEOUT_SEC=${TIMEOUT_SEC:-120}
