@@ -40,7 +40,7 @@ from pathlib import Path
 # CONFIGURATION
 # ============================================================
 
-OUTPUT_FILE = Path(__file__).resolve().parent / "hospital_easy.sdf"
+OUTPUT_DIRECTORY = Path(__file__).resolve().parent
 
 
 # Overall hospital dimensions
@@ -898,51 +898,6 @@ def generate_benches(solid_base=False):
 # ROOM LABELS
 # ============================================================
 
-def generate_room_markers():
-    """
-    Add small visual markers near the rooms.
-
-    These are simple blocks used only to make the room
-    arrangement easier to identify in Gazebo.
-    """
-
-    models = ""
-
-    centers = room_centers()
-
-    # Small wall-mounted marker near each room.
-    marker_width = 0.35
-    marker_height = 0.25
-
-    for i, x in enumerate(centers):
-
-        # North marker
-        models += box_model(
-            name=f"north_room_marker_{i + 1:02d}",
-            x=x,
-            y=CORRIDOR_WIDTH / 2.0 + 0.03,
-            z=0.75,
-            sx=marker_width,
-            sy=0.04,
-            sz=marker_height,
-            color="0.95 0.95 0.95 1.0",
-        )
-
-        # South marker
-        models += box_model(
-            name=f"south_room_marker_{i + 1:02d}",
-            x=x,
-            y=-CORRIDOR_WIDTH / 2.0 - 0.03,
-            z=0.75,
-            sx=marker_width,
-            sy=0.04,
-            sz=marker_height,
-            color="0.95 0.95 0.95 1.0",
-        )
-
-    return models
-
-
 def static_human_model(name, x, y, z, yaw, vertical_scale=1.0, collision_height=1.70, has_collision=True,):
         """Tạo người đứng yên; collision có chiều cao phù hợp từng tư thế."""
 
@@ -1407,8 +1362,201 @@ def generate_medium_standing_people():
     return models
 
 
+def generate_hard_door_exit_walker():
+    """H8 exits north room 5, waits four seconds, then walks west.
+
+    Reuses Medium's scripted visual actor convention and walk mesh.
+    Returns through the same doorway; never crosses a room partition.
+    This actor has no moving collision proxy and no robot-triggered motion.
+    """
+    room_x = room_centers()[4]
+    points = [
+        (0.0, room_x, 4.0, -1.570796),
+        (6.0, room_x, 4.0, -1.570796),
+        (10.0, room_x, 1.35, -1.570796),
+        (14.0, room_x, 1.35, -1.570796),
+        (16.0, room_x, 1.35, 3.141593),
+        (22.0, room_x - 4.2, 1.35, 3.141593),
+        (24.0, room_x - 4.2, 1.35, 3.141593),
+        (26.0, room_x - 4.2, 1.35, 0.0),
+        (32.0, room_x, 1.35, 0.0),
+        (34.0, room_x, 1.35, 1.570796),
+        (38.0, room_x, 4.0, 1.570796),
+        (40.0, room_x, 4.0, -1.570796),
+    ]
+    waypoints = "\n".join(
+        f"<waypoint><time>{t:.1f}</time>"
+        f"<pose>{x:.3f} {y:.3f} 1.0 0 0 {yaw:.6f}</pose></waypoint>"
+        for t, x, y, yaw in points
+    )
+    return f"""
+    <actor name="hard_walker_08_door_exit">
+      <skin><filename>model://human/meshes/walk.dae</filename><scale>1</scale></skin>
+      <animation name="walk"><filename>model://human/meshes/walk.dae</filename><interpolate_x>true</interpolate_x></animation>
+      <script><loop>true</loop><delay_start>0</delay_start><auto_start>true</auto_start>
+        <trajectory id="0" type="walk" tension="0">{waypoints}</trajectory>
+      </script>
+    </actor>
+"""
+
+
+def generate_hard_door_entry_walker():
+    """H09 walks east, enters south room 5, waits, and returns.
+
+    Scripted visual motion, independent of robot pose. Crosses the south
+    corridor wall only at room 5's door center. Delayed relative to H03/H08.
+    """
+    room_x = room_centers()[4]
+    points = [
+        (0.0, room_x - 4.2, -1.35, 0.0),
+        (12.0, room_x - 4.2, -1.35, 0.0),
+        (18.0, room_x, -1.35, 0.0),
+        (20.0, room_x, -1.35, -1.570796),
+        (24.0, room_x, -4.0, -1.570796),
+        (32.0, room_x, -4.0, -1.570796),
+        (34.0, room_x, -4.0, 1.570796),
+        (38.0, room_x, -1.35, 1.570796),
+        (40.0, room_x, -1.35, 3.141593),
+        (46.0, room_x - 4.2, -1.35, 3.141593),
+        (48.0, room_x - 4.2, -1.35, 0.0),
+    ]
+    waypoints = "\n".join(
+        f"<waypoint><time>{t:.1f}</time>"
+        f"<pose>{x:.3f} {y:.3f} 1.0 0 0 {yaw:.6f}</pose></waypoint>"
+        for t, x, y, yaw in points
+    )
+    return f"""
+    <actor name="hard_walker_09_door_entry">
+      <skin><filename>model://human/meshes/walk.dae</filename><scale>1</scale></skin>
+      <animation name="walk"><filename>model://human/meshes/walk.dae</filename><interpolate_x>true</interpolate_x></animation>
+      <script><loop>true</loop><delay_start>0</delay_start><auto_start>true</auto_start>
+        <trajectory id="0" type="walk" tension="0">{waypoints}</trajectory>
+      </script>
+    </actor>
+"""
+
+
+def generate_hard_multi_crossing_walkers():
+    """H10/H11 cross in opposite directions through adjacent room doors.
+
+    Different door centers prevent a guaranteed head-on overlap between the
+    pair. H11 starts three seconds later. Both are scripted visual actors.
+    """
+    centers = room_centers()
+    result = ""
+    for name, x, start_y, start_time in [
+        ("hard_walker_10_cross_south_to_north", centers[5], -4.0, 5.0),
+        ("hard_walker_11_cross_north_to_south", centers[6], 4.0, 8.0),
+    ]:
+        destination_y = -start_y
+        forward_yaw = 1.570796 if start_y < 0 else -1.570796
+        backward_yaw = -forward_yaw
+        # Each 8 m crossing takes 10 seconds (0.8 m/s). The six-second
+        # end wait and two-second turns give a 28-second periodic route.
+        points = [
+            (0.0, start_y, forward_yaw),
+            (10.0, destination_y, forward_yaw),
+            (14.0, destination_y, forward_yaw),
+            (16.0, destination_y, backward_yaw),
+            (26.0, start_y, backward_yaw),
+            (28.0, start_y, forward_yaw),
+        ]
+        waypoints = "\n".join(
+            f"<waypoint><time>{t:.1f}</time>"
+            f"<pose>{x:.3f} {y:.3f} 1.0 0 0 {yaw:.6f}</pose></waypoint>"
+            for t, y, yaw in points
+        )
+        result += f"""
+    <actor name="{name}">
+      <skin><filename>model://human/meshes/walk.dae</filename><scale>1</scale></skin>
+      <animation name="walk"><filename>model://human/meshes/walk.dae</filename><interpolate_x>true</interpolate_x></animation>
+      <script><loop>true</loop><delay_start>{start_time:.1f}</delay_start><auto_start>true</auto_start>
+        <trajectory id="0" type="walk" tension="0">{waypoints}</trajectory>
+      </script>
+    </actor>
+"""
+    return result
+
+
+def generate_hard_group_walkers():
+    """H12/H13 walk side by side with synchronized stops.
+
+    Both use the same timing and x coordinates; y differs by 0.8 m.
+    Scripted visual actors only, without robot-dependent group behavior.
+    """
+    result = ""
+    for name, y in [("hard_walker_12_group", -0.4),
+                    ("hard_walker_13_group", 0.4)]:
+        points = [
+            (0.0, 11.5, 0.0),
+            (6.0, 11.5, 0.0),
+            (14.0, 15.5, 0.0),
+            (19.0, 15.5, 0.0),
+            (25.0, 18.5, 0.0),
+            (28.0, 18.5, 0.0),
+            (30.0, 18.5, 3.141593),
+            (36.0, 15.5, 3.141593),
+            (41.0, 15.5, 3.141593),
+            (49.0, 11.5, 3.141593),
+            (51.0, 11.5, 0.0),
+        ]
+        waypoints = "\n".join(
+            f"<waypoint><time>{t:.1f}</time>"
+            f"<pose>{x:.3f} {y:.3f} 1.0 0 0 {yaw:.6f}</pose></waypoint>"
+            for t, x, yaw in points
+        )
+        result += f"""
+    <actor name="{name}">
+      <skin><filename>model://human/meshes/walk.dae</filename><scale>1</scale></skin>
+      <animation name="walk"><filename>model://human/meshes/walk.dae</filename><interpolate_x>true</interpolate_x></animation>
+      <script><loop>true</loop><delay_start>0</delay_start><auto_start>true</auto_start>
+        <trajectory id="0" type="walk" tension="0">{waypoints}</trajectory>
+      </script>
+    </actor>
+"""
+    return result
+
+
+def generate_hard_second_trolley_pusher():
+    """H14 and cart 2 share identical poses/times, as in Medium's cart.
+
+    Stops near room 8 for delivery. Scripted visual motion only; the mesh
+    carries the cart offset ahead of the pusher's shared actor origin.
+    """
+    delivery_x = room_centers()[7] - 1.2
+    points = [
+        (0.0, 22.0, 3.141593),
+        (9.0, 22.0, 3.141593),
+        (32.0, delivery_x, 3.141593),
+        (40.0, delivery_x, 3.141593),
+        (44.0, delivery_x, 0.0),
+        (67.0, 22.0, 0.0),
+        (71.0, 22.0, 3.141593),
+    ]
+    result = ""
+    for name, mesh in [
+        ("hard_walker_14_trolley_pusher", "push_trolley.dae"),
+        ("hard_trolley_14", "trolley.dae"),
+    ]:
+        waypoints = "\n".join(
+            f"<waypoint><time>{t:.1f}</time>"
+            f"<pose>{x:.3f} -1.200 1.0 0 0 {yaw:.6f}</pose></waypoint>"
+            for t, x, yaw in points
+        )
+        result += f"""
+    <actor name="{name}">
+      <skin><filename>model://human/meshes/{mesh}</filename><scale>1</scale></skin>
+      <animation name="push"><filename>model://human/meshes/{mesh}</filename><interpolate_x>false</interpolate_x></animation>
+      <script><loop>true</loop><delay_start>0</delay_start><auto_start>true</auto_start>
+        <trajectory id="0" type="push" tension="0">{waypoints}</trajectory>
+      </script>
+    </actor>
+"""
+    return result
+
+
 def generate_world(difficulty="easy"):
-    if difficulty not in ("easy", "medium"):
+    if difficulty not in ("easy", "medium", "hard"):
         raise ValueError(f"Unsupported hospital difficulty: {difficulty}")
 
     models = ""
@@ -1427,12 +1575,8 @@ def generate_world(difficulty="easy"):
 
     models += generate_doors()
 
-    models += generate_benches(solid_base=difficulty == "medium")
+    models += generate_benches(solid_base=difficulty in ("medium", "hard"))
 
-    # The markers are solid boxes centered in the doorways. Keep the original
-    # Easy world unchanged, but leave every Medium doorway unobstructed.
-    if difficulty == "easy":
-        models += generate_room_markers()
 
     if difficulty == "easy":
         models += generate_static_humans()
@@ -1448,6 +1592,12 @@ def generate_world(difficulty="easy"):
         models += generate_medium_standing_people()
         models += generate_medium_trolley_pusher()
         models += generate_medium_yielding_walker()
+        if difficulty == "hard":
+            models += generate_hard_door_exit_walker()
+            models += generate_hard_door_entry_walker()
+            models += generate_hard_multi_crossing_walkers()
+            models += generate_hard_group_walkers()
+            models += generate_hard_second_trolley_pusher()
     return f"""<?xml version="1.0" ?>
 
 <sdf version="1.9">
@@ -1528,44 +1678,42 @@ def generate_world(difficulty="easy"):
 # ============================================================
 
 def main():
-    parser = argparse.ArgumentParser(description="Generate a hospital Gazebo world")
-    parser.add_argument("--difficulty", choices=("easy", "medium"), default="easy")
-    args = parser.parse_args()
-
-    sdf_content = generate_world(args.difficulty)
-    output_file = OUTPUT_FILE.with_name(f"hospital_{args.difficulty}.sdf")
-
-    output_file.write_text(
-        sdf_content,
-        encoding="utf-8",
+    parser = argparse.ArgumentParser(
+        description="Generate separate Easy, Medium and Hard hospital worlds."
     )
+    selection = parser.add_mutually_exclusive_group()
+    selection.add_argument(
+        "--difficulty", choices=("easy", "medium", "hard"),
+        help="World to generate (default: easy).",
+    )
+    selection.add_argument(
+        "--all", action="store_true", help="Generate all three separate SDF files."
+    )
+    args = parser.parse_args()
+    difficulties = ("easy", "medium", "hard") if args.all else (args.difficulty or "easy",)
 
-    print()
-    print("=" * 60)
-    print(f"Hospital {args.difficulty.capitalize()} generated successfully")
-    print("=" * 60)
-    print(f"Output : {output_file}")
-    print()
-    print("Layout:")
-    print(f"  Rooms per side : {ROOM_COUNT_PER_SIDE}")
-    print(f"  Total rooms    : {ROOM_COUNT_PER_SIDE * 2}")
-    print(f"  Hospital size  : {HOSPITAL_LENGTH} x {HOSPITAL_WIDTH} m")
-    print(f"  Corridor width : {CORRIDOR_WIDTH} m")
-    print(f"  Room width     : {ROOM_WIDTH} m")
-    print(f"  Room depth     : {ROOM_DEPTH} m")
-    print(f"  Wall height    : {WALL_HEIGHT} m")
-    print(f"  Door width     : {DOOR_WIDTH} m")
-    print()
-    print("Features:")
-    print("  [OK] Open-top environment")
-    print("  [OK] No ceiling")
-    print("  [OK] No end walls")
-    print("  [OK] 20 rooms")
-    print("  [OK] Door opening for every room")
-    print("  [OK] Bench in front of every room")
-    print("  [OK] Static collision")
-    print("=" * 60)
-    print()
+    import xml.etree.ElementTree as ET
+
+    for difficulty in difficulties:
+        sdf_content = generate_world(difficulty)
+        world = ET.fromstring(sdf_content).find("world")
+        if world is None or world.get("name") != f"hospital_{difficulty}":
+            raise RuntimeError(f"Generated world does not match difficulty: {difficulty}")
+        actors = world.findall("actor")
+        names = [node.get("name") for node in world if node.get("name")]
+        if len(names) != len(set(names)):
+            raise RuntimeError(f"Duplicate world entity names in {difficulty}")
+        hard_actors = [actor for actor in actors if actor.get("name", "").startswith("hard_")]
+        if difficulty != "hard" and hard_actors:
+            raise RuntimeError(f"Hard actors leaked into {difficulty}")
+
+        output_file = OUTPUT_DIRECTORY / f"hospital_{difficulty}.sdf"
+        output_file.write_text(sdf_content, encoding="utf-8")
+        print(f"[OK] Difficulty : {difficulty}")
+        print(f"     World      : {world.get('name')}")
+        print(f"     Output     : {output_file}")
+        print(f"     Actor tags : {len(actors)} (includes carts)")
+        print(f"     Launch     : ros2 launch custom_corridor hospital_arena.launch.py difficulty:={difficulty}")
 
 
 if __name__ == "__main__":
