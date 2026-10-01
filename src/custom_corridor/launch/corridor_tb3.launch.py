@@ -81,6 +81,10 @@ def launch_setup(context):
         'worlds',
         world_map[width]
     )
+    if not os.path.isfile(raw_world_file):
+        alt_world = os.path.join(corridor_share, 'worlds', 'arena_dataset', world_map[width])
+        if os.path.isfile(alt_world):
+            raw_world_file = alt_world
 
     world_file = raw_world_file
     if obstacle in ['object', 'cylinder', 'box', 'none', 'clean', 'empty']:

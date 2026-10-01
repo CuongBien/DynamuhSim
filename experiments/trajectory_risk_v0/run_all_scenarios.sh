@@ -1,11 +1,12 @@
 #!/usr/bin/env bash
 set -e
-cd ~/nav_ws
+WS="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
+cd "$WS"
 source /opt/ros/jazzy/setup.bash
 source install/setup.bash
 export ROS_DOMAIN_ID=42
 export RMW_IMPLEMENTATION=rmw_fastrtps_cpp
-cd ~/nav_ws/experiments/trajectory_risk_v0
+cd "$WS/experiments/trajectory_risk_v0"
 for n in $(seq 1 13); do
   printf -v sid "%03d" "$n"
   echo "============================================================"
