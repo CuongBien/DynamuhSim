@@ -95,7 +95,7 @@ def launch_setup(context):
         with open(raw_world_file, 'r') as f:
             content = f.read()
         import re
-        filtered_content = re.sub(r'<actor name="human_actor">.*?</actor>', '', content, flags=re.DOTALL)
+        filtered_content = re.sub(r'<actor name="(?:human_actor|human_\w+_visual)">.*?</actor>', '', content, flags=re.DOTALL)
         if obstacle in ['object', 'cylinder', 'box']:
             filtered_content = filtered_content.replace(
                 '<pose>5.0 0.0 -50.0 0 0 3.14159</pose>',
@@ -106,6 +106,8 @@ def launch_setup(context):
                 '<default_mode>object</default_mode>'
             )
         elif obstacle in ['none', 'clean', 'empty']:
+            filtered_content = re.sub(r'<model name="human_\w+_proxy">.*?</model>', '', filtered_content, flags=re.DOTALL)
+            filtered_content = re.sub(r'<plugin\s+filename="librvo2_human_system\.so".*?</plugin>', '', filtered_content, flags=re.DOTALL)
             filtered_content = filtered_content.replace(
                 '<pose>5.0 0.0 0.85 0 0 3.14159</pose>',
                 '<pose>5.0 0.0 -50.0 0 0 3.14159</pose>'
