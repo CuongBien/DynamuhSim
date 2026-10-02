@@ -100,6 +100,14 @@ enum class HumanMode
   Autonomous
 };
 
+enum class CorridorState
+{
+  Patrol,
+  YieldingEnter,
+  YieldingWait,
+  YieldingExit
+};
+
 struct Waypoint
 {
   double x{0.0};
@@ -141,6 +149,9 @@ struct HumanAgent
   double politeness{0.5}; // Yielding / politeness weight in [0.0 = distracted/stubborn, 1.0 = highly cooperative]
   double latencyTau{0.3}; // Reaction latency time constant (seconds)
 
+  // Corridor Recess State
+  CorridorState corridorState{CorridorState::Patrol};
+
   // Gazebo entities
   gz::sim::Entity modelEntity{gz::sim::kNullEntity};
   gz::sim::Entity actorEntity{gz::sim::kNullEntity};
@@ -159,6 +170,7 @@ struct HumanAgent
     this->prefVx = 0.0;
     this->prefVy = 0.0;
     this->waypointIndex = 0;
+    this->corridorState = CorridorState::Patrol;
     this->animTimeSec = 0.0;
     this->animationTime = std::chrono::steady_clock::duration{0};
   }
@@ -210,6 +222,16 @@ public:
     this->animSpeedFactor_ = SdfValueOr<double>(_sdf, "animation_speed_factor", 4.1534);
     this->politenessBalancePoint_ = SdfValueOr<double>(_sdf, "politeness_balance_point", 0.6);
     this->randomizePoliteness_ = SdfValueOr<bool>(_sdf, "randomize_politeness", true);
+
+    // Corridor and Recess configuration
+    this->corridorMode_ = SdfValueOr<bool>(_sdf, "corridor_mode", false);
+    this->corridorHalfWidth_ = SdfValueOr<double>(_sdf, "corridor_half_width", 0.45);
+    this->recessXMin_ = SdfValueOr<double>(_sdf, "recess_x_min", 1.35);
+    this->recessXMax_ = SdfValueOr<double>(_sdf, "recess_x_max", 2.65);
+    this->recessXCenter_ = SdfValueOr<double>(_sdf, "recess_x_center", 2.00);
+    this->recessY_ = SdfValueOr<double>(_sdf, "recess_y", 0.75);
+    this->recessApproachDist_ = SdfValueOr<double>(_sdf, "recess_approach_dist", 3.5);
+    this->recessThreshold_ = SdfValueOr<double>(_sdf, "recess_threshold", 0.40);
 
     // Initialize humans
     this->humans_.clear();
@@ -297,6 +319,20 @@ public:
       human.y = pos.y();
       human.vx = vel.x();
       human.vy = vel.y();
+
+      // In corridor mode, clamp Y to guarantee agent never penetrates corridor or recess walls
+      if (this->corridorMode_)
+      {
+        const double r = human.radius;
+        const double minWallY = -this->corridorHalfWidth_ + r;
+        double maxWallY = this->corridorHalfWidth_ - r;
+        if (human.x >= (this->recessXMin_ - 0.1) && human.x <= (this->recessXMax_ + 0.1))
+        {
+          maxWallY = this->recessY_ + 0.10;
+        }
+        human.y = std::clamp(human.y, minWallY, maxWallY);
+        this->rvoSim_->setAgentPosition(human.rvoIndex, RVO::Vector2(human.x, human.y));
+      }
 
       const double speed = std::hypot(human.vx, human.vy);
       double targetYaw = human.yaw;
@@ -450,6 +486,13 @@ private:
       if (human.actorEntity != gz::sim::kNullEntity)
       {
         human.actorOrigin = gz::sim::worldPose(human.actorEntity, _ecm);
+        auto poseComp = _ecm.Component<gz::sim::components::Pose>(human.actorEntity);
+        if (poseComp)
+        {
+          *poseComp = gz::sim::components::Pose(gz::math::Pose3d::Zero);
+          _ecm.SetChanged(human.actorEntity, gz::sim::components::Pose::typeId,
+                          gz::sim::ComponentState::OneTimeChange);
+        }
       }
     }
   }
@@ -544,8 +587,84 @@ private:
       desiredVy = (dy / d) * _human.speed * turnFactor;
     }
 
-    // Asymmetric Politeness & Anisotropic Proxemic Yielding with Continuous Weight
-    if (_human.politeness > 0.05 && this->robotHasPrevPose_)
+    // Corridor Recess Yielding State Machine vs Open Arena Proxemic Yielding
+    if (this->corridorMode_ && this->robotHasPrevPose_)
+    {
+      const double rx = this->robotPrevX_ - _human.x;
+      const double ry = this->robotPrevY_ - _human.y;
+      const double distToRobot = std::hypot(rx, ry);
+
+      if (_human.corridorState == CorridorState::Patrol)
+      {
+        // Check if robot is approaching in front and human is near the recess zone
+        const bool robotInFront = (desiredVx * rx > 0.0);
+        const bool nearRecess = (_human.x >= (this->recessXMin_ - 0.4) && _human.x <= (this->recessXMax_ + 1.2));
+
+        if (robotInFront && distToRobot < this->recessApproachDist_ && nearRecess)
+        {
+          // Stochastic decision based on politeness balance point
+          if (_human.politeness >= this->recessThreshold_)
+          {
+            _human.corridorState = CorridorState::YieldingEnter;
+          }
+        }
+      }
+      else if (_human.corridorState == CorridorState::YieldingEnter)
+      {
+        const double targetX = this->recessXCenter_;
+        const double targetY = this->recessY_;
+        const double dxRecess = targetX - _human.x;
+        const double dyRecess = targetY - _human.y;
+        const double dRecess = std::hypot(dxRecess, dyRecess);
+
+        if (dRecess < 0.22)
+        {
+          _human.corridorState = CorridorState::YieldingWait;
+          desiredVx = 0.0;
+          desiredVy = 0.0;
+        }
+        else
+        {
+          desiredVx = (dxRecess / dRecess) * _human.speed * 0.85;
+          desiredVy = (dyRecess / dRecess) * _human.speed * 0.85;
+        }
+      }
+      else if (_human.corridorState == CorridorState::YieldingWait)
+      {
+        desiredVx = 0.0;
+        desiredVy = 0.0;
+        // Human turns to face the corridor (-pi/2) while waiting for robot to pass
+        const double targetHeading = -1.5708;
+        const double headingDiff = NormalizeAngle(targetHeading - _human.yaw);
+        _human.yaw = NormalizeAngle(_human.yaw + std::clamp(headingDiff, -4.0 * _dt, 4.0 * _dt));
+
+        // Check if robot has cleared the bottleneck
+        const bool robotCleared = (this->robotPrevX_ > (_human.x + 0.6)) || (distToRobot > 3.0 && this->robotPrevX_ > _human.x);
+        if (robotCleared)
+        {
+          _human.corridorState = CorridorState::YieldingExit;
+        }
+      }
+      else if (_human.corridorState == CorridorState::YieldingExit)
+      {
+        const double targetX = this->recessXCenter_;
+        const double targetY = 0.0;
+        const double dxExit = targetX - _human.x;
+        const double dyExit = targetY - _human.y;
+        const double dExit = std::hypot(dxExit, dyExit);
+
+        if (std::abs(_human.y) < 0.12)
+        {
+          _human.corridorState = CorridorState::Patrol;
+        }
+        else
+        {
+          desiredVx = (dxExit / std::max(0.01, dExit)) * _human.speed * 0.85;
+          desiredVy = (dyExit / std::max(0.01, dExit)) * _human.speed * 0.85;
+        }
+      }
+    }
+    else if (_human.politeness > 0.05 && this->robotHasPrevPose_)
     {
       const double rx = this->robotPrevX_ - _human.x;
       const double ry = this->robotPrevY_ - _human.y;
@@ -624,6 +743,7 @@ private:
     const double tSec = std::chrono::duration<double>(_simTime).count();
     json payload;
     payload["timestamp"] = tSec;
+    payload["corridor_mode"] = this->corridorMode_;
     payload["humans"] = json::array();
 
     for (const auto &human : this->humans_)
@@ -640,6 +760,14 @@ private:
       hObj["vy"] = human.vy;
       hObj["speed"] = std::hypot(human.vx, human.vy);
       hObj["politeness"] = human.politeness;
+      hObj["yielding"] = (human.corridorState == CorridorState::YieldingEnter ||
+                          human.corridorState == CorridorState::YieldingWait);
+      std::string stateStr = "patrol";
+      if (human.corridorState == CorridorState::YieldingEnter) stateStr = "yielding_enter";
+      else if (human.corridorState == CorridorState::YieldingWait) stateStr = "yielding_wait";
+      else if (human.corridorState == CorridorState::YieldingExit) stateStr = "yielding_exit";
+      hObj["state"] = stateStr;
+
       payload["humans"].push_back(hObj);
     }
 
@@ -790,6 +918,19 @@ private:
 
   void LoadDefaultScenario()
   {
+    if (this->corridorMode_)
+    {
+      std::string jsonStr = R"({
+        "episode_id": 1,
+        "corridor_mode": true,
+        "humans": [
+          {"id": 1, "mode": "autonomous", "speed": 0.75, "scale": 1.02, "visual_z": 1.02, "proxy_z": 0.85, "waypoints": [[5.0, 0.0], [-3.0, 0.0]]}
+        ]
+      })";
+      this->LoadScenarioJson(jsonStr);
+      return;
+    }
+
     // Built-in default patrol for 4 dynamic agents - all active and moving with calibrated scale & tempo
     std::string jsonStr = R"({
       "episode_id": 1,
@@ -852,6 +993,16 @@ private:
   double politenessBalancePoint_{0.6};
   bool randomizePoliteness_{true};
   std::mt19937 rng_{std::random_device{}()};
+
+  // Corridor parameters
+  bool corridorMode_{false};
+  double corridorHalfWidth_{0.45};
+  double recessXMin_{1.35};
+  double recessXMax_{2.65};
+  double recessXCenter_{2.00};
+  double recessY_{0.75};
+  double recessApproachDist_{3.5};
+  double recessThreshold_{0.40};
 
   int humanCount_{4};
   std::vector<HumanAgent> humans_;

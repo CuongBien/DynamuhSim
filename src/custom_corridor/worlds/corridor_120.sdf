@@ -245,5 +245,82 @@
       <specular>0.2 0.2 0.2 1</specular>
     </light>
 
+    <!-- ============================================================== -->
+    <!-- RVO2 Social Navigation System Plugin for 1.20m Corridor        -->
+    <!-- ============================================================== -->
+    <plugin
+      filename="librvo2_human_system.so"
+      name="custom_corridor::RVO2HumanSystem">
+      <human_count>1</human_count>
+      <robot_name>burger</robot_name>
+      <robot_radius>0.28</robot_radius>
+      <human_radius>0.28</human_radius>
+      <corridor_mode>true</corridor_mode>
+      <corridor_half_width>0.60</corridor_half_width>
+      <recess_x_min>1.35</recess_x_min>
+      <recess_x_max>2.65</recess_x_max>
+      <recess_x_center>2.00</recess_x_center>
+      <recess_y>0.90</recess_y>
+      <recess_approach_dist>3.5</recess_approach_dist>
+      <recess_threshold>0.40</recess_threshold>
+      <politeness_balance_point>0.60</politeness_balance_point>
+      <randomize_politeness>true</randomize_politeness>
+      <visual_z>1.06</visual_z>
+      <proxy_z>0.875</proxy_z>
+    </plugin>
+
+    <!-- Human 01: Oncoming Walker (Amber Orange, Scale 1.06, Height ~1.82m) -->
+    <actor name="human_01_visual">
+      <pose>0 0 0 0 0 0</pose>
+      <skin>
+        <filename>model://human/meshes/walk_orange.dae</filename>
+        <scale>1.06</scale>
+      </skin>
+      <animation name="walk">
+        <filename>model://human/meshes/walk_orange.dae</filename>
+        <interpolate_x>false</interpolate_x>
+      </animation>
+      <script>
+        <loop>false</loop>
+        <delay_start>0</delay_start>
+        <auto_start>false</auto_start>
+        <trajectory id="0" type="walk" tension="0">
+          <waypoint>
+            <time>0</time>
+            <pose>0 0 0 0 0 0</pose>
+          </waypoint>
+          <waypoint>
+            <time>1</time>
+            <pose>0 0 0 0 0 0</pose>
+          </waypoint>
+        </trajectory>
+      </script>
+    </actor>
+
+    <model name="human_01_proxy">
+      <pose>5.0 0.0 0.875 0 0 3.14159</pose>
+      <link name="link">
+        <gravity>false</gravity>
+        <kinematic>true</kinematic>
+        <collision name="collision">
+          <geometry>
+            <cylinder>
+              <radius>0.28</radius>
+              <length>1.70</length>
+            </cylinder>
+          </geometry>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <cylinder>
+              <radius>0.001</radius>
+              <length>0.001</length>
+            </cylinder>
+          </geometry>
+          <transparency>1.0</transparency>
+        </visual>
+      </link>
+    </model>
+
   </world>
 </sdf>

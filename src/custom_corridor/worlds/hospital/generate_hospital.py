@@ -1055,11 +1055,11 @@ def generate_second_walking_human():
     return f"""
     <actor name="hospital_walking_human_2">
       <skin>
-        <filename>model://human/meshes/walk.dae</filename>
-        <scale>1.0</scale>
+        <filename>model://human/meshes/walk_blue.dae</filename>
+        <scale>0.95</scale>
       </skin>
       <animation name="walk">
-        <filename>model://human/meshes/walk.dae</filename>
+        <filename>model://human/meshes/walk_blue.dae</filename>
         <interpolate_x>true</interpolate_x>
       </animation>
       <script>
@@ -1104,11 +1104,11 @@ def generate_third_walking_human():
     return f"""
     <actor name="hospital_walking_human_3">
       <skin>
-        <filename>model://human/meshes/walk.dae</filename>
-        <scale>1.0</scale>
+        <filename>model://human/meshes/walk_red.dae</filename>
+        <scale>1.02</scale>
       </skin>
       <animation name="walk">
-        <filename>model://human/meshes/walk.dae</filename>
+        <filename>model://human/meshes/walk_red.dae</filename>
         <interpolate_x>true</interpolate_x>
       </animation>
       <script>
