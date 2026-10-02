@@ -64,3 +64,21 @@
   ros_type_name: "sensor_msgs/msg/Imu"
   gz_type_name: "gz.msgs.IMU"
   direction: GZ_TO_ROS
+
+- ros_topic_name: "rvo2_human/ground_truth"
+  gz_topic_name: "/rvo2_human/ground_truth"
+  ros_type_name: "std_msgs/msg/String"
+  gz_type_name: "gz.msgs.StringMsg"
+  direction: GZ_TO_ROS
+
+- ros_topic_name: "rvo2_human/scenario"
+  gz_topic_name: "/rvo2_human/scenario"
+  ros_type_name: "std_msgs/msg/String"
+  gz_type_name: "gz.msgs.StringMsg"
+  direction: ROS_TO_GZ
+
+- ros_topic_name: "rvo2_human/command"
+  gz_topic_name: "/rvo2_human/command"
+  ros_type_name: "std_msgs/msg/String"
+  gz_type_name: "gz.msgs.StringMsg"
+  direction: ROS_TO_GZ

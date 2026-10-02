@@ -8,6 +8,18 @@ find_package(gz-sim8 REQUIRED)
 find_package(gz-transport13 REQUIRED)
 find_package(nlohmann_json REQUIRED)
 
+add_library(rvo2 STATIC
+  src/rvo2/Agent.cc
+  src/rvo2/KdTree.cc
+  src/rvo2/Line.cc
+  src/rvo2/Obstacle.cc
+  src/rvo2/RVOSimulator.cc
+  src/rvo2/Vector2.cc
+)
+target_include_directories(rvo2 PUBLIC src/rvo2)
+target_compile_features(rvo2 PUBLIC cxx_std_17)
+set_target_properties(rvo2 PROPERTIES POSITION_INDEPENDENT_CODE ON)
+
 add_library(oscillating_obstacle_system SHARED
   src/oscillating_obstacle_system.cc
 )
@@ -50,6 +62,24 @@ target_link_libraries(hospital_yielding_system PRIVATE
 )
 
 install(TARGETS hospital_yielding_system
+  LIBRARY DESTINATION lib
+)
+
+add_library(rvo2_human_system SHARED
+  src/rvo2_human_system.cpp
+)
+
+target_compile_features(rvo2_human_system PRIVATE cxx_std_17)
+
+target_link_libraries(rvo2_human_system PRIVATE
+  rvo2
+  gz-sim8::gz-sim8
+  gz-transport13::core
+  gz-plugin2::gz-plugin2
+  nlohmann_json::nlohmann_json
+)
+
+install(TARGETS rvo2_human_system
   LIBRARY DESTINATION lib
 )
 
