@@ -30,11 +30,14 @@ def launch_setup(context):
         '1.20': 'corridor_120.sdf',
         'arena': 'arena_obstacle.sdf',
         'dataset': 'arena_dataset.sdf',
+        'rvo2': 'arena_rvo2.sdf',
     }
 
-    if width.lower() in ['arena', 'open', 'big', 'wide', 'dataset']:
+    if width.lower() in ['arena', 'open', 'big', 'wide', 'dataset', 'rvo2', 'social']:
         if width.lower() == 'dataset':
             width = 'dataset'
+        elif width.lower() in ['rvo2', 'social']:
+            width = 'rvo2'
         elif width.lower() in ['arena', 'open', 'big', 'wide']:
             width = 'arena'
     else:
@@ -43,13 +46,13 @@ def launch_setup(context):
         except ValueError:
             raise RuntimeError(
                 f"Invalid width '{width}'. "
-                "Allowed values: 0.70, 0.90, 1.20, arena, dataset"
+                "Allowed values: 0.70, 0.90, 1.20, arena, dataset, rvo2"
             )
 
     if width not in world_map:
         raise RuntimeError(
             f"Invalid width '{width}'. "
-            "Allowed values: 0.70, 0.90, 1.20, arena, dataset"
+            "Allowed values: 0.70, 0.90, 1.20, arena, dataset, rvo2"
         )
 
     # ---------------------------------------------------------
@@ -359,7 +362,7 @@ def generate_launch_description():
 
     gui_arg = DeclareLaunchArgument(
         'gui',
-        default_value='false',
+        default_value='true',
         description='Set to true to show Gazebo GUI window, false for headless Gazebo (server only)',
     )
 
@@ -367,12 +370,6 @@ def generate_launch_description():
         'rviz',
         default_value='true',
         description='Set to true to launch RViz2 (default true), false to disable',
-    )
-
-    rviz_arg = DeclareLaunchArgument(
-        'rviz',
-        default_value='true',
-        description='Set to false to disable RViz2',
     )
 
     # ---------------------------------------------------------
