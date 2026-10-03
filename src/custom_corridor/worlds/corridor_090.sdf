@@ -259,173 +259,71 @@
     </model>
 
 
-    <!-- ===================================================== -->
-    <!-- Realistic 3D Animated Walking Human Pedestrian        -->
-    <!-- ===================================================== -->
-    <actor name="human_actor">
+    <!-- ============================================================== -->
+    <!-- RVO2 Social Navigation System Plugin for 0.90m Corridor        -->
+    <!-- ============================================================== -->
+    <plugin
+      filename="librvo2_human_system.so"
+      name="custom_corridor::RVO2HumanSystem">
+      <human_count>1</human_count>
+      <robot_name>burger</robot_name>
+      <robot_radius>0.28</robot_radius>
+      <human_radius>0.28</human_radius>
+      <corridor_mode>true</corridor_mode>
+      <corridor_half_width>0.45</corridor_half_width>
+      <recess_x_min>1.35</recess_x_min>
+      <recess_x_max>2.65</recess_x_max>
+      <recess_x_center>2.00</recess_x_center>
+      <recess_y>0.75</recess_y>
+      <recess_approach_dist>3.5</recess_approach_dist>
+      <recess_threshold>0.40</recess_threshold>
+      <politeness_balance_point>0.60</politeness_balance_point>
+      <randomize_politeness>true</randomize_politeness>
+      <visual_z>0.95</visual_z>
+      <proxy_z>0.80</proxy_z>
+    </plugin>
+
+    <!-- Human 01: Oncoming Walker (Royal Blue Jacket, Scale 0.95, Height ~1.63m) -->
+    <actor name="human_01_visual">
+      <pose>0 0 0 0 0 0</pose>
       <skin>
-        <filename>model://human/meshes/walk.dae</filename>
-        <scale>1.0</scale>
+        <filename>model://human/meshes/walk_blue.dae</filename>
+        <scale>0.95</scale>
       </skin>
       <animation name="walk">
-        <filename>model://human/meshes/walk.dae</filename>
-        <interpolate_x>true</interpolate_x>
+        <filename>model://human/meshes/walk_blue.dae</filename>
+        <interpolate_x>false</interpolate_x>
       </animation>
       <script>
-        <loop>true</loop>
-        <delay_start>0.000000</delay_start>
-        <auto_start>true</auto_start>
-        <trajectory id="0" type="walk" tension="1.0">
-          <!-- Forward walk: 5.0 -> -1.0 at 0.8 m/s (t = 0.0 to 7.5s, strictly yaw = 3.14159) -->
+        <loop>false</loop>
+        <delay_start>0</delay_start>
+        <auto_start>false</auto_start>
+        <trajectory id="0" type="walk" tension="0">
           <waypoint>
-            <time>0.0</time>
-            <pose>5.0 0.0 1.0 0 0 3.14159</pose>
+            <time>0</time>
+            <pose>0 0 0 0 0 0</pose>
           </waypoint>
           <waypoint>
-            <time>1.0</time>
-            <pose>4.2 0.0 1.0 0 0 3.14159</pose>
-          </waypoint>
-          <waypoint>
-            <time>2.0</time>
-            <pose>3.4 0.0 1.0 0 0 3.14159</pose>
-          </waypoint>
-          <waypoint>
-            <time>3.0</time>
-            <pose>2.6 0.0 1.0 0 0 3.14159</pose>
-          </waypoint>
-          <waypoint>
-            <time>4.0</time>
-            <pose>1.8 0.0 1.0 0 0 3.14159</pose>
-          </waypoint>
-          <waypoint>
-            <time>5.0</time>
-            <pose>1.0 0.0 1.0 0 0 3.14159</pose>
-          </waypoint>
-          <waypoint>
-            <time>6.0</time>
-            <pose>0.2 0.0 1.0 0 0 3.14159</pose>
-          </waypoint>
-          <waypoint>
-            <time>7.0</time>
-            <pose>-0.6 0.0 1.0 0 0 3.14159</pose>
-          </waypoint>
-          <waypoint>
-            <time>7.5</time>
-            <pose>-1.0 0.0 1.0 0 0 3.14159</pose>
-          </waypoint>
-          <waypoint>
-            <time>7.6</time>
-            <pose>-1.0 0.0 1.0 0 0 3.14159</pose>
-          </waypoint>
-          <!-- Smooth turnaround in place at x = -1.0 (t = 7.6 to 8.9s) -->
-          <waypoint>
-            <time>7.9</time>
-            <pose>-1.0 0.0 1.0 0 0 2.3562</pose>
-          </waypoint>
-          <waypoint>
-            <time>8.2</time>
-            <pose>-1.0 0.0 1.0 0 0 1.5708</pose>
-          </waypoint>
-          <waypoint>
-            <time>8.5</time>
-            <pose>-1.0 0.0 1.0 0 0 0.7854</pose>
-          </waypoint>
-          <waypoint>
-            <time>8.8</time>
-            <pose>-1.0 0.0 1.0 0 0 0.0</pose>
-          </waypoint>
-          <waypoint>
-            <time>8.9</time>
-            <pose>-1.0 0.0 1.0 0 0 0.0</pose>
-          </waypoint>
-          <waypoint>
-            <time>9.0</time>
-            <pose>-1.0 0.0 1.0 0 0 0.0</pose>
-          </waypoint>
-          <!-- Return walk: -1.0 -> 5.0 at 0.8 m/s (t = 9.0 to 16.5s, strictly yaw = 0.0) -->
-          <waypoint>
-            <time>10.0</time>
-            <pose>-0.2 0.0 1.0 0 0 0.0</pose>
-          </waypoint>
-          <waypoint>
-            <time>11.0</time>
-            <pose>0.6 0.0 1.0 0 0 0.0</pose>
-          </waypoint>
-          <waypoint>
-            <time>12.0</time>
-            <pose>1.4 0.0 1.0 0 0 0.0</pose>
-          </waypoint>
-          <waypoint>
-            <time>13.0</time>
-            <pose>2.2 0.0 1.0 0 0 0.0</pose>
-          </waypoint>
-          <waypoint>
-            <time>14.0</time>
-            <pose>3.0 0.0 1.0 0 0 0.0</pose>
-          </waypoint>
-          <waypoint>
-            <time>15.0</time>
-            <pose>3.8 0.0 1.0 0 0 0.0</pose>
-          </waypoint>
-          <waypoint>
-            <time>16.0</time>
-            <pose>4.6 0.0 1.0 0 0 0.0</pose>
-          </waypoint>
-          <waypoint>
-            <time>16.5</time>
-            <pose>5.0 0.0 1.0 0 0 0.0</pose>
-          </waypoint>
-          <waypoint>
-            <time>16.6</time>
-            <pose>5.0 0.0 1.0 0 0 0.0</pose>
-          </waypoint>
-          <!-- Smooth turnaround in place at x = 5.0 (t = 16.6 to 17.9s) -->
-          <waypoint>
-            <time>16.9</time>
-            <pose>5.0 0.0 1.0 0 0 0.7854</pose>
-          </waypoint>
-          <waypoint>
-            <time>17.2</time>
-            <pose>5.0 0.0 1.0 0 0 1.5708</pose>
-          </waypoint>
-          <waypoint>
-            <time>17.5</time>
-            <pose>5.0 0.0 1.0 0 0 2.3562</pose>
-          </waypoint>
-          <waypoint>
-            <time>17.8</time>
-            <pose>5.0 0.0 1.0 0 0 3.14159</pose>
-          </waypoint>
-          <waypoint>
-            <time>17.9</time>
-            <pose>5.0 0.0 1.0 0 0 3.14159</pose>
-          </waypoint>
-          <waypoint>
-            <time>18.0</time>
-            <pose>5.0 0.0 1.0 0 0 3.14159</pose>
+            <time>1</time>
+            <pose>0 0 0 0 0 0</pose>
           </waypoint>
         </trajectory>
       </script>
     </actor>
 
-    <!-- Physical collision & ground-truth tracking for Nav2 / LiDAR -->
-    <model name="dynamic_obstacle">
-      <pose>5.0 0.0 0.85 0 0 3.14159</pose>
-      <self_collide>false</self_collide>
-
+    <model name="human_01_proxy">
+      <pose>5.0 0.0 0.80 0 0 3.14159</pose>
       <link name="link">
         <gravity>false</gravity>
         <kinematic>true</kinematic>
-
         <collision name="collision">
           <geometry>
             <cylinder>
-              <radius>0.22</radius>
+              <radius>0.28</radius>
               <length>1.70</length>
             </cylinder>
           </geometry>
         </collision>
-
         <visual name="visual">
           <geometry>
             <cylinder>
@@ -436,16 +334,6 @@
           <transparency>1.0</transparency>
         </visual>
       </link>
-
-      <plugin filename="liboscillating_obstacle_system.so"
-              name="custom_corridor::OscillatingObstacle">
-        <min_x>-1.0</min_x>
-        <max_x>5.0</max_x>
-        <speed>0.8</speed>
-        <y>0.0</y>
-        <z>0.85</z>
-        <default_mode>human</default_mode>
-      </plugin>
     </model>
 
     <!-- Physical Industrial Object (Cylinder / Pillar for Object mode) -->

@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <sdf version="1.9">
-  <world name="arena_obstacle">
+  <world name="arena_rvo2">
 
     <gravity>0 0 -9.81</gravity>
 
@@ -8,7 +8,33 @@
     <plugin filename="gz-sim-user-commands-system" name="gz::sim::systems::UserCommands"/>
     <plugin filename="gz-sim-scene-broadcaster-system" name="gz::sim::systems::SceneBroadcaster"/>
 
-    <!-- Scene and Physics Optimization -->
+    <!-- High-Throughput Social Navigation with RVO2 / ORCA -->
+    <plugin
+        filename="librvo2_human_system.so"
+        name="custom_corridor::RVO2HumanSystem">
+      <human_count>4</human_count>
+      <robot_name>burger</robot_name>
+      <robot_radius>0.35</robot_radius>
+      <human_radius>0.28</human_radius>
+      <proxemic_margin_front>1.5</proxemic_margin_front>
+      <proxemic_margin_side>0.7</proxemic_margin_side>
+      <reaction_latency>0.3</reaction_latency>
+      <social_yield_distance>3.5</social_yield_distance>
+      <max_speed>0.85</max_speed>
+      <time_step>0.004</time_step>
+      <neighbor_dist>12.0</neighbor_dist>
+      <max_neighbors>10</max_neighbors>
+      <time_horizon>4.0</time_horizon>
+      <time_horizon_obst>3.0</time_horizon_obst>
+      <scenario_topic>/rvo2_human/scenario</scenario_topic>
+      <command_topic>/rvo2_human/command</command_topic>
+      <ground_truth_topic>/rvo2_human/ground_truth</ground_truth_topic>
+      <proxy_z>0.85</proxy_z>
+      <visual_z>1.0</visual_z>
+      <animation_speed_factor>4.1534</animation_speed_factor>
+    </plugin>
+
+    <!-- Scene and Physics Optimization for RTX 4060 -->
     <scene>
       <shadows>false</shadows>
     </scene>
@@ -38,7 +64,6 @@
     </light>
 
     <!-- Ground Plane -->
-    
     <model name="ground">
       <static>true</static>
       <link name="link">
@@ -61,7 +86,6 @@
     </model>
 
     <!-- Perimeter Boundary Walls (10m wide, 20m long) -->
-    
     <model name="wall_west">
       <static>true</static>
       <link name="link">
@@ -109,12 +133,12 @@
       <link name="link">
         <collision name="collision">
           <geometry>
-            <box><size>20.4 0.2 2.0</size></box>
+            <box><size>20.2 0.2 2.0</size></box>
           </geometry>
         </collision>
         <visual name="visual">
           <geometry>
-            <box><size>20.4 0.2 2.0</size></box>
+            <box><size>20.2 0.2 2.0</size></box>
           </geometry>
           <material>
             <ambient>0.3 0.3 0.3 1</ambient>
@@ -122,7 +146,7 @@
           </material>
         </visual>
       </link>
-      <pose>-5.0 -5.0 1.0 0 0 0</pose>
+      <pose>-5.0 -5.1 1.0 0 0 0</pose>
     </model>
     
     <model name="wall_north">
@@ -130,12 +154,12 @@
       <link name="link">
         <collision name="collision">
           <geometry>
-            <box><size>20.4 0.2 2.0</size></box>
+            <box><size>20.2 0.2 2.0</size></box>
           </geometry>
         </collision>
         <visual name="visual">
           <geometry>
-            <box><size>20.4 0.2 2.0</size></box>
+            <box><size>20.2 0.2 2.0</size></box>
           </geometry>
           <material>
             <ambient>0.3 0.3 0.3 1</ambient>
@@ -143,43 +167,42 @@
           </material>
         </visual>
       </link>
-      <pose>-5.0 5.0 1.0 0 0 0</pose>
+      <pose>-5.0 5.1 1.0 0 0 0</pose>
     </model>
 
-    <!-- Static Obstacles -->
-    
+    <!-- Interior Static Obstacles -->
     <model name="static_box_A">
       <static>true</static>
       <link name="link">
         <collision name="collision">
           <geometry>
-            <box><size>1.2 1.2 2.0</size></box>
+            <box><size>1.0 1.0 2.0</size></box>
           </geometry>
         </collision>
         <visual name="visual">
           <geometry>
-            <box><size>1.2 1.2 2.0</size></box>
+            <box><size>1.0 1.0 2.0</size></box>
           </geometry>
           <material>
-            <ambient>0.8 0.4 0.2 1</ambient>
-            <diffuse>0.8 0.4 0.2 1</diffuse>
+            <ambient>0.2 0.5 0.8 1</ambient>
+            <diffuse>0.2 0.5 0.8 1</diffuse>
           </material>
         </visual>
       </link>
-      <pose>-9.0 1.8 1.0 0 0 0</pose>
+      <pose>-8.0 2.0 1.0 0 0 0</pose>
     </model>
-    
+
     <model name="static_cylinder_B">
       <static>true</static>
       <link name="link">
         <collision name="collision">
           <geometry>
-            <cylinder><radius>0.4</radius><length>2.0</length></cylinder>
+            <cylinder><radius>0.5</radius><length>2.0</length></cylinder>
           </geometry>
         </collision>
         <visual name="visual">
           <geometry>
-            <cylinder><radius>0.4</radius><length>2.0</length></cylinder>
+            <cylinder><radius>0.5</radius><length>2.0</length></cylinder>
           </geometry>
           <material>
             <ambient>0.2 0.5 0.8 1</ambient>
@@ -187,69 +210,14 @@
           </material>
         </visual>
       </link>
-      <pose>-8.0 -2.2 1.0 0 0 0</pose>
-    </model>
-    
-    <model name="static_box_C">
-      <static>true</static>
-      <link name="link">
-        <collision name="collision">
-          <geometry>
-            <box><size>1.5 0.8 2.0</size></box>
-          </geometry>
-        </collision>
-        <visual name="visual">
-          <geometry>
-            <box><size>1.5 0.8 2.0</size></box>
-          </geometry>
-          <material>
-            <ambient>0.8 0.4 0.2 1</ambient>
-            <diffuse>0.8 0.4 0.2 1</diffuse>
-          </material>
-        </visual>
-      </link>
-      <pose>-3.0 -2.0 1.0 0 0 0</pose>
-    </model>
-    
-    <model name="static_cylinder_D">
-      <static>true</static>
-      <link name="link">
-        <collision name="collision">
-          <geometry>
-            <cylinder><radius>0.4</radius><length>2.0</length></cylinder>
-          </geometry>
-        </collision>
-        <visual name="visual">
-          <geometry>
-            <cylinder><radius>0.4</radius><length>2.0</length></cylinder>
-          </geometry>
-          <material>
-            <ambient>0.2 0.5 0.8 1</ambient>
-            <diffuse>0.2 0.5 0.8 1</diffuse>
-          </material>
-        </visual>
-      </link>
-      <pose>-2.0 2.0 1.0 0 0 0</pose>
+      <pose>-8.0 -2.0 1.0 0 0 0</pose>
     </model>
 
     <!-- ============================================================== -->
-    <!-- RVO2 Social Navigation System Plugin                           -->
+    <!-- DUAL-LAYER HUMAN AGENTS (Animated 3D Visual Actor + Collision) -->
     <!-- ============================================================== -->
-    <plugin
-      filename="librvo2_human_system.so"
-      name="custom_corridor::RVO2HumanSystem">
-      <human_count>1</human_count>
-      <robot_name>burger</robot_name>
-      <robot_radius>0.28</robot_radius>
-      <human_radius>0.28</human_radius>
-      <corridor_mode>false</corridor_mode>
-      <politeness_balance_point>0.60</politeness_balance_point>
-      <randomize_politeness>true</randomize_politeness>
-      <visual_z>1.02</visual_z>
-      <proxy_z>0.85</proxy_z>
-    </plugin>
 
-    <!-- Human 01: Oncoming Social Walker (Crimson Sweater, Scale 1.02, Height ~1.75m) -->
+    <!-- Human 01: Oncoming Walker (Crimson Sweater, Scale 1.02, Height ~1.75m) -->
     <actor name="human_01_visual">
       <pose>0 0 0 0 0 0</pose>
       <skin>
@@ -267,18 +235,18 @@
         <trajectory id="0" type="walk" tension="0">
           <waypoint>
             <time>0</time>
-            <pose>0 0 0 0 0 0</pose>
+            <pose>4.0 0.0 1.02 0 0 3.14159</pose>
           </waypoint>
           <waypoint>
             <time>1</time>
-            <pose>0 0 0 0 0 0</pose>
+            <pose>4.0 0.0 1.02 0 0 3.14159</pose>
           </waypoint>
         </trajectory>
       </script>
     </actor>
 
     <model name="human_01_proxy">
-      <pose>1.0 0.0 0.85 0 0 3.14159</pose>
+      <pose>4.0 0.0 0.85 0 0 3.14159</pose>
       <link name="link">
         <gravity>false</gravity>
         <kinematic>true</kinematic>
@@ -302,32 +270,161 @@
       </link>
     </model>
 
-    <!-- Physical Industrial Object (Cylinder / Pillar for Object mode) -->
-    <model name="dynamic_object">
-      <pose>1.0 0.0 -50.0 0 0 3.14159</pose>
-      <self_collide>false</self_collide>
+    <!-- Human 02: Counter-flow Walker (Royal Blue Jacket, Scale 0.95, Height ~1.63m) -->
+    <actor name="human_02_visual">
+      <pose>0 0 0 0 0 0</pose>
+      <skin>
+        <filename>model://human/meshes/walk_blue.dae</filename>
+        <scale>0.95</scale>
+      </skin>
+      <animation name="walk">
+        <filename>model://human/meshes/walk_blue.dae</filename>
+        <interpolate_x>false</interpolate_x>
+      </animation>
+      <script>
+        <loop>false</loop>
+        <delay_start>0</delay_start>
+        <auto_start>false</auto_start>
+        <trajectory id="0" type="walk" tension="0">
+          <waypoint>
+            <time>0</time>
+            <pose>-8.0 -1.2 0.95 0 0 0.196</pose>
+          </waypoint>
+          <waypoint>
+            <time>1</time>
+            <pose>-8.0 -1.2 0.95 0 0 0.196</pose>
+          </waypoint>
+        </trajectory>
+      </script>
+    </actor>
+
+    <model name="human_02_proxy">
+      <pose>-8.0 -1.2 0.80 0 0 0.196</pose>
       <link name="link">
         <gravity>false</gravity>
         <kinematic>true</kinematic>
         <collision name="collision">
           <geometry>
             <cylinder>
-              <radius>0.22</radius>
+              <radius>0.26</radius>
+              <length>1.60</length>
+            </cylinder>
+          </geometry>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <cylinder>
+              <radius>0.001</radius>
+              <length>0.001</length>
+            </cylinder>
+          </geometry>
+          <transparency>1.0</transparency>
+        </visual>
+      </link>
+    </model>
+
+    <!-- Human 03: Orthogonal Crossing Walker (Amber Orange, Scale 1.06, Height ~1.82m) -->
+    <actor name="human_03_visual">
+      <pose>0 0 0 0 0 0</pose>
+      <skin>
+        <filename>model://human/meshes/walk_orange.dae</filename>
+        <scale>1.06</scale>
+      </skin>
+      <animation name="walk">
+        <filename>model://human/meshes/walk_orange.dae</filename>
+        <interpolate_x>false</interpolate_x>
+      </animation>
+      <script>
+        <loop>false</loop>
+        <delay_start>0</delay_start>
+        <auto_start>false</auto_start>
+        <trajectory id="0" type="walk" tension="0">
+          <waypoint>
+            <time>0</time>
+            <pose>-3.0 -3.0 1.06 0 0 1.5708</pose>
+          </waypoint>
+          <waypoint>
+            <time>1</time>
+            <pose>-3.0 -3.0 1.06 0 0 1.5708</pose>
+          </waypoint>
+        </trajectory>
+      </script>
+    </actor>
+
+    <model name="human_03_proxy">
+      <pose>-3.0 -3.0 0.875 0 0 1.5708</pose>
+      <link name="link">
+        <gravity>false</gravity>
+        <kinematic>true</kinematic>
+        <collision name="collision">
+          <geometry>
+            <cylinder>
+              <radius>0.29</radius>
+              <length>1.75</length>
+            </cylinder>
+          </geometry>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <cylinder>
+              <radius>0.001</radius>
+              <length>0.001</length>
+            </cylinder>
+          </geometry>
+          <transparency>1.0</transparency>
+        </visual>
+      </link>
+    </model>
+
+    <!-- Human 04: Diagonal Crossing Walker (Classic Green Sweater, Scale 1.00, Height ~1.72m) -->
+    <actor name="human_04_visual">
+      <pose>0 0 0 0 0 0</pose>
+      <skin>
+        <filename>model://human/meshes/walk.dae</filename>
+        <scale>1.00</scale>
+      </skin>
+      <animation name="walk">
+        <filename>model://human/meshes/walk.dae</filename>
+        <interpolate_x>false</interpolate_x>
+      </animation>
+      <script>
+        <loop>false</loop>
+        <delay_start>0</delay_start>
+        <auto_start>false</auto_start>
+        <trajectory id="0" type="walk" tension="0">
+          <waypoint>
+            <time>0</time>
+            <pose>1.0 2.5 1.00 0 0 -2.63</pose>
+          </waypoint>
+          <waypoint>
+            <time>1</time>
+            <pose>1.0 2.5 1.00 0 0 -2.63</pose>
+          </waypoint>
+        </trajectory>
+      </script>
+    </actor>
+
+    <model name="human_04_proxy">
+      <pose>1.0 2.5 0.85 0 0 -2.63</pose>
+      <link name="link">
+        <gravity>false</gravity>
+        <kinematic>true</kinematic>
+        <collision name="collision">
+          <geometry>
+            <cylinder>
+              <radius>0.28</radius>
               <length>1.70</length>
             </cylinder>
           </geometry>
         </collision>
-        <visual name="body_visual">
+        <visual name="visual">
           <geometry>
             <cylinder>
-              <radius>0.22</radius>
-              <length>1.50</length>
+              <radius>0.001</radius>
+              <length>0.001</length>
             </cylinder>
           </geometry>
-          <material>
-            <ambient>1.0 0.45 0.0 1</ambient>
-            <diffuse>1.0 0.45 0.0 1</diffuse>
-          </material>
+          <transparency>1.0</transparency>
         </visual>
       </link>
     </model>

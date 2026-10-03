@@ -112,64 +112,62 @@ def room(name, x0, x1, y0, y1, front):
     else:
         raise ValueError(front)
 
-def moving_person(name, start_x, start_y, waypoints, color):
-    wps = "\n".join(f"          <waypoint>{x:.3f} {y:.3f}</waypoint>"
-                    for x, y in waypoints)
+def moving_person(name, start_x, start_y, waypoints, color, mesh="walk.dae", scale=1.0):
     add(f"""
-    <model name="{name}">
-      <static>false</static>
-      <pose>{start_x:.3f} {start_y:.3f} 0.82 0 0 0</pose>
-      <link name="base_link">
-        <inertial>
-          <mass>8.0</mass>
-          <inertia>
-            <ixx>12.0</ixx><ixy>0</ixy><ixz>0</ixz>
-            <iyy>12.0</iyy><iyz>0</iyz><izz>0.45</izz>
-          </inertia>
-        </inertial>
+    <!-- Human Actor (Visual Mesh) -->
+    <actor name="{name}">
+      <pose>0 0 0 0 0 0</pose>
+      <skin>
+        <filename>model://human/meshes/{mesh}</filename>
+        <scale>{scale:.2f}</scale>
+      </skin>
+      <animation name="walk">
+        <filename>model://human/meshes/{mesh}</filename>
+        <interpolate_x>false</interpolate_x>
+      </animation>
+      <script>
+        <loop>false</loop>
+        <delay_start>0</delay_start>
+        <auto_start>false</auto_start>
+        <trajectory id="0" type="walk" tension="0">
+          <waypoint><time>0</time><pose>0 0 0 0 0 0</pose></waypoint>
+          <waypoint><time>1</time><pose>0 0 0 0 0 0</pose></waypoint>
+        </trajectory>
+      </script>
+    </actor>
+
+    <!-- Physical Collision Proxy for LiDAR & Physics -->
+    <model name="{name}_proxy">
+      <pose>{start_x:.3f} {start_y:.3f} 0.85 0 0 0</pose>
+      <link name="link">
+        <gravity>false</gravity>
+        <kinematic>true</kinematic>
         <collision name="collision">
-          <geometry><box><size>0.38 0.38 1.64</size></box></geometry>
-          <surface>
-            <friction>
-              <bullet>
-                <friction>0.8</friction>
-                <friction2>0.8</friction2>
-                <rolling_friction>0.0</rolling_friction>
-              </bullet>
-            </friction>
-          </surface>
+          <geometry>
+            <cylinder>
+              <radius>0.28</radius>
+              <length>1.70</length>
+            </cylinder>
+          </geometry>
         </collision>
-        <visual name="body">
-          <geometry><cylinder><radius>0.19</radius><length>1.35</length></cylinder></geometry>
-          <pose>0 0 -0.10 0 0 0</pose>
-          <material><ambient>{color}</ambient><diffuse>{color}</diffuse></material>
-        </visual>
-        <visual name="head">
-          <pose>0 0 0.76 0 0 0</pose>
-          <geometry><sphere><radius>0.16</radius></sphere></geometry>
-          <material><ambient>0.82 0.67 0.52 1</ambient><diffuse>0.82 0.67 0.52 1</diffuse></material>
+        <visual name="proxy_visual">
+          <geometry>
+            <cylinder>
+              <radius>0.28</radius>
+              <length>1.70</length>
+            </cylinder>
+          </geometry>
+          <transparency>1.0</transparency>
         </visual>
       </link>
-      <plugin filename="gz-sim-trajectory-follower-system"
-              name="gz::sim::systems::TrajectoryFollower">
-        <link_name>base_link</link_name>
-        <loop>true</loop>
-        <force>7.0</force>
-        <torque>8.0</torque>
-        <range_tolerance>0.18</range_tolerance>
-        <bearing_tolerance>5</bearing_tolerance>
-        <waypoints>
-{wps}
-        </waypoints>
-      </plugin>
     </model>
 """)
 
 header = """<?xml version="1.0"?>
 <sdf version="1.9">
   <world name="school_arena">
-    <physics name="school_physics" type="ignored">
-      <max_step_size>0.001</max_step_size>
+    <physics name="school_physics" type="ode">
+      <max_step_size>0.004</max_step_size>
       <real_time_factor>1.0</real_time_factor>
     </physics>
 
@@ -179,6 +177,26 @@ header = """<?xml version="1.0"?>
             name="gz::sim::systems::UserCommands"/>
     <plugin filename="gz-sim-scene-broadcaster-system"
             name="gz::sim::systems::SceneBroadcaster"/>
+    <plugin filename="gz-sim-sensors-system"
+            name="gz::sim::systems::Sensors">
+      <render_engine>ogre2</render_engine>
+    </plugin>
+
+    <!-- ============================================================== -->
+    <!-- RVO2 Social Navigation System Plugin                           -->
+    <!-- ============================================================== -->
+    <plugin
+      filename="librvo2_human_system.so"
+      name="custom_corridor::RVO2HumanSystem">
+      <human_count>8</human_count>
+      <robot_name>burger</robot_name>
+      <robot_radius>0.28</robot_radius>
+      <human_radius>0.28</human_radius>
+      <corridor_mode>false</corridor_mode>
+      <politeness_balance_point>0.60</politeness_balance_point>
+      <randomize_politeness>true</randomize_politeness>
+      <default_scenario_file>school_arena</default_scenario_file>
+    </plugin>
 
     <scene>
       <ambient>0.75 0.75 0.78 1</ambient>
@@ -284,29 +302,29 @@ box("notice_board", 6.52, -1.7, 0.10, 1.30, 1.00, z=1.20,
 
 moving_person("student_head_on_A", -12.0, -8.05,
               [(-12.0, -8.05), (10.0, -8.05)],
-              "0.10 0.35 0.85 1")
+              "0.10 0.35 0.85 1", mesh="walk_orange.dae", scale=1.02)
 moving_person("student_opposite_A", 10.0, -7.85,
               [(10.0, -7.85), (-10.0, -7.85)],
-              "0.85 0.20 0.20 1")
+              "0.85 0.20 0.20 1", mesh="walk_red.dae", scale=0.96)
 moving_person("student_corner_B", 15.05, -7.0,
               [(15.05, -7.0), (15.05, -4.1), (10.5, -4.0)],
-              "0.60 0.20 0.75 1")
+              "0.60 0.20 0.75 1", mesh="walk_blue.dae", scale=1.04)
 moving_person("student_stair_loop", 14.85, -5.2,
               [(14.85, -5.2), (15.0, -4.0), (7.0, -4.0),
                (7.0, 0.0), (14.9, 0.0), (15.0, 5.0)],
-              "0.90 0.55 0.10 1")
+              "0.90 0.55 0.10 1", mesh="walk.dae", scale=1.00)
 moving_person("student_door_exit", -3.73, -10.4,
               [(-3.73, -10.4), (-3.73, -8.05), (2.0, -8.05)],
-              "0.10 0.65 0.55 1")
+              "0.10 0.65 0.55 1", mesh="walk_orange.dae", scale=0.95)
 moving_person("student_vertical_up", 14.85, 1.4,
               [(14.85, 1.4), (14.85, 12.4)],
-              "0.75 0.40 0.15 1")
+              "0.75 0.40 0.15 1", mesh="walk_red.dae", scale=1.02)
 moving_person("student_vertical_down", 15.15, 12.0,
               [(15.15, 12.0), (15.15, 2.0)],
-              "0.35 0.20 0.80 1")
+              "0.35 0.20 0.80 1", mesh="walk_blue.dae", scale=0.98)
 moving_person("student_short_cross", 15.15, 6.4,
               [(15.15, 6.4), (14.65, 6.4), (15.35, 6.4)],
-              "0.15 0.65 0.20 1")
+              "0.15 0.65 0.20 1", mesh="walk.dae", scale=1.00)
 
 add("""
   </world>

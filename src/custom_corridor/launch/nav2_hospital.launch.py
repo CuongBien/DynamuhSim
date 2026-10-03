@@ -30,17 +30,32 @@ def launch_setup(context, *args, **kwargs):
                 raise RuntimeError(f"Map YAML does not exist: {map_name}")
             resolved_map = map_name
         else:
-            cand1 = os.path.join(package_share, "maps", f"{map_name}.yaml")
-            cand2 = os.path.join(package_share, "maps", map_name)
-            if os.path.isfile(cand1):
-                resolved_map = cand1
-            elif os.path.isfile(cand2):
-                resolved_map = cand2
-            else:
+            candidates = [
+                os.path.join(package_share, "maps", f"{map_name}.yaml"),
+                os.path.join(package_share, "maps", map_name),
+                os.path.join(package_share, "maps", "hospital", f"{map_name}.yaml"),
+                os.path.join(package_share, "maps", "hospital", map_name),
+            ]
+            clean_name = map_name.replace("hospital/", "").strip()
+            if clean_name != map_name:
+                candidates.extend([
+                    os.path.join(package_share, "maps", "hospital", f"{clean_name}.yaml"),
+                    os.path.join(package_share, "maps", "hospital", clean_name),
+                ])
+            # Fallback to hospital_easy.yaml if medium or hard specific map is requested but shares identical geometry
+            if any(k in map_name for k in ("medium", "hard", "easy")):
+                candidates.append(os.path.join(package_share, "maps", "hospital", "hospital_easy.yaml"))
+
+            resolved_map = None
+            for cand in candidates:
+                if os.path.isfile(cand):
+                    resolved_map = cand
+                    break
+
+            if resolved_map is None:
                 raise RuntimeError(
-                    f"Map '{map_name}' was not found. Checked:\n"
-                    f"  {cand1}\n"
-                    f"  {cand2}"
+                    f"Map '{map_name}' was not found. Checked:\n" +
+                    "\n".join(f"  {c}" for c in candidates)
                 )
         map_override["yaml_filename"] = resolved_map
         print(f"[nav2_corridor] Using map: {resolved_map}")

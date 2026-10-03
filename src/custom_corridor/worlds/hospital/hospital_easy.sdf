@@ -21,6 +21,22 @@
             <render_engine>ogre2</render_engine>
         </plugin>
 
+    <!-- ============================================================== -->
+    <!-- RVO2 Social Navigation System Plugin                           -->
+    <!-- ============================================================== -->
+    <plugin
+      filename="librvo2_human_system.so"
+      name="custom_corridor::RVO2HumanSystem">
+      <human_count>3</human_count>
+      <robot_name>burger</robot_name>
+      <robot_radius>0.28</robot_radius>
+      <human_radius>0.28</human_radius>
+      <corridor_mode>false</corridor_mode>
+      <politeness_balance_point>0.60</politeness_balance_point>
+      <randomize_politeness>true</randomize_politeness>
+      <default_scenario_file>hospital_easy</default_scenario_file>
+    </plugin>
+
     <physics name="default_physics" type="ode">
       <max_step_size>0.004</max_step_size>
       <real_time_factor>1.0</real_time_factor>
@@ -7613,172 +7629,142 @@
             </model>
     
     <actor name="hospital_walking_human">
+      <pose>0 0 0 0 0 0</pose>
       <skin>
-        <filename>model://human/meshes/walk.dae</filename>
-        <scale>1.0</scale>
+        <filename>model://human/meshes/walk_orange.dae</filename>
+        <scale>1.00</scale>
       </skin>
       <animation name="walk">
-        <filename>model://human/meshes/walk.dae</filename>
-        <interpolate_x>true</interpolate_x>
+        <filename>model://human/meshes/walk_orange.dae</filename>
+        <interpolate_x>false</interpolate_x>
       </animation>
       <script>
-        <loop>true</loop>
-        <delay_start>0.0</delay_start>
-        <auto_start>true</auto_start>
-        <trajectory id="0" type="walk" tension="0.0">
-          
-          <waypoint>
-            <time>0.00</time>
-            <pose>-14.000 0.000 1.0 0 0 0.00000</pose>
-          </waypoint>
-
-          <waypoint>
-            <time>14.00</time>
-            <pose>-2.800 0.000 1.0 0 0 0.00000</pose>
-          </waypoint>
-
-          <waypoint>
-            <time>14.40</time>
-            <pose>-2.800 0.000 1.0 0 0 -1.57080</pose>
-          </waypoint>
-
-          <waypoint>
-            <time>17.50</time>
-            <pose>-2.800 -2.500 1.0 0 0 -1.57080</pose>
-          </waypoint>
-
-          <waypoint>
-            <time>19.40</time>
-            <pose>-2.800 -4.000 1.0 0 0 -1.57080</pose>
-          </waypoint>
-
-          <waypoint>
-            <time>21.40</time>
-            <pose>-2.800 -4.000 1.0 0 0 1.57080</pose>
-          </waypoint>
-
-          <waypoint>
-            <time>23.30</time>
-            <pose>-2.800 -2.500 1.0 0 0 1.57080</pose>
-          </waypoint>
-
-          <waypoint>
-            <time>26.40</time>
-            <pose>-2.800 0.000 1.0 0 0 1.57080</pose>
-          </waypoint>
-
-          <waypoint>
-            <time>26.80</time>
-            <pose>-2.800 0.000 1.0 0 0 3.14159</pose>
-          </waypoint>
-
-          <waypoint>
-            <time>40.80</time>
-            <pose>-14.000 0.000 1.0 0 0 3.14159</pose>
-          </waypoint>
-
-          <waypoint>
-            <time>41.20</time>
-            <pose>-14.000 0.000 1.0 0 0 0.00000</pose>
-          </waypoint>
+        <loop>false</loop>
+        <delay_start>0</delay_start>
+        <auto_start>false</auto_start>
+        <trajectory id="0" type="walk" tension="0">
+          <waypoint><time>0</time><pose>0 0 0 0 0 0</pose></waypoint>
+          <waypoint><time>1</time><pose>0 0 0 0 0 0</pose></waypoint>
         </trajectory>
       </script>
     </actor>
+
+    <model name="hospital_walking_human_proxy">
+      <pose>-14.000 0.000 0.850 0 0 0.00000</pose>
+      <link name="link">
+        <gravity>false</gravity>
+        <kinematic>true</kinematic>
+        <collision name="collision">
+          <geometry>
+            <cylinder>
+              <radius>0.28</radius>
+              <length>1.70</length>
+            </cylinder>
+          </geometry>
+        </collision>
+        <visual name="proxy_visual">
+          <geometry>
+            <cylinder>
+              <radius>0.28</radius>
+              <length>1.70</length>
+            </cylinder>
+          </geometry>
+          <transparency>1.0</transparency>
+        </visual>
+      </link>
+    </model>
 
     <actor name="hospital_walking_human_2">
+      <pose>0 0 0 0 0 0</pose>
       <skin>
-        <filename>model://human/meshes/walk.dae</filename>
-        <scale>1.0</scale>
+        <filename>model://human/meshes/walk_blue.dae</filename>
+        <scale>0.95</scale>
       </skin>
       <animation name="walk">
-        <filename>model://human/meshes/walk.dae</filename>
-        <interpolate_x>true</interpolate_x>
+        <filename>model://human/meshes/walk_blue.dae</filename>
+        <interpolate_x>false</interpolate_x>
       </animation>
       <script>
-        <loop>true</loop>
-        <delay_start>0.0</delay_start>
-        <auto_start>true</auto_start>
-        <trajectory id="0" type="walk" tension="0.0">
-          
-          <waypoint>
-            <time>0.00</time>
-            <pose>2.800 -4.000 1.0 0 0 1.57080</pose>
-          </waypoint>
-
-          <waypoint>
-            <time>3.60</time>
-            <pose>2.800 -1.100 1.0 0 0 1.57080</pose>
-          </waypoint>
-
-          <waypoint>
-            <time>3.90</time>
-            <pose>2.800 -1.100 1.0 0 0 3.14159</pose>
-          </waypoint>
-
-          <waypoint>
-            <time>31.90</time>
-            <pose>-19.600 -1.100 1.0 0 0 3.14159</pose>
-          </waypoint>
-
-          <waypoint>
-            <time>41.90</time>
-            <pose>-19.600 -1.100 1.0 0 0 3.14159</pose>
-          </waypoint>
-
-          <waypoint>
-            <time>42.30</time>
-            <pose>-19.600 -1.100 1.0 0 0 0.00000</pose>
-          </waypoint>
-
-          <waypoint>
-            <time>49.30</time>
-            <pose>-14.000 -1.100 1.0 0 0 0.00000</pose>
-          </waypoint>
-
-          <waypoint>
-            <time>49.70</time>
-            <pose>-14.000 -1.100 1.0 0 0 1.57080</pose>
-          </waypoint>
-
-          <waypoint>
-            <time>56.70</time>
-            <pose>-14.000 4.000 1.0 0 0 1.57080</pose>
-          </waypoint>
+        <loop>false</loop>
+        <delay_start>0</delay_start>
+        <auto_start>false</auto_start>
+        <trajectory id="0" type="walk" tension="0">
+          <waypoint><time>0</time><pose>0 0 0 0 0 0</pose></waypoint>
+          <waypoint><time>1</time><pose>0 0 0 0 0 0</pose></waypoint>
         </trajectory>
       </script>
     </actor>
+
+    <model name="hospital_walking_human_2_proxy">
+      <pose>2.800 -4.000 0.850 0 0 1.57080</pose>
+      <link name="link">
+        <gravity>false</gravity>
+        <kinematic>true</kinematic>
+        <collision name="collision">
+          <geometry>
+            <cylinder>
+              <radius>0.28</radius>
+              <length>1.70</length>
+            </cylinder>
+          </geometry>
+        </collision>
+        <visual name="proxy_visual">
+          <geometry>
+            <cylinder>
+              <radius>0.28</radius>
+              <length>1.70</length>
+            </cylinder>
+          </geometry>
+          <transparency>1.0</transparency>
+        </visual>
+      </link>
+    </model>
 
     <actor name="hospital_walking_human_3">
+      <pose>0 0 0 0 0 0</pose>
       <skin>
-        <filename>model://human/meshes/walk.dae</filename>
-        <scale>1.0</scale>
+        <filename>model://human/meshes/walk_red.dae</filename>
+        <scale>1.02</scale>
       </skin>
       <animation name="walk">
-        <filename>model://human/meshes/walk.dae</filename>
-        <interpolate_x>true</interpolate_x>
+        <filename>model://human/meshes/walk_red.dae</filename>
+        <interpolate_x>false</interpolate_x>
       </animation>
       <script>
-        <loop>true</loop>
-        <delay_start>0.0</delay_start>
-        <auto_start>true</auto_start>
-        <trajectory id="0" type="walk" tension="0.0">
-          <waypoint><time>0.00</time>
-        <pose>-21.300 -2.100 1.0 0 0 0.00000</pose></waypoint>
-<waypoint><time>42.30</time>
-        <pose>-21.300 -2.100 1.0 0 0 0.00000</pose></waypoint>
-<waypoint><time>43.60</time>
-        <pose>-21.300 -1.100 1.0 0 0 1.57080</pose></waypoint>
-<waypoint><time>44.00</time>
-        <pose>-21.300 -1.100 1.0 0 0 0.00000</pose></waypoint>
-<waypoint><time>52.00</time>
-        <pose>-14.000 -1.100 1.0 0 0 0.00000</pose></waypoint>
-<waypoint><time>52.40</time>
-        <pose>-14.000 -1.100 1.0 0 0 1.57080</pose></waypoint>
-<waypoint><time>59.40</time>
-        <pose>-14.000 4.000 1.0 0 0 1.57080</pose></waypoint>
+        <loop>false</loop>
+        <delay_start>0</delay_start>
+        <auto_start>false</auto_start>
+        <trajectory id="0" type="walk" tension="0">
+          <waypoint><time>0</time><pose>0 0 0 0 0 0</pose></waypoint>
+          <waypoint><time>1</time><pose>0 0 0 0 0 0</pose></waypoint>
         </trajectory>
       </script>
     </actor>
+
+    <model name="hospital_walking_human_3_proxy">
+      <pose>-21.300 -2.100 0.850 0 0 0.00000</pose>
+      <link name="link">
+        <gravity>false</gravity>
+        <kinematic>true</kinematic>
+        <collision name="collision">
+          <geometry>
+            <cylinder>
+              <radius>0.28</radius>
+              <length>1.70</length>
+            </cylinder>
+          </geometry>
+        </collision>
+        <visual name="proxy_visual">
+          <geometry>
+            <cylinder>
+              <radius>0.28</radius>
+              <length>1.70</length>
+            </cylinder>
+          </geometry>
+          <transparency>1.0</transparency>
+        </visual>
+      </link>
+    </model>
 
 
   </world>
