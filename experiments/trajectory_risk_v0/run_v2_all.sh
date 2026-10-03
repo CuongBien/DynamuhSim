@@ -205,12 +205,19 @@ run_episode() {
 
   echo "$NAV_RC" > "$OUT/navigation_return_code.txt"
 
-  # Phân loại kết quả
-  case "$NAV_RC" in
-    0)   STATUS="SUCCESS" ;;
-    124) STATUS="TIMEOUT" ;;
-    *)   STATUS="FAILED (rc=$NAV_RC)" ;;
-  esac
+  # Phân loại kết quả — đọc từ log thực tế, KHÔNG dùng exit code
+  # vì ros2 action send_goal luôn trả về 0 dù goal ABORTED/SUCCEEDED
+  if [ "$NAV_RC" -eq 124 ]; then
+    STATUS="TIMEOUT"
+  elif grep -q "Goal finished with status: SUCCEEDED" "$OUT/navigation.log" 2>/dev/null; then
+    STATUS="SUCCESS"
+  elif grep -q "Goal finished with status: ABORTED" "$OUT/navigation.log" 2>/dev/null; then
+    STATUS="ABORTED"
+  elif grep -q "Goal finished with status: CANCELED" "$OUT/navigation.log" 2>/dev/null; then
+    STATUS="CANCELED"
+  else
+    STATUS="FAILED (rc=$NAV_RC)"
+  fi
   echo "  → Navigation result: $STATUS"
   echo "$STATUS" > "$OUT/status.txt"
 
