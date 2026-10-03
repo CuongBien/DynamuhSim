@@ -969,373 +969,137 @@ def generate_static_humans():
 
         return models
 
-def generate_walking_human():
-    """Người đi từ phòng 3 đến phòng 5 phía nam rồi quay về, lặp liên tục."""
-
-    waypoints = [
-        # time (s), x, y, yaw (rad)
-        (0.0,  -14.0,  0.0,  0.0),     # Trước phòng 3
-        (14.0,  -2.8,  0.0,  0.0),     # Dọc hành lang, tốc độ ~0.8 m/s
-        (14.4,  -2.8,  0.0, -1.5708), # Quay về cửa phòng phía nam
-        (17.5,  -2.8, -2.5, -1.5708), # Qua cửa
-        (19.4,  -2.8, -4.0, -1.5708), # Trong phòng 5
-        (21.4,  -2.8, -4.0,  1.5708), # Dừng rồi quay ra
-        (23.3,  -2.8, -2.5,  1.5708),
-        (26.4,  -2.8,  0.0,  1.5708),
-        (26.8,  -2.8,  0.0,  3.14159),
-        (40.8, -14.0,  0.0,  3.14159), # Trở về điểm đầu
-        (41.2, -14.0,  0.0,  0.0),     # Quay đầu, bắt đầu vòng tiếp
-    ]
-
-    waypoint_xml = "\n".join(
-        f"""
-          <waypoint>
-            <time>{t:.2f}</time>
-            <pose>{x:.3f} {y:.3f} 1.0 0 0 {yaw:.5f}</pose>
-          </waypoint>"""
-        for t, x, y, yaw in waypoints
-    )
-
+def human_proxy_model(name, x, y, z=0.85, yaw=0.0, radius=0.28, length=1.70):
+    """Physical collision proxy for LiDAR and physics, synchronized with RVO2."""
     return f"""
-    <actor name="hospital_walking_human">
+    <model name="{name}_proxy">
+      <pose>{x:.3f} {y:.3f} {z:.3f} 0 0 {yaw:.5f}</pose>
+      <link name="link">
+        <gravity>false</gravity>
+        <kinematic>true</kinematic>
+        <collision name="collision">
+          <geometry>
+            <cylinder>
+              <radius>{radius:.2f}</radius>
+              <length>{length:.2f}</length>
+            </cylinder>
+          </geometry>
+        </collision>
+        <visual name="proxy_visual">
+          <geometry>
+            <cylinder>
+              <radius>{radius:.2f}</radius>
+              <length>{length:.2f}</length>
+            </cylinder>
+          </geometry>
+          <transparency>1.0</transparency>
+        </visual>
+      </link>
+    </model>
+"""
+
+
+def rvo2_actor_model(name, mesh="walk.dae", scale=1.0, anim_name="walk"):
+    """Visual-only animated skeletal actor zero-anchored for Gazebo Sim 8."""
+    return f"""
+    <actor name="{name}">
+      <pose>0 0 0 0 0 0</pose>
       <skin>
-        <filename>model://human/meshes/walk.dae</filename>
-        <scale>1.0</scale>
+        <filename>model://human/meshes/{mesh}</filename>
+        <scale>{scale:.2f}</scale>
       </skin>
-      <animation name="walk">
-        <filename>model://human/meshes/walk.dae</filename>
-        <interpolate_x>true</interpolate_x>
+      <animation name="{anim_name}">
+        <filename>model://human/meshes/{mesh}</filename>
+        <interpolate_x>false</interpolate_x>
       </animation>
       <script>
-        <loop>true</loop>
-        <delay_start>0.0</delay_start>
-        <auto_start>true</auto_start>
-        <trajectory id="0" type="walk" tension="0.0">
-          {waypoint_xml}
+        <loop>false</loop>
+        <delay_start>0</delay_start>
+        <auto_start>false</auto_start>
+        <trajectory id="0" type="{anim_name}" tension="0">
+          <waypoint><time>0</time><pose>0 0 0 0 0 0</pose></waypoint>
+          <waypoint><time>1</time><pose>0 0 0 0 0 0</pose></waypoint>
         </trajectory>
       </script>
     </actor>
 """
+
+
+def generate_walking_human():
+    """Easy Actor 1: Oncoming corridor walker."""
+    return (
+        rvo2_actor_model("hospital_walking_human", mesh="walk_orange.dae", scale=1.00)
+        + human_proxy_model("hospital_walking_human", -14.0, 0.0, yaw=0.0)
+    )
+
 
 def generate_second_walking_human():
-    """Room 6 south -> room 2 -> wait -> room 3 north."""
-
-    centers = room_centers()
-    room_6_x = centers[5]  #  2.8
-    room_2_x = centers[1]  # -19.6
-    room_3_x = centers[2]  # -14.0
-
-    # Ghế phía nam có tâm y = -2.1; người đứng cũ cách ghế 1 m.
-    south_bench_y = -CORRIDOR_WIDTH / 2.0 + 0.40
-    walking_y = south_bench_y + 1.0  # -1.1, phía trong hành lang
-
-    # Thời gian tính theo giây; quãng đi chính xấp xỉ 0.8 m/s.
-    waypoints = [
-    # time (s), x, y, yaw (rad)
-    (0.0,  room_6_x, -4.0,      1.5708),   # Trong phòng 6 nam
-    (3.6,  room_6_x, walking_y, 1.5708),   # Ra hành lang
-    (3.9,  room_6_x, walking_y, 3.14159),  # Quay sang trái
-    (31.9, room_2_x, walking_y, 3.14159),  # Đến phòng 2
-    (41.9, room_2_x, walking_y, 3.14159),  # Đứng chờ 10 giây
-    (42.3, room_2_x, walking_y, 0.0),      # Quay lại
-    (49.3, room_3_x, walking_y, 0.0),      # Đến cửa phòng 3
-    (49.7, room_3_x, walking_y, 1.5708),   # Quay về phía bắc
-    (56.7, room_3_x, 4.0,       1.5708),   # Vào phòng 3 bắc
-]
-
-    waypoint_xml = "\n".join(
-        f"""
-          <waypoint>
-            <time>{t:.2f}</time>
-            <pose>{x:.3f} {y:.3f} 1.0 0 0 {yaw:.5f}</pose>
-          </waypoint>"""
-        for t, x, y, yaw in waypoints
+    """Easy Actor 2: South room 6 walker."""
+    room_6_x = room_centers()[5]  # 2.8
+    return (
+        rvo2_actor_model("hospital_walking_human_2", mesh="walk_blue.dae", scale=0.95)
+        + human_proxy_model("hospital_walking_human_2", room_6_x, -4.0, yaw=1.5708)
     )
 
-    return f"""
-    <actor name="hospital_walking_human_2">
-      <skin>
-        <filename>model://human/meshes/walk_blue.dae</filename>
-        <scale>0.95</scale>
-      </skin>
-      <animation name="walk">
-        <filename>model://human/meshes/walk_blue.dae</filename>
-        <interpolate_x>true</interpolate_x>
-      </animation>
-      <script>
-        <loop>true</loop>
-        <delay_start>0.0</delay_start>
-        <auto_start>true</auto_start>
-        <trajectory id="0" type="walk" tension="0.0">
-          {waypoint_xml}
-        </trajectory>
-      </script>
-    </actor>
-"""
 
 def generate_third_walking_human():
-    """Wait by the bench at south room 2, then follow actor 2 into north room 3."""
-
-    centers = room_centers()
-    room_2_x = centers[1]
-    room_3_x = centers[2]
-    bench_x = room_2_x - DOOR_WIDTH / 2.0 - 0.30 - BENCH_LENGTH / 2.0
+    """Easy Actor 3: Waiting follower at south room 2 bench."""
+    bench_x = room_centers()[1] - DOOR_WIDTH / 2.0 - 0.30 - BENCH_LENGTH / 2.0
     bench_y = -CORRIDOR_WIDTH / 2.0 + 0.40
-    walking_y = bench_y + 1.0
-
-    # Actor 2 leaves room 2 at t=42.3. The follower starts beside the bench
-    # after that point and reaches each turn roughly 2-3 seconds later.
-    waypoints = [
-        (0.0, bench_x, bench_y, 0.0),
-        (42.3, bench_x, bench_y, 0.0),
-        (43.6, bench_x, walking_y, 1.5708),
-        (44.0, bench_x, walking_y, 0.0),
-        (52.0, room_3_x, walking_y, 0.0),
-        (52.4, room_3_x, walking_y, 1.5708),
-        (59.4, room_3_x, 4.0, 1.5708),
-    ]
-
-    waypoint_xml = "\n".join(
-        f"""<waypoint><time>{t:.2f}</time>
-        <pose>{x:.3f} {y:.3f} 1.0 0 0 {yaw:.5f}</pose></waypoint>"""
-        for t, x, y, yaw in waypoints
+    return (
+        rvo2_actor_model("hospital_walking_human_3", mesh="walk_red.dae", scale=1.02)
+        + human_proxy_model("hospital_walking_human_3", bench_x, bench_y, yaw=0.0)
     )
 
-    return f"""
-    <actor name="hospital_walking_human_3">
-      <skin>
-        <filename>model://human/meshes/walk_red.dae</filename>
-        <scale>1.02</scale>
-      </skin>
-      <animation name="walk">
-        <filename>model://human/meshes/walk_red.dae</filename>
-        <interpolate_x>true</interpolate_x>
-      </animation>
-      <script>
-        <loop>true</loop>
-        <delay_start>0.0</delay_start>
-        <auto_start>true</auto_start>
-        <trajectory id="0" type="walk" tension="0.0">
-          {waypoint_xml}
-        </trajectory>
-      </script>
-    </actor>
-"""
 
 # ============================================================
-# WORLD GENERATION
+# MEDIUM & HARD WALKERS
 # ============================================================
 
 def generate_medium_single_walker():
-    """Walker 1 takes the opposite lane through the trolley route.
-
-    Planned avoidance: transition before entering the cart's swept region.
-    This is not perception-driven social avoidance.
-    """
-    points = [(0, -10, 0, 3.14159), (8, -16, 0, 3.14159),
-              (10, -17, -1.3, 3.14159), (22, -26, -1.3, 3.14159),
-              (24, -26, -1.3, 0), (36, -17, -1.3, 0),
-              (38, -16, 0, 0), (46, -10, 0, 0),
-              (48, -10, 0, 3.14159)]
-    waypoints = "".join(f"<waypoint><time>{time}</time><pose>{x} {y} 1 0 0 {yaw}</pose></waypoint>"
-                        for time, x, y, yaw in points)
-    return f"""
-    <actor name="medium_walker_01">
-      <skin><filename>model://human/meshes/walk.dae</filename><scale>1</scale></skin>
-      <animation name="walk"><filename>model://human/meshes/walk.dae</filename><interpolate_x>true</interpolate_x></animation>
-      <script><loop>true</loop><delay_start>0</delay_start><auto_start>true</auto_start>
-        <trajectory id="0" type="walk" tension="0">{waypoints}</trajectory>
-      </script>
-    </actor>
-"""
+    """Medium Actor 1: Westbound pedestrian."""
+    return (
+        rvo2_actor_model("medium_walker_01", mesh="walk_orange.dae", scale=1.00)
+        + human_proxy_model("medium_walker_01", -10.0, 0.0, yaw=3.14159)
+    )
 
 
 def generate_medium_head_on_walker():
-    """Medium actor 2: walk westward on the corridor and return."""
-    return """
-    <actor name="medium_walker_02_head_on">
-      <skin>
-        <filename>model://human/meshes/walk.dae</filename>
-        <scale>1.0</scale>
-      </skin>
-      <animation name="walk">
-        <filename>model://human/meshes/walk.dae</filename>
-        <interpolate_x>true</interpolate_x>
-      </animation>
-      <script>
-        <loop>true</loop>
-        <delay_start>0.0</delay_start>
-        <auto_start>true</auto_start>
-        <trajectory id="0" type="walk" tension="0.0">
-          <waypoint><time>0.0</time><pose>8.0 0.0 1.0 0 0 3.14159</pose></waypoint>
-          <waypoint><time>8.0</time><pose>2.0 0.0 1.0 0 0 3.14159</pose></waypoint>
-          <waypoint><time>10.0</time><pose>2.0 0.0 1.0 0 0 0</pose></waypoint>
-          <waypoint><time>18.0</time><pose>8.0 0.0 1.0 0 0 0</pose></waypoint>
-          <waypoint><time>20.0</time><pose>8.0 0.0 1.0 0 0 3.14159</pose></waypoint>
-        </trajectory>
-      </script>
-    </actor>
-"""
+    """Medium Actor 2: Westward corridor walker."""
+    return (
+        rvo2_actor_model("medium_walker_02_head_on", mesh="walk_red.dae", scale=0.95)
+        + human_proxy_model("medium_walker_02_head_on", 8.0, 0.0, yaw=3.14159)
+    )
 
 
 def generate_medium_room_crossing_walker():
-    """Medium actor 3: cross the corridor through south/north room 5 doors."""
+    """Medium Actor 3: Cross corridor through south/north room 5 doors."""
     room_x = room_centers()[4]
-    waypoints = [
-        (0.0, -4.0, 1.57080),
-        (2.0, -4.0, 1.57080),
-        (10.0, 2.0, 1.57080),
-        (12.0, 4.0, 1.57080),
-        (14.0, 4.0, -1.57080),
-        (24.0, -4.0, -1.57080),
-        (26.0, -4.0, 1.57080),
-    ]
-    waypoint_xml = "\n".join(
-        f"<waypoint><time>{t:.1f}</time>"
-        f"<pose>{room_x:.3f} {y:.3f} 1.0 0 0 {yaw:.5f}</pose></waypoint>"
-        for t, y, yaw in waypoints
+    return (
+        rvo2_actor_model("medium_walker_03_room_crossing", mesh="walk_blue.dae", scale=1.06)
+        + human_proxy_model("medium_walker_03_room_crossing", room_x, -4.0, yaw=1.5708)
     )
-    return f"""
-    <actor name="medium_walker_03_room_crossing">
-      <skin>
-        <filename>model://human/meshes/walk.dae</filename>
-        <scale>1.0</scale>
-      </skin>
-      <animation name="walk">
-        <filename>model://human/meshes/walk.dae</filename>
-        <interpolate_x>true</interpolate_x>
-      </animation>
-      <script>
-        <loop>true</loop>
-        <delay_start>0.0</delay_start>
-        <auto_start>true</auto_start>
-        <trajectory id="0" type="walk" tension="0.0">
-          {waypoint_xml}
-        </trajectory>
-      </script>
-    </actor>
-"""
 
 
 def generate_medium_same_direction_walker():
-    """Medium actor 4: an eastbound pedestrian in a separate corridor segment."""
-    return """
-    <actor name="medium_walker_04_same_direction">
-      <skin>
-        <filename>model://human/meshes/walk.dae</filename>
-        <scale>1.0</scale>
-      </skin>
-      <animation name="walk">
-        <filename>model://human/meshes/walk.dae</filename>
-        <interpolate_x>true</interpolate_x>
-      </animation>
-      <script>
-        <loop>true</loop>
-        <delay_start>0.0</delay_start>
-        <auto_start>true</auto_start>
-        <trajectory id="0" type="walk" tension="0.0">
-          <waypoint><time>0.0</time><pose>11.0 0.0 1.0 0 0 0</pose></waypoint>
-          <waypoint><time>8.0</time><pose>17.0 0.0 1.0 0 0 0</pose></waypoint>
-          <waypoint><time>10.0</time><pose>17.0 0.0 1.0 0 0 3.14159</pose></waypoint>
-          <waypoint><time>18.0</time><pose>11.0 0.0 1.0 0 0 3.14159</pose></waypoint>
-          <waypoint><time>20.0</time><pose>11.0 0.0 1.0 0 0 0</pose></waypoint>
-        </trajectory>
-      </script>
-    </actor>
-"""
+    """Medium Actor 4: Eastbound corridor segment pedestrian."""
+    return (
+        rvo2_actor_model("medium_walker_04_same_direction", mesh="walk.dae", scale=1.00)
+        + human_proxy_model("medium_walker_04_same_direction", 11.0, 0.0, yaw=0.0)
+    )
 
 
 def generate_medium_wait_then_cross_walker():
-    """Medium actor 5: wait in south room 9, then cross to north room 9."""
+    """Medium Actor 5: Cross room 9 corridor doors."""
     room_x = room_centers()[8]
-    waypoints = [
-        (0.0, -4.0, 1.57080),
-        (8.0, -4.0, 1.57080),
-        (12.0, -1.0, 1.57080),
-        (16.0, 2.0, 1.57080),
-        (18.7, 4.0, 1.57080),
-        (20.7, 4.0, -1.57080),
-        (31.4, -4.0, -1.57080),
-        (33.4, -4.0, 1.57080),
-    ]
-    waypoint_xml = "\n".join(
-        f"<waypoint><time>{t:.1f}</time>"
-        f"<pose>{room_x:.3f} {y:.3f} 1.0 0 0 {yaw:.5f}</pose></waypoint>"
-        for t, y, yaw in waypoints
+    return (
+        rvo2_actor_model("medium_walker_05_wait_then_cross", mesh="walk_orange.dae", scale=0.98)
+        + human_proxy_model("medium_walker_05_wait_then_cross", room_x, -4.0, yaw=1.5708)
     )
-    return f"""
-    <actor name="medium_walker_05_wait_then_cross">
-      <skin>
-        <filename>model://human/meshes/walk.dae</filename>
-        <scale>1.0</scale>
-      </skin>
-      <animation name="walk">
-        <filename>model://human/meshes/walk.dae</filename>
-        <interpolate_x>true</interpolate_x>
-      </animation>
-      <script>
-        <loop>true</loop>
-        <delay_start>0.0</delay_start>
-        <auto_start>true</auto_start>
-        <trajectory id="0" type="walk" tension="0.0">
-          {waypoint_xml}
-        </trajectory>
-      </script>
-    </actor>
-"""
-
-
-def generate_medium_trolley_pusher():
-    """New human and rigid three-shelf cart with identical timed trajectories.
-
-    Visual scripted motion only, as with the other Medium walking actors.
-    Cart geometry is offset ahead of its actor origin; the root stays level.
-    """
-    waypoints = [(0, -24, 0), (12, -18, 0), (16, -18, 3.14159),
-                 (28, -24, 3.14159), (32, -24, 0)]
-    result = ""
-    for name, mesh in [("medium_walker_06_trolley_pusher", "push_trolley.dae"),
-                       ("medium_trolley_06", "trolley.dae")]:
-        points = "".join(f"<waypoint><time>{t}</time><pose>{x} 0.6 1 0 0 {yaw}</pose></waypoint>"
-                         for t, x, yaw in waypoints)
-        result += f"""
-    <actor name="{name}">
-      <skin><filename>model://human/meshes/{mesh}</filename><scale>1</scale></skin>
-      <animation name="push"><filename>model://human/meshes/{mesh}</filename><interpolate_x>false</interpolate_x></animation>
-      <script><loop>true</loop><delay_start>0</delay_start><auto_start>true</auto_start>
-        <trajectory id="0" type="push" tension="0">{points}</trajectory>
-      </script>
-    </actor>
-"""
-    return result
-
-
-def generate_medium_yielding_walker():
-    """Actor 7 is driven by a Medium-only reactive robot-yielding plugin."""
-    return """
-    <actor name="medium_walker_07_yielding">
-      <pose>0 0 0 0 0 0</pose>
-      <skin><filename>model://human/meshes/walk.dae</filename><scale>1</scale></skin>
-      <animation name="walk"><filename>model://human/meshes/walk.dae</filename><interpolate_x>false</interpolate_x></animation>
-      <script><loop>false</loop><delay_start>0</delay_start><auto_start>false</auto_start>
-        <trajectory id="0" type="walk" tension="0">
-          <waypoint><time>0</time><pose>0 -1.35 1 0 0 1.570796</pose></waypoint>
-          <waypoint><time>1</time><pose>0 -1.35 1 0 0 1.570796</pose></waypoint>
-        </trajectory>
-      </script>
-    </actor>
-    <plugin filename="libhospital_yielding_system.so" name="custom_corridor::HospitalYieldingSystem">
-      <robot_name>burger</robot_name>
-    </plugin>
-"""
 
 
 def generate_medium_standing_people():
-    """Three new Medium-only people at the right of selected entrances.
-
-    Right means the observer faces the room from the corridor. All positions
-    are in the corridor, with clearance to the doorway, benches and wall.
-    """
+    """Three Medium-only static people at the right of selected entrances."""
     centers = room_centers()
     placements = [
         ("medium_standing_room_04_south", centers[3] - 1.0, -1.0, 0.0),
@@ -1362,197 +1126,83 @@ def generate_medium_standing_people():
     return models
 
 
-def generate_hard_door_exit_walker():
-    """H8 exits north room 5, waits four seconds, then walks west.
-
-    Reuses Medium's scripted visual actor convention and walk mesh.
-    Returns through the same doorway; never crosses a room partition.
-    This actor has no moving collision proxy and no robot-triggered motion.
-    """
-    room_x = room_centers()[4]
-    points = [
-        (0.0, room_x, 4.0, -1.570796),
-        (6.0, room_x, 4.0, -1.570796),
-        (10.0, room_x, 1.35, -1.570796),
-        (14.0, room_x, 1.35, -1.570796),
-        (16.0, room_x, 1.35, 3.141593),
-        (22.0, room_x - 4.2, 1.35, 3.141593),
-        (24.0, room_x - 4.2, 1.35, 3.141593),
-        (26.0, room_x - 4.2, 1.35, 0.0),
-        (32.0, room_x, 1.35, 0.0),
-        (34.0, room_x, 1.35, 1.570796),
-        (38.0, room_x, 4.0, 1.570796),
-        (40.0, room_x, 4.0, -1.570796),
-    ]
-    waypoints = "\n".join(
-        f"<waypoint><time>{t:.1f}</time>"
-        f"<pose>{x:.3f} {y:.3f} 1.0 0 0 {yaw:.6f}</pose></waypoint>"
-        for t, x, y, yaw in points
+def generate_medium_trolley_pusher():
+    """Medium Actors 6 & 7: Pusher and three-shelf trolley."""
+    pusher = (
+        rvo2_actor_model("medium_walker_06_trolley_pusher", mesh="push_trolley.dae", scale=1.00, anim_name="push")
+        + human_proxy_model("medium_walker_06_trolley_pusher", -24.0, 0.6, yaw=0.0)
     )
-    return f"""
-    <actor name="hard_walker_08_door_exit">
-      <skin><filename>model://human/meshes/walk.dae</filename><scale>1</scale></skin>
-      <animation name="walk"><filename>model://human/meshes/walk.dae</filename><interpolate_x>true</interpolate_x></animation>
-      <script><loop>true</loop><delay_start>0</delay_start><auto_start>true</auto_start>
-        <trajectory id="0" type="walk" tension="0">{waypoints}</trajectory>
-      </script>
-    </actor>
-"""
+    trolley = (
+        rvo2_actor_model("medium_trolley_06", mesh="trolley.dae", scale=1.00, anim_name="push")
+        + human_proxy_model("medium_trolley_06", -23.3, 0.6, yaw=0.0, radius=0.35)
+    )
+    return pusher + trolley
+
+
+def generate_medium_yielding_walker():
+    """Medium Actor 8: Social yielding pedestrian driven by RVO2."""
+    return (
+        rvo2_actor_model("medium_walker_07_yielding", mesh="walk_red.dae", scale=1.02)
+        + human_proxy_model("medium_walker_07_yielding", 0.0, -1.35, yaw=1.5708)
+    )
+
+
+def generate_hard_door_exit_walker():
+    """Hard Actor 9 (H8): Exit north room 5, walk west."""
+    room_x = room_centers()[4]
+    return (
+        rvo2_actor_model("hard_walker_08_door_exit", mesh="walk_blue.dae", scale=1.00)
+        + human_proxy_model("hard_walker_08_door_exit", room_x, 4.0, yaw=-1.5708)
+    )
 
 
 def generate_hard_door_entry_walker():
-    """H09 walks east, enters south room 5, waits, and returns.
-
-    Scripted visual motion, independent of robot pose. Crosses the south
-    corridor wall only at room 5's door center. Delayed relative to H03/H08.
-    """
+    """Hard Actor 10 (H9): Walk east, enter south room 5."""
     room_x = room_centers()[4]
-    points = [
-        (0.0, room_x - 4.2, -1.35, 0.0),
-        (12.0, room_x - 4.2, -1.35, 0.0),
-        (18.0, room_x, -1.35, 0.0),
-        (20.0, room_x, -1.35, -1.570796),
-        (24.0, room_x, -4.0, -1.570796),
-        (32.0, room_x, -4.0, -1.570796),
-        (34.0, room_x, -4.0, 1.570796),
-        (38.0, room_x, -1.35, 1.570796),
-        (40.0, room_x, -1.35, 3.141593),
-        (46.0, room_x - 4.2, -1.35, 3.141593),
-        (48.0, room_x - 4.2, -1.35, 0.0),
-    ]
-    waypoints = "\n".join(
-        f"<waypoint><time>{t:.1f}</time>"
-        f"<pose>{x:.3f} {y:.3f} 1.0 0 0 {yaw:.6f}</pose></waypoint>"
-        for t, x, y, yaw in points
+    return (
+        rvo2_actor_model("hard_walker_09_door_entry", mesh="walk_orange.dae", scale=0.96)
+        + human_proxy_model("hard_walker_09_door_entry", room_x - 4.2, -1.35, yaw=0.0)
     )
-    return f"""
-    <actor name="hard_walker_09_door_entry">
-      <skin><filename>model://human/meshes/walk.dae</filename><scale>1</scale></skin>
-      <animation name="walk"><filename>model://human/meshes/walk.dae</filename><interpolate_x>true</interpolate_x></animation>
-      <script><loop>true</loop><delay_start>0</delay_start><auto_start>true</auto_start>
-        <trajectory id="0" type="walk" tension="0">{waypoints}</trajectory>
-      </script>
-    </actor>
-"""
 
 
 def generate_hard_multi_crossing_walkers():
-    """H10/H11 cross in opposite directions through adjacent room doors.
-
-    Different door centers prevent a guaranteed head-on overlap between the
-    pair. H11 starts three seconds later. Both are scripted visual actors.
-    """
+    """Hard Actors 11 & 12 (H10/H11): Cross through adjacent room doors."""
     centers = room_centers()
-    result = ""
-    for name, x, start_y, start_time in [
-        ("hard_walker_10_cross_south_to_north", centers[5], -4.0, 5.0),
-        ("hard_walker_11_cross_north_to_south", centers[6], 4.0, 8.0),
-    ]:
-        destination_y = -start_y
-        forward_yaw = 1.570796 if start_y < 0 else -1.570796
-        backward_yaw = -forward_yaw
-        # Each 8 m crossing takes 10 seconds (0.8 m/s). The six-second
-        # end wait and two-second turns give a 28-second periodic route.
-        points = [
-            (0.0, start_y, forward_yaw),
-            (10.0, destination_y, forward_yaw),
-            (14.0, destination_y, forward_yaw),
-            (16.0, destination_y, backward_yaw),
-            (26.0, start_y, backward_yaw),
-            (28.0, start_y, forward_yaw),
-        ]
-        waypoints = "\n".join(
-            f"<waypoint><time>{t:.1f}</time>"
-            f"<pose>{x:.3f} {y:.3f} 1.0 0 0 {yaw:.6f}</pose></waypoint>"
-            for t, y, yaw in points
-        )
-        result += f"""
-    <actor name="{name}">
-      <skin><filename>model://human/meshes/walk.dae</filename><scale>1</scale></skin>
-      <animation name="walk"><filename>model://human/meshes/walk.dae</filename><interpolate_x>true</interpolate_x></animation>
-      <script><loop>true</loop><delay_start>{start_time:.1f}</delay_start><auto_start>true</auto_start>
-        <trajectory id="0" type="walk" tension="0">{waypoints}</trajectory>
-      </script>
-    </actor>
-"""
-    return result
+    h10 = (
+        rvo2_actor_model("hard_walker_10_cross_south_to_north", mesh="walk_red.dae", scale=1.02)
+        + human_proxy_model("hard_walker_10_cross_south_to_north", centers[5], -4.0, yaw=1.5708)
+    )
+    h11 = (
+        rvo2_actor_model("hard_walker_11_cross_north_to_south", mesh="walk.dae", scale=0.98)
+        + human_proxy_model("hard_walker_11_cross_north_to_south", centers[6], 4.0, yaw=-1.5708)
+    )
+    return h10 + h11
 
 
 def generate_hard_group_walkers():
-    """H12/H13 walk side by side with synchronized stops.
-
-    Both use the same timing and x coordinates; y differs by 0.8 m.
-    Scripted visual actors only, without robot-dependent group behavior.
-    """
-    result = ""
-    for name, y in [("hard_walker_12_group", -0.4),
-                    ("hard_walker_13_group", 0.4)]:
-        points = [
-            (0.0, 11.5, 0.0),
-            (6.0, 11.5, 0.0),
-            (14.0, 15.5, 0.0),
-            (19.0, 15.5, 0.0),
-            (25.0, 18.5, 0.0),
-            (28.0, 18.5, 0.0),
-            (30.0, 18.5, 3.141593),
-            (36.0, 15.5, 3.141593),
-            (41.0, 15.5, 3.141593),
-            (49.0, 11.5, 3.141593),
-            (51.0, 11.5, 0.0),
-        ]
-        waypoints = "\n".join(
-            f"<waypoint><time>{t:.1f}</time>"
-            f"<pose>{x:.3f} {y:.3f} 1.0 0 0 {yaw:.6f}</pose></waypoint>"
-            for t, x, yaw in points
-        )
-        result += f"""
-    <actor name="{name}">
-      <skin><filename>model://human/meshes/walk.dae</filename><scale>1</scale></skin>
-      <animation name="walk"><filename>model://human/meshes/walk.dae</filename><interpolate_x>true</interpolate_x></animation>
-      <script><loop>true</loop><delay_start>0</delay_start><auto_start>true</auto_start>
-        <trajectory id="0" type="walk" tension="0">{waypoints}</trajectory>
-      </script>
-    </actor>
-"""
-    return result
+    """Hard Actors 13 & 14 (H12/H13): Walk side by side."""
+    h12 = (
+        rvo2_actor_model("hard_walker_12_group", mesh="walk_blue.dae", scale=1.04)
+        + human_proxy_model("hard_walker_12_group", 11.5, -0.4, yaw=0.0)
+    )
+    h13 = (
+        rvo2_actor_model("hard_walker_13_group", mesh="walk_red.dae", scale=0.95)
+        + human_proxy_model("hard_walker_13_group", 11.5, 0.4, yaw=0.0)
+    )
+    return h12 + h13
 
 
 def generate_hard_second_trolley_pusher():
-    """H14 and cart 2 share identical poses/times, as in Medium's cart.
-
-    Stops near room 8 for delivery. Scripted visual motion only; the mesh
-    carries the cart offset ahead of the pusher's shared actor origin.
-    """
-    delivery_x = room_centers()[7] - 1.2
-    points = [
-        (0.0, 22.0, 3.141593),
-        (9.0, 22.0, 3.141593),
-        (32.0, delivery_x, 3.141593),
-        (40.0, delivery_x, 3.141593),
-        (44.0, delivery_x, 0.0),
-        (67.0, 22.0, 0.0),
-        (71.0, 22.0, 3.141593),
-    ]
-    result = ""
-    for name, mesh in [
-        ("hard_walker_14_trolley_pusher", "push_trolley.dae"),
-        ("hard_trolley_14", "trolley.dae"),
-    ]:
-        waypoints = "\n".join(
-            f"<waypoint><time>{t:.1f}</time>"
-            f"<pose>{x:.3f} -1.200 1.0 0 0 {yaw:.6f}</pose></waypoint>"
-            for t, x, yaw in points
-        )
-        result += f"""
-    <actor name="{name}">
-      <skin><filename>model://human/meshes/{mesh}</filename><scale>1</scale></skin>
-      <animation name="push"><filename>model://human/meshes/{mesh}</filename><interpolate_x>false</interpolate_x></animation>
-      <script><loop>true</loop><delay_start>0</delay_start><auto_start>true</auto_start>
-        <trajectory id="0" type="push" tension="0">{waypoints}</trajectory>
-      </script>
-    </actor>
-"""
-    return result
+    """Hard Actors 15 & 16 (H14 & cart): Pusher and delivery cart."""
+    pusher = (
+        rvo2_actor_model("hard_walker_14_trolley_pusher", mesh="push_trolley.dae", scale=1.00, anim_name="push")
+        + human_proxy_model("hard_walker_14_trolley_pusher", 22.0, -1.2, yaw=3.14159)
+    )
+    trolley = (
+        rvo2_actor_model("hard_trolley_14", mesh="trolley.dae", scale=1.00, anim_name="push")
+        + human_proxy_model("hard_trolley_14", 21.3, -1.2, yaw=3.14159, radius=0.35)
+    )
+    return pusher + trolley
 
 
 def generate_world(difficulty="easy"):
@@ -1598,6 +1248,7 @@ def generate_world(difficulty="easy"):
             models += generate_hard_multi_crossing_walkers()
             models += generate_hard_group_walkers()
             models += generate_hard_second_trolley_pusher()
+    human_count = {"easy": 3, "medium": 8, "hard": 16}[difficulty]
     return f"""<?xml version="1.0" ?>
 
 <sdf version="1.9">
@@ -1620,6 +1271,22 @@ def generate_world(difficulty="easy"):
             name="gz::sim::systems::Sensors">
             <render_engine>ogre2</render_engine>
         </plugin>
+
+    <!-- ============================================================== -->
+    <!-- RVO2 Social Navigation System Plugin                           -->
+    <!-- ============================================================== -->
+    <plugin
+      filename="librvo2_human_system.so"
+      name="custom_corridor::RVO2HumanSystem">
+      <human_count>{human_count}</human_count>
+      <robot_name>burger</robot_name>
+      <robot_radius>0.28</robot_radius>
+      <human_radius>0.28</human_radius>
+      <corridor_mode>false</corridor_mode>
+      <politeness_balance_point>0.60</politeness_balance_point>
+      <randomize_politeness>true</randomize_politeness>
+      <default_scenario_file>hospital_{difficulty}</default_scenario_file>
+    </plugin>
 
     <physics name="default_physics" type="ode">
       <max_step_size>0.004</max_step_size>

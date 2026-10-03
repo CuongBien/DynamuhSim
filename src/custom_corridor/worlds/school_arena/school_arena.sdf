@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <sdf version="1.9">
   <world name="school_arena">
-    <physics name="school_physics" type="ignored">
+    <physics name="school_physics" type="ode">
       <max_step_size>0.004</max_step_size>
       <real_time_factor>1.0</real_time_factor>
     </physics>
@@ -12,15 +12,34 @@
             name="gz::sim::systems::UserCommands"/>
     <plugin filename="gz-sim-scene-broadcaster-system"
             name="gz::sim::systems::SceneBroadcaster"/>
+    <plugin filename="gz-sim-sensors-system"
+            name="gz::sim::systems::Sensors">
+      <render_engine>ogre2</render_engine>
+    </plugin>
+
+    <!-- ============================================================== -->
+    <!-- RVO2 Social Navigation System Plugin                           -->
+    <!-- ============================================================== -->
+    <plugin
+      filename="librvo2_human_system.so"
+      name="custom_corridor::RVO2HumanSystem">
+      <human_count>8</human_count>
+      <robot_name>burger</robot_name>
+      <robot_radius>0.28</robot_radius>
+      <human_radius>0.28</human_radius>
+      <corridor_mode>false</corridor_mode>
+      <politeness_balance_point>0.60</politeness_balance_point>
+      <randomize_politeness>true</randomize_politeness>
+      <default_scenario_file>school_arena</default_scenario_file>
+    </plugin>
 
     <scene>
       <ambient>0.75 0.75 0.78 1</ambient>
       <background>0.92 0.95 1.0 1</background>
-      <shadows>false</shadows>
+      <shadows>true</shadows>
     </scene>
 
     <light type="directional" name="sun">
-      <cast_shadows>false</cast_shadows>
       <pose>0 0 20 0 0 0</pose>
       <direction>-0.4 0.2 -1</direction>
       <diffuse>0.9 0.9 0.9 1</diffuse>
@@ -2117,403 +2136,388 @@
       </link>
     </model>
 
-    <model name="student_head_on_A">
-      <static>false</static>
-      <pose>-12.000 -8.050 0.82 0 0 0</pose>
-      <link name="base_link">
-        <inertial>
-          <mass>8.0</mass>
-          <inertia>
-            <ixx>12.0</ixx><ixy>0</ixy><ixz>0</ixz>
-            <iyy>12.0</iyy><iyz>0</iyz><izz>0.45</izz>
-          </inertia>
-        </inertial>
+    <!-- Human Actor (Visual Mesh) -->
+    <actor name="student_head_on_A">
+      <pose>0 0 0 0 0 0</pose>
+      <skin>
+        <filename>model://human/meshes/walk_orange.dae</filename>
+        <scale>1.02</scale>
+      </skin>
+      <animation name="walk">
+        <filename>model://human/meshes/walk_orange.dae</filename>
+        <interpolate_x>false</interpolate_x>
+      </animation>
+      <script>
+        <loop>false</loop>
+        <delay_start>0</delay_start>
+        <auto_start>false</auto_start>
+        <trajectory id="0" type="walk" tension="0">
+          <waypoint><time>0</time><pose>0 0 0 0 0 0</pose></waypoint>
+          <waypoint><time>1</time><pose>0 0 0 0 0 0</pose></waypoint>
+        </trajectory>
+      </script>
+    </actor>
+
+    <!-- Physical Collision Proxy for LiDAR & Physics -->
+    <model name="student_head_on_A_proxy">
+      <pose>-12.000 -8.050 0.85 0 0 0</pose>
+      <link name="link">
+        <gravity>false</gravity>
+        <kinematic>true</kinematic>
         <collision name="collision">
-          <geometry><box><size>0.38 0.38 1.64</size></box></geometry>
-          <surface>
-            <friction>
-              <bullet>
-                <friction>0.8</friction>
-                <friction2>0.8</friction2>
-                <rolling_friction>0.0</rolling_friction>
-              </bullet>
-            </friction>
-          </surface>
+          <geometry>
+            <cylinder>
+              <radius>0.28</radius>
+              <length>1.70</length>
+            </cylinder>
+          </geometry>
         </collision>
-        <visual name="body">
-          <geometry><cylinder><radius>0.19</radius><length>1.35</length></cylinder></geometry>
-          <pose>0 0 -0.10 0 0 0</pose>
-          <material><ambient>0.10 0.35 0.85 1</ambient><diffuse>0.10 0.35 0.85 1</diffuse></material>
-        </visual>
-        <visual name="head">
-          <pose>0 0 0.76 0 0 0</pose>
-          <geometry><sphere><radius>0.16</radius></sphere></geometry>
-          <material><ambient>0.82 0.67 0.52 1</ambient><diffuse>0.82 0.67 0.52 1</diffuse></material>
+        <visual name="proxy_visual">
+          <geometry>
+            <cylinder>
+              <radius>0.28</radius>
+              <length>1.70</length>
+            </cylinder>
+          </geometry>
+          <transparency>1.0</transparency>
         </visual>
       </link>
-      <plugin filename="gz-sim-trajectory-follower-system"
-              name="gz::sim::systems::TrajectoryFollower">
-        <link_name>base_link</link_name>
-        <loop>true</loop>
-        <force>7.0</force>
-        <torque>8.0</torque>
-        <range_tolerance>0.18</range_tolerance>
-        <bearing_tolerance>5</bearing_tolerance>
-        <waypoints>
-          <waypoint>-12.000 -8.050</waypoint>
-          <waypoint>10.000 -8.050</waypoint>
-        </waypoints>
-      </plugin>
     </model>
 
-    <model name="student_opposite_A">
-      <static>false</static>
-      <pose>10.000 -7.850 0.82 0 0 0</pose>
-      <link name="base_link">
-        <inertial>
-          <mass>8.0</mass>
-          <inertia>
-            <ixx>12.0</ixx><ixy>0</ixy><ixz>0</ixz>
-            <iyy>12.0</iyy><iyz>0</iyz><izz>0.45</izz>
-          </inertia>
-        </inertial>
+    <!-- Human Actor (Visual Mesh) -->
+    <actor name="student_opposite_A">
+      <pose>0 0 0 0 0 0</pose>
+      <skin>
+        <filename>model://human/meshes/walk_red.dae</filename>
+        <scale>0.96</scale>
+      </skin>
+      <animation name="walk">
+        <filename>model://human/meshes/walk_red.dae</filename>
+        <interpolate_x>false</interpolate_x>
+      </animation>
+      <script>
+        <loop>false</loop>
+        <delay_start>0</delay_start>
+        <auto_start>false</auto_start>
+        <trajectory id="0" type="walk" tension="0">
+          <waypoint><time>0</time><pose>0 0 0 0 0 0</pose></waypoint>
+          <waypoint><time>1</time><pose>0 0 0 0 0 0</pose></waypoint>
+        </trajectory>
+      </script>
+    </actor>
+
+    <!-- Physical Collision Proxy for LiDAR & Physics -->
+    <model name="student_opposite_A_proxy">
+      <pose>10.000 -7.850 0.85 0 0 0</pose>
+      <link name="link">
+        <gravity>false</gravity>
+        <kinematic>true</kinematic>
         <collision name="collision">
-          <geometry><box><size>0.38 0.38 1.64</size></box></geometry>
-          <surface>
-            <friction>
-              <bullet>
-                <friction>0.8</friction>
-                <friction2>0.8</friction2>
-                <rolling_friction>0.0</rolling_friction>
-              </bullet>
-            </friction>
-          </surface>
+          <geometry>
+            <cylinder>
+              <radius>0.28</radius>
+              <length>1.70</length>
+            </cylinder>
+          </geometry>
         </collision>
-        <visual name="body">
-          <geometry><cylinder><radius>0.19</radius><length>1.35</length></cylinder></geometry>
-          <pose>0 0 -0.10 0 0 0</pose>
-          <material><ambient>0.85 0.20 0.20 1</ambient><diffuse>0.85 0.20 0.20 1</diffuse></material>
-        </visual>
-        <visual name="head">
-          <pose>0 0 0.76 0 0 0</pose>
-          <geometry><sphere><radius>0.16</radius></sphere></geometry>
-          <material><ambient>0.82 0.67 0.52 1</ambient><diffuse>0.82 0.67 0.52 1</diffuse></material>
+        <visual name="proxy_visual">
+          <geometry>
+            <cylinder>
+              <radius>0.28</radius>
+              <length>1.70</length>
+            </cylinder>
+          </geometry>
+          <transparency>1.0</transparency>
         </visual>
       </link>
-      <plugin filename="gz-sim-trajectory-follower-system"
-              name="gz::sim::systems::TrajectoryFollower">
-        <link_name>base_link</link_name>
-        <loop>true</loop>
-        <force>7.0</force>
-        <torque>8.0</torque>
-        <range_tolerance>0.18</range_tolerance>
-        <bearing_tolerance>5</bearing_tolerance>
-        <waypoints>
-          <waypoint>10.000 -7.850</waypoint>
-          <waypoint>-10.000 -7.850</waypoint>
-        </waypoints>
-      </plugin>
     </model>
 
-    <model name="student_corner_B">
-      <static>false</static>
-      <pose>15.050 -7.000 0.82 0 0 0</pose>
-      <link name="base_link">
-        <inertial>
-          <mass>8.0</mass>
-          <inertia>
-            <ixx>12.0</ixx><ixy>0</ixy><ixz>0</ixz>
-            <iyy>12.0</iyy><iyz>0</iyz><izz>0.45</izz>
-          </inertia>
-        </inertial>
+    <!-- Human Actor (Visual Mesh) -->
+    <actor name="student_corner_B">
+      <pose>0 0 0 0 0 0</pose>
+      <skin>
+        <filename>model://human/meshes/walk_blue.dae</filename>
+        <scale>1.04</scale>
+      </skin>
+      <animation name="walk">
+        <filename>model://human/meshes/walk_blue.dae</filename>
+        <interpolate_x>false</interpolate_x>
+      </animation>
+      <script>
+        <loop>false</loop>
+        <delay_start>0</delay_start>
+        <auto_start>false</auto_start>
+        <trajectory id="0" type="walk" tension="0">
+          <waypoint><time>0</time><pose>0 0 0 0 0 0</pose></waypoint>
+          <waypoint><time>1</time><pose>0 0 0 0 0 0</pose></waypoint>
+        </trajectory>
+      </script>
+    </actor>
+
+    <!-- Physical Collision Proxy for LiDAR & Physics -->
+    <model name="student_corner_B_proxy">
+      <pose>15.050 -7.000 0.85 0 0 0</pose>
+      <link name="link">
+        <gravity>false</gravity>
+        <kinematic>true</kinematic>
         <collision name="collision">
-          <geometry><box><size>0.38 0.38 1.64</size></box></geometry>
-          <surface>
-            <friction>
-              <bullet>
-                <friction>0.8</friction>
-                <friction2>0.8</friction2>
-                <rolling_friction>0.0</rolling_friction>
-              </bullet>
-            </friction>
-          </surface>
+          <geometry>
+            <cylinder>
+              <radius>0.28</radius>
+              <length>1.70</length>
+            </cylinder>
+          </geometry>
         </collision>
-        <visual name="body">
-          <geometry><cylinder><radius>0.19</radius><length>1.35</length></cylinder></geometry>
-          <pose>0 0 -0.10 0 0 0</pose>
-          <material><ambient>0.60 0.20 0.75 1</ambient><diffuse>0.60 0.20 0.75 1</diffuse></material>
-        </visual>
-        <visual name="head">
-          <pose>0 0 0.76 0 0 0</pose>
-          <geometry><sphere><radius>0.16</radius></sphere></geometry>
-          <material><ambient>0.82 0.67 0.52 1</ambient><diffuse>0.82 0.67 0.52 1</diffuse></material>
+        <visual name="proxy_visual">
+          <geometry>
+            <cylinder>
+              <radius>0.28</radius>
+              <length>1.70</length>
+            </cylinder>
+          </geometry>
+          <transparency>1.0</transparency>
         </visual>
       </link>
-      <plugin filename="gz-sim-trajectory-follower-system"
-              name="gz::sim::systems::TrajectoryFollower">
-        <link_name>base_link</link_name>
-        <loop>true</loop>
-        <force>7.0</force>
-        <torque>8.0</torque>
-        <range_tolerance>0.18</range_tolerance>
-        <bearing_tolerance>5</bearing_tolerance>
-        <waypoints>
-          <waypoint>15.050 -7.000</waypoint>
-          <waypoint>15.050 -4.100</waypoint>
-          <waypoint>10.500 -4.000</waypoint>
-        </waypoints>
-      </plugin>
     </model>
 
-    <model name="student_stair_loop">
-      <static>false</static>
-      <pose>14.850 -5.200 0.82 0 0 0</pose>
-      <link name="base_link">
-        <inertial>
-          <mass>8.0</mass>
-          <inertia>
-            <ixx>12.0</ixx><ixy>0</ixy><ixz>0</ixz>
-            <iyy>12.0</iyy><iyz>0</iyz><izz>0.45</izz>
-          </inertia>
-        </inertial>
+    <!-- Human Actor (Visual Mesh) -->
+    <actor name="student_stair_loop">
+      <pose>0 0 0 0 0 0</pose>
+      <skin>
+        <filename>model://human/meshes/walk.dae</filename>
+        <scale>1.00</scale>
+      </skin>
+      <animation name="walk">
+        <filename>model://human/meshes/walk.dae</filename>
+        <interpolate_x>false</interpolate_x>
+      </animation>
+      <script>
+        <loop>false</loop>
+        <delay_start>0</delay_start>
+        <auto_start>false</auto_start>
+        <trajectory id="0" type="walk" tension="0">
+          <waypoint><time>0</time><pose>0 0 0 0 0 0</pose></waypoint>
+          <waypoint><time>1</time><pose>0 0 0 0 0 0</pose></waypoint>
+        </trajectory>
+      </script>
+    </actor>
+
+    <!-- Physical Collision Proxy for LiDAR & Physics -->
+    <model name="student_stair_loop_proxy">
+      <pose>14.850 -5.200 0.85 0 0 0</pose>
+      <link name="link">
+        <gravity>false</gravity>
+        <kinematic>true</kinematic>
         <collision name="collision">
-          <geometry><box><size>0.38 0.38 1.64</size></box></geometry>
-          <surface>
-            <friction>
-              <bullet>
-                <friction>0.8</friction>
-                <friction2>0.8</friction2>
-                <rolling_friction>0.0</rolling_friction>
-              </bullet>
-            </friction>
-          </surface>
+          <geometry>
+            <cylinder>
+              <radius>0.28</radius>
+              <length>1.70</length>
+            </cylinder>
+          </geometry>
         </collision>
-        <visual name="body">
-          <geometry><cylinder><radius>0.19</radius><length>1.35</length></cylinder></geometry>
-          <pose>0 0 -0.10 0 0 0</pose>
-          <material><ambient>0.90 0.55 0.10 1</ambient><diffuse>0.90 0.55 0.10 1</diffuse></material>
-        </visual>
-        <visual name="head">
-          <pose>0 0 0.76 0 0 0</pose>
-          <geometry><sphere><radius>0.16</radius></sphere></geometry>
-          <material><ambient>0.82 0.67 0.52 1</ambient><diffuse>0.82 0.67 0.52 1</diffuse></material>
+        <visual name="proxy_visual">
+          <geometry>
+            <cylinder>
+              <radius>0.28</radius>
+              <length>1.70</length>
+            </cylinder>
+          </geometry>
+          <transparency>1.0</transparency>
         </visual>
       </link>
-      <plugin filename="gz-sim-trajectory-follower-system"
-              name="gz::sim::systems::TrajectoryFollower">
-        <link_name>base_link</link_name>
-        <loop>true</loop>
-        <force>7.0</force>
-        <torque>8.0</torque>
-        <range_tolerance>0.18</range_tolerance>
-        <bearing_tolerance>5</bearing_tolerance>
-        <waypoints>
-          <waypoint>14.850 -5.200</waypoint>
-          <waypoint>15.000 -4.000</waypoint>
-          <waypoint>7.000 -4.000</waypoint>
-          <waypoint>7.000 0.000</waypoint>
-          <waypoint>14.900 0.000</waypoint>
-          <waypoint>15.000 5.000</waypoint>
-        </waypoints>
-      </plugin>
     </model>
 
-    <model name="student_door_exit">
-      <static>false</static>
-      <pose>-3.730 -10.400 0.82 0 0 0</pose>
-      <link name="base_link">
-        <inertial>
-          <mass>8.0</mass>
-          <inertia>
-            <ixx>12.0</ixx><ixy>0</ixy><ixz>0</ixz>
-            <iyy>12.0</iyy><iyz>0</iyz><izz>0.45</izz>
-          </inertia>
-        </inertial>
+    <!-- Human Actor (Visual Mesh) -->
+    <actor name="student_door_exit">
+      <pose>0 0 0 0 0 0</pose>
+      <skin>
+        <filename>model://human/meshes/walk_orange.dae</filename>
+        <scale>0.95</scale>
+      </skin>
+      <animation name="walk">
+        <filename>model://human/meshes/walk_orange.dae</filename>
+        <interpolate_x>false</interpolate_x>
+      </animation>
+      <script>
+        <loop>false</loop>
+        <delay_start>0</delay_start>
+        <auto_start>false</auto_start>
+        <trajectory id="0" type="walk" tension="0">
+          <waypoint><time>0</time><pose>0 0 0 0 0 0</pose></waypoint>
+          <waypoint><time>1</time><pose>0 0 0 0 0 0</pose></waypoint>
+        </trajectory>
+      </script>
+    </actor>
+
+    <!-- Physical Collision Proxy for LiDAR & Physics -->
+    <model name="student_door_exit_proxy">
+      <pose>-3.730 -10.400 0.85 0 0 0</pose>
+      <link name="link">
+        <gravity>false</gravity>
+        <kinematic>true</kinematic>
         <collision name="collision">
-          <geometry><box><size>0.38 0.38 1.64</size></box></geometry>
-          <surface>
-            <friction>
-              <bullet>
-                <friction>0.8</friction>
-                <friction2>0.8</friction2>
-                <rolling_friction>0.0</rolling_friction>
-              </bullet>
-            </friction>
-          </surface>
+          <geometry>
+            <cylinder>
+              <radius>0.28</radius>
+              <length>1.70</length>
+            </cylinder>
+          </geometry>
         </collision>
-        <visual name="body">
-          <geometry><cylinder><radius>0.19</radius><length>1.35</length></cylinder></geometry>
-          <pose>0 0 -0.10 0 0 0</pose>
-          <material><ambient>0.10 0.65 0.55 1</ambient><diffuse>0.10 0.65 0.55 1</diffuse></material>
-        </visual>
-        <visual name="head">
-          <pose>0 0 0.76 0 0 0</pose>
-          <geometry><sphere><radius>0.16</radius></sphere></geometry>
-          <material><ambient>0.82 0.67 0.52 1</ambient><diffuse>0.82 0.67 0.52 1</diffuse></material>
+        <visual name="proxy_visual">
+          <geometry>
+            <cylinder>
+              <radius>0.28</radius>
+              <length>1.70</length>
+            </cylinder>
+          </geometry>
+          <transparency>1.0</transparency>
         </visual>
       </link>
-      <plugin filename="gz-sim-trajectory-follower-system"
-              name="gz::sim::systems::TrajectoryFollower">
-        <link_name>base_link</link_name>
-        <loop>true</loop>
-        <force>7.0</force>
-        <torque>8.0</torque>
-        <range_tolerance>0.18</range_tolerance>
-        <bearing_tolerance>5</bearing_tolerance>
-        <waypoints>
-          <waypoint>-3.730 -10.400</waypoint>
-          <waypoint>-3.730 -8.050</waypoint>
-          <waypoint>2.000 -8.050</waypoint>
-        </waypoints>
-      </plugin>
     </model>
 
-    <model name="student_vertical_up">
-      <static>false</static>
-      <pose>14.850 1.400 0.82 0 0 0</pose>
-      <link name="base_link">
-        <inertial>
-          <mass>8.0</mass>
-          <inertia>
-            <ixx>12.0</ixx><ixy>0</ixy><ixz>0</ixz>
-            <iyy>12.0</iyy><iyz>0</iyz><izz>0.45</izz>
-          </inertia>
-        </inertial>
+    <!-- Human Actor (Visual Mesh) -->
+    <actor name="student_vertical_up">
+      <pose>0 0 0 0 0 0</pose>
+      <skin>
+        <filename>model://human/meshes/walk_red.dae</filename>
+        <scale>1.02</scale>
+      </skin>
+      <animation name="walk">
+        <filename>model://human/meshes/walk_red.dae</filename>
+        <interpolate_x>false</interpolate_x>
+      </animation>
+      <script>
+        <loop>false</loop>
+        <delay_start>0</delay_start>
+        <auto_start>false</auto_start>
+        <trajectory id="0" type="walk" tension="0">
+          <waypoint><time>0</time><pose>0 0 0 0 0 0</pose></waypoint>
+          <waypoint><time>1</time><pose>0 0 0 0 0 0</pose></waypoint>
+        </trajectory>
+      </script>
+    </actor>
+
+    <!-- Physical Collision Proxy for LiDAR & Physics -->
+    <model name="student_vertical_up_proxy">
+      <pose>14.850 1.400 0.85 0 0 0</pose>
+      <link name="link">
+        <gravity>false</gravity>
+        <kinematic>true</kinematic>
         <collision name="collision">
-          <geometry><box><size>0.38 0.38 1.64</size></box></geometry>
-          <surface>
-            <friction>
-              <bullet>
-                <friction>0.8</friction>
-                <friction2>0.8</friction2>
-                <rolling_friction>0.0</rolling_friction>
-              </bullet>
-            </friction>
-          </surface>
+          <geometry>
+            <cylinder>
+              <radius>0.28</radius>
+              <length>1.70</length>
+            </cylinder>
+          </geometry>
         </collision>
-        <visual name="body">
-          <geometry><cylinder><radius>0.19</radius><length>1.35</length></cylinder></geometry>
-          <pose>0 0 -0.10 0 0 0</pose>
-          <material><ambient>0.75 0.40 0.15 1</ambient><diffuse>0.75 0.40 0.15 1</diffuse></material>
-        </visual>
-        <visual name="head">
-          <pose>0 0 0.76 0 0 0</pose>
-          <geometry><sphere><radius>0.16</radius></sphere></geometry>
-          <material><ambient>0.82 0.67 0.52 1</ambient><diffuse>0.82 0.67 0.52 1</diffuse></material>
+        <visual name="proxy_visual">
+          <geometry>
+            <cylinder>
+              <radius>0.28</radius>
+              <length>1.70</length>
+            </cylinder>
+          </geometry>
+          <transparency>1.0</transparency>
         </visual>
       </link>
-      <plugin filename="gz-sim-trajectory-follower-system"
-              name="gz::sim::systems::TrajectoryFollower">
-        <link_name>base_link</link_name>
-        <loop>true</loop>
-        <force>7.0</force>
-        <torque>8.0</torque>
-        <range_tolerance>0.18</range_tolerance>
-        <bearing_tolerance>5</bearing_tolerance>
-        <waypoints>
-          <waypoint>14.850 1.400</waypoint>
-          <waypoint>14.850 12.400</waypoint>
-        </waypoints>
-      </plugin>
     </model>
 
-    <model name="student_vertical_down">
-      <static>false</static>
-      <pose>15.150 12.000 0.82 0 0 0</pose>
-      <link name="base_link">
-        <inertial>
-          <mass>8.0</mass>
-          <inertia>
-            <ixx>12.0</ixx><ixy>0</ixy><ixz>0</ixz>
-            <iyy>12.0</iyy><iyz>0</iyz><izz>0.45</izz>
-          </inertia>
-        </inertial>
+    <!-- Human Actor (Visual Mesh) -->
+    <actor name="student_vertical_down">
+      <pose>0 0 0 0 0 0</pose>
+      <skin>
+        <filename>model://human/meshes/walk_blue.dae</filename>
+        <scale>0.98</scale>
+      </skin>
+      <animation name="walk">
+        <filename>model://human/meshes/walk_blue.dae</filename>
+        <interpolate_x>false</interpolate_x>
+      </animation>
+      <script>
+        <loop>false</loop>
+        <delay_start>0</delay_start>
+        <auto_start>false</auto_start>
+        <trajectory id="0" type="walk" tension="0">
+          <waypoint><time>0</time><pose>0 0 0 0 0 0</pose></waypoint>
+          <waypoint><time>1</time><pose>0 0 0 0 0 0</pose></waypoint>
+        </trajectory>
+      </script>
+    </actor>
+
+    <!-- Physical Collision Proxy for LiDAR & Physics -->
+    <model name="student_vertical_down_proxy">
+      <pose>15.150 12.000 0.85 0 0 0</pose>
+      <link name="link">
+        <gravity>false</gravity>
+        <kinematic>true</kinematic>
         <collision name="collision">
-          <geometry><box><size>0.38 0.38 1.64</size></box></geometry>
-          <surface>
-            <friction>
-              <bullet>
-                <friction>0.8</friction>
-                <friction2>0.8</friction2>
-                <rolling_friction>0.0</rolling_friction>
-              </bullet>
-            </friction>
-          </surface>
+          <geometry>
+            <cylinder>
+              <radius>0.28</radius>
+              <length>1.70</length>
+            </cylinder>
+          </geometry>
         </collision>
-        <visual name="body">
-          <geometry><cylinder><radius>0.19</radius><length>1.35</length></cylinder></geometry>
-          <pose>0 0 -0.10 0 0 0</pose>
-          <material><ambient>0.35 0.20 0.80 1</ambient><diffuse>0.35 0.20 0.80 1</diffuse></material>
-        </visual>
-        <visual name="head">
-          <pose>0 0 0.76 0 0 0</pose>
-          <geometry><sphere><radius>0.16</radius></sphere></geometry>
-          <material><ambient>0.82 0.67 0.52 1</ambient><diffuse>0.82 0.67 0.52 1</diffuse></material>
+        <visual name="proxy_visual">
+          <geometry>
+            <cylinder>
+              <radius>0.28</radius>
+              <length>1.70</length>
+            </cylinder>
+          </geometry>
+          <transparency>1.0</transparency>
         </visual>
       </link>
-      <plugin filename="gz-sim-trajectory-follower-system"
-              name="gz::sim::systems::TrajectoryFollower">
-        <link_name>base_link</link_name>
-        <loop>true</loop>
-        <force>7.0</force>
-        <torque>8.0</torque>
-        <range_tolerance>0.18</range_tolerance>
-        <bearing_tolerance>5</bearing_tolerance>
-        <waypoints>
-          <waypoint>15.150 12.000</waypoint>
-          <waypoint>15.150 2.000</waypoint>
-        </waypoints>
-      </plugin>
     </model>
 
-    <model name="student_short_cross">
-      <static>false</static>
-      <pose>15.150 6.400 0.82 0 0 0</pose>
-      <link name="base_link">
-        <inertial>
-          <mass>8.0</mass>
-          <inertia>
-            <ixx>12.0</ixx><ixy>0</ixy><ixz>0</ixz>
-            <iyy>12.0</iyy><iyz>0</iyz><izz>0.45</izz>
-          </inertia>
-        </inertial>
+    <!-- Human Actor (Visual Mesh) -->
+    <actor name="student_short_cross">
+      <pose>0 0 0 0 0 0</pose>
+      <skin>
+        <filename>model://human/meshes/walk.dae</filename>
+        <scale>1.00</scale>
+      </skin>
+      <animation name="walk">
+        <filename>model://human/meshes/walk.dae</filename>
+        <interpolate_x>false</interpolate_x>
+      </animation>
+      <script>
+        <loop>false</loop>
+        <delay_start>0</delay_start>
+        <auto_start>false</auto_start>
+        <trajectory id="0" type="walk" tension="0">
+          <waypoint><time>0</time><pose>0 0 0 0 0 0</pose></waypoint>
+          <waypoint><time>1</time><pose>0 0 0 0 0 0</pose></waypoint>
+        </trajectory>
+      </script>
+    </actor>
+
+    <!-- Physical Collision Proxy for LiDAR & Physics -->
+    <model name="student_short_cross_proxy">
+      <pose>15.150 6.400 0.85 0 0 0</pose>
+      <link name="link">
+        <gravity>false</gravity>
+        <kinematic>true</kinematic>
         <collision name="collision">
-          <geometry><box><size>0.38 0.38 1.64</size></box></geometry>
-          <surface>
-            <friction>
-              <bullet>
-                <friction>0.8</friction>
-                <friction2>0.8</friction2>
-                <rolling_friction>0.0</rolling_friction>
-              </bullet>
-            </friction>
-          </surface>
+          <geometry>
+            <cylinder>
+              <radius>0.28</radius>
+              <length>1.70</length>
+            </cylinder>
+          </geometry>
         </collision>
-        <visual name="body">
-          <geometry><cylinder><radius>0.19</radius><length>1.35</length></cylinder></geometry>
-          <pose>0 0 -0.10 0 0 0</pose>
-          <material><ambient>0.15 0.65 0.20 1</ambient><diffuse>0.15 0.65 0.20 1</diffuse></material>
-        </visual>
-        <visual name="head">
-          <pose>0 0 0.76 0 0 0</pose>
-          <geometry><sphere><radius>0.16</radius></sphere></geometry>
-          <material><ambient>0.82 0.67 0.52 1</ambient><diffuse>0.82 0.67 0.52 1</diffuse></material>
+        <visual name="proxy_visual">
+          <geometry>
+            <cylinder>
+              <radius>0.28</radius>
+              <length>1.70</length>
+            </cylinder>
+          </geometry>
+          <transparency>1.0</transparency>
         </visual>
       </link>
-      <plugin filename="gz-sim-trajectory-follower-system"
-              name="gz::sim::systems::TrajectoryFollower">
-        <link_name>base_link</link_name>
-        <loop>true</loop>
-        <force>7.0</force>
-        <torque>8.0</torque>
-        <range_tolerance>0.18</range_tolerance>
-        <bearing_tolerance>5</bearing_tolerance>
-        <waypoints>
-          <waypoint>15.150 6.400</waypoint>
-          <waypoint>14.650 6.400</waypoint>
-          <waypoint>15.350 6.400</waypoint>
-        </waypoints>
-      </plugin>
     </model>
 
   </world>

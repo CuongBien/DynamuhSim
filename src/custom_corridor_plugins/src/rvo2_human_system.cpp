@@ -445,10 +445,37 @@ private:
         gz::sim::components::Model(),
         gz::sim::components::Name(this->robotName_));
 
+    // Discover all actors and proxies in the world for fallback pairing
+    std::vector<gz::sim::Entity> allActors;
+    _ecm.Each<gz::sim::components::Name, gz::sim::components::Actor>(
+        [&](const gz::sim::Entity &entity,
+            const gz::sim::components::Name *,
+            const gz::sim::components::Actor *) -> bool
+        {
+          allActors.push_back(entity);
+          return true;
+        });
+
+    std::vector<gz::sim::Entity> allProxies;
+    _ecm.Each<gz::sim::components::Name, gz::sim::components::Model>(
+        [&](const gz::sim::Entity &entity,
+            const gz::sim::components::Name *compName,
+            const gz::sim::components::Model *) -> bool
+        {
+          if (compName && (compName->Data().find("proxy") != std::string::npos ||
+                           compName->Data().find("walker") != std::string::npos))
+          {
+            allProxies.push_back(entity);
+          }
+          return true;
+        });
+
     // 2. Resolve Humans
-    for (auto &human : this->humans_)
+    for (std::size_t i = 0; i < this->humans_.size(); ++i)
     {
+      auto &human = this->humans_[i];
       const std::string name = human.name;
+
       // Try unified single model first: "human_01"
       human.modelEntity = _ecm.EntityByComponents(
           gz::sim::components::Model(),
@@ -467,14 +494,22 @@ private:
         human.isSingleModel = false;
       }
 
-      // Try actor: "human_01_visual" or "human_01_actor" using Each
+      // Fallback proxy binding if not found by name
+      if (human.modelEntity == gz::sim::kNullEntity && i < allProxies.size())
+      {
+        human.modelEntity = allProxies[i];
+        human.isSingleModel = false;
+      }
+
+      // Try actor: "name", "name_visual" or "name_actor" using Each
       human.actorEntity = gz::sim::kNullEntity;
       _ecm.Each<gz::sim::components::Name, gz::sim::components::Actor>(
           [&](const gz::sim::Entity &entity,
               const gz::sim::components::Name *compName,
               const gz::sim::components::Actor *) -> bool
           {
-            if (compName && (compName->Data() == name + "_visual" ||
+            if (compName && (compName->Data() == name ||
+                             compName->Data() == name + "_visual" ||
                              compName->Data() == name + "_actor"))
             {
               human.actorEntity = entity;
@@ -482,6 +517,12 @@ private:
             }
             return true;
           });
+
+      // Fallback actor binding if not found by standard name (e.g. hospital/school worlds)
+      if (human.actorEntity == gz::sim::kNullEntity && i < allActors.size())
+      {
+        human.actorEntity = allActors[i];
+      }
 
       if (human.actorEntity != gz::sim::kNullEntity)
       {
@@ -532,6 +573,16 @@ private:
 
   void ComputePreferredVelocity(HumanAgent &_human, double _dt)
   {
+    if (_human.name.find("trolley") != std::string::npos &&
+        _human.name.find("pusher") == std::string::npos)
+    {
+      _human.prefVx = 0.0;
+      _human.prefVy = 0.0;
+      this->rvoSim_->setAgentPrefVelocity(_human.rvoIndex, RVO::Vector2(0, 0));
+      this->rvoSim_->setAgentPosition(_human.rvoIndex, RVO::Vector2(10000.0f, 10000.0f));
+      return;
+    }
+
     if (_human.mode == HumanMode::Stationary || _human.mode == HumanMode::Hidden)
     {
       _human.prefVx = 0.0;
@@ -707,15 +758,54 @@ private:
 
   void ApplyAllPoses(gz::sim::EntityComponentManager &_ecm)
   {
+    // Synchronize trolley poses to their respective pusher
+    for (auto &human : this->humans_)
+    {
+      if (human.name.find("trolley") != std::string::npos &&
+          human.name.find("pusher") == std::string::npos)
+      {
+        for (const auto &pusher : this->humans_)
+        {
+          if (pusher.name.find("trolley_pusher") != std::string::npos)
+          {
+            bool match = false;
+            if (human.name.find("06") != std::string::npos && pusher.name.find("06") != std::string::npos) match = true;
+            else if (human.name.find("14") != std::string::npos && pusher.name.find("14") != std::string::npos) match = true;
+            else match = true;
+            if (match)
+            {
+              human.x = pusher.x;
+              human.y = pusher.y;
+              human.yaw = pusher.yaw;
+              human.animTimeSec = pusher.animTimeSec;
+              human.animationTime = pusher.animationTime;
+              break;
+            }
+          }
+        }
+      }
+    }
+
     for (auto &human : this->humans_)
     {
       const bool visible = (human.active && human.mode != HumanMode::Hidden);
+      const bool isTrolley = (human.name.find("trolley") != std::string::npos &&
+                              human.name.find("pusher") == std::string::npos);
 
       if (human.modelEntity != gz::sim::kNullEntity)
       {
         const double modelZ = visible ? human.proxyZ : this->hiddenZ_;
         gz::sim::Model model(human.modelEntity);
-        model.SetWorldPoseCmd(_ecm, gz::math::Pose3d(human.x, human.y, modelZ, 0.0, 0.0, human.yaw));
+        if (isTrolley)
+        {
+          const double px = human.x + 0.7 * std::cos(human.yaw);
+          const double py = human.y + 0.7 * std::sin(human.yaw);
+          model.SetWorldPoseCmd(_ecm, gz::math::Pose3d(px, py, modelZ, 0.0, 0.0, human.yaw));
+        }
+        else
+        {
+          model.SetWorldPoseCmd(_ecm, gz::math::Pose3d(human.x, human.y, modelZ, 0.0, 0.0, human.yaw));
+        }
       }
 
       if (human.actorEntity != gz::sim::kNullEntity)
@@ -725,7 +815,9 @@ private:
         {
           const double actorZ = visible ? human.visualZ : this->hiddenZ_;
           actor.SetTrajectoryPose(_ecm, gz::math::Pose3d(human.x, human.y, actorZ, 0.0, 0.0, human.yaw));
-          actor.SetAnimationName(_ecm, "walk");
+          const std::string animName = (human.name.find("push") != std::string::npos ||
+                                        human.name.find("trolley") != std::string::npos) ? "push" : "walk";
+          actor.SetAnimationName(_ecm, animName);
           actor.SetAnimationTime(_ecm, human.animationTime);
 
           // Gazebo 8 Harmonic rendering (SceneBroadcaster / Ogre2) must be notified of actor changes
@@ -851,6 +943,10 @@ private:
 
           auto &h = this->humans_[static_cast<std::size_t>(id - 1)];
           h.active = true;
+          if (item.contains("name"))
+          {
+            h.name = item["name"].get<std::string>();
+          }
           const std::string modeStr = item.value("mode", "autonomous");
           if (modeStr == "stationary")
             h.mode = HumanMode::Stationary;
@@ -918,6 +1014,97 @@ private:
 
   void LoadDefaultScenario()
   {
+    if (this->defaultScenarioFile_ != "default" && !this->defaultScenarioFile_.empty())
+    {
+      if (this->defaultScenarioFile_ == "hospital_easy")
+      {
+        std::string jsonStr = R"({
+          "episode_id": 1,
+          "humans": [
+            {"id": 1, "name": "hospital_walking_human", "mode": "autonomous", "speed": 0.75, "scale": 1.00, "visual_z": 1.00, "proxy_z": 0.85, "waypoints": [[-14.0, 0.0], [-2.8, 0.0], [-2.8, -4.0], [-2.8, 0.0], [-14.0, 0.0]]},
+            {"id": 2, "name": "hospital_walking_human_2", "mode": "autonomous", "speed": 0.75, "scale": 0.95, "visual_z": 0.95, "proxy_z": 0.80, "waypoints": [[2.8, -4.0], [2.8, -1.1], [-19.6, -1.1], [-14.0, -1.1], [-14.0, 4.0], [-14.0, -1.1], [2.8, -1.1]]},
+            {"id": 3, "name": "hospital_walking_human_3", "mode": "autonomous", "speed": 0.70, "scale": 1.02, "visual_z": 1.02, "proxy_z": 0.85, "waypoints": [[-21.0, -2.1], [-21.0, -1.1], [-14.0, -1.1], [-14.0, 4.0], [-14.0, -1.1], [-21.0, -1.1]]}
+          ]
+        })";
+        this->LoadScenarioJson(jsonStr);
+        return;
+      }
+
+      if (this->defaultScenarioFile_ == "hospital_medium")
+      {
+        std::string jsonStr = R"({
+          "episode_id": 1,
+          "humans": [
+            {"id": 1, "name": "medium_walker_01", "mode": "autonomous", "speed": 0.75, "scale": 1.00, "visual_z": 1.00, "proxy_z": 0.85, "waypoints": [[-10.0, 0.0], [-16.0, 0.0], [-17.0, -1.3], [-26.0, -1.3], [-17.0, -1.3], [-16.0, 0.0], [-10.0, 0.0]]},
+            {"id": 2, "name": "medium_walker_02_head_on", "mode": "autonomous", "speed": 0.75, "scale": 0.95, "visual_z": 0.95, "proxy_z": 0.80, "waypoints": [[8.0, 0.0], [2.0, 0.0], [8.0, 0.0]]},
+            {"id": 3, "name": "medium_walker_03_room_crossing", "mode": "autonomous", "speed": 0.70, "scale": 1.06, "visual_z": 1.06, "proxy_z": 0.875, "waypoints": [[-2.8, -4.0], [-2.8, 4.0], [-2.8, -4.0]]},
+            {"id": 4, "name": "medium_walker_04_same_direction", "mode": "autonomous", "speed": 0.80, "scale": 1.00, "visual_z": 1.00, "proxy_z": 0.85, "waypoints": [[11.0, 0.0], [17.0, 0.0], [11.0, 0.0]]},
+            {"id": 5, "name": "medium_walker_05_wait_then_cross", "mode": "autonomous", "speed": 0.65, "scale": 0.98, "visual_z": 0.98, "proxy_z": 0.82, "waypoints": [[19.6, -4.0], [19.6, 4.0], [19.6, -4.0]]},
+            {"id": 6, "name": "medium_walker_06_trolley_pusher", "mode": "autonomous", "speed": 0.60, "scale": 1.00, "visual_z": 1.00, "proxy_z": 0.85, "waypoints": [[-24.0, 0.6], [-18.0, 0.6], [-24.0, 0.6]]},
+            {"id": 7, "name": "medium_trolley_06", "mode": "stationary", "speed": 0.0, "scale": 1.00, "visual_z": 1.00, "proxy_z": 0.85, "waypoints": []},
+            {"id": 8, "name": "medium_walker_07_yielding", "mode": "autonomous", "speed": 0.75, "scale": 1.02, "visual_z": 1.02, "proxy_z": 0.85, "waypoints": [[0.0, -1.35], [0.0, 1.35], [0.0, -1.35]]}
+          ]
+        })";
+        this->LoadScenarioJson(jsonStr);
+        return;
+      }
+
+      if (this->defaultScenarioFile_ == "hospital_hard")
+      {
+        std::string jsonStr = R"({
+          "episode_id": 1,
+          "humans": [
+            {"id": 1, "name": "medium_walker_01", "mode": "autonomous", "speed": 0.75, "scale": 1.00, "visual_z": 1.00, "proxy_z": 0.85, "waypoints": [[-10.0, 0.0], [-16.0, 0.0], [-17.0, -1.3], [-26.0, -1.3], [-17.0, -1.3], [-16.0, 0.0], [-10.0, 0.0]]},
+            {"id": 2, "name": "medium_walker_02_head_on", "mode": "autonomous", "speed": 0.75, "scale": 0.95, "visual_z": 0.95, "proxy_z": 0.80, "waypoints": [[8.0, 0.0], [2.0, 0.0], [8.0, 0.0]]},
+            {"id": 3, "name": "medium_walker_03_room_crossing", "mode": "autonomous", "speed": 0.70, "scale": 1.06, "visual_z": 1.06, "proxy_z": 0.875, "waypoints": [[-2.8, -4.0], [-2.8, 4.0], [-2.8, -4.0]]},
+            {"id": 4, "name": "medium_walker_04_same_direction", "mode": "autonomous", "speed": 0.80, "scale": 1.00, "visual_z": 1.00, "proxy_z": 0.85, "waypoints": [[11.0, 0.0], [17.0, 0.0], [11.0, 0.0]]},
+            {"id": 5, "name": "medium_walker_05_wait_then_cross", "mode": "autonomous", "speed": 0.65, "scale": 0.98, "visual_z": 0.98, "proxy_z": 0.82, "waypoints": [[19.6, -4.0], [19.6, 4.0], [19.6, -4.0]]},
+            {"id": 6, "name": "medium_walker_06_trolley_pusher", "mode": "autonomous", "speed": 0.60, "scale": 1.00, "visual_z": 1.00, "proxy_z": 0.85, "waypoints": [[-24.0, 0.6], [-18.0, 0.6], [-24.0, 0.6]]},
+            {"id": 7, "name": "medium_trolley_06", "mode": "stationary", "speed": 0.0, "scale": 1.00, "visual_z": 1.00, "proxy_z": 0.85, "waypoints": []},
+            {"id": 8, "name": "medium_walker_07_yielding", "mode": "autonomous", "speed": 0.75, "scale": 1.02, "visual_z": 1.02, "proxy_z": 0.85, "waypoints": [[0.0, -1.35], [0.0, 1.35], [0.0, -1.35]]},
+            {"id": 9, "name": "hard_walker_08_door_exit", "mode": "autonomous", "speed": 0.75, "scale": 1.00, "visual_z": 1.00, "proxy_z": 0.85, "waypoints": [[-2.8, 4.0], [-2.8, 1.35], [-7.0, 1.35], [-2.8, 1.35], [-2.8, 4.0]]},
+            {"id": 10, "name": "hard_walker_09_door_entry", "mode": "autonomous", "speed": 0.70, "scale": 0.96, "visual_z": 0.96, "proxy_z": 0.82, "waypoints": [[-7.0, -1.35], [-2.8, -1.35], [-2.8, -4.0], [-2.8, -1.35], [-7.0, -1.35]]},
+            {"id": 11, "name": "hard_walker_10_cross_south_to_north", "mode": "autonomous", "speed": 0.80, "scale": 1.02, "visual_z": 1.02, "proxy_z": 0.85, "waypoints": [[2.8, -4.0], [2.8, 4.0], [2.8, -4.0]]},
+            {"id": 12, "name": "hard_walker_11_cross_north_to_south", "mode": "autonomous", "speed": 0.80, "scale": 0.98, "visual_z": 0.98, "proxy_z": 0.82, "waypoints": [[8.4, 4.0], [8.4, -4.0], [8.4, 4.0]]},
+            {"id": 13, "name": "hard_walker_12_group", "mode": "autonomous", "speed": 0.70, "scale": 1.04, "visual_z": 1.04, "proxy_z": 0.86, "waypoints": [[11.5, -0.4], [18.5, -0.4], [11.5, -0.4]]},
+            {"id": 14, "name": "hard_walker_13_group", "mode": "autonomous", "speed": 0.70, "scale": 0.95, "visual_z": 0.95, "proxy_z": 0.80, "waypoints": [[11.5, 0.4], [18.5, 0.4], [11.5, 0.4]]},
+            {"id": 15, "name": "hard_walker_14_trolley_pusher", "mode": "autonomous", "speed": 0.60, "scale": 1.00, "visual_z": 1.00, "proxy_z": 0.85, "waypoints": [[22.0, -1.2], [12.8, -1.2], [22.0, -1.2]]},
+            {"id": 16, "name": "hard_trolley_14", "mode": "stationary", "speed": 0.0, "scale": 1.00, "visual_z": 1.00, "proxy_z": 0.85, "waypoints": []}
+          ]
+        })";
+        this->LoadScenarioJson(jsonStr);
+        return;
+      }
+
+      if (this->defaultScenarioFile_ == "school_arena")
+      {
+        std::string jsonStr = R"({
+          "episode_id": 1,
+          "humans": [
+            {"id": 1, "name": "student_head_on_A", "mode": "autonomous", "speed": 0.80, "scale": 1.02, "visual_z": 1.02, "proxy_z": 0.85, "waypoints": [[-12.0, -8.05], [10.0, -8.05], [-12.0, -8.05]]},
+            {"id": 2, "name": "student_opposite_A", "mode": "autonomous", "speed": 0.75, "scale": 0.96, "visual_z": 0.96, "proxy_z": 0.82, "waypoints": [[10.0, -7.85], [-10.0, -7.85], [10.0, -7.85]]},
+            {"id": 3, "name": "student_corner_B", "mode": "autonomous", "speed": 0.70, "scale": 1.04, "visual_z": 1.04, "proxy_z": 0.86, "waypoints": [[15.05, -7.0], [15.05, -4.1], [10.5, -4.0], [15.05, -4.1], [15.05, -7.0]]},
+            {"id": 4, "name": "student_stair_loop", "mode": "autonomous", "speed": 0.75, "scale": 1.00, "visual_z": 1.00, "proxy_z": 0.85, "waypoints": [[14.85, -5.2], [15.0, -4.0], [7.0, -4.0], [7.0, 0.0], [14.9, 0.0], [15.0, 5.0], [14.9, 0.0], [7.0, 0.0], [7.0, -4.0], [15.0, -4.0], [14.85, -5.2]]},
+            {"id": 5, "name": "student_door_exit", "mode": "autonomous", "speed": 0.65, "scale": 0.95, "visual_z": 0.95, "proxy_z": 0.80, "waypoints": [[-3.73, -10.4], [-3.73, -8.05], [2.0, -8.05], [-3.73, -8.05], [-3.73, -10.4]]},
+            {"id": 6, "name": "student_vertical_up", "mode": "autonomous", "speed": 0.70, "scale": 1.02, "visual_z": 1.02, "proxy_z": 0.85, "waypoints": [[14.85, 1.4], [14.85, 12.4], [14.85, 1.4]]},
+            {"id": 7, "name": "student_vertical_down", "mode": "autonomous", "speed": 0.70, "scale": 0.98, "visual_z": 0.98, "proxy_z": 0.82, "waypoints": [[15.15, 12.0], [15.15, 2.0], [15.15, 12.0]]},
+            {"id": 8, "name": "student_short_cross", "mode": "autonomous", "speed": 0.60, "scale": 1.00, "visual_z": 1.00, "proxy_z": 0.85, "waypoints": [[15.15, 6.4], [14.65, 6.4], [15.35, 6.4], [15.15, 6.4]]}
+          ]
+        })";
+        this->LoadScenarioJson(jsonStr);
+        return;
+      }
+
+      std::ifstream f(this->defaultScenarioFile_);
+      if (f.good())
+      {
+        std::stringstream ss;
+        ss << f.rdbuf();
+        this->LoadScenarioJson(ss.str());
+        return;
+      }
+    }
+
     if (this->corridorMode_)
     {
       std::string jsonStr = R"({
@@ -925,6 +1112,18 @@ private:
         "corridor_mode": true,
         "humans": [
           {"id": 1, "mode": "autonomous", "speed": 0.75, "scale": 1.02, "visual_z": 1.02, "proxy_z": 0.85, "waypoints": [[5.0, 0.0], [-3.0, 0.0]]}
+        ]
+      })";
+      this->LoadScenarioJson(jsonStr);
+      return;
+    }
+
+    if (this->humanCount_ == 1)
+    {
+      std::string jsonStr = R"({
+        "episode_id": 1,
+        "humans": [
+          {"id": 1, "mode": "autonomous", "speed": 0.75, "scale": 1.02, "visual_z": 1.02, "proxy_z": 0.85, "waypoints": [[1.0, 0.0], [-6.0, 0.0]]}
         ]
       })";
       this->LoadScenarioJson(jsonStr);

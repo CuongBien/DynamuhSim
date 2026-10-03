@@ -232,83 +232,60 @@
       <pose>-2.0 2.0 1.0 0 0 0</pose>
     </model>
 
-    <!-- Dynamic Walking Pedestrian (Actor) -->
-    <actor name="human_actor">
+    <!-- ============================================================== -->
+    <!-- RVO2 Social Navigation System Plugin                           -->
+    <!-- ============================================================== -->
+    <plugin
+      filename="librvo2_human_system.so"
+      name="custom_corridor::RVO2HumanSystem">
+      <human_count>1</human_count>
+      <robot_name>burger</robot_name>
+      <robot_radius>0.28</robot_radius>
+      <human_radius>0.28</human_radius>
+      <corridor_mode>false</corridor_mode>
+      <politeness_balance_point>0.60</politeness_balance_point>
+      <randomize_politeness>true</randomize_politeness>
+      <visual_z>1.02</visual_z>
+      <proxy_z>0.85</proxy_z>
+    </plugin>
+
+    <!-- Human 01: Oncoming Social Walker (Crimson Sweater, Scale 1.02, Height ~1.75m) -->
+    <actor name="human_01_visual">
+      <pose>0 0 0 0 0 0</pose>
       <skin>
-        <filename>model://human/meshes/walk.dae</filename>
-        <scale>1.0</scale>
+        <filename>model://human/meshes/walk_red.dae</filename>
+        <scale>1.02</scale>
       </skin>
       <animation name="walk">
-        <filename>model://human/meshes/walk.dae</filename>
-        <interpolate_x>true</interpolate_x>
+        <filename>model://human/meshes/walk_red.dae</filename>
+        <interpolate_x>false</interpolate_x>
       </animation>
       <script>
-        <loop>true</loop>
-        <delay_start>0.000000</delay_start>
-        <auto_start>true</auto_start>
-        <trajectory id="0" type="walk" tension="1.0">
+        <loop>false</loop>
+        <delay_start>0</delay_start>
+        <auto_start>false</auto_start>
+        <trajectory id="0" type="walk" tension="0">
           <waypoint>
-            <time>0.0</time>
-            <pose>1.0 0.0 1.0 0 0 3.14159</pose>
+            <time>0</time>
+            <pose>0 0 0 0 0 0</pose>
           </waypoint>
           <waypoint>
-            <time>10.0</time>
-            <pose>-6.0 0.0 1.0 0 0 3.14159</pose>
-          </waypoint>
-          <!-- Turnaround at -6.0 -->
-          <waypoint>
-            <time>10.4</time>
-            <pose>-6.0 0.0 1.0 0 0 2.3562</pose>
-          </waypoint>
-          <waypoint>
-            <time>10.8</time>
-            <pose>-6.0 0.0 1.0 0 0 1.5708</pose>
-          </waypoint>
-          <waypoint>
-            <time>11.2</time>
-            <pose>-6.0 0.0 1.0 0 0 0.7854</pose>
-          </waypoint>
-          <waypoint>
-            <time>11.5</time>
-            <pose>-6.0 0.0 1.0 0 0 0.0</pose>
-          </waypoint>
-          <!-- Return walk -->
-          <waypoint>
-            <time>21.5</time>
-            <pose>1.0 0.0 1.0 0 0 0.0</pose>
-          </waypoint>
-          <!-- Turnaround at 1.0 -->
-          <waypoint>
-            <time>21.9</time>
-            <pose>1.0 0.0 1.0 0 0 0.7854</pose>
-          </waypoint>
-          <waypoint>
-            <time>22.3</time>
-            <pose>1.0 0.0 1.0 0 0 1.5708</pose>
-          </waypoint>
-          <waypoint>
-            <time>22.7</time>
-            <pose>1.0 0.0 1.0 0 0 2.3562</pose>
-          </waypoint>
-          <waypoint>
-            <time>23.0</time>
-            <pose>1.0 0.0 1.0 0 0 3.14159</pose>
+            <time>1</time>
+            <pose>0 0 0 0 0 0</pose>
           </waypoint>
         </trajectory>
       </script>
     </actor>
 
-    <!-- Physical collision & ground-truth tracking for Nav2 / LiDAR -->
-    <model name="dynamic_obstacle">
+    <model name="human_01_proxy">
       <pose>1.0 0.0 0.85 0 0 3.14159</pose>
-      <self_collide>false</self_collide>
       <link name="link">
         <gravity>false</gravity>
         <kinematic>true</kinematic>
         <collision name="collision">
           <geometry>
             <cylinder>
-              <radius>0.22</radius>
+              <radius>0.28</radius>
               <length>1.70</length>
             </cylinder>
           </geometry>
@@ -323,15 +300,6 @@
           <transparency>1.0</transparency>
         </visual>
       </link>
-      <plugin filename="liboscillating_obstacle_system.so"
-              name="custom_corridor::OscillatingObstacle">
-        <min_x>-6.0</min_x>
-        <max_x>1.0</max_x>
-        <speed>0.7</speed>
-        <y>0.0</y>
-        <z>0.85</z>
-        <default_mode>human</default_mode>
-      </plugin>
     </model>
 
     <!-- Physical Industrial Object (Cylinder / Pillar for Object mode) -->
