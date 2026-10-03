@@ -8,14 +8,24 @@ DynamuhSim is a simulation and evaluation framework built on **ROS 2 Jazzy** and
 
 ## 📌 Key Features
 
-- **Parametric Environments & Open Arenas**: Configurable environments including narrow corridors (`0.70m`, `0.90m`, `1.20m`) and an open obstacle arena (`20m x 10m` with `arena`) with static pillars, industrial boxes, and dynamic human pedestrians.
-- **Dual Local Controller Support (DWB & MPPI)**: Full support for both DWB (`dwb_core::DWBLocalPlanner`) and Model Predictive Path Integral (`nav2_mppi_controller::MPPIController`) with DiffDrive kinematics, predictive horizon rollouts, and tuned obstacle avoidance critics.
-- **Dynamic Obstacle Simulation**: Custom Gazebo Sim C++ System Plugin (`oscillating_obstacle_system`) simulating oscillating human/patrol traffic with exact ground-truth pose publication.
-- **Headless & GUI Simulation Modes**: Fast-execution headless Gazebo mode (`gui:=false`) reducing CPU load by >100% and stabilizing Real Time Factor (RTF ~ 1.0) for automated testing.
-- **Nav2 Stack Integration**: Tailored costmap and controller configurations for TurtleBot3 Burger, synchronized FastDDS lifecycle managers with race condition mitigation, and action bridge forwarding `/goal_pose` to `/navigate_to_pose`.
-- **Automated Trial Orchestrator (`run_baseline_trials.sh`)**: 8-stage lifecycle-managed runner (Gazebo readiness, Nav2 node creation, lifecycle state verification, AMCL localization, ground-truth logging, rosbag recording, navigation goal dispatch, and automatic metrics generation).
-- **Comprehensive & Social Evaluation Framework (`evaluation/`)**: Computes trajectory lengths, speed profiles, minimal clearances, reaction latencies, motion smoothness (Linear/Angular Jerk RMS, Jerk Cost), and Proxemic Space Intrusion (PSI) intimate/personal metrics.
-- **DynaBARN Benchmark Integration**: Git submodule integration for dynamic indoor navigation benchmarking.
+- **In-Engine RVO2 / ORCA C++ Social Navigation Plugin (`librvo2_human_system.so`)**: High-throughput reciprocal velocity obstacle collision avoidance running synchronously at 250 Hz in Gazebo Sim 8.
+- **Social Compliance & Proxemics**:
+  - **Asymmetric Politeness**: Configurable yielding compliance ($0.0\text{--}1.0$) with lateral nudge to the right when meeting robots head-on.
+  - **Hall's Anisotropic Proxemics**: Asymmetric personal space modeling ($1.2\text{m}$ front buffer, $0.6\text{m}$ side margin).
+  - **Reaction Latency**: 1st-order low-pass filter ($\tau \approx 250\text{--}400\text{ ms}$) capturing human cognitive and physical reaction delay.
+  - **Stochastic Recess Yielding FSM**: 60% polite pedestrians step into corridor alcoves, turn to observe the robot, and wait for clearance.
+- **Multi-Environment Simulation Suite**:
+  - **Narrow Corridors**: Parametric widths (`0.70m`, `0.90m`, `1.20m`) with alcoves.
+  - **Open Arenas**: Multi-agent interaction (`arena_rvo2` with 4 distinct colored agents, `arena_obstacle`, and `arena_dataset` with 24 agents).
+  - **Hospital Facility**: Realistic $60\text{m} \times 17\text{m}$ hospital with staff, patients, and synchronized medical delivery cart pushers (`easy`: 3 agents, `medium`: 8 agents, `hard`: 16 agents).
+  - **School Campus Arena**: 15 classrooms, corridors A–F, stairways, and 8 active student pedestrians.
+- **Dual-Layer Physical Perception Model**:
+  - **Visual Layer**: Multi-colored 3D skinned meshes (`walk_orange.dae`, `walk_red.dae`, `walk_blue.dae`, `push_trolley.dae`) with zero elevation drift and speed-locked gait animation (zero foot-sliding).
+  - **Collision Layer**: Dynamic rigid cylinder proxies ($r=0.25\text{--}0.28\text{m}, h=1.70\text{m}$) providing $100\%$ reliable 2D LiDAR reflection.
+- **Dual Local Controller Support (DWB & MPPI)**: Full support for both DWB (`dwb_core::DWBLocalPlanner`) and Model Predictive Path Integral (`nav2_mppi_controller::MPPIController`) with DiffDrive kinematics.
+- **Lightweight & High-Throughput**: Consumes $< 1.5\text{ GB}$ VRAM in headless mode (`gui:=false`), ideal for RL / Imitation Learning training pipelines on RTX 4060 (8GB VRAM).
+- **Nav2 Stack Integration**: Auto-map resolution and environment-specific AMCL initial pose configuration across all worlds.
+- **Comprehensive Evaluation Framework (`evaluation/`)**: Metrics for trajectory length, speed profiles, minimal clearances, jerk smoothness, reaction latency, and Proxemic Space Intrusion (PSI).
 
 ---
 
@@ -23,32 +33,27 @@ DynamuhSim is a simulation and evaluation framework built on **ROS 2 Jazzy** and
 
 ```text
 DynamuhSim/
-├── src/
-│   ├── custom_corridor/                 # Main simulation & Nav2 package
-│   │   ├── config/                      # Nav2 parameters (nav2_corridor.yaml, nav2_mppi.yaml)
-│   │   ├── launch/                      # Launch files (corridor_tb3.launch.py, nav2_corridor.launch.py)
-│   │   ├── maps/                        # 2D maps (corridor_070, 090, 120, arena_obstacle)
-│   │   ├── rviz/                        # RViz2 visualization setup (corridor.rviz)
-│   │   ├── scripts/                     # Helper nodes (goal_pose_bridge.py)
-│   │   ├── urdf/                        # TurtleBot3 URDF / Xacro descriptions
-│   │   └── worlds/                      # Gazebo SDF worlds (corridor_070, 090, 120, arena_obstacle)
-│   ├── custom_corridor_plugins/         # C++ Gazebo Sim System plugins
-│   │   └── src/oscillating_obstacle_system.cc
-│   └── dynabarn/                        # DynaBARN benchmark submodule
-├── evaluation/                          # Modular evaluation package
-│   ├── analyzer.py                      # Core trial analysis pipeline
-│   ├── motion_metrics.py                # Trajectory, velocity, and jerk metrics
-│   ├── obstacle_metrics.py              # Clearance and encounter metrics
-│   ├── social_metrics.py                # Proxemics and PSI metrics
-│   ├── reporter.py                      # Report and JSON serialization
-│   └── types.py                         # Data structures and schemas
-├── experiments/                         # Evaluation datasets & baseline configs
+├── RVO2_SOCIAL_NAVIGATION_GUIDE.md      # Detailed RVO2 / ORCA technical guide & cheat sheet
+├── Human_modelize_sync.md               # Technical specification for unified human pipeline
+├── BASELINE_TRIALS.md                   # Quick guide for automated trials
 ├── run_baseline_trials.sh               # Automated batch trial orchestrator
 ├── record_obstacle.py                   # Ground-truth obstacle pose recorder
 ├── analyze_baseline.py                  # Single-trial offline metrics CLI facade
 ├── evaluate_framework.py                # Batch evaluation & algorithm comparison
-├── BASELINE_TRIALS.md                   # Quick guide for automated trials
-└── README.md
+├── evaluation/                          # Modular evaluation package (PSI, motion, jerk metrics)
+├── src/
+│   ├── custom_corridor/                 # Main simulation & Nav2 package
+│   │   ├── config/                      # Nav2 parameters (nav2_corridor.yaml, nav2_mppi.yaml)
+│   │   ├── launch/                      # Launch files (corridor_tb3, nav2_corridor, hospital_arena, nav2_hospital)
+│   │   ├── maps/                        # 2D maps (corridor_090, arena_obstacle, school_arena, hospital/)
+│   │   ├── models/                      # TurtleBot3 Burger, 3D animated humans (walk_orange, red, blue, trolley)
+│   │   ├── rviz/                        # RViz2 visualization setup
+│   │   ├── scripts/                     # Helper nodes (goal_pose_bridge.py, hospital_auto_route.py)
+│   │   └── worlds/                      # Gazebo SDF worlds (corridors, arena, hospital, school_arena)
+│   ├── custom_corridor_plugins/         # C++ Gazebo Sim System plugins
+│   │   ├── src/rvo2_human_system.cpp    # In-engine RVO2 / ORCA social navigation plugin
+│   │   └── src/rvo2/                    # Core RVO2 / ORCA C++ library
+│   └── dynabarn/                        # DynaBARN benchmark submodule
 ```
 
 ---
@@ -97,64 +102,79 @@ source install/setup.bash
 
 ## 🚀 Usage
 
-### Option 1: Manual Run (Gazebo + Nav2 + RViz2)
+### Option 1: Manual Run & Testing
 
-#### 1. Narrow Corridor (0.90m) with DWB:
-**Terminal 1 — Start Gazebo simulation:**
-```bash
-source /opt/ros/jazzy/setup.bash
-source ~/nav_ws/install/setup.bash
-export ROS_DOMAIN_ID=42
+> 💡 *For an exhaustive parameter reference, mathematical details, and benchmark tips, see the [RVO2 Social Navigation Guide](RVO2_SOCIAL_NAVIGATION_GUIDE.md).*
 
-# width options: 0.70, 0.90 (default), 1.20, arena
-# obstacle options: human (default), object, none
-# gui options: true (default), false (headless)
-ros2 launch custom_corridor corridor_tb3.launch.py width:=0.90 obstacle:=human
-```
+#### Quick Environment Cheat Sheet:
+| Environment | Simulation Command (`corridor_tb3` / `hospital_arena`) | Nav2 Command | Goal Pose `(x, y)` |
+|---|---|---|---|
+| **Corridor (0.90m)** | `ros2 launch custom_corridor corridor_tb3.launch.py width:=0.90` | `ros2 launch custom_corridor nav2_corridor.launch.py map:=corridor_090` | `(20.0, 0.0)` |
+| **Arena RVO2 (4 agents)** | `ros2 launch custom_corridor corridor_tb3.launch.py width:=rvo2` | `ros2 launch custom_corridor nav2_corridor.launch.py map:=arena_obstacle` | `(2.0, 0.0)` |
+| **School Arena (8 students)** | `ros2 launch custom_corridor corridor_tb3.launch.py width:=school` | `ros2 launch custom_corridor nav2_corridor.launch.py map:=school` | `(10.0, -8.15)` |
+| **Hospital Facility (Medium)**| `ros2 launch custom_corridor hospital_arena.launch.py difficulty:=medium` | `ros2 launch custom_corridor nav2_hospital.launch.py map:=medium` | `(8.0, 0.0)` |
 
-**Terminal 2 — Start Nav2 & RViz2:**
-```bash
-source /opt/ros/jazzy/setup.bash
-source ~/nav_ws/install/setup.bash
-export ROS_DOMAIN_ID=42
+---
 
-# controller options: dwb (default), mppi
-ros2 launch custom_corridor nav2_corridor.launch.py controller:=dwb
-```
+#### 1. Narrow Corridor (0.90m, 0.70m, 1.20m)
+* **Terminal 1 — Gazebo Simulation & TurtleBot3:**
+  ```bash
+  ros2 launch custom_corridor corridor_tb3.launch.py width:=0.90 obstacle:=human gui:=true rviz:=true
+  ```
+* **Terminal 2 — Nav2 Stack (DWB / MPPI):**
+  ```bash
+  ros2 launch custom_corridor nav2_corridor.launch.py map:=corridor_090 controller:=dwb
+  ```
+* **Terminal 3 — Send Navigation Goal:**
+  ```bash
+  ros2 action send_goal /navigate_to_pose nav2_msgs/action/NavigateToPose \
+    "{pose: {header: {frame_id: 'map'}, pose: {position: {x: 20.0, y: 0.0, z: 0.0}, orientation: {w: 1.0}}}}"
+  ```
 
-#### 2. Open Arena (20m x 10m) with MPPI Controller (Headless):
-**Terminal 1 — Start Headless Gazebo simulation (Fast & low CPU):**
-```bash
-source /opt/ros/jazzy/setup.bash
-source ~/nav_ws/install/setup.bash
-export ROS_DOMAIN_ID=42
+#### 2. Open Arena (RVO2 4-Agent, Obstacle, Dataset)
+* **Terminal 1 — Gazebo Simulation:**
+  ```bash
+  ros2 launch custom_corridor corridor_tb3.launch.py width:=rvo2 gui:=true rviz:=true
+  ```
+* **Terminal 2 — Nav2 Stack:**
+  ```bash
+  ros2 launch custom_corridor nav2_corridor.launch.py map:=arena_obstacle controller:=dwb
+  ```
+* **Terminal 3 — Send Navigation Goal:**
+  ```bash
+  ros2 action send_goal /navigate_to_pose nav2_msgs/action/NavigateToPose \
+    "{pose: {header: {frame_id: 'map'}, pose: {position: {x: 2.0, y: 0.0, z: 0.0}, orientation: {w: 1.0}}}}"
+  ```
 
-ros2 launch custom_corridor corridor_tb3.launch.py width:=arena obstacle:=human gui:=false rviz:=false
-```
+#### 3. School Campus Arena (15 Classrooms, 8 Students)
+* **Terminal 1 — Gazebo Simulation:**
+  ```bash
+  ros2 launch custom_corridor corridor_tb3.launch.py width:=school gui:=true rviz:=true
+  ```
+* **Terminal 2 — Nav2 Stack:**
+  ```bash
+  ros2 launch custom_corridor nav2_corridor.launch.py map:=school controller:=dwb
+  ```
+* **Terminal 3 — Send Navigation Goal:**
+  ```bash
+  ros2 action send_goal /navigate_to_pose nav2_msgs/action/NavigateToPose \
+    "{pose: {header: {frame_id: 'map'}, pose: {position: {x: 10.0, y: -8.15, z: 0.0}, orientation: {w: 1.0}}}}"
+  ```
 
-**Terminal 2 — Start Nav2 with MPPI Controller & Arena Map:**
-```bash
-source /opt/ros/jazzy/setup.bash
-source ~/nav_ws/install/setup.bash
-export ROS_DOMAIN_ID=42
-
-ros2 launch custom_corridor nav2_corridor.launch.py controller:=mppi map:=arena_obstacle
-```
-
-**Terminal 3 — Open RViz2 visualization:**
-```bash
-source /opt/ros/jazzy/setup.bash
-source ~/nav_ws/install/setup.bash
-export ROS_DOMAIN_ID=42
-
-rviz2 -d ~/nav_ws/src/custom_corridor/rviz/corridor.rviz
-```
-
-**Terminal 4 — Dispatch Goal Pose:**
-```bash
-source /opt/ros/jazzy/setup.bash
-ros2 topic pub --once /goal_pose geometry_msgs/msg/PoseStamped '{header: {frame_id: "map"}, pose: {position: {x: 15.0, y: 0.0, z: 0.0}, orientation: {w: 1.0}}}'
-```
+#### 4. Hospital Facility (Easy / Medium / Hard)
+* **Terminal 1 — Gazebo Simulation:**
+  ```bash
+  ros2 launch custom_corridor hospital_arena.launch.py difficulty:=medium gui:=true rviz:=true
+  ```
+* **Terminal 2 — Nav2 Stack:**
+  ```bash
+  ros2 launch custom_corridor nav2_hospital.launch.py map:=medium auto_route:=false
+  ```
+* **Terminal 3 — Send Navigation Goal:**
+  ```bash
+  ros2 action send_goal /navigate_to_pose nav2_msgs/action/NavigateToPose \
+    "{pose: {header: {frame_id: 'map'}, pose: {position: {x: 8.0, y: 0.0, z: 0.0}, orientation: {w: 1.0}}}}"
+  ```
 
 ---
 

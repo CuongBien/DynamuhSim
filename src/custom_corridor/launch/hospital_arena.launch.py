@@ -114,9 +114,21 @@ def launch_setup(context):
 
     gz_cmd.append(world_file)
 
+    gz_resource_path = os.pathsep.join(
+        p for p in [model_path, turtlebot_model_path, existing_resource_path] if p
+    )
+    gz_plugin_path = os.pathsep.join(
+        p for p in [plugin_path, existing_plugin_path] if p
+    )
+
     gazebo = ExecuteProcess(
         cmd=gz_cmd,
         output="screen",
+        additional_env={
+            "GZ_PARTITION": gz_partition,
+            "GZ_SIM_RESOURCE_PATH": gz_resource_path,
+            "GZ_SIM_SYSTEM_PLUGIN_PATH": gz_plugin_path,
+        },
     )
 
     # ---------------------------------------------------------

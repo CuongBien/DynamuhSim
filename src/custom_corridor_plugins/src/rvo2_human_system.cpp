@@ -151,6 +151,7 @@ struct HumanAgent
 
   // Corridor Recess State
   CorridorState corridorState{CorridorState::Patrol};
+  double waitDuration{0.0};
 
   // Gazebo entities
   gz::sim::Entity modelEntity{gz::sim::kNullEntity};
@@ -171,6 +172,7 @@ struct HumanAgent
     this->prefVy = 0.0;
     this->waypointIndex = 0;
     this->corridorState = CorridorState::Patrol;
+    this->waitDuration = 0.0;
     this->animTimeSec = 0.0;
     this->animationTime = std::chrono::steady_clock::duration{0};
   }
@@ -230,7 +232,7 @@ public:
     this->recessXMax_ = SdfValueOr<double>(_sdf, "recess_x_max", 2.65);
     this->recessXCenter_ = SdfValueOr<double>(_sdf, "recess_x_center", 2.00);
     this->recessY_ = SdfValueOr<double>(_sdf, "recess_y", 0.75);
-    this->recessApproachDist_ = SdfValueOr<double>(_sdf, "recess_approach_dist", 3.5);
+    this->recessApproachDist_ = SdfValueOr<double>(_sdf, "recess_approach_dist", 5.0);
     this->recessThreshold_ = SdfValueOr<double>(_sdf, "recess_threshold", 0.40);
 
     // Initialize humans
@@ -323,9 +325,9 @@ public:
       // In corridor mode, clamp Y to guarantee agent never penetrates corridor or recess walls
       if (this->corridorMode_)
       {
-        const double r = human.radius;
-        const double minWallY = -this->corridorHalfWidth_ + r;
-        double maxWallY = this->corridorHalfWidth_ - r;
+        const double wallMargin = 0.16;
+        const double minWallY = -this->corridorHalfWidth_ + wallMargin;
+        double maxWallY = this->corridorHalfWidth_ - wallMargin;
         if (human.x >= (this->recessXMin_ - 0.1) && human.x <= (this->recessXMax_ + 0.1))
         {
           maxWallY = this->recessY_ + 0.10;
@@ -336,16 +338,43 @@ public:
 
       const double speed = std::hypot(human.vx, human.vy);
       double targetYaw = human.yaw;
-      if (speed > 0.08)
+
+      if (this->corridorMode_)
       {
-        targetYaw = std::atan2(human.vy, human.vx);
-      }
-      else if (!human.waypoints.empty() && human.mode == HumanMode::Autonomous)
-      {
-        const auto &wp = human.waypoints[human.waypointIndex];
-        if (Distance2D(human.x, human.y, wp.x, wp.y) > 0.1)
+        if (human.corridorState == CorridorState::YieldingWait)
         {
-          targetYaw = HeadingTo(human.x, human.y, wp.x, wp.y);
+          targetYaw = -1.5708; // Face the corridor while waiting in recess
+        }
+        else if (human.corridorState == CorridorState::YieldingEnter)
+        {
+          targetYaw = HeadingTo(human.x, human.y, this->recessXCenter_, this->recessY_);
+        }
+        else if (human.corridorState == CorridorState::YieldingExit)
+        {
+          targetYaw = HeadingTo(human.x, human.y, this->recessXCenter_, 0.0);
+        }
+        else if (human.corridorState == CorridorState::Patrol)
+        {
+          if (!human.waypoints.empty())
+          {
+            const auto &wp = human.waypoints[human.waypointIndex];
+            targetYaw = HeadingTo(human.x, human.y, wp.x, wp.y);
+          }
+        }
+      }
+      else
+      {
+        if (speed > 0.12)
+        {
+          targetYaw = std::atan2(human.vy, human.vx);
+        }
+        else if (!human.waypoints.empty() && human.mode == HumanMode::Autonomous)
+        {
+          const auto &wp = human.waypoints[human.waypointIndex];
+          if (Distance2D(human.x, human.y, wp.x, wp.y) > 0.1)
+          {
+            targetYaw = HeadingTo(human.x, human.y, wp.x, wp.y);
+          }
         }
       }
 
@@ -564,6 +593,9 @@ private:
       this->robotPrevX_ = currentX;
       this->robotPrevY_ = currentY;
       this->robotHasPrevPose_ = true;
+      this->robotVx_ = vx;
+      this->robotVy_ = vy;
+      this->robotSpeed_ = std::hypot(vx, vy);
 
       this->rvoSim_->setAgentPosition(this->robotRvoIndex_, RVO::Vector2(currentX, currentY));
       this->rvoSim_->setAgentVelocity(this->robotRvoIndex_, RVO::Vector2(vx, vy));
@@ -645,73 +677,124 @@ private:
       const double ry = this->robotPrevY_ - _human.y;
       const double distToRobot = std::hypot(rx, ry);
 
-      if (_human.corridorState == CorridorState::Patrol)
+      double patrolDirX = -1.0;
+      if (!_human.waypoints.empty())
       {
-        // Check if robot is approaching in front and human is near the recess zone
-        const bool robotInFront = (desiredVx * rx > 0.0);
-        const bool nearRecess = (_human.x >= (this->recessXMin_ - 0.4) && _human.x <= (this->recessXMax_ + 1.2));
+        const auto &wp = _human.waypoints[_human.waypointIndex];
+        patrolDirX = (wp.x - _human.x >= 0.0) ? 1.0 : -1.0;
+      }
 
-        if (robotInFront && distToRobot < this->recessApproachDist_ && nearRecess)
+      // Robot is in front of human's travel direction
+      const bool robotInFront = (patrolDirX * rx > 0.0);
+      // Robot is actively moving towards human (closing distance)
+      const bool robotMovingTowards = (this->robotSpeed_ > 0.03 && (rx * this->robotVx_ < 0.0));
+      // Is corridor a single-lane bottleneck (< 1.10m)? (corridor_070 and corridor_090)
+      const bool isNarrowCorridor = (this->corridorHalfWidth_ < 0.55);
+
+      if (!isNarrowCorridor)
+      {
+        // Wide corridor (1.20m): agents can pass each other side-by-side!
+        // Human shifts to their right lane (+Y if heading -X, -Y if heading +X) and keeps walking smoothly.
+        if (robotInFront && distToRobot < 4.5)
         {
-          // Stochastic decision based on politeness balance point
-          if (_human.politeness >= this->recessThreshold_)
+          const double rightY = (patrolDirX < 0.0) ? 0.28 : -0.28;
+          const double dyToRight = rightY - _human.y;
+          desiredVy += std::clamp(dyToRight * 1.5, -0.35, 0.35);
+        }
+      }
+      else
+      {
+        // Single-lane bottleneck (corridor 0.70m and 0.90m)
+        if (_human.corridorState == CorridorState::Patrol)
+        {
+          _human.waitDuration = 0.0;
+
+          // ONLY enter recess if human is right at the recess (x in [1.15, 2.95])
+          // AND robot is ACTUALLY CLOSE (distToRobot < 3.5m) and approaching!
+          const bool nearRecessAhead = (_human.x >= (this->recessXMin_ - 0.2) && _human.x <= (this->recessXMax_ + 0.3));
+          const bool robotCloseAndApproaching = robotInFront && (robotMovingTowards || distToRobot < 2.5) && (distToRobot < 3.5);
+
+          // Or if human is just past the recess (x in [-1.5, 1.15]) and meets robot close (< 2.8m)
+          const bool insideBottleneck = (_human.x < (this->recessXMin_ - 0.2) && _human.x >= (this->recessXMin_ - 2.5));
+          const bool confrontationNearAlcove = insideBottleneck && robotInFront && (robotMovingTowards || distToRobot < 2.5) && (distToRobot < 2.8);
+
+          if ((nearRecessAhead && robotCloseAndApproaching) || confrontationNearAlcove)
           {
             _human.corridorState = CorridorState::YieldingEnter;
           }
+          else if (robotInFront && distToRobot < 4.0)
+          {
+            // When walking down the corridor, step to the right wall like a real human!
+            // If heading -X (patrolDirX < 0), right is +Y. If heading +X, right is -Y.
+            const double rightY = (patrolDirX < 0.0) ? (this->corridorHalfWidth_ - 0.18) : (-this->corridorHalfWidth_ + 0.18);
+            const double dyToRight = rightY - _human.y;
+            desiredVy += std::clamp(dyToRight * 1.5, -0.35, 0.35);
+          }
         }
-      }
-      else if (_human.corridorState == CorridorState::YieldingEnter)
-      {
-        const double targetX = this->recessXCenter_;
-        const double targetY = this->recessY_;
-        const double dxRecess = targetX - _human.x;
-        const double dyRecess = targetY - _human.y;
-        const double dRecess = std::hypot(dxRecess, dyRecess);
-
-        if (dRecess < 0.22)
+        else if (_human.corridorState == CorridorState::YieldingEnter)
         {
-          _human.corridorState = CorridorState::YieldingWait;
+          const double targetX = this->recessXCenter_;
+          const double targetY = this->recessY_;
+          const double dxRecess = targetX - _human.x;
+          const double dyRecess = targetY - _human.y;
+          const double dRecess = std::hypot(dxRecess, dyRecess);
+
+          if (dRecess < 0.25)
+          {
+            _human.corridorState = CorridorState::YieldingWait;
+            _human.waitDuration = 0.0;
+            desiredVx = 0.0;
+            desiredVy = 0.0;
+          }
+          else
+          {
+            desiredVx = (dxRecess / dRecess) * _human.speed * 0.85;
+            desiredVy = (dyRecess / dRecess) * _human.speed * 0.85;
+          }
+        }
+        else if (_human.corridorState == CorridorState::YieldingWait)
+        {
           desiredVx = 0.0;
           desiredVy = 0.0;
-        }
-        else
-        {
-          desiredVx = (dxRecess / dRecess) * _human.speed * 0.85;
-          desiredVy = (dyRecess / dRecess) * _human.speed * 0.85;
-        }
-      }
-      else if (_human.corridorState == CorridorState::YieldingWait)
-      {
-        desiredVx = 0.0;
-        desiredVy = 0.0;
-        // Human turns to face the corridor (-pi/2) while waiting for robot to pass
-        const double targetHeading = -1.5708;
-        const double headingDiff = NormalizeAngle(targetHeading - _human.yaw);
-        _human.yaw = NormalizeAngle(_human.yaw + std::clamp(headingDiff, -4.0 * _dt, 4.0 * _dt));
+          _human.waitDuration += _dt;
 
-        // Check if robot has cleared the bottleneck
-        const bool robotCleared = (this->robotPrevX_ > (_human.x + 0.6)) || (distToRobot > 3.0 && this->robotPrevX_ > _human.x);
-        if (robotCleared)
-        {
-          _human.corridorState = CorridorState::YieldingExit;
-        }
-      }
-      else if (_human.corridorState == CorridorState::YieldingExit)
-      {
-        const double targetX = this->recessXCenter_;
-        const double targetY = 0.0;
-        const double dxExit = targetX - _human.x;
-        const double dyExit = targetY - _human.y;
-        const double dExit = std::hypot(dxExit, dyExit);
+          // Human turns to face the corridor (-pi/2) while waiting for robot to pass
+          const double targetHeading = -1.5708;
+          const double headingDiff = NormalizeAngle(targetHeading - _human.yaw);
+          _human.yaw = NormalizeAngle(_human.yaw + std::clamp(headingDiff, -4.0 * _dt, 4.0 * _dt));
 
-        if (std::abs(_human.y) < 0.12)
-        {
-          _human.corridorState = CorridorState::Patrol;
+          // Robot has cleared if it has driven past the recess in the direction of travel
+          // Robot travels +X from -13.0 to +5.0. When robot X > (recessXMax + 0.35), bottleneck is clear!
+          const bool robotPassedX = (this->robotVx_ >= -0.01) ?
+              (this->robotPrevX_ > (this->recessXMax_ + 0.35)) :
+              (this->robotPrevX_ < (this->recessXMin_ - 0.35));
+
+          // Fail-safe: if robot stopped or turned around for > 8.0s far away (dist > 4.5m), resume patrol
+          const bool robotGaveUp = (_human.waitDuration > 8.0 && this->robotSpeed_ < 0.03 && distToRobot > 4.5);
+
+          if (robotPassedX || robotGaveUp)
+          {
+            _human.corridorState = CorridorState::YieldingExit;
+          }
         }
-        else
+        else if (_human.corridorState == CorridorState::YieldingExit)
         {
-          desiredVx = (dxExit / std::max(0.01, dExit)) * _human.speed * 0.85;
-          desiredVy = (dyExit / std::max(0.01, dExit)) * _human.speed * 0.85;
+          const double targetX = this->recessXCenter_;
+          const double targetY = 0.0;
+          const double dxExit = targetX - _human.x;
+          const double dyExit = targetY - _human.y;
+          const double dExit = std::hypot(dxExit, dyExit);
+
+          if (std::abs(_human.y) < 0.12)
+          {
+            _human.corridorState = CorridorState::Patrol;
+            _human.waitDuration = 0.0;
+          }
+          else
+          {
+            desiredVx = (dxExit / std::max(0.01, dExit)) * _human.speed * 0.85;
+            desiredVy = (dyExit / std::max(0.01, dExit)) * _human.speed * 0.85;
+          }
         }
       }
     }
@@ -1200,7 +1283,7 @@ private:
   double recessXMax_{2.65};
   double recessXCenter_{2.00};
   double recessY_{0.75};
-  double recessApproachDist_{3.5};
+  double recessApproachDist_{5.0};
   double recessThreshold_{0.40};
 
   int humanCount_{4};
@@ -1210,6 +1293,9 @@ private:
 
   double robotPrevX_{0.0};
   double robotPrevY_{0.0};
+  double robotVx_{0.0};
+  double robotVy_{0.0};
+  double robotSpeed_{0.0};
   bool robotHasPrevPose_{false};
 
   bool running_{true};

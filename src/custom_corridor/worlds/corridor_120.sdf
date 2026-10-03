@@ -4,7 +4,17 @@
 
     <gravity>0 0 -9.81</gravity>
 
-    <!-- Physics -->
+    <!-- Scene and Physics Optimization -->
+    <scene>
+      <shadows>false</shadows>
+    </scene>
+
+    <physics name="default_physics" type="ode">
+      <max_step_size>0.004</max_step_size>
+      <real_time_factor>1.0</real_time_factor>
+    </physics>
+
+    <!-- Physics System Plugin -->
     <plugin
       filename="gz-sim-physics-system"
       name="gz::sim::systems::Physics"/>
@@ -239,7 +249,7 @@
     <!-- Sun -->
     <light name="sun" type="directional">
       <pose>0 0 10 0 0 0</pose>
-      <cast_shadows>true</cast_shadows>
+      <cast_shadows>false</cast_shadows>
       <direction>-0.5 -0.5 -1</direction>
       <diffuse>1 1 1 1</diffuse>
       <specular>0.2 0.2 0.2 1</specular>
@@ -261,7 +271,7 @@
       <recess_x_max>2.65</recess_x_max>
       <recess_x_center>2.00</recess_x_center>
       <recess_y>0.90</recess_y>
-      <recess_approach_dist>3.5</recess_approach_dist>
+      <recess_approach_dist>5.0</recess_approach_dist>
       <recess_threshold>0.40</recess_threshold>
       <politeness_balance_point>0.60</politeness_balance_point>
       <randomize_politeness>true</randomize_politeness>
