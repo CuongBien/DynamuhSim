@@ -1,0 +1,248 @@
+{
+  "episode_id": 109,
+  "scenario_family": "wait_then_cross",
+  "description": "2 ng\u01b0\u1eddi: \u0111\u1ee9ng r\u1ed3i b\u1ea5t ng\u1edd c\u1eaft qua tr\u1ee5c (timing l\u1ec7ch nhau) + 8 background.",
+  "robot_start": {
+    "x": -13.0,
+    "y": 0.0,
+    "yaw": 0.0
+  },
+  "robot_goal": {
+    "x": 3.5,
+    "y": 0.0,
+    "yaw": 0.0
+  },
+  "human_count": 10,
+  "interaction_human_count": 2,
+  "background_human_count": 8,
+  "humans": [
+    {
+      "id": 1,
+      "mode": "scripted",
+      "behavior": "wait_then_cross",
+      "start": {
+        "x": -7.5,
+        "y": -2.5,
+        "yaw": 1.5707963267948966
+      },
+      "segments": [
+        {
+          "duration": 4.0,
+          "speed": 0.0,
+          "heading": 1.5707963267948966
+        },
+        {
+          "duration": 5.6,
+          "speed": 0.8,
+          "heading": 1.5707963267948966
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "mode": "scripted",
+      "behavior": "wait_then_cross",
+      "start": {
+        "x": -2.0,
+        "y": 2.5,
+        "yaw": -1.5707963267948966
+      },
+      "segments": [
+        {
+          "duration": 9.0,
+          "speed": 0.0,
+          "heading": -1.5707963267948966
+        },
+        {
+          "duration": 5.6,
+          "speed": 0.75,
+          "heading": -1.5707963267948966
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "mode": "autonomous",
+      "behavior": "background_flow",
+      "speed": 0.41,
+      "waypoints": [
+        [
+          -13.5,
+          3.2
+        ],
+        [
+          4.0,
+          3.2
+        ]
+      ],
+      "loop": true,
+      "waypoint_tolerance": 0.12,
+      "start": {
+        "x": -8.09,
+        "y": 3.2,
+        "yaw": 0.0
+      }
+    },
+    {
+      "id": 4,
+      "mode": "autonomous",
+      "behavior": "background_flow",
+      "speed": 0.44,
+      "waypoints": [
+        [
+          4.0,
+          3.8
+        ],
+        [
+          -13.5,
+          3.8
+        ]
+      ],
+      "loop": true,
+      "waypoint_tolerance": 0.12,
+      "start": {
+        "x": -4.34,
+        "y": 3.8,
+        "yaw": 3.14159
+      }
+    },
+    {
+      "id": 5,
+      "mode": "autonomous",
+      "behavior": "background_flow",
+      "speed": 0.63,
+      "waypoints": [
+        [
+          -13.5,
+          4.3
+        ],
+        [
+          4.0,
+          4.3
+        ]
+      ],
+      "loop": true,
+      "waypoint_tolerance": 0.12,
+      "start": {
+        "x": -4.97,
+        "y": 4.3,
+        "yaw": 0.0
+      }
+    },
+    {
+      "id": 6,
+      "mode": "autonomous",
+      "behavior": "background_flow",
+      "speed": 0.44,
+      "waypoints": [
+        [
+          4.0,
+          4.0
+        ],
+        [
+          -13.5,
+          4.0
+        ]
+      ],
+      "loop": true,
+      "waypoint_tolerance": 0.12,
+      "start": {
+        "x": -4.12,
+        "y": 4.0,
+        "yaw": 3.14159
+      }
+    },
+    {
+      "id": 7,
+      "mode": "autonomous",
+      "behavior": "background_flow",
+      "speed": 0.45,
+      "waypoints": [
+        [
+          4.0,
+          -3.2
+        ],
+        [
+          -13.5,
+          -3.2
+        ]
+      ],
+      "loop": true,
+      "waypoint_tolerance": 0.12,
+      "start": {
+        "x": -0.94,
+        "y": -3.2,
+        "yaw": 3.14159
+      }
+    },
+    {
+      "id": 8,
+      "mode": "autonomous",
+      "behavior": "background_flow",
+      "speed": 0.59,
+      "waypoints": [
+        [
+          -13.5,
+          -3.8
+        ],
+        [
+          4.0,
+          -3.8
+        ]
+      ],
+      "loop": true,
+      "waypoint_tolerance": 0.12,
+      "start": {
+        "x": -8.15,
+        "y": -3.8,
+        "yaw": 0.0
+      }
+    },
+    {
+      "id": 9,
+      "mode": "autonomous",
+      "behavior": "background_flow",
+      "speed": 0.53,
+      "waypoints": [
+        [
+          4.0,
+          -4.3
+        ],
+        [
+          -13.5,
+          -4.3
+        ]
+      ],
+      "loop": true,
+      "waypoint_tolerance": 0.12,
+      "start": {
+        "x": -9.66,
+        "y": -4.3,
+        "yaw": 3.14159
+      }
+    },
+    {
+      "id": 10,
+      "mode": "autonomous",
+      "behavior": "background_flow",
+      "speed": 0.61,
+      "waypoints": [
+        [
+          -13.5,
+          -4.0
+        ],
+        [
+          4.0,
+          -4.0
+        ]
+      ],
+      "loop": true,
+      "waypoint_tolerance": 0.12,
+      "start": {
+        "x": 0.37,
+        "y": -4.0,
+        "yaw": 0.0
+      }
+    }
+  ]
+}
