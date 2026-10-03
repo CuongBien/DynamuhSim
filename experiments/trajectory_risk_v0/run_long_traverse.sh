@@ -8,7 +8,7 @@ OUT=$EXP/data_long_traverse/episode_${STAMP}
 TIMEOUT_SEC=${TIMEOUT_SEC:-120}
 GOAL_X=${GOAL_X:-4.5}
 GOAL_Y=${GOAL_Y:-0.0}
-TIMEOUT_SEC=${TIMEOUT_SEC:-120}
+TIMEOUT_SEC=${TIMEOUT_SEC:-600}
 mkdir -p "$OUT"
 cd "$WS"
 source /opt/ros/jazzy/setup.bash
