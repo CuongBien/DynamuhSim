@@ -55,13 +55,14 @@ def main():
     OUTPUT.mkdir(parents=True, exist_ok=True)
     pgm = OUTPUT / "hospital_easy.pgm"
     pgm.write_bytes(f"P5\n{WIDTH} {HEIGHT}\n255\n".encode() + pixels)
-    (OUTPUT / "hospital_easy.yaml").write_text(
-        "image: hospital_easy.pgm\n"
-        f"resolution: {RESOLUTION:.3f}\n"
-        f"origin: [{ORIGIN_X:.3f}, {ORIGIN_Y:.3f}, 0.0]\n"
-        "negate: 0\noccupied_thresh: 0.65\nfree_thresh: 0.196\nmode: trinary\n"
-    )
-    print(f"Generated {pgm}: {WIDTH}x{HEIGHT}, {count} static obstacles")
+    for diff in ("easy", "medium", "hard"):
+        (OUTPUT / f"hospital_{diff}.yaml").write_text(
+            "image: hospital_easy.pgm\n"
+            f"resolution: {RESOLUTION:.3f}\n"
+            f"origin: [{ORIGIN_X:.3f}, {ORIGIN_Y:.3f}, 0.0]\n"
+            "negate: 0\noccupied_thresh: 0.65\nfree_thresh: 0.196\nmode: trinary\n"
+        )
+    print(f"Generated {pgm} and YAMLs (easy, medium, hard): {WIDTH}x{HEIGHT}, {count} static obstacles")
 
 
 if __name__ == "__main__":

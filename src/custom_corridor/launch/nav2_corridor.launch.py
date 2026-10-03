@@ -33,10 +33,13 @@ def launch_setup(context, *args, **kwargs):
         else:
             cand1 = os.path.join(package_share, "maps", f"{map_name}.yaml")
             cand2 = os.path.join(package_share, "maps", map_name)
+            cand_school = os.path.join(package_share, "maps", "school_arena.yaml")
             if os.path.exists(cand1):
                 map_override["yaml_filename"] = cand1
             elif os.path.exists(cand2):
                 map_override["yaml_filename"] = cand2
+            elif map_name in ["school", "school_arena"] and os.path.exists(cand_school):
+                map_override["yaml_filename"] = cand_school
 
     if "yaml_filename" not in map_override:
         map_override["yaml_filename"] = os.path.join(package_share, "maps", "corridor_090.yaml")
@@ -52,15 +55,33 @@ def launch_setup(context, *args, **kwargs):
         parameters=map_server_params,
     )
 
+    amcl_params = [nav2_params]
+    if episode_mode:
+        amcl_params.append({"set_initial_pose": False, "transform_tolerance": 0.5})
+    else:
+        selected_map = map_override.get("yaml_filename", "")
+        if "school" in selected_map or map_name in ["school", "school_arena"]:
+            amcl_params.append({
+                "set_initial_pose": True,
+                "initial_pose": {"x": -13.5, "y": -8.15, "z": 0.0, "yaw": 0.0},
+            })
+        elif "arena" in selected_map or map_name in ["arena", "arena_obstacle", "dataset", "rvo2"]:
+            amcl_params.append({
+                "set_initial_pose": True,
+                "initial_pose": {"x": -13.0, "y": 0.0, "z": 0.0, "yaw": 0.0},
+            })
+        else:
+            amcl_params.append({
+                "set_initial_pose": True,
+                "initial_pose": {"x": 0.0, "y": 0.0, "z": 0.0, "yaw": 0.0},
+            })
+
     amcl = Node(
         package="nav2_amcl",
         executable="amcl",
         name="amcl",
         output="screen",
-        # The school laser scans at 5 Hz. AMCL's 0.1 s episode YAML value
-        # expires between scans; post-date map->odom beyond one scan period.
-        parameters=[nav2_params, {"set_initial_pose": False, "transform_tolerance": 0.5}]
-        if episode_mode else [nav2_params],
+        parameters=amcl_params,
     )
 
     planner_server = Node(

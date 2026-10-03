@@ -21,6 +21,22 @@
             <render_engine>ogre2</render_engine>
         </plugin>
 
+    <!-- ============================================================== -->
+    <!-- RVO2 Social Navigation System Plugin                           -->
+    <!-- ============================================================== -->
+    <plugin
+      filename="librvo2_human_system.so"
+      name="custom_corridor::RVO2HumanSystem">
+      <human_count>8</human_count>
+      <robot_name>burger</robot_name>
+      <robot_radius>0.28</robot_radius>
+      <human_radius>0.28</human_radius>
+      <corridor_mode>false</corridor_mode>
+      <politeness_balance_point>0.60</politeness_balance_point>
+      <randomize_politeness>true</randomize_politeness>
+      <default_scenario_file>hospital_medium</default_scenario_file>
+    </plugin>
+
     <physics name="default_physics" type="ode">
       <max_step_size>0.004</max_step_size>
       <real_time_factor>1.0</real_time_factor>
@@ -6298,109 +6314,234 @@
     </model>
 
     <actor name="medium_walker_01">
-      <skin><filename>model://human/meshes/walk.dae</filename><scale>1</scale></skin>
-      <animation name="walk"><filename>model://human/meshes/walk.dae</filename><interpolate_x>true</interpolate_x></animation>
-      <script><loop>true</loop><delay_start>0</delay_start><auto_start>true</auto_start>
-        <trajectory id="0" type="walk" tension="0"><waypoint><time>0</time><pose>-10 0 1 0 0 3.14159</pose></waypoint><waypoint><time>8</time><pose>-16 0 1 0 0 3.14159</pose></waypoint><waypoint><time>10</time><pose>-17 -1.3 1 0 0 3.14159</pose></waypoint><waypoint><time>22</time><pose>-26 -1.3 1 0 0 3.14159</pose></waypoint><waypoint><time>24</time><pose>-26 -1.3 1 0 0 0</pose></waypoint><waypoint><time>36</time><pose>-17 -1.3 1 0 0 0</pose></waypoint><waypoint><time>38</time><pose>-16 0 1 0 0 0</pose></waypoint><waypoint><time>46</time><pose>-10 0 1 0 0 0</pose></waypoint><waypoint><time>48</time><pose>-10 0 1 0 0 3.14159</pose></waypoint></trajectory>
+      <pose>0 0 0 0 0 0</pose>
+      <skin>
+        <filename>model://human/meshes/walk_orange.dae</filename>
+        <scale>1.00</scale>
+      </skin>
+      <animation name="walk">
+        <filename>model://human/meshes/walk_orange.dae</filename>
+        <interpolate_x>false</interpolate_x>
+      </animation>
+      <script>
+        <loop>false</loop>
+        <delay_start>0</delay_start>
+        <auto_start>false</auto_start>
+        <trajectory id="0" type="walk" tension="0">
+          <waypoint><time>0</time><pose>0 0 0 0 0 0</pose></waypoint>
+          <waypoint><time>1</time><pose>0 0 0 0 0 0</pose></waypoint>
+        </trajectory>
       </script>
     </actor>
+
+    <model name="medium_walker_01_proxy">
+      <pose>-10.000 0.000 0.850 0 0 3.14159</pose>
+      <link name="link">
+        <gravity>false</gravity>
+        <kinematic>true</kinematic>
+        <collision name="collision">
+          <geometry>
+            <cylinder>
+              <radius>0.28</radius>
+              <length>1.70</length>
+            </cylinder>
+          </geometry>
+        </collision>
+        <visual name="proxy_visual">
+          <geometry>
+            <cylinder>
+              <radius>0.28</radius>
+              <length>1.70</length>
+            </cylinder>
+          </geometry>
+          <transparency>1.0</transparency>
+        </visual>
+      </link>
+    </model>
 
     <actor name="medium_walker_02_head_on">
+      <pose>0 0 0 0 0 0</pose>
       <skin>
-        <filename>model://human/meshes/walk.dae</filename>
-        <scale>1.0</scale>
+        <filename>model://human/meshes/walk_red.dae</filename>
+        <scale>0.95</scale>
       </skin>
       <animation name="walk">
-        <filename>model://human/meshes/walk.dae</filename>
-        <interpolate_x>true</interpolate_x>
+        <filename>model://human/meshes/walk_red.dae</filename>
+        <interpolate_x>false</interpolate_x>
       </animation>
       <script>
-        <loop>true</loop>
-        <delay_start>0.0</delay_start>
-        <auto_start>true</auto_start>
-        <trajectory id="0" type="walk" tension="0.0">
-          <waypoint><time>0.0</time><pose>8.0 0.0 1.0 0 0 3.14159</pose></waypoint>
-          <waypoint><time>8.0</time><pose>2.0 0.0 1.0 0 0 3.14159</pose></waypoint>
-          <waypoint><time>10.0</time><pose>2.0 0.0 1.0 0 0 0</pose></waypoint>
-          <waypoint><time>18.0</time><pose>8.0 0.0 1.0 0 0 0</pose></waypoint>
-          <waypoint><time>20.0</time><pose>8.0 0.0 1.0 0 0 3.14159</pose></waypoint>
+        <loop>false</loop>
+        <delay_start>0</delay_start>
+        <auto_start>false</auto_start>
+        <trajectory id="0" type="walk" tension="0">
+          <waypoint><time>0</time><pose>0 0 0 0 0 0</pose></waypoint>
+          <waypoint><time>1</time><pose>0 0 0 0 0 0</pose></waypoint>
         </trajectory>
       </script>
     </actor>
+
+    <model name="medium_walker_02_head_on_proxy">
+      <pose>8.000 0.000 0.850 0 0 3.14159</pose>
+      <link name="link">
+        <gravity>false</gravity>
+        <kinematic>true</kinematic>
+        <collision name="collision">
+          <geometry>
+            <cylinder>
+              <radius>0.28</radius>
+              <length>1.70</length>
+            </cylinder>
+          </geometry>
+        </collision>
+        <visual name="proxy_visual">
+          <geometry>
+            <cylinder>
+              <radius>0.28</radius>
+              <length>1.70</length>
+            </cylinder>
+          </geometry>
+          <transparency>1.0</transparency>
+        </visual>
+      </link>
+    </model>
 
     <actor name="medium_walker_03_room_crossing">
+      <pose>0 0 0 0 0 0</pose>
       <skin>
-        <filename>model://human/meshes/walk.dae</filename>
-        <scale>1.0</scale>
+        <filename>model://human/meshes/walk_blue.dae</filename>
+        <scale>1.06</scale>
       </skin>
       <animation name="walk">
-        <filename>model://human/meshes/walk.dae</filename>
-        <interpolate_x>true</interpolate_x>
+        <filename>model://human/meshes/walk_blue.dae</filename>
+        <interpolate_x>false</interpolate_x>
       </animation>
       <script>
-        <loop>true</loop>
-        <delay_start>0.0</delay_start>
-        <auto_start>true</auto_start>
-        <trajectory id="0" type="walk" tension="0.0">
-          <waypoint><time>0.0</time><pose>-2.800 -4.000 1.0 0 0 1.57080</pose></waypoint>
-<waypoint><time>2.0</time><pose>-2.800 -4.000 1.0 0 0 1.57080</pose></waypoint>
-<waypoint><time>10.0</time><pose>-2.800 2.000 1.0 0 0 1.57080</pose></waypoint>
-<waypoint><time>12.0</time><pose>-2.800 4.000 1.0 0 0 1.57080</pose></waypoint>
-<waypoint><time>14.0</time><pose>-2.800 4.000 1.0 0 0 -1.57080</pose></waypoint>
-<waypoint><time>24.0</time><pose>-2.800 -4.000 1.0 0 0 -1.57080</pose></waypoint>
-<waypoint><time>26.0</time><pose>-2.800 -4.000 1.0 0 0 1.57080</pose></waypoint>
+        <loop>false</loop>
+        <delay_start>0</delay_start>
+        <auto_start>false</auto_start>
+        <trajectory id="0" type="walk" tension="0">
+          <waypoint><time>0</time><pose>0 0 0 0 0 0</pose></waypoint>
+          <waypoint><time>1</time><pose>0 0 0 0 0 0</pose></waypoint>
         </trajectory>
       </script>
     </actor>
+
+    <model name="medium_walker_03_room_crossing_proxy">
+      <pose>-2.800 -4.000 0.850 0 0 1.57080</pose>
+      <link name="link">
+        <gravity>false</gravity>
+        <kinematic>true</kinematic>
+        <collision name="collision">
+          <geometry>
+            <cylinder>
+              <radius>0.28</radius>
+              <length>1.70</length>
+            </cylinder>
+          </geometry>
+        </collision>
+        <visual name="proxy_visual">
+          <geometry>
+            <cylinder>
+              <radius>0.28</radius>
+              <length>1.70</length>
+            </cylinder>
+          </geometry>
+          <transparency>1.0</transparency>
+        </visual>
+      </link>
+    </model>
 
     <actor name="medium_walker_04_same_direction">
+      <pose>0 0 0 0 0 0</pose>
       <skin>
         <filename>model://human/meshes/walk.dae</filename>
-        <scale>1.0</scale>
+        <scale>1.00</scale>
       </skin>
       <animation name="walk">
         <filename>model://human/meshes/walk.dae</filename>
-        <interpolate_x>true</interpolate_x>
+        <interpolate_x>false</interpolate_x>
       </animation>
       <script>
-        <loop>true</loop>
-        <delay_start>0.0</delay_start>
-        <auto_start>true</auto_start>
-        <trajectory id="0" type="walk" tension="0.0">
-          <waypoint><time>0.0</time><pose>11.0 0.0 1.0 0 0 0</pose></waypoint>
-          <waypoint><time>8.0</time><pose>17.0 0.0 1.0 0 0 0</pose></waypoint>
-          <waypoint><time>10.0</time><pose>17.0 0.0 1.0 0 0 3.14159</pose></waypoint>
-          <waypoint><time>18.0</time><pose>11.0 0.0 1.0 0 0 3.14159</pose></waypoint>
-          <waypoint><time>20.0</time><pose>11.0 0.0 1.0 0 0 0</pose></waypoint>
+        <loop>false</loop>
+        <delay_start>0</delay_start>
+        <auto_start>false</auto_start>
+        <trajectory id="0" type="walk" tension="0">
+          <waypoint><time>0</time><pose>0 0 0 0 0 0</pose></waypoint>
+          <waypoint><time>1</time><pose>0 0 0 0 0 0</pose></waypoint>
         </trajectory>
       </script>
     </actor>
 
+    <model name="medium_walker_04_same_direction_proxy">
+      <pose>11.000 0.000 0.850 0 0 0.00000</pose>
+      <link name="link">
+        <gravity>false</gravity>
+        <kinematic>true</kinematic>
+        <collision name="collision">
+          <geometry>
+            <cylinder>
+              <radius>0.28</radius>
+              <length>1.70</length>
+            </cylinder>
+          </geometry>
+        </collision>
+        <visual name="proxy_visual">
+          <geometry>
+            <cylinder>
+              <radius>0.28</radius>
+              <length>1.70</length>
+            </cylinder>
+          </geometry>
+          <transparency>1.0</transparency>
+        </visual>
+      </link>
+    </model>
+
     <actor name="medium_walker_05_wait_then_cross">
+      <pose>0 0 0 0 0 0</pose>
       <skin>
-        <filename>model://human/meshes/walk.dae</filename>
-        <scale>1.0</scale>
+        <filename>model://human/meshes/walk_orange.dae</filename>
+        <scale>0.98</scale>
       </skin>
       <animation name="walk">
-        <filename>model://human/meshes/walk.dae</filename>
-        <interpolate_x>true</interpolate_x>
+        <filename>model://human/meshes/walk_orange.dae</filename>
+        <interpolate_x>false</interpolate_x>
       </animation>
       <script>
-        <loop>true</loop>
-        <delay_start>0.0</delay_start>
-        <auto_start>true</auto_start>
-        <trajectory id="0" type="walk" tension="0.0">
-          <waypoint><time>0.0</time><pose>19.600 -4.000 1.0 0 0 1.57080</pose></waypoint>
-<waypoint><time>8.0</time><pose>19.600 -4.000 1.0 0 0 1.57080</pose></waypoint>
-<waypoint><time>12.0</time><pose>19.600 -1.000 1.0 0 0 1.57080</pose></waypoint>
-<waypoint><time>16.0</time><pose>19.600 2.000 1.0 0 0 1.57080</pose></waypoint>
-<waypoint><time>18.7</time><pose>19.600 4.000 1.0 0 0 1.57080</pose></waypoint>
-<waypoint><time>20.7</time><pose>19.600 4.000 1.0 0 0 -1.57080</pose></waypoint>
-<waypoint><time>31.4</time><pose>19.600 -4.000 1.0 0 0 -1.57080</pose></waypoint>
-<waypoint><time>33.4</time><pose>19.600 -4.000 1.0 0 0 1.57080</pose></waypoint>
+        <loop>false</loop>
+        <delay_start>0</delay_start>
+        <auto_start>false</auto_start>
+        <trajectory id="0" type="walk" tension="0">
+          <waypoint><time>0</time><pose>0 0 0 0 0 0</pose></waypoint>
+          <waypoint><time>1</time><pose>0 0 0 0 0 0</pose></waypoint>
         </trajectory>
       </script>
     </actor>
+
+    <model name="medium_walker_05_wait_then_cross_proxy">
+      <pose>19.600 -4.000 0.850 0 0 1.57080</pose>
+      <link name="link">
+        <gravity>false</gravity>
+        <kinematic>true</kinematic>
+        <collision name="collision">
+          <geometry>
+            <cylinder>
+              <radius>0.28</radius>
+              <length>1.70</length>
+            </cylinder>
+          </geometry>
+        </collision>
+        <visual name="proxy_visual">
+          <geometry>
+            <cylinder>
+              <radius>0.28</radius>
+              <length>1.70</length>
+            </cylinder>
+          </geometry>
+          <transparency>1.0</transparency>
+        </visual>
+      </link>
+    </model>
 
     <model name="medium_standing_room_04_south">
       <static>true</static>
@@ -6445,35 +6586,142 @@
     </model>
 
     <actor name="medium_walker_06_trolley_pusher">
-      <skin><filename>model://human/meshes/push_trolley.dae</filename><scale>1</scale></skin>
-      <animation name="push"><filename>model://human/meshes/push_trolley.dae</filename><interpolate_x>false</interpolate_x></animation>
-      <script><loop>true</loop><delay_start>0</delay_start><auto_start>true</auto_start>
-        <trajectory id="0" type="push" tension="0"><waypoint><time>0</time><pose>-24 0.6 1 0 0 0</pose></waypoint><waypoint><time>12</time><pose>-18 0.6 1 0 0 0</pose></waypoint><waypoint><time>16</time><pose>-18 0.6 1 0 0 3.14159</pose></waypoint><waypoint><time>28</time><pose>-24 0.6 1 0 0 3.14159</pose></waypoint><waypoint><time>32</time><pose>-24 0.6 1 0 0 0</pose></waypoint></trajectory>
-      </script>
-    </actor>
-
-    <actor name="medium_trolley_06">
-      <skin><filename>model://human/meshes/trolley.dae</filename><scale>1</scale></skin>
-      <animation name="push"><filename>model://human/meshes/trolley.dae</filename><interpolate_x>false</interpolate_x></animation>
-      <script><loop>true</loop><delay_start>0</delay_start><auto_start>true</auto_start>
-        <trajectory id="0" type="push" tension="0"><waypoint><time>0</time><pose>-24 0.6 1 0 0 0</pose></waypoint><waypoint><time>12</time><pose>-18 0.6 1 0 0 0</pose></waypoint><waypoint><time>16</time><pose>-18 0.6 1 0 0 3.14159</pose></waypoint><waypoint><time>28</time><pose>-24 0.6 1 0 0 3.14159</pose></waypoint><waypoint><time>32</time><pose>-24 0.6 1 0 0 0</pose></waypoint></trajectory>
-      </script>
-    </actor>
-
-    <actor name="medium_walker_07_yielding">
       <pose>0 0 0 0 0 0</pose>
-      <skin><filename>model://human/meshes/walk.dae</filename><scale>1</scale></skin>
-      <animation name="walk"><filename>model://human/meshes/walk.dae</filename><interpolate_x>false</interpolate_x></animation>
-      <script><loop>false</loop><delay_start>0</delay_start><auto_start>false</auto_start>
-        <trajectory id="0" type="walk" tension="0">
-          <waypoint><time>0</time><pose>0 -1.35 1 0 0 1.570796</pose></waypoint>
-          <waypoint><time>1</time><pose>0 -1.35 1 0 0 1.570796</pose></waypoint>
+      <skin>
+        <filename>model://human/meshes/push_trolley.dae</filename>
+        <scale>1.00</scale>
+      </skin>
+      <animation name="push">
+        <filename>model://human/meshes/push_trolley.dae</filename>
+        <interpolate_x>false</interpolate_x>
+      </animation>
+      <script>
+        <loop>false</loop>
+        <delay_start>0</delay_start>
+        <auto_start>false</auto_start>
+        <trajectory id="0" type="push" tension="0">
+          <waypoint><time>0</time><pose>0 0 0 0 0 0</pose></waypoint>
+          <waypoint><time>1</time><pose>0 0 0 0 0 0</pose></waypoint>
         </trajectory>
       </script>
     </actor>
-    <plugin filename="libhospital_yielding_system.so" name="custom_corridor::HospitalYieldingSystem">
-      <robot_name>burger</robot_name>
-    </plugin>
+
+    <model name="medium_walker_06_trolley_pusher_proxy">
+      <pose>-24.000 0.600 0.850 0 0 0.00000</pose>
+      <link name="link">
+        <gravity>false</gravity>
+        <kinematic>true</kinematic>
+        <collision name="collision">
+          <geometry>
+            <cylinder>
+              <radius>0.28</radius>
+              <length>1.70</length>
+            </cylinder>
+          </geometry>
+        </collision>
+        <visual name="proxy_visual">
+          <geometry>
+            <cylinder>
+              <radius>0.28</radius>
+              <length>1.70</length>
+            </cylinder>
+          </geometry>
+          <transparency>1.0</transparency>
+        </visual>
+      </link>
+    </model>
+
+    <actor name="medium_trolley_06">
+      <pose>0 0 0 0 0 0</pose>
+      <skin>
+        <filename>model://human/meshes/trolley.dae</filename>
+        <scale>1.00</scale>
+      </skin>
+      <animation name="push">
+        <filename>model://human/meshes/trolley.dae</filename>
+        <interpolate_x>false</interpolate_x>
+      </animation>
+      <script>
+        <loop>false</loop>
+        <delay_start>0</delay_start>
+        <auto_start>false</auto_start>
+        <trajectory id="0" type="push" tension="0">
+          <waypoint><time>0</time><pose>0 0 0 0 0 0</pose></waypoint>
+          <waypoint><time>1</time><pose>0 0 0 0 0 0</pose></waypoint>
+        </trajectory>
+      </script>
+    </actor>
+
+    <model name="medium_trolley_06_proxy">
+      <pose>-23.300 0.600 0.850 0 0 0.00000</pose>
+      <link name="link">
+        <gravity>false</gravity>
+        <kinematic>true</kinematic>
+        <collision name="collision">
+          <geometry>
+            <cylinder>
+              <radius>0.35</radius>
+              <length>1.70</length>
+            </cylinder>
+          </geometry>
+        </collision>
+        <visual name="proxy_visual">
+          <geometry>
+            <cylinder>
+              <radius>0.35</radius>
+              <length>1.70</length>
+            </cylinder>
+          </geometry>
+          <transparency>1.0</transparency>
+        </visual>
+      </link>
+    </model>
+
+    <actor name="medium_walker_07_yielding">
+      <pose>0 0 0 0 0 0</pose>
+      <skin>
+        <filename>model://human/meshes/walk_red.dae</filename>
+        <scale>1.02</scale>
+      </skin>
+      <animation name="walk">
+        <filename>model://human/meshes/walk_red.dae</filename>
+        <interpolate_x>false</interpolate_x>
+      </animation>
+      <script>
+        <loop>false</loop>
+        <delay_start>0</delay_start>
+        <auto_start>false</auto_start>
+        <trajectory id="0" type="walk" tension="0">
+          <waypoint><time>0</time><pose>0 0 0 0 0 0</pose></waypoint>
+          <waypoint><time>1</time><pose>0 0 0 0 0 0</pose></waypoint>
+        </trajectory>
+      </script>
+    </actor>
+
+    <model name="medium_walker_07_yielding_proxy">
+      <pose>0.000 -1.350 0.850 0 0 1.57080</pose>
+      <link name="link">
+        <gravity>false</gravity>
+        <kinematic>true</kinematic>
+        <collision name="collision">
+          <geometry>
+            <cylinder>
+              <radius>0.28</radius>
+              <length>1.70</length>
+            </cylinder>
+          </geometry>
+        </collision>
+        <visual name="proxy_visual">
+          <geometry>
+            <cylinder>
+              <radius>0.28</radius>
+              <length>1.70</length>
+            </cylinder>
+          </geometry>
+          <transparency>1.0</transparency>
+        </visual>
+      </link>
+    </model>
 
 
   </world>

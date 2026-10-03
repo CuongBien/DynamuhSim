@@ -30,11 +30,18 @@ def launch_setup(context):
         '1.20': 'corridor_120.sdf',
         'arena': 'arena_obstacle.sdf',
         'dataset': 'arena_dataset.sdf',
+        'rvo2': 'arena_rvo2.sdf',
+        'school': os.path.join('school_arena', 'school_arena.sdf'),
+        'school_arena': os.path.join('school_arena', 'school_arena.sdf'),
     }
 
-    if width.lower() in ['arena', 'open', 'big', 'wide', 'dataset']:
+    if width.lower() in ['arena', 'open', 'big', 'wide', 'dataset', 'rvo2', 'social', 'school', 'school_arena']:
         if width.lower() == 'dataset':
             width = 'dataset'
+        elif width.lower() in ['rvo2', 'social']:
+            width = 'rvo2'
+        elif width.lower() in ['school', 'school_arena']:
+            width = 'school'
         elif width.lower() in ['arena', 'open', 'big', 'wide']:
             width = 'arena'
     else:
@@ -43,13 +50,13 @@ def launch_setup(context):
         except ValueError:
             raise RuntimeError(
                 f"Invalid width '{width}'. "
-                "Allowed values: 0.70, 0.90, 1.20, arena, dataset"
+                "Allowed values: 0.70, 0.90, 1.20, arena, dataset, rvo2, school"
             )
 
     if width not in world_map:
         raise RuntimeError(
             f"Invalid width '{width}'. "
-            "Allowed values: 0.70, 0.90, 1.20, arena, dataset"
+            "Allowed values: 0.70, 0.90, 1.20, arena, dataset, rvo2, school"
         )
 
     # ---------------------------------------------------------
@@ -92,7 +99,7 @@ def launch_setup(context):
         with open(raw_world_file, 'r') as f:
             content = f.read()
         import re
-        filtered_content = re.sub(r'<actor name="human_actor">.*?</actor>', '', content, flags=re.DOTALL)
+        filtered_content = re.sub(r'<actor name="(?:human_actor|human_\w+_visual)">.*?</actor>', '', content, flags=re.DOTALL)
         if obstacle in ['object', 'cylinder', 'box']:
             filtered_content = filtered_content.replace(
                 '<pose>5.0 0.0 -50.0 0 0 3.14159</pose>',
@@ -103,6 +110,8 @@ def launch_setup(context):
                 '<default_mode>object</default_mode>'
             )
         elif obstacle in ['none', 'clean', 'empty']:
+            filtered_content = re.sub(r'<model name="human_\w+_proxy">.*?</model>', '', filtered_content, flags=re.DOTALL)
+            filtered_content = re.sub(r'<plugin\s+filename="librvo2_human_system\.so".*?</plugin>', '', filtered_content, flags=re.DOTALL)
             filtered_content = filtered_content.replace(
                 '<pose>5.0 0.0 0.85 0 0 3.14159</pose>',
                 '<pose>5.0 0.0 -50.0 0 0 3.14159</pose>'
@@ -161,15 +170,22 @@ def launch_setup(context):
     # ---------------------------------------------------------
     # Spawn TurtleBot3 Burger
     #
-    # Corridor:
-    #   x = -15 ... +15
-    #
-    # Robot:
-    #   x = -13
-    #   y = 0
-    #   z = 0.01
-    #   yaw = 0 -> +X
+    # Corridor / Arena: (-13.0, 0.0)
+    # School: (-13.5, -8.15)
     # ---------------------------------------------------------
+    x_val = LaunchConfiguration('x').perform(context).strip()
+    y_val = LaunchConfiguration('y').perform(context).strip()
+    yaw_val = LaunchConfiguration('yaw').perform(context).strip()
+
+    if width == 'school':
+        spawn_x = x_val if x_val else '-13.5'
+        spawn_y = y_val if y_val else '-8.15'
+        spawn_yaw = yaw_val if yaw_val else '0.0'
+    else:
+        spawn_x = x_val if x_val else '-13.0'
+        spawn_y = y_val if y_val else '0.0'
+        spawn_yaw = yaw_val if yaw_val else '0.0'
+
     spawn_robot = Node(
         package='ros_gz_sim',
         executable='create',
@@ -177,11 +193,11 @@ def launch_setup(context):
             '-name', 'burger',
             '-file', burger_model,
 
-            '-x', '-13.0',
-            '-y', '0.0',
+            '-x', spawn_x,
+            '-y', spawn_y,
             '-z', '0.01',
 
-            '-Y', '0.0',
+            '-Y', spawn_yaw,
         ],
         output='screen',
     )
@@ -359,7 +375,7 @@ def generate_launch_description():
 
     gui_arg = DeclareLaunchArgument(
         'gui',
-        default_value='false',
+        default_value='true',
         description='Set to true to show Gazebo GUI window, false for headless Gazebo (server only)',
     )
 
@@ -369,10 +385,22 @@ def generate_launch_description():
         description='Set to true to launch RViz2 (default true), false to disable',
     )
 
-    rviz_arg = DeclareLaunchArgument(
-        'rviz',
-        default_value='true',
-        description='Set to false to disable RViz2',
+    x_arg = DeclareLaunchArgument(
+        'x',
+        default_value='',
+        description='Initial robot spawn X coordinate (defaults to -13.5 for school, -13.0 for corridor/arena)',
+    )
+
+    y_arg = DeclareLaunchArgument(
+        'y',
+        default_value='',
+        description='Initial robot spawn Y coordinate (defaults to -8.15 for school, 0.0 for corridor/arena)',
+    )
+
+    yaw_arg = DeclareLaunchArgument(
+        'yaw',
+        default_value='',
+        description='Initial robot spawn Yaw angle in radians (default 0.0)',
     )
 
     # ---------------------------------------------------------
@@ -460,6 +488,9 @@ def generate_launch_description():
      obstacle_arg,
      gui_arg,
      rviz_arg,
+     x_arg,
+     y_arg,
+     yaw_arg,
      resource_path,
      system_plugin_path,
      OpaqueFunction(function=launch_setup),
