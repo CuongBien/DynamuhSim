@@ -60,7 +60,16 @@ export FASTDDS_BUILTIN_TRANSPORTS=UDPv4
 export ROS_DOMAIN_ID="${ROS_DOMAIN_ID:-0}"
 export ROS_AUTOMATIC_DISCOVERY_RANGE="${DYNAMUHSIM_DISCOVERY_RANGE:-LOCALHOST}"
 
+# Gazebo Sim 8 (Harmonic) Resource & System Plugin Paths
+TB3_MODELS="/opt/ros/${ROS_DISTRO:-jazzy}/share/turtlebot3_gazebo/models"
+CORRIDOR_MODELS="$DYNAMUHSIM_ROOT/install/custom_corridor/share/custom_corridor/models"
+PLUGINS_LIB="$DYNAMUHSIM_ROOT/install/custom_corridor_plugins/lib"
+
+export GZ_SIM_RESOURCE_PATH="$CORRIDOR_MODELS:$TB3_MODELS${GZ_SIM_RESOURCE_PATH:+:$GZ_SIM_RESOURCE_PATH}"
+export GZ_SIM_SYSTEM_PLUGIN_PATH="$PLUGINS_LIB${GZ_SIM_SYSTEM_PLUGIN_PATH:+:$GZ_SIM_SYSTEM_PLUGIN_PATH}"
+
 echo "[DynamuhSim environment]"
 echo "ROOT      : $DYNAMUHSIM_ROOT"
 echo "ROS_DISTRO: ${ROS_DISTRO:-unknown}"
 echo "DISCOVERY : $ROS_AUTOMATIC_DISCOVERY_RANGE"
+echo "GZ_MODELS : $CORRIDOR_MODELS"

@@ -159,11 +159,25 @@ def launch_setup(context):
         gz_cmd.append('-s')
     gz_cmd.append(world_file)
 
+    local_models = os.path.join(corridor_share, 'models')
+    gazebo_models = os.path.join(turtlebot_share, 'models')
+    plugin_share = get_package_share_directory('custom_corridor_plugins')
+    plugin_lib = os.path.join(os.path.dirname(os.path.dirname(plugin_share)), 'lib')
+
+    gz_resource_path = os.pathsep.join(
+        p for p in [local_models, gazebo_models, os.environ.get('GZ_SIM_RESOURCE_PATH', '')] if p
+    )
+    gz_plugin_path = os.pathsep.join(
+        p for p in [plugin_lib, os.environ.get('GZ_SIM_SYSTEM_PLUGIN_PATH', '')] if p
+    )
+
     gazebo = ExecuteProcess(
         cmd=gz_cmd,
         output='screen',
         additional_env={
             'GZ_OBSTACLE_TYPE': obstacle,
+            'GZ_SIM_RESOURCE_PATH': gz_resource_path,
+            'GZ_SIM_SYSTEM_PLUGIN_PATH': gz_plugin_path,
         },
     )
 
