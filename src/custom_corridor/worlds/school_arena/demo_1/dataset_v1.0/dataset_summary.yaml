@@ -1,19 +1,19 @@
 dataset_version: v1.0
 state: INCOMPLETE
 total_episodes: 605
-pass: 5
-fail_infrastructure: 4
+pass: 52
+fail_infrastructure: 158
 status_counts:
-  FAIL_INFRASTRUCTURE: 4
-  PASS: 5
-  PLANNED: 595
+  FAIL_INFRASTRUCTURE: 158
+  PASS: 52
+  PLANNED: 394
   RUNNING: 1
 episodes_per_scenario:
-  empty: 4
-  head_on: 1
-  same_direction: 0
-  crossing: 0
-  exit_room: 0
+  empty: 19
+  head_on: 24
+  same_direction: 6
+  crossing: 2
+  exit_room: 1
   enter_room: 0
   merge: 0
   diverge: 0
@@ -34,39 +34,39 @@ episodes_per_scenario:
   class_change_burst: 0
   mixed_interaction: 0
 episodes_per_density:
-  low: 0
-  medium: 2
-  high: 3
+  low: 19
+  medium: 18
+  high: 15
 human_count_distribution:
-  count: 5
+  count: 52
   min: 0
-  median: 0
-  max: 9
+  median: 2.0
+  max: 11
 behavior_distribution:
-  regular: 7
-  impassive: 0
-  surprised: 1
-  scared: 1
-  curious: 0
-  threatening: 0
+  regular: 121
+  impassive: 16
+  surprised: 11
+  scared: 6
+  curious: 12
+  threatening: 7
 outcome_distribution:
-  success: 3
+  success: 5
   collision: 0
   timeout: 0
-  stuck: 2
-  nav_failure: 0
+  stuck: 30
+  nav_failure: 17
 duration_sec:
-  count: 5
-  min: 44.67912168299995
-  median: 109.10745895199989
-  max: 131.1143908859999
+  count: 49
+  min: 25.863908998999705
+  median: 34.88371429299991
+  max: 135.6711705990001
 sample_count:
-  count: 5
-  min: 105
-  median: 405
+  count: 49
+  min: 8
+  median: 35
   max: 516
 missing_ratio:
-  count: 5
+  count: 49
   min: 0.0
   median: 0.0
   max: 0.0
@@ -75,16 +75,15 @@ duplicate_scenario_seed_density: 0
 duplicate_sampled_config: 0
 orphan_episode_directories: []
 warnings:
-- 'empty: accepted 4 below target 20'
-- 'empty: only 4 accepted seeds'
-- 'head_on: accepted 1 below target 25'
-- 'head_on: only 1 accepted seeds'
-- 'same_direction: accepted 0 below target 25'
-- 'same_direction: only 0 accepted seeds'
-- 'crossing: accepted 0 below target 25'
-- 'crossing: only 0 accepted seeds'
-- 'exit_room: accepted 0 below target 25'
-- 'exit_room: only 0 accepted seeds'
+- 'empty: accepted 19 below target 20'
+- 'empty: only 19 accepted seeds'
+- 'head_on: accepted 24 below target 25'
+- 'same_direction: accepted 6 below target 25'
+- 'same_direction: only 6 accepted seeds'
+- 'crossing: accepted 2 below target 25'
+- 'crossing: only 2 accepted seeds'
+- 'exit_room: accepted 1 below target 25'
+- 'exit_room: only 1 accepted seeds'
 - 'enter_room: accepted 0 below target 25'
 - 'enter_room: only 0 accepted seeds'
 - 'merge: accepted 0 below target 25'
@@ -123,10 +122,8 @@ warnings:
 - 'class_change_burst: only 0 accepted seeds'
 - 'mixed_interaction: accepted 0 below target 30'
 - 'mixed_interaction: only 0 accepted seeds'
-- density low absent from accepted episodes
-- 'behavior impassive rare: 0'
-- 'behavior surprised rare: 1'
-- 'behavior scared rare: 1'
-- 'behavior curious rare: 0'
-- 'behavior threatening rare: 0'
-integrity_issues: []
+integrity_issues:
+- 'ep_000055: invalid execution outcome/duration'
+- 'ep_000065: invalid execution outcome/duration'
+- 'ep_000075: invalid execution outcome/duration'
+- manifest episode IDs differ from accepted production plan

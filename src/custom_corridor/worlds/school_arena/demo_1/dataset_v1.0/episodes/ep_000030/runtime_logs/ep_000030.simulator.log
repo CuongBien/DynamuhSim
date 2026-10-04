@@ -1,0 +1,1481 @@
+[INFO] [launch]: All log files can be found below /home/haduckien/.ros/log/2026-10-01-17-13-19-242425-Raccoon2005-53702
+[INFO] [launch]: Default logging verbosity is set to INFO
+[INFO] [gz-1]: process started with pid [54036]
+[INFO] [parameter_bridge-2]: process started with pid [54037]
+[INFO] [robot_state_publisher-3]: process started with pid [54038]
+[INFO] [python3-4]: process started with pid [54039]
+[INFO] [python3-5]: process started with pid [54040]
+[robot_state_publisher-3] [INFO] [1790849599.365070749] [robot_state_publisher]: Robot initialized
+[python3-4] [INFO] [1790849599.784584141] [school_collision_safe_pose_applier]: Wall guard active: map=/home/haduckien/nav_ws/src/custom_corridor/worlds/school_arena/demo_1/map.yaml, radius=0.22 m, topic=/school_hunav/target_poses
+[python3-5] [INFO] [1790849599.874065874] [school_pose_sync_monitor]: Gazebo/RViz sync monitor active: orange pose=/demo/gazebo_robot_pose
+[gz-1] [1;33mWarning [Utils.cc:132][0m [/sdf/world[@name="school_arena"]/model[@name="robot"]/link[@name="base_scan"]/sensor[@name="hls_lfcd_lds"]/gz_frame_id:/home/haduckien/nav_ws/src/custom_corridor/worlds/school_arena/demo_1/dataset_v1.0/episodes/ep_000030/runtime_logs/ep_000030.contact.world:L3633]: XML Element[gz_frame_id], child of element[sensor], not defined in SDF. Copying[gz_frame_id] as children of [sensor].
+[parameter_bridge-2] [INFO] [1790849600.412035536] [ros_gz_bridge]: Creating GZ->ROS Bridge: [/clock (gz.msgs.Clock) -> /clock (rosgraph_msgs/msg/Clock)] (Lazy 0)
+[parameter_bridge-2] [INFO] [1790849600.413476692] [ros_gz_bridge]: Creating GZ->ROS Bridge: [/joint_states (gz.msgs.Model) -> /joint_states (sensor_msgs/msg/JointState)] (Lazy 0)
+[parameter_bridge-2] [INFO] [1790849600.416992684] [ros_gz_bridge]: Creating GZ->ROS Bridge: [/odom (gz.msgs.Odometry) -> /odom (nav_msgs/msg/Odometry)] (Lazy 0)
+[parameter_bridge-2] [INFO] [1790849600.419387963] [ros_gz_bridge]: Creating GZ->ROS Bridge: [/tf (gz.msgs.Pose_V) -> /tf (tf2_msgs/msg/TFMessage)] (Lazy 0)
+[parameter_bridge-2] [INFO] [1790849600.420953868] [ros_gz_bridge]: Creating GZ->ROS Bridge: [/scan (gz.msgs.LaserScan) -> /scan (sensor_msgs/msg/LaserScan)] (Lazy 0)
+[parameter_bridge-2] [INFO] [1790849600.421750334] [ros_gz_bridge]: Creating ROS->GZ Bridge: [/cmd_vel (geometry_msgs/msg/TwistStamped) -> /cmd_vel (gz.msgs.Twist)] (Lazy 0)
+[parameter_bridge-2] [INFO] [1790849600.422895184] [ros_gz_bridge]: Creating GZ->ROS Bridge: [/world/school_arena/dynamic_pose/info (gz.msgs.Pose_V) -> /world/school_arena/dynamic_pose/info (tf2_msgs/msg/TFMessage)] (Lazy 0)
+[parameter_bridge-2] [INFO] [1790849600.423253708] [ros_gz_bridge]: Creating ROS->GZ service bridge [/world/school_arena/set_pose (ros_gz_interfaces/srv/SetEntityPose -> gz.msgs.Pose/gz.msgs.Boolean)]
+[parameter_bridge-2] [INFO] [1790849600.424103653] [ros_gz_bridge]: Creating ROS->GZ service bridge [/world/school_arena/control (ros_gz_interfaces/srv/ControlWorld -> gz.msgs.WorldControl/gz.msgs.Boolean)]
+[parameter_bridge-2] [INFO] [1790849600.424462161] [ros_gz_bridge]: Creating GZ->ROS Bridge: [/robot/camera/image_raw (gz.msgs.Image) -> /robot/camera/image_raw (sensor_msgs/msg/Image)] (Lazy 0)
+[INFO] [python3-6]: process started with pid [54531]
+[python3-6] [INFO] [1790849603.219461204] [school_wait_for_robot_tf]: Robot odom/TF and simulation clock ready
+[INFO] [python3-6]: process has finished cleanly [pid 54531]
+[INFO] [map_server-7]: process started with pid [54562]
+[INFO] [amcl-8]: process started with pid [54563]
+[INFO] [planner_server-9]: process started with pid [54564]
+[INFO] [controller_server-10]: process started with pid [54565]
+[INFO] [bt_navigator-11]: process started with pid [54566]
+[INFO] [behavior_server-12]: process started with pid [54567]
+[INFO] [waypoint_follower-13]: process started with pid [54568]
+[INFO] [python3-14]: process started with pid [54569]
+[INFO] [goal_pose_bridge.py-15]: process started with pid [54570]
+[waypoint_follower-13] [INFO] [1790849603.476960008] [waypoint_follower]: 
+[waypoint_follower-13] 	waypoint_follower lifecycle node launched. 
+[waypoint_follower-13] 	Waiting on external lifecycle transitions to activate
+[waypoint_follower-13] 	See https://design.ros2.org/articles/node_lifecycle.html for more information.
+[waypoint_follower-13] [INFO] [1790849603.477787350] [waypoint_follower]: Creating
+[map_server-7] [INFO] [1790849603.485065225] [map_server]: 
+[map_server-7] 	map_server lifecycle node launched. 
+[map_server-7] 	Waiting on external lifecycle transitions to activate
+[map_server-7] 	See https://design.ros2.org/articles/node_lifecycle.html for more information.
+[amcl-8] [INFO] [1790849603.485175569] [amcl]: 
+[amcl-8] 	amcl lifecycle node launched. 
+[amcl-8] 	Waiting on external lifecycle transitions to activate
+[amcl-8] 	See https://design.ros2.org/articles/node_lifecycle.html for more information.
+[map_server-7] [INFO] [1790849603.485270897] [map_server]: Creating
+[amcl-8] [INFO] [1790849603.485712752] [amcl]: Creating
+[behavior_server-12] [INFO] [1790849603.502135889] [behavior_server]: 
+[behavior_server-12] 	behavior_server lifecycle node launched. 
+[behavior_server-12] 	Waiting on external lifecycle transitions to activate
+[behavior_server-12] 	See https://design.ros2.org/articles/node_lifecycle.html for more information.
+[controller_server-10] [INFO] [1790849603.502665823] [controller_server]: 
+[controller_server-10] 	controller_server lifecycle node launched. 
+[controller_server-10] 	Waiting on external lifecycle transitions to activate
+[controller_server-10] 	See https://design.ros2.org/articles/node_lifecycle.html for more information.
+[controller_server-10] [INFO] [1790849603.506697178] [controller_server]: Creating controller server
+[planner_server-9] [INFO] [1790849603.511803479] [planner_server]: 
+[planner_server-9] 	planner_server lifecycle node launched. 
+[planner_server-9] 	Waiting on external lifecycle transitions to activate
+[planner_server-9] 	See https://design.ros2.org/articles/node_lifecycle.html for more information.
+[planner_server-9] [INFO] [1790849603.513127701] [planner_server]: Creating
+[bt_navigator-11] [INFO] [1790849603.521173287] [bt_navigator]: 
+[bt_navigator-11] 	bt_navigator lifecycle node launched. 
+[bt_navigator-11] 	Waiting on external lifecycle transitions to activate
+[bt_navigator-11] 	See https://design.ros2.org/articles/node_lifecycle.html for more information.
+[bt_navigator-11] [INFO] [1790849603.523208284] [bt_navigator]: Creating
+[controller_server-10] [INFO] [1790849603.534000525] [local_costmap.local_costmap]: 
+[controller_server-10] 	local_costmap lifecycle node launched. 
+[controller_server-10] 	Waiting on external lifecycle transitions to activate
+[controller_server-10] 	See https://design.ros2.org/articles/node_lifecycle.html for more information.
+[controller_server-10] [INFO] [1790849603.534787928] [local_costmap.local_costmap]: Creating Costmap
+[planner_server-9] [INFO] [1790849603.546779268] [global_costmap.global_costmap]: 
+[planner_server-9] 	global_costmap lifecycle node launched. 
+[planner_server-9] 	Waiting on external lifecycle transitions to activate
+[planner_server-9] 	See https://design.ros2.org/articles/node_lifecycle.html for more information.
+[planner_server-9] [INFO] [1790849603.547740390] [global_costmap.global_costmap]: Creating Costmap
+[goal_pose_bridge.py-15] [INFO] [1790849604.283594788] [goal_pose_bridge]: GoalPoseBridge started: listening on /goal_pose -> forwarding to /navigate_to_pose
+[INFO] [lifecycle_manager-16]: process started with pid [54786]
+[lifecycle_manager-16] [INFO] [1790849605.447262264] [lifecycle_manager_localization]: Creating
+[lifecycle_manager-16] [INFO] [1790849605.452698782] [lifecycle_manager_localization]: [34m[1mCreating and initializing lifecycle service clients[0m[0m
+[lifecycle_manager-16] [INFO] [1790849607.149110205] [lifecycle_manager_localization]: [34m[1mStarting managed nodes bringup...[0m[0m
+[lifecycle_manager-16] [INFO] [1790849607.149202029] [lifecycle_manager_localization]: [34m[1mConfiguring map_server[0m[0m
+[map_server-7] [INFO] [1790849607.149771128] [map_server]: Configuring
+[map_server-7] [INFO] [1790849607.149863109] [map_io]: Loading yaml file: /home/haduckien/nav_ws/src/custom_corridor/worlds/school_arena/demo_1/map.yaml
+[map_server-7] [INFO] [1790849607.150157647] [map_io]: resolution: 0.05
+[map_server-7] [INFO] [1790849607.150169703] [map_io]: origin[0]: -16
+[map_server-7] [INFO] [1790849607.150174367] [map_io]: origin[1]: -14
+[map_server-7] [INFO] [1790849607.150176586] [map_io]: origin[2]: 0
+[map_server-7] [INFO] [1790849607.150178806] [map_io]: free_thresh: 0.25
+[map_server-7] [INFO] [1790849607.150181289] [map_io]: occupied_thresh: 0.65
+[map_server-7] [INFO] [1790849607.150186263] [map_io]: mode: trinary
+[map_server-7] [INFO] [1790849607.150190153] [map_io]: negate: 0
+[map_server-7] [INFO] [1790849607.150455111] [map_io]: Loading image_file: /home/haduckien/nav_ws/src/custom_corridor/worlds/school_arena/demo_1/map.pgm
+[map_server-7] [INFO] [1790849607.160954000] [map_io]: Read map /home/haduckien/nav_ws/src/custom_corridor/worlds/school_arena/demo_1/map.pgm: 730 X 580 map @ 0.05 m/cell
+[lifecycle_manager-16] [INFO] [1790849607.176679883] [lifecycle_manager_localization]: [34m[1mConfiguring amcl[0m[0m
+[amcl-8] [INFO] [1790849607.177204465] [amcl]: Configuring
+[amcl-8] [INFO] [1790849607.177327083] [amcl]: initTransforms
+[amcl-8] [INFO] [1790849607.190010052] [amcl]: initPubSub
+[amcl-8] [INFO] [1790849607.202928803] [amcl]: Subscribed to map topic.
+[lifecycle_manager-16] [ERROR] [1790849609.209326928] [lifecycle_manager_localization]: Failed to change state for node: amcl. Exception: amcl/get_state service client: async_send_request failed.
+[lifecycle_manager-16] [ERROR] [1790849609.209440781] [lifecycle_manager_localization]: Failed to bring up all requested nodes. Aborting bringup.
+[python3-4] [WARN] [1790849621.445029339] [school_collision_safe_pose_applier]: BLOCKED robot collision for event_agent_1: d=0.41m < 0.45m
+[python3-4] [WARN] [1790849624.862237424] [school_collision_safe_pose_applier]: BLOCKED human-human collision background_agent_2 <-> event_agent_1: d=0.33m
+[python3-4] [WARN] [1790849626.346556271] [school_collision_safe_pose_applier]: BLOCKED wall crossing for event_agent_1: target=(0.446, -7.910)
+[python3-4] [WARN] [1790849631.466923019] [school_collision_safe_pose_applier]: BLOCKED wall crossing for event_agent_1: target=(0.368, -7.905)
+[python3-4] [WARN] [1790849636.483256323] [school_collision_safe_pose_applier]: BLOCKED wall crossing for event_agent_1: target=(0.364, -7.903)
+[python3-4] [WARN] [1790849641.486052329] [school_collision_safe_pose_applier]: BLOCKED wall crossing for event_agent_1: target=(0.364, -7.905)
+[python3-4] [WARN] [1790849646.451543486] [school_collision_safe_pose_applier]: BLOCKED wall crossing for event_agent_1: target=(0.364, -7.906)
+[python3-4] [WARN] [1790849648.938080720] [school_collision_safe_pose_applier]: BLOCKED human-human collision background_agent_2 <-> background_agent_1: d=0.31m
+[python3-4] [WARN] [1790849649.040208069] [school_collision_safe_pose_applier]: BLOCKED human-human collision background_agent_1 <-> background_agent_2: d=0.34m
+[python3-4] [WARN] [1790849651.479368966] [school_collision_safe_pose_applier]: BLOCKED wall crossing for event_agent_1: target=(0.364, -7.906)
+[python3-4] [WARN] [1790849656.468243723] [school_collision_safe_pose_applier]: BLOCKED wall crossing for event_agent_1: target=(0.363, -7.905)
+[python3-4] [WARN] [1790849661.471596612] [school_collision_safe_pose_applier]: BLOCKED wall crossing for event_agent_1: target=(0.341, -7.904)
+[python3-14] [ERROR] [1790849664.198266028] [school_episode_initial_pose]: Timed out waiting for AMCL/scan-time TF
+[ERROR] [python3-14]: process has died [pid 54569, exit code 1, cmd 'python3 /home/haduckien/nav_ws/install/custom_corridor/share/custom_corridor/launch/publish_episode_initial_pose.py --params-file /home/haduckien/nav_ws/src/custom_corridor/worlds/school_arena/demo_1/dataset_v1.0/episodes/ep_000030/nav2_school.yaml --ros-args -p use_sim_time:=true'].
+[WARNING] [launch]: user interrupted with ctrl-c (SIGINT)
+[INFO] [lifecycle_manager-16]: sending signal 'SIGINT' to process[lifecycle_manager-16]
+[INFO] [goal_pose_bridge.py-15]: sending signal 'SIGINT' to process[goal_pose_bridge.py-15]
+[INFO] [waypoint_follower-13]: sending signal 'SIGINT' to process[waypoint_follower-13]
+[INFO] [behavior_server-12]: sending signal 'SIGINT' to process[behavior_server-12]
+[INFO] [bt_navigator-11]: sending signal 'SIGINT' to process[bt_navigator-11]
+[ERROR] [lifecycle_manager-16]: process has died [pid 54786, exit code -2, cmd '/opt/ros/jazzy/lib/nav2_lifecycle_manager/lifecycle_manager --ros-args -r __node:=lifecycle_manager_localization --params-file /tmp/launch_params_hawu_t89'].
+[ERROR] [waypoint_follower-13]: process has died [pid 54568, exit code -2, cmd '/opt/ros/jazzy/lib/nav2_waypoint_follower/waypoint_follower --ros-args -r __node:=waypoint_follower --params-file /home/haduckien/nav_ws/src/custom_corridor/worlds/school_arena/demo_1/dataset_v1.0/episodes/ep_000030/nav2_school.yaml'].
+[INFO] [controller_server-10]: sending signal 'SIGINT' to process[controller_server-10]
+[INFO] [planner_server-9]: sending signal 'SIGINT' to process[planner_server-9]
+[ERROR] [bt_navigator-11]: process has died [pid 54566, exit code -2, cmd '/opt/ros/jazzy/lib/nav2_bt_navigator/bt_navigator --ros-args -r __node:=bt_navigator --params-file /home/haduckien/nav_ws/src/custom_corridor/worlds/school_arena/demo_1/dataset_v1.0/episodes/ep_000030/nav2_school.yaml --params-file /tmp/launch_params_py0kfnzj'].
+[INFO] [amcl-8]: sending signal 'SIGINT' to process[amcl-8]
+[ERROR] [behavior_server-12]: process has died [pid 54567, exit code -2, cmd '/opt/ros/jazzy/lib/nav2_behaviors/behavior_server --ros-args -r __node:=behavior_server --params-file /home/haduckien/nav_ws/src/custom_corridor/worlds/school_arena/demo_1/dataset_v1.0/episodes/ep_000030/nav2_school.yaml'].
+[INFO] [map_server-7]: sending signal 'SIGINT' to process[map_server-7]
+[ERROR] [controller_server-10]: process has died [pid 54565, exit code -2, cmd '/opt/ros/jazzy/lib/nav2_controller/controller_server --ros-args -r __node:=controller_server --params-file /home/haduckien/nav_ws/src/custom_corridor/worlds/school_arena/demo_1/dataset_v1.0/episodes/ep_000030/nav2_school.yaml'].
+[INFO] [python3-5]: sending signal 'SIGINT' to process[python3-5]
+[ERROR] [planner_server-9]: process has died [pid 54564, exit code -2, cmd '/opt/ros/jazzy/lib/nav2_planner/planner_server --ros-args -r __node:=planner_server --params-file /home/haduckien/nav_ws/src/custom_corridor/worlds/school_arena/demo_1/dataset_v1.0/episodes/ep_000030/nav2_school.yaml'].
+[INFO] [python3-4]: sending signal 'SIGINT' to process[python3-4]
+[ERROR] [amcl-8]: process has died [pid 54563, exit code -2, cmd '/opt/ros/jazzy/lib/nav2_amcl/amcl --ros-args -r __node:=amcl --params-file /home/haduckien/nav_ws/src/custom_corridor/worlds/school_arena/demo_1/dataset_v1.0/episodes/ep_000030/nav2_school.yaml --params-file /tmp/launch_params_ixp6gerj'].
+[INFO] [robot_state_publisher-3]: sending signal 'SIGINT' to process[robot_state_publisher-3]
+[ERROR] [map_server-7]: process has died [pid 54562, exit code -2, cmd '/opt/ros/jazzy/lib/nav2_map_server/map_server --ros-args -r __node:=map_server --params-file /home/haduckien/nav_ws/src/custom_corridor/worlds/school_arena/demo_1/dataset_v1.0/episodes/ep_000030/nav2_school.yaml --params-file /tmp/launch_params_gh__qj0d'].
+[INFO] [parameter_bridge-2]: sending signal 'SIGINT' to process[parameter_bridge-2]
+[INFO] [gz-1]: sending signal 'SIGINT' to process[gz-1]
+[map_server-7] [INFO] [1790849667.246814589] [rclcpp]: signal_handler(SIGINT/SIGTERM)
+[map_server-7] [INFO] [1790849667.246976124] [map_server]: Running Nav2 LifecycleNode rcl preshutdown (map_server)
+[map_server-7] [INFO] [1790849667.247080960] [map_server]: Cleaning up
+[map_server-7] [INFO] [1790849667.247132097] [map_server]: Destroying bond (map_server) to lifecycle manager.
+[planner_server-9] [INFO] [1790849667.246811950] [rclcpp]: signal_handler(SIGINT/SIGTERM)
+[planner_server-9] [INFO] [1790849667.246965630] [planner_server]: Running Nav2 LifecycleNode rcl preshutdown (planner_server)
+[planner_server-9] [INFO] [1790849667.247039881] [planner_server]: Destroying bond (planner_server) to lifecycle manager.
+[bt_navigator-11] [INFO] [1790849667.246811637] [rclcpp]: signal_handler(SIGINT/SIGTERM)
+[bt_navigator-11] [INFO] [1790849667.246965652] [bt_navigator]: Running Nav2 LifecycleNode rcl preshutdown (bt_navigator)
+[bt_navigator-11] [INFO] [1790849667.247106501] [bt_navigator]: Destroying bond (bt_navigator) to lifecycle manager.
+[ERROR] [robot_state_publisher-3]: process has died [pid 54038, exit code -2, cmd '/opt/ros/jazzy/lib/robot_state_publisher/robot_state_publisher --ros-args --params-file /tmp/launch_params_avtw64m3'].
+[lifecycle_manager-16] [INFO] [1790849667.246821105] [rclcpp]: signal_handler(SIGINT/SIGTERM)
+[lifecycle_manager-16] [INFO] [1790849667.246963793] [lifecycle_manager_localization]: Running Nav2 LifecycleManager rcl preshutdown (lifecycle_manager_localization)
+[controller_server-10] [INFO] [1790849667.246829392] [rclcpp]: signal_handler(SIGINT/SIGTERM)
+[controller_server-10] [INFO] [1790849667.247042379] [controller_server]: Running Nav2 LifecycleNode rcl preshutdown (controller_server)
+[controller_server-10] [INFO] [1790849667.247115174] [controller_server]: Destroying bond (controller_server) to lifecycle manager.
+[parameter_bridge-2] [INFO] [1790849667.246834087] [rclcpp]: signal_handler(SIGINT/SIGTERM)
+[behavior_server-12] [INFO] [1790849667.246841482] [rclcpp]: signal_handler(SIGINT/SIGTERM)
+[behavior_server-12] [INFO] [1790849667.246969086] [behavior_server]: Running Nav2 LifecycleNode rcl preshutdown (behavior_server)
+[waypoint_follower-13] [INFO] [1790849667.246977840] [rclcpp]: signal_handler(SIGINT/SIGTERM)
+[waypoint_follower-13] [INFO] [1790849667.247111585] [waypoint_follower]: Running Nav2 LifecycleNode rcl preshutdown (waypoint_follower)
+[waypoint_follower-13] [INFO] [1790849667.247182778] [waypoint_follower]: Destroying bond (waypoint_follower) to lifecycle manager.
+[waypoint_follower-13] [INFO] [1790849667.248964969] [waypoint_follower]: Destroying
+[robot_state_publisher-3] [INFO] [1790849667.247387411] [rclcpp]: signal_handler(SIGINT/SIGTERM)
+[behavior_server-12] [INFO] [1790849667.247936492] [behavior_server]: Destroying bond (behavior_server) to lifecycle manager.
+[ERROR] [python3-5]: process has died [pid 54040, exit code -2, cmd 'python3 /home/haduckien/nav_ws/src/custom_corridor/worlds/school_arena/demo_1/pose_sync_monitor.py --ros-args -p use_sim_time:=true -p robot_name:=robot -p world_frame:=map -p initial_x:=0.0 -p initial_y:=-7.85'].
+[amcl-8] [INFO] [1790849667.247999864] [rclcpp]: signal_handler(SIGINT/SIGTERM)
+[amcl-8] [INFO] [1790849667.248129838] [amcl]: Running Nav2 LifecycleNode rcl preshutdown (amcl)
+[amcl-8] [INFO] [1790849667.248204290] [amcl]: Cleaning up
+[bt_navigator-11] [INFO] [1790849667.249102476] [bt_navigator]: Destroying
+[planner_server-9] [INFO] [1790849667.249982413] [global_costmap.global_costmap]: Destroying
+[controller_server-10] [INFO] [1790849667.250899041] [local_costmap.local_costmap]: Destroying
+[amcl-8] [INFO] [1790849667.255302086] [amcl]: Destroying bond (amcl) to lifecycle manager.
+[lifecycle_manager-16] [INFO] [1790849667.254221229] [lifecycle_manager_localization]: Destroying lifecycle_manager_localization
+[map_server-7] [INFO] [1790849667.255754638] [map_server]: Destroying
+[goal_pose_bridge.py-15] Traceback (most recent call last):
+[goal_pose_bridge.py-15]   File "/home/haduckien/nav_ws/install/custom_corridor/lib/custom_corridor/goal_pose_bridge.py", line 88, in <module>
+[goal_pose_bridge.py-15]     main()
+[goal_pose_bridge.py-15]   File "/home/haduckien/nav_ws/install/custom_corridor/lib/custom_corridor/goal_pose_bridge.py", line 82, in main
+[goal_pose_bridge.py-15]     node.destroy_node()
+[goal_pose_bridge.py-15]   File "/opt/ros/jazzy/lib/python3.12/site-packages/rclpy/node.py", line 1962, in destroy_node
+[behavior_server-12] [INFO] [1790849667.263024922] [behavior_server]: Destroying
+[ERROR] [python3-4]: process has died [pid 54039, exit code -2, cmd 'python3 /home/haduckien/nav_ws/src/custom_corridor/worlds/school_arena/demo_1/collision_safe_pose_applier.py --ros-args -p use_sim_time:=true -p world_name:=school_arena -p target_topic:=/school_hunav/target_poses -p map_yaml:=/home/haduckien/nav_ws/src/custom_corridor/worlds/school_arena/demo_1/map.yaml -p agent_radius:=0.22 -p apply_hz:=20.0 -p ground_z:=0.0'].
+[goal_pose_bridge.py-15]     self.destroy_service(self._services[0])
+[goal_pose_bridge.py-15]   File "/opt/ros/jazzy/lib/python3.12/site-packages/rclpy/node.py", line 1886, in destroy_service
+[goal_pose_bridge.py-15]     service.destroy()
+[goal_pose_bridge.py-15]   File "/opt/ros/jazzy/lib/python3.12/site-packages/rclpy/service.py", line 123, in destroy
+[goal_pose_bridge.py-15]     self.__service.destroy_when_not_in_use()
+[goal_pose_bridge.py-15] KeyboardInterrupt
+[amcl-8] [INFO] [1790849667.264305540] [amcl]: Destroying
+[planner_server-9] [INFO] [1790849667.269198076] [planner_server]: Destroying
+[controller_server-10] [INFO] [1790849667.272374389] [controller_server]: Destroying
+[parameter_bridge-2] [INFO] [1790849667.290771401] [rclcpp]: signal_handler(SIGINT/SIGTERM)
+[ERROR] [goal_pose_bridge.py-15]: process has died [pid 54570, exit code -2, cmd '/home/haduckien/nav_ws/install/custom_corridor/lib/custom_corridor/goal_pose_bridge.py --ros-args -r __node:=goal_pose_bridge --params-file /tmp/launch_params_d4p0vakv'].
+[INFO] [parameter_bridge-2]: process has finished cleanly [pid 54037]
+[INFO] [gz-1]: process has finished cleanly [pid 54036]
+[INFO] [launch]: All log files can be found below /home/haduckien/.ros/log/2026-10-01-17-29-27-916680-Raccoon2005-116764
+[INFO] [launch]: Default logging verbosity is set to INFO
+[INFO] [gz-1]: process started with pid [117091]
+[INFO] [parameter_bridge-2]: process started with pid [117092]
+[INFO] [robot_state_publisher-3]: process started with pid [117093]
+[INFO] [python3-4]: process started with pid [117094]
+[INFO] [python3-5]: process started with pid [117095]
+[robot_state_publisher-3] [INFO] [1790850568.043179396] [robot_state_publisher]: Robot initialized
+[python3-4] [INFO] [1790850568.448108093] [school_collision_safe_pose_applier]: Wall guard active: map=/home/haduckien/nav_ws/src/custom_corridor/worlds/school_arena/demo_1/map.yaml, radius=0.22 m, topic=/school_hunav/target_poses
+[python3-5] [INFO] [1790850568.474357948] [school_pose_sync_monitor]: Gazebo/RViz sync monitor active: orange pose=/demo/gazebo_robot_pose
+[gz-1] [1;33mWarning [Utils.cc:132][0m [/sdf/world[@name="school_arena"]/model[@name="robot"]/link[@name="base_scan"]/sensor[@name="hls_lfcd_lds"]/gz_frame_id:/home/haduckien/nav_ws/src/custom_corridor/worlds/school_arena/demo_1/dataset_v1.0/episodes/ep_000030/runtime_logs/ep_000030.contact.world:L3633]: XML Element[gz_frame_id], child of element[sensor], not defined in SDF. Copying[gz_frame_id] as children of [sensor].
+[parameter_bridge-2] [INFO] [1790850569.071739299] [ros_gz_bridge]: Creating GZ->ROS Bridge: [/clock (gz.msgs.Clock) -> /clock (rosgraph_msgs/msg/Clock)] (Lazy 0)
+[parameter_bridge-2] [INFO] [1790850569.094581890] [ros_gz_bridge]: Creating GZ->ROS Bridge: [/joint_states (gz.msgs.Model) -> /joint_states (sensor_msgs/msg/JointState)] (Lazy 0)
+[parameter_bridge-2] [INFO] [1790850569.097306974] [ros_gz_bridge]: Creating GZ->ROS Bridge: [/odom (gz.msgs.Odometry) -> /odom (nav_msgs/msg/Odometry)] (Lazy 0)
+[parameter_bridge-2] [INFO] [1790850569.098892720] [ros_gz_bridge]: Creating GZ->ROS Bridge: [/tf (gz.msgs.Pose_V) -> /tf (tf2_msgs/msg/TFMessage)] (Lazy 0)
+[parameter_bridge-2] [INFO] [1790850569.101191398] [ros_gz_bridge]: Creating GZ->ROS Bridge: [/scan (gz.msgs.LaserScan) -> /scan (sensor_msgs/msg/LaserScan)] (Lazy 0)
+[parameter_bridge-2] [INFO] [1790850569.102056542] [ros_gz_bridge]: Creating ROS->GZ Bridge: [/cmd_vel (geometry_msgs/msg/TwistStamped) -> /cmd_vel (gz.msgs.Twist)] (Lazy 0)
+[parameter_bridge-2] [INFO] [1790850569.103089520] [ros_gz_bridge]: Creating GZ->ROS Bridge: [/world/school_arena/dynamic_pose/info (gz.msgs.Pose_V) -> /world/school_arena/dynamic_pose/info (tf2_msgs/msg/TFMessage)] (Lazy 0)
+[parameter_bridge-2] [INFO] [1790850569.103545023] [ros_gz_bridge]: Creating ROS->GZ service bridge [/world/school_arena/set_pose (ros_gz_interfaces/srv/SetEntityPose -> gz.msgs.Pose/gz.msgs.Boolean)]
+[parameter_bridge-2] [INFO] [1790850569.104365123] [ros_gz_bridge]: Creating ROS->GZ service bridge [/world/school_arena/control (ros_gz_interfaces/srv/ControlWorld -> gz.msgs.WorldControl/gz.msgs.Boolean)]
+[parameter_bridge-2] [INFO] [1790850569.104700575] [ros_gz_bridge]: Creating GZ->ROS Bridge: [/robot/camera/image_raw (gz.msgs.Image) -> /robot/camera/image_raw (sensor_msgs/msg/Image)] (Lazy 0)
+[robot_state_publisher-3] [WARN] [1790850570.928209993] [robot_state_publisher]: Moved backwards in time, re-publishing joint transforms!
+[INFO] [python3-6]: process started with pid [117578]
+[robot_state_publisher-3] [WARN] [1790850571.029089690] [robot_state_publisher]: Moved backwards in time, re-publishing joint transforms!
+[robot_state_publisher-3] [WARN] [1790850571.128993133] [robot_state_publisher]: Moved backwards in time, re-publishing joint transforms!
+[robot_state_publisher-3] [WARN] [1790850571.230288637] [robot_state_publisher]: Moved backwards in time, re-publishing joint transforms!
+[robot_state_publisher-3] [WARN] [1790850571.530547817] [robot_state_publisher]: Moved backwards in time, re-publishing joint transforms!
+[robot_state_publisher-3] [WARN] [1790850571.630024492] [robot_state_publisher]: Moved backwards in time, re-publishing joint transforms!
+[robot_state_publisher-3] [WARN] [1790850571.731504178] [robot_state_publisher]: Moved backwards in time, re-publishing joint transforms!
+[python3-6] [INFO] [1790850571.837311711] [school_wait_for_robot_tf]: Robot odom/TF and simulation clock ready
+[INFO] [python3-6]: process has finished cleanly [pid 117578]
+[INFO] [map_server-7]: process started with pid [117651]
+[INFO] [amcl-8]: process started with pid [117652]
+[INFO] [planner_server-9]: process started with pid [117653]
+[INFO] [controller_server-10]: process started with pid [117654]
+[INFO] [bt_navigator-11]: process started with pid [117655]
+[INFO] [behavior_server-12]: process started with pid [117656]
+[INFO] [waypoint_follower-13]: process started with pid [117657]
+[INFO] [python3-14]: process started with pid [117658]
+[INFO] [goal_pose_bridge.py-15]: process started with pid [117659]
+[robot_state_publisher-3] [WARN] [1790850572.110775784] [robot_state_publisher]: Moved backwards in time, re-publishing joint transforms!
+[planner_server-9] [INFO] [1790850572.114093212] [planner_server]: 
+[planner_server-9] 	planner_server lifecycle node launched. 
+[planner_server-9] 	Waiting on external lifecycle transitions to activate
+[planner_server-9] 	See https://design.ros2.org/articles/node_lifecycle.html for more information.
+[planner_server-9] [INFO] [1790850572.115516592] [planner_server]: Creating
+[behavior_server-12] [INFO] [1790850572.123636924] [behavior_server]: 
+[behavior_server-12] 	behavior_server lifecycle node launched. 
+[behavior_server-12] 	Waiting on external lifecycle transitions to activate
+[behavior_server-12] 	See https://design.ros2.org/articles/node_lifecycle.html for more information.
+[controller_server-10] [INFO] [1790850572.125980794] [controller_server]: 
+[controller_server-10] 	controller_server lifecycle node launched. 
+[controller_server-10] 	Waiting on external lifecycle transitions to activate
+[controller_server-10] 	See https://design.ros2.org/articles/node_lifecycle.html for more information.
+[controller_server-10] [INFO] [1790850572.129422532] [controller_server]: Creating controller server
+[planner_server-9] [INFO] [1790850572.135190133] [global_costmap.global_costmap]: 
+[planner_server-9] 	global_costmap lifecycle node launched. 
+[planner_server-9] 	Waiting on external lifecycle transitions to activate
+[planner_server-9] 	See https://design.ros2.org/articles/node_lifecycle.html for more information.
+[planner_server-9] [INFO] [1790850572.135748705] [global_costmap.global_costmap]: Creating Costmap
+[waypoint_follower-13] [INFO] [1790850572.138041494] [waypoint_follower]: 
+[waypoint_follower-13] 	waypoint_follower lifecycle node launched. 
+[waypoint_follower-13] 	Waiting on external lifecycle transitions to activate
+[waypoint_follower-13] 	See https://design.ros2.org/articles/node_lifecycle.html for more information.
+[waypoint_follower-13] [INFO] [1790850572.138664800] [waypoint_follower]: Creating
+[bt_navigator-11] [INFO] [1790850572.142205341] [bt_navigator]: 
+[bt_navigator-11] 	bt_navigator lifecycle node launched. 
+[bt_navigator-11] 	Waiting on external lifecycle transitions to activate
+[bt_navigator-11] 	See https://design.ros2.org/articles/node_lifecycle.html for more information.
+[bt_navigator-11] [INFO] [1790850572.146879386] [bt_navigator]: Creating
+[controller_server-10] [INFO] [1790850572.159205288] [local_costmap.local_costmap]: 
+[controller_server-10] 	local_costmap lifecycle node launched. 
+[controller_server-10] 	Waiting on external lifecycle transitions to activate
+[controller_server-10] 	See https://design.ros2.org/articles/node_lifecycle.html for more information.
+[controller_server-10] [INFO] [1790850572.159737699] [local_costmap.local_costmap]: Creating Costmap
+[map_server-7] [INFO] [1790850572.162991228] [map_server]: 
+[map_server-7] 	map_server lifecycle node launched. 
+[map_server-7] 	Waiting on external lifecycle transitions to activate
+[map_server-7] 	See https://design.ros2.org/articles/node_lifecycle.html for more information.
+[map_server-7] [INFO] [1790850572.163279901] [map_server]: Creating
+[amcl-8] [INFO] [1790850572.171478969] [amcl]: 
+[amcl-8] 	amcl lifecycle node launched. 
+[amcl-8] 	Waiting on external lifecycle transitions to activate
+[amcl-8] 	See https://design.ros2.org/articles/node_lifecycle.html for more information.
+[amcl-8] [INFO] [1790850572.172014985] [amcl]: Creating
+[robot_state_publisher-3] [WARN] [1790850572.340921960] [robot_state_publisher]: Moved backwards in time, re-publishing joint transforms!
+[robot_state_publisher-3] [WARN] [1790850572.590700409] [robot_state_publisher]: Moved backwards in time, re-publishing joint transforms!
+[robot_state_publisher-3] [WARN] [1790850572.786944696] [robot_state_publisher]: Moved backwards in time, re-publishing joint transforms!
+[goal_pose_bridge.py-15] [INFO] [1790850572.955782212] [goal_pose_bridge]: GoalPoseBridge started: listening on /goal_pose -> forwarding to /navigate_to_pose
+[robot_state_publisher-3] [WARN] [1790850573.102840570] [robot_state_publisher]: Moved backwards in time, re-publishing joint transforms!
+[robot_state_publisher-3] [WARN] [1790850573.204248285] [robot_state_publisher]: Moved backwards in time, re-publishing joint transforms!
+[robot_state_publisher-3] [WARN] [1790850573.304949189] [robot_state_publisher]: Moved backwards in time, re-publishing joint transforms!
+[robot_state_publisher-3] [WARN] [1790850573.404345794] [robot_state_publisher]: Moved backwards in time, re-publishing joint transforms!
+[robot_state_publisher-3] [WARN] [1790850573.505573159] [robot_state_publisher]: Moved backwards in time, re-publishing joint transforms!
+[robot_state_publisher-3] [WARN] [1790850573.908147728] [robot_state_publisher]: Moved backwards in time, re-publishing joint transforms!
+[INFO] [lifecycle_manager-16]: process started with pid [117862]
+[lifecycle_manager-16] [INFO] [1790850574.092726410] [lifecycle_manager_localization]: Creating
+[lifecycle_manager-16] [INFO] [1790850574.095717867] [lifecycle_manager_localization]: [34m[1mCreating and initializing lifecycle service clients[0m[0m
+[robot_state_publisher-3] [WARN] [1790850574.217699013] [robot_state_publisher]: Moved backwards in time, re-publishing joint transforms!
+[robot_state_publisher-3] [WARN] [1790850574.292387036] [robot_state_publisher]: Moved backwards in time, re-publishing joint transforms!
+[robot_state_publisher-3] [WARN] [1790850574.321185595] [robot_state_publisher]: Moved backwards in time, re-publishing joint transforms!
+[robot_state_publisher-3] [WARN] [1790850574.384033103] [robot_state_publisher]: Moved backwards in time, re-publishing joint transforms!
+[robot_state_publisher-3] [WARN] [1790850574.431385576] [robot_state_publisher]: Moved backwards in time, re-publishing joint transforms!
+[robot_state_publisher-3] [WARN] [1790850575.317803857] [robot_state_publisher]: Moved backwards in time, re-publishing joint transforms!
+[robot_state_publisher-3] [WARN] [1790850575.424469757] [robot_state_publisher]: Moved backwards in time, re-publishing joint transforms!
+[robot_state_publisher-3] [WARN] [1790850575.692074815] [robot_state_publisher]: Moved backwards in time, re-publishing joint transforms!
+[lifecycle_manager-16] [INFO] [1790850575.813334587] [lifecycle_manager_localization]: [34m[1mStarting managed nodes bringup...[0m[0m
+[lifecycle_manager-16] [INFO] [1790850575.813397440] [lifecycle_manager_localization]: [34m[1mConfiguring map_server[0m[0m
+[map_server-7] [INFO] [1790850575.813943552] [map_server]: Configuring
+[map_server-7] [INFO] [1790850575.814037414] [map_io]: Loading yaml file: /home/haduckien/nav_ws/src/custom_corridor/worlds/school_arena/demo_1/map.yaml
+[map_server-7] [INFO] [1790850575.814286405] [map_io]: resolution: 0.05
+[map_server-7] [INFO] [1790850575.814293504] [map_io]: origin[0]: -16
+[map_server-7] [INFO] [1790850575.814296602] [map_io]: origin[1]: -14
+[map_server-7] [INFO] [1790850575.814298772] [map_io]: origin[2]: 0
+[map_server-7] [INFO] [1790850575.814300989] [map_io]: free_thresh: 0.25
+[map_server-7] [INFO] [1790850575.814303206] [map_io]: occupied_thresh: 0.65
+[map_server-7] [INFO] [1790850575.814307232] [map_io]: mode: trinary
+[map_server-7] [INFO] [1790850575.814310661] [map_io]: negate: 0
+[map_server-7] [INFO] [1790850575.814490561] [map_io]: Loading image_file: /home/haduckien/nav_ws/src/custom_corridor/worlds/school_arena/demo_1/map.pgm
+[map_server-7] [INFO] [1790850575.823257602] [map_io]: Read map /home/haduckien/nav_ws/src/custom_corridor/worlds/school_arena/demo_1/map.pgm: 730 X 580 map @ 0.05 m/cell
+[lifecycle_manager-16] [INFO] [1790850575.834163950] [lifecycle_manager_localization]: [34m[1mConfiguring amcl[0m[0m
+[amcl-8] [INFO] [1790850575.834388465] [amcl]: Configuring
+[amcl-8] [INFO] [1790850575.834492415] [amcl]: initTransforms
+[amcl-8] [INFO] [1790850575.848516425] [amcl]: initPubSub
+[amcl-8] [INFO] [1790850575.862394160] [amcl]: Subscribed to map topic.
+[lifecycle_manager-16] [INFO] [1790850575.868859961] [lifecycle_manager_localization]: [34m[1mActivating map_server[0m[0m
+[map_server-7] [INFO] [1790850575.869129301] [map_server]: Activating
+[map_server-7] [INFO] [1790850575.870377143] [map_server]: Creating bond (map_server) to lifecycle manager.
+[amcl-8] [INFO] [1790850575.882310313] [amcl]: Received a 730 X 580 map @ 0.050 m/pix
+[lifecycle_manager-16] [INFO] [1790850575.984055338] [lifecycle_manager_localization]: Server map_server connected with bond.
+[lifecycle_manager-16] [INFO] [1790850575.984111840] [lifecycle_manager_localization]: [34m[1mActivating amcl[0m[0m
+[amcl-8] [INFO] [1790850575.984403622] [amcl]: Activating
+[amcl-8] [INFO] [1790850575.984453857] [amcl]: Creating bond (amcl) to lifecycle manager.
+[amcl-8] [INFO] [1790850575.991088551] [amcl]: initialPoseReceived
+[amcl-8] [INFO] [1790850575.991414356] [amcl]: Setting pose (4.805000): 0.000 -7.850 -2.978
+[amcl-8] [INFO] [1790850576.005557133] [amcl]: createLaserObject
+[python3-14] [INFO] [1790850576.007442469] [school_episode_initial_pose]: Published /initialpose from episode: 0.000, -7.850, -2.978
+[lifecycle_manager-16] [INFO] [1790850576.095050777] [lifecycle_manager_localization]: Server amcl connected with bond.
+[lifecycle_manager-16] [INFO] [1790850576.095109162] [lifecycle_manager_localization]: [34m[1mManaged nodes are active[0m[0m
+[lifecycle_manager-16] [INFO] [1790850576.095118865] [lifecycle_manager_localization]: [34m[1mCreating bond timer...[0m[0m
+[amcl-8] [WARN] [1790850576.105588472] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[robot_state_publisher-3] [WARN] [1790850576.105774281] [robot_state_publisher]: Moved backwards in time, re-publishing joint transforms!
+[amcl-8] [WARN] [1790850576.317755299] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[python3-5] [INFO] [1790850576.525715495] [school_pose_sync_monitor]: Gazebo↔RViz pose error=0.007 m (gz=0.00,-7.85; tf=-0.00,-7.85)
+[amcl-8] [WARN] [1790850576.643412370] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[python3-14] [INFO] [1790850576.677447640] [school_episode_initial_pose]: AMCL map->odom is available at scan and current simulation timestamps
+[amcl-8] [WARN] [1790850576.763676709] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[robot_state_publisher-3] [WARN] [1790850576.763685536] [robot_state_publisher]: Moved backwards in time, re-publishing joint transforms!
+[INFO] [python3-14]: process has finished cleanly [pid 117658]
+[INFO] [lifecycle_manager-17]: process started with pid [117959]
+[lifecycle_manager-17] [INFO] [1790850576.942454733] [lifecycle_manager_navigation]: Creating
+[lifecycle_manager-17] [INFO] [1790850576.948862089] [lifecycle_manager_navigation]: [34m[1mCreating and initializing lifecycle service clients[0m[0m
+[robot_state_publisher-3] [WARN] [1790850576.982852352] [robot_state_publisher]: Moved backwards in time, re-publishing joint transforms!
+[amcl-8] [WARN] [1790850576.983166794] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[amcl-8] [WARN] [1790850577.204584520] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[robot_state_publisher-3] [WARN] [1790850577.204751617] [robot_state_publisher]: Moved backwards in time, re-publishing joint transforms!
+[amcl-8] [INFO] [1790850577.210849278] [amcl]: Message Filter dropping message: frame 'base_scan' at time 5.400 for reason 'the timestamp on the message is earlier than all the data in the transform cache'
+[robot_state_publisher-3] [WARN] [1790850577.312332141] [robot_state_publisher]: Moved backwards in time, re-publishing joint transforms!
+[robot_state_publisher-3] [WARN] [1790850577.736365389] [robot_state_publisher]: Moved backwards in time, re-publishing joint transforms!
+[amcl-8] [WARN] [1790850577.736491372] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[amcl-8] [WARN] [1790850577.943852697] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[robot_state_publisher-3] [WARN] [1790850577.944083916] [robot_state_publisher]: Moved backwards in time, re-publishing joint transforms!
+[amcl-8] [WARN] [1790850578.258426010] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[robot_state_publisher-3] [WARN] [1790850578.258501255] [robot_state_publisher]: Moved backwards in time, re-publishing joint transforms!
+[amcl-8] [WARN] [1790850578.459135672] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[lifecycle_manager-17] [INFO] [1790850578.795779059] [lifecycle_manager_navigation]: [34m[1mStarting managed nodes bringup...[0m[0m
+[lifecycle_manager-17] [INFO] [1790850578.795847117] [lifecycle_manager_navigation]: [34m[1mConfiguring planner_server[0m[0m
+[planner_server-9] [INFO] [1790850578.796411138] [planner_server]: Configuring
+[planner_server-9] [INFO] [1790850578.796463463] [global_costmap.global_costmap]: Configuring
+[planner_server-9] [INFO] [1790850578.808458662] [global_costmap.global_costmap]: Using plugin "static_layer"
+[planner_server-9] [INFO] [1790850578.812420294] [global_costmap.global_costmap]: Subscribing to the map topic (/map) with transient local durability
+[planner_server-9] [INFO] [1790850578.815014872] [global_costmap.global_costmap]: Initialized plugin "static_layer"
+[planner_server-9] [INFO] [1790850578.815058394] [global_costmap.global_costmap]: Using plugin "obstacle_layer"
+[planner_server-9] [INFO] [1790850578.815742060] [global_costmap.global_costmap]: Subscribed to Topics: scan
+[planner_server-9] [INFO] [1790850578.820632962] [global_costmap.global_costmap]: Initialized plugin "obstacle_layer"
+[planner_server-9] [INFO] [1790850578.820670674] [global_costmap.global_costmap]: Using plugin "inflation_layer"
+[planner_server-9] [INFO] [1790850578.821529991] [global_costmap.global_costmap]: Initialized plugin "inflation_layer"
+[planner_server-9] [INFO] [1790850578.861648477] [global_costmap.global_costmap]: StaticLayer: Resizing costmap to 730 X 580 at 0.050000 m/pix
+[planner_server-9] [INFO] [1790850578.868078575] [planner_server]: Created global planner plugin GridBased of type nav2_smac_planner::SmacPlanner2D
+[planner_server-9] [INFO] [1790850578.868168028] [planner_server]: Configuring GridBased of type SmacPlanner2D
+[planner_server-9] [ERROR] [1790850578.870259323] [planner_server]: Inflation layer either not found or inflation is not set sufficiently for optimized non-circular collision checking capabilities. It is HIGHLY recommended to set the inflation radius to be at MINIMUM half of the robot's largest cross-section. See github.com/ros-planning/navigation2/tree/main/nav2_smac_planner#potential-fields for full instructions. This will substantially impact run-time performance.
+[amcl-8] [WARN] [1790850578.872914505] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[planner_server-9] [WARN] [1790850578.872968391] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[planner_server-9] [INFO] [1790850578.873385693] [planner_server]: Configured plugin GridBased of type SmacPlanner2D with tolerance 0.15, maximum iterations 1000000, max on approach iterations 1000, and not allowing unknown traversal.
+[robot_state_publisher-3] [WARN] [1790850578.873262574] [robot_state_publisher]: Moved backwards in time, re-publishing joint transforms!
+[planner_server-9] [INFO] [1790850578.873446575] [planner_server]: Planner Server has GridBased  planners available.
+[lifecycle_manager-17] [INFO] [1790850578.895663408] [lifecycle_manager_navigation]: [34m[1mConfiguring controller_server[0m[0m
+[controller_server-10] [INFO] [1790850578.896109158] [controller_server]: Configuring controller interface
+[controller_server-10] [INFO] [1790850578.896138530] [controller_server]: getting progress checker plugins..
+[controller_server-10] [INFO] [1790850578.896747544] [controller_server]: getting goal checker plugins..
+[controller_server-10] [INFO] [1790850578.897054564] [controller_server]: Controller frequency set to 10.0000Hz
+[controller_server-10] [INFO] [1790850578.897134550] [local_costmap.local_costmap]: Configuring
+[controller_server-10] [INFO] [1790850578.909609637] [local_costmap.local_costmap]: Using plugin "obstacle_layer"
+[controller_server-10] [INFO] [1790850578.916066930] [local_costmap.local_costmap]: Subscribed to Topics: scan
+[controller_server-10] [INFO] [1790850578.923682465] [local_costmap.local_costmap]: Initialized plugin "obstacle_layer"
+[controller_server-10] [INFO] [1790850578.923846119] [local_costmap.local_costmap]: Using plugin "inflation_layer"
+[controller_server-10] [INFO] [1790850578.925829887] [local_costmap.local_costmap]: Initialized plugin "inflation_layer"
+[controller_server-10] [INFO] [1790850578.966605812] [controller_server]: Created progress_checker : progress_checker of type nav2_controller::SimpleProgressChecker
+[controller_server-10] [INFO] [1790850578.966972075] [controller_server]: Controller Server has progress_checker  progress checkers available.
+[controller_server-10] [INFO] [1790850578.967365979] [controller_server]: Created goal checker : goal_checker of type nav2_controller::SimpleGoalChecker
+[controller_server-10] [INFO] [1790850578.967961203] [controller_server]: Controller Server has goal_checker  goal checkers available.
+[controller_server-10] [INFO] [1790850578.969822695] [controller_server]: Created controller : FollowPath of type dwb_core::DWBLocalPlanner
+[controller_server-10] [INFO] [1790850578.971004600] [controller_server]: Setting transform_tolerance to 0.100000
+[controller_server-10] [INFO] [1790850578.988760877] [controller_server]: Using critic "RotateToGoal" (dwb_critics::RotateToGoalCritic)
+[controller_server-10] [INFO] [1790850578.989768639] [controller_server]: Critic plugin initialized
+[controller_server-10] [INFO] [1790850578.990029129] [controller_server]: Using critic "Oscillation" (dwb_critics::OscillationCritic)
+[controller_server-10] [INFO] [1790850578.990775613] [controller_server]: Critic plugin initialized
+[controller_server-10] [INFO] [1790850578.990960832] [controller_server]: Using critic "BaseObstacle" (dwb_critics::BaseObstacleCritic)
+[controller_server-10] [INFO] [1790850578.991260037] [controller_server]: Critic plugin initialized
+[controller_server-10] [INFO] [1790850578.991439045] [controller_server]: Using critic "GoalAlign" (dwb_critics::GoalAlignCritic)
+[controller_server-10] [INFO] [1790850578.992356047] [controller_server]: Critic plugin initialized
+[controller_server-10] [INFO] [1790850578.992591787] [controller_server]: Using critic "PathAlign" (dwb_critics::PathAlignCritic)
+[controller_server-10] [INFO] [1790850578.993143032] [controller_server]: Critic plugin initialized
+[controller_server-10] [INFO] [1790850578.993353795] [controller_server]: Using critic "PathDist" (dwb_critics::PathDistCritic)
+[controller_server-10] [INFO] [1790850578.993753071] [controller_server]: Critic plugin initialized
+[controller_server-10] [INFO] [1790850578.993965168] [controller_server]: Using critic "GoalDist" (dwb_critics::GoalDistCritic)
+[controller_server-10] [INFO] [1790850578.994297659] [controller_server]: Critic plugin initialized
+[controller_server-10] [INFO] [1790850578.994333768] [controller_server]: Controller Server has FollowPath  controllers available.
+[lifecycle_manager-17] [INFO] [1790850579.012436740] [lifecycle_manager_navigation]: [34m[1mConfiguring bt_navigator[0m[0m
+[bt_navigator-11] [INFO] [1790850579.012914848] [bt_navigator]: Configuring
+[bt_navigator-11] [INFO] [1790850579.024741884] [bt_navigator]: Creating navigator id navigate_to_pose of type nav2_bt_navigator::NavigateToPoseNavigator
+[bt_navigator-11] [WARN] [1790850579.031381260] [bt_navigator]: Error_code parameters were not set. Using default values of: follow_path_error_code compute_path_error_code
+[bt_navigator-11] Make sure these match your BT and there are not other sources of error codes youreported to your application
+[bt_navigator-11] [INFO] [1790850579.120363224] [bt_navigator]: Creating navigator id navigate_through_poses of type nav2_bt_navigator::NavigateThroughPosesNavigator
+[lifecycle_manager-17] [INFO] [1790850579.157740151] [lifecycle_manager_navigation]: [34m[1mConfiguring behavior_server[0m[0m
+[behavior_server-12] [INFO] [1790850579.158230333] [behavior_server]: Configuring
+[behavior_server-12] [INFO] [1790850579.167408746] [behavior_server]: Creating behavior plugin spin of type nav2_behaviors::Spin
+[behavior_server-12] [INFO] [1790850579.169060273] [behavior_server]: Creating behavior plugin backup of type nav2_behaviors::BackUp
+[behavior_server-12] [INFO] [1790850579.170644083] [behavior_server]: Creating behavior plugin wait of type nav2_behaviors::Wait
+[behavior_server-12] [INFO] [1790850579.184691062] [behavior_server]: Configuring spin
+[behavior_server-12] [INFO] [1790850579.203842733] [behavior_server]: Configuring backup
+[behavior_server-12] [INFO] [1790850579.216539107] [behavior_server]: Configuring wait
+[lifecycle_manager-17] [INFO] [1790850579.226747884] [lifecycle_manager_navigation]: [34m[1mConfiguring waypoint_follower[0m[0m
+[waypoint_follower-13] [INFO] [1790850579.227242135] [waypoint_follower]: Configuring
+[waypoint_follower-13] [INFO] [1790850579.278205136] [waypoint_follower]: Created waypoint_task_executor : wait_at_waypoint of type nav2_waypoint_follower::WaitAtWaypoint
+[waypoint_follower-13] [INFO] [1790850579.279079414] [waypoint_follower]: Waypoint pause duration is set to zero, disabling task executor plugin.
+[lifecycle_manager-17] [INFO] [1790850579.279805758] [lifecycle_manager_navigation]: [34m[1mActivating planner_server[0m[0m
+[planner_server-9] [INFO] [1790850579.280212456] [planner_server]: Activating
+[planner_server-9] [INFO] [1790850579.280253286] [global_costmap.global_costmap]: Activating
+[planner_server-9] [INFO] [1790850579.280261472] [global_costmap.global_costmap]: Checking transform
+[planner_server-9] [INFO] [1790850579.280340021] [global_costmap.global_costmap]: Timed out waiting for transform from base_footprint to map to become available, tf error: Lookup would require extrapolation at time 7.760000, but only time 8.100000 is in the buffer, when looking up transform from frame [base_footprint] to frame [map]
+[behavior_server-12] [WARN] [1790850579.326115505] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[planner_server-9] [WARN] [1790850579.326143660] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[bt_navigator-11] [WARN] [1790850579.326157037] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[robot_state_publisher-3] [WARN] [1790850579.326229171] [robot_state_publisher]: Moved backwards in time, re-publishing joint transforms!
+[controller_server-10] [WARN] [1790850579.427421000] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[bt_navigator-11] [WARN] [1790850579.427653658] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[behavior_server-12] [WARN] [1790850579.530586025] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[amcl-8] [WARN] [1790850579.530650071] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[controller_server-10] [WARN] [1790850579.530688983] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[robot_state_publisher-3] [WARN] [1790850579.530755583] [robot_state_publisher]: Moved backwards in time, re-publishing joint transforms!
+[bt_navigator-11] [WARN] [1790850579.530870895] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[planner_server-9] [INFO] [1790850579.780446095] [global_costmap.global_costmap]: Timed out waiting for transform from base_footprint to map to become available, tf error: Lookup would require extrapolation into the past.  Requested time 8.240000 but the earliest data is at time 8.300000, when looking up transform from frame [base_footprint] to frame [map]
+[behavior_server-12] [WARN] [1790850579.836039219] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[amcl-8] [WARN] [1790850579.836183939] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[controller_server-10] [WARN] [1790850579.836303539] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[controller_server-10] [WARN] [1790850579.938052744] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[amcl-8] [WARN] [1790850579.938122977] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[bt_navigator-11] [WARN] [1790850579.938195178] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[controller_server-10] [WARN] [1790850580.041819186] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[behavior_server-12] [WARN] [1790850580.041815160] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[amcl-8] [WARN] [1790850580.041823766] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[planner_server-9] [WARN] [1790850580.041865823] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[bt_navigator-11] [WARN] [1790850580.041930590] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[robot_state_publisher-3] [WARN] [1790850580.041997726] [robot_state_publisher]: Moved backwards in time, re-publishing joint transforms!
+[amcl-8] [INFO] [1790850580.047294548] [amcl]: Message Filter dropping message: frame 'base_scan' at time 8.000 for reason 'the timestamp on the message is earlier than all the data in the transform cache'
+[planner_server-9] [INFO] [1790850580.280363959] [global_costmap.global_costmap]: Timed out waiting for transform from base_footprint to map to become available, tf error: Lookup would require extrapolation at time 8.740000, but only time 9.100000 is in the buffer, when looking up transform from frame [base_footprint] to frame [map]
+[behavior_server-12] [WARN] [1790850580.541660777] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[controller_server-10] [WARN] [1790850580.541750623] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[planner_server-9] [WARN] [1790850580.541777860] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[amcl-8] [WARN] [1790850580.541781776] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[bt_navigator-11] [WARN] [1790850580.541818206] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[robot_state_publisher-3] [WARN] [1790850580.541825255] [robot_state_publisher]: Moved backwards in time, re-publishing joint transforms!
+[bt_navigator-11] [WARN] [1790850580.644504826] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[planner_server-9] [INFO] [1790850580.780366262] [global_costmap.global_costmap]: Timed out waiting for transform from base_footprint to map to become available, tf error: Lookup would require extrapolation at time 9.240000, but only time 9.700000 is in the buffer, when looking up transform from frame [base_footprint] to frame [map]
+[controller_server-10] [WARN] [1790850580.951722969] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[bt_navigator-11] [WARN] [1790850581.053884309] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[behavior_server-12] [WARN] [1790850581.053875437] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[controller_server-10] [WARN] [1790850581.053855570] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[amcl-8] [WARN] [1790850581.054126218] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[robot_state_publisher-3] [WARN] [1790850581.054145329] [robot_state_publisher]: Moved backwards in time, re-publishing joint transforms!
+[behavior_server-12] [WARN] [1790850581.153429699] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[amcl-8] [WARN] [1790850581.153473785] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[planner_server-9] [WARN] [1790850581.153528386] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[bt_navigator-11] [WARN] [1790850581.153549520] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[controller_server-10] [WARN] [1790850581.153636736] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[robot_state_publisher-3] [WARN] [1790850581.153646842] [robot_state_publisher]: Moved backwards in time, re-publishing joint transforms!
+[behavior_server-12] [WARN] [1790850581.253588723] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[amcl-8] [WARN] [1790850581.253608572] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[planner_server-9] [WARN] [1790850581.253676529] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[bt_navigator-11] [WARN] [1790850581.253708746] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[robot_state_publisher-3] [WARN] [1790850581.253770635] [robot_state_publisher]: Moved backwards in time, re-publishing joint transforms!
+[planner_server-9] [INFO] [1790850581.280362262] [global_costmap.global_costmap]: Timed out waiting for transform from base_footprint to map to become available, tf error: Could not find a connection between 'map' and 'base_footprint' because they are not part of the same tree.Tf has two or more unconnected trees.
+[behavior_server-12] [WARN] [1790850581.354644775] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[amcl-8] [WARN] [1790850581.354656613] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[controller_server-10] [WARN] [1790850581.354691841] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[planner_server-9] [WARN] [1790850581.354716655] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[bt_navigator-11] [WARN] [1790850581.354721415] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[behavior_server-12] [WARN] [1790850581.456688410] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[amcl-8] [WARN] [1790850581.456730158] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[controller_server-10] [WARN] [1790850581.456728309] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[planner_server-9] [WARN] [1790850581.456755259] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[bt_navigator-11] [WARN] [1790850581.456806038] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[python3-5] [INFO] [1790850581.532539853] [school_pose_sync_monitor]: Gazebo↔RViz pose error=0.009 m (gz=0.01,-7.85; tf=-0.00,-7.85)
+[behavior_server-12] [WARN] [1790850581.556626614] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[amcl-8] [WARN] [1790850581.556639384] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[controller_server-10] [WARN] [1790850581.556651153] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[planner_server-9] [WARN] [1790850581.556774384] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[bt_navigator-11] [WARN] [1790850581.556826149] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[behavior_server-12] [WARN] [1790850581.658080955] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[amcl-8] [WARN] [1790850581.658083937] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[bt_navigator-11] [WARN] [1790850581.658174694] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[planner_server-9] [WARN] [1790850581.658295835] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[amcl-8] [WARN] [1790850581.757975269] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[behavior_server-12] [WARN] [1790850581.757963520] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[controller_server-10] [WARN] [1790850581.758004763] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[bt_navigator-11] [WARN] [1790850581.758057091] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[planner_server-9] [WARN] [1790850581.758124717] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[robot_state_publisher-3] [WARN] [1790850581.758239313] [robot_state_publisher]: Moved backwards in time, re-publishing joint transforms!
+[planner_server-9] [INFO] [1790850581.780351400] [global_costmap.global_costmap]: Timed out waiting for transform from base_footprint to map to become available, tf error: Could not find a connection between 'map' and 'base_footprint' because they are not part of the same tree.Tf has two or more unconnected trees.
+[robot_state_publisher-3] [WARN] [1790850581.858442307] [robot_state_publisher]: Moved backwards in time, re-publishing joint transforms!
+[behavior_server-12] [WARN] [1790850581.858460092] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[amcl-8] [WARN] [1790850581.858512501] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[bt_navigator-11] [WARN] [1790850581.858524354] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[controller_server-10] [WARN] [1790850581.858533533] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[planner_server-9] [WARN] [1790850581.858564315] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[amcl-8] [WARN] [1790850582.058477881] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[behavior_server-12] [WARN] [1790850582.058473065] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[behavior_server-12] [WARN] [1790850582.058769461] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[controller_server-10] [WARN] [1790850582.058492651] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[amcl-8] [WARN] [1790850582.058765739] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[bt_navigator-11] [WARN] [1790850582.159047222] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[amcl-8] [WARN] [1790850582.159170236] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[controller_server-10] [WARN] [1790850582.159187782] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[controller_server-10] [WARN] [1790850582.159264299] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[behavior_server-12] [WARN] [1790850582.159224932] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[robot_state_publisher-3] [WARN] [1790850582.159508734] [robot_state_publisher]: Moved backwards in time, re-publishing joint transforms!
+[behavior_server-12] [WARN] [1790850582.261968473] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[bt_navigator-11] [WARN] [1790850582.262023552] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[robot_state_publisher-3] [WARN] [1790850582.262222787] [robot_state_publisher]: Moved backwards in time, re-publishing joint transforms!
+[planner_server-9] [WARN] [1790850582.262240257] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[controller_server-10] [WARN] [1790850582.262422590] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[planner_server-9] [INFO] [1790850582.280362707] [global_costmap.global_costmap]: Timed out waiting for transform from base_footprint to map to become available, tf error: Could not find a connection between 'map' and 'base_footprint' because they are not part of the same tree.Tf has two or more unconnected trees.
+[amcl-8] [WARN] [1790850582.362374146] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[behavior_server-12] [WARN] [1790850582.362376595] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[controller_server-10] [WARN] [1790850582.362438540] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[planner_server-9] [WARN] [1790850582.362455967] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[bt_navigator-11] [WARN] [1790850582.362513749] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[behavior_server-12] [WARN] [1790850582.564600265] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[amcl-8] [WARN] [1790850582.564708201] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[bt_navigator-11] [WARN] [1790850582.564754211] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[controller_server-10] [WARN] [1790850582.564767228] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[controller_server-10] [WARN] [1790850582.564913081] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[bt_navigator-11] [WARN] [1790850582.565135431] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[planner_server-9] [WARN] [1790850582.565135548] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[behavior_server-12] [WARN] [1790850582.668033921] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[amcl-8] [WARN] [1790850582.668063691] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[controller_server-10] [WARN] [1790850582.668081081] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[planner_server-9] [WARN] [1790850582.668164659] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[bt_navigator-11] [WARN] [1790850582.668170624] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[robot_state_publisher-3] [WARN] [1790850582.668295663] [robot_state_publisher]: Moved backwards in time, re-publishing joint transforms!
+[amcl-8] [INFO] [1790850582.672037336] [amcl]: Message Filter dropping message: frame 'base_scan' at time 10.600 for reason 'the timestamp on the message is earlier than all the data in the transform cache'
+[bt_navigator-11] [WARN] [1790850582.771596940] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[planner_server-9] [INFO] [1790850582.780375434] [global_costmap.global_costmap]: Timed out waiting for transform from base_footprint to map to become available, tf error: Lookup would require extrapolation at time 11.200000, but only time 11.700000 is in the buffer, when looking up transform from frame [base_footprint] to frame [map]
+[behavior_server-12] [WARN] [1790850582.873681774] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[amcl-8] [WARN] [1790850582.873697223] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[controller_server-10] [WARN] [1790850582.873729828] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[planner_server-9] [WARN] [1790850582.873779048] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[bt_navigator-11] [WARN] [1790850582.873804668] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[robot_state_publisher-3] [WARN] [1790850582.873843263] [robot_state_publisher]: Moved backwards in time, re-publishing joint transforms!
+[amcl-8] [WARN] [1790850583.075989095] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[behavior_server-12] [WARN] [1790850583.076007818] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[controller_server-10] [WARN] [1790850583.076024189] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[planner_server-9] [WARN] [1790850583.076061832] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[bt_navigator-11] [WARN] [1790850583.076191603] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[bt_navigator-11] [WARN] [1790850583.076481871] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[behavior_server-12] [WARN] [1790850583.076340966] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[behavior_server-12] [WARN] [1790850583.076579371] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[amcl-8] [WARN] [1790850583.076351683] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[amcl-8] [WARN] [1790850583.076624804] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[controller_server-10] [WARN] [1790850583.076382258] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[controller_server-10] [WARN] [1790850583.076631060] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[planner_server-9] [WARN] [1790850583.076398720] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[planner_server-9] [WARN] [1790850583.076655202] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[robot_state_publisher-3] [WARN] [1790850583.076772328] [robot_state_publisher]: Moved backwards in time, re-publishing joint transforms!
+[amcl-8] [WARN] [1790850583.277853018] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[controller_server-10] [WARN] [1790850583.277877250] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[bt_navigator-11] [WARN] [1790850583.277898326] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[robot_state_publisher-3] [WARN] [1790850583.277976955] [robot_state_publisher]: Moved backwards in time, re-publishing joint transforms!
+[planner_server-9] [INFO] [1790850583.280355985] [global_costmap.global_costmap]: Timed out waiting for transform from base_footprint to map to become available, tf error: Lookup would require extrapolation at time 11.700000, but only time 12.100000 is in the buffer, when looking up transform from frame [base_footprint] to frame [map]
+[behavior_server-12] [WARN] [1790850583.476932690] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[planner_server-9] [INFO] [1790850583.780453990] [global_costmap.global_costmap]: start
+[planner_server-9] [WARN] [1790850583.784573713] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[bt_navigator-11] [WARN] [1790850583.784573756] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[behavior_server-12] [WARN] [1790850583.784589274] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[controller_server-10] [WARN] [1790850583.784842373] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[amcl-8] [WARN] [1790850583.784861515] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[robot_state_publisher-3] [WARN] [1790850583.784959376] [robot_state_publisher]: Moved backwards in time, re-publishing joint transforms!
+[behavior_server-12] [WARN] [1790850583.886986646] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[amcl-8] [WARN] [1790850583.887021898] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[controller_server-10] [WARN] [1790850583.887018741] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[planner_server-9] [WARN] [1790850583.887080890] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[bt_navigator-11] [WARN] [1790850583.887106819] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[robot_state_publisher-3] [WARN] [1790850583.887147766] [robot_state_publisher]: Moved backwards in time, re-publishing joint transforms!
+[amcl-8] [WARN] [1790850584.089831190] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[behavior_server-12] [WARN] [1790850584.089831411] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[controller_server-10] [WARN] [1790850584.089845906] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[bt_navigator-11] [WARN] [1790850584.089893388] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[robot_state_publisher-3] [WARN] [1790850584.089924621] [robot_state_publisher]: Moved backwards in time, re-publishing joint transforms!
+[planner_server-9] [WARN] [1790850584.089926516] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[planner_server-9] [INFO] [1790850584.095223470] [global_costmap.global_costmap]: Message Filter dropping message: frame 'base_scan' at time 12.200 for reason 'the timestamp on the message is earlier than all the data in the transform cache'
+[bt_navigator-11] [WARN] [1790850584.191892658] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[controller_server-10] [WARN] [1790850584.192276900] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[amcl-8] [WARN] [1790850584.292926540] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[controller_server-10] [WARN] [1790850584.292946543] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[behavior_server-12] [WARN] [1790850584.292945652] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[planner_server-9] [WARN] [1790850584.293009369] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[bt_navigator-11] [WARN] [1790850584.293048546] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[robot_state_publisher-3] [WARN] [1790850584.293089012] [robot_state_publisher]: Moved backwards in time, re-publishing joint transforms!
+[bt_navigator-11] [WARN] [1790850584.394926340] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[behavior_server-12] [WARN] [1790850584.394917990] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[planner_server-9] [WARN] [1790850584.394915270] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[bt_navigator-11] [WARN] [1790850584.395161684] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[amcl-8] [WARN] [1790850584.498622302] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[bt_navigator-11] [WARN] [1790850584.498661581] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[controller_server-10] [WARN] [1790850584.498664275] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[planner_server-9] [WARN] [1790850584.498672960] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[behavior_server-12] [WARN] [1790850584.498690859] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[robot_state_publisher-3] [WARN] [1790850584.498759233] [robot_state_publisher]: Moved backwards in time, re-publishing joint transforms!
+[planner_server-9] [ERROR] [1790850584.593945174] [transformPoseInTargetFrame]: Connectivity Error looking up target frame: Could not find a connection between 'map' and 'base_footprint' because they are not part of the same tree.Tf has two or more unconnected trees.
+[planner_server-9] 
+[bt_navigator-11] [WARN] [1790850584.601736647] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[planner_server-9] [WARN] [1790850584.601736158] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[bt_navigator-11] [WARN] [1790850584.701210904] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[behavior_server-12] [WARN] [1790850584.701234777] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[planner_server-9] [WARN] [1790850584.701245762] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[amcl-8] [WARN] [1790850584.701296582] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[robot_state_publisher-3] [WARN] [1790850584.701302434] [robot_state_publisher]: Moved backwards in time, re-publishing joint transforms!
+[controller_server-10] [WARN] [1790850584.701697539] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[amcl-8] [WARN] [1790850584.901202048] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[planner_server-9] [WARN] [1790850584.901504328] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[behavior_server-12] [WARN] [1790850585.002869881] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[amcl-8] [WARN] [1790850585.002906201] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[controller_server-10] [WARN] [1790850585.002903798] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[planner_server-9] [WARN] [1790850585.002942041] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[robot_state_publisher-3] [WARN] [1790850585.003131181] [robot_state_publisher]: Moved backwards in time, re-publishing joint transforms!
+[bt_navigator-11] [WARN] [1790850585.004432602] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[planner_server-9] [ERROR] [1790850585.084024346] [transformPoseInTargetFrame]: Connectivity Error looking up target frame: Could not find a connection between 'map' and 'base_footprint' because they are not part of the same tree.Tf has two or more unconnected trees.
+[planner_server-9] 
+[amcl-8] [WARN] [1790850585.104891133] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[behavior_server-12] [WARN] [1790850585.104968116] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[behavior_server-12] [WARN] [1790850585.105107607] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[planner_server-9] [WARN] [1790850585.104967413] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[bt_navigator-11] [WARN] [1790850585.104993520] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[controller_server-10] [WARN] [1790850585.104962312] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[behavior_server-12] [WARN] [1790850585.409278308] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[amcl-8] [WARN] [1790850585.409288196] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[controller_server-10] [WARN] [1790850585.409304751] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[planner_server-9] [WARN] [1790850585.409380932] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[bt_navigator-11] [WARN] [1790850585.409486252] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[amcl-8] [INFO] [1790850585.516503448] [amcl]: Message Filter dropping message: frame 'base_scan' at time 13.400 for reason 'the timestamp on the message is earlier than all the data in the transform cache'
+[planner_server-9] [ERROR] [1790850585.583733667] [transformPoseInTargetFrame]: Connectivity Error looking up target frame: Could not find a connection between 'map' and 'base_footprint' because they are not part of the same tree.Tf has two or more unconnected trees.
+[planner_server-9] 
+[behavior_server-12] [WARN] [1790850585.611407021] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[controller_server-10] [WARN] [1790850585.611430066] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[planner_server-9] [WARN] [1790850585.611480083] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[bt_navigator-11] [WARN] [1790850585.611544079] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[robot_state_publisher-3] [WARN] [1790850585.611577870] [robot_state_publisher]: Moved backwards in time, re-publishing joint transforms!
+[behavior_server-12] [WARN] [1790850585.712070652] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[amcl-8] [WARN] [1790850585.712087416] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[planner_server-9] [WARN] [1790850585.712142260] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[bt_navigator-11] [WARN] [1790850585.712166112] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[robot_state_publisher-3] [WARN] [1790850585.712220094] [robot_state_publisher]: Moved backwards in time, re-publishing joint transforms!
+[controller_server-10] [WARN] [1790850585.713388802] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[behavior_server-12] [WARN] [1790850585.814214374] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[amcl-8] [WARN] [1790850585.814269031] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[planner_server-9] [WARN] [1790850585.814321993] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[robot_state_publisher-3] [WARN] [1790850585.814378171] [robot_state_publisher]: Moved backwards in time, re-publishing joint transforms!
+[controller_server-10] [WARN] [1790850585.814437006] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[bt_navigator-11] [WARN] [1790850585.815034251] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[robot_state_publisher-3] [WARN] [1790850585.916629972] [robot_state_publisher]: Moved backwards in time, re-publishing joint transforms!
+[behavior_server-12] [WARN] [1790850585.916685868] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[amcl-8] [WARN] [1790850585.916702770] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[controller_server-10] [WARN] [1790850585.916719688] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[planner_server-9] [WARN] [1790850585.916774245] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[bt_navigator-11] [WARN] [1790850585.916796433] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[behavior_server-12] [WARN] [1790850586.017268917] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[behavior_server-12] [WARN] [1790850586.017414426] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[controller_server-10] [WARN] [1790850586.017273030] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[controller_server-10] [WARN] [1790850586.017434984] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[planner_server-9] [WARN] [1790850586.017308157] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[planner_server-9] [WARN] [1790850586.017458564] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[bt_navigator-11] [WARN] [1790850586.017464585] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[planner_server-9] [ERROR] [1790850586.093682387] [transformPoseInTargetFrame]: Extrapolation Error looking up target frame: Lookup would require extrapolation at time 14.480000, but only time 14.900000 is in the buffer, when looking up transform from frame [base_footprint] to frame [map]
+[planner_server-9] 
+[bt_navigator-11] [WARN] [1790850586.121055916] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[bt_navigator-11] [WARN] [1790850586.121232539] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[controller_server-10] [WARN] [1790850586.121474143] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[bt_navigator-11] [WARN] [1790850586.222389609] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[controller_server-10] [WARN] [1790850586.423832362] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[amcl-8] [WARN] [1790850586.423870102] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[bt_navigator-11] [WARN] [1790850586.423900068] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[planner_server-9] [WARN] [1790850586.423949041] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[robot_state_publisher-3] [WARN] [1790850586.424026956] [robot_state_publisher]: Moved backwards in time, re-publishing joint transforms!
+[behavior_server-12] [WARN] [1790850586.424036596] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[behavior_server-12] [WARN] [1790850586.424565098] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[controller_server-10] [WARN] [1790850586.424432449] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[amcl-8] [WARN] [1790850586.424556870] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[bt_navigator-11] [WARN] [1790850586.424656496] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[planner_server-9] [WARN] [1790850586.424930865] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[behavior_server-12] [WARN] [1790850586.522992103] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[behavior_server-12] [WARN] [1790850586.523264202] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[amcl-8] [WARN] [1790850586.523283416] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[controller_server-10] [WARN] [1790850586.523302518] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[planner_server-9] [WARN] [1790850586.523343656] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[bt_navigator-11] [WARN] [1790850586.523351057] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[robot_state_publisher-3] [WARN] [1790850586.523392385] [robot_state_publisher]: Moved backwards in time, re-publishing joint transforms!
+[python3-5] [INFO] [1790850586.545154917] [school_pose_sync_monitor]: Gazebo↔RViz pose error=0.011 m (gz=0.01,-7.85; tf=-0.00,-7.85)
+[planner_server-9] [ERROR] [1790850586.583775596] [transformPoseInTargetFrame]: Connectivity Error looking up target frame: Could not find a connection between 'map' and 'base_footprint' because they are not part of the same tree.Tf has two or more unconnected trees.
+[planner_server-9] 
+[amcl-8] [WARN] [1790850586.723177810] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[controller_server-10] [WARN] [1790850586.723190001] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[bt_navigator-11] [WARN] [1790850586.723233755] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[behavior_server-12] [WARN] [1790850586.723261198] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[planner_server-9] [WARN] [1790850586.723279041] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[robot_state_publisher-3] [WARN] [1790850586.723336021] [robot_state_publisher]: Moved backwards in time, re-publishing joint transforms!
+[planner_server-9] [INFO] [1790850586.729550846] [global_costmap.global_costmap]: Message Filter dropping message: frame 'base_scan' at time 14.800 for reason 'the timestamp on the message is earlier than all the data in the transform cache'
+[amcl-8] [WARN] [1790850586.924605074] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[bt_navigator-11] [WARN] [1790850586.924742553] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[bt_navigator-11] [WARN] [1790850586.924841194] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[controller_server-10] [WARN] [1790850586.924855185] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[planner_server-9] [WARN] [1790850586.924894231] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[behavior_server-12] [WARN] [1790850586.924905252] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[planner_server-9] [WARN] [1790850587.026412133] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[planner_server-9] [ERROR] [1790850587.094180958] [transformPoseInTargetFrame]: Extrapolation Error looking up target frame: Lookup would require extrapolation at time 15.460000, but only time 15.900000 is in the buffer, when looking up transform from frame [base_footprint] to frame [map]
+[planner_server-9] 
+[behavior_server-12] [WARN] [1790850587.331307082] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[controller_server-10] [WARN] [1790850587.432441050] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[amcl-8] [WARN] [1790850587.432437801] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[behavior_server-12] [WARN] [1790850587.432517722] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[planner_server-9] [WARN] [1790850587.432522975] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[robot_state_publisher-3] [WARN] [1790850587.432601224] [robot_state_publisher]: Moved backwards in time, re-publishing joint transforms!
+[behavior_server-12] [WARN] [1790850587.535285009] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[planner_server-9] [ERROR] [1790850587.593668406] [transformPoseInTargetFrame]: Connectivity Error looking up target frame: Could not find a connection between 'map' and 'base_footprint' because they are not part of the same tree.Tf has two or more unconnected trees.
+[planner_server-9] 
+[controller_server-10] [WARN] [1790850587.636560613] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[bt_navigator-11] [WARN] [1790850587.636590713] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[behavior_server-12] [WARN] [1790850587.636639908] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[robot_state_publisher-3] [WARN] [1790850587.736733337] [robot_state_publisher]: Moved backwards in time, re-publishing joint transforms!
+[amcl-8] [WARN] [1790850587.736778930] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[controller_server-10] [WARN] [1790850587.736777986] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[controller_server-10] [WARN] [1790850587.737049536] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[amcl-8] [WARN] [1790850587.737058874] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[bt_navigator-11] [WARN] [1790850587.737107808] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[planner_server-9] [WARN] [1790850587.737163234] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[robot_state_publisher-3] [WARN] [1790850587.737178920] [robot_state_publisher]: Moved backwards in time, re-publishing joint transforms!
+[behavior_server-12] [WARN] [1790850587.737189275] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[amcl-8] [WARN] [1790850587.837503562] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[planner_server-9] [WARN] [1790850587.837638322] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[behavior_server-12] [WARN] [1790850587.837667426] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[robot_state_publisher-3] [WARN] [1790850587.837599731] [robot_state_publisher]: Moved backwards in time, re-publishing joint transforms!
+[controller_server-10] [WARN] [1790850587.837671089] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[bt_navigator-11] [WARN] [1790850587.837686184] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[amcl-8] [WARN] [1790850587.939180730] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[controller_server-10] [WARN] [1790850587.939195296] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[behavior_server-12] [WARN] [1790850587.939193272] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[bt_navigator-11] [WARN] [1790850587.939294485] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[planner_server-9] [WARN] [1790850587.939305735] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[robot_state_publisher-3] [WARN] [1790850587.939367341] [robot_state_publisher]: Moved backwards in time, re-publishing joint transforms!
+[behavior_server-12] [WARN] [1790850588.039428246] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[controller_server-10] [WARN] [1790850588.039462672] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[planner_server-9] [WARN] [1790850588.039534935] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[robot_state_publisher-3] [WARN] [1790850588.039542448] [robot_state_publisher]: Moved backwards in time, re-publishing joint transforms!
+[bt_navigator-11] [WARN] [1790850588.039687295] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[bt_navigator-11] [WARN] [1790850588.040197803] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[behavior_server-12] [WARN] [1790850588.040087684] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[controller_server-10] [WARN] [1790850588.040139953] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[planner_server-9] [WARN] [1790850588.040171648] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[robot_state_publisher-3] [WARN] [1790850588.040270702] [robot_state_publisher]: Moved backwards in time, re-publishing joint transforms!
+[planner_server-9] [ERROR] [1790850588.083551716] [transformPoseInTargetFrame]: Extrapolation Error looking up target frame: Lookup would require extrapolation at time 16.440000, but only time 16.900000 is in the buffer, when looking up transform from frame [base_footprint] to frame [map]
+[planner_server-9] 
+[amcl-8] [WARN] [1790850588.140212282] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[behavior_server-12] [WARN] [1790850588.140200929] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[controller_server-10] [WARN] [1790850588.140236496] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[bt_navigator-11] [WARN] [1790850588.140321202] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[robot_state_publisher-3] [WARN] [1790850588.140442769] [robot_state_publisher]: Moved backwards in time, re-publishing joint transforms!
+[behavior_server-12] [WARN] [1790850588.140910964] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[amcl-8] [WARN] [1790850588.140942956] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[controller_server-10] [WARN] [1790850588.140954162] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[planner_server-9] [WARN] [1790850588.140986576] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[bt_navigator-11] [WARN] [1790850588.141009981] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[robot_state_publisher-3] [WARN] [1790850588.141062474] [robot_state_publisher]: Moved backwards in time, re-publishing joint transforms!
+[amcl-8] [WARN] [1790850588.342313265] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[behavior_server-12] [WARN] [1790850588.342323492] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[controller_server-10] [WARN] [1790850588.342350686] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[bt_navigator-11] [WARN] [1790850588.342412100] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[planner_server-9] [WARN] [1790850588.342426774] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[robot_state_publisher-3] [WARN] [1790850588.342459106] [robot_state_publisher]: Moved backwards in time, re-publishing joint transforms!
+[amcl-8] [INFO] [1790850588.347146942] [amcl]: Message Filter dropping message: frame 'base_scan' at time 16.200 for reason 'the timestamp on the message is earlier than all the data in the transform cache'
+[behavior_server-12] [WARN] [1790850588.542642846] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[amcl-8] [WARN] [1790850588.542660049] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[controller_server-10] [WARN] [1790850588.542718187] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[planner_server-9] [WARN] [1790850588.542798975] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[bt_navigator-11] [WARN] [1790850588.542924638] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[bt_navigator-11] [WARN] [1790850588.543208862] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[behavior_server-12] [WARN] [1790850588.543130506] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[amcl-8] [WARN] [1790850588.543164830] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[planner_server-9] [WARN] [1790850588.543178168] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[robot_state_publisher-3] [WARN] [1790850588.543227643] [robot_state_publisher]: Moved backwards in time, re-publishing joint transforms!
+[planner_server-9] [ERROR] [1790850588.583804341] [transformPoseInTargetFrame]: Connectivity Error looking up target frame: Could not find a connection between 'map' and 'base_footprint' because they are not part of the same tree.Tf has two or more unconnected trees.
+[planner_server-9] 
+[bt_navigator-11] [WARN] [1790850588.643319648] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[behavior_server-12] [WARN] [1790850588.643568084] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[amcl-8] [WARN] [1790850588.643574680] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[planner_server-9] [WARN] [1790850588.643587359] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[controller_server-10] [WARN] [1790850588.743752576] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[controller_server-10] [WARN] [1790850588.845881190] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[amcl-8] [WARN] [1790850588.946932654] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[controller_server-10] [WARN] [1790850588.946952256] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[behavior_server-12] [WARN] [1790850588.946986710] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[planner_server-9] [WARN] [1790850588.947014430] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[robot_state_publisher-3] [WARN] [1790850588.947046329] [robot_state_publisher]: Moved backwards in time, re-publishing joint transforms!
+[amcl-8] [WARN] [1790850589.048723548] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[controller_server-10] [WARN] [1790850589.048736892] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[behavior_server-12] [WARN] [1790850589.048774197] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[planner_server-9] [WARN] [1790850589.048812953] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[robot_state_publisher-3] [WARN] [1790850589.048864554] [robot_state_publisher]: Moved backwards in time, re-publishing joint transforms!
+[bt_navigator-11] [WARN] [1790850589.048992074] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[planner_server-9] [ERROR] [1790850589.093606285] [transformPoseInTargetFrame]: Connectivity Error looking up target frame: Could not find a connection between 'map' and 'base_footprint' because they are not part of the same tree.Tf has two or more unconnected trees.
+[planner_server-9] 
+[behavior_server-12] [WARN] [1790850589.150903569] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[amcl-8] [WARN] [1790850589.150930049] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[planner_server-9] [WARN] [1790850589.150938906] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[controller_server-10] [WARN] [1790850589.150933980] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[robot_state_publisher-3] [WARN] [1790850589.151012918] [robot_state_publisher]: Moved backwards in time, re-publishing joint transforms!
+[bt_navigator-11] [WARN] [1790850589.151069714] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[amcl-8] [WARN] [1790850589.355151179] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[behavior_server-12] [WARN] [1790850589.355166766] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[controller_server-10] [WARN] [1790850589.355222094] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[planner_server-9] [WARN] [1790850589.355296299] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[bt_navigator-11] [WARN] [1790850589.355375449] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[planner_server-9] [INFO] [1790850589.358408180] [global_costmap.global_costmap]: Message Filter dropping message: frame 'base_scan' at time 17.400 for reason 'the timestamp on the message is earlier than all the data in the transform cache'
+[controller_server-10] [WARN] [1790850589.558287252] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[bt_navigator-11] [WARN] [1790850589.558307947] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[amcl-8] [WARN] [1790850589.558306538] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[behavior_server-12] [WARN] [1790850589.558345463] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[behavior_server-12] [WARN] [1790850589.558441001] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[planner_server-9] [ERROR] [1790850589.593776388] [transformPoseInTargetFrame]: Extrapolation Error looking up target frame: Lookup would require extrapolation at time 17.940000, but only time 18.300000 is in the buffer, when looking up transform from frame [base_footprint] to frame [map]
+[planner_server-9] 
+[python3-4] [WARN] [1790850589.600062103] [school_collision_safe_pose_applier]: BLOCKED robot collision for event_agent_1: d=0.38m < 0.45m
+[amcl-8] [WARN] [1790850589.657667136] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[planner_server-9] [WARN] [1790850589.657720357] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[controller_server-10] [WARN] [1790850589.657761429] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[behavior_server-12] [WARN] [1790850589.657773402] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[bt_navigator-11] [WARN] [1790850589.657860409] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[amcl-8] [WARN] [1790850589.859729967] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[behavior_server-12] [WARN] [1790850589.859722658] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[bt_navigator-11] [WARN] [1790850589.859848304] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[behavior_server-12] [WARN] [1790850589.860216614] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[amcl-8] [WARN] [1790850589.860273469] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[planner_server-9] [WARN] [1790850589.860331750] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[robot_state_publisher-3] [WARN] [1790850589.860360711] [robot_state_publisher]: Moved backwards in time, re-publishing joint transforms!
+[bt_navigator-11] [WARN] [1790850589.860399186] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[bt_navigator-11] [WARN] [1790850589.961044706] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[behavior_server-12] [WARN] [1790850589.961421266] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[bt_navigator-11] [WARN] [1790850589.961471508] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[amcl-8] [WARN] [1790850589.961512170] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[controller_server-10] [WARN] [1790850589.961714009] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[amcl-8] [WARN] [1790850590.061430029] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[controller_server-10] [WARN] [1790850590.061412658] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[bt_navigator-11] [WARN] [1790850590.061603137] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[planner_server-9] [ERROR] [1790850590.083395121] [transformPoseInTargetFrame]: Connectivity Error looking up target frame: Could not find a connection between 'map' and 'base_footprint' because they are not part of the same tree.Tf has two or more unconnected trees.
+[planner_server-9] 
+[behavior_server-12] [WARN] [1790850590.088094773] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[amcl-8] [WARN] [1790850590.088097167] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[controller_server-10] [WARN] [1790850590.088106576] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[planner_server-9] [WARN] [1790850590.088129708] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[bt_navigator-11] [WARN] [1790850590.088149019] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[robot_state_publisher-3] [WARN] [1790850590.088248479] [robot_state_publisher]: Moved backwards in time, re-publishing joint transforms!
+[planner_server-9] [WARN] [1790850590.163924123] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[amcl-8] [WARN] [1790850590.163990918] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[behavior_server-12] [WARN] [1790850590.164048922] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[bt_navigator-11] [WARN] [1790850590.164056562] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[controller_server-10] [WARN] [1790850590.164092979] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[controller_server-10] [WARN] [1790850590.364088379] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[amcl-8] [WARN] [1790850590.364108192] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[behavior_server-12] [WARN] [1790850590.364154995] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[planner_server-9] [WARN] [1790850590.364260759] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[robot_state_publisher-3] [WARN] [1790850590.364343425] [robot_state_publisher]: Moved backwards in time, re-publishing joint transforms!
+[bt_navigator-11] [WARN] [1790850590.364427134] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[behavior_server-12] [WARN] [1790850590.466890457] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[amcl-8] [WARN] [1790850590.466898342] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[planner_server-9] [WARN] [1790850590.466933614] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[robot_state_publisher-3] [WARN] [1790850590.467007694] [robot_state_publisher]: Moved backwards in time, re-publishing joint transforms!
+[behavior_server-12] [WARN] [1790850590.566181418] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[behavior_server-12] [WARN] [1790850590.566299483] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[amcl-8] [WARN] [1790850590.566424790] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[controller_server-10] [WARN] [1790850590.566511074] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[bt_navigator-11] [WARN] [1790850590.566908787] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[planner_server-9] [ERROR] [1790850590.583764740] [transformPoseInTargetFrame]: Connectivity Error looking up target frame: Could not find a connection between 'map' and 'base_footprint' because they are not part of the same tree.Tf has two or more unconnected trees.
+[planner_server-9] 
+[bt_navigator-11] [WARN] [1790850590.665643885] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[behavior_server-12] [WARN] [1790850590.873428994] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[amcl-8] [WARN] [1790850590.873441257] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[controller_server-10] [WARN] [1790850590.873458272] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[bt_navigator-11] [WARN] [1790850590.873537695] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[robot_state_publisher-3] [WARN] [1790850590.873579458] [robot_state_publisher]: Moved backwards in time, re-publishing joint transforms!
+[bt_navigator-11] [WARN] [1790850590.975083354] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[amcl-8] [WARN] [1790850590.975226733] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[behavior_server-12] [WARN] [1790850590.975259949] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[controller_server-10] [WARN] [1790850590.975290442] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[planner_server-9] [WARN] [1790850590.975315426] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[amcl-8] [INFO] [1790850590.982941743] [amcl]: Message Filter dropping message: frame 'base_scan' at time 18.800 for reason 'the timestamp on the message is earlier than all the data in the transform cache'
+[planner_server-9] [ERROR] [1790850591.093752848] [transformPoseInTargetFrame]: Extrapolation Error looking up target frame: Lookup would require extrapolation at time 19.420000, but only time 19.900000 is in the buffer, when looking up transform from frame [base_footprint] to frame [map]
+[planner_server-9] 
+[behavior_server-12] [WARN] [1790850591.176767020] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[amcl-8] [WARN] [1790850591.176759857] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[robot_state_publisher-3] [WARN] [1790850591.176754203] [robot_state_publisher]: Moved backwards in time, re-publishing joint transforms!
+[controller_server-10] [WARN] [1790850591.176801577] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[bt_navigator-11] [WARN] [1790850591.176853477] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[planner_server-9] [WARN] [1790850591.176991929] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[bt_navigator-11] [WARN] [1790850591.279845434] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[planner_server-9] [WARN] [1790850591.280055154] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[planner_server-9] [WARN] [1790850591.378906251] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[bt_navigator-11] [WARN] [1790850591.379139998] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[controller_server-10] [WARN] [1790850591.480157861] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[behavior_server-12] [WARN] [1790850591.480178704] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[amcl-8] [WARN] [1790850591.480194688] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[planner_server-9] [WARN] [1790850591.480206034] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[bt_navigator-11] [WARN] [1790850591.480341081] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[robot_state_publisher-3] [WARN] [1790850591.480402515] [robot_state_publisher]: Moved backwards in time, re-publishing joint transforms!
+[python3-5] [INFO] [1790850591.554113068] [school_pose_sync_monitor]: Gazebo↔RViz pose error=0.013 m (gz=0.01,-7.85; tf=-0.00,-7.85)
+[bt_navigator-11] [WARN] [1790850591.582981856] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[behavior_server-12] [WARN] [1790850591.582948522] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[behavior_server-12] [WARN] [1790850591.583161437] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[controller_server-10] [WARN] [1790850591.583141735] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[bt_navigator-11] [WARN] [1790850591.583332394] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[amcl-8] [WARN] [1790850591.583672688] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[planner_server-9] [ERROR] [1790850591.593627728] [transformPoseInTargetFrame]: Connectivity Error looking up target frame: Could not find a connection between 'map' and 'base_footprint' because they are not part of the same tree.Tf has two or more unconnected trees.
+[planner_server-9] 
+[amcl-8] [WARN] [1790850591.683694502] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[controller_server-10] [WARN] [1790850591.683692932] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[planner_server-9] [WARN] [1790850591.683752100] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[bt_navigator-11] [WARN] [1790850591.683768696] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[robot_state_publisher-3] [WARN] [1790850591.683894384] [robot_state_publisher]: Moved backwards in time, re-publishing joint transforms!
+[behavior_server-12] [WARN] [1790850591.683931956] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[behavior_server-12] [WARN] [1790850591.786439056] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[amcl-8] [WARN] [1790850591.786464172] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[controller_server-10] [WARN] [1790850591.786486094] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[planner_server-9] [WARN] [1790850591.786526364] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[bt_navigator-11] [WARN] [1790850591.786594572] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[robot_state_publisher-3] [WARN] [1790850591.786657874] [robot_state_publisher]: Moved backwards in time, re-publishing joint transforms!
+[bt_navigator-11] [WARN] [1790850591.888775022] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[robot_state_publisher-3] [WARN] [1790850591.888799010] [robot_state_publisher]: Moved backwards in time, re-publishing joint transforms!
+[controller_server-10] [WARN] [1790850591.888685773] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[planner_server-9] [INFO] [1790850591.994416392] [global_costmap.global_costmap]: Message Filter dropping message: frame 'base_scan' at time 20.000 for reason 'the timestamp on the message is earlier than all the data in the transform cache'
+[planner_server-9] [ERROR] [1790850592.083833869] [transformPoseInTargetFrame]: Extrapolation Error looking up target frame: Lookup would require extrapolation at time 20.400000, but only time 20.700000 is in the buffer, when looking up transform from frame [base_footprint] to frame [map]
+[planner_server-9] 
+[behavior_server-12] [WARN] [1790850592.090310735] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[planner_server-9] [WARN] [1790850592.090367709] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[bt_navigator-11] [WARN] [1790850592.090667417] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[behavior_server-12] [WARN] [1790850592.193143559] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[amcl-8] [WARN] [1790850592.193166040] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[controller_server-10] [WARN] [1790850592.193176082] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[planner_server-9] [WARN] [1790850592.193246036] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[bt_navigator-11] [WARN] [1790850592.193307704] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[robot_state_publisher-3] [WARN] [1790850592.193431646] [robot_state_publisher]: Moved backwards in time, re-publishing joint transforms!
+[amcl-8] [WARN] [1790850592.401630242] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[controller_server-10] [WARN] [1790850592.401627215] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[bt_navigator-11] [WARN] [1790850592.401760344] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[behavior_server-12] [WARN] [1790850592.401789724] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[planner_server-9] [WARN] [1790850592.401822414] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[robot_state_publisher-3] [WARN] [1790850592.401867411] [robot_state_publisher]: Moved backwards in time, re-publishing joint transforms!
+[planner_server-9] [ERROR] [1790850592.594502308] [transformPoseInTargetFrame]: Extrapolation Error looking up target frame: Lookup would require extrapolation at time 20.880000, but only time 21.300000 is in the buffer, when looking up transform from frame [base_footprint] to frame [map]
+[planner_server-9] 
+[planner_server-9] [WARN] [1790850592.608763486] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[behavior_server-12] [WARN] [1790850592.609052175] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[bt_navigator-11] [WARN] [1790850592.711093906] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[amcl-8] [WARN] [1790850592.711256722] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[behavior_server-12] [WARN] [1790850592.917531205] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[controller_server-10] [WARN] [1790850592.917558915] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[bt_navigator-11] [WARN] [1790850592.917668363] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[python3-4] [WARN] [1790850593.013399380] [school_collision_safe_pose_applier]: BLOCKED human-human collision background_agent_2 <-> event_agent_1: d=0.34m
+[planner_server-9] [ERROR] [1790850593.093530612] [transformPoseInTargetFrame]: Extrapolation Error looking up target frame: Lookup would require extrapolation at time 21.380000, but only time 21.700000 is in the buffer, when looking up transform from frame [base_footprint] to frame [map]
+[planner_server-9] 
+[behavior_server-12] [WARN] [1790850593.224326950] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[amcl-8] [WARN] [1790850593.224341772] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[controller_server-10] [WARN] [1790850593.224390851] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[bt_navigator-11] [WARN] [1790850593.224455134] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[planner_server-9] [WARN] [1790850593.224469802] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[robot_state_publisher-3] [WARN] [1790850593.224500655] [robot_state_publisher]: Moved backwards in time, re-publishing joint transforms!
+[controller_server-10] [WARN] [1790850593.326984350] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[amcl-8] [WARN] [1790850593.326999838] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[planner_server-9] [WARN] [1790850593.327118614] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[robot_state_publisher-3] [WARN] [1790850593.327260813] [robot_state_publisher]: Moved backwards in time, re-publishing joint transforms!
+[behavior_server-12] [WARN] [1790850593.327499878] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[behavior_server-12] [WARN] [1790850593.328053391] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[behavior_server-12] [WARN] [1790850593.431086098] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[controller_server-10] [WARN] [1790850593.431105486] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[amcl-8] [WARN] [1790850593.431116276] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[planner_server-9] [WARN] [1790850593.431173029] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[bt_navigator-11] [WARN] [1790850593.431242595] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[robot_state_publisher-3] [WARN] [1790850593.431249643] [robot_state_publisher]: Moved backwards in time, re-publishing joint transforms!
+[controller_server-10] [WARN] [1790850593.531837079] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[planner_server-9] [WARN] [1790850593.531853485] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[robot_state_publisher-3] [WARN] [1790850593.532154654] [robot_state_publisher]: Moved backwards in time, re-publishing joint transforms!
+[bt_navigator-11] [WARN] [1790850593.532535677] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[behavior_server-12] [WARN] [1790850593.532725859] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[planner_server-9] [ERROR] [1790850593.593925479] [transformPoseInTargetFrame]: Extrapolation Error looking up target frame: Lookup would require extrapolation at time 21.860000, but only time 22.300000 is in the buffer, when looking up transform from frame [base_footprint] to frame [map]
+[planner_server-9] 
+[robot_state_publisher-3] [WARN] [1790850593.633843561] [robot_state_publisher]: Moved backwards in time, re-publishing joint transforms!
+[controller_server-10] [WARN] [1790850593.633853177] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[amcl-8] [WARN] [1790850593.633862367] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[planner_server-9] [WARN] [1790850593.633909611] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[behavior_server-12] [WARN] [1790850593.633962337] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[bt_navigator-11] [WARN] [1790850593.634413690] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[bt_navigator-11] [WARN] [1790850593.734925111] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[controller_server-10] [WARN] [1790850593.735104337] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[bt_navigator-11] [WARN] [1790850593.736030261] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[amcl-8] [INFO] [1790850593.837297253] [amcl]: Message Filter dropping message: frame 'base_scan' at time 21.600 for reason 'the timestamp on the message is earlier than all the data in the transform cache'
+[amcl-8] [WARN] [1790850593.936875374] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[bt_navigator-11] [WARN] [1790850593.936871247] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[planner_server-9] [WARN] [1790850593.936881238] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[behavior_server-12] [WARN] [1790850593.936892385] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[behavior_server-12] [WARN] [1790850593.937097340] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[robot_state_publisher-3] [WARN] [1790850593.937061493] [robot_state_publisher]: Moved backwards in time, re-publishing joint transforms!
+[amcl-8] [WARN] [1790850593.937189207] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[controller_server-10] [WARN] [1790850593.937721996] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[planner_server-9] [ERROR] [1790850594.083648764] [transformPoseInTargetFrame]: Connectivity Error looking up target frame: Could not find a connection between 'map' and 'base_footprint' because they are not part of the same tree.Tf has two or more unconnected trees.
+[planner_server-9] 
+[controller_server-10] [WARN] [1790850594.139137290] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[amcl-8] [WARN] [1790850594.139217679] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[bt_navigator-11] [WARN] [1790850594.139225157] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[planner_server-9] [WARN] [1790850594.139249473] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[robot_state_publisher-3] [WARN] [1790850594.139346555] [robot_state_publisher]: Moved backwards in time, re-publishing joint transforms!
+[behavior_server-12] [WARN] [1790850594.139386623] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[amcl-8] [WARN] [1790850594.243999028] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[behavior_server-12] [WARN] [1790850594.244054554] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[planner_server-9] [WARN] [1790850594.244065735] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[controller_server-10] [WARN] [1790850594.244136129] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[robot_state_publisher-3] [WARN] [1790850594.244135701] [robot_state_publisher]: Moved backwards in time, re-publishing joint transforms!
+[bt_navigator-11] [WARN] [1790850594.244381376] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[bt_navigator-11] [WARN] [1790850594.441779322] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[robot_state_publisher-3] [WARN] [1790850594.441961082] [robot_state_publisher]: Moved backwards in time, re-publishing joint transforms!
+[behavior_server-12] [WARN] [1790850594.441991961] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[behavior_server-12] [WARN] [1790850594.442178311] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[amcl-8] [WARN] [1790850594.442000825] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[amcl-8] [WARN] [1790850594.442182847] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[controller_server-10] [WARN] [1790850594.442024800] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[bt_navigator-11] [WARN] [1790850594.442087301] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[python3-4] [WARN] [1790850594.487186451] [school_collision_safe_pose_applier]: BLOCKED wall crossing for event_agent_1: target=(0.444, -7.923)
+[behavior_server-12] [WARN] [1790850594.542583182] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[bt_navigator-11] [WARN] [1790850594.542837605] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[amcl-8] [WARN] [1790850594.542866979] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[planner_server-9] [ERROR] [1790850594.583862766] [transformPoseInTargetFrame]: Extrapolation Error looking up target frame: Lookup would require extrapolation at time 22.840000, but only time 23.100000 is in the buffer, when looking up transform from frame [base_footprint] to frame [map]
+[planner_server-9] 
+[behavior_server-12] [WARN] [1790850594.648646012] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[planner_server-9] [WARN] [1790850594.648662524] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[controller_server-10] [WARN] [1790850594.648867677] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[bt_navigator-11] [WARN] [1790850594.648868575] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[planner_server-9] [INFO] [1790850594.652547428] [global_costmap.global_costmap]: Message Filter dropping message: frame 'base_scan' at time 22.600 for reason 'the timestamp on the message is earlier than all the data in the transform cache'
+[amcl-8] [WARN] [1790850594.748294462] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[planner_server-9] [WARN] [1790850594.748448269] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[bt_navigator-11] [WARN] [1790850594.749040087] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[amcl-8] [WARN] [1790850595.054875826] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[planner_server-9] [WARN] [1790850595.054933762] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[bt_navigator-11] [WARN] [1790850595.054954626] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[behavior_server-12] [WARN] [1790850595.054952900] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[robot_state_publisher-3] [WARN] [1790850595.055016878] [robot_state_publisher]: Moved backwards in time, re-publishing joint transforms!
+[planner_server-9] [ERROR] [1790850595.093663468] [transformPoseInTargetFrame]: Connectivity Error looking up target frame: Could not find a connection between 'map' and 'base_footprint' because they are not part of the same tree.Tf has two or more unconnected trees.
+[planner_server-9] 
+[behavior_server-12] [WARN] [1790850595.156072398] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[amcl-8] [WARN] [1790850595.156089116] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[controller_server-10] [WARN] [1790850595.156107655] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[planner_server-9] [WARN] [1790850595.156167083] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[bt_navigator-11] [WARN] [1790850595.156231066] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[planner_server-9] [ERROR] [1790850595.584104839] [transformPoseInTargetFrame]: Extrapolation Error looking up target frame: Lookup would require extrapolation into the past.  Requested time 23.820000 but the earliest data is at time 24.100000, when looking up transform from frame [base_footprint] to frame [map]
+[planner_server-9] 
+[planner_server-9] [WARN] [1790850595.660705486] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[bt_navigator-11] [WARN] [1790850595.660723728] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[controller_server-10] [WARN] [1790850595.791032536] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[amcl-8] [WARN] [1790850595.791049765] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[robot_state_publisher-3] [WARN] [1790850595.791143991] [robot_state_publisher]: Moved backwards in time, re-publishing joint transforms!
+[bt_navigator-11] [WARN] [1790850595.791156010] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[planner_server-9] [WARN] [1790850595.791270013] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[amcl-8] [WARN] [1790850595.908320187] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[bt_navigator-11] [WARN] [1790850595.908363158] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[bt_navigator-11] [WARN] [1790850595.908559528] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[controller_server-10] [WARN] [1790850595.908402132] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[amcl-8] [WARN] [1790850595.908667726] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[behavior_server-12] [WARN] [1790850595.908654740] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[planner_server-9] [WARN] [1790850595.908654911] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[robot_state_publisher-3] [WARN] [1790850595.908645738] [robot_state_publisher]: Moved backwards in time, re-publishing joint transforms!
+[planner_server-9] [ERROR] [1790850596.115291988] [transformPoseInTargetFrame]: Extrapolation Error looking up target frame: Lookup would require extrapolation at time 24.300000, but only time 24.700000 is in the buffer, when looking up transform from frame [base_footprint] to frame [map]
+[planner_server-9] 
+[behavior_server-12] [WARN] [1790850596.126230093] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[controller_server-10] [WARN] [1790850596.126297923] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[planner_server-9] [WARN] [1790850596.126366742] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[bt_navigator-11] [WARN] [1790850596.126556532] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[amcl-8] [WARN] [1790850596.126632228] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[behavior_server-12] [WARN] [1790850596.241565484] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[amcl-8] [WARN] [1790850596.242140035] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[bt_navigator-11] [WARN] [1790850596.242241502] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[robot_state_publisher-3] [WARN] [1790850596.242269235] [robot_state_publisher]: Moved backwards in time, re-publishing joint transforms!
+[controller_server-10] [WARN] [1790850596.242276294] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[planner_server-9] [WARN] [1790850596.243271501] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[python3-5] [INFO] [1790850596.554732584] [school_pose_sync_monitor]: Gazebo↔RViz pose error=0.014 m (gz=0.01,-7.85; tf=-0.00,-7.85)
+[bt_navigator-11] [WARN] [1790850596.576266529] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[planner_server-9] [ERROR] [1790850596.615382496] [transformPoseInTargetFrame]: Extrapolation Error looking up target frame: Lookup would require extrapolation at time 24.740000, but only time 25.100000 is in the buffer, when looking up transform from frame [base_footprint] to frame [map]
+[planner_server-9] 
+[controller_server-10] [WARN] [1790850596.684046243] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[controller_server-10] [WARN] [1790850596.684292497] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[amcl-8] [WARN] [1790850596.684046114] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[amcl-8] [WARN] [1790850596.684530752] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[bt_navigator-11] [WARN] [1790850596.684106558] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[behavior_server-12] [WARN] [1790850596.684491145] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[robot_state_publisher-3] [WARN] [1790850596.684902364] [robot_state_publisher]: Moved backwards in time, re-publishing joint transforms!
+[amcl-8] [WARN] [1790850596.795408266] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[behavior_server-12] [WARN] [1790850596.795491090] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[bt_navigator-11] [WARN] [1790850596.795537767] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[amcl-8] [INFO] [1790850596.807152963] [amcl]: Message Filter dropping message: frame 'base_scan' at time 24.400 for reason 'the timestamp on the message is earlier than all the data in the transform cache'
+[behavior_server-12] [WARN] [1790850597.003536370] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[controller_server-10] [WARN] [1790850597.003573881] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[planner_server-9] [WARN] [1790850597.003689617] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[bt_navigator-11] [WARN] [1790850597.003695119] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[robot_state_publisher-3] [WARN] [1790850597.003708601] [robot_state_publisher]: Moved backwards in time, re-publishing joint transforms!
+[planner_server-9] [INFO] [1790850597.032818509] [planner_server]: Activating plugin GridBased of type SmacPlanner2D
+[planner_server-9] [INFO] [1790850597.037552817] [planner_server]: Creating bond (planner_server) to lifecycle manager.
+[behavior_server-12] [WARN] [1790850597.121220210] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[amcl-8] [WARN] [1790850597.121220385] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[robot_state_publisher-3] [WARN] [1790850597.121343944] [robot_state_publisher]: Moved backwards in time, re-publishing joint transforms!
+[bt_navigator-11] [WARN] [1790850597.121532704] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[controller_server-10] [WARN] [1790850597.121691206] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[planner_server-9] [WARN] [1790850597.121821103] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[lifecycle_manager-17] [INFO] [1790850597.147579604] [lifecycle_manager_navigation]: Server planner_server connected with bond.
+[lifecycle_manager-17] [INFO] [1790850597.147635315] [lifecycle_manager_navigation]: [34m[1mActivating controller_server[0m[0m
+[controller_server-10] [INFO] [1790850597.147971079] [controller_server]: Activating
+[controller_server-10] [INFO] [1790850597.148014434] [local_costmap.local_costmap]: Activating
+[controller_server-10] [INFO] [1790850597.148023538] [local_costmap.local_costmap]: Checking transform
+[controller_server-10] [INFO] [1790850597.148177060] [local_costmap.local_costmap]: start
+[amcl-8] [WARN] [1790850597.228046887] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[controller_server-10] [WARN] [1790850597.228085798] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[planner_server-9] [WARN] [1790850597.228093601] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[behavior_server-12] [WARN] [1790850597.228099560] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[bt_navigator-11] [WARN] [1790850597.228230496] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[robot_state_publisher-3] [WARN] [1790850597.228286436] [robot_state_publisher]: Moved backwards in time, re-publishing joint transforms!
+[bt_navigator-11] [WARN] [1790850597.328772557] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[controller_server-10] [INFO] [1790850597.350546738] [controller_server]: Creating bond (controller_server) to lifecycle manager.
+[planner_server-9] [INFO] [1790850597.440433227] [global_costmap.global_costmap]: Message Filter dropping message: frame 'base_scan' at time 25.200 for reason 'the timestamp on the message is earlier than all the data in the transform cache'
+[lifecycle_manager-17] [INFO] [1790850597.459242415] [lifecycle_manager_navigation]: Server controller_server connected with bond.
+[lifecycle_manager-17] [INFO] [1790850597.459299875] [lifecycle_manager_navigation]: [34m[1mActivating bt_navigator[0m[0m
+[bt_navigator-11] [INFO] [1790850597.459642164] [bt_navigator]: Activating
+[bt_navigator-11] [INFO] [1790850597.639600574] [bt_navigator]: Creating bond (bt_navigator) to lifecycle manager.
+[amcl-8] [WARN] [1790850597.647340641] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[behavior_server-12] [WARN] [1790850597.647569045] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[bt_navigator-11] [WARN] [1790850597.647570600] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[robot_state_publisher-3] [WARN] [1790850597.647924344] [robot_state_publisher]: Moved backwards in time, re-publishing joint transforms!
+[planner_server-9] [ERROR] [1790850597.726685450] [transformPoseInTargetFrame]: Extrapolation Error looking up target frame: Lookup would require extrapolation into the past.  Requested time 25.660000 but the earliest data is at time 25.900000, when looking up transform from frame [base_footprint] to frame [map]
+[planner_server-9] 
+[lifecycle_manager-17] [INFO] [1790850597.759731332] [lifecycle_manager_navigation]: Server bt_navigator connected with bond.
+[lifecycle_manager-17] [INFO] [1790850597.759803245] [lifecycle_manager_navigation]: [34m[1mActivating behavior_server[0m[0m
+[behavior_server-12] [INFO] [1790850597.760181300] [behavior_server]: Activating
+[behavior_server-12] [INFO] [1790850597.760218199] [behavior_server]: Activating spin
+[behavior_server-12] [INFO] [1790850597.760233463] [behavior_server]: Activating backup
+[behavior_server-12] [INFO] [1790850597.760244653] [behavior_server]: Activating wait
+[behavior_server-12] [INFO] [1790850597.760260725] [behavior_server]: Creating bond (behavior_server) to lifecycle manager.
+[controller_server-10] [WARN] [1790850597.794846235] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[amcl-8] [WARN] [1790850597.794851219] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[bt_navigator-11] [WARN] [1790850597.794905825] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[planner_server-9] [WARN] [1790850597.794936412] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[robot_state_publisher-3] [WARN] [1790850597.794961346] [robot_state_publisher]: Moved backwards in time, re-publishing joint transforms!
+[behavior_server-12] [WARN] [1790850597.794964507] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[lifecycle_manager-17] [INFO] [1790850597.872113253] [lifecycle_manager_navigation]: Server behavior_server connected with bond.
+[lifecycle_manager-17] [INFO] [1790850597.872329669] [lifecycle_manager_navigation]: [34m[1mActivating waypoint_follower[0m[0m
+[waypoint_follower-13] [INFO] [1790850597.873361081] [waypoint_follower]: Activating
+[waypoint_follower-13] [INFO] [1790850597.873447034] [waypoint_follower]: Creating bond (waypoint_follower) to lifecycle manager.
+[bt_navigator-11] [WARN] [1790850597.947596460] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[behavior_server-12] [WARN] [1790850597.947586669] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[amcl-8] [WARN] [1790850597.948087916] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[planner_server-9] [WARN] [1790850597.948152332] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[controller_server-10] [WARN] [1790850597.948242043] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[lifecycle_manager-17] [INFO] [1790850597.989314253] [lifecycle_manager_navigation]: Server waypoint_follower connected with bond.
+[lifecycle_manager-17] [INFO] [1790850597.989462681] [lifecycle_manager_navigation]: [34m[1mManaged nodes are active[0m[0m
+[lifecycle_manager-17] [INFO] [1790850597.989492010] [lifecycle_manager_navigation]: [34m[1mCreating bond timer...[0m[0m
+[controller_server-10] [WARN] [1790850598.017975577] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[bt_navigator-11] [WARN] [1790850598.018408516] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[planner_server-9] [WARN] [1790850598.018491209] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[behavior_server-12] [WARN] [1790850598.058304804] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[controller_server-10] [WARN] [1790850598.058396270] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[amcl-8] [WARN] [1790850598.058511132] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[planner_server-9] [WARN] [1790850598.058655449] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[robot_state_publisher-3] [WARN] [1790850598.063354194] [robot_state_publisher]: Moved backwards in time, re-publishing joint transforms!
+[bt_navigator-11] [WARN] [1790850598.063750237] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[bt_navigator-11] [WARN] [1790850598.063889545] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[planner_server-9] [WARN] [1790850598.064134345] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[amcl-8] [WARN] [1790850598.121639428] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[planner_server-9] [WARN] [1790850598.121775335] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[bt_navigator-11] [WARN] [1790850598.121788863] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[behavior_server-12] [WARN] [1790850598.122010886] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[bt_navigator-11] [WARN] [1790850598.122107800] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[planner_server-9] [WARN] [1790850598.122112485] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[amcl-8] [WARN] [1790850598.143955106] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[planner_server-9] [ERROR] [1790850598.238041895] [transformPoseInTargetFrame]: Connectivity Error looking up target frame: Could not find a connection between 'map' and 'base_footprint' because they are not part of the same tree.Tf has two or more unconnected trees.
+[planner_server-9] 
+[amcl-8] [WARN] [1790850598.362012683] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[behavior_server-12] [WARN] [1790850598.362084483] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[behavior_server-12] [WARN] [1790850598.362240621] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[controller_server-10] [WARN] [1790850598.362269714] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[controller_server-10] [INFO] [1790850598.370801193] [local_costmap.local_costmap]: Message Filter dropping message: frame 'base_scan' at time 25.800 for reason 'the timestamp on the message is earlier than all the data in the transform cache'
+[bt_navigator-11] [ERROR] [1790850598.471978343] [transformPoseInTargetFrame]: Extrapolation Error looking up target frame: Lookup would require extrapolation at time 26.180000, but only time 26.500000 is in the buffer, when looking up transform from frame [base_footprint] to frame [map]
+[bt_navigator-11] 
+[bt_navigator-11] [ERROR] [1790850598.472097274] [bt_navigator]: Initial robot pose is not available.
+[bt_navigator-11] [WARN] [1790850598.472177117] [bt_navigator]: [navigate_to_pose] [ActionServer] Aborting handle.
+[bt_navigator-11] [WARN] [1790850598.593672729] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[controller_server-10] [WARN] [1790850598.593695960] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[planner_server-9] [WARN] [1790850598.593706503] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[behavior_server-12] [WARN] [1790850598.593715483] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[planner_server-9] [ERROR] [1790850598.695775951] [transformPoseInTargetFrame]: Connectivity Error looking up target frame: Could not find a connection between 'map' and 'base_footprint' because they are not part of the same tree.Tf has two or more unconnected trees.
+[planner_server-9] 
+[amcl-8] [WARN] [1790850598.914698646] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[behavior_server-12] [WARN] [1790850598.914714535] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[bt_navigator-11] [WARN] [1790850598.914938398] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[planner_server-9] [WARN] [1790850598.915074367] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[planner_server-9] [WARN] [1790850598.915634211] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[bt_navigator-11] [WARN] [1790850598.915709779] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[amcl-8] [WARN] [1790850598.915899189] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[behavior_server-12] [WARN] [1790850598.915897073] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[controller_server-10] [WARN] [1790850598.915934386] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[robot_state_publisher-3] [WARN] [1790850598.916109692] [robot_state_publisher]: Moved backwards in time, re-publishing joint transforms!
+[planner_server-9] [WARN] [1790850599.046684718] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[amcl-8] [WARN] [1790850599.172959272] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[controller_server-10] [WARN] [1790850599.173104364] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[bt_navigator-11] [WARN] [1790850599.173138650] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[behavior_server-12] [WARN] [1790850599.173422854] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[controller_server-10] [WARN] [1790850599.173596595] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[robot_state_publisher-3] [WARN] [1790850599.173714799] [robot_state_publisher]: Moved backwards in time, re-publishing joint transforms!
+[planner_server-9] [WARN] [1790850599.173840566] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[planner_server-9] [ERROR] [1790850599.176580289] [transformPoseInTargetFrame]: Connectivity Error looking up target frame: Could not find a connection between 'map' and 'base_footprint' because they are not part of the same tree.Tf has two or more unconnected trees.
+[planner_server-9] 
+[amcl-8] [WARN] [1790850599.276093720] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[behavior_server-12] [WARN] [1790850599.276218910] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[bt_navigator-11] [WARN] [1790850599.276275293] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[planner_server-9] [WARN] [1790850599.276334986] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[planner_server-9] [WARN] [1790850599.276484748] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[behavior_server-12] [WARN] [1790850599.381200222] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[bt_navigator-11] [WARN] [1790850599.381327823] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[bt_navigator-11] [WARN] [1790850599.381426346] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[planner_server-9] [WARN] [1790850599.381849753] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[python3-4] [WARN] [1790850599.476636884] [school_collision_safe_pose_applier]: BLOCKED wall crossing for event_agent_1: target=(0.445, -7.851)
+[bt_navigator-11] [WARN] [1790850599.485539237] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[behavior_server-12] [WARN] [1790850599.485590706] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[planner_server-9] [WARN] [1790850599.485627513] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[bt_navigator-11] [WARN] [1790850599.594293491] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[controller_server-10] [WARN] [1790850599.594308618] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[planner_server-9] [ERROR] [1790850599.603922061] [transformPoseInTargetFrame]: Extrapolation Error looking up target frame: Lookup would require extrapolation at time 27.120000, but only time 27.500000 is in the buffer, when looking up transform from frame [base_footprint] to frame [map]
+[planner_server-9] 
+[amcl-8] [WARN] [1790850599.697643559] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[behavior_server-12] [WARN] [1790850599.697723388] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[bt_navigator-11] [WARN] [1790850599.698753922] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[controller_server-10] [WARN] [1790850599.815269688] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[bt_navigator-11] [WARN] [1790850599.815894574] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[planner_server-9] [WARN] [1790850599.893387446] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[robot_state_publisher-3] [WARN] [1790850599.894084904] [robot_state_publisher]: Moved backwards in time, re-publishing joint transforms!
+[amcl-8] [WARN] [1790850599.955026750] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[behavior_server-12] [WARN] [1790850599.955152484] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[bt_navigator-11] [WARN] [1790850599.955170931] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[planner_server-9] [WARN] [1790850599.956027191] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[behavior_server-12] [WARN] [1790850600.010245054] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[amcl-8] [WARN] [1790850600.010250325] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[controller_server-10] [WARN] [1790850600.010466682] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[amcl-8] [WARN] [1790850600.030242873] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[behavior_server-12] [WARN] [1790850600.030362580] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[bt_navigator-11] [WARN] [1790850600.030911916] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[planner_server-9] [ERROR] [1790850600.223357882] [transformPoseInTargetFrame]: Connectivity Error looking up target frame: Could not find a connection between 'map' and 'base_footprint' because they are not part of the same tree.Tf has two or more unconnected trees.
+[planner_server-9] 
+[amcl-8] [WARN] [1790850600.244353048] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[robot_state_publisher-3] [WARN] [1790850600.244528441] [robot_state_publisher]: Moved backwards in time, re-publishing joint transforms!
+[bt_navigator-11] [WARN] [1790850600.244657320] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[amcl-8] [INFO] [1790850600.375149586] [amcl]: Message Filter dropping message: frame 'base_scan' at time 27.200 for reason 'the timestamp on the message is earlier than all the data in the transform cache'
+[behavior_server-12] [WARN] [1790850600.469750597] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[amcl-8] [WARN] [1790850600.469945653] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[controller_server-10] [WARN] [1790850600.469955110] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[bt_navigator-11] [WARN] [1790850600.470023982] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[planner_server-9] [WARN] [1790850600.470048700] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[controller_server-10] [WARN] [1790850600.578223837] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[amcl-8] [WARN] [1790850600.578375240] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[bt_navigator-11] [WARN] [1790850600.578382240] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[robot_state_publisher-3] [WARN] [1790850600.578391938] [robot_state_publisher]: Moved backwards in time, re-publishing joint transforms!
+[planner_server-9] [WARN] [1790850600.579027102] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[planner_server-9] [ERROR] [1790850600.624391085] [transformPoseInTargetFrame]: Connectivity Error looking up target frame: Could not find a connection between 'map' and 'base_footprint' because they are not part of the same tree.Tf has two or more unconnected trees.
+[planner_server-9] 
+[bt_navigator-11] [WARN] [1790850600.697744975] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[behavior_server-12] [WARN] [1790850600.697744925] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[amcl-8] [WARN] [1790850600.698527620] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[behavior_server-12] [WARN] [1790850600.828820296] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[bt_navigator-11] [WARN] [1790850600.828840879] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[robot_state_publisher-3] [WARN] [1790850600.828985172] [robot_state_publisher]: Moved backwards in time, re-publishing joint transforms!
+[controller_server-10] [WARN] [1790850600.829418486] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[planner_server-9] [WARN] [1790850600.829687343] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[planner_server-9] [INFO] [1790850600.835503311] [global_costmap.global_costmap]: Message Filter dropping message: frame 'base_scan' at time 27.800 for reason 'the timestamp on the message is earlier than all the data in the transform cache'
+[robot_state_publisher-3] [WARN] [1790850600.946752947] [robot_state_publisher]: Moved backwards in time, re-publishing joint transforms!
+[controller_server-10] [WARN] [1790850600.947276493] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[behavior_server-12] [WARN] [1790850601.000127097] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[planner_server-9] [ERROR] [1790850601.210693846] [transformPoseInTargetFrame]: Extrapolation Error looking up target frame: Lookup would require extrapolation at time 28.360000, but only time 28.700000 is in the buffer, when looking up transform from frame [base_footprint] to frame [map]
+[planner_server-9] 
+[controller_server-10] [WARN] [1790850601.261268743] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[amcl-8] [WARN] [1790850601.261286036] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[behavior_server-12] [WARN] [1790850601.261291795] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[planner_server-9] [WARN] [1790850601.261318258] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[bt_navigator-11] [WARN] [1790850601.261941072] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[planner_server-9] [WARN] [1790850601.402918145] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[behavior_server-12] [WARN] [1790850601.403021759] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[bt_navigator-11] [WARN] [1790850601.403784361] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[planner_server-9] [WARN] [1790850601.525804547] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[bt_navigator-11] [WARN] [1790850601.526361621] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[amcl-8] [WARN] [1790850601.527193747] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[bt_navigator-11] [WARN] [1790850601.527242848] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[behavior_server-12] [WARN] [1790850601.527339606] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[planner_server-9] [WARN] [1790850601.527357171] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[python3-5] [INFO] [1790850601.555831900] [school_pose_sync_monitor]: Gazebo↔RViz pose error=0.015 m (gz=0.01,-7.85; tf=-0.00,-7.85)
+[amcl-8] [WARN] [1790850601.633304959] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[bt_navigator-11] [WARN] [1790850601.633405998] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[bt_navigator-11] [WARN] [1790850601.633638527] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[behavior_server-12] [WARN] [1790850601.633648169] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[planner_server-9] [WARN] [1790850601.633943703] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[controller_server-10] [INFO] [1790850601.652697059] [local_costmap.local_costmap]: Message Filter dropping message: frame 'base_scan' at time 28.400 for reason 'the timestamp on the message is earlier than all the data in the transform cache'
+[planner_server-9] [ERROR] [1790850601.656696628] [transformPoseInTargetFrame]: Connectivity Error looking up target frame: Could not find a connection between 'map' and 'base_footprint' because they are not part of the same tree.Tf has two or more unconnected trees.
+[planner_server-9] 
+[behavior_server-12] [WARN] [1790850602.097543647] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[controller_server-10] [WARN] [1790850602.097586919] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[amcl-8] [WARN] [1790850602.097598450] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[planner_server-9] [WARN] [1790850602.097604769] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[bt_navigator-11] [WARN] [1790850602.097689340] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[planner_server-9] [WARN] [1790850602.159073455] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[behavior_server-12] [WARN] [1790850602.159100940] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[robot_state_publisher-3] [WARN] [1790850602.159127941] [robot_state_publisher]: Moved backwards in time, re-publishing joint transforms!
+[bt_navigator-11] [WARN] [1790850602.159226538] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[planner_server-9] [ERROR] [1790850602.159810853] [transformPoseInTargetFrame]: Connectivity Error looking up target frame: Could not find a connection between 'map' and 'base_footprint' because they are not part of the same tree.Tf has two or more unconnected trees.
+[planner_server-9] 
+[amcl-8] [WARN] [1790850602.267354030] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[bt_navigator-11] [WARN] [1790850602.267363137] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[robot_state_publisher-3] [WARN] [1790850602.398215464] [robot_state_publisher]: Moved backwards in time, re-publishing joint transforms!
+[behavior_server-12] [WARN] [1790850602.398256889] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[amcl-8] [WARN] [1790850602.398430185] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[planner_server-9] [WARN] [1790850602.398901570] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[bt_navigator-11] [WARN] [1790850602.399134130] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[WARNING] [launch]: user interrupted with ctrl-c (SIGINT)
+[amcl-8] [WARN] [1790850602.540009707] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[amcl-8] [INFO] [1790850602.540235172] [rclcpp]: signal_handler(SIGINT/SIGTERM)
+[amcl-8] [INFO] [1790850602.540336353] [amcl]: Running Nav2 LifecycleNode rcl preshutdown (amcl)
+[amcl-8] [INFO] [1790850602.540420303] [amcl]: Deactivating
+[behavior_server-12] [WARN] [1790850602.540111319] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[behavior_server-12] [INFO] [1790850602.540364146] [rclcpp]: signal_handler(SIGINT/SIGTERM)
+[behavior_server-12] [INFO] [1790850602.540463288] [behavior_server]: Running Nav2 LifecycleNode rcl preshutdown (behavior_server)
+[lifecycle_manager-17] [INFO] [1790850602.540101933] [rclcpp]: signal_handler(SIGINT/SIGTERM)
+[lifecycle_manager-17] [INFO] [1790850602.540300942] [lifecycle_manager_navigation]: Running Nav2 LifecycleManager rcl preshutdown (lifecycle_manager_navigation)
+[lifecycle_manager-17] [INFO] [1790850602.540353893] [lifecycle_manager_navigation]: [34m[1mTerminating bond timer...[0m[0m
+[parameter_bridge-2] [INFO] [1790850602.540127887] [rclcpp]: signal_handler(SIGINT/SIGTERM)
+[bt_navigator-11] [INFO] [1790850602.540151060] [rclcpp]: signal_handler(SIGINT/SIGTERM)
+[bt_navigator-11] [INFO] [1790850602.540275986] [bt_navigator]: Running Nav2 LifecycleNode rcl preshutdown (bt_navigator)
+[INFO] [lifecycle_manager-17]: sending signal 'SIGINT' to process[lifecycle_manager-17]
+[INFO] [lifecycle_manager-16]: sending signal 'SIGINT' to process[lifecycle_manager-16]
+[INFO] [goal_pose_bridge.py-15]: sending signal 'SIGINT' to process[goal_pose_bridge.py-15]
+[INFO] [waypoint_follower-13]: sending signal 'SIGINT' to process[waypoint_follower-13]
+[INFO] [behavior_server-12]: sending signal 'SIGINT' to process[behavior_server-12]
+[INFO] [bt_navigator-11]: sending signal 'SIGINT' to process[bt_navigator-11]
+[INFO] [controller_server-10]: sending signal 'SIGINT' to process[controller_server-10]
+[INFO] [planner_server-9]: sending signal 'SIGINT' to process[planner_server-9]
+[INFO] [amcl-8]: sending signal 'SIGINT' to process[amcl-8]
+[INFO] [map_server-7]: sending signal 'SIGINT' to process[map_server-7]
+[INFO] [python3-5]: sending signal 'SIGINT' to process[python3-5]
+[INFO] [python3-4]: sending signal 'SIGINT' to process[python3-4]
+[INFO] [robot_state_publisher-3]: sending signal 'SIGINT' to process[robot_state_publisher-3]
+[INFO] [parameter_bridge-2]: sending signal 'SIGINT' to process[parameter_bridge-2]
+[ERROR] [map_server-7]: process has died [pid 117651, exit code -2, cmd '/opt/ros/jazzy/lib/nav2_map_server/map_server --ros-args -r __node:=map_server --params-file /home/haduckien/nav_ws/src/custom_corridor/worlds/school_arena/demo_1/dataset_v1.0/episodes/ep_000030/nav2_school.yaml --params-file /tmp/launch_params_xwxs_6su'].
+[INFO] [gz-1]: sending signal 'SIGINT' to process[gz-1]
+[controller_server-10] [INFO] [1790850602.540202327] [rclcpp]: signal_handler(SIGINT/SIGTERM)
+[controller_server-10] [INFO] [1790850602.540335586] [controller_server]: Running Nav2 LifecycleNode rcl preshutdown (controller_server)
+[controller_server-10] [INFO] [1790850602.540420806] [controller_server]: Deactivating
+[controller_server-10] [INFO] [1790850602.540483374] [local_costmap.local_costmap]: Deactivating
+[waypoint_follower-13] [INFO] [1790850602.540353171] [rclcpp]: signal_handler(SIGINT/SIGTERM)
+[waypoint_follower-13] [INFO] [1790850602.540490277] [waypoint_follower]: Running Nav2 LifecycleNode rcl preshutdown (waypoint_follower)
+[waypoint_follower-13] [INFO] [1790850602.540567085] [waypoint_follower]: Deactivating
+[waypoint_follower-13] [INFO] [1790850602.540602592] [waypoint_follower]: Destroying bond (waypoint_follower) to lifecycle manager.
+[amcl-8] [INFO] [1790850602.540454355] [amcl]: Destroying bond (amcl) to lifecycle manager.
+[behavior_server-12] [INFO] [1790850602.540540242] [behavior_server]: Deactivating
+[behavior_server-12] [INFO] [1790850602.540581641] [behavior_server]: Destroying bond (behavior_server) to lifecycle manager.
+[ERROR] [amcl-8]: process has died [pid 117652, exit code -2, cmd '/opt/ros/jazzy/lib/nav2_amcl/amcl --ros-args -r __node:=amcl --params-file /home/haduckien/nav_ws/src/custom_corridor/worlds/school_arena/demo_1/dataset_v1.0/episodes/ep_000030/nav2_school.yaml --params-file /tmp/launch_params__higj48f'].
+[bt_navigator-11] [INFO] [1790850602.540403203] [bt_navigator]: Deactivating
+[bt_navigator-11] [INFO] [1790850602.540560304] [bt_navigator]: Destroying bond (bt_navigator) to lifecycle manager.
+[robot_state_publisher-3] [INFO] [1790850602.540636776] [rclcpp]: signal_handler(SIGINT/SIGTERM)
+[lifecycle_manager-16] [INFO] [1790850602.540667230] [rclcpp]: signal_handler(SIGINT/SIGTERM)
+[lifecycle_manager-16] [INFO] [1790850602.540765436] [lifecycle_manager_localization]: Running Nav2 LifecycleManager rcl preshutdown (lifecycle_manager_localization)
+[lifecycle_manager-16] [INFO] [1790850602.540819781] [lifecycle_manager_localization]: [34m[1mTerminating bond timer...[0m[0m
+[planner_server-9] [INFO] [1790850602.541096670] [rclcpp]: signal_handler(SIGINT/SIGTERM)
+[planner_server-9] [INFO] [1790850602.541196287] [planner_server]: Running Nav2 LifecycleNode rcl preshutdown (planner_server)
+[planner_server-9] [INFO] [1790850602.541264257] [planner_server]: Deactivating
+[planner_server-9] [INFO] [1790850602.541298677] [global_costmap.global_costmap]: Deactivating
+[controller_server-10] [WARN] [1790850602.541663172] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[controller_server-10] [INFO] [1790850602.548768667] [controller_server]: Destroying bond (controller_server) to lifecycle manager.
+[map_server-7] [INFO] [1790850602.541771426] [rclcpp]: signal_handler(SIGINT/SIGTERM)
+[map_server-7] [INFO] [1790850602.541940161] [map_server]: Running Nav2 LifecycleNode rcl preshutdown (map_server)
+[map_server-7] [INFO] [1790850602.542024107] [map_server]: Deactivating
+[map_server-7] [INFO] [1790850602.542041396] [map_server]: Destroying bond (map_server) to lifecycle manager.
+[map_server-7] [INFO] [1790850602.553779688] [map_server]: Cleaning up
+[map_server-7] [INFO] [1790850602.553889407] [map_server]: Destroying bond (map_server) to lifecycle manager.
+[ERROR] [goal_pose_bridge.py-15]: process has died [pid 117659, exit code -2, cmd '/home/haduckien/nav_ws/install/custom_corridor/lib/custom_corridor/goal_pose_bridge.py --ros-args -r __node:=goal_pose_bridge --params-file /tmp/launch_params_eyud2dex'].
+[amcl-8] [INFO] [1790850602.551089133] [amcl]: Cleaning up
+[bt_navigator-11] [INFO] [1790850602.551317746] [bt_navigator]: Cleaning up
+[waypoint_follower-13] [INFO] [1790850602.551733674] [waypoint_follower]: Cleaning up
+[behavior_server-12] [INFO] [1790850602.552065900] [behavior_server]: Cleaning up
+[controller_server-10] [INFO] [1790850602.560277835] [controller_server]: Cleaning up
+[controller_server-10] [INFO] [1790850602.560521140] [local_costmap.local_costmap]: Cleaning up
+[behavior_server-12] [INFO] [1790850602.566143488] [behavior_server]: Destroying bond (behavior_server) to lifecycle manager.
+[amcl-8] [INFO] [1790850602.567446157] [amcl]: Destroying bond (amcl) to lifecycle manager.
+[behavior_server-12] [INFO] [1790850602.573655453] [rclcpp]: signal_handler(SIGINT/SIGTERM)
+[map_server-7] [INFO] [1790850602.577670531] [map_server]: Destroying
+[lifecycle_manager-16] [INFO] [1790850602.583605473] [rclcpp]: signal_handler(SIGINT/SIGTERM)
+[lifecycle_manager-16] [INFO] [1790850602.587712348] [lifecycle_manager_localization]: Destroying lifecycle_manager_localization
+[waypoint_follower-13] [INFO] [1790850602.588930820] [waypoint_follower]: Destroying bond (waypoint_follower) to lifecycle manager.
+[python3-4] Error in sys.excepthook:
+[python3-4] Traceback (most recent call last):
+[python3-4]   File "/usr/lib/python3/dist-packages/apport_python_hook.py", line 227, in partial_apport_excepthook
+[robot_state_publisher-3] [INFO] [1790850602.591582149] [rclcpp]: signal_handler(SIGINT/SIGTERM)
+[waypoint_follower-13] [INFO] [1790850602.591812123] [rclcpp]: signal_handler(SIGINT/SIGTERM)
+[python3-4]     def partial_apport_excepthook(exc_type, exc_obj, exc_tb):
+[python3-4] 
+[python3-4] KeyboardInterrupt
+[python3-4] 
+[python3-4] Original exception was:
+[python3-4] Traceback (most recent call last):
+[python3-4]   File "/home/haduckien/nav_ws/src/custom_corridor/worlds/school_arena/demo_1/collision_safe_pose_applier.py", line 238, in <module>
+[python3-4]     main()
+[python3-4]   File "/home/haduckien/nav_ws/src/custom_corridor/worlds/school_arena/demo_1/collision_safe_pose_applier.py", line 228, in main
+[python3-4]     rclpy.spin(node)
+[python3-4]   File "/opt/ros/jazzy/lib/python3.12/site-packages/rclpy/__init__.py", line 247, in spin
+[python3-4]     executor.spin_once()
+[python3-4]   File "/opt/ros/jazzy/lib/python3.12/site-packages/rclpy/executors.py", line 926, in spin_once
+[python3-4]     self._spin_once_impl(timeout_sec)
+[python3-4]   File "/opt/ros/jazzy/lib/python3.12/site-packages/rclpy/executors.py", line 918, in _spin_once_impl
+[python3-4]     raise handler.exception()
+[python3-4]   File "/opt/ros/jazzy/lib/python3.12/site-packages/rclpy/task.py", line 286, in _execute_coroutine_step
+[python3-4]     result = coro.send(None)
+[python3-4]              ^^^^^^^^^^^^^^^
+[python3-4]   File "/opt/ros/jazzy/lib/python3.12/site-packages/rclpy/executors.py", line 584, in handler
+[python3-4]     call_coroutine = take_from_wait_list(entity)
+[python3-4]                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[python3-4]   File "/opt/ros/jazzy/lib/python3.12/site-packages/rclpy/executors.py", line 470, in _take_subscription
+[python3-4]     msg_info = sub.handle.take_message(sub.msg_type, sub.raw)
+[python3-4]                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[python3-4] RuntimeError: Unable to convert call argument '0' to Python object (#define PYBIND11_DETAILED_ERROR_MESSAGES or compile in debug mode for details)
+[parameter_bridge-2] [INFO] [1790850602.595599929] [rclcpp]: signal_handler(SIGINT/SIGTERM)
+[python3-5] Traceback (most recent call last):
+[python3-5]   File "/home/haduckien/nav_ws/src/custom_corridor/worlds/school_arena/demo_1/pose_sync_monitor.py", line 161, in <module>
+[python3-5]     main()
+[python3-5]   File "/home/haduckien/nav_ws/src/custom_corridor/worlds/school_arena/demo_1/pose_sync_monitor.py", line 155, in main
+[python3-5]     node.destroy_node()
+[python3-5]   File "/opt/ros/jazzy/lib/python3.12/site-packages/rclpy/node.py", line 1968, in destroy_node
+[python3-5]     self.__node.destroy_when_not_in_use()
+[python3-5] KeyboardInterrupt
+[behavior_server-12] [INFO] [1790850602.601420728] [behavior_server]: Destroying
+[waypoint_follower-13] [INFO] [1790850602.607395174] [waypoint_follower]: Destroying
+[controller_server-10] [INFO] [1790850602.619930920] [controller_server]: Destroying bond (controller_server) to lifecycle manager.
+[controller_server-10] [INFO] [1790850602.622994146] [rclcpp]: signal_handler(SIGINT/SIGTERM)
+[lifecycle_manager-17] [INFO] [1790850602.624112447] [rclcpp]: signal_handler(SIGINT/SIGTERM)
+[controller_server-10] [INFO] [1790850602.626819591] [local_costmap.local_costmap]: Destroying
+[lifecycle_manager-17] [INFO] [1790850602.627915248] [lifecycle_manager_navigation]: Destroying lifecycle_manager_navigation
+[controller_server-10] [INFO] [1790850602.642252722] [controller_server]: Destroying
+[bt_navigator-11] [INFO] [1790850602.674167692] [bt_navigator]: Completed Cleaning up
+[bt_navigator-11] [INFO] [1790850602.674284307] [bt_navigator]: Destroying bond (bt_navigator) to lifecycle manager.
+[bt_navigator-11] [INFO] [1790850602.674992343] [rclcpp]: signal_handler(SIGINT/SIGTERM)
+[INFO] [parameter_bridge-2]: process has finished cleanly [pid 117092]
+[bt_navigator-11] [INFO] [1790850602.686979201] [bt_navigator]: Destroying
+[INFO] [robot_state_publisher-3]: process has finished cleanly [pid 117093]
+[ERROR] [python3-5]: process has died [pid 117095, exit code -2, cmd 'python3 /home/haduckien/nav_ws/src/custom_corridor/worlds/school_arena/demo_1/pose_sync_monitor.py --ros-args -p use_sim_time:=true -p robot_name:=robot -p world_frame:=map -p initial_x:=0.0 -p initial_y:=-7.85'].
+[INFO] [lifecycle_manager-16]: process has finished cleanly [pid 117862]
+[INFO] [behavior_server-12]: process has finished cleanly [pid 117656]
+[INFO] [waypoint_follower-13]: process has finished cleanly [pid 117657]
+[INFO] [lifecycle_manager-17]: process has finished cleanly [pid 117959]
+[INFO] [controller_server-10]: process has finished cleanly [pid 117654]
+[INFO] [bt_navigator-11]: process has finished cleanly [pid 117655]
+[ERROR] [python3-4]: process has died [pid 117094, exit code 1, cmd 'python3 /home/haduckien/nav_ws/src/custom_corridor/worlds/school_arena/demo_1/collision_safe_pose_applier.py --ros-args -p use_sim_time:=true -p world_name:=school_arena -p target_topic:=/school_hunav/target_poses -p map_yaml:=/home/haduckien/nav_ws/src/custom_corridor/worlds/school_arena/demo_1/map.yaml -p agent_radius:=0.22 -p apply_hz:=20.0 -p ground_z:=0.0'].
+[ERROR] [planner_server-9]: process[planner_server-9] failed to terminate '5' seconds after receiving 'SIGINT', escalating to 'SIGTERM'
+[INFO] [planner_server-9]: sending signal 'SIGTERM' to process[planner_server-9]
+[ERROR] [gz-1]: process[gz-1] failed to terminate '5' seconds after receiving 'SIGINT', escalating to 'SIGTERM'
+[INFO] [gz-1]: sending signal 'SIGTERM' to process[gz-1]

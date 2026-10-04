@@ -21,10 +21,10 @@
       <!-- In a narrow corridor, yield briefly when the robot violates the
            pedestrian's personal space.  AvoidRobot is a native HuNav node. -->
       <Sequence name="YieldToCloseRobot">
-        <IsRobotClose agent_id="{id}" threshold="0.95"/>
+        <IsRobotClose agent_id="{id}" threshold="1.30"/>
         <AvoidRobot agent_id="{id}" time_step="{dt}"
-                    safe_distance="1.10" runaway_vel="0.75"
-                    duration="0.80"/>
+                    safe_distance="1.20" runaway_vel="0.65"
+                    duration="1.00"/>
       </Sequence>
       <Sequence name="NormalSocialForceNavigation">
         <SetBlackboard output_key="agentid" value="{id}"/>

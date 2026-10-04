@@ -13,6 +13,7 @@ from rclpy.node import Node
 from ros_gz_interfaces.msg import Entity
 from ros_gz_interfaces.srv import SetEntityPose
 from tf2_msgs.msg import TFMessage
+from geometry_msgs.msg import PoseStamped
 
 
 class OccupancyGuard:
@@ -96,6 +97,13 @@ class CollisionSafePoseApplier(Node):
         self.pending_pose = {}
         self.blocked_count = {}
         self.last_wait_log = 0.0
+        self.declare_parameter("robot_safe_distance", 0.45)
+        self.declare_parameter("human_safe_distance", 0.35)
+        self.robot_safe_dist = float(self.get_parameter("robot_safe_distance").value)
+        self.human_safe_dist = float(self.get_parameter("human_safe_distance").value)
+        self.robot_pose = None
+        self.create_subscription(PoseStamped, "/demo/gazebo_robot_pose", self._robot_pose_cb, 10)
+
         service = f"/world/{world}/set_pose"
         self.create_subscription(TFMessage, topic, self._target_cb, 10)
         self.client = self.create_client(SetEntityPose, service)
@@ -103,6 +111,10 @@ class CollisionSafePoseApplier(Node):
         self.get_logger().info(
             f"Wall guard active: map={map_yaml}, radius={radius:.2f} m, topic={topic}"
         )
+
+    
+    def _robot_pose_cb(self, msg: PoseStamped) -> None:
+        self.robot_pose = (msg.pose.position.x, msg.pose.position.y)
 
     def _target_cb(self, msg: TFMessage) -> None:
         for target in msg.transforms:
@@ -153,8 +165,38 @@ class CollisionSafePoseApplier(Node):
             target = (transform.translation.x, transform.translation.y)
             previous = self.current.get(name)
             safe = self.guard.pose_is_free(*target)
+
             if previous is not None:
                 safe = safe and self.guard.segment_is_free(previous, target)
+            
+            # Check overlap with robot
+            if safe and self.robot_pose is not None:
+                d_robot = math.hypot(target[0] - self.robot_pose[0], target[1] - self.robot_pose[1])
+                if d_robot < self.robot_safe_dist:
+                    safe = False
+                    count = self.blocked_count.get(name, 0) + 1
+                    self.blocked_count[name] = count
+                    if count == 1 or count % 50 == 0:
+                        self.get_logger().warn(
+                            f"BLOCKED robot collision for {name}: d={d_robot:.2f}m < {self.robot_safe_dist:.2f}m"
+                        )
+            
+            # Check overlap with other humans
+            if safe:
+                for other_name, other_pose in self.current.items():
+                    if other_name == name:
+                        continue
+                    d_human = math.hypot(target[0] - other_pose[0], target[1] - other_pose[1])
+                    if d_human < self.human_safe_dist:
+                        safe = False
+                        count = self.blocked_count.get(name, 0) + 1
+                        self.blocked_count[name] = count
+                        if count == 1 or count % 50 == 0:
+                            self.get_logger().warn(
+                                f"BLOCKED human-human collision {name} <-> {other_name}: d={d_human:.2f}m"
+                            )
+                        break
+
             if not safe:
                 count = self.blocked_count.get(name, 0) + 1
                 self.blocked_count[name] = count

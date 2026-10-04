@@ -162,7 +162,7 @@ class SchoolHuNavBridge(Node):
         self.declare_parameter('max_yaw_rate', 2.5)
         # 0.45 m lets a pedestrian sidestep a bin or bench while the hard AABB
         # guard below still prevents crossing corridor walls.
-        self.declare_parameter('route_half_width', 0.45)
+        self.declare_parameter('route_half_width', 0.55)
         self.declare_parameter('target_topic', '/school_hunav/target_poses')
 
         self.world_name = self.get_parameter('world_name').value

@@ -1,0 +1,1103 @@
+[INFO] [1790849785.258127717] [hunav_agent_manager]: Initializing hunav_agent_manager node...
+[INFO] [1790849785.262496349] [hunav_agent_manager]: Waiting for hunav_loader get_parameters service...
+[INFO] [1790849785.347486036] [hunav_agent_manager]: Loaded global goal 1 → (5.000, -8.150)
+[INFO] [1790849785.347524887] [hunav_agent_manager]: Loaded global goal 2 → (2.600, -8.150)
+[INFO] [1790849785.347530499] [hunav_agent_manager]: Loaded global goal 3 → (0.000, -7.850)
+[INFO] [1790849785.347535559] [hunav_agent_manager]: Loaded global goal 4 → (-2.000, -8.180)
+[INFO] [1790849785.347543947] [hunav_agent_manager]: Loaded global goal 5 → (-5.000, -8.150)
+[INFO] [1790849785.347549232] [hunav_agent_manager]: Loaded global goal 6 → (-10.000, -7.850)
+[INFO] [1790849785.347554852] [hunav_agent_manager]: Loaded global goal 7 → (-14.000, -8.150)
+[INFO] [1790849785.347559429] [hunav_agent_manager]: Loaded global goal 8 → (14.100, 6.010)
+[INFO] [1790849785.347567499] [hunav_agent_manager]: Loaded global goal 9 → (14.400, 6.010)
+[INFO] [1790849785.347573126] [hunav_agent_manager]: Loaded global goal 10 → (15.000, 6.010)
+[INFO] [1790849785.347578672] [hunav_agent_manager]: Loaded global goal 11 → (15.000, 8.000)
+[INFO] [1790849785.347588867] [hunav_agent_manager]: Loaded global goal 12 → (15.000, 3.500)
+[INFO] [1790849785.347593204] [hunav_agent_manager]: Loaded global goal 13 → (15.000, 2.550)
+[INFO] [1790849785.347598809] [hunav_agent_manager]: Loaded global goal 14 → (15.000, 1.940)
+[INFO] [1790849785.347607513] [hunav_agent_manager]: Loaded global goal 15 → (15.600, 1.940)
+[INFO] [1790849785.347620036] [hunav_agent_manager]: Loaded global goal 16 → (15.900, 1.940)
+[INFO] [1790849785.347625992] [hunav_agent_manager]: Loaded global goal 17 → (17.600, 2.833)
+[INFO] [1790849785.347630614] [hunav_agent_manager]: Successfully retrieved parameters from hunav_loader
+[INFO] [1790849785.347643364] [hunav_agent_manager]: Parameters from loader: map=school_arena, simulator=Gazebo Fortress, yaml_base_name=scenario_head_on_low_1201109388, publish_people=true
+[INFO] [1790849785.347815924] [hunav_agent_manager]: Found ROS2 package 'hunav_gazebo_fortress_wrapper', behavior trees will be loaded from: /home/hunav_gz_fortress_ws/src/hunav_gazebo_fortress_wrapper/behavior_trees
+[INFO] [1790849785.348205553] [hunav_agent_manager]: BT nodes registered
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+[INFO] [1790849786.444619008] [hunav_agent_manager]: First service call received!
+[INFO] [1790849786.444682772] [hunav_agent_manager]: robot pose x:15.15, y:12.00, th:-1.57
+[INFO] [1790849786.444697914] [hunav_agent_manager]: Agents received: 2
+[INFO] [1790849786.444707470] [hunav_agent_manager]: Initializing Behavior Trees of 2 agents...
+[INFO] [1790849786.444719260] [hunav_agent_manager]: Initializing Behavior tree of Agent event_agent_1, id: 1
+[INFO] [1790849786.444779581] [hunav_agent_manager]: Loading BT file: /home/hunav_gz_fortress_ws/src/hunav_gazebo_fortress_wrapper/behavior_trees/scenario_head_on_low_1201109388__agent_1_bt.xml
+[INFO] [1790849786.447146829] [hunav_agent_manager]: Behavior Tree for agent event_agent_1 [id:1] loaded!
+	robot -1, x:15.15, y:12.00
+SFM Robot initialized
+Initializing SFM Agents...
+	agent event_agent_1, x:10.00, y:-8.20, th:-3.14
+	agent background_agent_1, x:12.40, y:6.95, th:-0.51
+SFM Agents initialized
+----------------
+SchoolPedestrianFallback
+   YieldToCloseRobot
+      IsRobotClose
+      AvoidRobot
+   NormalSocialForceNavigation
+      SetBlackboard
+      SetBlackboard
+      RegularNavTree
+         RegularNavFallback
+            RegularNavigation
+               Inverter
+                  IsGoalReached
+               RegularNav
+            UpdateGoal
+----------------
+[INFO] [1790849786.447257559] [hunav_agent_manager]: Initializing Behavior tree of Agent background_agent_1, id: 2
+[INFO] [1790849786.447291953] [hunav_agent_manager]: Loading BT file: /home/hunav_gz_fortress_ws/src/hunav_gazebo_fortress_wrapper/behavior_trees/scenario_head_on_low_1201109388__agent_2_bt.xml
+[INFO] [1790849786.447685979] [hunav_agent_manager]: Behavior Tree for agent background_agent_1 [id:2] loaded!
+----------------
+SchoolPedestrianFallback
+   YieldToCloseRobot
+      IsRobotClose
+      AvoidRobot
+   NormalSocialForceNavigation
+      SetBlackboard
+      SetBlackboard
+      RegularNavTree
+         RegularNavFallback
+            RegularNavigation
+               Inverter
+                  IsGoalReached
+               RegularNav
+            UpdateGoal
+----------------
+[INFO] [1790849786.447732206] [hunav_agent_manager]: Behavior trees succesfully initiated!
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+[INFO] [1790849804.620301588] [rclcpp]: signal_handler(SIGINT/SIGTERM)
+cannot publish data, at ./src/rmw_publish.cpp:62 during '__function__'
+[ERROR] [1790849804.755701961] [agent_say_node.rclcpp]: Error in destruction of rcl subscription handle: Failed to delete datareader, at ./src/subscription.cpp:52, at ./src/rcl/subscription.c:184
+hunav_agent_manager: tpp.c:83: __pthread_tpp_change_priority: Assertion `new_prio == -1 || (new_prio >= fifo_min_prio && new_prio <= fifo_max_prio)' failed.
+[ros2run]: Aborted
+[INFO] [1790850766.622470978] [hunav_agent_manager]: Initializing hunav_agent_manager node...
+[INFO] [1790850766.625800821] [hunav_agent_manager]: Waiting for hunav_loader get_parameters service...
+[INFO] [1790850766.707383146] [hunav_agent_manager]: Loaded global goal 1 → (5.000, -8.150)
+[INFO] [1790850766.707411084] [hunav_agent_manager]: Loaded global goal 2 → (2.600, -8.150)
+[INFO] [1790850766.707415853] [hunav_agent_manager]: Loaded global goal 3 → (0.000, -7.850)
+[INFO] [1790850766.707419156] [hunav_agent_manager]: Loaded global goal 4 → (-2.000, -8.180)
+[INFO] [1790850766.707426075] [hunav_agent_manager]: Loaded global goal 5 → (-5.000, -8.150)
+[INFO] [1790850766.707429363] [hunav_agent_manager]: Loaded global goal 6 → (-10.000, -7.850)
+[INFO] [1790850766.707433781] [hunav_agent_manager]: Loaded global goal 7 → (-14.000, -8.150)
+[INFO] [1790850766.707436994] [hunav_agent_manager]: Loaded global goal 8 → (14.100, 6.010)
+[INFO] [1790850766.707440524] [hunav_agent_manager]: Loaded global goal 9 → (14.400, 6.010)
+[INFO] [1790850766.707444021] [hunav_agent_manager]: Loaded global goal 10 → (15.000, 6.010)
+[INFO] [1790850766.707447376] [hunav_agent_manager]: Loaded global goal 11 → (15.000, 8.000)
+[INFO] [1790850766.707450615] [hunav_agent_manager]: Loaded global goal 12 → (15.000, 3.500)
+[INFO] [1790850766.707453763] [hunav_agent_manager]: Loaded global goal 13 → (15.000, 2.550)
+[INFO] [1790850766.707456914] [hunav_agent_manager]: Loaded global goal 14 → (15.000, 1.940)
+[INFO] [1790850766.707460219] [hunav_agent_manager]: Loaded global goal 15 → (15.600, 1.940)
+[INFO] [1790850766.707463533] [hunav_agent_manager]: Loaded global goal 16 → (15.900, 1.940)
+[INFO] [1790850766.707471408] [hunav_agent_manager]: Loaded global goal 17 → (17.600, 2.833)
+[INFO] [1790850766.707474717] [hunav_agent_manager]: Successfully retrieved parameters from hunav_loader
+[INFO] [1790850766.707481875] [hunav_agent_manager]: Parameters from loader: map=school_arena, simulator=Gazebo Fortress, yaml_base_name=scenario_head_on_low_1201109388, publish_people=true
+[INFO] [1790850766.707619959] [hunav_agent_manager]: Found ROS2 package 'hunav_gazebo_fortress_wrapper', behavior trees will be loaded from: /home/hunav_gz_fortress_ws/src/hunav_gazebo_fortress_wrapper/behavior_trees
+[INFO] [1790850766.707995345] [hunav_agent_manager]: BT nodes registered
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+[INFO] [1790850767.712697878] [hunav_agent_manager]: First service call received!
+[INFO] [1790850767.712749832] [hunav_agent_manager]: robot pose x:15.15, y:12.00, th:-1.57
+[INFO] [1790850767.712762732] [hunav_agent_manager]: Agents received: 2
+[INFO] [1790850767.712774151] [hunav_agent_manager]: Initializing Behavior Trees of 2 agents...
+[INFO] [1790850767.712787164] [hunav_agent_manager]: Initializing Behavior tree of Agent event_agent_1, id: 1
+[INFO] [1790850767.712868626] [hunav_agent_manager]: Loading BT file: /home/hunav_gz_fortress_ws/src/hunav_gazebo_fortress_wrapper/behavior_trees/scenario_head_on_low_1201109388__agent_1_bt.xml
+[INFO] [1790850767.715231428] [hunav_agent_manager]: Behavior Tree for agent event_agent_1 [id:1] loaded!
+	robot -1, x:15.15, y:12.00
+SFM Robot initialized
+Initializing SFM Agents...
+	agent event_agent_1, x:10.00, y:-8.20, th:-3.14
+	agent background_agent_1, x:12.40, y:6.95, th:-0.51
+SFM Agents initialized
+----------------
+SchoolPedestrianFallback
+   YieldToCloseRobot
+      IsRobotClose
+      AvoidRobot
+   NormalSocialForceNavigation
+      SetBlackboard
+      SetBlackboard
+      RegularNavTree
+         RegularNavFallback
+            RegularNavigation
+               Inverter
+                  IsGoalReached
+               RegularNav
+            UpdateGoal
+----------------
+[INFO] [1790850767.715369146] [hunav_agent_manager]: Initializing Behavior tree of Agent background_agent_1, id: 2
+[INFO] [1790850767.715411162] [hunav_agent_manager]: Loading BT file: /home/hunav_gz_fortress_ws/src/hunav_gazebo_fortress_wrapper/behavior_trees/scenario_head_on_low_1201109388__agent_2_bt.xml
+[INFO] [1790850767.715828642] [hunav_agent_manager]: Behavior Tree for agent background_agent_1 [id:2] loaded!
+----------------
+SchoolPedestrianFallback
+   YieldToCloseRobot
+      IsRobotClose
+      AvoidRobot
+   NormalSocialForceNavigation
+      SetBlackboard
+      SetBlackboard
+      RegularNavTree
+         RegularNavFallback
+            RegularNavigation
+               Inverter
+                  IsGoalReached
+               RegularNav
+            UpdateGoal
+----------------
+[INFO] [1790850767.715869227] [hunav_agent_manager]: Behavior trees succesfully initiated!
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+[INFO] [1790850833.568477850] [rclcpp]: signal_handler(SIGINT/SIGTERM)
+cannot publish data, at ./src/rmw_publish.cpp:62 during '__function__'
+[ERROR] [1790850833.707417567] [agent_say_node.rclcpp]: Error in destruction of rcl subscription handle: Failed to delete datareader, at ./src/subscription.cpp:52, at ./src/rcl/subscription.c:184
+Failed to delete datawriter, at ./src/publisher.cpp:48 during '__function__'
+[ERROR] [1790850833.707465140] [agent_say_node.rclcpp]: Error in destruction of rcl publisher handle: cannot publish data, at ./src/rmw_publish.cpp:62, at ./src/rcl/publisher.c:187
+cannot publish data, at ./src/rmw_publish.cpp:62 during '__function__'
+[ERROR] [1790850833.707490227] [agent_say_node.rclcpp]: Error in destruction of rcl subscription handle: Failed to delete datareader, at ./src/subscription.cpp:52, at ./src/rcl/subscription.c:184
+cannot publish data, at ./src/rmw_publish.cpp:62 during '__function__'
+Fail in delete datareader, at ./src/rmw_service.cpp:104 during '__function__'
+[ros2run]: Segmentation fault

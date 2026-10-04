@@ -1,0 +1,26 @@
+[INFO] [1790850193.944689432] [hunav_agent_manager]: Initializing hunav_agent_manager node...
+[INFO] [1790850193.945817606] [hunav_agent_manager]: Waiting for hunav_loader get_parameters service...
+[INFO] [1790850194.010143639] [hunav_agent_manager]: Loaded global goal 1 → (1.170, -7.100)
+[INFO] [1790850194.010185836] [hunav_agent_manager]: Loaded global goal 2 → (1.170, -7.400)
+[INFO] [1790850194.010198817] [hunav_agent_manager]: Loaded global goal 3 → (1.170, -8.150)
+[INFO] [1790850194.010209697] [hunav_agent_manager]: Loaded global goal 4 → (0.000, -7.850)
+[INFO] [1790850194.010224993] [hunav_agent_manager]: Loaded global goal 5 → (1.170, -8.150)
+[INFO] [1790850194.010235394] [hunav_agent_manager]: Loaded global goal 6 → (1.170, -8.600)
+[INFO] [1790850194.010245337] [hunav_agent_manager]: Loaded global goal 7 → (1.170, -8.900)
+[INFO] [1790850194.010255311] [hunav_agent_manager]: Loaded global goal 8 → (2.150, -10.600)
+[INFO] [1790850194.010265770] [hunav_agent_manager]: Successfully retrieved parameters from hunav_loader
+[INFO] [1790850194.010277337] [hunav_agent_manager]: Parameters from loader: map=school_arena, simulator=Gazebo Fortress, yaml_base_name=scenario_crossing_low_1268087856, publish_people=true
+[INFO] [1790850194.010466366] [hunav_agent_manager]: Found ROS2 package 'hunav_gazebo_fortress_wrapper', behavior trees will be loaded from: /home/hunav_gz_fortress_ws/src/hunav_gazebo_fortress_wrapper/behavior_trees
+[INFO] [1790850194.011010056] [hunav_agent_manager]: BT nodes registered
+sequence size exceeds remaining buffer
+sequence size exceeds remaining buffer
+[INFO] [1790850195.098255687] [rclcpp]: signal_handler(SIGINT/SIGTERM)
+cannot publish data, at ./src/rmw_publish.cpp:62 during '__function__'
+[ERROR] [1790850195.207621102] [agent_say_node.rclcpp]: Error in destruction of rcl subscription handle: Failed to delete datareader, at ./src/subscription.cpp:52, at ./src/rcl/subscription.c:184
+Failed to delete datawriter, at ./src/publisher.cpp:48 during '__function__'
+[ERROR] [1790850195.207655646] [agent_say_node.rclcpp]: Error in destruction of rcl publisher handle: cannot publish data, at ./src/rmw_publish.cpp:62, at ./src/rcl/publisher.c:187
+cannot publish data, at ./src/rmw_publish.cpp:62 during '__function__'
+[ERROR] [1790850195.207678536] [agent_say_node.rclcpp]: Error in destruction of rcl subscription handle: Failed to delete datareader, at ./src/subscription.cpp:52, at ./src/rcl/subscription.c:184
+cannot publish data, at ./src/rmw_publish.cpp:62 during '__function__'
+Fail in delete datareader, at ./src/rmw_service.cpp:104 during '__function__'
+[ros2run]: Segmentation fault

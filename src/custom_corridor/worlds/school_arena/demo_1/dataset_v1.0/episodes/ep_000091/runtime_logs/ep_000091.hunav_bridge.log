@@ -1,0 +1,26 @@
+Traceback (most recent call last):
+  File "/tmp/school_arena/hunav_gz8_school_bridge.py", line 11, in <module>
+    from rclpy.node import Node
+  File "/opt/ros/humble/local/lib/python3.10/dist-packages/rclpy/node.py", line 75, in <module>
+    from rclpy.time_source import TimeSource
+  File "/opt/ros/humble/local/lib/python3.10/dist-packages/rclpy/time_source.py", line 24, in <module>
+    import rosgraph_msgs.msg
+  File "/opt/ros/humble/local/lib/python3.10/dist-packages/rosgraph_msgs/msg/__init__.py", line 9, in <module>
+    from rosgraph_msgs.msg._type_hash import TypeHash  # noqa: F401
+  File "/opt/ros/humble/local/lib/python3.10/dist-packages/rosgraph_msgs/msg/_type_hash.py", line 11, in <module>
+    import numpy  # noqa: E402, I100
+  File "/usr/local/lib/python3.10/dist-packages/numpy/__init__.py", line 114, in <module>
+    from numpy.__config__ import show_config
+  File "/usr/local/lib/python3.10/dist-packages/numpy/__config__.py", line 4, in <module>
+    from numpy._core._multiarray_umath import (
+  File "/usr/local/lib/python3.10/dist-packages/numpy/_core/__init__.py", line 100, in <module>
+    from . import _internal
+  File "/usr/local/lib/python3.10/dist-packages/numpy/_core/_internal.py", line 140, in <module>
+    format_re = re.compile(r'(?P<order1>[<>|=]?)'
+  File "/usr/lib/python3.10/re.py", line 251, in compile
+    return _compile(pattern, flags)
+  File "/usr/lib/python3.10/re.py", line 304, in _compile
+    if not (flags & DEBUG):
+  File "/usr/lib/python3.10/enum.py", line 987, in __and__
+    if not isinstance(other, (self.__class__, int)):
+KeyboardInterrupt

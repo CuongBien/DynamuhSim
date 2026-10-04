@@ -1,0 +1,267 @@
+[INFO] [launch]: All log files can be found below /home/haduckien/.ros/log/2026-10-01-17-23-12-542709-Raccoon2005-102229
+[INFO] [launch]: Default logging verbosity is set to INFO
+[INFO] [gz-1]: process started with pid [102544]
+[INFO] [parameter_bridge-2]: process started with pid [102545]
+[INFO] [robot_state_publisher-3]: process started with pid [102546]
+[INFO] [python3-4]: process started with pid [102547]
+[INFO] [python3-5]: process started with pid [102548]
+[robot_state_publisher-3] [INFO] [1790850192.674465815] [robot_state_publisher]: Robot initialized
+[python3-4] [INFO] [1790850193.084334918] [school_collision_safe_pose_applier]: Wall guard active: map=/home/haduckien/nav_ws/src/custom_corridor/worlds/school_arena/demo_1/map.yaml, radius=0.22 m, topic=/school_hunav/target_poses
+[python3-5] [INFO] [1790850193.118378137] [school_pose_sync_monitor]: Gazebo/RViz sync monitor active: orange pose=/demo/gazebo_robot_pose
+[gz-1] [1;33mWarning [Utils.cc:132][0m [/sdf/world[@name="school_arena"]/model[@name="robot"]/link[@name="base_scan"]/sensor[@name="hls_lfcd_lds"]/gz_frame_id:/home/haduckien/nav_ws/src/custom_corridor/worlds/school_arena/demo_1/dataset_v1.0/episodes/ep_000091/runtime_logs/ep_000091.contact.world:L3545]: XML Element[gz_frame_id], child of element[sensor], not defined in SDF. Copying[gz_frame_id] as children of [sensor].
+[parameter_bridge-2] [INFO] [1790850193.698667032] [ros_gz_bridge]: Creating GZ->ROS Bridge: [/clock (gz.msgs.Clock) -> /clock (rosgraph_msgs/msg/Clock)] (Lazy 0)
+[parameter_bridge-2] [INFO] [1790850193.700040973] [ros_gz_bridge]: Creating GZ->ROS Bridge: [/joint_states (gz.msgs.Model) -> /joint_states (sensor_msgs/msg/JointState)] (Lazy 0)
+[parameter_bridge-2] [INFO] [1790850193.702436041] [ros_gz_bridge]: Creating GZ->ROS Bridge: [/odom (gz.msgs.Odometry) -> /odom (nav_msgs/msg/Odometry)] (Lazy 0)
+[parameter_bridge-2] [INFO] [1790850193.705345407] [ros_gz_bridge]: Creating GZ->ROS Bridge: [/tf (gz.msgs.Pose_V) -> /tf (tf2_msgs/msg/TFMessage)] (Lazy 0)
+[parameter_bridge-2] [INFO] [1790850193.706932083] [ros_gz_bridge]: Creating GZ->ROS Bridge: [/scan (gz.msgs.LaserScan) -> /scan (sensor_msgs/msg/LaserScan)] (Lazy 0)
+[parameter_bridge-2] [INFO] [1790850193.708045071] [ros_gz_bridge]: Creating ROS->GZ Bridge: [/cmd_vel (geometry_msgs/msg/TwistStamped) -> /cmd_vel (gz.msgs.Twist)] (Lazy 0)
+[parameter_bridge-2] [INFO] [1790850193.709253925] [ros_gz_bridge]: Creating GZ->ROS Bridge: [/world/school_arena/dynamic_pose/info (gz.msgs.Pose_V) -> /world/school_arena/dynamic_pose/info (tf2_msgs/msg/TFMessage)] (Lazy 0)
+[parameter_bridge-2] [INFO] [1790850193.710088140] [ros_gz_bridge]: Creating ROS->GZ service bridge [/world/school_arena/set_pose (ros_gz_interfaces/srv/SetEntityPose -> gz.msgs.Pose/gz.msgs.Boolean)]
+[parameter_bridge-2] [INFO] [1790850193.711062285] [ros_gz_bridge]: Creating ROS->GZ service bridge [/world/school_arena/control (ros_gz_interfaces/srv/ControlWorld -> gz.msgs.WorldControl/gz.msgs.Boolean)]
+[parameter_bridge-2] [INFO] [1790850193.711449777] [ros_gz_bridge]: Creating GZ->ROS Bridge: [/robot/camera/image_raw (gz.msgs.Image) -> /robot/camera/image_raw (sensor_msgs/msg/Image)] (Lazy 0)
+[INFO] [python3-6]: process started with pid [103255]
+[python3-6] [INFO] [1790850196.435265063] [school_wait_for_robot_tf]: Robot odom/TF and simulation clock ready
+[INFO] [python3-6]: process has finished cleanly [pid 103255]
+[INFO] [map_server-7]: process started with pid [103286]
+[INFO] [amcl-8]: process started with pid [103287]
+[INFO] [planner_server-9]: process started with pid [103288]
+[INFO] [controller_server-10]: process started with pid [103289]
+[INFO] [bt_navigator-11]: process started with pid [103290]
+[INFO] [behavior_server-12]: process started with pid [103291]
+[INFO] [waypoint_follower-13]: process started with pid [103292]
+[INFO] [python3-14]: process started with pid [103293]
+[INFO] [goal_pose_bridge.py-15]: process started with pid [103294]
+[behavior_server-12] [INFO] [1790850196.679496548] [behavior_server]: 
+[behavior_server-12] 	behavior_server lifecycle node launched. 
+[behavior_server-12] 	Waiting on external lifecycle transitions to activate
+[behavior_server-12] 	See https://design.ros2.org/articles/node_lifecycle.html for more information.
+[waypoint_follower-13] [INFO] [1790850196.688704078] [waypoint_follower]: 
+[waypoint_follower-13] 	waypoint_follower lifecycle node launched. 
+[waypoint_follower-13] 	Waiting on external lifecycle transitions to activate
+[waypoint_follower-13] 	See https://design.ros2.org/articles/node_lifecycle.html for more information.
+[waypoint_follower-13] [INFO] [1790850196.689173217] [waypoint_follower]: Creating
+[controller_server-10] [INFO] [1790850196.693207221] [controller_server]: 
+[controller_server-10] 	controller_server lifecycle node launched. 
+[controller_server-10] 	Waiting on external lifecycle transitions to activate
+[controller_server-10] 	See https://design.ros2.org/articles/node_lifecycle.html for more information.
+[controller_server-10] [INFO] [1790850196.697531554] [controller_server]: Creating controller server
+[planner_server-9] [INFO] [1790850196.699659540] [planner_server]: 
+[planner_server-9] 	planner_server lifecycle node launched. 
+[planner_server-9] 	Waiting on external lifecycle transitions to activate
+[planner_server-9] 	See https://design.ros2.org/articles/node_lifecycle.html for more information.
+[amcl-8] [INFO] [1790850196.701092928] [amcl]: 
+[amcl-8] 	amcl lifecycle node launched. 
+[amcl-8] 	Waiting on external lifecycle transitions to activate
+[amcl-8] 	See https://design.ros2.org/articles/node_lifecycle.html for more information.
+[planner_server-9] [INFO] [1790850196.701400303] [planner_server]: Creating
+[amcl-8] [INFO] [1790850196.701996532] [amcl]: Creating
+[bt_navigator-11] [INFO] [1790850196.711870280] [bt_navigator]: 
+[bt_navigator-11] 	bt_navigator lifecycle node launched. 
+[bt_navigator-11] 	Waiting on external lifecycle transitions to activate
+[bt_navigator-11] 	See https://design.ros2.org/articles/node_lifecycle.html for more information.
+[bt_navigator-11] [INFO] [1790850196.714741830] [bt_navigator]: Creating
+[map_server-7] [INFO] [1790850196.718131392] [map_server]: 
+[map_server-7] 	map_server lifecycle node launched. 
+[map_server-7] 	Waiting on external lifecycle transitions to activate
+[map_server-7] 	See https://design.ros2.org/articles/node_lifecycle.html for more information.
+[map_server-7] [INFO] [1790850196.718329943] [map_server]: Creating
+[planner_server-9] [INFO] [1790850196.720819338] [global_costmap.global_costmap]: 
+[planner_server-9] 	global_costmap lifecycle node launched. 
+[planner_server-9] 	Waiting on external lifecycle transitions to activate
+[planner_server-9] 	See https://design.ros2.org/articles/node_lifecycle.html for more information.
+[planner_server-9] [INFO] [1790850196.721503931] [global_costmap.global_costmap]: Creating Costmap
+[controller_server-10] [INFO] [1790850196.722809251] [local_costmap.local_costmap]: 
+[controller_server-10] 	local_costmap lifecycle node launched. 
+[controller_server-10] 	Waiting on external lifecycle transitions to activate
+[controller_server-10] 	See https://design.ros2.org/articles/node_lifecycle.html for more information.
+[controller_server-10] [INFO] [1790850196.723128363] [local_costmap.local_costmap]: Creating Costmap
+[goal_pose_bridge.py-15] [INFO] [1790850197.363232209] [goal_pose_bridge]: GoalPoseBridge started: listening on /goal_pose -> forwarding to /navigate_to_pose
+[INFO] [lifecycle_manager-16]: process started with pid [103476]
+[lifecycle_manager-16] [INFO] [1790850198.669728423] [lifecycle_manager_localization]: Creating
+[lifecycle_manager-16] [INFO] [1790850198.674859532] [lifecycle_manager_localization]: [34m[1mCreating and initializing lifecycle service clients[0m[0m
+[lifecycle_manager-16] [INFO] [1790850200.366095681] [lifecycle_manager_localization]: [34m[1mStarting managed nodes bringup...[0m[0m
+[lifecycle_manager-16] [INFO] [1790850200.366159782] [lifecycle_manager_localization]: [34m[1mConfiguring map_server[0m[0m
+[map_server-7] [INFO] [1790850200.366653807] [map_server]: Configuring
+[map_server-7] [INFO] [1790850200.366726769] [map_io]: Loading yaml file: /home/haduckien/nav_ws/src/custom_corridor/worlds/school_arena/demo_1/map.yaml
+[map_server-7] [INFO] [1790850200.367013719] [map_io]: resolution: 0.05
+[map_server-7] [INFO] [1790850200.367027980] [map_io]: origin[0]: -16
+[map_server-7] [INFO] [1790850200.367035088] [map_io]: origin[1]: -14
+[map_server-7] [INFO] [1790850200.367039667] [map_io]: origin[2]: 0
+[map_server-7] [INFO] [1790850200.367044284] [map_io]: free_thresh: 0.25
+[map_server-7] [INFO] [1790850200.367048873] [map_io]: occupied_thresh: 0.65
+[map_server-7] [INFO] [1790850200.367055974] [map_io]: mode: trinary
+[map_server-7] [INFO] [1790850200.367061013] [map_io]: negate: 0
+[map_server-7] [INFO] [1790850200.367300574] [map_io]: Loading image_file: /home/haduckien/nav_ws/src/custom_corridor/worlds/school_arena/demo_1/map.pgm
+[map_server-7] [INFO] [1790850200.374830903] [map_io]: Read map /home/haduckien/nav_ws/src/custom_corridor/worlds/school_arena/demo_1/map.pgm: 730 X 580 map @ 0.05 m/cell
+[lifecycle_manager-16] [INFO] [1790850200.384208610] [lifecycle_manager_localization]: [34m[1mConfiguring amcl[0m[0m
+[amcl-8] [INFO] [1790850200.384399789] [amcl]: Configuring
+[amcl-8] [INFO] [1790850200.384477090] [amcl]: initTransforms
+[amcl-8] [INFO] [1790850200.395150162] [amcl]: initPubSub
+[amcl-8] [INFO] [1790850200.407023084] [amcl]: Subscribed to map topic.
+[lifecycle_manager-16] [INFO] [1790850200.412609553] [lifecycle_manager_localization]: [34m[1mActivating map_server[0m[0m
+[map_server-7] [INFO] [1790850200.412808846] [map_server]: Activating
+[map_server-7] [INFO] [1790850200.413786268] [map_server]: Creating bond (map_server) to lifecycle manager.
+[amcl-8] [INFO] [1790850200.424804490] [amcl]: Received a 730 X 580 map @ 0.050 m/pix
+[lifecycle_manager-16] [INFO] [1790850200.519093024] [lifecycle_manager_localization]: Server map_server connected with bond.
+[lifecycle_manager-16] [INFO] [1790850200.519132971] [lifecycle_manager_localization]: [34m[1mActivating amcl[0m[0m
+[amcl-8] [INFO] [1790850200.519284145] [amcl]: Activating
+[amcl-8] [INFO] [1790850200.519313883] [amcl]: Creating bond (amcl) to lifecycle manager.
+[amcl-8] [INFO] [1790850200.523845192] [amcl]: initialPoseReceived
+[amcl-8] [INFO] [1790850200.524094845] [amcl]: Setting pose (4.879000): -5.000 -8.150 -0.010
+[python3-14] [INFO] [1790850200.535455436] [school_episode_initial_pose]: Published /initialpose from episode: -5.000, -8.150, -0.010
+[lifecycle_manager-16] [INFO] [1790850200.625187270] [lifecycle_manager_localization]: Server amcl connected with bond.
+[lifecycle_manager-16] [INFO] [1790850200.625248116] [lifecycle_manager_localization]: [34m[1mManaged nodes are active[0m[0m
+[lifecycle_manager-16] [INFO] [1790850200.625268467] [lifecycle_manager_localization]: [34m[1mCreating bond timer...[0m[0m
+[amcl-8] [INFO] [1790850200.677424849] [amcl]: createLaserObject
+[python3-5] [INFO] [1790850201.219882857] [school_pose_sync_monitor]: Gazebo↔RViz pose error=0.019 m (gz=-5.00,-8.15; tf=-4.99,-8.17)
+[python3-14] [INFO] [1790850201.336276806] [school_episode_initial_pose]: AMCL map->odom is available at scan and current simulation timestamps
+[INFO] [python3-14]: process has finished cleanly [pid 103293]
+[INFO] [lifecycle_manager-17]: process started with pid [103540]
+[lifecycle_manager-17] [INFO] [1790850201.565393944] [lifecycle_manager_navigation]: Creating
+[lifecycle_manager-17] [INFO] [1790850201.569355984] [lifecycle_manager_navigation]: [34m[1mCreating and initializing lifecycle service clients[0m[0m
+[lifecycle_manager-17] [INFO] [1790850203.354077589] [lifecycle_manager_navigation]: [34m[1mStarting managed nodes bringup...[0m[0m
+[lifecycle_manager-17] [INFO] [1790850203.354129116] [lifecycle_manager_navigation]: [34m[1mConfiguring planner_server[0m[0m
+[planner_server-9] [INFO] [1790850203.354602925] [planner_server]: Configuring
+[planner_server-9] [INFO] [1790850203.354674406] [global_costmap.global_costmap]: Configuring
+[planner_server-9] [INFO] [1790850203.368198752] [global_costmap.global_costmap]: Using plugin "static_layer"
+[planner_server-9] [INFO] [1790850203.373763735] [global_costmap.global_costmap]: Subscribing to the map topic (/map) with transient local durability
+[planner_server-9] [INFO] [1790850203.376650313] [global_costmap.global_costmap]: Initialized plugin "static_layer"
+[planner_server-9] [INFO] [1790850203.376697002] [global_costmap.global_costmap]: Using plugin "obstacle_layer"
+[planner_server-9] [INFO] [1790850203.377396018] [global_costmap.global_costmap]: Subscribed to Topics: scan
+[planner_server-9] [INFO] [1790850203.382072322] [global_costmap.global_costmap]: Initialized plugin "obstacle_layer"
+[planner_server-9] [INFO] [1790850203.382113317] [global_costmap.global_costmap]: Using plugin "inflation_layer"
+[planner_server-9] [INFO] [1790850203.382955176] [global_costmap.global_costmap]: Initialized plugin "inflation_layer"
+[planner_server-9] [INFO] [1790850203.418146434] [global_costmap.global_costmap]: StaticLayer: Resizing costmap to 730 X 580 at 0.050000 m/pix
+[planner_server-9] [INFO] [1790850203.425371767] [planner_server]: Created global planner plugin GridBased of type nav2_smac_planner::SmacPlanner2D
+[planner_server-9] [INFO] [1790850203.425463622] [planner_server]: Configuring GridBased of type SmacPlanner2D
+[planner_server-9] [ERROR] [1790850203.427033297] [planner_server]: Inflation layer either not found or inflation is not set sufficiently for optimized non-circular collision checking capabilities. It is HIGHLY recommended to set the inflation radius to be at MINIMUM half of the robot's largest cross-section. See github.com/ros-planning/navigation2/tree/main/nav2_smac_planner#potential-fields for full instructions. This will substantially impact run-time performance.
+[planner_server-9] [INFO] [1790850203.429908465] [planner_server]: Configured plugin GridBased of type SmacPlanner2D with tolerance 0.15, maximum iterations 1000000, max on approach iterations 1000, and not allowing unknown traversal.
+[planner_server-9] [INFO] [1790850203.430006225] [planner_server]: Planner Server has GridBased  planners available.
+[lifecycle_manager-17] [INFO] [1790850203.451220939] [lifecycle_manager_navigation]: [34m[1mConfiguring controller_server[0m[0m
+[controller_server-10] [INFO] [1790850203.451459447] [controller_server]: Configuring controller interface
+[controller_server-10] [INFO] [1790850203.451483241] [controller_server]: getting progress checker plugins..
+[controller_server-10] [INFO] [1790850203.451750543] [controller_server]: getting goal checker plugins..
+[controller_server-10] [INFO] [1790850203.451912178] [controller_server]: Controller frequency set to 10.0000Hz
+[controller_server-10] [INFO] [1790850203.451975796] [local_costmap.local_costmap]: Configuring
+[controller_server-10] [INFO] [1790850203.462569334] [local_costmap.local_costmap]: Using plugin "obstacle_layer"
+[controller_server-10] [INFO] [1790850203.466356869] [local_costmap.local_costmap]: Subscribed to Topics: scan
+[controller_server-10] [INFO] [1790850203.470524014] [local_costmap.local_costmap]: Initialized plugin "obstacle_layer"
+[controller_server-10] [INFO] [1790850203.470566621] [local_costmap.local_costmap]: Using plugin "inflation_layer"
+[controller_server-10] [INFO] [1790850203.471292940] [local_costmap.local_costmap]: Initialized plugin "inflation_layer"
+[controller_server-10] [INFO] [1790850203.498961280] [controller_server]: Created progress_checker : progress_checker of type nav2_controller::SimpleProgressChecker
+[controller_server-10] [INFO] [1790850203.499358634] [controller_server]: Controller Server has progress_checker  progress checkers available.
+[controller_server-10] [INFO] [1790850203.499734319] [controller_server]: Created goal checker : goal_checker of type nav2_controller::SimpleGoalChecker
+[controller_server-10] [INFO] [1790850203.500198844] [controller_server]: Controller Server has goal_checker  goal checkers available.
+[controller_server-10] [INFO] [1790850203.501878623] [controller_server]: Created controller : FollowPath of type dwb_core::DWBLocalPlanner
+[controller_server-10] [INFO] [1790850203.503377330] [controller_server]: Setting transform_tolerance to 0.100000
+[controller_server-10] [INFO] [1790850203.519880490] [controller_server]: Using critic "RotateToGoal" (dwb_critics::RotateToGoalCritic)
+[controller_server-10] [INFO] [1790850203.520862763] [controller_server]: Critic plugin initialized
+[controller_server-10] [INFO] [1790850203.521107318] [controller_server]: Using critic "Oscillation" (dwb_critics::OscillationCritic)
+[controller_server-10] [INFO] [1790850203.521852678] [controller_server]: Critic plugin initialized
+[controller_server-10] [INFO] [1790850203.522053109] [controller_server]: Using critic "BaseObstacle" (dwb_critics::BaseObstacleCritic)
+[controller_server-10] [INFO] [1790850203.522342906] [controller_server]: Critic plugin initialized
+[controller_server-10] [INFO] [1790850203.522498529] [controller_server]: Using critic "GoalAlign" (dwb_critics::GoalAlignCritic)
+[controller_server-10] [INFO] [1790850203.523049268] [controller_server]: Critic plugin initialized
+[controller_server-10] [INFO] [1790850203.523219514] [controller_server]: Using critic "PathAlign" (dwb_critics::PathAlignCritic)
+[controller_server-10] [INFO] [1790850203.523628359] [controller_server]: Critic plugin initialized
+[controller_server-10] [INFO] [1790850203.523811174] [controller_server]: Using critic "PathDist" (dwb_critics::PathDistCritic)
+[controller_server-10] [INFO] [1790850203.524123005] [controller_server]: Critic plugin initialized
+[controller_server-10] [INFO] [1790850203.524279060] [controller_server]: Using critic "GoalDist" (dwb_critics::GoalDistCritic)
+[controller_server-10] [INFO] [1790850203.524600117] [controller_server]: Critic plugin initialized
+[controller_server-10] [INFO] [1790850203.524637695] [controller_server]: Controller Server has FollowPath  controllers available.
+[lifecycle_manager-17] [INFO] [1790850203.538130896] [lifecycle_manager_navigation]: [34m[1mConfiguring bt_navigator[0m[0m
+[bt_navigator-11] [INFO] [1790850203.538500632] [bt_navigator]: Configuring
+[bt_navigator-11] [INFO] [1790850203.545733997] [bt_navigator]: Creating navigator id navigate_to_pose of type nav2_bt_navigator::NavigateToPoseNavigator
+[bt_navigator-11] [WARN] [1790850203.552281989] [bt_navigator]: Error_code parameters were not set. Using default values of: follow_path_error_code compute_path_error_code
+[bt_navigator-11] Make sure these match your BT and there are not other sources of error codes youreported to your application
+[bt_navigator-11] [INFO] [1790850203.637842281] [bt_navigator]: Creating navigator id navigate_through_poses of type nav2_bt_navigator::NavigateThroughPosesNavigator
+[lifecycle_manager-17] [INFO] [1790850203.670578202] [lifecycle_manager_navigation]: [34m[1mConfiguring behavior_server[0m[0m
+[behavior_server-12] [INFO] [1790850203.670918978] [behavior_server]: Configuring
+[behavior_server-12] [INFO] [1790850203.677006170] [behavior_server]: Creating behavior plugin spin of type nav2_behaviors::Spin
+[behavior_server-12] [INFO] [1790850203.678176530] [behavior_server]: Creating behavior plugin backup of type nav2_behaviors::BackUp
+[behavior_server-12] [INFO] [1790850203.679316259] [behavior_server]: Creating behavior plugin wait of type nav2_behaviors::Wait
+[behavior_server-12] [INFO] [1790850203.691940456] [behavior_server]: Configuring spin
+[behavior_server-12] [INFO] [1790850203.705216988] [behavior_server]: Configuring backup
+[behavior_server-12] [INFO] [1790850203.712379875] [behavior_server]: Configuring wait
+[lifecycle_manager-17] [INFO] [1790850203.718100334] [lifecycle_manager_navigation]: [34m[1mConfiguring waypoint_follower[0m[0m
+[waypoint_follower-13] [INFO] [1790850203.718371243] [waypoint_follower]: Configuring
+[waypoint_follower-13] [INFO] [1790850203.743510092] [waypoint_follower]: Created waypoint_task_executor : wait_at_waypoint of type nav2_waypoint_follower::WaitAtWaypoint
+[waypoint_follower-13] [INFO] [1790850203.743911415] [waypoint_follower]: Waypoint pause duration is set to zero, disabling task executor plugin.
+[lifecycle_manager-17] [INFO] [1790850203.744449410] [lifecycle_manager_navigation]: [34m[1mActivating planner_server[0m[0m
+[planner_server-9] [INFO] [1790850203.744669370] [planner_server]: Activating
+[planner_server-9] [INFO] [1790850203.744714407] [global_costmap.global_costmap]: Activating
+[planner_server-9] [INFO] [1790850203.744728590] [global_costmap.global_costmap]: Checking transform
+[planner_server-9] [INFO] [1790850203.744821131] [global_costmap.global_costmap]: Timed out waiting for transform from base_footprint to map to become available, tf error: Lookup would require extrapolation into the past.  Requested time 7.940000 but the earliest data is at time 8.100000, when looking up transform from frame [base_footprint] to frame [map]
+[planner_server-9] [INFO] [1790850204.245055122] [global_costmap.global_costmap]: start
+[planner_server-9] [INFO] [1790850204.796763266] [planner_server]: Activating plugin GridBased of type SmacPlanner2D
+[planner_server-9] [INFO] [1790850204.798378584] [planner_server]: Creating bond (planner_server) to lifecycle manager.
+[lifecycle_manager-17] [INFO] [1790850204.903736189] [lifecycle_manager_navigation]: Server planner_server connected with bond.
+[lifecycle_manager-17] [INFO] [1790850204.903786631] [lifecycle_manager_navigation]: [34m[1mActivating controller_server[0m[0m
+[controller_server-10] [INFO] [1790850204.904191156] [controller_server]: Activating
+[controller_server-10] [INFO] [1790850204.904265999] [local_costmap.local_costmap]: Activating
+[controller_server-10] [INFO] [1790850204.904282467] [local_costmap.local_costmap]: Checking transform
+[controller_server-10] [INFO] [1790850204.904442327] [local_costmap.local_costmap]: start
+[controller_server-10] [INFO] [1790850205.106037836] [controller_server]: Creating bond (controller_server) to lifecycle manager.
+[lifecycle_manager-17] [INFO] [1790850205.210961732] [lifecycle_manager_navigation]: Server controller_server connected with bond.
+[lifecycle_manager-17] [INFO] [1790850205.211024265] [lifecycle_manager_navigation]: [34m[1mActivating bt_navigator[0m[0m
+[bt_navigator-11] [INFO] [1790850205.211361737] [bt_navigator]: Activating
+[bt_navigator-11] [INFO] [1790850205.308337273] [bt_navigator]: Creating bond (bt_navigator) to lifecycle manager.
+[lifecycle_manager-17] [INFO] [1790850205.414250066] [lifecycle_manager_navigation]: Server bt_navigator connected with bond.
+[lifecycle_manager-17] [INFO] [1790850205.414289310] [lifecycle_manager_navigation]: [34m[1mActivating behavior_server[0m[0m
+[behavior_server-12] [INFO] [1790850205.414605107] [behavior_server]: Activating
+[behavior_server-12] [INFO] [1790850205.414635769] [behavior_server]: Activating spin
+[behavior_server-12] [INFO] [1790850205.414645535] [behavior_server]: Activating backup
+[behavior_server-12] [INFO] [1790850205.414660957] [behavior_server]: Activating wait
+[behavior_server-12] [INFO] [1790850205.414671252] [behavior_server]: Creating bond (behavior_server) to lifecycle manager.
+[lifecycle_manager-17] [INFO] [1790850205.521054722] [lifecycle_manager_navigation]: Server behavior_server connected with bond.
+[lifecycle_manager-17] [INFO] [1790850205.521098150] [lifecycle_manager_navigation]: [34m[1mActivating waypoint_follower[0m[0m
+[waypoint_follower-13] [INFO] [1790850205.521486264] [waypoint_follower]: Activating
+[waypoint_follower-13] [INFO] [1790850205.521546273] [waypoint_follower]: Creating bond (waypoint_follower) to lifecycle manager.
+[lifecycle_manager-17] [INFO] [1790850205.628962548] [lifecycle_manager_navigation]: Server waypoint_follower connected with bond.
+[lifecycle_manager-17] [INFO] [1790850205.629001417] [lifecycle_manager_navigation]: [34m[1mManaged nodes are active[0m[0m
+[lifecycle_manager-17] [INFO] [1790850205.629015134] [lifecycle_manager_navigation]: [34m[1mCreating bond timer...[0m[0m
+[python3-5] [INFO] [1790850206.234713897] [school_pose_sync_monitor]: Gazebo↔RViz pose error=0.021 m (gz=-5.01,-8.15; tf=-4.99,-8.17)
+[python3-5] [INFO] [1790850211.242906391] [school_pose_sync_monitor]: Gazebo↔RViz pose error=0.022 m (gz=-5.01,-8.15; tf=-4.99,-8.17)
+[python3-5] [INFO] [1790850216.261246195] [school_pose_sync_monitor]: Gazebo↔RViz pose error=0.024 m (gz=-5.01,-8.15; tf=-4.99,-8.17)
+[python3-5] [INFO] [1790850221.271985661] [school_pose_sync_monitor]: Gazebo↔RViz pose error=0.025 m (gz=-5.01,-8.15; tf=-4.99,-8.17)
+[python3-5] [INFO] [1790850226.279900546] [school_pose_sync_monitor]: Gazebo↔RViz pose error=0.025 m (gz=-5.01,-8.15; tf=-4.99,-8.17)
+[python3-5] [INFO] [1790850231.290052509] [school_pose_sync_monitor]: Gazebo↔RViz pose error=0.025 m (gz=-5.01,-8.15; tf=-4.99,-8.17)
+[python3-5] [INFO] [1790850236.299982760] [school_pose_sync_monitor]: Gazebo↔RViz pose error=0.025 m (gz=-5.01,-8.15; tf=-4.99,-8.17)
+[python3-5] [INFO] [1790850241.301005306] [school_pose_sync_monitor]: Gazebo↔RViz pose error=0.025 m (gz=-5.01,-8.15; tf=-4.99,-8.17)
+[python3-5] [INFO] [1790850246.313877111] [school_pose_sync_monitor]: Gazebo↔RViz pose error=0.025 m (gz=-5.01,-8.15; tf=-4.99,-8.17)
+[python3-5] [INFO] [1790850251.328709462] [school_pose_sync_monitor]: Gazebo↔RViz pose error=0.025 m (gz=-5.01,-8.15; tf=-4.99,-8.17)
+[python3-5] [INFO] [1790850256.332317081] [school_pose_sync_monitor]: Gazebo↔RViz pose error=0.025 m (gz=-5.01,-8.15; tf=-4.99,-8.17)
+[python3-5] [INFO] [1790850261.345624136] [school_pose_sync_monitor]: Gazebo↔RViz pose error=0.025 m (gz=-5.01,-8.15; tf=-4.99,-8.17)
+[python3-5] [INFO] [1790850266.349200379] [school_pose_sync_monitor]: Gazebo↔RViz pose error=0.025 m (gz=-5.01,-8.15; tf=-4.99,-8.17)
+[python3-5] [INFO] [1790850271.357298770] [school_pose_sync_monitor]: Gazebo↔RViz pose error=0.025 m (gz=-5.01,-8.15; tf=-4.99,-8.17)
+[python3-5] [INFO] [1790850276.359598293] [school_pose_sync_monitor]: Gazebo↔RViz pose error=0.025 m (gz=-5.01,-8.15; tf=-4.99,-8.17)
+[python3-5] [INFO] [1790850281.369371803] [school_pose_sync_monitor]: Gazebo↔RViz pose error=0.025 m (gz=-5.01,-8.15; tf=-4.99,-8.17)
+[python3-5] [INFO] [1790850286.370774381] [school_pose_sync_monitor]: Gazebo↔RViz pose error=0.025 m (gz=-5.01,-8.15; tf=-4.99,-8.17)
+[python3-5] [INFO] [1790850291.371025797] [school_pose_sync_monitor]: Gazebo↔RViz pose error=0.025 m (gz=-5.01,-8.15; tf=-4.99,-8.17)
+[python3-5] [INFO] [1790850296.380280044] [school_pose_sync_monitor]: Gazebo↔RViz pose error=0.025 m (gz=-5.01,-8.15; tf=-4.99,-8.17)
+[python3-5] [INFO] [1790850301.390605171] [school_pose_sync_monitor]: Gazebo↔RViz pose error=0.025 m (gz=-5.01,-8.15; tf=-4.99,-8.17)
+[python3-5] [INFO] [1790850306.405025837] [school_pose_sync_monitor]: Gazebo↔RViz pose error=0.025 m (gz=-5.01,-8.15; tf=-4.99,-8.17)
+[python3-5] [INFO] [1790850311.407170183] [school_pose_sync_monitor]: Gazebo↔RViz pose error=0.025 m (gz=-5.01,-8.15; tf=-4.99,-8.17)
+[python3-5] [INFO] [1790850316.417856323] [school_pose_sync_monitor]: Gazebo↔RViz pose error=0.025 m (gz=-5.01,-8.15; tf=-4.99,-8.17)
+[python3-5] [INFO] [1790850321.425029127] [school_pose_sync_monitor]: Gazebo↔RViz pose error=0.025 m (gz=-5.01,-8.15; tf=-4.99,-8.17)
+[python3-5] [INFO] [1790850326.428580949] [school_pose_sync_monitor]: Gazebo↔RViz pose error=0.025 m (gz=-5.01,-8.15; tf=-4.99,-8.17)
+[python3-5] [INFO] [1790850331.443839379] [school_pose_sync_monitor]: Gazebo↔RViz pose error=0.025 m (gz=-5.01,-8.15; tf=-4.99,-8.17)
+[python3-5] [INFO] [1790850336.444214117] [school_pose_sync_monitor]: Gazebo↔RViz pose error=0.025 m (gz=-5.01,-8.15; tf=-4.99,-8.17)
+[python3-5] [INFO] [1790850341.451818474] [school_pose_sync_monitor]: Gazebo↔RViz pose error=0.025 m (gz=-5.01,-8.15; tf=-4.99,-8.17)
+[python3-5] [INFO] [1790850346.459579855] [school_pose_sync_monitor]: Gazebo↔RViz pose error=0.025 m (gz=-5.01,-8.15; tf=-4.99,-8.17)
+[python3-5] [INFO] [1790850351.470876657] [school_pose_sync_monitor]: Gazebo↔RViz pose error=0.025 m (gz=-5.01,-8.15; tf=-4.99,-8.17)
+[python3-5] [INFO] [1790850356.477587781] [school_pose_sync_monitor]: Gazebo↔RViz pose error=0.025 m (gz=-5.01,-8.15; tf=-4.99,-8.17)
+[python3-5] [INFO] [1790850361.481158890] [school_pose_sync_monitor]: Gazebo↔RViz pose error=0.025 m (gz=-5.01,-8.15; tf=-4.99,-8.17)
+[python3-5] [INFO] [1790850366.488876992] [school_pose_sync_monitor]: Gazebo↔RViz pose error=0.025 m (gz=-5.01,-8.15; tf=-4.99,-8.17)
+[python3-5] [INFO] [1790850371.499272949] [school_pose_sync_monitor]: Gazebo↔RViz pose error=0.025 m (gz=-5.01,-8.15; tf=-4.99,-8.17)
+[python3-5] [INFO] [1790850376.505394499] [school_pose_sync_monitor]: Gazebo↔RViz pose error=0.025 m (gz=-5.01,-8.15; tf=-4.99,-8.17)
+[python3-5] [INFO] [1790850381.507707390] [school_pose_sync_monitor]: Gazebo↔RViz pose error=0.025 m (gz=-5.01,-8.15; tf=-4.99,-8.17)
+[python3-5] [INFO] [1790850386.520528055] [school_pose_sync_monitor]: Gazebo↔RViz pose error=0.025 m (gz=-5.01,-8.15; tf=-4.99,-8.17)
+[python3-5] [INFO] [1790850391.532855185] [school_pose_sync_monitor]: Gazebo↔RViz pose error=0.025 m (gz=-5.01,-8.15; tf=-4.99,-8.17)
+[python3-5] [INFO] [1790850396.536487354] [school_pose_sync_monitor]: Gazebo↔RViz pose error=0.025 m (gz=-5.01,-8.15; tf=-4.99,-8.17)
+[python3-5] [INFO] [1790850401.547170968] [school_pose_sync_monitor]: Gazebo↔RViz pose error=0.025 m (gz=-5.01,-8.15; tf=-4.99,-8.17)
+[python3-5] [INFO] [1790850406.558150437] [school_pose_sync_monitor]: Gazebo↔RViz pose error=0.025 m (gz=-5.01,-8.15; tf=-4.99,-8.17)
+[python3-5] [INFO] [1790850411.560744103] [school_pose_sync_monitor]: Gazebo↔RViz pose error=0.025 m (gz=-5.01,-8.15; tf=-4.99,-8.17)
+[python3-5] [INFO] [1790850416.564264559] [school_pose_sync_monitor]: Gazebo↔RViz pose error=0.025 m (gz=-5.01,-8.15; tf=-4.99,-8.17)
+[python3-5] [INFO] [1790850421.570891590] [school_pose_sync_monitor]: Gazebo↔RViz pose error=0.025 m (gz=-5.01,-8.15; tf=-4.99,-8.17)
+[python3-5] [INFO] [1790850426.581720120] [school_pose_sync_monitor]: Gazebo↔RViz pose error=0.025 m (gz=-5.01,-8.15; tf=-4.99,-8.17)

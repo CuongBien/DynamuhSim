@@ -6,9 +6,9 @@
       <real_time_factor>1.0</real_time_factor>
     </physics>
 
-    <plugin filename="gz-sim-physics-system" name="gz::sim::systems::Physics"/>
-    <plugin filename="gz-sim-user-commands-system" name="gz::sim::systems::UserCommands"/>
-    <plugin filename="gz-sim-scene-broadcaster-system" name="gz::sim::systems::SceneBroadcaster"/>
+    <plugin filename="gz-sim-physics-system" name="gz::sim::systems::Physics" />
+    <plugin filename="gz-sim-user-commands-system" name="gz::sim::systems::UserCommands" />
+    <plugin filename="gz-sim-scene-broadcaster-system" name="gz::sim::systems::SceneBroadcaster" />
     <plugin filename="gz-sim-sensors-system" name="gz::sim::systems::Sensors">
       <render_engine>ogre2</render_engine>
     </plugin>
@@ -2117,8 +2117,7 @@
       </link>
     </model>
 
-    <!-- HuNavSim controls planar motion.  The model origin is the foot-ground
-         contact point; this visual-only proxy cannot be lifted by physics. -->
+    
     <model name="student_head_on_A">
       <static>false</static>
       <pose>-12.000 -8.050 0.000 0 0 0</pose>
@@ -2132,7 +2131,13 @@
             <iyy>12.0</iyy><iyz>0</iyz><izz>0.45</izz>
           </inertia>
         </inertial>
-        <!-- Visual-only proxy: HuNav handles social/obstacle collision. -->
+        
+        
+        <collision name="collision">
+          <pose>0 0 0.675 0 0 0</pose>
+          <geometry><cylinder><radius>0.22</radius><length>1.35</length></cylinder></geometry>
+          <surface><contact><collide_bitmask>0x01</collide_bitmask></contact></surface>
+        </collision>
         <visual name="body">
           <geometry><cylinder><radius>0.19</radius><length>1.35</length></cylinder></geometry>
           <pose>0 0 0.675 0 0 0</pose>
@@ -2159,7 +2164,13 @@
             <iyy>12.0</iyy><iyz>0</iyz><izz>0.45</izz>
           </inertia>
         </inertial>
-        <!-- Visual-only proxy: HuNav handles social/obstacle collision. -->
+        
+        
+        <collision name="collision">
+          <pose>0 0 0.675 0 0 0</pose>
+          <geometry><cylinder><radius>0.22</radius><length>1.35</length></cylinder></geometry>
+          <surface><contact><collide_bitmask>0x01</collide_bitmask></contact></surface>
+        </collision>
         <visual name="body">
           <geometry><cylinder><radius>0.19</radius><length>1.35</length></cylinder></geometry>
           <pose>0 0 0.675 0 0 0</pose>
@@ -2186,7 +2197,13 @@
             <iyy>12.0</iyy><iyz>0</iyz><izz>0.45</izz>
           </inertia>
         </inertial>
-        <!-- Visual-only proxy: HuNav handles social/obstacle collision. -->
+        
+        
+        <collision name="collision">
+          <pose>0 0 0.675 0 0 0</pose>
+          <geometry><cylinder><radius>0.22</radius><length>1.35</length></cylinder></geometry>
+          <surface><contact><collide_bitmask>0x01</collide_bitmask></contact></surface>
+        </collision>
         <visual name="body">
           <geometry><cylinder><radius>0.19</radius><length>1.35</length></cylinder></geometry>
           <pose>0 0 0.675 0 0 0</pose>
@@ -2213,7 +2230,13 @@
             <iyy>12.0</iyy><iyz>0</iyz><izz>0.45</izz>
           </inertia>
         </inertial>
-        <!-- Visual-only proxy: HuNav handles social/obstacle collision. -->
+        
+        
+        <collision name="collision">
+          <pose>0 0 0.675 0 0 0</pose>
+          <geometry><cylinder><radius>0.22</radius><length>1.35</length></cylinder></geometry>
+          <surface><contact><collide_bitmask>0x01</collide_bitmask></contact></surface>
+        </collision>
         <visual name="body">
           <geometry><cylinder><radius>0.19</radius><length>1.35</length></cylinder></geometry>
           <pose>0 0 0.675 0 0 0</pose>
@@ -2240,7 +2263,13 @@
             <iyy>12.0</iyy><iyz>0</iyz><izz>0.45</izz>
           </inertia>
         </inertial>
-        <!-- Visual-only proxy: HuNav handles social/obstacle collision. -->
+        
+        
+        <collision name="collision">
+          <pose>0 0 0.675 0 0 0</pose>
+          <geometry><cylinder><radius>0.22</radius><length>1.35</length></cylinder></geometry>
+          <surface><contact><collide_bitmask>0x01</collide_bitmask></contact></surface>
+        </collision>
         <visual name="body">
           <geometry><cylinder><radius>0.19</radius><length>1.35</length></cylinder></geometry>
           <pose>0 0 0.675 0 0 0</pose>
@@ -2267,7 +2296,13 @@
             <iyy>12.0</iyy><iyz>0</iyz><izz>0.45</izz>
           </inertia>
         </inertial>
-        <!-- Visual-only proxy: HuNav handles social/obstacle collision. -->
+        
+        
+        <collision name="collision">
+          <pose>0 0 0.675 0 0 0</pose>
+          <geometry><cylinder><radius>0.22</radius><length>1.35</length></cylinder></geometry>
+          <surface><contact><collide_bitmask>0x01</collide_bitmask></contact></surface>
+        </collision>
         <visual name="body">
           <geometry><cylinder><radius>0.19</radius><length>1.35</length></cylinder></geometry>
           <pose>0 0 0.675 0 0 0</pose>
@@ -2294,7 +2329,13 @@
             <iyy>12.0</iyy><iyz>0</iyz><izz>0.45</izz>
           </inertia>
         </inertial>
-        <!-- Visual-only proxy: HuNav handles social/obstacle collision. -->
+        
+        
+        <collision name="collision">
+          <pose>0 0 0.675 0 0 0</pose>
+          <geometry><cylinder><radius>0.22</radius><length>1.35</length></cylinder></geometry>
+          <surface><contact><collide_bitmask>0x01</collide_bitmask></contact></surface>
+        </collision>
         <visual name="body">
           <geometry><cylinder><radius>0.19</radius><length>1.35</length></cylinder></geometry>
           <pose>0 0 0.675 0 0 0</pose>
@@ -2321,7 +2362,13 @@
             <iyy>12.0</iyy><iyz>0</iyz><izz>0.45</izz>
           </inertia>
         </inertial>
-        <!-- Visual-only proxy: HuNav handles social/obstacle collision. -->
+        
+        
+        <collision name="collision">
+          <pose>0 0 0.675 0 0 0</pose>
+          <geometry><cylinder><radius>0.22</radius><length>1.35</length></cylinder></geometry>
+          <surface><contact><collide_bitmask>0x01</collide_bitmask></contact></surface>
+        </collision>
         <visual name="body">
           <geometry><cylinder><radius>0.19</radius><length>1.35</length></cylinder></geometry>
           <pose>0 0 0.675 0 0 0</pose>

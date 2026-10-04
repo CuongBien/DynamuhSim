@@ -1,0 +1,770 @@
+[INFO] [launch]: All log files can be found below /home/haduckien/.ros/log/2026-10-01-17-10-33-190635-Raccoon2005-43327
+[INFO] [launch]: Default logging verbosity is set to INFO
+[INFO] [gz-1]: process started with pid [43617]
+[INFO] [parameter_bridge-2]: process started with pid [43618]
+[INFO] [robot_state_publisher-3]: process started with pid [43619]
+[INFO] [python3-4]: process started with pid [43620]
+[INFO] [python3-5]: process started with pid [43621]
+[robot_state_publisher-3] [INFO] [1790849433.314586849] [robot_state_publisher]: Robot initialized
+[python3-4] [INFO] [1790849433.717138041] [school_collision_safe_pose_applier]: Wall guard active: map=/home/haduckien/nav_ws/src/custom_corridor/worlds/school_arena/demo_1/map.yaml, radius=0.22 m, topic=/school_hunav/target_poses
+[python3-5] [INFO] [1790849433.740887316] [school_pose_sync_monitor]: Gazebo/RViz sync monitor active: orange pose=/demo/gazebo_robot_pose
+[gz-1] [1;33mWarning [Utils.cc:132][0m [/sdf/world[@name="school_arena"]/model[@name="robot"]/link[@name="base_scan"]/sensor[@name="hls_lfcd_lds"]/gz_frame_id:/home/haduckien/nav_ws/src/custom_corridor/worlds/school_arena/demo_1/dataset_v1.0/episodes/ep_000026/runtime_logs/ep_000026.contact.world:L3897]: XML Element[gz_frame_id], child of element[sensor], not defined in SDF. Copying[gz_frame_id] as children of [sensor].
+[parameter_bridge-2] [INFO] [1790849434.320759533] [ros_gz_bridge]: Creating GZ->ROS Bridge: [/clock (gz.msgs.Clock) -> /clock (rosgraph_msgs/msg/Clock)] (Lazy 0)
+[parameter_bridge-2] [INFO] [1790849434.321528558] [ros_gz_bridge]: Creating GZ->ROS Bridge: [/joint_states (gz.msgs.Model) -> /joint_states (sensor_msgs/msg/JointState)] (Lazy 0)
+[parameter_bridge-2] [INFO] [1790849434.323306263] [ros_gz_bridge]: Creating GZ->ROS Bridge: [/odom (gz.msgs.Odometry) -> /odom (nav_msgs/msg/Odometry)] (Lazy 0)
+[parameter_bridge-2] [INFO] [1790849434.324886342] [ros_gz_bridge]: Creating GZ->ROS Bridge: [/tf (gz.msgs.Pose_V) -> /tf (tf2_msgs/msg/TFMessage)] (Lazy 0)
+[parameter_bridge-2] [INFO] [1790849434.326399722] [ros_gz_bridge]: Creating GZ->ROS Bridge: [/scan (gz.msgs.LaserScan) -> /scan (sensor_msgs/msg/LaserScan)] (Lazy 0)
+[parameter_bridge-2] [INFO] [1790849434.326903877] [ros_gz_bridge]: Creating ROS->GZ Bridge: [/cmd_vel (geometry_msgs/msg/TwistStamped) -> /cmd_vel (gz.msgs.Twist)] (Lazy 0)
+[parameter_bridge-2] [INFO] [1790849434.327501166] [ros_gz_bridge]: Creating GZ->ROS Bridge: [/world/school_arena/dynamic_pose/info (gz.msgs.Pose_V) -> /world/school_arena/dynamic_pose/info (tf2_msgs/msg/TFMessage)] (Lazy 0)
+[parameter_bridge-2] [INFO] [1790849434.327873057] [ros_gz_bridge]: Creating ROS->GZ service bridge [/world/school_arena/set_pose (ros_gz_interfaces/srv/SetEntityPose -> gz.msgs.Pose/gz.msgs.Boolean)]
+[parameter_bridge-2] [INFO] [1790849434.328615219] [ros_gz_bridge]: Creating ROS->GZ service bridge [/world/school_arena/control (ros_gz_interfaces/srv/ControlWorld -> gz.msgs.WorldControl/gz.msgs.Boolean)]
+[parameter_bridge-2] [INFO] [1790849434.328922923] [ros_gz_bridge]: Creating GZ->ROS Bridge: [/robot/camera/image_raw (gz.msgs.Image) -> /robot/camera/image_raw (sensor_msgs/msg/Image)] (Lazy 0)
+[INFO] [python3-6]: process started with pid [44218]
+[python3-6] [INFO] [1790849436.924804973] [school_wait_for_robot_tf]: Robot odom/TF and simulation clock ready
+[INFO] [python3-6]: process has finished cleanly [pid 44218]
+[INFO] [map_server-7]: process started with pid [44234]
+[INFO] [amcl-8]: process started with pid [44235]
+[INFO] [planner_server-9]: process started with pid [44236]
+[INFO] [controller_server-10]: process started with pid [44237]
+[INFO] [bt_navigator-11]: process started with pid [44238]
+[INFO] [behavior_server-12]: process started with pid [44239]
+[INFO] [waypoint_follower-13]: process started with pid [44240]
+[INFO] [python3-14]: process started with pid [44241]
+[INFO] [goal_pose_bridge.py-15]: process started with pid [44242]
+[waypoint_follower-13] [INFO] [1790849437.156904656] [waypoint_follower]: 
+[waypoint_follower-13] 	waypoint_follower lifecycle node launched. 
+[waypoint_follower-13] 	Waiting on external lifecycle transitions to activate
+[waypoint_follower-13] 	See https://design.ros2.org/articles/node_lifecycle.html for more information.
+[waypoint_follower-13] [INFO] [1790849437.157573013] [waypoint_follower]: Creating
+[controller_server-10] [INFO] [1790849437.169652292] [controller_server]: 
+[controller_server-10] 	controller_server lifecycle node launched. 
+[controller_server-10] 	Waiting on external lifecycle transitions to activate
+[controller_server-10] 	See https://design.ros2.org/articles/node_lifecycle.html for more information.
+[controller_server-10] [INFO] [1790849437.173501686] [controller_server]: Creating controller server
+[planner_server-9] [INFO] [1790849437.188032149] [planner_server]: 
+[planner_server-9] 	planner_server lifecycle node launched. 
+[planner_server-9] 	Waiting on external lifecycle transitions to activate
+[planner_server-9] 	See https://design.ros2.org/articles/node_lifecycle.html for more information.
+[planner_server-9] [INFO] [1790849437.194933127] [planner_server]: Creating
+[controller_server-10] [INFO] [1790849437.200108519] [local_costmap.local_costmap]: 
+[controller_server-10] 	local_costmap lifecycle node launched. 
+[controller_server-10] 	Waiting on external lifecycle transitions to activate
+[controller_server-10] 	See https://design.ros2.org/articles/node_lifecycle.html for more information.
+[controller_server-10] [INFO] [1790849437.202534275] [local_costmap.local_costmap]: Creating Costmap
+[behavior_server-12] [INFO] [1790849437.222038939] [behavior_server]: 
+[behavior_server-12] 	behavior_server lifecycle node launched. 
+[behavior_server-12] 	Waiting on external lifecycle transitions to activate
+[behavior_server-12] 	See https://design.ros2.org/articles/node_lifecycle.html for more information.
+[amcl-8] [INFO] [1790849437.224439452] [amcl]: 
+[amcl-8] 	amcl lifecycle node launched. 
+[amcl-8] 	Waiting on external lifecycle transitions to activate
+[amcl-8] 	See https://design.ros2.org/articles/node_lifecycle.html for more information.
+[amcl-8] [INFO] [1790849437.226265610] [amcl]: Creating
+[bt_navigator-11] [INFO] [1790849437.232350721] [bt_navigator]: 
+[bt_navigator-11] 	bt_navigator lifecycle node launched. 
+[bt_navigator-11] 	Waiting on external lifecycle transitions to activate
+[bt_navigator-11] 	See https://design.ros2.org/articles/node_lifecycle.html for more information.
+[bt_navigator-11] [INFO] [1790849437.234431137] [bt_navigator]: Creating
+[map_server-7] [INFO] [1790849437.233282740] [map_server]: 
+[map_server-7] 	map_server lifecycle node launched. 
+[map_server-7] 	Waiting on external lifecycle transitions to activate
+[map_server-7] 	See https://design.ros2.org/articles/node_lifecycle.html for more information.
+[map_server-7] [INFO] [1790849437.233573793] [map_server]: Creating
+[planner_server-9] [INFO] [1790849437.251778271] [global_costmap.global_costmap]: 
+[planner_server-9] 	global_costmap lifecycle node launched. 
+[planner_server-9] 	Waiting on external lifecycle transitions to activate
+[planner_server-9] 	See https://design.ros2.org/articles/node_lifecycle.html for more information.
+[planner_server-9] [INFO] [1790849437.252498341] [global_costmap.global_costmap]: Creating Costmap
+[goal_pose_bridge.py-15] [INFO] [1790849437.958527739] [goal_pose_bridge]: GoalPoseBridge started: listening on /goal_pose -> forwarding to /navigate_to_pose
+[INFO] [lifecycle_manager-16]: process started with pid [44486]
+[lifecycle_manager-16] [INFO] [1790849439.169621858] [lifecycle_manager_localization]: Creating
+[lifecycle_manager-16] [INFO] [1790849439.173000287] [lifecycle_manager_localization]: [34m[1mCreating and initializing lifecycle service clients[0m[0m
+[lifecycle_manager-16] [INFO] [1790849440.848897682] [lifecycle_manager_localization]: [34m[1mStarting managed nodes bringup...[0m[0m
+[lifecycle_manager-16] [INFO] [1790849440.848951811] [lifecycle_manager_localization]: [34m[1mConfiguring map_server[0m[0m
+[map_server-7] [INFO] [1790849440.849360215] [map_server]: Configuring
+[map_server-7] [INFO] [1790849440.849422639] [map_io]: Loading yaml file: /home/haduckien/nav_ws/src/custom_corridor/worlds/school_arena/demo_1/map.yaml
+[map_server-7] [INFO] [1790849440.849663064] [map_io]: resolution: 0.05
+[map_server-7] [INFO] [1790849440.849670998] [map_io]: origin[0]: -16
+[map_server-7] [INFO] [1790849440.849673698] [map_io]: origin[1]: -14
+[map_server-7] [INFO] [1790849440.849676043] [map_io]: origin[2]: 0
+[map_server-7] [INFO] [1790849440.849678007] [map_io]: free_thresh: 0.25
+[map_server-7] [INFO] [1790849440.849679786] [map_io]: occupied_thresh: 0.65
+[map_server-7] [INFO] [1790849440.849683686] [map_io]: mode: trinary
+[map_server-7] [INFO] [1790849440.849686180] [map_io]: negate: 0
+[map_server-7] [INFO] [1790849440.849847272] [map_io]: Loading image_file: /home/haduckien/nav_ws/src/custom_corridor/worlds/school_arena/demo_1/map.pgm
+[map_server-7] [INFO] [1790849440.859193865] [map_io]: Read map /home/haduckien/nav_ws/src/custom_corridor/worlds/school_arena/demo_1/map.pgm: 730 X 580 map @ 0.05 m/cell
+[lifecycle_manager-16] [INFO] [1790849440.868189826] [lifecycle_manager_localization]: [34m[1mConfiguring amcl[0m[0m
+[amcl-8] [INFO] [1790849440.868437742] [amcl]: Configuring
+[amcl-8] [INFO] [1790849440.868579286] [amcl]: initTransforms
+[amcl-8] [INFO] [1790849440.882513453] [amcl]: initPubSub
+[amcl-8] [INFO] [1790849440.891757141] [amcl]: Subscribed to map topic.
+[lifecycle_manager-16] [ERROR] [1790849442.898370781] [lifecycle_manager_localization]: Failed to change state for node: amcl. Exception: amcl/get_state service client: async_send_request failed.
+[lifecycle_manager-16] [ERROR] [1790849442.898498705] [lifecycle_manager_localization]: Failed to bring up all requested nodes. Aborting bringup.
+[python3-4] [WARN] [1790849443.169659840] [school_collision_safe_pose_applier]: BLOCKED robot collision for background_agent_4: d=0.42m < 0.45m
+[python3-4] [WARN] [1790849448.173900989] [school_collision_safe_pose_applier]: BLOCKED human-human collision event_agent_1 <-> background_agent_6: d=0.34m
+[python3-4] [WARN] [1790849448.244050244] [school_collision_safe_pose_applier]: BLOCKED wall crossing for background_agent_7: target=(-2.099, -8.091)
+[python3-4] [WARN] [1790849448.348575613] [school_collision_safe_pose_applier]: BLOCKED human-human collision event_agent_1 <-> background_agent_6: d=0.34m
+[python3-4] [WARN] [1790849448.353286390] [school_collision_safe_pose_applier]: BLOCKED human-human collision background_agent_6 <-> event_agent_1: d=0.34m
+[python3-4] [WARN] [1790849448.577424709] [school_collision_safe_pose_applier]: BLOCKED human-human collision background_agent_7 <-> background_agent_4: d=0.32m
+[python3-4] [WARN] [1790849449.133088427] [school_collision_safe_pose_applier]: BLOCKED human-human collision background_agent_6 <-> event_agent_1: d=0.35m
+[python3-4] [WARN] [1790849450.448932230] [school_collision_safe_pose_applier]: BLOCKED robot collision for background_agent_7: d=0.39m < 0.45m
+[python3-4] [WARN] [1790849451.468988088] [school_collision_safe_pose_applier]: BLOCKED wall crossing for background_agent_4: target=(-2.153, -8.089)
+[python3-4] [WARN] [1790849453.249019787] [school_collision_safe_pose_applier]: BLOCKED wall crossing for event_agent_1: target=(-10.054, -7.867)
+[python3-4] [WARN] [1790849454.502206431] [school_collision_safe_pose_applier]: BLOCKED human-human collision background_agent_5 <-> event_agent_1: d=0.34m
+[python3-4] [WARN] [1790849457.078984603] [school_collision_safe_pose_applier]: BLOCKED human-human collision background_agent_5 <-> background_agent_6: d=0.35m
+[python3-4] [WARN] [1790849457.083131566] [school_collision_safe_pose_applier]: BLOCKED human-human collision background_agent_6 <-> background_agent_5: d=0.34m
+[python3-4] [WARN] [1790849460.935491906] [school_collision_safe_pose_applier]: BLOCKED human-human collision background_agent_4 <-> event_agent_1: d=0.32m
+[python3-4] [WARN] [1790849461.086314927] [school_collision_safe_pose_applier]: BLOCKED human-human collision event_agent_1 <-> background_agent_4: d=0.32m
+[python3-4] [WARN] [1790849462.078828108] [school_collision_safe_pose_applier]: BLOCKED wall crossing for background_agent_6: target=(-10.495, -7.883)
+[python3-4] [WARN] [1790849464.739766784] [school_collision_safe_pose_applier]: BLOCKED human-human collision background_agent_4 <-> background_agent_6: d=0.32m
+[python3-4] [WARN] [1790849466.661455391] [school_collision_safe_pose_applier]: BLOCKED human-human collision background_agent_1 <-> background_agent_2: d=0.34m
+[python3-4] [WARN] [1790849466.798025464] [school_collision_safe_pose_applier]: BLOCKED human-human collision background_agent_2 <-> background_agent_1: d=0.29m
+[python3-4] [WARN] [1790849467.968589354] [school_collision_safe_pose_applier]: BLOCKED human-human collision background_agent_4 <-> background_agent_5: d=0.34m
+[python3-4] [WARN] [1790849467.969740687] [school_collision_safe_pose_applier]: BLOCKED human-human collision background_agent_5 <-> background_agent_4: d=0.35m
+[python3-4] [WARN] [1790849470.610533634] [school_collision_safe_pose_applier]: BLOCKED human-human collision background_agent_2 <-> background_agent_8: d=0.34m
+[python3-4] [WARN] [1790849470.611907413] [school_collision_safe_pose_applier]: BLOCKED human-human collision background_agent_8 <-> background_agent_2: d=0.35m
+[python3-4] [WARN] [1790849470.732019383] [school_collision_safe_pose_applier]: BLOCKED human-human collision background_agent_4 <-> background_agent_6: d=0.35m
+[python3-4] [WARN] [1790849477.546969561] [school_collision_safe_pose_applier]: BLOCKED robot collision for event_agent_1: d=0.45m < 0.45m
+[python3-4] [WARN] [1790849482.508799223] [school_collision_safe_pose_applier]: BLOCKED wall crossing for event_agent_1: target=(-0.324, -7.884)
+[python3-4] [WARN] [1790849487.391238133] [school_collision_safe_pose_applier]: BLOCKED wall crossing for background_agent_5: target=(-2.197, -8.098)
+[python3-4] [WARN] [1790849487.450176144] [school_collision_safe_pose_applier]: BLOCKED wall crossing for event_agent_1: target=(-0.106, -7.903)
+[python3-4] [WARN] [1790849490.839897691] [school_collision_safe_pose_applier]: BLOCKED human-human collision background_agent_5 <-> event_agent_1: d=0.31m
+[python3-4] [WARN] [1790849492.426437771] [school_collision_safe_pose_applier]: BLOCKED wall crossing for event_agent_1: target=(0.445, -7.918)
+[python3-4] [WARN] [1790849495.783799594] [school_collision_safe_pose_applier]: BLOCKED wall crossing for background_agent_5: target=(0.116, -7.941)
+[python3-4] [WARN] [1790849497.459550297] [school_collision_safe_pose_applier]: BLOCKED wall crossing for event_agent_1: target=(0.450, -7.862)
+[python3-14] [ERROR] [1790849497.790978192] [school_episode_initial_pose]: Timed out waiting for AMCL/scan-time TF
+[ERROR] [python3-14]: process has died [pid 44241, exit code 1, cmd 'python3 /home/haduckien/nav_ws/install/custom_corridor/share/custom_corridor/launch/publish_episode_initial_pose.py --params-file /home/haduckien/nav_ws/src/custom_corridor/worlds/school_arena/demo_1/dataset_v1.0/episodes/ep_000026/nav2_school.yaml --ros-args -p use_sim_time:=true'].
+[WARNING] [launch]: user interrupted with ctrl-c (SIGINT)
+[lifecycle_manager-16] [INFO] [1790849501.275933230] [rclcpp]: signal_handler(SIGINT/SIGTERM)
+[lifecycle_manager-16] [INFO] [1790849501.276104554] [lifecycle_manager_localization]: Running Nav2 LifecycleManager rcl preshutdown (lifecycle_manager_localization)
+[behavior_server-12] [INFO] [1790849501.275963778] [rclcpp]: signal_handler(SIGINT/SIGTERM)
+[behavior_server-12] [INFO] [1790849501.276119874] [behavior_server]: Running Nav2 LifecycleNode rcl preshutdown (behavior_server)
+[INFO] [lifecycle_manager-16]: sending signal 'SIGINT' to process[lifecycle_manager-16]
+[INFO] [goal_pose_bridge.py-15]: sending signal 'SIGINT' to process[goal_pose_bridge.py-15]
+[INFO] [waypoint_follower-13]: sending signal 'SIGINT' to process[waypoint_follower-13]
+[INFO] [behavior_server-12]: sending signal 'SIGINT' to process[behavior_server-12]
+[INFO] [bt_navigator-11]: sending signal 'SIGINT' to process[bt_navigator-11]
+[ERROR] [waypoint_follower-13]: process has died [pid 44240, exit code -2, cmd '/opt/ros/jazzy/lib/nav2_waypoint_follower/waypoint_follower --ros-args -r __node:=waypoint_follower --params-file /home/haduckien/nav_ws/src/custom_corridor/worlds/school_arena/demo_1/dataset_v1.0/episodes/ep_000026/nav2_school.yaml'].
+[INFO] [controller_server-10]: sending signal 'SIGINT' to process[controller_server-10]
+[ERROR] [goal_pose_bridge.py-15]: process has died [pid 44242, exit code -2, cmd '/home/haduckien/nav_ws/install/custom_corridor/lib/custom_corridor/goal_pose_bridge.py --ros-args -r __node:=goal_pose_bridge --params-file /tmp/launch_params_0iyscl81'].
+[INFO] [planner_server-9]: sending signal 'SIGINT' to process[planner_server-9]
+[ERROR] [behavior_server-12]: process has died [pid 44239, exit code -2, cmd '/opt/ros/jazzy/lib/nav2_behaviors/behavior_server --ros-args -r __node:=behavior_server --params-file /home/haduckien/nav_ws/src/custom_corridor/worlds/school_arena/demo_1/dataset_v1.0/episodes/ep_000026/nav2_school.yaml'].
+[ERROR] [bt_navigator-11]: process has died [pid 44238, exit code -2, cmd '/opt/ros/jazzy/lib/nav2_bt_navigator/bt_navigator --ros-args -r __node:=bt_navigator --params-file /home/haduckien/nav_ws/src/custom_corridor/worlds/school_arena/demo_1/dataset_v1.0/episodes/ep_000026/nav2_school.yaml --params-file /tmp/launch_params_8pkpqzs9'].
+[INFO] [amcl-8]: sending signal 'SIGINT' to process[amcl-8]
+[ERROR] [controller_server-10]: process has died [pid 44237, exit code -2, cmd '/opt/ros/jazzy/lib/nav2_controller/controller_server --ros-args -r __node:=controller_server --params-file /home/haduckien/nav_ws/src/custom_corridor/worlds/school_arena/demo_1/dataset_v1.0/episodes/ep_000026/nav2_school.yaml'].
+[INFO] [map_server-7]: sending signal 'SIGINT' to process[map_server-7]
+[ERROR] [planner_server-9]: process has died [pid 44236, exit code -2, cmd '/opt/ros/jazzy/lib/nav2_planner/planner_server --ros-args -r __node:=planner_server --params-file /home/haduckien/nav_ws/src/custom_corridor/worlds/school_arena/demo_1/dataset_v1.0/episodes/ep_000026/nav2_school.yaml'].
+[INFO] [python3-5]: sending signal 'SIGINT' to process[python3-5]
+[INFO] [python3-4]: sending signal 'SIGINT' to process[python3-4]
+[ERROR] [amcl-8]: process has died [pid 44235, exit code -2, cmd '/opt/ros/jazzy/lib/nav2_amcl/amcl --ros-args -r __node:=amcl --params-file /home/haduckien/nav_ws/src/custom_corridor/worlds/school_arena/demo_1/dataset_v1.0/episodes/ep_000026/nav2_school.yaml --params-file /tmp/launch_params_hxvtbgyk'].
+[INFO] [robot_state_publisher-3]: sending signal 'SIGINT' to process[robot_state_publisher-3]
+[ERROR] [map_server-7]: process has died [pid 44234, exit code -2, cmd '/opt/ros/jazzy/lib/nav2_map_server/map_server --ros-args -r __node:=map_server --params-file /home/haduckien/nav_ws/src/custom_corridor/worlds/school_arena/demo_1/dataset_v1.0/episodes/ep_000026/nav2_school.yaml --params-file /tmp/launch_params_2q9tcatn'].
+[INFO] [parameter_bridge-2]: sending signal 'SIGINT' to process[parameter_bridge-2]
+[INFO] [gz-1]: sending signal 'SIGINT' to process[gz-1]
+[map_server-7] [INFO] [1790849501.275975838] [rclcpp]: signal_handler(SIGINT/SIGTERM)
+[map_server-7] [INFO] [1790849501.276123865] [map_server]: Running Nav2 LifecycleNode rcl preshutdown (map_server)
+[map_server-7] [INFO] [1790849501.276240291] [map_server]: Cleaning up
+[map_server-7] [INFO] [1790849501.276297020] [map_server]: Destroying bond (map_server) to lifecycle manager.
+[ERROR] [robot_state_publisher-3]: process has died [pid 43619, exit code -2, cmd '/opt/ros/jazzy/lib/robot_state_publisher/robot_state_publisher --ros-args --params-file /tmp/launch_params_5qpl4dpy'].
+[waypoint_follower-13] [INFO] [1790849501.275998775] [rclcpp]: signal_handler(SIGINT/SIGTERM)
+[ERROR] [python3-5]: process has died [pid 43621, exit code -2, cmd 'python3 /home/haduckien/nav_ws/src/custom_corridor/worlds/school_arena/demo_1/pose_sync_monitor.py --ros-args -p use_sim_time:=true -p robot_name:=robot -p world_frame:=map -p initial_x:=0.0 -p initial_y:=-7.85'].
+[amcl-8] [INFO] [1790849501.276004882] [rclcpp]: signal_handler(SIGINT/SIGTERM)
+[amcl-8] [INFO] [1790849501.276122649] [amcl]: Running Nav2 LifecycleNode rcl preshutdown (amcl)
+[amcl-8] [INFO] [1790849501.276240701] [amcl]: Cleaning up
+[behavior_server-12] [INFO] [1790849501.276218802] [behavior_server]: Destroying bond (behavior_server) to lifecycle manager.
+[behavior_server-12] [INFO] [1790849501.281560784] [behavior_server]: Destroying
+[ERROR] [python3-4]: process has died [pid 43620, exit code -2, cmd 'python3 /home/haduckien/nav_ws/src/custom_corridor/worlds/school_arena/demo_1/collision_safe_pose_applier.py --ros-args -p use_sim_time:=true -p world_name:=school_arena -p target_topic:=/school_hunav/target_poses -p map_yaml:=/home/haduckien/nav_ws/src/custom_corridor/worlds/school_arena/demo_1/map.yaml -p agent_radius:=0.22 -p apply_hz:=20.0 -p ground_z:=0.0'].
+[parameter_bridge-2] [INFO] [1790849501.276137527] [rclcpp]: signal_handler(SIGINT/SIGTERM)
+[bt_navigator-11] [INFO] [1790849501.276215206] [rclcpp]: signal_handler(SIGINT/SIGTERM)
+[bt_navigator-11] [INFO] [1790849501.276339600] [bt_navigator]: Running Nav2 LifecycleNode rcl preshutdown (bt_navigator)
+[bt_navigator-11] [INFO] [1790849501.276413598] [bt_navigator]: Destroying bond (bt_navigator) to lifecycle manager.
+[bt_navigator-11] [INFO] [1790849501.282433223] [bt_navigator]: Destroying
+[planner_server-9] [INFO] [1790849501.276323544] [rclcpp]: signal_handler(SIGINT/SIGTERM)
+[planner_server-9] [INFO] [1790849501.276456346] [planner_server]: Running Nav2 LifecycleNode rcl preshutdown (planner_server)
+[planner_server-9] [INFO] [1790849501.276526851] [planner_server]: Destroying bond (planner_server) to lifecycle manager.
+[planner_server-9] [INFO] [1790849501.282068875] [global_costmap.global_costmap]: Destroying
+[controller_server-10] [INFO] [1790849501.276637363] [rclcpp]: signal_handler(SIGINT/SIGTERM)
+[controller_server-10] [INFO] [1790849501.276777888] [controller_server]: Running Nav2 LifecycleNode rcl preshutdown (controller_server)
+[controller_server-10] [INFO] [1790849501.276836543] [controller_server]: Destroying bond (controller_server) to lifecycle manager.
+[waypoint_follower-13] [INFO] [1790849501.277743055] [waypoint_follower]: Running Nav2 LifecycleNode rcl preshutdown (waypoint_follower)
+[waypoint_follower-13] [INFO] [1790849501.277818700] [waypoint_follower]: Destroying bond (waypoint_follower) to lifecycle manager.
+[waypoint_follower-13] [INFO] [1790849501.279293652] [waypoint_follower]: Destroying
+[robot_state_publisher-3] [INFO] [1790849501.277989713] [rclcpp]: signal_handler(SIGINT/SIGTERM)
+[map_server-7] [INFO] [1790849501.282282378] [map_server]: Destroying
+[amcl-8] [INFO] [1790849501.286738476] [amcl]: Destroying bond (amcl) to lifecycle manager.
+[controller_server-10] [INFO] [1790849501.289398531] [local_costmap.local_costmap]: Destroying
+[controller_server-10] [INFO] [1790849501.314818780] [controller_server]: Destroying
+[lifecycle_manager-16] [INFO] [1790849501.290234014] [rclcpp]: signal_handler(SIGINT/SIGTERM)
+[lifecycle_manager-16] [INFO] [1790849501.290644697] [lifecycle_manager_localization]: Destroying lifecycle_manager_localization
+[amcl-8] [INFO] [1790849501.303032314] [amcl]: Destroying
+[planner_server-9] [INFO] [1790849501.313359985] [planner_server]: Destroying
+[INFO] [lifecycle_manager-16]: process has finished cleanly [pid 44486]
+[INFO] [gz-1]: process has finished cleanly [pid 43617]
+[ERROR] [parameter_bridge-2]: process[parameter_bridge-2] failed to terminate '5' seconds after receiving 'SIGINT', escalating to 'SIGTERM'
+[INFO] [parameter_bridge-2]: sending signal 'SIGTERM' to process[parameter_bridge-2]
+[ERROR] [parameter_bridge-2]: process has died [pid 43618, exit code -11, cmd '/opt/ros/jazzy/lib/ros_gz_bridge/parameter_bridge --ros-args --params-file /tmp/launch_params_51b7owgb'].
+[INFO] [launch]: All log files can be found below /home/haduckien/.ros/log/2026-10-01-17-27-38-423604-Raccoon2005-111251
+[INFO] [launch]: Default logging verbosity is set to INFO
+[INFO] [gz-1]: process started with pid [111508]
+[INFO] [parameter_bridge-2]: process started with pid [111509]
+[INFO] [robot_state_publisher-3]: process started with pid [111510]
+[INFO] [python3-4]: process started with pid [111511]
+[INFO] [python3-5]: process started with pid [111512]
+[robot_state_publisher-3] [INFO] [1790850458.548240706] [robot_state_publisher]: Robot initialized
+[python3-5] [INFO] [1790850458.973756499] [school_pose_sync_monitor]: Gazebo/RViz sync monitor active: orange pose=/demo/gazebo_robot_pose
+[python3-4] [INFO] [1790850459.033084514] [school_collision_safe_pose_applier]: Wall guard active: map=/home/haduckien/nav_ws/src/custom_corridor/worlds/school_arena/demo_1/map.yaml, radius=0.22 m, topic=/school_hunav/target_poses
+[gz-1] [1;33mWarning [Utils.cc:132][0m [/sdf/world[@name="school_arena"]/model[@name="robot"]/link[@name="base_scan"]/sensor[@name="hls_lfcd_lds"]/gz_frame_id:/home/haduckien/nav_ws/src/custom_corridor/worlds/school_arena/demo_1/dataset_v1.0/episodes/ep_000026/runtime_logs/ep_000026.contact.world:L3897]: XML Element[gz_frame_id], child of element[sensor], not defined in SDF. Copying[gz_frame_id] as children of [sensor].
+[parameter_bridge-2] [INFO] [1790850459.565968226] [ros_gz_bridge]: Creating GZ->ROS Bridge: [/clock (gz.msgs.Clock) -> /clock (rosgraph_msgs/msg/Clock)] (Lazy 0)
+[parameter_bridge-2] [INFO] [1790850459.567637930] [ros_gz_bridge]: Creating GZ->ROS Bridge: [/joint_states (gz.msgs.Model) -> /joint_states (sensor_msgs/msg/JointState)] (Lazy 0)
+[parameter_bridge-2] [INFO] [1790850459.570849196] [ros_gz_bridge]: Creating GZ->ROS Bridge: [/odom (gz.msgs.Odometry) -> /odom (nav_msgs/msg/Odometry)] (Lazy 0)
+[parameter_bridge-2] [INFO] [1790850459.573099572] [ros_gz_bridge]: Creating GZ->ROS Bridge: [/tf (gz.msgs.Pose_V) -> /tf (tf2_msgs/msg/TFMessage)] (Lazy 0)
+[parameter_bridge-2] [INFO] [1790850459.576510287] [ros_gz_bridge]: Creating GZ->ROS Bridge: [/scan (gz.msgs.LaserScan) -> /scan (sensor_msgs/msg/LaserScan)] (Lazy 0)
+[parameter_bridge-2] [INFO] [1790850459.578714197] [ros_gz_bridge]: Creating ROS->GZ Bridge: [/cmd_vel (geometry_msgs/msg/TwistStamped) -> /cmd_vel (gz.msgs.Twist)] (Lazy 0)
+[parameter_bridge-2] [INFO] [1790850459.580872296] [ros_gz_bridge]: Creating GZ->ROS Bridge: [/world/school_arena/dynamic_pose/info (gz.msgs.Pose_V) -> /world/school_arena/dynamic_pose/info (tf2_msgs/msg/TFMessage)] (Lazy 0)
+[parameter_bridge-2] [INFO] [1790850459.582816143] [ros_gz_bridge]: Creating ROS->GZ service bridge [/world/school_arena/set_pose (ros_gz_interfaces/srv/SetEntityPose -> gz.msgs.Pose/gz.msgs.Boolean)]
+[parameter_bridge-2] [INFO] [1790850459.584565806] [ros_gz_bridge]: Creating ROS->GZ service bridge [/world/school_arena/control (ros_gz_interfaces/srv/ControlWorld -> gz.msgs.WorldControl/gz.msgs.Boolean)]
+[parameter_bridge-2] [INFO] [1790850459.585516547] [ros_gz_bridge]: Creating GZ->ROS Bridge: [/robot/camera/image_raw (gz.msgs.Image) -> /robot/camera/image_raw (sensor_msgs/msg/Image)] (Lazy 0)
+[robot_state_publisher-3] [WARN] [1790850461.241490696] [robot_state_publisher]: Moved backwards in time, re-publishing joint transforms!
+[robot_state_publisher-3] [WARN] [1790850461.339893840] [robot_state_publisher]: Moved backwards in time, re-publishing joint transforms!
+[INFO] [python3-6]: process started with pid [112135]
+[robot_state_publisher-3] [WARN] [1790850461.742871117] [robot_state_publisher]: Moved backwards in time, re-publishing joint transforms!
+[python3-6] [INFO] [1790850462.253097040] [school_wait_for_robot_tf]: Robot odom/TF and simulation clock ready
+[INFO] [python3-6]: process has finished cleanly [pid 112135]
+[INFO] [map_server-7]: process started with pid [112174]
+[INFO] [amcl-8]: process started with pid [112175]
+[INFO] [planner_server-9]: process started with pid [112176]
+[INFO] [controller_server-10]: process started with pid [112177]
+[INFO] [bt_navigator-11]: process started with pid [112178]
+[INFO] [behavior_server-12]: process started with pid [112179]
+[INFO] [waypoint_follower-13]: process started with pid [112180]
+[INFO] [python3-14]: process started with pid [112181]
+[INFO] [goal_pose_bridge.py-15]: process started with pid [112182]
+[controller_server-10] [INFO] [1790850462.535223052] [controller_server]: 
+[controller_server-10] 	controller_server lifecycle node launched. 
+[controller_server-10] 	Waiting on external lifecycle transitions to activate
+[controller_server-10] 	See https://design.ros2.org/articles/node_lifecycle.html for more information.
+[controller_server-10] [INFO] [1790850462.538241561] [controller_server]: Creating controller server
+[behavior_server-12] [INFO] [1790850462.544698905] [behavior_server]: 
+[behavior_server-12] 	behavior_server lifecycle node launched. 
+[behavior_server-12] 	Waiting on external lifecycle transitions to activate
+[behavior_server-12] 	See https://design.ros2.org/articles/node_lifecycle.html for more information.
+[planner_server-9] [INFO] [1790850462.546058491] [planner_server]: 
+[planner_server-9] 	planner_server lifecycle node launched. 
+[planner_server-9] 	Waiting on external lifecycle transitions to activate
+[planner_server-9] 	See https://design.ros2.org/articles/node_lifecycle.html for more information.
+[planner_server-9] [INFO] [1790850462.548287178] [planner_server]: Creating
+[map_server-7] [INFO] [1790850462.555008780] [map_server]: 
+[map_server-7] 	map_server lifecycle node launched. 
+[map_server-7] 	Waiting on external lifecycle transitions to activate
+[map_server-7] 	See https://design.ros2.org/articles/node_lifecycle.html for more information.
+[map_server-7] [INFO] [1790850462.555217632] [map_server]: Creating
+[waypoint_follower-13] [INFO] [1790850462.555335806] [waypoint_follower]: 
+[waypoint_follower-13] 	waypoint_follower lifecycle node launched. 
+[waypoint_follower-13] 	Waiting on external lifecycle transitions to activate
+[waypoint_follower-13] 	See https://design.ros2.org/articles/node_lifecycle.html for more information.
+[waypoint_follower-13] [INFO] [1790850462.556225907] [waypoint_follower]: Creating
+[bt_navigator-11] [INFO] [1790850462.557265252] [bt_navigator]: 
+[bt_navigator-11] 	bt_navigator lifecycle node launched. 
+[bt_navigator-11] 	Waiting on external lifecycle transitions to activate
+[bt_navigator-11] 	See https://design.ros2.org/articles/node_lifecycle.html for more information.
+[bt_navigator-11] [INFO] [1790850462.558415855] [bt_navigator]: Creating
+[controller_server-10] [INFO] [1790850462.578184644] [local_costmap.local_costmap]: 
+[controller_server-10] 	local_costmap lifecycle node launched. 
+[controller_server-10] 	Waiting on external lifecycle transitions to activate
+[controller_server-10] 	See https://design.ros2.org/articles/node_lifecycle.html for more information.
+[controller_server-10] [INFO] [1790850462.581128036] [local_costmap.local_costmap]: Creating Costmap
+[amcl-8] [INFO] [1790850462.589262714] [amcl]: 
+[amcl-8] 	amcl lifecycle node launched. 
+[amcl-8] 	Waiting on external lifecycle transitions to activate
+[amcl-8] 	See https://design.ros2.org/articles/node_lifecycle.html for more information.
+[amcl-8] [INFO] [1790850462.590194349] [amcl]: Creating
+[planner_server-9] [INFO] [1790850462.605549887] [global_costmap.global_costmap]: 
+[planner_server-9] 	global_costmap lifecycle node launched. 
+[planner_server-9] 	Waiting on external lifecycle transitions to activate
+[planner_server-9] 	See https://design.ros2.org/articles/node_lifecycle.html for more information.
+[planner_server-9] [INFO] [1790850462.608172819] [global_costmap.global_costmap]: Creating Costmap
+[robot_state_publisher-3] [WARN] [1790850463.230827508] [robot_state_publisher]: Moved backwards in time, re-publishing joint transforms!
+[robot_state_publisher-3] [WARN] [1790850463.233412402] [robot_state_publisher]: Moved backwards in time, re-publishing joint transforms!
+[goal_pose_bridge.py-15] [INFO] [1790850463.339031861] [goal_pose_bridge]: GoalPoseBridge started: listening on /goal_pose -> forwarding to /navigate_to_pose
+[robot_state_publisher-3] [WARN] [1790850463.570319504] [robot_state_publisher]: Moved backwards in time, re-publishing joint transforms!
+[robot_state_publisher-3] [WARN] [1790850464.430767638] [robot_state_publisher]: Moved backwards in time, re-publishing joint transforms!
+[INFO] [lifecycle_manager-16]: process started with pid [112421]
+[lifecycle_manager-16] [INFO] [1790850464.500183992] [lifecycle_manager_localization]: Creating
+[lifecycle_manager-16] [INFO] [1790850464.504149432] [lifecycle_manager_localization]: [34m[1mCreating and initializing lifecycle service clients[0m[0m
+[robot_state_publisher-3] [WARN] [1790850464.742155939] [robot_state_publisher]: Moved backwards in time, re-publishing joint transforms!
+[robot_state_publisher-3] [WARN] [1790850464.845507622] [robot_state_publisher]: Moved backwards in time, re-publishing joint transforms!
+[robot_state_publisher-3] [WARN] [1790850465.048848174] [robot_state_publisher]: Moved backwards in time, re-publishing joint transforms!
+[robot_state_publisher-3] [WARN] [1790850465.544152806] [robot_state_publisher]: Moved backwards in time, re-publishing joint transforms!
+[robot_state_publisher-3] [WARN] [1790850465.637925641] [robot_state_publisher]: Moved backwards in time, re-publishing joint transforms!
+[robot_state_publisher-3] [WARN] [1790850465.854936197] [robot_state_publisher]: Moved backwards in time, re-publishing joint transforms!
+[lifecycle_manager-16] [INFO] [1790850466.209473629] [lifecycle_manager_localization]: [34m[1mStarting managed nodes bringup...[0m[0m
+[lifecycle_manager-16] [INFO] [1790850466.209563600] [lifecycle_manager_localization]: [34m[1mConfiguring map_server[0m[0m
+[map_server-7] [INFO] [1790850466.210182651] [map_server]: Configuring
+[map_server-7] [INFO] [1790850466.210298361] [map_io]: Loading yaml file: /home/haduckien/nav_ws/src/custom_corridor/worlds/school_arena/demo_1/map.yaml
+[map_server-7] [INFO] [1790850466.210726623] [map_io]: resolution: 0.05
+[map_server-7] [INFO] [1790850466.210745288] [map_io]: origin[0]: -16
+[map_server-7] [INFO] [1790850466.210752746] [map_io]: origin[1]: -14
+[map_server-7] [INFO] [1790850466.210757992] [map_io]: origin[2]: 0
+[map_server-7] [INFO] [1790850466.210763798] [map_io]: free_thresh: 0.25
+[map_server-7] [INFO] [1790850466.210768887] [map_io]: occupied_thresh: 0.65
+[map_server-7] [INFO] [1790850466.210777096] [map_io]: mode: trinary
+[map_server-7] [INFO] [1790850466.210783482] [map_io]: negate: 0
+[map_server-7] [INFO] [1790850466.211029712] [map_io]: Loading image_file: /home/haduckien/nav_ws/src/custom_corridor/worlds/school_arena/demo_1/map.pgm
+[map_server-7] [INFO] [1790850466.221096664] [map_io]: Read map /home/haduckien/nav_ws/src/custom_corridor/worlds/school_arena/demo_1/map.pgm: 730 X 580 map @ 0.05 m/cell
+[lifecycle_manager-16] [INFO] [1790850466.235842620] [lifecycle_manager_localization]: [34m[1mConfiguring amcl[0m[0m
+[amcl-8] [INFO] [1790850466.236200493] [amcl]: Configuring
+[amcl-8] [INFO] [1790850466.236324192] [amcl]: initTransforms
+[amcl-8] [INFO] [1790850466.251865018] [amcl]: initPubSub
+[amcl-8] [INFO] [1790850466.269279691] [amcl]: Subscribed to map topic.
+[lifecycle_manager-16] [INFO] [1790850466.280902781] [lifecycle_manager_localization]: [34m[1mActivating map_server[0m[0m
+[map_server-7] [INFO] [1790850466.281135208] [map_server]: Activating
+[map_server-7] [INFO] [1790850466.281990063] [map_server]: Creating bond (map_server) to lifecycle manager.
+[amcl-8] [INFO] [1790850466.293283954] [amcl]: Received a 730 X 580 map @ 0.050 m/pix
+[lifecycle_manager-16] [INFO] [1790850466.321846388] [lifecycle_manager_localization]: Server map_server connected with bond.
+[lifecycle_manager-16] [INFO] [1790850466.321904130] [lifecycle_manager_localization]: [34m[1mActivating amcl[0m[0m
+[amcl-8] [INFO] [1790850466.322310651] [amcl]: Activating
+[amcl-8] [INFO] [1790850466.322351643] [amcl]: Creating bond (amcl) to lifecycle manager.
+[amcl-8] [INFO] [1790850466.328985919] [amcl]: initialPoseReceived
+[amcl-8] [INFO] [1790850466.329268452] [amcl]: Setting pose (4.400000): 0.000 -7.850 -2.978
+[python3-14] [INFO] [1790850466.348871291] [school_episode_initial_pose]: Published /initialpose from episode: 0.000, -7.850, -2.978
+[amcl-8] [INFO] [1790850466.353658676] [amcl]: createLaserObject
+[lifecycle_manager-16] [INFO] [1790850466.432876281] [lifecycle_manager_localization]: Server amcl connected with bond.
+[lifecycle_manager-16] [INFO] [1790850466.432925950] [lifecycle_manager_localization]: [34m[1mManaged nodes are active[0m[0m
+[lifecycle_manager-16] [INFO] [1790850466.432934048] [lifecycle_manager_localization]: [34m[1mCreating bond timer...[0m[0m
+[robot_state_publisher-3] [WARN] [1790850466.473518010] [robot_state_publisher]: Moved backwards in time, re-publishing joint transforms!
+[amcl-8] [WARN] [1790850466.703563669] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[robot_state_publisher-3] [WARN] [1790850466.703592267] [robot_state_publisher]: Moved backwards in time, re-publishing joint transforms!
+[python3-5] [INFO] [1790850466.948689745] [school_pose_sync_monitor]: Gazebo↔RViz pose error=0.020 m (gz=0.00,-7.85; tf=-0.01,-7.87)
+[python3-14] [INFO] [1790850467.081974881] [school_episode_initial_pose]: AMCL map->odom is available at scan and current simulation timestamps
+[amcl-8] [WARN] [1790850467.307105974] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[INFO] [python3-14]: process has finished cleanly [pid 112181]
+[INFO] [lifecycle_manager-17]: process started with pid [112506]
+[lifecycle_manager-17] [INFO] [1790850467.376226882] [lifecycle_manager_navigation]: Creating
+[lifecycle_manager-17] [INFO] [1790850467.382918534] [lifecycle_manager_navigation]: [34m[1mCreating and initializing lifecycle service clients[0m[0m
+[amcl-8] [WARN] [1790850467.435293779] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[amcl-8] [WARN] [1790850467.466900009] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[amcl-8] [WARN] [1790850467.559588660] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[robot_state_publisher-3] [WARN] [1790850467.669138798] [robot_state_publisher]: Moved backwards in time, re-publishing joint transforms!
+[amcl-8] [INFO] [1790850467.888683399] [amcl]: Message Filter dropping message: frame 'base_scan' at time 5.200 for reason 'the timestamp on the message is earlier than all the data in the transform cache'
+[amcl-8] [WARN] [1790850468.219092593] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[robot_state_publisher-3] [WARN] [1790850468.219141025] [robot_state_publisher]: Moved backwards in time, re-publishing joint transforms!
+[python3-4] [WARN] [1790850468.267883211] [school_collision_safe_pose_applier]: BLOCKED robot collision for background_agent_4: d=0.42m < 0.45m
+[lifecycle_manager-17] [INFO] [1790850469.203383516] [lifecycle_manager_navigation]: [34m[1mStarting managed nodes bringup...[0m[0m
+[lifecycle_manager-17] [INFO] [1790850469.203457058] [lifecycle_manager_navigation]: [34m[1mConfiguring planner_server[0m[0m
+[planner_server-9] [INFO] [1790850469.203951128] [planner_server]: Configuring
+[planner_server-9] [INFO] [1790850469.203998880] [global_costmap.global_costmap]: Configuring
+[planner_server-9] [INFO] [1790850469.221351055] [global_costmap.global_costmap]: Using plugin "static_layer"
+[planner_server-9] [INFO] [1790850469.227872166] [global_costmap.global_costmap]: Subscribing to the map topic (/map) with transient local durability
+[planner_server-9] [INFO] [1790850469.231628185] [global_costmap.global_costmap]: Initialized plugin "static_layer"
+[planner_server-9] [INFO] [1790850469.231697669] [global_costmap.global_costmap]: Using plugin "obstacle_layer"
+[planner_server-9] [INFO] [1790850469.233711820] [global_costmap.global_costmap]: Subscribed to Topics: scan
+[planner_server-9] [INFO] [1790850469.247732917] [global_costmap.global_costmap]: Initialized plugin "obstacle_layer"
+[planner_server-9] [INFO] [1790850469.247807803] [global_costmap.global_costmap]: Using plugin "inflation_layer"
+[planner_server-9] [INFO] [1790850469.250488309] [global_costmap.global_costmap]: Initialized plugin "inflation_layer"
+[planner_server-9] [INFO] [1790850469.303925344] [global_costmap.global_costmap]: StaticLayer: Resizing costmap to 730 X 580 at 0.050000 m/pix
+[planner_server-9] [INFO] [1790850469.311133730] [planner_server]: Created global planner plugin GridBased of type nav2_smac_planner::SmacPlanner2D
+[planner_server-9] [INFO] [1790850469.311216228] [planner_server]: Configuring GridBased of type SmacPlanner2D
+[planner_server-9] [ERROR] [1790850469.313868763] [planner_server]: Inflation layer either not found or inflation is not set sufficiently for optimized non-circular collision checking capabilities. It is HIGHLY recommended to set the inflation radius to be at MINIMUM half of the robot's largest cross-section. See github.com/ros-planning/navigation2/tree/main/nav2_smac_planner#potential-fields for full instructions. This will substantially impact run-time performance.
+[planner_server-9] [INFO] [1790850469.317581586] [planner_server]: Configured plugin GridBased of type SmacPlanner2D with tolerance 0.15, maximum iterations 1000000, max on approach iterations 1000, and not allowing unknown traversal.
+[planner_server-9] [INFO] [1790850469.317668134] [planner_server]: Planner Server has GridBased  planners available.
+[lifecycle_manager-17] [INFO] [1790850469.341268410] [lifecycle_manager_navigation]: [34m[1mConfiguring controller_server[0m[0m
+[controller_server-10] [INFO] [1790850469.341706664] [controller_server]: Configuring controller interface
+[controller_server-10] [INFO] [1790850469.341756307] [controller_server]: getting progress checker plugins..
+[controller_server-10] [INFO] [1790850469.342096838] [controller_server]: getting goal checker plugins..
+[controller_server-10] [INFO] [1790850469.342775364] [controller_server]: Controller frequency set to 10.0000Hz
+[controller_server-10] [INFO] [1790850469.342872343] [local_costmap.local_costmap]: Configuring
+[controller_server-10] [INFO] [1790850469.358162478] [local_costmap.local_costmap]: Using plugin "obstacle_layer"
+[controller_server-10] [INFO] [1790850469.364983911] [local_costmap.local_costmap]: Subscribed to Topics: scan
+[controller_server-10] [INFO] [1790850469.373388826] [local_costmap.local_costmap]: Initialized plugin "obstacle_layer"
+[controller_server-10] [INFO] [1790850469.373434270] [local_costmap.local_costmap]: Using plugin "inflation_layer"
+[controller_server-10] [INFO] [1790850469.375402808] [local_costmap.local_costmap]: Initialized plugin "inflation_layer"
+[controller_server-10] [INFO] [1790850469.428705088] [controller_server]: Created progress_checker : progress_checker of type nav2_controller::SimpleProgressChecker
+[controller_server-10] [INFO] [1790850469.429481189] [controller_server]: Controller Server has progress_checker  progress checkers available.
+[controller_server-10] [INFO] [1790850469.430415102] [controller_server]: Created goal checker : goal_checker of type nav2_controller::SimpleGoalChecker
+[controller_server-10] [INFO] [1790850469.431235948] [controller_server]: Controller Server has goal_checker  goal checkers available.
+[controller_server-10] [INFO] [1790850469.434135511] [controller_server]: Created controller : FollowPath of type dwb_core::DWBLocalPlanner
+[controller_server-10] [INFO] [1790850469.436866522] [controller_server]: Setting transform_tolerance to 0.100000
+[controller_server-10] [INFO] [1790850469.463854492] [controller_server]: Using critic "RotateToGoal" (dwb_critics::RotateToGoalCritic)
+[controller_server-10] [INFO] [1790850469.465667610] [controller_server]: Critic plugin initialized
+[controller_server-10] [INFO] [1790850469.466022573] [controller_server]: Using critic "Oscillation" (dwb_critics::OscillationCritic)
+[controller_server-10] [INFO] [1790850469.467265140] [controller_server]: Critic plugin initialized
+[controller_server-10] [INFO] [1790850469.467596119] [controller_server]: Using critic "BaseObstacle" (dwb_critics::BaseObstacleCritic)
+[controller_server-10] [INFO] [1790850469.468300940] [controller_server]: Critic plugin initialized
+[controller_server-10] [INFO] [1790850469.468811767] [controller_server]: Using critic "GoalAlign" (dwb_critics::GoalAlignCritic)
+[controller_server-10] [INFO] [1790850469.469797921] [controller_server]: Critic plugin initialized
+[controller_server-10] [INFO] [1790850469.470105858] [controller_server]: Using critic "PathAlign" (dwb_critics::PathAlignCritic)
+[controller_server-10] [INFO] [1790850469.470973019] [controller_server]: Critic plugin initialized
+[controller_server-10] [INFO] [1790850469.471497800] [controller_server]: Using critic "PathDist" (dwb_critics::PathDistCritic)
+[controller_server-10] [INFO] [1790850469.472739329] [controller_server]: Critic plugin initialized
+[controller_server-10] [INFO] [1790850469.473097534] [controller_server]: Using critic "GoalDist" (dwb_critics::GoalDistCritic)
+[controller_server-10] [INFO] [1790850469.473721015] [controller_server]: Critic plugin initialized
+[controller_server-10] [INFO] [1790850469.473775391] [controller_server]: Controller Server has FollowPath  controllers available.
+[lifecycle_manager-17] [INFO] [1790850469.494301060] [lifecycle_manager_navigation]: [34m[1mConfiguring bt_navigator[0m[0m
+[bt_navigator-11] [INFO] [1790850469.494696695] [bt_navigator]: Configuring
+[bt_navigator-11] [INFO] [1790850469.509962235] [bt_navigator]: Creating navigator id navigate_to_pose of type nav2_bt_navigator::NavigateToPoseNavigator
+[bt_navigator-11] [WARN] [1790850469.517870796] [bt_navigator]: Error_code parameters were not set. Using default values of: follow_path_error_code compute_path_error_code
+[bt_navigator-11] Make sure these match your BT and there are not other sources of error codes youreported to your application
+[bt_navigator-11] [INFO] [1790850469.626677369] [bt_navigator]: Creating navigator id navigate_through_poses of type nav2_bt_navigator::NavigateThroughPosesNavigator
+[lifecycle_manager-17] [INFO] [1790850469.674060485] [lifecycle_manager_navigation]: [34m[1mConfiguring behavior_server[0m[0m
+[behavior_server-12] [INFO] [1790850469.674376686] [behavior_server]: Configuring
+[behavior_server-12] [INFO] [1790850469.686051088] [behavior_server]: Creating behavior plugin spin of type nav2_behaviors::Spin
+[behavior_server-12] [INFO] [1790850469.687780241] [behavior_server]: Creating behavior plugin backup of type nav2_behaviors::BackUp
+[behavior_server-12] [INFO] [1790850469.689328843] [behavior_server]: Creating behavior plugin wait of type nav2_behaviors::Wait
+[behavior_server-12] [INFO] [1790850469.705281163] [behavior_server]: Configuring spin
+[behavior_server-12] [INFO] [1790850469.721149978] [behavior_server]: Configuring backup
+[behavior_server-12] [INFO] [1790850469.735774319] [behavior_server]: Configuring wait
+[lifecycle_manager-17] [INFO] [1790850469.750365314] [lifecycle_manager_navigation]: [34m[1mConfiguring waypoint_follower[0m[0m
+[waypoint_follower-13] [INFO] [1790850469.750980432] [waypoint_follower]: Configuring
+[controller_server-10] [WARN] [1790850469.755767065] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[bt_navigator-11] [WARN] [1790850469.755824649] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[behavior_server-12] [WARN] [1790850469.756165604] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[amcl-8] [WARN] [1790850469.756225701] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[waypoint_follower-13] [INFO] [1790850469.816037361] [waypoint_follower]: Created waypoint_task_executor : wait_at_waypoint of type nav2_waypoint_follower::WaitAtWaypoint
+[waypoint_follower-13] [INFO] [1790850469.817249487] [waypoint_follower]: Waypoint pause duration is set to zero, disabling task executor plugin.
+[lifecycle_manager-17] [INFO] [1790850469.818382228] [lifecycle_manager_navigation]: [34m[1mActivating planner_server[0m[0m
+[planner_server-9] [INFO] [1790850469.818946816] [planner_server]: Activating
+[planner_server-9] [INFO] [1790850469.819011974] [global_costmap.global_costmap]: Activating
+[planner_server-9] [INFO] [1790850469.819025912] [global_costmap.global_costmap]: Checking transform
+[planner_server-9] [INFO] [1790850469.819121909] [global_costmap.global_costmap]: Timed out waiting for transform from base_footprint to map to become available, tf error: Lookup would require extrapolation at time 7.220000, but only time 7.500000 is in the buffer, when looking up transform from frame [base_footprint] to frame [map]
+[planner_server-9] [INFO] [1790850470.319270465] [global_costmap.global_costmap]: start
+[python3-4] [WARN] [1790850470.662867566] [school_collision_safe_pose_applier]: BLOCKED human-human collision background_agent_5 <-> event_agent_1: d=0.33m
+[controller_server-10] [WARN] [1790850470.721698282] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[bt_navigator-11] [WARN] [1790850470.722238823] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[planner_server-9] [INFO] [1790850470.871105576] [planner_server]: Activating plugin GridBased of type SmacPlanner2D
+[planner_server-9] [INFO] [1790850470.873543141] [planner_server]: Creating bond (planner_server) to lifecycle manager.
+[lifecycle_manager-17] [INFO] [1790850470.905651859] [lifecycle_manager_navigation]: Server planner_server connected with bond.
+[lifecycle_manager-17] [INFO] [1790850470.905705789] [lifecycle_manager_navigation]: [34m[1mActivating controller_server[0m[0m
+[controller_server-10] [INFO] [1790850470.906171705] [controller_server]: Activating
+[controller_server-10] [INFO] [1790850470.906210437] [local_costmap.local_costmap]: Activating
+[controller_server-10] [INFO] [1790850470.906217161] [local_costmap.local_costmap]: Checking transform
+[controller_server-10] [INFO] [1790850470.906370210] [local_costmap.local_costmap]: start
+[controller_server-10] [WARN] [1790850470.943283342] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[controller_server-10] [WARN] [1790850470.943555929] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[bt_navigator-11] [WARN] [1790850470.943657461] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[controller_server-10] [INFO] [1790850471.108293054] [controller_server]: Creating bond (controller_server) to lifecycle manager.
+[planner_server-9] [WARN] [1790850471.149841281] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[planner_server-9] [WARN] [1790850471.150322480] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[planner_server-9] [WARN] [1790850471.155389879] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[lifecycle_manager-17] [INFO] [1790850471.219396934] [lifecycle_manager_navigation]: Server controller_server connected with bond.
+[lifecycle_manager-17] [INFO] [1790850471.219890800] [lifecycle_manager_navigation]: [34m[1mActivating bt_navigator[0m[0m
+[bt_navigator-11] [INFO] [1790850471.220219178] [bt_navigator]: Activating
+[bt_navigator-11] [INFO] [1790850471.362387507] [bt_navigator]: Creating bond (bt_navigator) to lifecycle manager.
+[lifecycle_manager-17] [INFO] [1790850471.423893551] [lifecycle_manager_navigation]: Server bt_navigator connected with bond.
+[lifecycle_manager-17] [INFO] [1790850471.423961179] [lifecycle_manager_navigation]: [34m[1mActivating behavior_server[0m[0m
+[behavior_server-12] [INFO] [1790850471.424564855] [behavior_server]: Activating
+[behavior_server-12] [INFO] [1790850471.424599256] [behavior_server]: Activating spin
+[behavior_server-12] [INFO] [1790850471.424618090] [behavior_server]: Activating backup
+[behavior_server-12] [INFO] [1790850471.424657502] [behavior_server]: Activating wait
+[behavior_server-12] [INFO] [1790850471.424681123] [behavior_server]: Creating bond (behavior_server) to lifecycle manager.
+[lifecycle_manager-17] [INFO] [1790850471.525828031] [lifecycle_manager_navigation]: Server behavior_server connected with bond.
+[lifecycle_manager-17] [INFO] [1790850471.525880168] [lifecycle_manager_navigation]: [34m[1mActivating waypoint_follower[0m[0m
+[waypoint_follower-13] [INFO] [1790850471.526670429] [waypoint_follower]: Activating
+[waypoint_follower-13] [INFO] [1790850471.526723511] [waypoint_follower]: Creating bond (waypoint_follower) to lifecycle manager.
+[lifecycle_manager-17] [INFO] [1790850471.632360010] [lifecycle_manager_navigation]: Server waypoint_follower connected with bond.
+[lifecycle_manager-17] [INFO] [1790850471.632413290] [lifecycle_manager_navigation]: [34m[1mManaged nodes are active[0m[0m
+[lifecycle_manager-17] [INFO] [1790850471.632429408] [lifecycle_manager_navigation]: [34m[1mCreating bond timer...[0m[0m
+[bt_navigator-11] [INFO] [1790850471.696555373] [bt_navigator]: Begin navigating from current location (-0.01, -7.87) to (-14.00, -8.15)
+[planner_server-9] [INFO] [1790850471.710091772] [global_costmap.global_costmap]: Message Filter dropping message: frame 'base_scan' at time 8.600 for reason 'the timestamp on the message is earlier than all the data in the transform cache'
+[planner_server-9] [ERROR] [1790850471.715862176] [transformPoseInTargetFrame]: Extrapolation Error looking up target frame: Lookup would require extrapolation into the past.  Requested time 8.900000 but the earliest data is at time 9.100000, when looking up transform from frame [base_footprint] to frame [map]
+[planner_server-9] 
+[planner_server-9] [WARN] [1790850471.934077688] [planner_server]: Planner loop missed its desired rate of 10.0000 Hz. Current loop rate is 4.9751 Hz
+[controller_server-10] [INFO] [1790850471.948224943] [controller_server]: Received a goal, begin computing control effort.
+[controller_server-10] [WARN] [1790850471.948287827] [controller_server]: No goal checker was specified in parameter 'current_goal_checker'. Server will use only plugin loaded goal_checker . This warning will appear once.
+[controller_server-10] [WARN] [1790850471.948307374] [controller_server]: No progress checker was specified in parameter 'current_progress_checker'. Server will use only plugin loaded progress_checker . This warning will appear once.
+[python3-5] [INFO] [1790850471.953275633] [school_pose_sync_monitor]: Gazebo↔RViz pose error=0.022 m (gz=0.01,-7.85; tf=-0.01,-7.87)
+[controller_server-10] [WARN] [1790850472.185516220] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[behavior_server-12] [WARN] [1790850472.185759852] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[bt_navigator-11] [WARN] [1790850472.186266469] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[amcl-8] [WARN] [1790850472.186347111] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[planner_server-9] [WARN] [1790850472.186414916] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[behavior_server-12] [WARN] [1790850472.186880167] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[controller_server-10] [WARN] [1790850472.186937150] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[planner_server-9] [WARN] [1790850472.186974974] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[bt_navigator-11] [WARN] [1790850472.187372482] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[controller_server-10] [ERROR] [1790850472.274441661] [controller_server]: Could not find a connection between 'odom' and 'map' because they are not part of the same tree.Tf has two or more unconnected trees.
+[controller_server-10] [WARN] [1790850472.274671621] [controller_server]: [follow_path] [ActionServer] Aborting handle.
+[behavior_server-12] [WARN] [1790850472.444269846] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[planner_server-9] [WARN] [1790850472.444386435] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[amcl-8] [WARN] [1790850472.568232235] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[planner_server-9] [ERROR] [1790850472.675776143] [transformPoseInTargetFrame]: Extrapolation Error looking up target frame: Lookup would require extrapolation at time 9.700000, but only time 10.100000 is in the buffer, when looking up transform from frame [base_footprint] to frame [map]
+[planner_server-9] 
+[bt_navigator-11] [ERROR] [1790850472.786762975] [transformPoseInTargetFrame]: Extrapolation Error looking up target frame: Lookup would require extrapolation into the past.  Requested time 9.800000 but the earliest data is at time 9.900000, when looking up transform from frame [base_footprint] to frame [map]
+[bt_navigator-11] 
+[bt_navigator-11] [ERROR] [1790850472.786848730] [bt_navigator]: Robot pose is not available.
+[controller_server-10] [INFO] [1790850472.890547228] [local_costmap.local_costmap]: Received request to clear entirely the local_costmap
+[controller_server-10] [INFO] [1790850472.891507869] [controller_server]: Received a goal, begin computing control effort.
+[bt_navigator-11] [WARN] [1790850472.898967941] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[behavior_server-12] [WARN] [1790850472.899714730] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[amcl-8] [WARN] [1790850473.093758058] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[bt_navigator-11] [WARN] [1790850473.093836562] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[planner_server-9] [WARN] [1790850473.094012850] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[planner_server-9] [ERROR] [1790850473.153047660] [transformPoseInTargetFrame]: Connectivity Error looking up target frame: Could not find a connection between 'map' and 'base_footprint' because they are not part of the same tree.Tf has two or more unconnected trees.
+[planner_server-9] 
+[bt_navigator-11] [WARN] [1790850473.224606529] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[behavior_server-12] [WARN] [1790850473.224606826] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[controller_server-10] [WARN] [1790850473.224647386] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[amcl-8] [WARN] [1790850473.224669683] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[planner_server-9] [WARN] [1790850473.224800473] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[robot_state_publisher-3] [WARN] [1790850473.225359092] [robot_state_publisher]: Moved backwards in time, re-publishing joint transforms!
+[controller_server-10] [ERROR] [1790850473.291908932] [controller_server]: Could not find a connection between 'odom' and 'map' because they are not part of the same tree.Tf has two or more unconnected trees.
+[controller_server-10] [WARN] [1790850473.292075755] [controller_server]: [follow_path] [ActionServer] Aborting handle.
+[bt_navigator-11] [ERROR] [1790850473.459099867] [transformPoseInTargetFrame]: Extrapolation Error looking up target frame: Lookup would require extrapolation at time 10.400000, but only time 10.900000 is in the buffer, when looking up transform from frame [base_footprint] to frame [map]
+[bt_navigator-11] 
+[bt_navigator-11] [ERROR] [1790850473.459154191] [bt_navigator]: Robot pose is not available.
+[controller_server-10] [WARN] [1790850473.484651334] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[amcl-8] [WARN] [1790850473.484714225] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[planner_server-9] [WARN] [1790850473.532872642] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[python3-4] [WARN] [1790850473.558518933] [school_collision_safe_pose_applier]: BLOCKED wall crossing for background_agent_7: target=(-2.295, -8.086)
+[controller_server-10] [INFO] [1790850473.583235024] [local_costmap.local_costmap]: Message Filter dropping message: frame 'base_scan' at time 10.400 for reason 'unknown'
+[controller_server-10] [WARN] [1790850473.658566656] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[behavior_server-12] [WARN] [1790850473.658592527] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[amcl-8] [WARN] [1790850473.658732829] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[planner_server-9] [WARN] [1790850473.659104253] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[robot_state_publisher-3] [WARN] [1790850473.659207176] [robot_state_publisher]: Moved backwards in time, re-publishing joint transforms!
+[planner_server-9] [ERROR] [1790850473.769751458] [transformPoseInTargetFrame]: Connectivity Error looking up target frame: Could not find a connection between 'map' and 'base_footprint' because they are not part of the same tree.Tf has two or more unconnected trees.
+[planner_server-9] 
+[behavior_server-12] [WARN] [1790850473.887994545] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[planner_server-9] [WARN] [1790850473.888193598] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[amcl-8] [WARN] [1790850473.888488721] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[bt_navigator-11] [WARN] [1790850473.889722395] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[amcl-8] [INFO] [1790850473.897682691] [amcl]: Message Filter dropping message: frame 'base_scan' at time 10.200 for reason 'the timestamp on the message is earlier than all the data in the transform cache'
+[planner_server-9] [ERROR] [1790850473.898392262] [transformPoseInTargetFrame]: Connectivity Error looking up target frame: Could not find a connection between 'map' and 'base_footprint' because they are not part of the same tree.Tf has two or more unconnected trees.
+[planner_server-9] 
+[planner_server-9] [WARN] [1790850473.898500305] [planner_server]: GridBased plugin failed to plan from (0.00, 0.00) to (-14.00, -8.15): "Unable to get start pose"
+[planner_server-9] [WARN] [1790850473.898537824] [planner_server]: [compute_path_to_pose] [ActionServer] Aborting handle.
+[behavior_server-12] [WARN] [1790850474.109419812] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[bt_navigator-11] [WARN] [1790850474.109403295] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[controller_server-10] [WARN] [1790850474.109410014] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[robot_state_publisher-3] [WARN] [1790850474.109883250] [robot_state_publisher]: Moved backwards in time, re-publishing joint transforms!
+[amcl-8] [WARN] [1790850474.110054254] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[planner_server-9] [WARN] [1790850474.110163715] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[bt_navigator-11] [ERROR] [1790850474.122583579] [transformPoseInTargetFrame]: Connectivity Error looking up target frame: Could not find a connection between 'map' and 'base_footprint' because they are not part of the same tree.Tf has two or more unconnected trees.
+[bt_navigator-11] 
+[bt_navigator-11] [ERROR] [1790850474.122655300] [bt_navigator]: Robot pose is not available.
+[controller_server-10] [INFO] [1790850474.123359117] [local_costmap.local_costmap]: Received request to clear entirely the local_costmap
+[planner_server-9] [INFO] [1790850474.123758438] [global_costmap.global_costmap]: Received request to clear entirely the global_costmap
+[python3-4] [WARN] [1790850474.158156957] [school_collision_safe_pose_applier]: BLOCKED wall crossing for background_agent_7: target=(-2.121, -8.073)
+[planner_server-9] [ERROR] [1790850474.163138045] [transformPoseInTargetFrame]: Connectivity Error looking up target frame: Could not find a connection between 'map' and 'base_footprint' because they are not part of the same tree.Tf has two or more unconnected trees.
+[planner_server-9] 
+[bt_navigator-11] [WARN] [1790850474.228352980] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[amcl-8] [WARN] [1790850474.228461410] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[controller_server-10] [WARN] [1790850474.228522276] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[behavior_server-12] [WARN] [1790850474.228523921] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[planner_server-9] [WARN] [1790850474.228579844] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[robot_state_publisher-3] [WARN] [1790850474.229192600] [robot_state_publisher]: Moved backwards in time, re-publishing joint transforms!
+[bt_navigator-11] [WARN] [1790850474.342527707] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[amcl-8] [WARN] [1790850474.342565129] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[planner_server-9] [WARN] [1790850474.342824123] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[controller_server-10] [WARN] [1790850474.342899929] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[robot_state_publisher-3] [WARN] [1790850474.343338163] [robot_state_publisher]: Moved backwards in time, re-publishing joint transforms!
+[python3-4] [WARN] [1790850474.506914953] [school_collision_safe_pose_applier]: BLOCKED human-human collision background_agent_4 <-> background_agent_7: d=0.34m
+[planner_server-9] [ERROR] [1790850474.673990220] [transformPoseInTargetFrame]: Extrapolation Error looking up target frame: Lookup would require extrapolation at time 11.380000, but only time 11.700000 is in the buffer, when looking up transform from frame [base_footprint] to frame [map]
+[planner_server-9] 
+[behavior_server-12] [WARN] [1790850474.690281302] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[bt_navigator-11] [ERROR] [1790850474.712397463] [transformPoseInTargetFrame]: Extrapolation Error looking up target frame: Lookup would require extrapolation into the past.  Requested time 11.420000 but the earliest data is at time 11.700000, when looking up transform from frame [base_footprint] to frame [map]
+[bt_navigator-11] 
+[bt_navigator-11] [ERROR] [1790850474.712469711] [bt_navigator]: Robot pose is not available.
+[amcl-8] [WARN] [1790850474.800790290] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[controller_server-10] [WARN] [1790850474.800806181] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[planner_server-9] [INFO] [1790850474.809402929] [global_costmap.global_costmap]: Message Filter dropping message: frame 'base_scan' at time 11.200 for reason 'the timestamp on the message is earlier than all the data in the transform cache'
+[behavior_server-12] [WARN] [1790850475.039545552] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[controller_server-10] [WARN] [1790850475.039574299] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[bt_navigator-11] [WARN] [1790850475.039749565] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[robot_state_publisher-3] [WARN] [1790850475.040284490] [robot_state_publisher]: Moved backwards in time, re-publishing joint transforms!
+[planner_server-9] [WARN] [1790850475.049032364] [planner_server]: Planner loop missed its desired rate of 10.0000 Hz. Current loop rate is 1.2594 Hz
+[controller_server-10] [INFO] [1790850475.050102260] [controller_server]: Received a goal, begin computing control effort.
+[controller_server-10] [ERROR] [1790850475.060483855] [controller_server]: Could not find a connection between 'odom' and 'map' because they are not part of the same tree.Tf has two or more unconnected trees.
+[controller_server-10] [WARN] [1790850475.060700431] [controller_server]: [follow_path] [ActionServer] Aborting handle.
+[behavior_server-12] [WARN] [1790850475.157006806] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[amcl-8] [WARN] [1790850475.157202583] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[planner_server-9] [WARN] [1790850475.157205038] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[behavior_server-12] [WARN] [1790850475.528338291] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[bt_navigator-11] [WARN] [1790850475.529846456] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[behavior_server-12] [WARN] [1790850475.658760341] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[amcl-8] [WARN] [1790850475.659028561] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[planner_server-9] [WARN] [1790850475.659309200] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[planner_server-9] [WARN] [1790850475.662219844] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[bt_navigator-11] [WARN] [1790850475.662997925] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[bt_navigator-11] [ERROR] [1790850475.749358160] [transformPoseInTargetFrame]: Extrapolation Error looking up target frame: Lookup would require extrapolation at time 12.200000, but only time 12.700000 is in the buffer, when looking up transform from frame [base_footprint] to frame [map]
+[bt_navigator-11] 
+[bt_navigator-11] [ERROR] [1790850475.749454023] [bt_navigator]: Robot pose is not available.
+[planner_server-9] [ERROR] [1790850475.776332089] [transformPoseInTargetFrame]: Extrapolation Error looking up target frame: Lookup would require extrapolation at time 12.240000, but only time 12.700000 is in the buffer, when looking up transform from frame [base_footprint] to frame [map]
+[planner_server-9] 
+[amcl-8] [WARN] [1790850475.853235319] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[behavior_server-12] [WARN] [1790850475.853258311] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[controller_server-10] [WARN] [1790850475.853289522] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[bt_navigator-11] [WARN] [1790850475.853301766] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[planner_server-9] [WARN] [1790850475.853803515] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[robot_state_publisher-3] [WARN] [1790850475.853930135] [robot_state_publisher]: Moved backwards in time, re-publishing joint transforms!
+[planner_server-9] [ERROR] [1790850476.163800607] [transformPoseInTargetFrame]: Extrapolation Error looking up target frame: Lookup would require extrapolation at time 12.580000, but only time 12.900000 is in the buffer, when looking up transform from frame [base_footprint] to frame [map]
+[planner_server-9] 
+[bt_navigator-11] [ERROR] [1790850476.316063006] [transformPoseInTargetFrame]: Extrapolation Error looking up target frame: Lookup would require extrapolation into the past.  Requested time 12.720000 but the earliest data is at time 12.900000, when looking up transform from frame [base_footprint] to frame [map]
+[bt_navigator-11] 
+[bt_navigator-11] [ERROR] [1790850476.316119814] [bt_navigator]: Robot pose is not available.
+[controller_server-10] [INFO] [1790850476.317620179] [local_costmap.local_costmap]: Received request to clear entirely the local_costmap
+[controller_server-10] [INFO] [1790850476.318335355] [controller_server]: Received a goal, begin computing control effort.
+[planner_server-9] [WARN] [1790850476.410665606] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[python3-4] [WARN] [1790850476.463236329] [school_collision_safe_pose_applier]: BLOCKED robot collision for background_agent_7: d=0.40m < 0.45m
+[controller_server-10] [WARN] [1790850476.510553653] [controller_server]: Control loop missed its desired rate of 10.0000 Hz. Current loop rate is 5.9172 Hz.
+[controller_server-10] [WARN] [1790850476.638808791] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[behavior_server-12] [WARN] [1790850476.638810150] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[amcl-8] [WARN] [1790850476.638872937] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[planner_server-9] [ERROR] [1790850476.671792315] [transformPoseInTargetFrame]: Extrapolation Error looking up target frame: Lookup would require extrapolation at time 13.020000, but only time 13.300000 is in the buffer, when looking up transform from frame [base_footprint] to frame [map]
+[planner_server-9] 
+[planner_server-9] [WARN] [1790850476.671880109] [planner_server]: GridBased plugin failed to plan from (0.00, 0.00) to (-14.00, -8.15): "Unable to get start pose"
+[planner_server-9] [WARN] [1790850476.671916423] [planner_server]: [compute_path_to_pose] [ActionServer] Aborting handle.
+[planner_server-9] [ERROR] [1790850476.674095202] [transformPoseInTargetFrame]: Extrapolation Error looking up target frame: Lookup would require extrapolation at time 13.020000, but only time 13.300000 is in the buffer, when looking up transform from frame [base_footprint] to frame [map]
+[planner_server-9] 
+[bt_navigator-11] [ERROR] [1790850476.702761253] [bt_navigator_navigate_to_pose_rclcpp_node]: Failed to get result for follow_path in node halt!
+[bt_navigator-11] [WARN] [1790850476.702979620] [bt_navigator]: [navigate_to_pose] [ActionServer] Aborting handle.
+[bt_navigator-11] [ERROR] [1790850476.703440853] [bt_navigator]: Goal failed
+[controller_server-10] [INFO] [1790850476.710718155] [controller_server]: Cancellation was successful. Stopping the robot.
+[controller_server-10] [INFO] [1790850476.710796478] [controller_server]: [follow_path] [ActionServer] Client requested to cancel the goal. Cancelling.
+[amcl-8] [WARN] [1790850476.806120971] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[behavior_server-12] [WARN] [1790850476.806296149] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[planner_server-9] [WARN] [1790850476.806357985] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[controller_server-10] [WARN] [1790850476.806392328] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[python3-5] [INFO] [1790850476.961145930] [school_pose_sync_monitor]: Gazebo↔RViz pose error=0.024 m (gz=0.01,-7.85; tf=-0.01,-7.87)
+[planner_server-9] [WARN] [1790850477.096048897] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[controller_server-10] [INFO] [1790850477.105840642] [local_costmap.local_costmap]: Message Filter dropping message: frame 'base_scan' at time 13.000 for reason 'the timestamp on the message is earlier than all the data in the transform cache'
+[planner_server-9] [ERROR] [1790850477.224607716] [transformPoseInTargetFrame]: Connectivity Error looking up target frame: Could not find a connection between 'map' and 'base_footprint' because they are not part of the same tree.Tf has two or more unconnected trees.
+[planner_server-9] 
+[amcl-8] [INFO] [1790850477.335885301] [amcl]: Message Filter dropping message: frame 'base_scan' at time 13.000 for reason 'the timestamp on the message is earlier than all the data in the transform cache'
+[planner_server-9] [ERROR] [1790850477.674315532] [transformPoseInTargetFrame]: Extrapolation Error looking up target frame: Lookup would require extrapolation into the past.  Requested time 13.800000 but the earliest data is at time 13.900000, when looking up transform from frame [base_footprint] to frame [map]
+[planner_server-9] 
+[behavior_server-12] [WARN] [1790850477.677258329] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[bt_navigator-11] [WARN] [1790850477.677269382] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[controller_server-10] [WARN] [1790850477.677315780] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[planner_server-9] [WARN] [1790850477.677918684] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[planner_server-9] [INFO] [1790850478.066012906] [global_costmap.global_costmap]: Message Filter dropping message: frame 'base_scan' at time 13.800 for reason 'the timestamp on the message is earlier than all the data in the transform cache'
+[planner_server-9] [ERROR] [1790850478.163760127] [transformPoseInTargetFrame]: Extrapolation Error looking up target frame: Lookup would require extrapolation into the past.  Requested time 14.200000 but the earliest data is at time 14.300000, when looking up transform from frame [base_footprint] to frame [map]
+[planner_server-9] 
+[behavior_server-12] [WARN] [1790850478.285317102] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[controller_server-10] [WARN] [1790850478.285316979] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[amcl-8] [WARN] [1790850478.285360700] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[bt_navigator-11] [WARN] [1790850478.285516511] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[robot_state_publisher-3] [WARN] [1790850478.414240161] [robot_state_publisher]: Moved backwards in time, re-publishing joint transforms!
+[amcl-8] [WARN] [1790850478.414688317] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[bt_navigator-11] [WARN] [1790850478.414812076] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[bt_navigator-11] [WARN] [1790850478.646427405] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[planner_server-9] [WARN] [1790850478.646531928] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[controller_server-10] [WARN] [1790850478.646537681] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[bt_navigator-11] [WARN] [1790850478.646823003] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[bt_navigator-11] [WARN] [1790850478.647543108] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[behavior_server-12] [WARN] [1790850478.646915957] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[amcl-8] [WARN] [1790850478.646950201] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[amcl-8] [WARN] [1790850478.647453333] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[planner_server-9] [WARN] [1790850478.647039845] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[robot_state_publisher-3] [WARN] [1790850478.647110317] [robot_state_publisher]: Moved backwards in time, re-publishing joint transforms!
+[WARNING] [launch]: user interrupted with ctrl-c (SIGINT)
+[controller_server-10] [INFO] [1790850478.828393425] [rclcpp]: signal_handler(SIGINT/SIGTERM)
+[controller_server-10] [INFO] [1790850478.828503440] [controller_server]: Running Nav2 LifecycleNode rcl preshutdown (controller_server)
+[controller_server-10] [INFO] [1790850478.828577399] [controller_server]: Deactivating
+[controller_server-10] [INFO] [1790850478.828647563] [local_costmap.local_costmap]: Deactivating
+[robot_state_publisher-3] [INFO] [1790850478.828410430] [rclcpp]: signal_handler(SIGINT/SIGTERM)
+[bt_navigator-11] [INFO] [1790850478.828407294] [rclcpp]: signal_handler(SIGINT/SIGTERM)
+[bt_navigator-11] [INFO] [1790850478.828503468] [bt_navigator]: Running Nav2 LifecycleNode rcl preshutdown (bt_navigator)
+[bt_navigator-11] [INFO] [1790850478.828575803] [bt_navigator]: Deactivating
+[bt_navigator-11] [INFO] [1790850478.828606195] [bt_navigator]: Destroying bond (bt_navigator) to lifecycle manager.
+[parameter_bridge-2] [INFO] [1790850478.828430631] [rclcpp]: signal_handler(SIGINT/SIGTERM)
+[planner_server-9] [INFO] [1790850478.828405618] [rclcpp]: signal_handler(SIGINT/SIGTERM)
+[planner_server-9] [INFO] [1790850478.828503727] [planner_server]: Running Nav2 LifecycleNode rcl preshutdown (planner_server)
+[planner_server-9] [INFO] [1790850478.828592325] [planner_server]: Deactivating
+[planner_server-9] [INFO] [1790850478.828642285] [global_costmap.global_costmap]: Deactivating
+[amcl-8] [INFO] [1790850478.828464464] [rclcpp]: signal_handler(SIGINT/SIGTERM)
+[amcl-8] [INFO] [1790850478.828602130] [amcl]: Running Nav2 LifecycleNode rcl preshutdown (amcl)
+[amcl-8] [INFO] [1790850478.828682086] [amcl]: Deactivating
+[amcl-8] [INFO] [1790850478.828714614] [amcl]: Destroying bond (amcl) to lifecycle manager.
+[waypoint_follower-13] [INFO] [1790850478.828468452] [rclcpp]: signal_handler(SIGINT/SIGTERM)
+[waypoint_follower-13] [INFO] [1790850478.828597799] [waypoint_follower]: Running Nav2 LifecycleNode rcl preshutdown (waypoint_follower)
+[waypoint_follower-13] [INFO] [1790850478.828673999] [waypoint_follower]: Deactivating
+[waypoint_follower-13] [INFO] [1790850478.828697533] [waypoint_follower]: Destroying bond (waypoint_follower) to lifecycle manager.
+[lifecycle_manager-17] [INFO] [1790850478.828497329] [rclcpp]: signal_handler(SIGINT/SIGTERM)
+[lifecycle_manager-17] [INFO] [1790850478.828604310] [lifecycle_manager_navigation]: Running Nav2 LifecycleManager rcl preshutdown (lifecycle_manager_navigation)
+[lifecycle_manager-17] [INFO] [1790850478.828663276] [lifecycle_manager_navigation]: [34m[1mTerminating bond timer...[0m[0m
+[behavior_server-12] [INFO] [1790850478.828574859] [rclcpp]: signal_handler(SIGINT/SIGTERM)
+[behavior_server-12] [INFO] [1790850478.828701325] [behavior_server]: Running Nav2 LifecycleNode rcl preshutdown (behavior_server)
+[behavior_server-12] [INFO] [1790850478.828775367] [behavior_server]: Deactivating
+[behavior_server-12] [INFO] [1790850478.828817849] [behavior_server]: Destroying bond (behavior_server) to lifecycle manager.
+[map_server-7] [INFO] [1790850478.828738406] [rclcpp]: signal_handler(SIGINT/SIGTERM)
+[map_server-7] [INFO] [1790850478.828868077] [map_server]: Running Nav2 LifecycleNode rcl preshutdown (map_server)
+[map_server-7] [INFO] [1790850478.828925678] [map_server]: Deactivating
+[map_server-7] [INFO] [1790850478.828943682] [map_server]: Destroying bond (map_server) to lifecycle manager.
+[lifecycle_manager-16] [INFO] [1790850478.828744757] [rclcpp]: signal_handler(SIGINT/SIGTERM)
+[lifecycle_manager-16] [INFO] [1790850478.828838205] [lifecycle_manager_localization]: Running Nav2 LifecycleManager rcl preshutdown (lifecycle_manager_localization)
+[lifecycle_manager-16] [INFO] [1790850478.828881133] [lifecycle_manager_localization]: [34m[1mTerminating bond timer...[0m[0m
+[INFO] [lifecycle_manager-17]: sending signal 'SIGINT' to process[lifecycle_manager-17]
+[INFO] [lifecycle_manager-16]: sending signal 'SIGINT' to process[lifecycle_manager-16]
+[INFO] [goal_pose_bridge.py-15]: sending signal 'SIGINT' to process[goal_pose_bridge.py-15]
+[INFO] [waypoint_follower-13]: sending signal 'SIGINT' to process[waypoint_follower-13]
+[INFO] [behavior_server-12]: sending signal 'SIGINT' to process[behavior_server-12]
+[INFO] [bt_navigator-11]: sending signal 'SIGINT' to process[bt_navigator-11]
+[INFO] [controller_server-10]: sending signal 'SIGINT' to process[controller_server-10]
+[INFO] [planner_server-9]: sending signal 'SIGINT' to process[planner_server-9]
+[INFO] [amcl-8]: sending signal 'SIGINT' to process[amcl-8]
+[INFO] [map_server-7]: sending signal 'SIGINT' to process[map_server-7]
+[INFO] [python3-5]: sending signal 'SIGINT' to process[python3-5]
+[INFO] [python3-4]: sending signal 'SIGINT' to process[python3-4]
+[INFO] [robot_state_publisher-3]: sending signal 'SIGINT' to process[robot_state_publisher-3]
+[INFO] [parameter_bridge-2]: sending signal 'SIGINT' to process[parameter_bridge-2]
+[INFO] [gz-1]: sending signal 'SIGINT' to process[gz-1]
+[amcl-8] [INFO] [1790850478.839232070] [amcl]: Cleaning up
+[bt_navigator-11] [INFO] [1790850478.839245578] [bt_navigator]: Cleaning up
+[ERROR] [map_server-7]: process has died [pid 112174, exit code -2, cmd '/opt/ros/jazzy/lib/nav2_map_server/map_server --ros-args -r __node:=map_server --params-file /home/haduckien/nav_ws/src/custom_corridor/worlds/school_arena/demo_1/dataset_v1.0/episodes/ep_000026/nav2_school.yaml --params-file /tmp/launch_params_lihq4uzf'].
+[ERROR] [python3-5]: process has died [pid 111512, exit code -2, cmd 'python3 /home/haduckien/nav_ws/src/custom_corridor/worlds/school_arena/demo_1/pose_sync_monitor.py --ros-args -p use_sim_time:=true -p robot_name:=robot -p world_frame:=map -p initial_x:=0.0 -p initial_y:=-7.85'].
+[behavior_server-12] [INFO] [1790850478.839496381] [behavior_server]: Cleaning up
+[map_server-7] [INFO] [1790850478.839923284] [map_server]: Cleaning up
+[map_server-7] [INFO] [1790850478.840090859] [map_server]: Destroying bond (map_server) to lifecycle manager.
+[waypoint_follower-13] [INFO] [1790850478.840983866] [waypoint_follower]: Cleaning up
+[ERROR] [python3-4]: process has died [pid 111511, exit code -2, cmd 'python3 /home/haduckien/nav_ws/src/custom_corridor/worlds/school_arena/demo_1/collision_safe_pose_applier.py --ros-args -p use_sim_time:=true -p world_name:=school_arena -p target_topic:=/school_hunav/target_poses -p map_yaml:=/home/haduckien/nav_ws/src/custom_corridor/worlds/school_arena/demo_1/map.yaml -p agent_radius:=0.22 -p apply_hz:=20.0 -p ground_z:=0.0'].
+[goal_pose_bridge.py-15] Traceback (most recent call last):
+[goal_pose_bridge.py-15]   File "/home/haduckien/nav_ws/install/custom_corridor/lib/custom_corridor/goal_pose_bridge.py", line 88, in <module>
+[goal_pose_bridge.py-15]     main()
+[goal_pose_bridge.py-15]   File "/home/haduckien/nav_ws/install/custom_corridor/lib/custom_corridor/goal_pose_bridge.py", line 82, in main
+[goal_pose_bridge.py-15]     node.destroy_node()
+[goal_pose_bridge.py-15]   File "/opt/ros/jazzy/lib/python3.12/site-packages/rclpy/node.py", line 1962, in destroy_node
+[goal_pose_bridge.py-15]     self.destroy_service(self._services[0])
+[goal_pose_bridge.py-15]   File "/opt/ros/jazzy/lib/python3.12/site-packages/rclpy/node.py", line 1886, in destroy_service
+[goal_pose_bridge.py-15]     service.destroy()
+[goal_pose_bridge.py-15]   File "/opt/ros/jazzy/lib/python3.12/site-packages/rclpy/service.py", line 123, in destroy
+[goal_pose_bridge.py-15]     self.__service.destroy_when_not_in_use()
+[goal_pose_bridge.py-15] KeyboardInterrupt
+[behavior_server-12] [INFO] [1790850478.865548416] [behavior_server]: Destroying bond (behavior_server) to lifecycle manager.
+[amcl-8] [INFO] [1790850478.866456217] [amcl]: Destroying bond (amcl) to lifecycle manager.
+[map_server-7] [INFO] [1790850478.867705079] [map_server]: Destroying
+[behavior_server-12] [INFO] [1790850478.874778239] [rclcpp]: signal_handler(SIGINT/SIGTERM)
+[amcl-8] [INFO] [1790850478.891270087] [rclcpp]: signal_handler(SIGINT/SIGTERM)
+[amcl-8] [INFO] [1790850478.901054895] [amcl]: Destroying
+[waypoint_follower-13] [INFO] [1790850478.905950985] [waypoint_follower]: Destroying bond (waypoint_follower) to lifecycle manager.
+[controller_server-10] [INFO] [1790850478.906863206] [controller_server]: Destroying bond (controller_server) to lifecycle manager.
+[robot_state_publisher-3] [INFO] [1790850478.908035800] [rclcpp]: signal_handler(SIGINT/SIGTERM)
+[waypoint_follower-13] [INFO] [1790850478.910337079] [waypoint_follower]: Destroying
+[parameter_bridge-2] [INFO] [1790850478.915226010] [rclcpp]: signal_handler(SIGINT/SIGTERM)
+[controller_server-10] [INFO] [1790850478.917792816] [controller_server]: Cleaning up
+[controller_server-10] [INFO] [1790850478.918198607] [local_costmap.local_costmap]: Cleaning up
+[behavior_server-12] [INFO] [1790850478.925310363] [behavior_server]: Destroying
+[lifecycle_manager-16] [INFO] [1790850478.933826539] [rclcpp]: signal_handler(SIGINT/SIGTERM)
+[lifecycle_manager-16] [INFO] [1790850478.937289393] [lifecycle_manager_localization]: Destroying lifecycle_manager_localization
+[lifecycle_manager-17] [INFO] [1790850478.950818115] [rclcpp]: signal_handler(SIGINT/SIGTERM)
+[lifecycle_manager-17] [INFO] [1790850478.951063438] [lifecycle_manager_navigation]: Destroying lifecycle_manager_navigation
+[controller_server-10] [INFO] [1790850478.969986098] [controller_server]: Destroying bond (controller_server) to lifecycle manager.
+[controller_server-10] [INFO] [1790850478.972507212] [rclcpp]: signal_handler(SIGINT/SIGTERM)
+[controller_server-10] [INFO] [1790850478.974877613] [local_costmap.local_costmap]: Destroying
+[controller_server-10] [INFO] [1790850478.986767698] [controller_server]: Destroying
+[INFO] [parameter_bridge-2]: process has finished cleanly [pid 111509]
+[bt_navigator-11] [INFO] [1790850479.020022103] [bt_navigator]: Completed Cleaning up
+[bt_navigator-11] [INFO] [1790850479.020095512] [bt_navigator]: Destroying bond (bt_navigator) to lifecycle manager.
+[bt_navigator-11] [INFO] [1790850479.020638119] [rclcpp]: signal_handler(SIGINT/SIGTERM)
+[ERROR] [goal_pose_bridge.py-15]: process has died [pid 112182, exit code -2, cmd '/home/haduckien/nav_ws/install/custom_corridor/lib/custom_corridor/goal_pose_bridge.py --ros-args -r __node:=goal_pose_bridge --params-file /tmp/launch_params_4lkqs6oh'].
+[bt_navigator-11] [INFO] [1790850479.025272673] [bt_navigator]: Destroying
+[INFO] [robot_state_publisher-3]: process has finished cleanly [pid 111510]
+[INFO] [amcl-8]: process has finished cleanly [pid 112175]
+[INFO] [waypoint_follower-13]: process has finished cleanly [pid 112180]
+[INFO] [behavior_server-12]: process has finished cleanly [pid 112179]
+[INFO] [lifecycle_manager-16]: process has finished cleanly [pid 112421]
+[INFO] [lifecycle_manager-17]: process has finished cleanly [pid 112506]
+[INFO] [controller_server-10]: process has finished cleanly [pid 112177]
+[INFO] [bt_navigator-11]: process has finished cleanly [pid 112178]
+[INFO] [gz-1]: process has finished cleanly [pid 111508]
+[ERROR] [planner_server-9]: process[planner_server-9] failed to terminate '5' seconds after receiving 'SIGINT', escalating to 'SIGTERM'
+[INFO] [planner_server-9]: sending signal 'SIGTERM' to process[planner_server-9]
