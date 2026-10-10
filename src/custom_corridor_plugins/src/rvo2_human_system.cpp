@@ -224,6 +224,10 @@ public:
     this->animSpeedFactor_ = SdfValueOr<double>(_sdf, "animation_speed_factor", 4.1534);
     this->politenessBalancePoint_ = SdfValueOr<double>(_sdf, "politeness_balance_point", 0.6);
     this->randomizePoliteness_ = SdfValueOr<bool>(_sdf, "randomize_politeness", true);
+    this->seed_ = static_cast<uint32_t>(SdfValueOr<int>(_sdf, "seed", 42));
+    this->autoStart_ = SdfValueOr<bool>(_sdf, "auto_start", true);
+    this->running_ = this->autoStart_;
+    this->rng_.seed(this->seed_);
 
     // Corridor and Recess configuration
     this->corridorMode_ = SdfValueOr<bool>(_sdf, "corridor_mode", false);
@@ -407,10 +411,13 @@ public:
       const gz::sim::UpdateInfo &,
       gz::sim::EntityComponentManager &_ecm) override
   {
-    this->running_ = false;
+    this->running_ = this->autoStart_;
+    this->robotEntity_ = gz::sim::kNullEntity;
+    this->entitiesResolved_ = false;
     this->ResetScenarioRuntime();
     this->ApplyAllPoses(_ecm);
-    gzmsg << "[RVO2HumanSystem] Reset handled.\n";
+    gzmsg << "[RVO2HumanSystem] Reset handled (running: " << (this->running_ ? "true" : "false")
+          << ", seed: " << this->seed_ << ").\n";
   }
 
 private:
@@ -919,6 +926,13 @@ private:
     json payload;
     payload["timestamp"] = tSec;
     payload["corridor_mode"] = this->corridorMode_;
+    payload["robot"] = {
+        {"x", this->robotPrevX_},
+        {"y", this->robotPrevY_},
+        {"vx", this->robotVx_},
+        {"vy", this->robotVy_},
+        {"speed", this->robotSpeed_}
+    };
     payload["humans"] = json::array();
 
     for (const auto &human : this->humans_)
@@ -1190,14 +1204,24 @@ private:
 
     if (this->corridorMode_)
     {
-      std::string jsonStr = R"({
-        "episode_id": 1,
-        "corridor_mode": true,
-        "humans": [
-          {"id": 1, "mode": "autonomous", "speed": 0.75, "scale": 1.02, "visual_z": 1.02, "proxy_z": 0.85, "waypoints": [[5.0, 0.0], [-3.0, 0.0]]}
-        ]
-      })";
-      this->LoadScenarioJson(jsonStr);
+      const std::vector<double> yOffsets = {0.0, 0.15, -0.15, 0.20, -0.20};
+      json root;
+      root["episode_id"] = 1;
+      root["corridor_mode"] = true;
+      root["humans"] = json::array();
+      for (int i = 1; i <= this->humanCount_; ++i)
+      {
+        json hObj;
+        hObj["id"] = i;
+        hObj["mode"] = "autonomous";
+        hObj["speed"] = 0.75;
+        const double spawnX = 3.5 + (i - 1) * (7.0 / std::max(this->humanCount_ - 1, 1));
+        const double spawnY = yOffsets[(i - 1) % yOffsets.size()];
+        hObj["start"] = {{"x", spawnX}, {"y", spawnY}, {"yaw", 3.14159}};
+        hObj["waypoints"] = json::array({{spawnX, spawnY}, {-5.0, spawnY}, {12.0, spawnY}});
+        root["humans"].push_back(hObj);
+      }
+      this->LoadScenarioJson(root.dump());
       return;
     }
 
@@ -1228,6 +1252,7 @@ private:
 
   void ResetScenarioRuntime()
   {
+    this->rng_.seed(this->seed_);
     for (auto &human : this->humans_)
     {
       human.Reset();
@@ -1244,10 +1269,26 @@ private:
           human.yaw = HeadingTo(human.x, human.y, human.waypoints[1].x, human.waypoints[1].y);
         }
       }
-      this->rvoSim_->setAgentPosition(human.rvoIndex, RVO::Vector2(human.x, human.y));
-      this->rvoSim_->setAgentVelocity(human.rvoIndex, RVO::Vector2(0, 0));
-      this->rvoSim_->setAgentPrefVelocity(human.rvoIndex, RVO::Vector2(0, 0));
+      if (this->rvoSim_)
+      {
+        this->rvoSim_->setAgentPosition(human.rvoIndex, RVO::Vector2(human.x, human.y));
+        this->rvoSim_->setAgentVelocity(human.rvoIndex, RVO::Vector2(0, 0));
+        this->rvoSim_->setAgentPrefVelocity(human.rvoIndex, RVO::Vector2(0, 0));
+      }
     }
+
+    if (this->rvoSim_)
+    {
+      this->rvoSim_->setAgentPosition(this->robotRvoIndex_, RVO::Vector2(1000.0f, 1000.0f));
+      this->rvoSim_->setAgentVelocity(this->robotRvoIndex_, RVO::Vector2(0, 0));
+      this->rvoSim_->setAgentPrefVelocity(this->robotRvoIndex_, RVO::Vector2(0, 0));
+    }
+    this->robotHasPrevPose_ = false;
+    this->robotSpeed_ = 0.0;
+    this->robotPrevX_ = 0.0;
+    this->robotPrevY_ = 0.0;
+    this->robotVx_ = 0.0;
+    this->robotVy_ = 0.0;
   }
 
   // Member variables
@@ -1274,7 +1315,9 @@ private:
   double animSpeedFactor_{4.1534};
   double politenessBalancePoint_{0.6};
   bool randomizePoliteness_{true};
-  std::mt19937 rng_{std::random_device{}()};
+  uint32_t seed_{42};
+  bool autoStart_{true};
+  std::mt19937 rng_{42};
 
   // Corridor parameters
   bool corridorMode_{false};
