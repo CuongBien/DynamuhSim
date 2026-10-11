@@ -30,7 +30,11 @@ class BenchmarkWorldGenerator:
         corridor_type: str = "090",
         seed: int = 42,
         real_time_factor: float = 1.0,
+        x_start: float = 3.5,
+        x_span: float = 7.0,
+        out_filename: str = None,
     ) -> str:
+
         """
         Generates an SDF world with N humans and specified representation.
         """
@@ -41,6 +45,16 @@ class BenchmarkWorldGenerator:
         content = re.sub(
             r"<human_count>\d+</human_count>",
             f"<human_count>{num_humans}</human_count>",
+            content
+        )
+        content = re.sub(
+            r"<robot_name>.*?</robot_name>",
+            "<robot_name>mecanum_robot</robot_name>",
+            content
+        )
+        content = re.sub(
+            r"<robot_radius>.*?</robot_radius>",
+            "<robot_radius>0.16</robot_radius>",
             content
         )
 
@@ -75,7 +89,7 @@ class BenchmarkWorldGenerator:
         for i in range(1, num_humans + 1):
             idx_str = f"{i:02d}"
             # Evenly spread along the corridor
-            x_pos = 3.5 + (i - 1) * (7.0 / max(num_humans - 1, 1))
+            x_pos = x_start + (i - 1) * (x_span / max(num_humans - 1, 1))
             y_pos = y_offsets[(i - 1) % len(y_offsets)]
             scale = scales[(i - 1) % len(scales)]
 
@@ -146,11 +160,12 @@ class BenchmarkWorldGenerator:
         injection_text = "\n".join(humans_sdf) + "\n  </world>"
         content = content.replace("</world>", injection_text)
 
-        out_name = f"world_n{num_humans}_{representation}.sdf"
+        out_name = out_filename if out_filename else f"world_n{num_humans}_{representation}.sdf"
         out_path = os.path.join(self.output_dir, out_name)
         with open(out_path, "w") as f:
             f.write(content)
         return out_path
+
 
     def generate_robot_model(
         self,

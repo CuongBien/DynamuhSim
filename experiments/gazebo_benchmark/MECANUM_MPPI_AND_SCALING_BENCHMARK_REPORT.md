@@ -2,7 +2,7 @@
 
 **Ngày thực hiện:** 11/10/2026  
 **Môi trường:** Ubuntu 24.04 (WSL2), ROS 2 Jazzy, Gazebo Harmonic 8.x  
-**Phần cứng:** Intel Core i7 (10 vCPUs), NVIDIA GeForce RTX 4060 Laptop GPU (8GB VRAM)  
+**Phần cứng:** AMD Ryzen 7 7735H with Radeon Graphics (16 vCPUs), NVIDIA GeForce RTX 4060 Laptop GPU (8GB VRAM)  
 **Tăng tốc dựng hình:** `GALLIUM_DRIVER=d3d12`, `MESA_D3D12_DEFAULT_ADAPTER_NAME=NVIDIA` (DirectX 12 D3D12 trên dGPU RTX 4060)
 
 ---
