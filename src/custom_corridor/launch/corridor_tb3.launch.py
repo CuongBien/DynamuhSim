@@ -105,12 +105,17 @@ def launch_setup(context):
             'urdf',
             'mecanum_robot.urdf'
         )
-        selected_robot_model = os.path.join(
-            corridor_share,
-            'models',
-            'mecanum_robot',
-            'model.sdf'
-        )
+        custom_robot_model = LaunchConfiguration('custom_robot_model').perform(context).strip()
+        if custom_robot_model and os.path.isfile(custom_robot_model):
+            selected_robot_model = custom_robot_model
+        else:
+            selected_robot_model = os.path.join(
+                corridor_share,
+                'models',
+                'mecanum_robot',
+                'model.sdf'
+            )
+
         selected_bridge_config = os.path.join(
             corridor_share,
             'config',
@@ -124,15 +129,19 @@ def launch_setup(context):
     # ---------------------------------------------------------
     # World
     # ---------------------------------------------------------
-    raw_world_file = os.path.join(
-        corridor_share,
-        'worlds',
-        world_map[width]
-    )
-    if not os.path.isfile(raw_world_file):
-        alt_world = os.path.join(corridor_share, 'worlds', 'arena_dataset', world_map[width])
-        if os.path.isfile(alt_world):
-            raw_world_file = alt_world
+    custom_world = LaunchConfiguration('custom_world').perform(context).strip()
+    if custom_world and os.path.isfile(custom_world):
+        raw_world_file = custom_world
+    else:
+        raw_world_file = os.path.join(
+            corridor_share,
+            'worlds',
+            world_map[width]
+        )
+        if not os.path.isfile(raw_world_file):
+            alt_world = os.path.join(corridor_share, 'worlds', 'arena_dataset', world_map[width])
+            if os.path.isfile(alt_world):
+                raw_world_file = alt_world
 
     world_file = raw_world_file
     if obstacle in ['object', 'cylinder', 'box', 'none', 'clean', 'empty']:
@@ -166,14 +175,16 @@ def launch_setup(context):
             f.write(filtered_content)
         world_file = active_world
 
-    # ---------------------------------------------------------
-    # Gazebo
-    # ---------------------------------------------------------
     gui = LaunchConfiguration('gui').perform(context).lower().strip()
-    gz_cmd = ['gz', 'sim', '-r']
+    paused = LaunchConfiguration('paused').perform(context).lower().strip()
+    gz_cmd = ['gz', 'sim']
+    if paused not in ['true', '1', 'yes']:
+        gz_cmd.append('-r')
     if gui in ['false', '0', 'no', 'headless']:
         gz_cmd.append('-s')
     gz_cmd.append(world_file)
+
+
 
     local_models = os.path.join(corridor_share, 'models')
     gazebo_models = os.path.join(turtlebot_share, 'models')
@@ -441,6 +452,26 @@ def generate_launch_description():
         description='Robot model to spawn: mecanum (default) or burger',
     )
 
+    custom_world_arg = DeclareLaunchArgument(
+        'custom_world',
+        default_value='',
+        description='Optional direct path to custom SDF world file',
+    )
+
+    custom_robot_model_arg = DeclareLaunchArgument(
+        'custom_robot_model',
+        default_value='',
+        description='Optional direct path to custom SDF robot model file',
+    )
+
+    paused_arg = DeclareLaunchArgument(
+        'paused',
+        default_value='false',
+        description='Start Gazebo in paused mode (true or false)',
+    )
+
+
+
     # ---------------------------------------------------------
     # Gazebo resource path
     #
@@ -539,7 +570,12 @@ def generate_launch_description():
      gui_arg,
      rviz_arg,
      robot_model_arg,
+     custom_world_arg,
+     custom_robot_model_arg,
+     paused_arg,
      x_arg,
+
+
      y_arg,
      yaw_arg,
      resource_path,

@@ -169,6 +169,7 @@ struct HumanAgent
   double maxSpeed{1.2};
   double radius{0.28};
   bool loop{true};
+  bool waitForRobot{false};
   std::size_t waypointIndex{0};
   std::vector<Waypoint> waypoints;
   double waypointTolerance{0.35};
@@ -232,8 +233,8 @@ public:
     this->worldEntity_ = _entity;
 
     this->humanCount_ = SdfValueOr<int>(_sdf, "human_count", 4);
-    this->robotName_ = SdfValueOr<std::string>(_sdf, "robot_name", "burger");
-    this->robotRadius_ = SdfValueOr<double>(_sdf, "robot_radius", 0.35);
+    this->robotName_ = SdfValueOr<std::string>(_sdf, "robot_name", "mecanum_robot");
+    this->robotRadius_ = SdfValueOr<double>(_sdf, "robot_radius", 0.16);
     this->humanRadius_ = SdfValueOr<double>(_sdf, "human_radius", 0.28);
     this->proxemicFront_ = SdfValueOr<double>(_sdf, "proxemic_margin_front", 1.2);
     this->proxemicSide_ = SdfValueOr<double>(_sdf, "proxemic_margin_side", 0.6);
@@ -767,6 +768,21 @@ private:
       return;
     }
 
+    if (_human.waitForRobot && !this->robotStartedMoving_)
+    {
+      if (this->robotHasPrevPose_ && (this->robotSpeed_ > 0.04 || std::abs(this->robotPrevX_ - (-13.0)) > 0.06))
+      {
+        this->robotStartedMoving_ = true;
+      }
+      else
+      {
+        _human.prefVx = 0.0;
+        _human.prefVy = 0.0;
+        this->rvoSim_->setAgentPrefVelocity(_human.rvoIndex, RVO::Vector2(0, 0));
+        return;
+      }
+    }
+
     // Advance waypoints
     const auto &target = _human.waypoints[_human.waypointIndex];
     const double distToGoal = Distance2D(_human.x, _human.y, target.x, target.y);
@@ -1247,6 +1263,8 @@ private:
           h.visualZ = item.value("visual_z", h.visualZ);
           h.proxyZ = item.value("proxy_z", h.proxyZ);
           h.scale = item.value("scale", h.scale);
+          h.loop = item.value("loop", h.loop);
+          h.waitForRobot = item.value("wait_for_robot", false);
 
           h.waypoints.clear();
           if (item.contains("waypoints") && item["waypoints"].is_array())
@@ -1432,6 +1450,7 @@ private:
   void ResetScenarioRuntime()
   {
     this->rng_.seed(this->seed_);
+    this->robotStartedMoving_ = false;
     for (auto &human : this->humans_)
     {
       human.Reset();
@@ -1475,8 +1494,8 @@ private:
   // Member variables
   gz::sim::Entity worldEntity_{gz::sim::kNullEntity};
   gz::sim::Entity robotEntity_{gz::sim::kNullEntity};
-  std::string robotName_{"burger"};
-  double robotRadius_{0.35};
+  std::string robotName_{"mecanum_robot"};
+  double robotRadius_{0.16};
   double humanRadius_{0.28};
   double proxemicFront_{1.2};
   double proxemicSide_{0.6};
@@ -1498,6 +1517,7 @@ private:
   bool randomizePoliteness_{true};
   uint32_t seed_{42};
   bool autoStart_{true};
+  bool robotStartedMoving_{false};
   std::mt19937 rng_{42};
 
   // Corridor parameters
