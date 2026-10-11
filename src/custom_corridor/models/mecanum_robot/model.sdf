@@ -25,7 +25,7 @@
         <pose>0.0 0.0 0.04 0 0 0</pose>
         <geometry>
           <box>
-            <size>0.28 0.22 0.08</size>
+            <size>0.24 0.20 0.08</size>
           </box>
         </geometry>
       </collision>
@@ -34,7 +34,7 @@
         <pose>0.0 0.0 0.04 0 0 0</pose>
         <geometry>
           <box>
-            <size>0.28 0.22 0.08</size>
+            <size>0.24 0.20 0.08</size>
           </box>
         </geometry>
         <material>
@@ -48,7 +48,7 @@
         <pose>0.0 0.0 0.085 0 0 0</pose>
         <geometry>
           <box>
-            <size>0.26 0.20 0.01</size>
+            <size>0.22 0.18 0.01</size>
           </box>
         </geometry>
         <material>
@@ -121,7 +121,7 @@
       <sensor name="lidar" type="gpu_lidar">
         <always_on>true</always_on>
         <visualize>false</visualize>
-        <update_rate>10</update_rate>
+        <update_rate>5</update_rate>
         <topic>scan</topic>
         <gz_frame_id>base_scan</gz_frame_id>
         <lidar>
@@ -147,9 +147,9 @@
       </sensor>
     </link>
 
-    <!-- Generic Front Depth Camera Link & Sensor (M2 Depth-Only) -->
+    <!-- D435i Front Depth Camera Link & Sensor -->
     <link name="camera_link">
-      <pose relative_to="base_link">0.14 0.0 0.08 0 0 0</pose>
+      <pose relative_to="base_link">0.12 0.0 0.08 0 0 0</pose>
       <inertial>
         <mass>0.06</mass>
         <inertia>
@@ -171,27 +171,22 @@
       <sensor name="depth_camera" type="depth_camera">
         <always_on>true</always_on>
         <visualize>false</visualize>
-        <update_rate>15</update_rate>
+        <update_rate>10</update_rate>
         <topic>camera/depth_image</topic>
         <gz_frame_id>camera_link</gz_frame_id>
         <camera>
           <camera_info_topic>camera/camera_info</camera_info_topic>
-          <!-- 86 deg Horizontal FOV = 1.500983 rad -->
-          <horizontal_fov>1.500983</horizontal_fov>
+          <!-- 87 deg Horizontal FOV = 1.518436 rad -->
+          <horizontal_fov>1.518436</horizontal_fov>
           <image>
-            <width>320</width>
+            <width>424</width>
             <height>240</height>
             <format>R_FLOAT32</format>
           </image>
           <clip>
-            <near>0.20</near>
-            <far>4.50</far>
+            <near>0.28</near>
+            <far>5.00</far>
           </clip>
-          <noise>
-            <type>gaussian</type>
-            <mean>0.0</mean>
-            <stddev>0.007</stddev>
-          </noise>
         </camera>
       </sensor>
     </link>
@@ -199,7 +194,7 @@
     <!-- Wheels (Front Left, Front Right, Rear Left, Rear Right) -->
     <!-- FL Wheel -->
     <link name="front_left_wheel">
-      <pose relative_to="base_link">0.10 0.12 0.0 -1.5707963 0 0</pose>
+      <pose relative_to="base_link">0.08 0.10 0.0 -1.5707963 0 0</pose>
       <inertial>
         <mass>0.25</mass>
         <inertia>
@@ -239,7 +234,7 @@
 
     <!-- FR Wheel -->
     <link name="front_right_wheel">
-      <pose relative_to="base_link">0.10 -0.12 0.0 -1.5707963 0 0</pose>
+      <pose relative_to="base_link">0.08 -0.10 0.0 -1.5707963 0 0</pose>
       <inertial>
         <mass>0.25</mass>
         <inertia>
@@ -279,7 +274,7 @@
 
     <!-- RL Wheel -->
     <link name="rear_left_wheel">
-      <pose relative_to="base_link">-0.10 0.12 0.0 -1.5707963 0 0</pose>
+      <pose relative_to="base_link">-0.08 0.10 0.0 -1.5707963 0 0</pose>
       <inertial>
         <mass>0.25</mass>
         <inertia>
@@ -319,7 +314,7 @@
 
     <!-- RR Wheel -->
     <link name="rear_right_wheel">
-      <pose relative_to="base_link">-0.10 -0.12 0.0 -1.5707963 0 0</pose>
+      <pose relative_to="base_link">-0.08 -0.10 0.0 -1.5707963 0 0</pose>
       <inertial>
         <mass>0.25</mass>
         <inertia>
@@ -434,11 +429,11 @@
       <front_right_joint>front_right_wheel_joint</front_right_joint>
       <back_left_joint>rear_left_wheel_joint</back_left_joint>
       <back_right_joint>rear_right_wheel_joint</back_right_joint>
-      <wheel_separation>0.24</wheel_separation>
-      <wheelbase>0.20</wheelbase>
+      <wheel_separation>0.20</wheel_separation>
+      <wheelbase>0.16</wheelbase>
       <wheel_radius>0.04</wheel_radius>
-      <min_acceleration>-3.0</min_acceleration>
-      <max_acceleration>3.0</max_acceleration>
+      <min_acceleration>-1.5</min_acceleration>
+      <max_acceleration>1.5</max_acceleration>
       <topic>cmd_vel</topic>
       <odom_topic>odom</odom_topic>
       <frame_id>odom</frame_id>
