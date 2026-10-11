@@ -249,7 +249,10 @@ Agent::Agent()
       neighborDist_(0.0F),
       radius_(0.0F),
       timeHorizon_(0.0F),
-      timeHorizonObst_(0.0F) {}
+      timeHorizonObst_(0.0F),
+      robotAgentId_(0U),
+      robotResponsibilityWeight_(0.5F),
+      ignoresRobot_(false) {}
 
 Agent::~Agent() {}
 
@@ -604,7 +607,14 @@ void Agent::computeNewVelocity(float timeStep) {
       u = (combinedRadius * invTimeStep - wLength) * unitW;
     }
 
-    line.point = velocity_ + 0.5F * u;
+    if (this->ignoresRobot_ && other->id_ == this->robotAgentId_) {
+      continue;
+    }
+
+    const float responsibility =
+        (other->id_ == this->robotAgentId_) ? this->robotResponsibilityWeight_ : 0.5F;
+
+    line.point = velocity_ + responsibility * u;
     orcaLines_.push_back(line);
   }
 
@@ -618,6 +628,10 @@ void Agent::computeNewVelocity(float timeStep) {
 
 void Agent::insertAgentNeighbor(const Agent *agent, float &rangeSq) {
   if (this != agent) {
+    if (this->ignoresRobot_ && agent->id_ == this->robotAgentId_) {
+      return;
+    }
+
     const float distSq = absSq(position_ - agent->position_);
 
     if (distSq < rangeSq) {

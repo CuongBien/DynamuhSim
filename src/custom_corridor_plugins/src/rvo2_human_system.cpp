@@ -100,6 +100,38 @@ enum class HumanMode
   Autonomous
 };
 
+enum class HumanPersona
+{
+  H1_Cooperative = 1,     // Reciprocal ORCA (alpha = 0.50, ~40%)
+  H2_Unyielding = 2,      // Low-responsibility ORCA (alpha in [0.10, 0.35], ~10%)
+  H3_RobotBlind = 3,      // Completely ignores robot (neighbor filtering, ~25%)
+  H4_Static = 4,          // Stationary / conversational group (v_pref = 0, ~15%)
+  H5_SocialForce = 5      // Soft exponential repulsion + LPF (~10%)
+};
+
+inline std::string PersonaToString(HumanPersona p)
+{
+  switch (p)
+  {
+    case HumanPersona::H1_Cooperative: return "H1";
+    case HumanPersona::H2_Unyielding: return "H2";
+    case HumanPersona::H3_RobotBlind: return "H3";
+    case HumanPersona::H4_Static: return "H4";
+    case HumanPersona::H5_SocialForce: return "H5";
+    default: return "H1";
+  }
+}
+
+inline HumanPersona StringToPersona(const std::string &str)
+{
+  if (str == "H1" || str == "cooperative" || str == "1") return HumanPersona::H1_Cooperative;
+  if (str == "H2" || str == "unyielding" || str == "2") return HumanPersona::H2_Unyielding;
+  if (str == "H3" || str == "blind" || str == "robot_blind" || str == "3") return HumanPersona::H3_RobotBlind;
+  if (str == "H4" || str == "static" || str == "4") return HumanPersona::H4_Static;
+  if (str == "H5" || str == "social_force" || str == "sfm" || str == "5") return HumanPersona::H5_SocialForce;
+  return HumanPersona::H1_Cooperative;
+}
+
 enum class CorridorState
 {
   Patrol,
@@ -119,6 +151,7 @@ struct HumanAgent
   int id{0};
   std::string name;
   HumanMode mode{HumanMode::Hidden};
+  HumanPersona persona{HumanPersona::H1_Cooperative};
   bool active{false};
 
   // Kinematic state
@@ -145,8 +178,9 @@ struct HumanAgent
   double proxyZ{0.85};
   double scale{1.0};
 
-  // Social traits
+  // Social traits & Personas H1-H5
   double politeness{0.5}; // Yielding / politeness weight in [0.0 = distracted/stubborn, 1.0 = highly cooperative]
+  double responsibilityWeight{0.50}; // Continuous responsibility weight alpha (e.g. 0.50 for H1, 0.10..0.35 for H2)
   double latencyTau{0.3}; // Reaction latency time constant (seconds)
 
   // Corridor Recess State
@@ -248,7 +282,8 @@ public:
       h.name = "human_" + TwoDigit(i);
       h.radius = this->humanRadius_;
       h.latencyTau = this->reactionLatency_;
-      h.politeness = this->randomizePoliteness_ ? this->SampleRandomPoliteness() : 0.6;
+      h.persona = this->randomizePoliteness_ ? this->SampleRandomPersona() : HumanPersona::H1_Cooperative;
+      this->ApplyPersonaDefaults(h);
       if (i == 1) { h.visualZ = 1.02; h.proxyZ = 0.85; h.scale = 1.02; }
       else if (i == 2) { h.visualZ = 0.95; h.proxyZ = 0.80; h.scale = 0.95; }
       else if (i == 3) { h.visualZ = 1.06; h.proxyZ = 0.875; h.scale = 1.06; }
@@ -421,6 +456,97 @@ public:
   }
 
 private:
+  HumanPersona SampleRandomPersona()
+  {
+    std::uniform_real_distribution<double> dist(0.0, 1.0);
+    const double r = dist(this->rng_);
+    // Initial distribution: 40% H1 / 10% H2 / 25% H3 / 15% H4 / 10% H5
+    if (r < 0.40)
+      return HumanPersona::H1_Cooperative;
+    if (r < 0.50)
+      return HumanPersona::H2_Unyielding;
+    if (r < 0.75)
+      return HumanPersona::H3_RobotBlind;
+    if (r < 0.90)
+      return HumanPersona::H4_Static;
+    return HumanPersona::H5_SocialForce;
+  }
+
+  double SampleH2Responsibility()
+  {
+    // H2: low responsibility strictly in [0.10, 0.35]
+    std::uniform_real_distribution<double> dist(0.10, 0.35);
+    return dist(this->rng_);
+  }
+
+  void ApplyPersonaDefaults(HumanAgent &h)
+  {
+    if (h.persona == HumanPersona::H1_Cooperative)
+    {
+      h.responsibilityWeight = 0.50;
+      h.politeness = 0.60;
+    }
+    else if (h.persona == HumanPersona::H2_Unyielding)
+    {
+      if (h.responsibilityWeight < 0.10 || h.responsibilityWeight > 0.35)
+      {
+        h.responsibilityWeight = this->SampleH2Responsibility();
+      }
+      h.politeness = h.responsibilityWeight;
+    }
+    else if (h.persona == HumanPersona::H3_RobotBlind)
+    {
+      h.responsibilityWeight = 0.0;
+      h.politeness = 0.0;
+    }
+    else if (h.persona == HumanPersona::H4_Static)
+    {
+      h.mode = HumanMode::Stationary;
+      h.speed = 0.0;
+      h.responsibilityWeight = 0.0;
+      h.politeness = 0.0;
+    }
+    else if (h.persona == HumanPersona::H5_SocialForce)
+    {
+      h.responsibilityWeight = 0.0;
+      h.politeness = 0.0;
+    }
+  }
+
+  void SyncHumanPropertiesToRVO(const HumanAgent &h)
+  {
+    if (!this->rvoSim_)
+      return;
+
+    if (h.persona == HumanPersona::H1_Cooperative)
+    {
+      this->rvoSim_->setAgentRobotResponsibility(h.rvoIndex, 0.5f);
+      this->rvoSim_->setAgentIgnoresRobot(h.rvoIndex, false);
+    }
+    else if (h.persona == HumanPersona::H2_Unyielding)
+    {
+      this->rvoSim_->setAgentRobotResponsibility(
+          h.rvoIndex, static_cast<float>(h.responsibilityWeight));
+      this->rvoSim_->setAgentIgnoresRobot(h.rvoIndex, false);
+    }
+    else if (h.persona == HumanPersona::H3_RobotBlind)
+    {
+      this->rvoSim_->setAgentRobotResponsibility(h.rvoIndex, 0.0f);
+      this->rvoSim_->setAgentIgnoresRobot(h.rvoIndex, true);
+    }
+    else if (h.persona == HumanPersona::H4_Static)
+    {
+      this->rvoSim_->setAgentRobotResponsibility(h.rvoIndex, 0.0f);
+      this->rvoSim_->setAgentIgnoresRobot(h.rvoIndex, false);
+    }
+    else if (h.persona == HumanPersona::H5_SocialForce)
+    {
+      // Soft repulsion handled via force field in ComputePreferredVelocity
+      this->rvoSim_->setAgentRobotResponsibility(h.rvoIndex, 0.0f);
+      this->rvoSim_->setAgentIgnoresRobot(h.rvoIndex, true);
+    }
+  }
+
   double SampleRandomPoliteness()
   {
     std::uniform_real_distribution<double> dist(0.0, 1.0);
@@ -460,6 +586,8 @@ private:
         static_cast<float>(this->robotRadius_),
         static_cast<float>(this->maxSpeed_));
 
+    this->rvoSim_->setRobotAgentIndex(this->robotRvoIndex_);
+
     // Register humans
     for (auto &human : this->humans_)
     {
@@ -471,6 +599,7 @@ private:
           static_cast<float>(this->timeHorizonObst_),
           static_cast<float>(human.radius),
           static_cast<float>(human.maxSpeed));
+      this->SyncHumanPropertiesToRVO(human);
     }
   }
 
@@ -622,7 +751,9 @@ private:
       return;
     }
 
-    if (_human.mode == HumanMode::Stationary || _human.mode == HumanMode::Hidden)
+    if (_human.persona == HumanPersona::H4_Static ||
+        _human.mode == HumanMode::Stationary ||
+        _human.mode == HumanMode::Hidden)
     {
       _human.prefVx = 0.0;
       _human.prefVy = 0.0;
@@ -678,7 +809,7 @@ private:
     }
 
     // Corridor Recess Yielding State Machine vs Open Arena Proxemic Yielding
-    if (this->corridorMode_ && this->robotHasPrevPose_)
+    if (this->corridorMode_ && this->robotHasPrevPose_ && _human.persona != HumanPersona::H3_RobotBlind)
     {
       const double rx = this->robotPrevX_ - _human.x;
       const double ry = this->robotPrevY_ - _human.y;
@@ -805,7 +936,35 @@ private:
         }
       }
     }
-    else if (_human.politeness > 0.05 && this->robotHasPrevPose_)
+    else if (_human.persona == HumanPersona::H5_SocialForce && this->robotHasPrevPose_)
+    {
+      const double rx = _human.x - this->robotPrevX_;
+      const double ry = _human.y - this->robotPrevY_;
+      const double distToRobot = std::hypot(rx, ry);
+      const double combinedRadius = _human.radius + this->robotRadius_;
+      const double dSurf = std::max(0.0, distToRobot - combinedRadius);
+
+      // Soft exponential repulsive force: F_rep = A * exp(-d_surf / B)
+      const double sfA = 2.5; // Repulsive magnitude (m/s^2)
+      const double sfB = 0.4; // Decay scale (m)
+      if (distToRobot > 1e-4 && dSurf < 3.0)
+      {
+        const double fRep = sfA * std::exp(-dSurf / sfB);
+        const double repX = (rx / distToRobot) * fRep;
+        const double repY = (ry / distToRobot) * fRep;
+        desiredVx += repX;
+        desiredVy += repY;
+
+        const double desiredSpeed = std::hypot(desiredVx, desiredVy);
+        if (desiredSpeed > _human.maxSpeed)
+        {
+          desiredVx = (desiredVx / desiredSpeed) * _human.maxSpeed;
+          desiredVy = (desiredVy / desiredSpeed) * _human.maxSpeed;
+        }
+      }
+    }
+    else if ((_human.persona == HumanPersona::H1_Cooperative || _human.persona == HumanPersona::H2_Unyielding) &&
+             _human.politeness > 0.05 && this->robotHasPrevPose_)
     {
       const double rx = this->robotPrevX_ - _human.x;
       const double ry = this->robotPrevY_ - _human.y;
@@ -949,6 +1108,9 @@ private:
       hObj["vy"] = human.vy;
       hObj["speed"] = std::hypot(human.vx, human.vy);
       hObj["politeness"] = human.politeness;
+      hObj["persona"] = PersonaToString(human.persona);
+      hObj["persona_id"] = static_cast<int>(human.persona);
+      hObj["responsibility_weight"] = human.responsibilityWeight;
       hObj["yielding"] = (human.corridorState == CorridorState::YieldingEnter ||
                           human.corridorState == CorridorState::YieldingWait);
       std::string stateStr = "patrol";
@@ -1054,17 +1216,33 @@ private:
 
           h.speed = item.value("speed", 0.85);
           h.maxSpeed = item.value("max_speed", 1.2);
-          if (item.contains("politeness"))
+
+          if (item.contains("persona"))
+          {
+            if (item["persona"].is_string())
+              h.persona = StringToPersona(item["persona"].get<std::string>());
+            else if (item["persona"].is_number())
+              h.persona = static_cast<HumanPersona>(item["persona"].get<int>());
+          }
+
+          if (item.contains("responsibility_weight"))
+          {
+            h.responsibilityWeight = std::clamp(item["responsibility_weight"].get<double>(), 0.0, 1.0);
+            h.politeness = h.responsibilityWeight;
+          }
+          else if (item.contains("politeness"))
           {
             h.politeness = std::clamp(item["politeness"].get<double>(), 0.0, 1.0);
+            h.responsibilityWeight = h.politeness;
           }
           else if (item.contains("social_polite"))
           {
             h.politeness = item["social_polite"].get<bool>() ? 0.8 : 0.0;
+            h.responsibilityWeight = h.politeness;
           }
-          else if (this->randomizePoliteness_)
+          else
           {
-            h.politeness = this->SampleRandomPoliteness();
+            this->ApplyPersonaDefaults(h);
           }
           h.visualZ = item.value("visual_z", h.visualZ);
           h.proxyZ = item.value("proxy_z", h.proxyZ);
@@ -1100,6 +1278,7 @@ private:
 
           // Update initial position in RVO
           this->rvoSim_->setAgentPosition(h.rvoIndex, RVO::Vector2(h.x, h.y));
+          this->SyncHumanPropertiesToRVO(h);
         }
       }
     }
@@ -1258,7 +1437,8 @@ private:
       human.Reset();
       if (this->randomizePoliteness_)
       {
-        human.politeness = this->SampleRandomPoliteness();
+        human.persona = this->SampleRandomPersona();
+        this->ApplyPersonaDefaults(human);
       }
       if (!human.waypoints.empty())
       {
@@ -1274,6 +1454,7 @@ private:
         this->rvoSim_->setAgentPosition(human.rvoIndex, RVO::Vector2(human.x, human.y));
         this->rvoSim_->setAgentVelocity(human.rvoIndex, RVO::Vector2(0, 0));
         this->rvoSim_->setAgentPrefVelocity(human.rvoIndex, RVO::Vector2(0, 0));
+        this->SyncHumanPropertiesToRVO(human);
       }
     }
 

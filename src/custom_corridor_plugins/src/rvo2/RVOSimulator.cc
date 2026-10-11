@@ -58,7 +58,8 @@ RVOSimulator::RVOSimulator()
     : defaultAgent_(NULL),
       kdTree_(new KdTree(this)),
       globalTime_(0.0F),
-      timeStep_(0.0F) {}
+      timeStep_(0.0F),
+      robotAgentIndex_(0U) {}
 
 RVOSimulator::RVOSimulator(float timeStep, float neighborDist,
                            std::size_t maxNeighbors, float timeHorizon,
@@ -66,7 +67,8 @@ RVOSimulator::RVOSimulator(float timeStep, float neighborDist,
     : defaultAgent_(new Agent()),
       kdTree_(new KdTree(this)),
       globalTime_(0.0F),
-      timeStep_(timeStep) {
+      timeStep_(timeStep),
+      robotAgentIndex_(0U) {
   defaultAgent_->maxNeighbors_ = maxNeighbors;
   defaultAgent_->maxSpeed_ = maxSpeed;
   defaultAgent_->neighborDist_ = neighborDist;
@@ -82,7 +84,8 @@ RVOSimulator::RVOSimulator(float timeStep, float neighborDist,
     : defaultAgent_(new Agent()),
       kdTree_(new KdTree(this)),
       globalTime_(0.0F),
-      timeStep_(timeStep) {
+      timeStep_(timeStep),
+      robotAgentIndex_(0U) {
   defaultAgent_->velocity_ = velocity;
   defaultAgent_->maxNeighbors_ = maxNeighbors;
   defaultAgent_->maxSpeed_ = maxSpeed;
@@ -117,6 +120,9 @@ std::size_t RVOSimulator::addAgent(const Vector2 &position) {
     agent->radius_ = defaultAgent_->radius_;
     agent->timeHorizon_ = defaultAgent_->timeHorizon_;
     agent->timeHorizonObst_ = defaultAgent_->timeHorizonObst_;
+    agent->robotAgentId_ = robotAgentIndex_;
+    agent->robotResponsibilityWeight_ = 0.5F;
+    agent->ignoresRobot_ = false;
     agents_.push_back(agent);
 
     return agents_.size() - 1U;
@@ -147,6 +153,9 @@ std::size_t RVOSimulator::addAgent(const Vector2 &position, float neighborDist,
   agent->radius_ = radius;
   agent->timeHorizon_ = timeHorizon;
   agent->timeHorizonObst_ = timeHorizonObst;
+  agent->robotAgentId_ = robotAgentIndex_;
+  agent->robotResponsibilityWeight_ = 0.5F;
+  agent->ignoresRobot_ = false;
   agents_.push_back(agent);
 
   return agents_.size() - 1U;
@@ -367,5 +376,42 @@ void RVOSimulator::setAgentTimeHorizonObst(std::size_t agentNo,
 void RVOSimulator::setAgentVelocity(std::size_t agentNo,
                                     const Vector2 &velocity) {
   agents_[agentNo]->velocity_ = velocity;
+}
+
+void RVOSimulator::setRobotAgentIndex(std::size_t robotIndex) {
+  robotAgentIndex_ = robotIndex;
+  for (std::size_t i = 0U; i < agents_.size(); ++i) {
+    agents_[i]->robotAgentId_ = robotIndex;
+  }
+}
+
+std::size_t RVOSimulator::getRobotAgentIndex() const {
+  return robotAgentIndex_;
+}
+
+void RVOSimulator::setAgentRobotResponsibility(std::size_t agentNo, float weight) {
+  if (agentNo < agents_.size()) {
+    agents_[agentNo]->robotResponsibilityWeight_ = weight;
+  }
+}
+
+float RVOSimulator::getAgentRobotResponsibility(std::size_t agentNo) const {
+  if (agentNo < agents_.size()) {
+    return agents_[agentNo]->robotResponsibilityWeight_;
+  }
+  return 0.5F;
+}
+
+void RVOSimulator::setAgentIgnoresRobot(std::size_t agentNo, bool ignoresRobot) {
+  if (agentNo < agents_.size()) {
+    agents_[agentNo]->ignoresRobot_ = ignoresRobot;
+  }
+}
+
+bool RVOSimulator::getAgentIgnoresRobot(std::size_t agentNo) const {
+  if (agentNo < agents_.size()) {
+    return agents_[agentNo]->ignoresRobot_;
+  }
+  return false;
 }
 } /* namespace RVO */

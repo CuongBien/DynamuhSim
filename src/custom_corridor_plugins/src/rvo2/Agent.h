@@ -122,6 +122,9 @@ class Agent {
   float radius_;
   float timeHorizon_;
   float timeHorizonObst_;
+  std::size_t robotAgentId_;
+  float robotResponsibilityWeight_;
+  bool ignoresRobot_;
 
   friend class KdTree;
   friend class RVOSimulator;

@@ -645,6 +645,47 @@ class RVO_EXPORT RVOSimulator {
    */
   void setTimeStep(float timeStep) { timeStep_ = timeStep; }
 
+  /**
+   * @brief Sets the agent index representing the robot obstacle.
+   * @param[in] robotIndex The agent index representing the robot.
+   */
+  void setRobotAgentIndex(std::size_t robotIndex);
+
+  /**
+   * @brief Gets the agent index representing the robot obstacle.
+   * @return The agent index representing the robot.
+   */
+  std::size_t getRobotAgentIndex() const;
+
+  /**
+   * @brief Sets the responsibility weight of an agent when avoiding the robot.
+   *        (0.5 = symmetric ORCA H1, 0.10 - 0.35 = unyielding H2).
+   * @param[in] agentNo The number of the agent.
+   * @param[in] weight  The responsibility weight in [0.0, 1.0].
+   */
+  void setAgentRobotResponsibility(std::size_t agentNo, float weight);
+
+  /**
+   * @brief Gets the responsibility weight of an agent when avoiding the robot.
+   * @param[in] agentNo The number of the agent.
+   * @return The responsibility weight.
+   */
+  float getAgentRobotResponsibility(std::size_t agentNo) const;
+
+  /**
+   * @brief Sets whether an agent completely ignores the robot (H3 Robot-Blind).
+   * @param[in] agentNo      The number of the agent.
+   * @param[in] ignoresRobot True to exclude robot from avoidance.
+   */
+  void setAgentIgnoresRobot(std::size_t agentNo, bool ignoresRobot);
+
+  /**
+   * @brief Gets whether an agent completely ignores the robot.
+   * @param[in] agentNo The number of the agent.
+   * @return True if agent ignores robot.
+   */
+  bool getAgentIgnoresRobot(std::size_t agentNo) const;
+
  private:
   /* Not implemented. */
   RVOSimulator(const RVOSimulator &other);
@@ -665,6 +706,7 @@ class RVO_EXPORT RVOSimulator {
   KdTree *kdTree_;
   float globalTime_;
   float timeStep_;
+  std::size_t robotAgentIndex_{0U};
 
   friend class KdTree;
 };
