@@ -17,11 +17,17 @@ def launch_setup(context, *args, **kwargs):
 
     controller = LaunchConfiguration("controller").perform(context).lower().strip()
     custom_params = LaunchConfiguration("params_file").perform(context).strip()
+    robot_model = LaunchConfiguration("robot_model").perform(context).lower().strip()
+    if robot_model not in ["burger", "tb3", "turtlebot3"]:
+        robot_model = "mecanum"
 
     if custom_params and os.path.exists(custom_params):
         nav2_params = custom_params
-    elif controller == "mppi":
-        nav2_params = os.path.join(package_share, "config", "nav2_mppi.yaml")
+    elif controller in ["mppi", "mppi_mecanum", "mppi_omni"]:
+        if robot_model == "mecanum" or controller in ["mppi_mecanum", "mppi_omni"]:
+            nav2_params = os.path.join(package_share, "config", "nav2_mppi_mecanum.yaml")
+        else:
+            nav2_params = os.path.join(package_share, "config", "nav2_mppi.yaml")
     else:
         nav2_params = os.path.join(package_share, "config", "nav2_corridor.yaml")
 
@@ -73,7 +79,7 @@ def launch_setup(context, *args, **kwargs):
         else:
             amcl_params.append({
                 "set_initial_pose": True,
-                "initial_pose": {"x": 0.0, "y": 0.0, "z": 0.0, "yaw": 0.0},
+                "initial_pose": {"x": -13.0, "y": 0.0, "z": 0.0, "yaw": 0.0},
             })
 
     amcl = Node(
@@ -261,10 +267,17 @@ def generate_launch_description():
         description="Name or path of map yaml file (e.g. arena_obstacle or corridor_090)",
     )
 
+    robot_model_arg = DeclareLaunchArgument(
+        "robot_model",
+        default_value="mecanum",
+        description="Robot model: mecanum (default) or burger",
+    )
+
     return LaunchDescription(
         [
             ros_domain,
             discovery_range,
+            robot_model_arg,
             controller_arg,
             params_file_arg,
             map_arg,

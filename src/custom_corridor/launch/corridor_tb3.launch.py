@@ -60,6 +60,13 @@ def launch_setup(context):
         )
 
     # ---------------------------------------------------------
+    # Robot model selection (mecanum or burger)
+    # ---------------------------------------------------------
+    robot_model = LaunchConfiguration('robot_model').perform(context).lower().strip()
+    if robot_model not in ['burger', 'tb3', 'turtlebot3']:
+        robot_model = 'mecanum'
+
+    # ---------------------------------------------------------
     # Package paths
     # ---------------------------------------------------------
     corridor_share = get_package_share_directory(
@@ -73,11 +80,44 @@ def launch_setup(context):
         'turtlebot3_description'
     )
 
-    urdf_file = os.path.join(
-        description_share,
-        'urdf',
-        'turtlebot3_burger.urdf'
-    )
+    if robot_model == 'burger':
+        urdf_file = os.path.join(
+            description_share,
+            'urdf',
+            'turtlebot3_burger.urdf'
+        )
+        selected_robot_model = os.path.join(
+            corridor_share,
+            'models',
+            'turtlebot3_burger',
+            'model.sdf'
+        )
+        selected_bridge_config = os.path.join(
+            corridor_share,
+            'config',
+            'turtlebot3_burger_bridge.yaml'
+        )
+        robot_entity_name = 'burger'
+        spawn_z_offset = '0.01'
+    else:
+        urdf_file = os.path.join(
+            corridor_share,
+            'urdf',
+            'mecanum_robot.urdf'
+        )
+        selected_robot_model = os.path.join(
+            corridor_share,
+            'models',
+            'mecanum_robot',
+            'model.sdf'
+        )
+        selected_bridge_config = os.path.join(
+            corridor_share,
+            'config',
+            'mecanum_bridge.yaml'
+        )
+        robot_entity_name = 'mecanum_robot'
+        spawn_z_offset = '0.04'
 
     doc = xacro.process_file(urdf_file)
     robot_description = doc.toxml()
@@ -127,30 +167,6 @@ def launch_setup(context):
         world_file = active_world
 
     # ---------------------------------------------------------
-    # LOCAL TurtleBot3 Burger model
-    #
-    # This is the copy where we changed:
-    #
-    #     gpu_lidar -> lidar
-    #
-    # ---------------------------------------------------------
-    burger_model = os.path.join(
-        corridor_share,
-        'models',
-        'turtlebot3_burger',
-        'model.sdf'
-    )
-
-    # ---------------------------------------------------------
-    # Bridge configuration
-    # ---------------------------------------------------------
-    bridge_config = os.path.join(
-        corridor_share,
-        'config',
-        'turtlebot3_burger_bridge.yaml'
-    )
-
-    # ---------------------------------------------------------
     # Gazebo
     # ---------------------------------------------------------
     gui = LaunchConfiguration('gui').perform(context).lower().strip()
@@ -178,11 +194,13 @@ def launch_setup(context):
             'GZ_OBSTACLE_TYPE': obstacle,
             'GZ_SIM_RESOURCE_PATH': gz_resource_path,
             'GZ_SIM_SYSTEM_PLUGIN_PATH': gz_plugin_path,
+            'GALLIUM_DRIVER': 'd3d12',
+            'MESA_D3D12_DEFAULT_ADAPTER_NAME': 'NVIDIA',
         },
     )
 
     # ---------------------------------------------------------
-    # Spawn TurtleBot3 Burger
+    # Spawn Robot
     #
     # Corridor / Arena: (-13.0, 0.0)
     # School: (-13.5, -8.15)
@@ -204,12 +222,12 @@ def launch_setup(context):
         package='ros_gz_sim',
         executable='create',
         arguments=[
-            '-name', 'burger',
-            '-file', burger_model,
+            '-name', robot_entity_name,
+            '-file', selected_robot_model,
 
             '-x', spawn_x,
             '-y', spawn_y,
-            '-z', '0.01',
+            '-z', spawn_z_offset,
 
             '-Y', spawn_yaw,
         ],
@@ -223,7 +241,7 @@ def launch_setup(context):
         package='ros_gz_bridge',
         executable='parameter_bridge',
         parameters=[{
-            'config_file': bridge_config,
+            'config_file': selected_bridge_config,
         }],
         output='screen',
     )
@@ -384,7 +402,7 @@ def generate_launch_description():
             'Dynamic obstacle type. '
             'Allowed values: human (people/pedestrian), object (industrial cylinder/box), none'
         ),
-        choices=['human', 'object', 'none', 'people', 'pedestrian', 'box', 'cylinder'],
+        choices=['human', 'object', 'none', 'clean', 'empty', 'people', 'pedestrian', 'box', 'cylinder'],
     )
 
     gui_arg = DeclareLaunchArgument(
@@ -415,6 +433,12 @@ def generate_launch_description():
         'yaw',
         default_value='',
         description='Initial robot spawn Yaw angle in radians (default 0.0)',
+    )
+
+    robot_model_arg = DeclareLaunchArgument(
+        'robot_model',
+        default_value='mecanum',
+        description='Robot model to spawn: mecanum (default) or burger',
     )
 
     # ---------------------------------------------------------
@@ -489,10 +513,22 @@ def generate_launch_description():
      value=os.environ.get('ROS_AUTOMATIC_DISCOVERY_RANGE', 'LOCALHOST')
     )
 
+    gallium_driver = SetEnvironmentVariable(
+        name='GALLIUM_DRIVER',
+        value='d3d12'
+    )
+
+    mesa_adapter = SetEnvironmentVariable(
+        name='MESA_D3D12_DEFAULT_ADAPTER_NAME',
+        value='NVIDIA'
+    )
+
     # ---------------------------------------------------------
     # Launch description
     # ---------------------------------------------------------
     return LaunchDescription([
+     gallium_driver,
+     mesa_adapter,
      rmw_implementation,
      fastdds_transport,
      ros_domain,
@@ -502,6 +538,7 @@ def generate_launch_description():
      obstacle_arg,
      gui_arg,
      rviz_arg,
+     robot_model_arg,
      x_arg,
      y_arg,
      yaw_arg,

@@ -93,7 +93,7 @@ flowchart TD
 * Để mạng nơ-ron nhận diện chuyển động thực tế của người mà không bị rối loạn bởi chuyển động quay của bản thân robot, $k=4$ khung LiDAR quá khứ ($t, t-0.2\text{s}, t-0.4\text{s}, t-0.6\text{s}$) được warp về **hệ quy chiếu của robot tại thời điểm $t$** thông qua ma trận biến đổi odometry $\Delta \mathbf{T}_{t, t-i} = [\Delta x, \Delta y, \Delta \theta]$.
 * **Cơ chế chống Overfit vào Odometry lý tưởng**:
   > [!IMPORTANT]
-  > Nếu trong pha huấn luyện dùng $\Delta \mathbf{T}$ chính xác tuyệt đối từ Ground Truth, khi triển khai thực tế trên TurtleBot3 Burger, hiện tượng trượt bánh xe vi sai (wheel slip) và trôi dạt tích phân (drift) sẽ làm các khung warp bị lệch, khiến mạng nơ-ron suy đoán sai hoàn toàn vận tốc của người.
+  > Nếu trong pha huấn luyện dùng $\Delta \mathbf{T}$ chính xác tuyệt đối từ Ground Truth, khi triển khai thực tế trên robot mecanum nhỏ, hiện tượng trượt con lăn bánh xe (roller slip) và trôi dạt tích phân (drift) sẽ làm các khung warp bị lệch, khiến mạng nơ-ron suy đoán sai hoàn toàn vận tốc của người.
   * **Quy chuẩn**: Phép warp trong pha Train bắt buộc sử dụng **Odometry mô phỏng có nhiễu**:
     $$\Delta \mathbf{T}_{\text{noisy}} = \Delta \mathbf{T}_{\text{true}} + \boldsymbol{\epsilon}_{\text{odom}}, \quad \boldsymbol{\epsilon}_{\text{odom}} \sim \mathcal{N}\big(0, \boldsymbol{\Sigma}_{\text{odom}}\big)$$
     với sai số góc $\sigma_\theta = 0.03\text{ rad}$ và sai số tịnh tiến $\sigma_{xy} = 0.015\text{ m}$ sau mỗi $0.2\text{ s}$.
@@ -125,15 +125,55 @@ Trước khi ấn định tham số cho mô hình chân 2D, bắt buộc thực 
 
 ## 3. Phổ Hành Vi Người (Pedestrian Spectrum) & Quy Tắc Khả Thi Hình Học
 
-### 3.1. Bảng Phân Bổ Hành Vi Khởi Đầu (Siêu tham số)
+### 3.0. Lộ Trình Cột Mốc Nghiên Cứu (Research Milestones M1–M4)
 
-| Mã | Loại Hành Vi | Mức Né Robot | Hiện Thực Kỹ Thuật | Tỷ Lệ Khởi Đầu |
+| Mốc | Nội Dung | Vai Trò & Ghi Chú |
+| :-: | :--- | :--- |
+| **M1** | Dự đoán quỹ đạo người trong 3 s tới, có điều kiện theo hành động của robot | Mức tối thiểu có thể nộp (Baseline Conditional Trajectory Prediction) |
+| **M2** | Thêm chiếm dụng BEV (lưới nhìn từ trên xuống - Bird's Eye View) tính **thuần từ kênh Depth** *(chỉ dùng depth, không dùng RGB)* | Mở rộng biểu diễn không gian quan sát |
+| **M3** | Thêm suy luận kiểu phản ứng **H1–H5** của từng người xung quanh | **Đóng góp khoa học chính (Core Contribution)** |
+| **M4** | Chạy trên robot thật (**robot mecanum nhỏ / camera depth**, khung gầm đa hướng omnidirectional), kiểm chứng Sim-to-Real | Đánh giá thực nghiệm chuyển giao thực tế |
+
+### 3.1. Bảng Phân Bổ Hành Vi Khởi Đầu & Cơ Chế Hiện Thực
+
+| Mã | Loại Hành Vi | Hệ Số Trách Nhiệm ($\alpha$) | Hiện Thực Kỹ Thuật | Tỷ Lệ Cảnh |
 | :-: | :--- | :---: | :--- | :---: |
-| **H1** | **Hợp tác đầy đủ (Cooperative)** | $50\%$ | ORCA chuẩn. Hai bên chia sẻ trách nhiệm tránh va chạm đối xứng. | $\sim 40\%$ |
-| **H2** | **Hợp tác một phần (Partially Cooperative)** | $20 - 70\%$ | ORCA với trọng số trách nhiệm né robot giảm còn $0.2 - 0.7$. Người có thấy robot nhưng chỉ lách nhẹ và phản xạ chậm. | $\sim 10\%$ |
-| **H3** | **Không phản ứng (Robot-Blind)** | $0\%$ | **Lọc hàng xóm**: Không đưa Robot vào neighbor list của agent. Agent vẫn né người khác bình thường nhưng hoàn toàn lờ robot. | $\sim 25\%$ |
-| **H4** | **Tĩnh & Nhóm đàm thoại (Static & O-Space)** | $0\%$ | $v_{pref} = 0$. Nhóm $2 - 3$ người đứng đối diện tạo không gian tương tác O-space ($0.8 - 1.2\text{ m}$), dao động nhẹ tại chỗ. | $\sim 15\%$ |
-| **H5** | **SFM tự viết (Soft Social Force)** | Theo lực | Trường lực đẩy mềm $F_{rep} = A \exp(-d_{surf}/B)$ kết hợp bộ lọc thông thấp (LPF) trên vận tốc: $v_t = \alpha v_{t-1} + (1-\alpha)v_{target}$. | $\sim 10\%$ |
+| **H1** | **Hợp tác đầy đủ (Cooperative)** | $\alpha = 0.50$ (Cố định) | ORCA đối xứng chuẩn. Hai bên chia sẻ $50\%$ trách nhiệm tránh va chạm. | $40\%$ |
+| **H2** | **Ít nhường / Trách nhiệm thấp (Unyielding)** | $\alpha \in [0.10, 0.35]$ | ORCA bất đối xứng. Người chỉ nhận $10\% - 35\%$ trách nhiệm né robot, đòi hỏi robot phải chủ động né nhiều hơn. Log giá trị thực liên tục `responsibility_weight`. | $10\%$ |
+| **H3** | **Không phản ứng (Robot-Blind)** | $\alpha = 0.0$ | **Lọc hàng xóm (Neighbor Exclusion)**: Loại hoàn toàn robot khỏi danh sách neighbor của agent trong KdTree. Người vẫn né người khác bằng ORCA chuẩn nhưng hoàn toàn lờ robot. | $25\%$ |
+| **H4** | **Tĩnh & Nhóm đàm thoại (Static & O-Space)** | $v_{\text{pref}} = 0$ | Người đứng yên hoặc dao động nhẹ tại chỗ ($0.8 - 1.2\text{ m}$). *(Tách riêng khi đánh giá M3)* | $15\%$ |
+| **H5** | **Trường lực xã hội mềm (Soft Social Force)** | Lực đẩy mềm | Trường lực đẩy mềm $F_{\text{rep}} = A \exp(-d_{\text{surf}}/B)$ cộng dồn vào preferred velocity + bộ lọc thông thấp (LPF): $v_t = \gamma v_{t-1} + (1-\gamma)v_{\text{target}}$. Người lờ ORCA với robot. | $10\%$ |
+
+#### ⚠️ Quy Tắc Đánh Giá & Huấn Luyện Quan Trọng Cho M3 (Persona Inference):
+1. **Khắc phục triệt để vùng chồng lấn H1 vs H2**:
+   - Trước đây H2 đặt $\alpha \in [0.2, 0.7]$ khiến dải $[0.5, 0.7]$ né nhiều hơn cả H1 ($\alpha = 0.5$), gây nhiễu nhãn.
+   - Chuẩn hóa: H2 **nghiêm ngặt trong khoảng $\alpha \in [0.10, 0.35]$**, tách rời hoàn toàn khỏi $0.50$.
+   - Ground-truth luôn lưu song song cả nhãn rời rạc `persona` ("H1"–"H5") và hệ số liên tục `responsibility_weight` để phục vụ cả bài toán phân loại và hồi quy.
+2. **Tách riêng H4 khi báo cáo chỉ số tương tác M3**:
+   - Tác nhân đứng yên (H4) có thể nhận diện tầm thường chỉ qua vận tốc ($v \approx 0$), không phản ánh khả năng suy luận động học xã hội.
+   - Khi báo cáo kết quả M3, **bắt buộc tách riêng**:
+     - *Toàn bộ tập kiểm tra (Overall Macro-F1 / Accuracy)*.
+     - *Tập tương tác động (Dynamic Subset: H1, H2, H3, H5)* để tránh làm đẹp kết quả nhân tạo.
+3. **Cân bằng lớp khi huấn luyện M3**:
+   - Trong bối cảnh thực, H2 chỉ chiếm $10\%$ và là lớp khó học nhất (dễ bị nhầm với H1 hoặc H3).
+   - Khi huấn luyện mạng suy luận Persona của M3, bắt buộc áp dụng **Class-Balanced Loss (hoặc Focal Loss / Stratified Sampling)** để bù trừ tỷ lệ 40/10/25/15/10.
+4. **Giữ H5 trong huấn luyện & Thiết kế thí nghiệm chuyển giao HuNavSim**:
+   - H5 là cơ chế né lực mềm thực tế (khác với ORCA dự đoán vận tốc hình học). Giữ đầy đủ H1–H5 trong tập Train.
+   - Do HuNavSim cũng dựa trên Social Force Model, kịch bản test trên HuNavSim sẽ gần H5. Bổ sung bài nghiên cứu triệt tiêu (Ablation B2) bỏ H5 khi train để đo lường chính xác mức độ H5 đóng góp cho khả năng chuyển giao sang HuNavSim.
+5. **Huấn luyện trên toàn bộ tập dữ liệu (Không lọc theo $d_{\min}$)**:
+   - Trong pha huấn luyện, mô hình được train trên toàn bộ tập dữ liệu quan sát, không cắt bỏ các mẫu xa hay mẫu không va chạm.
+   - Khi không có kích thích tương tác hình học, con người đi thẳng theo vận tốc ưa thích; mô hình học cách xuất phân bố xác suất xấp xỉ phân bố tiên nghiệm (prior distribution) thay vì đoán mò nhãn cứng.
+6. **Đầu ra xác suất & Hệ chỉ số đánh giá M3 (Probabilistic Output & Calibration)**:
+   - M3 xuất ra vector phân bố xác suất $P(H_i \mid \mathbf{o}_{1:t})$ với $\sum_{i=1}^5 P(H_i) = 1$. Khi chưa xuất hiện tương tác, phân bố tự nhiên hồi quy về tiên nghiệm $P(H) \to [0.40, 0.10, 0.25, 0.15, 0.10]$.
+   - Bên cạnh Accuracy và Macro-F1 (tách riêng subset Dynamic), M3 bắt buộc được đánh giá bằng các thước đo xác suất nghiêm ngặt:
+     * **Negative Log-Likelihood (NLL)** và **Brier Score** để đo độ chính xác của phân bố dự đoán.
+     * **Expected Calibration Error (ECE)** để đảm bảo độ tin cậy được hiệu chuẩn tốt (well-calibrated), tránh hiện tượng overconfident.
+     * **Độ trễ phát hiện sớm (Early Detection Latency)**: Đo độ chính xác, NLL và độ tự tin theo các cửa sổ quan sát thời gian thực tăng dần ($0.5\text{ s} \to 1.0\text{ s} \to 1.5\text{ s} \to 2.0\text{ s}$).
+7. **Đánh giá tương tác bằng Điểm tiếp cận gần nhất danh định (Nominal CPA)**:
+   - **Chống thiên lệch lựa chọn (Selection Bias)**: Tuyệt đối không dùng khoảng cách nhỏ nhất đo được ($d_{\min}$) sau khi đã né để chọn tập đánh giá, vì H3 không né nên tự động có $d_{\min}$ nhỏ, gây sai lệch kết quả.
+   - Chuẩn hóa: Đánh giá tập xung đột hình học dựa trên **Nominal CPA (Closest Point of Approach)** tính từ vector vận tốc ban đầu tại $t=0$:
+     $$d_{\text{CPA}}^{\text{nominal}} \le 1.20\text{ m}$$
+   - Cửa sổ quan sát thực tế của M3 được cố định nghiêm ngặt ở **$2.0\text{ s}$** (20 bước ở 10 Hz), không sử dụng thông tin tương lai của quỹ đạo để loại trừ hoàn toàn rò rỉ dữ liệu (data leakage).
 
 ### 3.2. Quy Tắc Khả Thi Bề Rộng Hành Lang
 * **Ngưỡng Tránh Nhau Tối Thiểu (Geometric Passing Threshold)**:
@@ -193,7 +233,7 @@ Do người H1 và H2 thay đổi quỹ đạo theo chuyển động của robot
   * Với tác nhân H1 và H2: Định nghĩa này mang tính **bảo thủ (conservative)** vì phản xạ nhường nhịn thực tế của người chỉ giúp robot tránh va chạm dễ dàng hơn.
 
 ### 6.2. Bộ Giải Lấy Mẫu & Chỉ Số Đo Lường
-* Sử dụng bộ giải Spatio-Temporal Lattice Planner / RRT* với đầy đủ ràng buộc unicycle của Burger ($v \le 0.22\text{ m/s}, |\omega| \le 2.84\text{ rad/s}, |a_v| \le 1.0\text{ m/s}^2, |a_\omega| \le 3.2\text{ rad/s}^2$).
+* Sử dụng bộ giải Spatio-Temporal Lattice Planner / RRT* với đầy đủ ràng buộc động học đa hướng (omnidirectional) của robot mecanum nhỏ ($|v_x| \le v_{x}^{\max}, |v_y| \le v_{y}^{\max}, |\omega| \le \omega^{\max}$ và giới hạn gia tốc tương ứng).
 * Do các thuật toán sampling không có tính đầy đủ tuyệt đối (incompleteness), việc bộ giải không tìm thấy đường không đồng nghĩa với việc kịch bản bất khả thi $100\%$.
 * **Quy chuẩn tên gọi và báo cáo**:
   * Chỉ số được đặt tên là: **"Tỷ lệ tìm được quỹ đạo khả thi (Found Feasible Path Rate)"** (đóng vai trò là cận dưới của tập khả thi thực tế).
@@ -253,8 +293,9 @@ Mọi cấu hình bắt buộc được đánh giá trên cùng một tập kị
 | Mã Cấu Hình | Mô Tả Huấn Luyện | Mục Tiêu Khoa Học | Môi Trường Đánh Giá | Số Seeds |
 | :---: | :--- | :--- | :---: | :---: |
 | **Ablation A** | $100\%$ H1 (ORCA chuẩn) | Đo lường mức độ rơi vào bẫy ỷ lại (Reciprocity trap) | 2D + Gazebo | 5 |
-| **Ablation B** | $70\%$ H1 + $25\%$ H3 + $5\%$ H4 | Kiểm chứng vai trò phá vỡ bẫy đối xứng của H3 | 2D + Gazebo | 5 |
-| **Ablation C** *(Chuẩn)* | Phổ đầy đủ H1-H5 + Parameterized Leg Profile Model + Ego-Motion Warping có nhiễu | Mô hình đề xuất chính thức của nghiên cứu | 2D + Gazebo (E1, E2) | 5 |
+| **Ablation B1** | $70\%$ H1 + $25\%$ H3 + $5\%$ H4 | Kiểm chứng vai trò phá vỡ bẫy đối xứng của H3 | 2D + Gazebo | 5 |
+| **Ablation B2** | $45\%$ H1 + $15\%$ H2 + $25\%$ H3 + $15\%$ H4 *(Bỏ hoàn toàn H5)* | **Đo lường sự đóng góp của H5**: Đánh giá mức độ suy giảm hiệu năng khi chuyển giao sang benchmark HuNavSim (vốn dựa trên Social Force Model) | 2D + HuNavSim / Gazebo | 5 |
+| **Ablation C** *(Chuẩn)* | Phổ đầy đủ H1-H5 + Parameterized Leg Profile Model + Ego-Motion Warping có nhiễu | Mô hình đề xuất chính thức của nghiên cứu | 2D + Gazebo (E1, E2) + HuNavSim | 5 |
 | **Ablation D1** | Cấu hình C nhưng chỉ train trên mô hình đĩa tròn (`circle`) | Đo độ nhạy cảm với hình dạng cẳng chân người | 2D + Gazebo | 3 |
 | **Ablation D2** | Cấu hình C nhưng warp odometry không nhiễu (Ground Truth) | Chứng minh tác hại của Sim-to-Real gap odometry | 2D + Gazebo | 3 |
 | **Ablation E** | Cấu hình C trên 2D với $v_{max} = 0.50\text{ m/s}$ (Robot tốc độ trung bình) | Đánh giá hành vi khi robot không còn bị giới hạn tốc độ thấp | **Chỉ đánh giá trên 2D** | 3 |

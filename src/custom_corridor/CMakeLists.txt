@@ -14,6 +14,7 @@ install(
     worlds
     launch
     models
+    urdf
     rviz
     config
     maps
