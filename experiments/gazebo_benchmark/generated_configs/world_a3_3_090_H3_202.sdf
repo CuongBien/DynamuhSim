@@ -1,0 +1,419 @@
+<?xml version="1.0"?>
+<sdf version="1.9">
+  <world name="corridor_0.90">
+
+    <gravity>0 0 -9.81</gravity>
+
+    <!-- Scene and Physics Optimization -->
+    <scene>
+      <shadows>false</shadows>
+    </scene>
+
+    <physics name="default_physics" type="ode">
+      <max_step_size>0.004</max_step_size>
+      <real_time_factor>0.0</real_time_factor>
+    </physics>
+
+    <light name="sun" type="directional">
+      <cast_shadows>false</cast_shadows>
+      <pose>0 0 10 0 0 0</pose>
+      <diffuse>0.8 0.8 0.8 1</diffuse>
+      <specular>0.2 0.2 0.2 1</specular>
+      <attenuation>
+        <range>1000</range>
+        <constant>0.9</constant>
+        <linear>0.01</linear>
+        <quadratic>0.001</quadratic>
+      </attenuation>
+      <direction>-0.5 0.1 -0.9</direction>
+    </light>
+
+    <!-- Physics -->
+    <plugin
+        filename="gz-sim-physics-system"
+        name="gz::sim::systems::Physics"/>
+
+    <plugin
+        filename="gz-sim-user-commands-system"
+        name="gz::sim::systems::UserCommands"/>
+
+    <plugin
+        filename="gz-sim-scene-broadcaster-system"
+        name="gz::sim::systems::SceneBroadcaster"/>
+
+    <!-- Sensors -->
+    <plugin
+        filename="gz-sim-sensors-system"
+        name="gz::sim::systems::Sensors">
+      <render_engine>ogre2</render_engine>
+    </plugin>
+
+    <plugin
+        filename="gz-sim-imu-system"
+        name="gz::sim::systems::Imu"/>
+
+
+    <!-- Ground -->
+    <model name="ground">
+      <static>true</static>
+
+      <link name="link">
+        <collision name="collision">
+          <geometry>
+            <box>
+              <size>34.0 10.0 0.1</size>
+            </box>
+          </geometry>
+        </collision>
+
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>34.0 10.0 0.1</size>
+            </box>
+          </geometry>
+
+          <material>
+            <ambient>0.7 0.7 0.7 1</ambient>
+            <diffuse>0.7 0.7 0.7 1</diffuse>
+          </material>
+        </visual>
+      </link>
+
+      <pose>0.0 0.0 -0.05 0 0 0</pose>
+    </model>
+
+
+    <!-- Left continuous wall -->
+    <model name="left_wall">
+      <static>true</static>
+
+      <link name="link">
+        <collision name="collision">
+          <geometry>
+            <box>
+              <size>30.0 0.1 2.0</size>
+            </box>
+          </geometry>
+        </collision>
+
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>30.0 0.1 2.0</size>
+            </box>
+          </geometry>
+
+          <material>
+            <ambient>0.7 0.7 0.7 1</ambient>
+            <diffuse>0.7 0.7 0.7 1</diffuse>
+          </material>
+        </visual>
+      </link>
+
+      <pose>0.0 -0.5 1.0 0 0 0</pose>
+    </model>
+
+
+    <!-- Right wall: segment before recess -->
+    <model name="right_wall_front">
+      <static>true</static>
+
+      <link name="link">
+        <collision name="collision">
+          <geometry>
+            <box>
+              <size>16.4 0.1 2.0</size>
+            </box>
+          </geometry>
+        </collision>
+
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>16.4 0.1 2.0</size>
+            </box>
+          </geometry>
+
+          <material>
+            <ambient>0.7 0.7 0.7 1</ambient>
+            <diffuse>0.7 0.7 0.7 1</diffuse>
+          </material>
+        </visual>
+      </link>
+
+      <pose>-6.800000000000001 0.5 1.0 0 0 0</pose>
+    </model>
+
+
+    <!-- Right wall: segment after recess -->
+    <model name="right_wall_back">
+      <static>true</static>
+
+      <link name="link">
+        <collision name="collision">
+          <geometry>
+            <box>
+              <size>12.4 0.1 2.0</size>
+            </box>
+          </geometry>
+        </collision>
+
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>12.4 0.1 2.0</size>
+            </box>
+          </geometry>
+
+          <material>
+            <ambient>0.7 0.7 0.7 1</ambient>
+            <diffuse>0.7 0.7 0.7 1</diffuse>
+          </material>
+        </visual>
+      </link>
+
+      <pose>8.8 0.5 1.0 0 0 0</pose>
+    </model>
+
+
+    <!-- Recess side walls -->
+    <model name="recess_side_left">
+      <static>true</static>
+
+      <link name="link">
+        <collision name="collision">
+          <geometry>
+            <box>
+              <size>0.1 0.6 2.0</size>
+            </box>
+          </geometry>
+        </collision>
+
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>0.1 0.6 2.0</size>
+            </box>
+          </geometry>
+
+          <material>
+            <ambient>0.7 0.7 0.7 1</ambient>
+            <diffuse>0.7 0.7 0.7 1</diffuse>
+          </material>
+        </visual>
+      </link>
+
+      <pose>1.3499999999999999 0.75 1.0 0 0 0</pose>
+    </model>
+
+
+    <model name="recess_side_right">
+      <static>true</static>
+
+      <link name="link">
+        <collision name="collision">
+          <geometry>
+            <box>
+              <size>0.1 0.6 2.0</size>
+            </box>
+          </geometry>
+        </collision>
+
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>0.1 0.6 2.0</size>
+            </box>
+          </geometry>
+
+          <material>
+            <ambient>0.7 0.7 0.7 1</ambient>
+            <diffuse>0.7 0.7 0.7 1</diffuse>
+          </material>
+        </visual>
+      </link>
+
+      <pose>2.65 0.75 1.0 0 0 0</pose>
+    </model>
+
+
+    <!-- Recess back wall -->
+    <model name="recess_back">
+      <static>true</static>
+
+      <link name="link">
+        <collision name="collision">
+          <geometry>
+            <box>
+              <size>1.4 0.1 2.0</size>
+            </box>
+          </geometry>
+        </collision>
+
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>1.4 0.1 2.0</size>
+            </box>
+          </geometry>
+
+          <material>
+            <ambient>0.7 0.7 0.7 1</ambient>
+            <diffuse>0.7 0.7 0.7 1</diffuse>
+          </material>
+        </visual>
+      </link>
+
+      <pose>2.0 1.1 1.0 0 0 0</pose>
+    </model>
+
+
+    <!-- ============================================================== -->
+    <!-- RVO2 Social Navigation System Plugin for 0.90m Corridor        -->
+    <!-- ============================================================== -->
+    <plugin
+      filename="librvo2_human_system.so"
+      name="custom_corridor::RVO2HumanSystem">
+      <human_count>1</human_count>
+      <robot_name>mecanum_robot</robot_name>
+      <robot_radius>0.16</robot_radius>
+      <human_radius>0.28</human_radius>
+      <corridor_mode>true</corridor_mode>
+      <corridor_half_width>0.45</corridor_half_width>
+      <recess_x_min>1.35</recess_x_min>
+      <recess_x_max>2.65</recess_x_max>
+      <recess_x_center>2.00</recess_x_center>
+      <recess_y>0.75</recess_y>
+      <recess_approach_dist>5.0</recess_approach_dist>
+      <recess_threshold>0.40</recess_threshold>
+      <politeness_balance_point>0.60</politeness_balance_point>
+      <randomize_politeness>false</randomize_politeness>
+      <seed>202</seed>
+      <default_scenario_file>/home/cuongbien/DynamuhSim/experiments/gazebo_benchmark/generated_configs/scenario_a3_3_090_H3_202.json</default_scenario_file>
+      <seed>42</seed>
+      <visual_z>0.95</visual_z>
+      <proxy_z>0.80</proxy_z>
+    </plugin>
+
+    <!-- Human 01: Oncoming Walker (Royal Blue Jacket, Scale 0.95, Height ~1.63m) -->
+    <actor name="human_01_visual">
+      <pose>-7.0 0.0 0.0 0 0 3.14159</pose>
+      <skin>
+        <filename>model://human/meshes/walk_blue.dae</filename>
+        <scale>0.95</scale>
+      </skin>
+      <animation name="walk">
+        <filename>model://human/meshes/walk_blue.dae</filename>
+        <interpolate_x>false</interpolate_x>
+      </animation>
+      <script>
+        <loop>false</loop>
+        <delay_start>0</delay_start>
+        <auto_start>false</auto_start>
+        <trajectory id="0" type="walk" tension="0">
+          <waypoint>
+            <time>0</time>
+            <pose>0 0 0 0 0 0</pose>
+          </waypoint>
+          <waypoint>
+            <time>1</time>
+            <pose>0 0 0 0 0 0</pose>
+          </waypoint>
+        </trajectory>
+      </script>
+    </actor>
+
+    <model name="human_01_proxy">
+      <pose>-7.0 0.0 0.80 0 0 3.14159</pose>
+      <link name="link">
+        <gravity>false</gravity>
+        <kinematic>true</kinematic>
+        <collision name="collision">
+          <geometry>
+            <cylinder>
+              <radius>0.28</radius>
+              <length>1.70</length>
+            </cylinder>
+          </geometry>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <cylinder>
+              <radius>0.001</radius>
+              <length>0.001</length>
+            </cylinder>
+          </geometry>
+          <transparency>1.0</transparency>
+        </visual>
+      </link>
+    </model>
+
+    <!-- Physical Industrial Object (Cylinder / Pillar for Object mode) -->
+    <model name="dynamic_object">
+      <pose>5.0 0.0 -50.0 0 0 3.14159</pose>
+      <self_collide>false</self_collide>
+
+      <link name="link">
+        <gravity>false</gravity>
+        <kinematic>true</kinematic>
+
+        <collision name="collision">
+          <geometry>
+            <cylinder>
+              <radius>0.22</radius>
+              <length>1.70</length>
+            </cylinder>
+          </geometry>
+        </collision>
+
+        <!-- Main pillar body: Industrial Safety Orange -->
+        <visual name="body_visual">
+          <geometry>
+            <cylinder>
+              <radius>0.22</radius>
+              <length>1.50</length>
+            </cylinder>
+          </geometry>
+          <material>
+            <ambient>0.9 0.4 0.0 1</ambient>
+            <diffuse>1.0 0.45 0.05 1</diffuse>
+            <specular>0.6 0.6 0.6 1</specular>
+          </material>
+        </visual>
+
+        <!-- Top industrial beacon / cap -->
+        <visual name="cap_visual">
+          <pose>0 0 0.80 0 0 0</pose>
+          <geometry>
+            <cylinder>
+              <radius>0.23</radius>
+              <length>0.10</length>
+            </cylinder>
+          </geometry>
+          <material>
+            <ambient>0.2 0.2 0.2 1</ambient>
+            <diffuse>0.2 0.2 0.2 1</diffuse>
+            <specular>0.8 0.8 0.8 1</specular>
+          </material>
+        </visual>
+
+        <!-- Warning hazard band -->
+        <visual name="band_visual">
+          <pose>0 0 0.10 0 0 0</pose>
+          <geometry>
+            <cylinder>
+              <radius>0.225</radius>
+              <length>0.15</length>
+            </cylinder>
+          </geometry>
+          <material>
+            <ambient>0.1 0.1 0.1 1</ambient>
+            <diffuse>0.1 0.1 0.1 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+  </world>
+</sdf>
