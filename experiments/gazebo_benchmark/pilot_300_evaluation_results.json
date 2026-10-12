@@ -1,0 +1,191 @@
+{
+  "dataset_summary": {
+    "total_episodes": 300,
+    "qc_passed_count": 296,
+    "qc_pass_rate_pct": 98.7,
+    "invariant_violations_dcenter_lt_030_no_col": 0,
+    "cpa_lt_15_count": 228,
+    "cpa_lt_15_rate_pct": 76.0,
+    "cpa_lt_20_count": 228,
+    "cpa_lt_20_rate_pct": 76.0,
+    "frozen_count": 3,
+    "frozen_rate_pct": 1.0,
+    "wall_penetration": {
+      "corridor_090": {
+        "pen_steps_gt_2cm": 743879,
+        "total_human_steps": 1083606,
+        "penetration_rate_pct": 68.65
+      },
+      "corridor_120": {
+        "pen_steps_gt_2cm": 1788494,
+        "total_human_steps": 4682520,
+        "penetration_rate_pct": 38.2
+      }
+    }
+  },
+  "evaluation_subset_count": 203,
+  "persona_manipulation_check": {
+    "H1": {
+      "num_episodes": 54,
+      "collision_rate_pct": 33.3,
+      "robot_stop_yield_rate_pct": 100.0,
+      "min_d_clear_m": {
+        "median": 0.0014,
+        "q25": -0.0001,
+        "q75": 0.0109,
+        "iqr": 0.011,
+        "count": 54
+      },
+      "max_human_lat_dev_m": {
+        "median": 0.2026,
+        "q25": 0.12,
+        "q75": 0.5236,
+        "iqr": 0.4036,
+        "count": 54
+      },
+      "human_vel_drop_mps": {
+        "median": 0.1,
+        "q25": 0.1,
+        "q75": 0.1,
+        "iqr": 0.0,
+        "count": 54
+      },
+      "dist_at_lat_onset_m": {
+        "median": 6.0873,
+        "q25": 4.467,
+        "q75": 7.7726,
+        "iqr": 3.3056,
+        "count": 47
+      },
+      "max_robot_lat_dev_m": {
+        "median": 0.1311,
+        "q25": 0.1155,
+        "q75": 0.1635,
+        "iqr": 0.0479,
+        "count": 54
+      },
+      "min_robot_speed_mps": {
+        "median": 0.0,
+        "q25": 0.0,
+        "q75": 0.0,
+        "iqr": 0.0,
+        "count": 54
+      },
+      "time_to_goal_s": {
+        "median": 12.802,
+        "q25": 11.976,
+        "q75": 14.153,
+        "iqr": 2.177,
+        "count": 28
+      }
+    },
+    "H2": {
+      "num_episodes": 58,
+      "collision_rate_pct": 51.7,
+      "robot_stop_yield_rate_pct": 100.0,
+      "min_d_clear_m": {
+        "median": 0.0,
+        "q25": -0.0003,
+        "q75": 0.0027,
+        "iqr": 0.003,
+        "count": 58
+      },
+      "max_human_lat_dev_m": {
+        "median": 0.1526,
+        "q25": 0.073,
+        "q75": 0.56,
+        "iqr": 0.487,
+        "count": 58
+      },
+      "human_vel_drop_mps": {
+        "median": 0.1,
+        "q25": 0.1,
+        "q75": 0.1,
+        "iqr": 0.0,
+        "count": 58
+      },
+      "dist_at_lat_onset_m": {
+        "median": 4.8752,
+        "q25": 4.2481,
+        "q75": 5.9162,
+        "iqr": 1.6682,
+        "count": 46
+      },
+      "max_robot_lat_dev_m": {
+        "median": 0.1288,
+        "q25": 0.0984,
+        "q75": 0.1559,
+        "iqr": 0.0575,
+        "count": 58
+      },
+      "min_robot_speed_mps": {
+        "median": 0.0,
+        "q25": 0.0,
+        "q75": 0.0,
+        "iqr": 0.0,
+        "count": 58
+      },
+      "time_to_goal_s": {
+        "median": 12.36,
+        "q25": 11.858,
+        "q75": 14.648,
+        "iqr": 2.79,
+        "count": 19
+      }
+    },
+    "H3": {
+      "num_episodes": 52,
+      "collision_rate_pct": 84.6,
+      "robot_stop_yield_rate_pct": 100.0,
+      "min_d_clear_m": {
+        "median": -0.0019,
+        "q25": -0.0034,
+        "q75": -0.0006,
+        "iqr": 0.0028,
+        "count": 52
+      },
+      "max_human_lat_dev_m": {
+        "median": 0.1026,
+        "q25": 0.0394,
+        "q75": 0.3065,
+        "iqr": 0.2671,
+        "count": 52
+      },
+      "human_vel_drop_mps": {
+        "median": 0.1,
+        "q25": 0.1,
+        "q75": 0.1,
+        "iqr": 0.0,
+        "count": 52
+      },
+      "dist_at_lat_onset_m": {
+        "median": 6.0185,
+        "q25": 4.1079,
+        "q75": 6.6759,
+        "iqr": 2.568,
+        "count": 33
+      },
+      "max_robot_lat_dev_m": {
+        "median": 0.0401,
+        "q25": 0.0087,
+        "q75": 0.1207,
+        "iqr": 0.112,
+        "count": 52
+      },
+      "min_robot_speed_mps": {
+        "median": 0.0,
+        "q25": 0.0,
+        "q75": 0.0,
+        "iqr": 0.0,
+        "count": 52
+      },
+      "time_to_goal_s": {
+        "median": 11.84,
+        "q25": 11.666,
+        "q75": 12.33,
+        "iqr": 0.664,
+        "count": 7
+      }
+    }
+  }
+}

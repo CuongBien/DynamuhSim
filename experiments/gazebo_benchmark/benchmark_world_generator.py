@@ -33,12 +33,16 @@ class BenchmarkWorldGenerator:
         x_start: float = 3.5,
         x_span: float = 7.0,
         out_filename: str = None,
+        scenario_file: str = None,
+        scenario_humans: list = None,
+        **kwargs
     ) -> str:
 
         """
         Generates an SDF world with N humans and specified representation.
         """
-        with open(self.corridor_090_path, "r") as f:
+        corridor_path = os.path.join(self.root_dir, f"src/custom_corridor/worlds/corridor_{corridor_type}.sdf")
+        with open(corridor_path, "r") as f:
             content = f.read()
 
         # Update human_count in plugin
@@ -58,7 +62,7 @@ class BenchmarkWorldGenerator:
             content
         )
 
-        # Update seed in plugin
+        # Update seed and scenario file in plugin
         if "<seed>" in content:
             content = re.sub(r"<seed>\d+</seed>", f"<seed>{seed}</seed>", content)
         else:
@@ -66,6 +70,17 @@ class BenchmarkWorldGenerator:
                 "<randomize_politeness>true</randomize_politeness>",
                 f"<randomize_politeness>true</randomize_politeness>\n      <seed>{seed}</seed>"
             )
+
+        # Add default_scenario_file if provided
+        scenario_file = scenario_file or kwargs.get("scenario_file", None)
+        if scenario_file:
+            if "<default_scenario_file>" in content:
+                content = re.sub(r"<default_scenario_file>.*?</default_scenario_file>", f"<default_scenario_file>{scenario_file}</default_scenario_file>", content)
+            else:
+                content = content.replace(
+                    f"<seed>{seed}</seed>",
+                    f"<seed>{seed}</seed>\n      <default_scenario_file>{scenario_file}</default_scenario_file>"
+                )
 
         # Update real_time_factor if specified
         if real_time_factor is not None:
@@ -80,23 +95,34 @@ class BenchmarkWorldGenerator:
         content = re.sub(r"<actor name=\"human_\d+_visual\">.*?</actor>", "", content, flags=re.DOTALL)
         content = re.sub(r"<model name=\"human_\d+_proxy\">.*?</model>", "", content, flags=re.DOTALL)
 
-        # Generate N humans distributed along corridor x in [3.0, 10.0]
+        # Generate N humans
+        scenario_humans = scenario_humans or kwargs.get("scenario_humans", None)
         humans_sdf = []
-        # Predefined lateral spawn offsets and scales for variation
         y_offsets = [0.0, 0.15, -0.15, 0.20, -0.20]
         scales = [0.95, 1.02, 0.98, 1.05, 0.92]
+        proxy_z_default = 0.80 if corridor_type == "090" else 0.875
 
         for i in range(1, num_humans + 1):
             idx_str = f"{i:02d}"
-            # Evenly spread along the corridor
-            x_pos = x_start + (i - 1) * (x_span / max(num_humans - 1, 1))
-            y_pos = y_offsets[(i - 1) % len(y_offsets)]
-            scale = scales[(i - 1) % len(scales)]
+            if scenario_humans and i <= len(scenario_humans):
+                sh = scenario_humans[i - 1]
+                st = sh.get("start", {})
+                x_pos = float(st.get("x", x_start + (i - 1) * 2.0))
+                y_pos = float(st.get("y", 0.0))
+                yaw_pos = float(st.get("yaw", 3.14159))
+                scale = float(sh.get("scale", scales[(i - 1) % len(scales)]))
+                proxy_z = float(sh.get("proxy_z", proxy_z_default))
+            else:
+                x_pos = x_start + (i - 1) * (x_span / max(num_humans - 1, 1))
+                y_pos = y_offsets[(i - 1) % len(y_offsets)]
+                yaw_pos = 3.14159
+                scale = scales[(i - 1) % len(scales)]
+                proxy_z = proxy_z_default
 
             actor_sdf = f"""
     <!-- Human {idx_str}: Walker -->
     <actor name="human_{idx_str}_visual">
-      <pose>{x_pos} {y_pos} 0.0 0 0 3.14159</pose>
+      <pose>{x_pos} {y_pos} 0.0 0 0 {yaw_pos}</pose>
       <skin>
         <filename>model://human/meshes/walk_blue.dae</filename>
         <scale>{scale}</scale>
@@ -112,11 +138,11 @@ class BenchmarkWorldGenerator:
         <trajectory id="0" type="walk" tension="0">
           <waypoint>
             <time>0</time>
-            <pose>{x_pos} {y_pos} 0.0 0 0 3.14159</pose>
+            <pose>{x_pos} {y_pos} 0.0 0 0 {yaw_pos}</pose>
           </waypoint>
           <waypoint>
             <time>1</time>
-            <pose>{x_pos} {y_pos} 0.0 0 0 3.14159</pose>
+            <pose>{x_pos} {y_pos} 0.0 0 0 {yaw_pos}</pose>
           </waypoint>
         </trajectory>
       </script>
@@ -124,7 +150,7 @@ class BenchmarkWorldGenerator:
 
             proxy_sdf = f"""
     <model name="human_{idx_str}_proxy">
-      <pose>{x_pos} {y_pos} 0.80 0 0 3.14159</pose>
+      <pose>{x_pos} {y_pos} {proxy_z} 0 0 {yaw_pos}</pose>
       <link name="link">
         <gravity>false</gravity>
         <kinematic>true</kinematic>
@@ -160,7 +186,7 @@ class BenchmarkWorldGenerator:
         injection_text = "\n".join(humans_sdf) + "\n  </world>"
         content = content.replace("</world>", injection_text)
 
-        out_name = out_filename if out_filename else f"world_n{num_humans}_{representation}.sdf"
+        out_name = out_filename if out_filename else f"world_n{num_humans}_{corridor_type}_{representation}.sdf"
         out_path = os.path.join(self.output_dir, out_name)
         with open(out_path, "w") as f:
             f.write(content)

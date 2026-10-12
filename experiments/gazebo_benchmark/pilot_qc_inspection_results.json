@@ -1,0 +1,210 @@
+{
+  "qc_summary": {
+    "total_episodes": 300,
+    "qc_passed_count": 296,
+    "has_nan_count": 0,
+    "max_time_gap_s": 1.8159999999999998,
+    "invariant_violations": 0,
+    "episodes_with_corrupt_files": 0,
+    "qc_pass_rate_pct": 98.7
+  },
+  "inspected_sample_10_episodes": [
+    {
+      "episode_name": "ep_0009",
+      "persona": "H3",
+      "corridor": "corridor_090",
+      "num_humans": 2,
+      "use_nav2": true,
+      "is_interactive_target": true,
+      "collision_occurred": true,
+      "goal_reached": false,
+      "gt_steps": 1168,
+      "depth_frames_count": 46,
+      "depth_dtype": "uint16",
+      "depth_shape": [
+        240,
+        424
+      ],
+      "delta_t_cmd0_s": 0.04,
+      "status": "PASS"
+    },
+    {
+      "episode_name": "ep_0028",
+      "persona": "H3",
+      "corridor": "corridor_120",
+      "num_humans": 5,
+      "use_nav2": true,
+      "is_interactive_target": true,
+      "collision_occurred": true,
+      "goal_reached": false,
+      "gt_steps": 1264,
+      "depth_frames_count": 49,
+      "depth_dtype": "uint16",
+      "depth_shape": [
+        240,
+        424
+      ],
+      "delta_t_cmd0_s": 0.04,
+      "status": "PASS"
+    },
+    {
+      "episode_name": "ep_0046",
+      "persona": "H3",
+      "corridor": "corridor_120",
+      "num_humans": 5,
+      "use_nav2": true,
+      "is_interactive_target": true,
+      "collision_occurred": true,
+      "goal_reached": false,
+      "gt_steps": 1412,
+      "depth_frames_count": 57,
+      "depth_dtype": "uint16",
+      "depth_shape": [
+        240,
+        424
+      ],
+      "delta_t_cmd0_s": 0.176,
+      "status": "PASS"
+    },
+    {
+      "episode_name": "ep_0098",
+      "persona": "H3",
+      "corridor": "corridor_090",
+      "num_humans": 5,
+      "use_nav2": true,
+      "is_interactive_target": true,
+      "collision_occurred": true,
+      "goal_reached": false,
+      "gt_steps": 1,
+      "depth_frames_count": 0,
+      "depth_dtype": "None",
+      "depth_shape": [],
+      "delta_t_cmd0_s": 0.176,
+      "status": "FAIL"
+    },
+    {
+      "episode_name": "ep_0105",
+      "persona": "H2",
+      "corridor": "corridor_120",
+      "num_humans": 10,
+      "use_nav2": true,
+      "is_interactive_target": false,
+      "collision_occurred": false,
+      "goal_reached": true,
+      "gt_steps": 4915,
+      "depth_frames_count": 199,
+      "depth_dtype": "uint16",
+      "depth_shape": [
+        240,
+        424
+      ],
+      "delta_t_cmd0_s": 0.044,
+      "status": "PASS"
+    },
+    {
+      "episode_name": "ep_0158",
+      "persona": "H1",
+      "corridor": "corridor_090",
+      "num_humans": 2,
+      "use_nav2": true,
+      "is_interactive_target": false,
+      "collision_occurred": false,
+      "goal_reached": true,
+      "gt_steps": 4913,
+      "depth_frames_count": 223,
+      "depth_dtype": "uint16",
+      "depth_shape": [
+        240,
+        424
+      ],
+      "delta_t_cmd0_s": 0.068,
+      "status": "PASS"
+    },
+    {
+      "episode_name": "ep_0165",
+      "persona": "H1",
+      "corridor": "corridor_090",
+      "num_humans": 5,
+      "use_nav2": true,
+      "is_interactive_target": true,
+      "collision_occurred": true,
+      "goal_reached": false,
+      "gt_steps": 665,
+      "depth_frames_count": 62,
+      "depth_dtype": "uint16",
+      "depth_shape": [
+        240,
+        424
+      ],
+      "delta_t_cmd0_s": 0.044,
+      "status": "PASS"
+    },
+    {
+      "episode_name": "ep_0168",
+      "persona": "H3",
+      "corridor": "corridor_090",
+      "num_humans": 2,
+      "use_nav2": true,
+      "is_interactive_target": true,
+      "collision_occurred": true,
+      "goal_reached": false,
+      "gt_steps": 1191,
+      "depth_frames_count": 47,
+      "depth_dtype": "uint16",
+      "depth_shape": [
+        240,
+        424
+      ],
+      "delta_t_cmd0_s": 0.212,
+      "status": "PASS"
+    },
+    {
+      "episode_name": "ep_0194",
+      "persona": "H2",
+      "corridor": "corridor_120",
+      "num_humans": 10,
+      "use_nav2": true,
+      "is_interactive_target": true,
+      "collision_occurred": false,
+      "goal_reached": true,
+      "gt_steps": 4940,
+      "depth_frames_count": 210,
+      "depth_dtype": "uint16",
+      "depth_shape": [
+        240,
+        424
+      ],
+      "delta_t_cmd0_s": 1.924,
+      "status": "PASS"
+    },
+    {
+      "episode_name": "ep_0255",
+      "persona": "H2",
+      "corridor": "corridor_120",
+      "num_humans": 10,
+      "use_nav2": false,
+      "is_interactive_target": true,
+      "collision_occurred": false,
+      "goal_reached": true,
+      "gt_steps": 4552,
+      "depth_frames_count": 203,
+      "depth_dtype": "uint16",
+      "depth_shape": [
+        240,
+        424
+      ],
+      "delta_t_cmd0_s": 0.0,
+      "status": "PASS"
+    }
+  ],
+  "depth_wall_patch_noise_verification": {
+    "verified": true,
+    "episode": "ep_0001",
+    "frame_file": "frame_0010.png",
+    "patch_size": "20x20 pixels",
+    "mean_distance_m": 0.7306,
+    "std_dev_mm": 0.7248,
+    "std_dev_under_1mm": true,
+    "zero_count": 0
+  }
+}
