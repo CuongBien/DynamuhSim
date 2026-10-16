@@ -84,7 +84,7 @@ Macro-F1 (%)
 ## 4. MA TRẬN NHẦM LẪN TRÊN HÀNH LANG VÀ KHÔNG GIAN MỞ ($\sigma = 0.05\text{ m}$)
 
 ### 4.1. Không gian mở $6\times 6\text{ m}$ (Open Space)
-Tệp CSV: [`confusion_matrix_5x5_open_sigma005.csv`](file:///home/cuongbien/DynamuhSim/experiments/pedestrian_persona_benchmark/confusion_matrix_5x5_open_sigma005.csv)  
+Tệp CSV: [`confusion_matrix_5x5_open_sigma005.csv`](file:///home/cuongbien/DynamuhSim/experiments/pedestrian_persona_benchmark/results/metrics/confusion_matrix_5x5_open_sigma005.csv)  
 Chỉ số: Accuracy = **$44.1\%$**, Macro-F1 = **$44.4\%$** (GBDT) / $35.9\%$ (GRU).
 
 | Thực tế \ Dự đoán | Pred H1 | Pred H2 | Pred H3 | Pred H4 | Pred H5 | Tổng thực tế |
@@ -96,7 +96,7 @@ Chỉ số: Accuracy = **$44.1\%$**, Macro-F1 = **$44.4\%$** (GBDT) / $35.9\%$ (
 | **H5 (Lực xã hội)** | 77 | 214 | 17 | 161 | **134** | 603 |
 
 ### 4.2. Tổng hợp hành lang (Corridor All — Chiều rộng $0.9\text{ m}$ & $1.2\text{ m}$)
-Tệp CSV: [`confusion_matrix_5x5_corridor_all_sigma005.csv`](file:///home/cuongbien/DynamuhSim/experiments/pedestrian_persona_benchmark/confusion_matrix_5x5_corridor_all_sigma005.csv)  
+Tệp CSV: [`confusion_matrix_5x5_corridor_all_sigma005.csv`](file:///home/cuongbien/DynamuhSim/experiments/pedestrian_persona_benchmark/results/metrics/confusion_matrix_5x5_corridor_all_sigma005.csv)  
 Chỉ số: Accuracy = **$28.3\%$**, Macro-F1 = **$26.5\%$** (GBDT) / $23.6\%$ (GRU).
 
 | Thực tế \ Dự đoán | Pred H1 | Pred H2 | Pred H3 | Pred H4 | Pred H5 | Tổng thực tế |
@@ -108,8 +108,8 @@ Chỉ số: Accuracy = **$28.3\%$**, Macro-F1 = **$26.5\%$** (GBDT) / $23.6\%$ (
 | **H5 (Lực xã hội)** | 171 | 202 | 25 | 407 | **392** | 1.197 |
 
 ### 4.3. Hành lang hẹp $0.9\text{ m}$ (Corridor 0.9m) & $1.2\text{ m}$ (Corridor 1.2m)
-- Tệp CSV Corridor 0.9m: [`confusion_matrix_5x5_corridor09_sigma005.csv`](file:///home/cuongbien/DynamuhSim/experiments/pedestrian_persona_benchmark/confusion_matrix_5x5_corridor09_sigma005.csv) — Macro-F1 = **$27.0\%$** (GBDT) / $24.2\%$ (GRU).
-- Tệp CSV Corridor 1.2m: [`confusion_matrix_5x5_corridor12_sigma005.csv`](file:///home/cuongbien/DynamuhSim/experiments/pedestrian_persona_benchmark/confusion_matrix_5x5_corridor12_sigma005.csv) — Macro-F1 = **$26.1\%$** (GBDT) / $22.9\%$ (GRU).
+- Tệp CSV Corridor 0.9m: [`confusion_matrix_5x5_corridor09_sigma005.csv`](file:///home/cuongbien/DynamuhSim/experiments/pedestrian_persona_benchmark/results/metrics/confusion_matrix_5x5_corridor09_sigma005.csv) — Macro-F1 = **$27.0\%$** (GBDT) / $24.2\%$ (GRU).
+- Tệp CSV Corridor 1.2m: [`confusion_matrix_5x5_corridor12_sigma005.csv`](file:///home/cuongbien/DynamuhSim/experiments/pedestrian_persona_benchmark/results/metrics/confusion_matrix_5x5_corridor12_sigma005.csv) — Macro-F1 = **$26.1\%$** (GBDT) / $22.9\%$ (GRU).
 
 > [!CAUTION]
 > **Hiện tượng đồng nhất hóa hành lang:** Nhìn vào bảng ma trận hành lang, 4 hàng H1, H2, H3, H5 có phân bố dự đoán gần như y hệt nhau từng ô một. Vì bề rộng hành lang quá hẹp, biên độ né ngang của người bị kẹp chặt, khiến mọi mô hình (kể cả GRU hay GBDT) đều không có thông tin hình học để phân biệt.
@@ -173,17 +173,17 @@ $\implies$ **Kết quả thực nghiệm khẳng định:** H1 và H2 vẫn nh�
 
 ## 8. TÀI NGUYÊN & TẬP TIN DỮ LIỆU LIÊN QUAN
 1. **Mã nguồn thực nghiệm:**
-   - Bộ kiểm chứng V2 (PyTorch GRU & Poly fit): [`evaluate_persona_separability_v2.py`](file:///home/cuongbien/DynamuhSim/experiments/pedestrian_persona_benchmark/evaluate_persona_separability_v2.py)
-   - Bộ kiểm chứng V1 (Finite Difference & GBDT): [`evaluate_persona_separability.py`](file:///home/cuongbien/DynamuhSim/experiments/pedestrian_persona_benchmark/evaluate_persona_separability.py)
-   - Bộ sinh 5.000 kịch bản C++: [`generate_persona_scenarios.cpp`](file:///home/cuongbien/DynamuhSim/experiments/pedestrian_persona_benchmark/generate_persona_scenarios.cpp)
+   - Bộ kiểm chứng V2 (PyTorch GRU & Poly fit): [`evaluate_persona_separability_v2.py`](file:///home/cuongbien/DynamuhSim/experiments/pedestrian_persona_benchmark/src/evaluators/evaluate_persona_separability_v2.py)
+   - Bộ kiểm chứng V1 (Finite Difference & GBDT): [`evaluate_persona_separability.py`](file:///home/cuongbien/DynamuhSim/experiments/pedestrian_persona_benchmark/src/evaluators/evaluate_persona_separability.py)
+   - Bộ sinh 5.000 kịch bản C++: [`generate_persona_scenarios.cpp`](file:///home/cuongbien/DynamuhSim/experiments/pedestrian_persona_benchmark/src/generators/generate_persona_scenarios.cpp)
 2. **Dữ liệu & Kết quả JSON:**
-   - Kết quả V2 đầy đủ: [`h1_h5_separability_results_v2.json`](file:///home/cuongbien/DynamuhSim/experiments/pedestrian_persona_benchmark/h1_h5_separability_results_v2.json)
-   - Bộ dữ liệu 5.000 kịch bản: [`h1_h5_scenarios_dataset.json`](file:///home/cuongbien/DynamuhSim/experiments/pedestrian_persona_benchmark/h1_h5_scenarios_dataset.json)
-   - Metadata & Seeds: [`scenarios_metadata.json`](file:///home/cuongbien/DynamuhSim/experiments/pedestrian_persona_benchmark/scenarios_metadata.json)
+   - Kết quả V2 đầy đủ: [`h1_h5_separability_results_v2.json`](file:///home/cuongbien/DynamuhSim/experiments/pedestrian_persona_benchmark/results/metrics/h1_h5_separability_results_v2.json)
+   - Bộ dữ liệu 5.000 kịch bản: [`h1_h5_scenarios_dataset.json`](file:///home/cuongbien/DynamuhSim/experiments/pedestrian_persona_benchmark/results/datasets/h1_h5_scenarios_dataset.json)
+   - Metadata & Seeds: [`scenarios_metadata.json`](file:///home/cuongbien/DynamuhSim/experiments/pedestrian_persona_benchmark/results/datasets/scenarios_metadata.json)
 3. **Các ma trận nhầm lẫn CSV:**
-   - Hành lang tổng hợp: [`confusion_matrix_5x5_corridor_all_sigma005.csv`](file:///home/cuongbien/DynamuhSim/experiments/pedestrian_persona_benchmark/confusion_matrix_5x5_corridor_all_sigma005.csv)
-   - Hành lang 0.9m: [`confusion_matrix_5x5_corridor09_sigma005.csv`](file:///home/cuongbien/DynamuhSim/experiments/pedestrian_persona_benchmark/confusion_matrix_5x5_corridor09_sigma005.csv)
-   - Hành lang 1.2m: [`confusion_matrix_5x5_corridor12_sigma005.csv`](file:///home/cuongbien/DynamuhSim/experiments/pedestrian_persona_benchmark/confusion_matrix_5x5_corridor12_sigma005.csv)
-   - Không gian mở 6x6m: [`confusion_matrix_5x5_open_sigma005.csv`](file:///home/cuongbien/DynamuhSim/experiments/pedestrian_persona_benchmark/confusion_matrix_5x5_open_sigma005.csv)
-   - Tương tác $\tau=1.5\text{ m}$: [`confusion_matrix_5x5_interactive15_sigma005.csv`](file:///home/cuongbien/DynamuhSim/experiments/pedestrian_persona_benchmark/confusion_matrix_5x5_interactive15_sigma005.csv)
-   - Tương tác $\tau=2.0\text{ m}$: [`confusion_matrix_5x5_interactive20_sigma005.csv`](file:///home/cuongbien/DynamuhSim/experiments/pedestrian_persona_benchmark/confusion_matrix_5x5_interactive20_sigma005.csv)
+   - Hành lang tổng hợp: [`confusion_matrix_5x5_corridor_all_sigma005.csv`](file:///home/cuongbien/DynamuhSim/experiments/pedestrian_persona_benchmark/results/metrics/confusion_matrix_5x5_corridor_all_sigma005.csv)
+   - Hành lang 0.9m: [`confusion_matrix_5x5_corridor09_sigma005.csv`](file:///home/cuongbien/DynamuhSim/experiments/pedestrian_persona_benchmark/results/metrics/confusion_matrix_5x5_corridor09_sigma005.csv)
+   - Hành lang 1.2m: [`confusion_matrix_5x5_corridor12_sigma005.csv`](file:///home/cuongbien/DynamuhSim/experiments/pedestrian_persona_benchmark/results/metrics/confusion_matrix_5x5_corridor12_sigma005.csv)
+   - Không gian mở 6x6m: [`confusion_matrix_5x5_open_sigma005.csv`](file:///home/cuongbien/DynamuhSim/experiments/pedestrian_persona_benchmark/results/metrics/confusion_matrix_5x5_open_sigma005.csv)
+   - Tương tác $\tau=1.5\text{ m}$: [`confusion_matrix_5x5_interactive15_sigma005.csv`](file:///home/cuongbien/DynamuhSim/experiments/pedestrian_persona_benchmark/results/metrics/confusion_matrix_5x5_interactive15_sigma005.csv)
+   - Tương tác $\tau=2.0\text{ m}$: [`confusion_matrix_5x5_interactive20_sigma005.csv`](file:///home/cuongbien/DynamuhSim/experiments/pedestrian_persona_benchmark/results/metrics/confusion_matrix_5x5_interactive20_sigma005.csv)

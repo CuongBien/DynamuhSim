@@ -1,3 +1,4 @@
+import os
 import json
 import numpy as np
 import matplotlib
@@ -14,8 +15,11 @@ def main():
     print("EVALUATING GROUND-TRUTH SEPARABILITY & ORACLE CLASSIFIER (H1 - H5)")
     print("=" * 70)
 
+    base_dir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+    dataset_path = os.path.join(base_dir, 'results', 'datasets', 'ground_truth_dataset.json')
+
     # 1. Load ground truth dataset
-    with open('experiments/pedestrian_persona_benchmark/ground_truth_dataset.json') as f:
+    with open(dataset_path) as f:
         data = json.load(f)
 
     print(f"Loaded {len(data)} interaction episodes.")
@@ -213,8 +217,9 @@ def main():
             axes[1].text(j, i, cm[i, j], ha="center", va="center",
                          color="white" if cm[i, j] > cm.max()/2 else "black")
     plt.colorbar(im, ax=axes[1])
+    fig_path = os.path.join(base_dir, 'results', 'figures', 'separability_evaluation.png')
     plt.tight_layout()
-    plt.savefig('experiments/pedestrian_persona_benchmark/separability_evaluation.png', dpi=300)
+    plt.savefig(fig_path, dpi=300)
     plt.close()
 
     # Save detailed JSON summary
@@ -230,11 +235,12 @@ def main():
         "confusion_matrix": cm.tolist(),
         "top_features": [(feature_names[sorted_idx[i]], float(importances[sorted_idx[i]])) for i in range(len(feature_names))]
     }
-    with open('experiments/pedestrian_persona_benchmark/gt_separability_results.json', 'w') as f:
+    json_path = os.path.join(base_dir, 'results', 'metrics', 'gt_separability_results.json')
+    with open(json_path, 'w') as f:
         json.dump(results_summary, f, indent=2)
 
-    print("\nSaved evaluation plots to experiments/pedestrian_persona_benchmark/separability_evaluation.png")
-    print("Saved results JSON to experiments/pedestrian_persona_benchmark/gt_separability_results.json")
+    print(f"\nSaved evaluation plots to {fig_path}")
+    print(f"Saved results JSON to {json_path}")
 
 if __name__ == '__main__':
     main()

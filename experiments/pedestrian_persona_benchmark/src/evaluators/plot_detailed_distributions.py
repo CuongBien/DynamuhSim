@@ -1,3 +1,4 @@
+import os
 import json
 import numpy as np
 import matplotlib
@@ -5,7 +6,9 @@ matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 
 def main():
-    with open('experiments/pedestrian_persona_benchmark/ground_truth_dataset.json') as f:
+    base_dir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+    dataset_path = os.path.join(base_dir, 'results', 'datasets', 'ground_truth_dataset.json')
+    with open(dataset_path) as f:
         data = json.load(f)
 
     headon = [ep for ep in data if ep['scenario'] == 'head_on']
@@ -81,10 +84,11 @@ def main():
     axes[2].legend(loc="upper left")
     axes[2].grid(True, linestyle='--', alpha=0.5)
 
+    fig_path = os.path.join(base_dir, 'results', 'figures', 'h1_h5_detailed_distributions.png')
     plt.tight_layout()
-    plt.savefig('experiments/pedestrian_persona_benchmark/h1_h5_detailed_distributions.png', dpi=300)
+    plt.savefig(fig_path, dpi=300)
     plt.close()
-    print("Saved detailed distributions to experiments/pedestrian_persona_benchmark/h1_h5_detailed_distributions.png")
+    print(f"Saved detailed distributions to {fig_path}")
 
 if __name__ == '__main__':
     main()
