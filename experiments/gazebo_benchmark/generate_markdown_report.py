@@ -1,7 +1,7 @@
 import json
 import os
 
-with open("experiments/gazebo_benchmark/a3_3_4policies_results.json") as f:
+with open("/home/cuongbien/DynamuhSim/experiments/gazebo_benchmark/results/datagen_4policies/a3_3_4policies_results.json") as f:
     res = json.load(f)
 
 for persona in ["H1", "H3"]:
