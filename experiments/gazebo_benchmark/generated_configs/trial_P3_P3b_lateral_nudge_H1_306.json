@@ -1,0 +1,91 @@
+{
+  "policy": "P3",
+  "sub_behavior": "P3b_lateral_nudge",
+  "policy_seed": 306163,
+  "policy_params": {
+    "d_nudge": 3.591,
+    "vy_cmd": 0.228,
+    "dur_nudge": 1.331
+  },
+  "goal_reached": true,
+  "time_to_goal": 11.39,
+  "collision_contact": false,
+  "collision_wall": false,
+  "near_miss_under_2cm": true,
+  "time_to_collision": null,
+  "dmin_clear_m": 0.0067,
+  "dmin_center_m": 0.4411,
+  "max_lateral_dev_m": 0.3434,
+  "ratio_time_vy_gt_01": 0.5364,
+  "stopped_fully_ge_1s": false,
+  "freezing_or_stuck_ge_3s": false,
+  "human_window_max_lat_dev_m": 0.2878,
+  "human_window_clamped_pct": 0.0,
+  "human_window_decel_mps": 0.288,
+  "actions_applied": {
+    "vx": {
+      "mean": 0.5048,
+      "std": 0.1287,
+      "p5": 0.2327,
+      "p95": 0.6
+    },
+    "vy": {
+      "mean": -0.0523,
+      "std": 0.1276,
+      "p5": -0.25,
+      "p95": 0.2282
+    },
+    "wz": {
+      "mean": 0.0178,
+      "std": 0.0578,
+      "p5": -0.0777,
+      "p95": 0.1353
+    }
+  },
+  "actions_intended": {
+    "vx": {
+      "mean": 0.5048,
+      "std": 0.1287,
+      "p5": 0.2327,
+      "p95": 0.6
+    },
+    "vy": {
+      "mean": -0.0445,
+      "std": 0.102,
+      "p5": -0.2104,
+      "p95": 0.1866
+    },
+    "wz": {
+      "mean": 0.0072,
+      "std": 0.0686,
+      "p5": -0.0916,
+      "p95": 0.1353
+    }
+  },
+  "actions_noise": {
+    "vx": {
+      "mean": 0.0,
+      "std": 0.0,
+      "p5": 0.0,
+      "p95": 0.0
+    },
+    "vy": {
+      "mean": 0.0,
+      "std": 0.0,
+      "p5": 0.0,
+      "p95": 0.0
+    },
+    "wz": {
+      "mean": 0.0,
+      "std": 0.0,
+      "p5": 0.0,
+      "p95": 0.0
+    }
+  },
+  "policy_code": "P3",
+  "persona": "H1",
+  "seed": 306,
+  "corridor_width_m": 1.2,
+  "rtf_setting": 1.0,
+  "retry_count": 0
+}
