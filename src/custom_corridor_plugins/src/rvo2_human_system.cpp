@@ -199,6 +199,13 @@ struct HumanAgent
   double animTimeSec{0.0};
   std::chrono::steady_clock::duration animationTime{0};
 
+  // Wall-clearance and safety tracking
+  uint64_t totalStepsCount{0};
+  uint64_t clampedStepsCount{0};
+  uint64_t penetrationStepsCount{0};
+  double maxPenetrationDepth{0.0};
+  double maxLateralDev{0.0};
+
   void Reset()
   {
     this->vx = 0.0;
@@ -210,6 +217,11 @@ struct HumanAgent
     this->waitDuration = 0.0;
     this->animTimeSec = 0.0;
     this->animationTime = std::chrono::steady_clock::duration{0};
+    this->totalStepsCount = 0;
+    this->clampedStepsCount = 0;
+    this->penetrationStepsCount = 0;
+    this->maxPenetrationDepth = 0.0;
+    this->maxLateralDev = 0.0;
   }
 };
 
@@ -362,18 +374,47 @@ public:
       human.vx = vel.x();
       human.vy = vel.y();
 
-      // In corridor mode, clamp Y to guarantee agent never penetrates corridor or recess walls
+      // In corridor mode, clamp Y to guarantee agent never penetrates corridor or recess walls.
+      // Strict rule: max lateral dev of human center = corridor_half_width - 0.28 - 0.02
       if (this->corridorMode_)
       {
-        const double wallMargin = 0.16;
-        const double minWallY = -this->corridorHalfWidth_ + wallMargin;
-        double maxWallY = this->corridorHalfWidth_ - wallMargin;
-        if (human.x >= (this->recessXMin_ - 0.1) && human.x <= (this->recessXMax_ + 0.1))
+        const double allowedY = std::max(0.05, this->corridorHalfWidth_ - human.radius - 0.02);
+        double minWallY = -allowedY;
+        double maxWallY = allowedY;
+
+        // If human is actively maneuvering within recess alcove
+        if (human.x >= (this->recessXMin_ - 0.1) && human.x <= (this->recessXMax_ + 0.1) &&
+            (human.corridorState == CorridorState::YieldingEnter ||
+             human.corridorState == CorridorState::YieldingWait ||
+             human.corridorState == CorridorState::YieldingExit))
         {
           maxWallY = this->recessY_ + 0.10;
         }
-        human.y = std::clamp(human.y, minWallY, maxWallY);
-        this->rvoSim_->setAgentPosition(human.rvoIndex, RVO::Vector2(human.x, human.y));
+
+        human.totalStepsCount++;
+        if (human.y < minWallY || human.y > maxWallY)
+        {
+          human.clampedStepsCount++;
+          human.y = std::clamp(human.y, minWallY, maxWallY);
+          this->rvoSim_->setAgentPosition(human.rvoIndex, RVO::Vector2(human.x, human.y));
+        }
+
+        if (std::abs(human.y) > human.maxLateralDev)
+        {
+          human.maxLateralDev = std::abs(human.y);
+        }
+
+        // Track wall penetration (outer body boundary = |y| + radius)
+        const double outerEdgeY = std::abs(human.y) + human.radius;
+        if (outerEdgeY > this->corridorHalfWidth_)
+        {
+          human.penetrationStepsCount++;
+          const double depth = outerEdgeY - this->corridorHalfWidth_;
+          if (depth > human.maxPenetrationDepth)
+          {
+            human.maxPenetrationDepth = depth;
+          }
+        }
       }
 
       const double speed = std::hypot(human.vx, human.vy);
@@ -601,6 +642,28 @@ private:
           static_cast<float>(human.radius),
           static_cast<float>(human.maxSpeed));
       this->SyncHumanPropertiesToRVO(human);
+    }
+
+    // Add corridor static obstacles to RVO2 simulator if in corridor mode
+    if (this->corridorMode_)
+    {
+      const float halfW = static_cast<float>(this->corridorHalfWidth_);
+      // Bounding polygon in clockwise (CW) order enclosing corridor and alcove
+      std::vector<RVO::Vector2> walls;
+      walls.push_back(RVO::Vector2(-50.0f, -halfW));
+      walls.push_back(RVO::Vector2(-50.0f,  halfW));
+      if (this->recessY_ > halfW)
+      {
+        walls.push_back(RVO::Vector2(static_cast<float>(this->recessXMin_), halfW));
+        walls.push_back(RVO::Vector2(static_cast<float>(this->recessXMin_), static_cast<float>(this->recessY_)));
+        walls.push_back(RVO::Vector2(static_cast<float>(this->recessXMax_), static_cast<float>(this->recessY_)));
+        walls.push_back(RVO::Vector2(static_cast<float>(this->recessXMax_), halfW));
+      }
+      walls.push_back(RVO::Vector2( 50.0f,  halfW));
+      walls.push_back(RVO::Vector2( 50.0f, -halfW));
+
+      this->rvoSim_->addObstacle(walls);
+      this->rvoSim_->processObstacles();
     }
   }
 
@@ -845,13 +908,15 @@ private:
       // Is corridor a single-lane bottleneck (< 1.10m)? (corridor_070 and corridor_090)
       const bool isNarrowCorridor = (this->corridorHalfWidth_ < 0.55);
 
+      const double maxAllowedY = std::max(0.05, this->corridorHalfWidth_ - _human.radius - 0.02);
+
       if (!isNarrowCorridor)
       {
         // Wide corridor (1.20m): agents can pass each other side-by-side!
-        // Human shifts to their right lane (+Y if heading -X, -Y if heading +X) and keeps walking smoothly.
+        // Human shifts to their right lane (+Y if heading -X, -Y if heading +X) up to maxAllowedY
         if (robotInFront && distToRobot < 4.5)
         {
-          const double rightY = (patrolDirX < 0.0) ? 0.28 : -0.28;
+          const double rightY = (patrolDirX < 0.0) ? maxAllowedY : -maxAllowedY;
           const double dyToRight = rightY - _human.y;
           desiredVy += std::clamp(dyToRight * 1.5, -0.35, 0.35);
         }
@@ -878,9 +943,9 @@ private:
           }
           else if (robotInFront && distToRobot < 4.0)
           {
-            // When walking down the corridor, step to the right wall like a real human!
+            // When walking down the corridor, step to the right wall up to maxAllowedY
             // If heading -X (patrolDirX < 0), right is +Y. If heading +X, right is -Y.
-            const double rightY = (patrolDirX < 0.0) ? (this->corridorHalfWidth_ - 0.18) : (-this->corridorHalfWidth_ + 0.18);
+            const double rightY = (patrolDirX < 0.0) ? maxAllowedY : -maxAllowedY;
             const double dyToRight = rightY - _human.y;
             desiredVy += std::clamp(dyToRight * 1.5, -0.35, 0.35);
           }
@@ -1134,6 +1199,14 @@ private:
       else if (human.corridorState == CorridorState::YieldingWait) stateStr = "yielding_wait";
       else if (human.corridorState == CorridorState::YieldingExit) stateStr = "yielding_exit";
       hObj["state"] = stateStr;
+
+      hObj["total_steps"] = human.totalStepsCount;
+      hObj["clamped_steps"] = human.clampedStepsCount;
+      hObj["penetration_steps"] = human.penetrationStepsCount;
+      hObj["max_penetration_depth"] = human.maxPenetrationDepth;
+      hObj["max_lateral_dev"] = human.maxLateralDev;
+      hObj["clamped_ratio"] = (human.totalStepsCount > 0) ? (static_cast<double>(human.clampedStepsCount) / human.totalStepsCount) : 0.0;
+      hObj["penetration_ratio"] = (human.totalStepsCount > 0) ? (static_cast<double>(human.penetrationStepsCount) / human.totalStepsCount) : 0.0;
 
       payload["humans"].push_back(hObj);
     }
@@ -1401,7 +1474,8 @@ private:
 
     if (this->corridorMode_)
     {
-      const std::vector<double> yOffsets = {0.0, 0.15, -0.15, 0.20, -0.20};
+      const double maxSpawnY = std::max(0.05, this->corridorHalfWidth_ - this->humanRadius_ - 0.02);
+      const std::vector<double> yOffsets = {0.0, maxSpawnY * 0.5, -maxSpawnY * 0.5, maxSpawnY, -maxSpawnY};
       json root;
       root["episode_id"] = 1;
       root["corridor_mode"] = true;
