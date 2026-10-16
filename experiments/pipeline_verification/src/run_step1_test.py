@@ -16,8 +16,10 @@ import numpy as np
 
 
 def main():
-    root_dir = "/home/cuongbien/DynamuhSim"
-    report_file = os.path.join(root_dir, "experiments/pipeline_verification/STEP1_LIDAR_MEASUREMENT_REPORT.md")
+    src_dir = os.path.dirname(os.path.abspath(__file__))
+    exp_dir = os.path.dirname(src_dir)
+    root_dir = os.path.dirname(os.path.dirname(exp_dir))
+    report_file = os.path.join(exp_dir, "reports/STEP1_LIDAR_MEASUREMENT_REPORT.md")
     
     print("[1/4] Starting Gazebo Harmonic headless with robot at x=3.0, y=0.0...")
     launch_cmd = (
@@ -41,7 +43,7 @@ def main():
         
         # Run inspector
         print("[3/4] Running measure_gazebo_lidar.py to collect /scan...")
-        measure_cmd = f"source {root_dir}/setup_env.sh && python3 {root_dir}/experiments/pipeline_verification/measure_gazebo_lidar.py"
+        measure_cmd = f"source {root_dir}/setup_env.sh && python3 {src_dir}/measure_gazebo_lidar.py"
         meas_proc = subprocess.run(
             ["bash", "-c", measure_cmd],
             stdout=subprocess.PIPE,

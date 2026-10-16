@@ -2,8 +2,8 @@
 **Tài liệu mã số**: `EXP-STEP1-LIDAR-VERIFICATION`  
 **Ngày thực hiện**: 2026-10-04  
 **Môi trường thử nghiệm**: Gazebo Sim 8 (Harmonic) + ROS 2 Jazzy, TurtleBot3 Burger (cảm biến LDS-01 tại $z = 0.171\text{ m}$), world [`corridor_090.sdf`](file:///home/cuongbien/DynamuhSim/src/custom_corridor/worlds/corridor_090.sdf).  
-**Dữ liệu thô lưu trữ tại**: [`experiments/pipeline_verification/raw_lidar_measurement.npy`](file:///home/cuongbien/DynamuhSim/experiments/pipeline_verification/raw_lidar_measurement.npy)  
-**Biểu đồ chẩn đoán**: [`experiments/pipeline_verification/figures/`](file:///home/cuongbien/DynamuhSim/experiments/pipeline_verification/figures/)
+**Dữ liệu thô lưu trữ tại**: [`experiments/pipeline_verification/results/raw_lidar_measurement.npy`](file:///home/cuongbien/DynamuhSim/experiments/pipeline_verification/results/raw_lidar_measurement.npy)  
+**Biểu đồ chẩn đoán**: [`experiments/pipeline_verification/results/figures/`](file:///home/cuongbien/DynamuhSim/experiments/pipeline_verification/results/figures/)
 
 ---
 
@@ -107,11 +107,11 @@ LEG_PROFILE_CONFIG = {
 ## 5. Biểu Đồ Minh Chứng
 
 1. **Biểu đồ Chu kỳ Bước Chân & Pha Tựa Chân Đứng Yên**:  
-   File: `experiments/pipeline_verification/figures/step1_gait_cadence.png`  
+   File: `experiments/pipeline_verification/results/figures/step1_gait_cadence.png`  
    *(Minh chứng bàn chân tiếp đất cố định tại $x \approx 0.205\text{ m}$ mà không bị trượt lê).*
 
 2. **Biểu đồ Phân Bố Bề Rộng Vật Cản & Khoảng Hở Hai Chân**:  
-   File: `experiments/pipeline_verification/figures/step1_profile_distribution.png`  
+   File: `experiments/pipeline_verification/results/figures/step1_profile_distribution.png`  
    *(Minh chứng bề rộng trung bình $0.133\text{ m}$ hoàn toàn tách biệt so với đường kính $0.56\text{ m}$ của cylinder proxy).*
 
 ---

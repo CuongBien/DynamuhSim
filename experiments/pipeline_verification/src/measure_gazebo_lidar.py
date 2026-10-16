@@ -186,8 +186,13 @@ def main():
 
     if results is not None:
         # Save raw results for reporting
-        np.save('/home/cuongbien/DynamuhSim/experiments/pipeline_verification/raw_lidar_measurement.npy', results)
-        print("\n[SUCCESS] Raw measurement saved to experiments/pipeline_verification/raw_lidar_measurement.npy")
+        import os
+        base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        results_dir = os.path.join(base_dir, 'results')
+        os.makedirs(results_dir, exist_ok=True)
+        out_path = os.path.join(results_dir, 'raw_lidar_measurement.npy')
+        np.save(out_path, results)
+        print(f"\n[SUCCESS] Raw measurement saved to {out_path}")
 
 
 if __name__ == '__main__':

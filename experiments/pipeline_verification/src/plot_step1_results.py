@@ -13,8 +13,9 @@ matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 
 def main():
-    data_path = "/home/cuongbien/DynamuhSim/experiments/pipeline_verification/raw_lidar_measurement.npy"
-    fig_dir = "/home/cuongbien/DynamuhSim/experiments/pipeline_verification/figures"
+    base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    data_path = os.path.join(base_dir, "results", "raw_lidar_measurement.npy")
+    fig_dir = os.path.join(base_dir, "results", "figures")
     os.makedirs(fig_dir, exist_ok=True)
     
     data = np.load(data_path, allow_pickle=True).item()
@@ -68,7 +69,7 @@ def main():
     fig.savefig(os.path.join(fig_dir, "step1_profile_distribution.png"))
     plt.close(fig)
     
-    print("[SUCCESS] Verification plots saved to experiments/pipeline_verification/figures/")
+    print(f"[SUCCESS] Verification plots saved to {fig_dir}")
 
 if __name__ == '__main__':
     main()
