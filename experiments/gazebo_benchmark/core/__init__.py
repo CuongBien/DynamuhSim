@@ -1,0 +1,29 @@
+"""
+Shared Core Modules for DynamuhSim Gazebo Harmonic Benchmarks.
+- geometry: Footprint clearance and predictive wall safety filter.
+- policies: Robot policies P1, P2, P3 (a-d), and P4.
+- sim_env: Gazebo & Nav2 process cleanup, SDF world patching, and scenario helpers.
+"""
+
+from .geometry import (
+    compute_rect_circle_distance,
+    apply_footprint_wall_safety_filter,
+    check_footprint_wall_contact,
+)
+from .policies import (
+    BasePolicy,
+    P1Policy,
+    P2Policy,
+    P3aPolicy,
+    P3bPolicy,
+    P3cPolicy,
+    P3dPolicy,
+    P4Policy,
+    create_policy_instance,
+)
+from .sim_env import (
+    cleanup_all,
+    create_corridor_scenario_json,
+    patch_corridor_world_sdf,
+    build_sim_env,
+)
