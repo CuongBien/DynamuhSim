@@ -447,12 +447,12 @@ int main() {
     }
 
     std::cout << "[Step 1] Exporting 5,000 scenarios to JSON files...\n" << std::flush;
-    std::string out_data_path = "experiments/pedestrian_persona_benchmark/h1_h5_scenarios_dataset.json";
+    std::string out_data_path = "experiments/pedestrian_persona_benchmark/results/datasets/h1_h5_scenarios_dataset.json";
     std::ofstream out_file(out_data_path);
     out_file << dataset.dump();
     out_file.close();
 
-    std::string out_meta_path = "experiments/pedestrian_persona_benchmark/scenarios_metadata.json";
+    std::string out_meta_path = "experiments/pedestrian_persona_benchmark/results/datasets/scenarios_metadata.json";
     std::ofstream meta_file(out_meta_path);
     meta_file << metadata_list.dump(2);
     meta_file.close();

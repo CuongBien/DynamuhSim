@@ -365,8 +365,9 @@ def save_confusion_matrix_csv(cm: np.ndarray, labels: List[str], filepath: str):
 # ----------------------------------------------------------------------
 
 def main():
-    root_dir = "/home/cuongbien/DynamuhSim"
-    dataset_path = os.path.join(root_dir, "experiments/pedestrian_persona_benchmark/h1_h5_scenarios_dataset.json")
+    base_dir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+    dataset_path = os.path.join(base_dir, "results/datasets/h1_h5_scenarios_dataset.json")
+    metrics_dir = os.path.join(base_dir, "results/metrics")
     
     print("=" * 80)
     print("M3 PERSONA OBSERVABILITY BENCHMARK V2 (POLYNOMIAL STATE ESTIMATION & PYTORCH GRU)")
@@ -731,25 +732,25 @@ def main():
             # Corridor All
             cm_corr = confusion_matrix(y_test[corr_all_mask], preds_gru[corr_all_mask], labels=[0, 1, 2, 3, 4])
             save_confusion_matrix_csv(cm_corr, ["H1", "H2", "H3", "H4", "H5"],
-                                      os.path.join(root_dir, "experiments/pedestrian_persona_benchmark/confusion_matrix_5x5_corridor_all_sigma005.csv"))
+                                      os.path.join(metrics_dir, "confusion_matrix_5x5_corridor_all_sigma005.csv"))
             
             # Corridor 0.9m
             m09 = (test_geometry == "corridor_09")
             cm_09 = confusion_matrix(y_test[m09], preds_gru[m09], labels=[0, 1, 2, 3, 4])
             save_confusion_matrix_csv(cm_09, ["H1", "H2", "H3", "H4", "H5"],
-                                      os.path.join(root_dir, "experiments/pedestrian_persona_benchmark/confusion_matrix_5x5_corridor09_sigma005.csv"))
+                                      os.path.join(metrics_dir, "confusion_matrix_5x5_corridor09_sigma005.csv"))
             
             # Corridor 1.2m
             m12 = (test_geometry == "corridor_12")
             cm_12 = confusion_matrix(y_test[m12], preds_gru[m12], labels=[0, 1, 2, 3, 4])
             save_confusion_matrix_csv(cm_12, ["H1", "H2", "H3", "H4", "H5"],
-                                      os.path.join(root_dir, "experiments/pedestrian_persona_benchmark/confusion_matrix_5x5_corridor12_sigma005.csv"))
+                                      os.path.join(metrics_dir, "confusion_matrix_5x5_corridor12_sigma005.csv"))
             
             # Open 6x6m
             m_op = (test_geometry == "open_6x6")
             cm_op = confusion_matrix(y_test[m_op], preds_gru[m_op], labels=[0, 1, 2, 3, 4])
             save_confusion_matrix_csv(cm_op, ["H1", "H2", "H3", "H4", "H5"],
-                                      os.path.join(root_dir, "experiments/pedestrian_persona_benchmark/confusion_matrix_5x5_open_sigma005.csv"))
+                                      os.path.join(metrics_dir, "confusion_matrix_5x5_open_sigma005.csv"))
 
     # ------------------------------------------------------------------
     # Step 6.7: 1,000 Bootstrap Resamplings for 95% Confidence Intervals
@@ -828,7 +829,7 @@ def main():
     benchmark_output["decision_rule"] = decision
 
     # Save output JSON
-    out_json_path = os.path.join(root_dir, "experiments/pedestrian_persona_benchmark/h1_h5_separability_results_v2.json")
+    out_json_path = os.path.join(metrics_dir, "h1_h5_separability_results_v2.json")
     with open(out_json_path, "w") as fp:
         json.dump(benchmark_output, fp, indent=2)
     print(f"\nSaved v2 benchmark results to {out_json_path}")

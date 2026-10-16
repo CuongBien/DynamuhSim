@@ -307,8 +307,9 @@ def save_confusion_matrix_csv(cm: np.ndarray, labels: List[str], filepath: str):
 # ----------------------------------------------------------------------
 
 def main():
-    root_dir = "/home/cuongbien/DynamuhSim"
-    dataset_path = os.path.join(root_dir, "experiments/pedestrian_persona_benchmark/h1_h5_scenarios_dataset.json")
+    base_dir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+    dataset_path = os.path.join(base_dir, "results/datasets/h1_h5_scenarios_dataset.json")
+    metrics_dir = os.path.join(base_dir, "results/metrics")
     
     print("=" * 80)
     print("M3 PERSONA OBSERVABILITY BENCHMARK (H1-H5 SEPARABILITY UNDER REAL CONSTRAINTS)")
@@ -623,19 +624,19 @@ def main():
             cached_probs_005 = probs_gbdt.copy()
             cm5 = np.array(noise_results["gbdt_handcrafted"]["confusion_matrix_5x5"])
             save_confusion_matrix_csv(cm5, ["H1", "H2", "H3", "H4", "H5"],
-                                      os.path.join(root_dir, "experiments/pedestrian_persona_benchmark/confusion_matrix_5x5_sigma005.csv"))
+                                      os.path.join(metrics_dir, "confusion_matrix_5x5_sigma005.csv"))
             
             cm4 = np.array(noise_results["gbdt_handcrafted"]["confusion_matrix_4x4_no_h4"])
             save_confusion_matrix_csv(cm4, ["H1", "H2", "H3", "H5"],
-                                      os.path.join(root_dir, "experiments/pedestrian_persona_benchmark/confusion_matrix_4x4_noH4_sigma005.csv"))
+                                      os.path.join(metrics_dir, "confusion_matrix_4x4_noH4_sigma005.csv"))
 
             cm5_15 = np.array(noise_results["gbdt_handcrafted"]["confusion_matrix_5x5_interactive15"])
             save_confusion_matrix_csv(cm5_15, ["H1", "H2", "H3", "H4", "H5"],
-                                      os.path.join(root_dir, "experiments/pedestrian_persona_benchmark/confusion_matrix_5x5_interactive15_sigma005.csv"))
+                                      os.path.join(metrics_dir, "confusion_matrix_5x5_interactive15_sigma005.csv"))
 
             cm4_15 = np.array(noise_results["gbdt_handcrafted"]["confusion_matrix_4x4_interactive15"])
             save_confusion_matrix_csv(cm4_15, ["H1", "H2", "H3", "H5"],
-                                      os.path.join(root_dir, "experiments/pedestrian_persona_benchmark/confusion_matrix_4x4_interactive15_sigma005.csv"))
+                                      os.path.join(metrics_dir, "confusion_matrix_4x4_interactive15_sigma005.csv"))
 
     # ------------------------------------------------------------------
     # Step 6.7: 95% Confidence Intervals via Scenario-level Bootstrap
@@ -719,7 +720,7 @@ def main():
     benchmark_output["decision_rule"] = decision
 
     # Save complete JSON
-    out_json_path = os.path.join(root_dir, "experiments/pedestrian_persona_benchmark/h1_h5_separability_results.json")
+    out_json_path = os.path.join(metrics_dir, "h1_h5_separability_results.json")
     with open(out_json_path, "w") as fp:
         json.dump(benchmark_output, fp, indent=2)
         

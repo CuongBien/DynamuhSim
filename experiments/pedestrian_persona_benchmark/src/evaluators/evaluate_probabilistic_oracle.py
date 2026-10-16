@@ -99,7 +99,10 @@ def main():
     print("PROBABILISTIC M3 ORACLE EVALUATION: 2.0s WINDOW, NOMINAL CPA & CALIBRATION")
     print("=" * 80)
 
-    with open('experiments/pedestrian_persona_benchmark/ground_truth_dataset.json') as f:
+    import os
+    base_dir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+    dataset_path = os.path.join(base_dir, 'results', 'datasets', 'ground_truth_dataset.json')
+    with open(dataset_path) as f:
         data = json.load(f)
 
     persona_map = {"H1": 0, "H2": 1, "H3": 2, "H4": 3, "H5": 4}
@@ -272,8 +275,9 @@ def main():
     axes[1].grid(True, linestyle='--', alpha=0.5)
     axes[1].legend(loc="lower right")
 
+    fig_path = os.path.join(base_dir, 'results', 'figures', 'probabilistic_calibration_latency.png')
     plt.tight_layout()
-    plt.savefig('experiments/pedestrian_persona_benchmark/probabilistic_calibration_latency.png', dpi=300)
+    plt.savefig(fig_path, dpi=300)
     plt.close()
 
     # Save summary report JSON
@@ -301,11 +305,12 @@ def main():
         },
         "early_detection_latency": latency_results
     }
-    with open('experiments/pedestrian_persona_benchmark/probabilistic_evaluation_results.json', 'w') as f:
+    json_path = os.path.join(base_dir, 'results', 'metrics', 'probabilistic_evaluation_results.json')
+    with open(json_path, 'w') as f:
         json.dump(prob_summary, f, indent=2)
 
-    print("\nSaved plots to experiments/pedestrian_persona_benchmark/probabilistic_calibration_latency.png")
-    print("Saved results to experiments/pedestrian_persona_benchmark/probabilistic_evaluation_results.json")
+    print(f"\nSaved plots to {fig_path}")
+    print(f"Saved results to {json_path}")
 
 if __name__ == '__main__':
     main()

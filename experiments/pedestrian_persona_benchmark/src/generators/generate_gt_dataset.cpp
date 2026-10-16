@@ -217,11 +217,11 @@ int main() {
         }
     }
 
-    std::ofstream out_file("experiments/pedestrian_persona_benchmark/ground_truth_dataset.json");
+    std::ofstream out_file("experiments/pedestrian_persona_benchmark/results/datasets/ground_truth_dataset.json");
     out_file << dataset.dump();
     out_file.close();
 
     std::cout << "[Dataset Generator] Done! Successfully exported " << dataset.size() 
-              << " episodes to experiments/pedestrian_persona_benchmark/ground_truth_dataset.json\n";
+              << " episodes to experiments/pedestrian_persona_benchmark/results/datasets/ground_truth_dataset.json\n";
     return 0;
 }

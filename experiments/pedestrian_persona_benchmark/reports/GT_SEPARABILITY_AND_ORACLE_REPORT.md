@@ -118,5 +118,5 @@ Khảo sát sự tiến triển của độ chính xác và độ tự tin khi �
    * **Bỏ khuyến nghị cắt lọc tập huấn luyện**: Mô hình M3 phải được huấn luyện trên toàn bộ tập dữ liệu quan sát.
    * Khi không có xung đột hoặc ở cự ly xa, con người đi thẳng theo quán tính; mô hình M3 xuất phân bố xác suất $P(H_i \mid \mathbf{o}_{1:t})$ tiệm cận về phân bố tiên nghiệm $[0.40, 0.10, 0.25, 0.15, 0.10]$. ECE đạt $7.48\%$ bảo đảm các xác suất này có độ tin cậy thực tế cao.
 4. **Lưu trữ tạo tác & Dữ liệu thực nghiệm**:
-   * Biểu đồ hiệu chuẩn xác suất và đường cong trễ phát hiện: `experiments/pedestrian_persona_benchmark/probabilistic_calibration_latency.png`.
-   * Số liệu định lượng chi tiết: `experiments/pedestrian_persona_benchmark/probabilistic_evaluation_results.json`.
+   * Biểu đồ hiệu chuẩn xác suất và đường cong trễ phát hiện: `experiments/pedestrian_persona_benchmark/results/figures/probabilistic_calibration_latency.png`.
+   * Số liệu định lượng chi tiết: `experiments/pedestrian_persona_benchmark/results/metrics/probabilistic_evaluation_results.json`.
