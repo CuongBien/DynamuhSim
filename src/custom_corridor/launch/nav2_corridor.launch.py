@@ -98,12 +98,15 @@ def launch_setup(context, *args, **kwargs):
         parameters=[nav2_params],
     )
 
+    cmd_vel_topic = LaunchConfiguration("cmd_vel_topic").perform(context).strip() or "cmd_vel"
+
     controller_server = Node(
         package="nav2_controller",
         executable="controller_server",
         name="controller_server",
         output="screen",
         parameters=[nav2_params],
+        remappings=[("cmd_vel", cmd_vel_topic)],
     )
 
     bt_override = {}
@@ -133,6 +136,7 @@ def launch_setup(context, *args, **kwargs):
         name="behavior_server",
         output="screen",
         parameters=[nav2_params],
+        remappings=[("cmd_vel", cmd_vel_topic)],
     )
 
     waypoint_follower = Node(
@@ -273,6 +277,12 @@ def generate_launch_description():
         description="Robot model: mecanum (default) or burger",
     )
 
+    cmd_vel_topic_arg = DeclareLaunchArgument(
+        "cmd_vel_topic",
+        default_value="cmd_vel",
+        description="Target topic for controller_server and behavior_server cmd_vel",
+    )
+
     return LaunchDescription(
         [
             ros_domain,
@@ -280,6 +290,7 @@ def generate_launch_description():
             robot_model_arg,
             controller_arg,
             params_file_arg,
+            cmd_vel_topic_arg,
             map_arg,
             episode_pose_arg,
             OpaqueFunction(function=launch_setup),
