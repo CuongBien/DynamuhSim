@@ -64,3 +64,5 @@ Nhóm chỉ được thử ở lối chính rộng; chưa xác minh qua bottlene
 GUI WSLg từng gặp một lỗi khởi tạo driver D3D12; lượt thử lại đã chạy. Log shutdown Gazebo có thể có lỗi SIGTERM/segfault sau khi verifier hoàn tất; báo cáo phân biệt lỗi runtime với lỗi khi đóng.
 
 Xem [báo cáo kết quả](reports/ADAPTER_REPORT.md), [so sánh ba framework](../FRAMEWORK_COMPARISON.md).
+
+Đã có [pilot ghép cặp với Nav2](../benchmark/reports/BENCHMARK_REPORT.md), dùng gate bắt đầu người sau khi Nav2 sẵn sàng. Protocol đó tách biệt với tùy chọn demo `--nav` ở trên.
