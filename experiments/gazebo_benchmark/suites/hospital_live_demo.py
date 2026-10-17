@@ -72,11 +72,17 @@ def main():
     parser.add_argument("--difficulty", type=str, default="easy", choices=["easy", "medium", "hard"], help="Hospital difficulty level (default: easy)")
     parser.add_argument("--robot-model", type=str, default="mecanum", choices=["mecanum", "burger"], help="Robot drive model: mecanum or burger (default: mecanum)")
     parser.add_argument("--controller", type=str, default="mppi", choices=["mppi", "dwb"], help="Nav2 controller: mppi or dwb (default: mppi)")
-    parser.add_argument("--rviz", action="store_true", default=False, help="Launch RViz2 window (default: False for maximum WSLg GPU stability)")
+    parser.add_argument("--rviz", action="store_true", default=True, help="Launch RViz2 window (default: True)")
+    parser.add_argument("--no-rviz", dest="rviz", action="store_false", help="Disable RViz2 window (Gazebo only)")
+    parser.add_argument("--interactive", action="store_true", default=False, help="Skip automated route and start in interactive 2D Goal Pose mode immediately")
     parser.add_argument("--domain-id", type=int, default=0, help="ROS_DOMAIN_ID (default: 0)")
     args = parser.parse_args()
 
-    human_counts = {"easy": "3 dynamic walkers", "medium": "7 walkers + 1 trolley + 3 static", "hard": "14 walkers + 2 trolleys + 3 static"}
+    human_counts = {
+        "easy": "3 dynamic walkers (H1-H5 social personas)",
+        "medium": "7 walkers + 1 trolley + 3 static (yielding crossing, clinical patrols)",
+        "hard": "14 walkers + 2 trolleys + 3 static (complex ward traffic, door exits, group walks)"
+    }
 
     print("=" * 80)
     print("🏥 DYNAMUHSIM HOSPITAL ARENA LIVE INTERACTIVE DEMO")
@@ -87,9 +93,9 @@ def main():
     print(f"  • Hospital Size      : 60m x 17m (Corridor Width: 5.0m, 20 Clinical Rooms)")
     print(f"  • Start Pose         : x = -18.0 m, y = 0.0 m")
     print(f"  • Route Waypoints    : 5 clinical stops (North Room 5 -> South Room 5 -> Home)")
-    print(f"  • 3D Viewport        : Gazebo Harmonic 3D GUI {'+ RViz2' if args.rviz else '(Gazebo only for GPU stability)'}")
+    print(f"  • 3D Viewport        : Gazebo Harmonic 3D GUI {'+ RViz2' if args.rviz else '(Gazebo only)'}")
     print("=" * 80)
-    print("Starting simulation and navigation stack... Gazebo window will appear on your desktop.")
+    print("Starting simulation and navigation stack... Windows will appear on your desktop.")
     print("Press Ctrl+C at any time to exit.\n")
 
     os.environ["ROS_DOMAIN_ID"] = str(args.domain_id)
@@ -107,13 +113,13 @@ def main():
     procs = []
     nav2_log_fp = None
     try:
-        # Step 1: Launch Hospital Arena Simulation
+        # Step 1: Launch Hospital Arena Simulation (rviz:=false to let Gazebo initialize OpenGL first)
         sim_cmd = [
             "ros2", "launch", "custom_corridor", "hospital_arena.launch.py",
             f"difficulty:={args.difficulty}",
             f"robot_model:={args.robot_model}",
             "gui:=true",
-            f"rviz:={'true' if args.rviz else 'false'}"
+            "rviz:=false"
         ]
         p_sim = subprocess.Popen(sim_cmd, env=env, preexec_fn=os.setsid)
         procs.append(p_sim)
@@ -152,6 +158,17 @@ def main():
         if not nav2_ready:
             print("⚠️ Lifecycle manager log wait timed out, continuing to action server check...")
 
+        # Step 3: Launch RViz2 (Staggered after Gazebo is fully stabilized to avoid WSLg GPU context clash)
+        if args.rviz:
+            print("⏳ Step 3/3: Opening RViz2 Visualization Window...")
+            rviz_cfg = os.path.join(package_share, "rviz", "hospital.rviz")
+            if not os.path.exists(rviz_cfg):
+                rviz_cfg = os.path.join(package_share, "rviz", "corridor.rviz")
+            rviz_cmd = ["rviz2", "-d", rviz_cfg]
+            p_rviz = subprocess.Popen(rviz_cmd, env=env, preexec_fn=os.setsid)
+            procs.append(p_rviz)
+            time.sleep(2.0)
+
         rclpy.init(domain_id=args.domain_id)
         nav_node = HospitalNavigatorNode()
 
@@ -160,66 +177,81 @@ def main():
             print("\n❌ Timed out waiting for Nav2 action server.")
             return
 
-        print("✨ Step 3/3: Nav2 Navigation Server is READY!")
+        print("✨ Nav2 Navigation Server is READY!")
         time.sleep(2.0)  # Brief settle for AMCL initial localization on 60m hospital map
 
-        print("\n🚀 Beginning Clinical Waypoint Route:")
-        for idx, (name, gx, gy, gyaw) in enumerate(HOSPITAL_ROUTE, 1):
-            goal_msg = NavigateToPose.Goal()
-            goal_msg.pose = PoseStamped()
-            goal_msg.pose.header.frame_id = 'map'
-            goal_msg.pose.header.stamp = nav_node.get_clock().now().to_msg()
-            goal_msg.pose.pose.position.x = float(gx)
-            goal_msg.pose.pose.position.y = float(gy)
-            goal_msg.pose.pose.orientation.z = math.sin(gyaw / 2.0)
-            goal_msg.pose.pose.orientation.w = math.cos(gyaw / 2.0)
+        last_print = 0.0
 
-            print(f"\n📍 [{idx}/{len(HOSPITAL_ROUTE)}] Heading to '{name}': target_x = {gx:5.1f}m, target_y = {gy:5.1f}m")
+        if not args.interactive:
+            print("\n🚀 Beginning Clinical Waypoint Route:")
+            for idx, (name, gx, gy, gyaw) in enumerate(HOSPITAL_ROUTE, 1):
+                goal_msg = NavigateToPose.Goal()
+                goal_msg.pose = PoseStamped()
+                goal_msg.pose.header.frame_id = 'map'
+                goal_msg.pose.header.stamp = nav_node.get_clock().now().to_msg()
+                goal_msg.pose.pose.position.x = float(gx)
+                goal_msg.pose.pose.position.y = float(gy)
+                goal_msg.pose.pose.orientation.z = math.sin(gyaw / 2.0)
+                goal_msg.pose.pose.orientation.w = math.cos(gyaw / 2.0)
 
-            goal_handle = None
-            for attempt in range(10):
-                send_future = nav_node.nav_client.send_goal_async(goal_msg)
-                rclpy.spin_until_future_complete(nav_node, send_future, timeout_sec=4.0)
-                if send_future.done():
-                    handle = send_future.result()
-                    if handle and handle.accepted:
-                        goal_handle = handle
-                        print(f"   ✅ Goal accepted by Nav2 planner. Robot is moving...")
-                        break
-                print(f"   ⏳ Retrying goal dispatch (attempt {attempt+1}/10)...")
+                print(f"\n📍 [{idx}/{len(HOSPITAL_ROUTE)}] Heading to '{name}': target_x = {gx:5.1f}m, target_y = {gy:5.1f}m")
+
+                goal_handle = None
+                for attempt in range(10):
+                    send_future = nav_node.nav_client.send_goal_async(goal_msg)
+                    rclpy.spin_until_future_complete(nav_node, send_future, timeout_sec=4.0)
+                    if send_future.done():
+                        handle = send_future.result()
+                        if handle and handle.accepted:
+                            goal_handle = handle
+                            print(f"   ✅ Goal accepted by Nav2 planner. Robot is moving...")
+                            break
+                    print(f"   ⏳ Retrying goal dispatch (attempt {attempt+1}/10)...")
+                    time.sleep(1.0)
+
+                if not goal_handle:
+                    print(f"   ❌ Goal rejected for {name}. Halting route.")
+                    break
+
+                result_future = goal_handle.get_result_async()
+
+                while rclpy.ok() and not result_future.done():
+                    rclpy.spin_once(nav_node, timeout_sec=0.05)
+                    now = time.time()
+                    if now - last_print >= 0.3:
+                        last_print = now
+                        rx, ry = nav_node.robot_pos
+                        d_rem = math.hypot(gx - rx, gy - ry)
+                        print(f"\r   [Transit] Robot Pos: x={rx:6.2f}m, y={ry:5.2f}m | Distance to '{name}': {d_rem:5.2f}m | Speed: {nav_node.robot_speed:4.2f} m/s", end="", flush=True)
+
+                status = result_future.result().status if result_future.done() else GoalStatus.STATUS_UNKNOWN
+                if status == GoalStatus.STATUS_SUCCEEDED:
+                    print(f"\n   🎉 Reached '{name}' successfully!")
+                else:
+                    print(f"\n   ⚠️ Navigation completed with status: {status}")
+
                 time.sleep(1.0)
 
-            if not goal_handle:
-                print(f"   ❌ Goal rejected for {name}. Halting route.")
-                break
+            print("\n\n🏁 Clinical Waypoint Route completed! Entering Interactive Mode...")
 
-            result_future = goal_handle.get_result_async()
-            last_print = 0.0
+        print("=" * 80)
+        print("🎮 INTERACTIVE MODE ACTIVE:")
+        print("  • In RViz2, click the '2D Goal Pose' (Nav2 Goal) button at the top toolbar.")
+        print("  • Click & drag anywhere in the 60m hospital ward to send new destinations.")
+        print("  • Watch the omnidirectional robot navigate reactively around hospital pedestrians!")
+        print("  • Press Ctrl+C in this terminal when finished.")
+        print("=" * 80)
 
-            while rclpy.ok() and not result_future.done():
-                rclpy.spin_once(nav_node, timeout_sec=0.05)
-                now = time.time()
-                if now - last_print >= 0.3:
-                    last_print = now
-                    rx, ry = nav_node.robot_pos
-                    d_rem = math.hypot(gx - rx, gy - ry)
-                    print(f"\r   [Transit] Robot Pos: x={rx:6.2f}m, y={ry:5.2f}m | Distance to '{name}': {d_rem:5.2f}m | Speed: {nav_node.robot_speed:4.2f} m/s", end="", flush=True)
+        while rclpy.ok():
+            rclpy.spin_once(nav_node, timeout_sec=0.1)
+            now = time.time()
+            if now - last_print >= 0.5:
+                last_print = now
+                rx, ry = nav_node.robot_pos
+                print(f"\r  [Hospital Robot Pos] x={rx:6.2f}m, y={ry:5.2f}m | Speed: {nav_node.robot_speed:4.2f} m/s  (Click '2D Goal Pose' in RViz2 to move)   ", end="", flush=True)
 
-            status = result_future.result().status if result_future.done() else GoalStatus.STATUS_UNKNOWN
-            if status == GoalStatus.STATUS_SUCCEEDED:
-                print(f"\n   🎉 Reached '{name}' successfully!")
-            else:
-                print(f"\n   ⚠️ Navigation completed with status: {status}")
-
-            time.sleep(1.0)
-
-        print("\n\n🏁 HOSPITAL ROUTE COMPLETED! Keeping simulation open for 5 seconds...")
-        time.sleep(5.0)
-        nav_node.destroy_node()
-        rclpy.shutdown()
-
-    except KeyboardInterrupt:
-        print("\n\n⏹️ Hospital Demo stopped by user.")
+    except (KeyboardInterrupt, rclpy.executors.ExternalShutdownException):
+        print("\n\n⏹️ Hospital Demo stopped.")
     finally:
         print("Cleaning up processes...")
         if nav2_log_fp and not nav2_log_fp.closed:
