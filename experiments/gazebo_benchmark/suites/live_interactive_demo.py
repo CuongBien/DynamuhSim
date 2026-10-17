@@ -94,7 +94,8 @@ def main():
     parser.add_argument("--humans", type=int, default=10, choices=[5, 10], help="Number of dynamic humans (default: 10)")
     parser.add_argument("--goal-x", type=float, default=8.0, help="Target X coordinate at the far end of the corridor (default: 8.0m)")
     parser.add_argument("--goal-y", type=float, default=0.0, help="Target Y coordinate (default: 0.0m)")
-    parser.add_argument("--domain-id", type=int, default=89, help="ROS_DOMAIN_ID (default: 89)")
+    parser.add_argument("--rviz", action="store_true", default=False, help="Enable RViz2 window alongside Gazebo (default: False, Gazebo 3D GUI only for maximum GPU stability)")
+    parser.add_argument("--domain-id", type=int, default=0, help="ROS_DOMAIN_ID (default: 0)")
     args = parser.parse_args()
 
     import tempfile, re
@@ -121,6 +122,7 @@ def main():
     print(f"  • Costmap Tuning   : inflation_radius = 0.20m (tuned for narrow corridors)")
     print(f"  • Start Position   : x = -13.0 m, y = 0.0 m")
     print(f"  • Target Goal      : x = +{args.goal_x:.1f} m, y = {args.goal_y:.1f} m  (~21 METERS TOTAL TRANSIT)")
+    print(f"  • 3D Viewport      : Gazebo Harmonic 3D GUI {'+ RViz2' if args.rviz else '(Gazebo only for GPU stability)'}")
     print("=" * 80)
     print("Starting simulation and navigation stack... Windows will appear on your desktop.")
     print("Press Ctrl+C at any time to exit.\n")
@@ -128,7 +130,6 @@ def main():
     os.environ["ROS_DOMAIN_ID"] = str(args.domain_id)
     env = os.environ.copy()
     env["ROS_DOMAIN_ID"] = str(args.domain_id)
-    env["GZ_PARTITION"] = f"gz_live_{args.domain_id}"
     env["GALLIUM_DRIVER"] = "d3d12"
     env["MESA_D3D12_DEFAULT_ADAPTER_NAME"] = "NVIDIA"
 
@@ -140,13 +141,14 @@ def main():
 
     procs = []
     try:
-        # Step 1: Launch Gazebo + RViz2 + Mecanum robot + 10 Humans
+        # Step 1: Launch Gazebo + Mecanum robot + 10 Humans
         sim_cmd = [
             "ros2", "launch", "custom_corridor", "corridor_tb3.launch.py",
             f"width:={args.width}",
             f"custom_world:={active_world_file}",
             "obstacle:=human",
-            "gui:=true", "rviz:=true",
+            "gui:=true",
+            f"rviz:={'true' if args.rviz else 'false'}",
             "robot_model:=mecanum",
             "x:=-13.0", "y:=0.0", "yaw:=0.0",
             "paused:=false"
@@ -154,8 +156,8 @@ def main():
         p_sim = subprocess.Popen(sim_cmd, env=env, preexec_fn=os.setsid)
         procs.append(p_sim)
 
-        print(f"⏳ Step 1/3: Launching Gazebo 3D simulation with {args.humans} pedestrians and RViz2 (5 seconds)...")
-        time.sleep(5.0)
+        print(f"⏳ Step 1/3: Launching Gazebo 3D simulation with {args.humans} pedestrians (6 seconds)...")
+        time.sleep(6.0)
 
         # Step 2: Launch Nav2 MPPI
         nav_map = "corridor_120" if args.width == "1.20" else "corridor_090"
@@ -171,7 +173,7 @@ def main():
         print("⏳ Step 2/3: Launching Nav2 stack with MPPI controller...")
         print("    Waiting for Nav2 lifecycle manager to become active (usually 10-15s)...")
 
-        rclpy.init()
+        rclpy.init(domain_id=args.domain_id)
         nav_node = LiveNavigatorNode(target_x=args.goal_x, target_y=args.goal_y)
 
         # Wait for Nav2 action server to be available
