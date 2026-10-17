@@ -1,0 +1,104 @@
+# Nhà xưởng và vòng khảo sát SocNavGym
+
+Tất cả file mới nằm trong `experiments/social_navigation/`. Không sửa launch,
+model, cấu hình Nav2, plugin C++ hay môi trường Python ROS đang có. Dùng workspace
+`install/` hiện có; không rebuild các thay đổi chưa commit của người dùng.
+
+## Chạy nhà xưởng trên Ubuntu/WSL
+
+Từ thư mục gốc DynamuhSim:
+
+```bash
+bash experiments/social_navigation/run.sh warehouse
+```
+
+Lệnh mở Gazebo + RViz + Nav2 MPPI Omni. Robot bắt đầu tại `(-27, 0, 0)`.
+Trong RViz dùng **2D Goal Pose**, ví dụ `(26, 0)` để đi qua lối hẹp.
+Mặc định ROS domain 73 và Gazebo partition `dynamuhsim_social_warehouse`.
+Không mở hai lần cùng domain/partition. Nhấn Ctrl+C trong terminal để dừng.
+
+Chỉ xem world và robot, chưa chạy Nav2:
+
+```bash
+bash experiments/social_navigation/run.sh warehouse nav:=false
+```
+
+Headless và kiểm tra tự động có timeout, dừng đúng process group được tạo:
+
+```bash
+bash experiments/social_navigation/run.sh verify --world warehouse
+bash experiments/social_navigation/run.sh verify --world warehouse --nav --goal-x 26 --timeout 240
+bash experiments/social_navigation/run.sh verify --world warehouse --nav --goal-x 26 --timeout 240 --gui
+```
+
+Không cần colcon build: wrapper nhận world/map bằng đường dẫn tuyệt đối và dùng
+launch cũ qua IncludeLaunchDescription. `obstacle:=human` trong wrapper chỉ giữ
+nguyên SDF, tránh tạo file `/tmp/corridor_*` dùng chung của launch cũ; world này
+chưa có actor/người hoặc plugin RVO2 nên không có người xuất hiện tự động.
+
+Nhà xưởng 60×40m có 8 dãy kệ, sân rộng, cột, khu loading, vùng nhóm trò chuyện,
+lối đi chính và cửa hẹp 1.8m dài 8m. Cột hỗ trợ LiDAR 3.5m trên tuyến chính;
+chưa khẳng định định vị tốt ở mọi vị trí trong sân rộng. Không có mái để dễ xem
+và giảm tải. Bản đồ 0.05m/pixel sinh từ cùng hình học collision của SDF, không
+phải bản đồ thu bằng SLAM. Khu màu xanh chỉ đánh dấu sàn, chưa có hành vi người.
+
+![Bố cục nhà xưởng](warehouse/layout.png)
+
+Sinh lại world/map/config riêng sau khi chỉnh generator:
+
+```bash
+python3 experiments/social_navigation/generate_warehouse.py
+```
+
+Generator cần Pillow và PyYAML (máy này đã có). Việc sinh lại cũng cập nhật
+`nav2_warehouse.yaml` từ cấu hình Mecanum hiện có; hãy lưu chỉnh sửa riêng trước.
+
+## SocNavGym độc lập
+
+Venv hiện đã cài xong trong `.venv-socnavgym/`. Để tái tạo trên máy này:
+
+```bash
+bash experiments/social_navigation/setup_socnavgym.sh
+```
+
+Cần Python 3.12, compiler C++, CMake, curl và Git. Script dùng venv
+`--without-pip` + bootstrap pip chính thức nếu thiếu `ensurepip`, không cần cài
+pip vào Python hệ thống. Các dependency và source được ghim phiên bản; toàn bộ
+freeze thực tế nằm trong `reports/environment_freeze.txt`. Không dùng `sudo pip`.
+PyTorch dùng bản CPU, không cài CUDA/DGL cho reward `sparse_gotopoint` đang thử.
+
+Chạy demo theo API/source v2 hiện tại với **cấu hình tests/test_env.yaml gốc**:
+
+```bash
+bash experiments/social_navigation/run.sh socnavgym --scenario original --steps 500 --show
+```
+
+Runner ngoài source upstream gọi reset/step/render, dùng action ngẫu nhiên như
+ví dụ README; không dùng joystick. Không chạy nguyên script tests/test_env.py
+vì script đó yêu cầu joystick. README v1 và nhiều config cũ không đồng bộ với
+source main v2; không sửa source để che lỗi này.
+
+Các lượt quan sát tùy chỉnh, chạy lần lượt:
+
+```bash
+bash experiments/social_navigation/run.sh socnavgym --scenario groups --steps 600 --show
+bash experiments/social_navigation/run.sh socnavgym --scenario formation --steps 1200 --show
+bash experiments/social_navigation/run.sh socnavgym --scenario reactive --steps 600 --show
+bash experiments/social_navigation/run.sh socnavgym --scenario blind --steps 600 --show
+```
+
+Bỏ `--show` để render video/ảnh không mở cửa sổ. Mặc định seed 42; có thể đổi
+`--seed`. Mỗi lượt ghi config, video MP4, 4 ảnh, quỹ đạo JSON và summary trong
+`reports/`. Cùng scenario/seed sẽ ghi đè kết quả trước. Nhóm groups/formation:
+robot đứng yên để quan sát. Reactive/blind: robot cố tiếp cận người gần nhất;
+đây là stress test, không phải một policy điều hướng an toàn hay benchmark Nav2.
+
+Các cấu hình demo là 2D 14×14m, **chưa phải nhà xưởng Gazebo**. Không suy diễn
+hiệu năng hay tỷ lệ va chạm của robot ROS từ các lượt này.
+
+## Bằng chứng và trạng thái
+
+Xem [báo cáo vòng đầu](reports/ROUND1.md), video và JSON liên kết trong báo cáo.
+SocNavGym chưa được nối vào Gazebo. Adapter, benchmark RVO2/SocNavGym cùng world,
+CrowdSimPlus và ComplexityNav chưa triển khai. Cần đánh giá phản ứng robot và
+sửa/bao bọc schema observation trước khi coi SocNavGym sẵn sàng tích hợp.

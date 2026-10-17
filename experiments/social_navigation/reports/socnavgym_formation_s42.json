@@ -1,0 +1,81 @@
+{
+  "scenario": "formation",
+  "seed": 42,
+  "steps": 1200,
+  "episode_resets": 1,
+  "config": "configs/formation.yaml",
+  "upstream_commit": "95fbc9cebe4357201145a7d0a28c7736c0efe6cf",
+  "initial_observation_outside_space": true,
+  "steps_observation_outside_space": 1200,
+  "group_membership_changes": [
+    {
+      "step": 316,
+      "before": [],
+      "after": [
+        [
+          "static",
+          [
+            1,
+            3,
+            8
+          ]
+        ]
+      ]
+    },
+    {
+      "step": 498,
+      "before": [
+        [
+          "static",
+          [
+            1,
+            3,
+            8
+          ]
+        ]
+      ],
+      "after": []
+    },
+    {
+      "step": 885,
+      "before": [],
+      "after": [
+        [
+          "static",
+          [
+            4,
+            5,
+            6
+          ]
+        ]
+      ]
+    },
+    {
+      "step": 1090,
+      "before": [
+        [
+          "static",
+          [
+            4,
+            5,
+            6
+          ]
+        ]
+      ],
+      "after": [
+        [
+          "static",
+          [
+            5,
+            6
+          ]
+        ]
+      ]
+    }
+  ],
+  "steps_with_robot_human_overlap": 0,
+  "minimum_clearance_m": 0.13936121340590363,
+  "wall_seconds": 99.61322685300001,
+  "mean_step_ms": 58.36960469749688,
+  "note": "Exploratory 2D demo; no ROS/Gazebo adapter and no learned robot navigation policy."
+}
