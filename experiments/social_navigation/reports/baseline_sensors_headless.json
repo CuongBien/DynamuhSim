@@ -1,0 +1,37 @@
+{
+  "world": "baseline",
+  "gui": false,
+  "nav_requested": false,
+  "command": [
+    "ros2",
+    "launch",
+    "custom_corridor",
+    "corridor_tb3.launch.py",
+    "width:=rvo2",
+    "robot_model:=mecanum",
+    "gui:=false",
+    "rviz:=false"
+  ],
+  "status": "PASS",
+  "initial_odom": [
+    -5.203760738665936e-12,
+    1.3864625470765879e-21
+  ],
+  "forward_displacement_m": 0.4499999999999957,
+  "lateral_displacement_m": 0.36000000000000354,
+  "sensor_messages": {
+    "scan": 41,
+    "imu": 802,
+    "odom": 222,
+    "clock": 2003,
+    "amcl": 0
+  },
+  "scan_beams": 360,
+  "scan_finite_returns": 96,
+  "min_range_m": 2.3428547382354736,
+  "final_odom": [
+    0.4499999999948718,
+    0.36000000000000354
+  ],
+  "observed_rtf": 0.9990685760949596
+}
