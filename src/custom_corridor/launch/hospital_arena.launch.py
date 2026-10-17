@@ -141,6 +141,8 @@ def launch_setup(context):
             "GZ_PARTITION": gz_partition,
             "GZ_SIM_RESOURCE_PATH": gz_resource_path,
             "GZ_SIM_SYSTEM_PLUGIN_PATH": gz_plugin_path,
+            "GALLIUM_DRIVER": "d3d12",
+            "MESA_D3D12_DEFAULT_ADAPTER_NAME": "NVIDIA",
         },
     )
 

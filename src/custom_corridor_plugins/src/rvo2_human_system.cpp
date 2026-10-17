@@ -682,6 +682,7 @@ private:
             gz::sim::components::Name(altName));
         if (this->robotEntity_ != gz::sim::kNullEntity)
         {
+          this->robotName_ = altName;
           gzmsg << "[RVO2HumanSystem] Resolved robot entity under fallback name: " << altName << "\n";
           break;
         }
@@ -788,6 +789,21 @@ private:
       this->robotEntity_ = _ecm.EntityByComponents(
           gz::sim::components::Model(),
           gz::sim::components::Name(this->robotName_));
+      if (this->robotEntity_ == gz::sim::kNullEntity)
+      {
+        for (const auto &altName : {"mecanum_robot", "burger", "turtlebot3_burger"})
+        {
+          this->robotEntity_ = _ecm.EntityByComponents(
+              gz::sim::components::Model(),
+              gz::sim::components::Name(altName));
+          if (this->robotEntity_ != gz::sim::kNullEntity)
+          {
+            this->robotName_ = altName;
+            gzmsg << "[RVO2HumanSystem] Late-resolved robot entity under fallback name: " << altName << "\n";
+            break;
+          }
+        }
+      }
     }
 
     if (this->robotEntity_ != gz::sim::kNullEntity)
