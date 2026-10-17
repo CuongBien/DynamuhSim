@@ -40,9 +40,17 @@ class HospitalYieldingSystem : public gz::sim::System,
         });
     }
     if (actorEntity == gz::sim::kNullEntity) return;
-    if (robotEntity == gz::sim::kNullEntity)
+    if (robotEntity == gz::sim::kNullEntity) {
       robotEntity = ecm.EntityByComponents(gz::sim::components::Model(),
         gz::sim::components::Name(robotName));
+      if (robotEntity == gz::sim::kNullEntity) {
+        for (const auto &alt : {"mecanum_robot", "burger", "turtlebot3_burger"}) {
+          robotEntity = ecm.EntityByComponents(gz::sim::components::Model(),
+            gz::sim::components::Name(alt));
+          if (robotEntity != gz::sim::kNullEntity) break;
+        }
+      }
+    }
     double distance = 1e9;
     if (robotEntity != gz::sim::kNullEntity) {
       const auto p = gz::sim::worldPose(robotEntity, ecm).Pos();

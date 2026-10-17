@@ -673,6 +673,20 @@ private:
     this->robotEntity_ = _ecm.EntityByComponents(
         gz::sim::components::Model(),
         gz::sim::components::Name(this->robotName_));
+    if (this->robotEntity_ == gz::sim::kNullEntity)
+    {
+      for (const auto &altName : {"mecanum_robot", "burger", "turtlebot3_burger"})
+      {
+        this->robotEntity_ = _ecm.EntityByComponents(
+            gz::sim::components::Model(),
+            gz::sim::components::Name(altName));
+        if (this->robotEntity_ != gz::sim::kNullEntity)
+        {
+          gzmsg << "[RVO2HumanSystem] Resolved robot entity under fallback name: " << altName << "\n";
+          break;
+        }
+      }
+    }
 
     // Discover all actors and proxies in the world for fallback pairing
     std::vector<gz::sim::Entity> allActors;

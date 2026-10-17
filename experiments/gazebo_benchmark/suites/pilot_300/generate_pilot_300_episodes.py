@@ -227,24 +227,42 @@ def generate_pilot_300_plan(seed=4242) -> Tuple[List[Dict], Dict]:
 
         # Spawn remaining N-1 humans spaced along corridor
         bg_xs = np.linspace(-4.5, 12.0, item['num_humans'])
+        # Sample background humans according to agreed population proportion:
+        # 40% H1 (Cooperative), 10% H2 (Unyielding), 25% H3 (RobotBlind), 15% H4 (Static), 10% H5 (SocialForce)
+        persona_choices = ['H1', 'H2', 'H3', 'H4', 'H5']
+        persona_probs = [0.40, 0.10, 0.25, 0.15, 0.10]
+
         for h_i in range(2, item['num_humans'] + 1):
             bg_x = float(bg_xs[h_i - 1] + rng.uniform(-0.25, 0.25))
             bg_raw_y = float(rng.uniform(-0.35, 0.35))
             bg_y = float(np.clip(bg_raw_y, -max_y, max_y))
-            bg_v = float(rng.uniform(0.70, 1.05))
-            # Background humans alternate walking directions
-            bg_dir = -1.0 if (h_i % 2 == 0) else 1.0
-            bg_target_x = -14.0 if bg_dir < 0 else 14.0
+
+            # Human 2 shares episode target persona for close-interaction density; humans 3..N follow population distribution
+            if h_i == 2 and item['num_humans'] <= 2:
+                bg_persona = item['persona']
+            else:
+                bg_persona = str(rng.choice(persona_choices, p=persona_probs))
+
+            if bg_persona == 'H4':
+                bg_mode = "stationary"
+                bg_v = 0.0
+                bg_target_x = bg_x
+            else:
+                bg_mode = "autonomous"
+                bg_v = float(rng.uniform(0.70, 1.05))
+                bg_dir = -1.0 if (h_i % 2 == 0) else 1.0
+                bg_target_x = -14.0 if bg_dir < 0 else 14.0
+
             humans_list.append({
                 "id": h_i,
                 "name": f"human_{h_i:02d}",
-                "mode": "autonomous",
+                "mode": bg_mode,
                 "speed": round(bg_v, 3),
-                "max_speed": round(bg_v * 1.2, 3),
-                "persona": item['persona'] if h_i <= 2 else "H1",
+                "max_speed": round(bg_v * 1.2 if bg_v > 0 else 0.0, 3),
+                "persona": bg_persona,
                 "loop": False,
                 "wait_for_robot": False,
-                "start": {"x": round(bg_x, 3), "y": round(bg_y, 3), "yaw": 3.14159 if bg_dir < 0 else 0.0},
+                "start": {"x": round(bg_x, 3), "y": round(bg_y, 3), "yaw": 3.14159 if (h_i % 2 == 0) else 0.0},
                 "waypoints": [[round(bg_x, 3), round(bg_y, 3)], [bg_target_x, round(bg_y, 3)]],
                 "proxy_z": 0.80 if corr == 'corridor_090' else 0.875
             })
