@@ -1,0 +1,140 @@
+{
+  "scenario": "hallway",
+  "human_policy": "orca_plus",
+  "robot_policy": "dwa",
+  "robot_kinematics": "unicycle",
+  "humans": 6,
+  "test_case": 2,
+  "robot_visible": true,
+  "status": "success",
+  "steps": 27,
+  "simulation_seconds": 6.75,
+  "wall_seconds": 1.1904541839999183,
+  "radius_robot_m": 0.25,
+  "radius_human_m": 0.3,
+  "mean_robot_policy_ms": 42.114790666716914,
+  "minimum_robot_human_clearance_m": 0.027175868454765773,
+  "minimum_human_human_clearance_m": 0.04026292760908401,
+  "robot_path_m": 5.0124999999999975,
+  "step_counts": {
+    "Collision": 0,
+    "WallCollision": 0,
+    "Frozen": 0,
+    "Danger": 0
+  },
+  "initial_state": {
+    "t": 0.0,
+    "robot": {
+      "id": -1,
+      "x": 0.0,
+      "y": -2.5,
+      "vx": 0.0,
+      "vy": 0.0,
+      "radius": 0.25,
+      "goal": [
+        0.0,
+        2.5
+      ]
+    },
+    "humans": [
+      {
+        "id": 0,
+        "x": 0.404557424159444,
+        "y": -1.5259599562064663,
+        "vx": 0.0,
+        "vy": 0.0,
+        "radius": 0.3,
+        "goal": [
+          0.22466208199749696,
+          0.6580880847028325
+        ]
+      },
+      {
+        "id": 1,
+        "x": -0.17293826791102362,
+        "y": -0.4728520386876789,
+        "vx": 0.0,
+        "vy": 0.0,
+        "radius": 0.3,
+        "goal": [
+          -0.30270773703973924,
+          4.638925640324385
+        ]
+      },
+      {
+        "id": 2,
+        "x": -0.29605295744943755,
+        "y": 1.2399029421126861,
+        "vx": 0.0,
+        "vy": 0.0,
+        "radius": 0.3,
+        "goal": [
+          -0.7254736707376673,
+          -0.8230550407106064
+        ]
+      },
+      {
+        "id": 3,
+        "x": -0.7814571224191095,
+        "y": -3.6418720989187343,
+        "vx": 0.0,
+        "vy": 0.0,
+        "radius": 0.3,
+        "goal": [
+          1.1778757365322452,
+          0.016711276621736926
+        ]
+      },
+      {
+        "id": 4,
+        "x": 0.6278495913925295,
+        "y": -0.7055853271600313,
+        "vx": 0.0,
+        "vy": 0.0,
+        "radius": 0.3,
+        "goal": [
+          0.8508682976449086,
+          4.3514376222730915
+        ]
+      },
+      {
+        "id": 5,
+        "x": -0.9155943306713454,
+        "y": 1.8110763007641837,
+        "vx": 0.0,
+        "vy": 0.0,
+        "radius": 0.3,
+        "goal": [
+          0.7838129777627086,
+          -4.232384596231248
+        ]
+      }
+    ],
+    "min_robot_human_clearance_m": 0.5047135707649888,
+    "min_human_human_clearance_m": 0.2339220462196226
+  },
+  "static_obstacles": [
+    [
+      [
+        -1.5,
+        -5.0
+      ],
+      [
+        -1.5,
+        5.0
+      ]
+    ],
+    [
+      [
+        1.5,
+        -5.0
+      ],
+      [
+        1.5,
+        5.0
+      ]
+    ]
+  ],
+  "source_commit": "d526a07c013c621fa1ad50894b6ba639f61063de",
+  "note": "Native 2D CrowdSimPlus, no ROS/Nav2 robot, no group membership model. Counts are flagged steps, not independent incidents."
+}
