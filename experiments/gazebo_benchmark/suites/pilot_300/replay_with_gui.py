@@ -31,16 +31,17 @@ from std_msgs.msg import String
 
 
 class VisualPilotReplayer(Node):
-    def __init__(self, recorded_cmds: List[Dict], t_sim_start: float, duration_s: float):
+    def __init__(self, recorded_cmds: List[Dict], duration_s: float):
         super().__init__('visual_pilot_replayer')
         self.set_parameters([rclpy.parameter.Parameter('use_sim_time', rclpy.Parameter.Type.BOOL, True)])
-        self.t_sim_start = t_sim_start
         self.duration_s = duration_s
 
         self.cmds = [(float(c.get('t_rel', 0.0)), float(c.get('vx', 0.0)), float(c.get('vy', 0.0)), float(c.get('w', 0.0))) for c in recorded_cmds]
         self.cmds.sort(key=lambda x: x[0])
 
         self.sim_time = 0.0
+        self.t_sim_start = None
+        self.unpaused = False
         self.cmd_idx = 0
         self.last_pub_sim_time = -1.0
         self.robot_pos = (-13.0, 0.0)
@@ -62,12 +63,13 @@ class VisualPilotReplayer(Node):
     def _clock_cb(self, msg: Clock):
         self.sim_time = msg.clock.sec + msg.clock.nanosec * 1e-9
 
-        if not self.active:
-            if self.sim_time >= self.t_sim_start:
-                self.active = True
-                self.last_pub_sim_time = self.sim_time
-            else:
-                return
+        if not self.unpaused:
+            return
+
+        if self.t_sim_start is None:
+            self.t_sim_start = self.sim_time
+            self.active = True
+            self.last_pub_sim_time = self.sim_time
 
         t_rel = self.sim_time - self.t_sim_start
         if t_rel >= self.duration_s:
@@ -167,8 +169,6 @@ def main():
     tmp_world.close()
     active_world_file = tmp_world.name
 
-    time_offset_s = 0.05
-    t_sim_start = orig_gt[0].get("timestamp", 0.0) - orig_gt[0].get("sim_time_rel", 0.0) + time_offset_s
     duration_s = min(orig_gt[-1].get("sim_time_rel", 20.0), 20.0)
     if manifest.get("time_to_goal") is not None:
         duration_s = min(duration_s, float(manifest["time_to_goal"]))
@@ -220,12 +220,23 @@ def main():
         p_sim = subprocess.Popen(sim_cmd, env=env, preexec_fn=os.setsid)
         procs.append(p_sim)
 
+        if args.rviz:
+            # Publish map -> odom static transform to satisfy RViz2 corridor config without Nav2
+            tf_cmd = [
+                "ros2", "run", "tf2_ros", "static_transform_publisher",
+                "--x", "0", "--y", "0", "--z", "0",
+                "--yaw", "0", "--pitch", "0", "--roll", "0",
+                "--frame-id", "map", "--child-frame-id", "odom"
+            ]
+            p_tf = subprocess.Popen(tf_cmd, env=env, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, preexec_fn=os.setsid)
+            procs.append(p_tf)
+
         # Allow Gazebo and RViz2 GUI to initialize and load 3D meshes
         print("⏳ Waiting for Gazebo and RViz2 to initialize (3 seconds)...")
         time.sleep(3.5)
 
         rclpy.init()
-        replayer = VisualPilotReplayer(recorded_cmds, t_sim_start, duration_s=duration_s)
+        replayer = VisualPilotReplayer(recorded_cmds, duration_s=duration_s)
 
         t_spin0 = time.time()
         while time.time() - t_spin0 < 1.0:
@@ -241,6 +252,7 @@ def main():
             "--req", "pause: false"
         ]
         subprocess.run(unpause_cmd, env=env, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        replayer.unpaused = True
 
         start_wall = time.time()
         last_print = 0.0
@@ -248,12 +260,13 @@ def main():
         while rclpy.ok() and not replayer.completed:
             rclpy.spin_once(replayer, timeout_sec=0.02)
             cur_wall = time.time() - start_wall
-            if cur_wall - last_print >= 0.5:
+            if cur_wall - last_print >= 0.2:
                 last_print = cur_wall
-                t_rel = max(0.0, replayer.sim_time - t_sim_start)
-                pct = min(100.0, (t_rel / duration_s) * 100.0)
-                print(f"\r  [Playback] Sim-Time: {t_rel:5.1f}s / {duration_s:5.1f}s ({pct:4.1f}%) | "
-                      f"Robot Pos: x={replayer.robot_pos[0]:6.2f}m, y={replayer.robot_pos[1]:5.2f}m", end="", flush=True)
+                if replayer.t_sim_start is not None:
+                    t_rel = max(0.0, replayer.sim_time - replayer.t_sim_start)
+                    pct = min(100.0, (t_rel / duration_s) * 100.0)
+                    print(f"\r  [Playback] Sim-Time: {t_rel:5.1f}s / {duration_s:5.1f}s ({pct:4.1f}%) | "
+                          f"Robot Pos: x={replayer.robot_pos[0]:6.2f}m, y={replayer.robot_pos[1]:5.2f}m", end="", flush=True)
 
         print("\n\n✅ Episode playback finished successfully!")
 
