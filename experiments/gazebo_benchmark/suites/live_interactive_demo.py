@@ -1,26 +1,33 @@
 #!/usr/bin/env python3
 """
-Full-Corridor Live Interactive Nav2 MPPI Demo.
-Launches Gazebo Harmonic 3D GUI and Nav2 MPPI controller, then dispatches
-a long navigation goal across the entire corridor (21 meters) passing all pedestrians.
+Full-Corridor Live Interactive Nav2 MPPI Demo with Dynamic Human Personas (H1-H5).
+Features:
+- Random sampling of human personas (40% H1, 10% H2, 25% H3, 15% H4, 10% H5).
+- Staggered Gazebo 3D + RViz2 launch for 100% WSLg GPU stability.
+- Automatic navigation to target goal + Interactive Mode (use RViz2 '2D Goal Pose' to move the robot).
 
 Usage:
   python3 experiments/gazebo_benchmark/suites/live_interactive_demo.py
-  python3 experiments/gazebo_benchmark/suites/live_interactive_demo.py --goal-x 8.0 --width 1.20
+  python3 experiments/gazebo_benchmark/suites/live_interactive_demo.py --humans 5 --goal-x 8.0
+  python3 experiments/gazebo_benchmark/suites/live_interactive_demo.py --humans 10 --no-rviz
 """
 
 import os
 import sys
 import time
 import json
+import math
+import random
 import signal
 import argparse
 import subprocess
 import tempfile
-import re
+import numpy as np
 
 ROOT_DIR = "/home/cuongbien/DynamuhSim"
 sys.path.insert(0, os.path.join(ROOT_DIR, "experiments/gazebo_benchmark/core"))
+
+from benchmark_world_generator import BenchmarkWorldGenerator
 
 import rclpy
 from rclpy.node import Node
@@ -30,6 +37,15 @@ from nav2_msgs.action import NavigateToPose
 from std_msgs.msg import String
 from rosgraph_msgs.msg import Clock
 from nav_msgs.msg import Odometry
+
+PERSONA_CONFIGS = {
+    "H1": {"name": "Cooperative", "trait": "Reciprocal ORCA (alpha=0.50), yields laterally", "color": "\033[92m"},
+    "H2": {"name": "Unyielding", "trait": "Low-responsibility ORCA (alpha=0.20), presses forward", "color": "\033[91m"},
+    "H3": {"name": "Robot-Blind", "trait": "Ignores robot completely (phone distracted)", "color": "\033[93m"},
+    "H4": {"name": "Static/Idle", "trait": "Stationary conversational group / bystander (v=0)", "color": "\033[94m"},
+    "H5": {"name": "Social-Force", "trait": "Soft exponential repulsion cushion + smooth LPF", "color": "\033[95m"}
+}
+RESET_COLOR = "\033[0m"
 
 
 class LiveNavigatorNode(Node):
@@ -71,47 +87,130 @@ class LiveNavigatorNode(Node):
             pass
 
 
+def generate_random_scenario(num_humans: int = 5, seed: int = None):
+    """
+    Generates a realistic scenario JSON with personas sampled from the agreed
+    natural proportion: 40% H1, 10% H2, 25% H3, 15% H4, 10% H5.
+    """
+    if seed is None:
+        seed = int(time.time()) % 100000
+    rng = np.random.RandomState(seed)
+
+    persona_choices = ['H1', 'H2', 'H3', 'H4', 'H5']
+    persona_probs = [0.40, 0.10, 0.25, 0.15, 0.10]
+
+    # Human 1 meets the robot head-on in the encounter zone
+    h1_persona = str(rng.choice(persona_choices, p=persona_probs))
+    h1_speed = 0.0 if h1_persona == "H4" else float(rng.uniform(0.90, 1.15))
+    h1_mode = "stationary" if h1_persona == "H4" else "autonomous"
+    h1_start_x = float(rng.uniform(-5.5, -4.0))
+    h1_start_y = float(rng.uniform(-0.25, 0.25)) if h1_persona != "H4" else float(rng.choice([-0.35, 0.35]))
+
+    humans = [{
+        "id": 1,
+        "name": "human_01",
+        "mode": h1_mode,
+        "speed": round(h1_speed, 3),
+        "max_speed": round(h1_speed * 1.2, 3),
+        "persona": h1_persona,
+        "loop": False,
+        "wait_for_robot": True,
+        "start": {"x": round(h1_start_x, 3), "y": round(h1_start_y, 3), "yaw": 3.14159},
+        "waypoints": [[round(h1_start_x, 3), round(h1_start_y, 3)], [-15.0, round(h1_start_y, 3)]],
+        "proxy_z": 0.875
+    }]
+
+    # Background humans spaced along corridor (-2.0m to 10.5m)
+    if num_humans > 1:
+        bg_xs = np.linspace(-2.0, 10.5, num_humans - 1)
+        for i in range(2, num_humans + 1):
+            p = str(rng.choice(persona_choices, p=persona_probs))
+            bx = float(bg_xs[i - 2] + rng.uniform(-0.35, 0.35))
+            if p == "H4":
+                # Static bystander standing near the corridor wall
+                by = float(rng.choice([-0.36, 0.36]))
+                b_spd = 0.0
+                b_mode = "stationary"
+                b_yaw = float(rng.choice([0.0, 3.14159, 1.57, -1.57]))
+                wps = [[round(bx, 3), round(by, 3)]]
+            else:
+                by = float(rng.uniform(-0.28, 0.28))
+                b_spd = float(rng.uniform(0.75, 1.10))
+                b_mode = "autonomous"
+                # Alternate directions: even walking towards -X, odd walking towards +X
+                b_dir = -1.0 if (i % 2 == 0) else 1.0
+                b_yaw = 3.14159 if b_dir < 0 else 0.0
+                b_target_x = -14.5 if b_dir < 0 else 14.5
+                wps = [[round(bx, 3), round(by, 3)], [b_target_x, round(by, 3)]]
+
+            humans.append({
+                "id": i,
+                "name": f"human_{i:02d}",
+                "mode": b_mode,
+                "speed": round(b_spd, 3),
+                "max_speed": round(b_spd * 1.2 if b_spd > 0 else 0.0, 3),
+                "persona": p,
+                "loop": False,
+                "wait_for_robot": False,
+                "start": {"x": round(bx, 3), "y": round(by, 3), "yaw": b_yaw},
+                "waypoints": wps,
+                "proxy_z": 0.875
+            })
+
+    return {"seed": seed, "humans": humans}
+
+
 def main():
-    parser = argparse.ArgumentParser(description="Full-Corridor Live Nav2 MPPI Demo")
+    parser = argparse.ArgumentParser(description="Full-Corridor Live Interactive Nav2 MPPI Demo")
     parser.add_argument("--width", type=str, default="1.20", choices=["0.90", "1.20"], help="Corridor width (default: 1.20)")
-    parser.add_argument("--humans", type=int, default=10, choices=[5, 10], help="Number of dynamic humans (default: 10)")
-    parser.add_argument("--goal-x", type=float, default=8.0, help="Target X coordinate at the far end of the corridor (default: 8.0m)")
-    parser.add_argument("--goal-y", type=float, default=0.0, help="Target Y coordinate (default: 0.0m)")
-    parser.add_argument("--rviz", action="store_true", default=False, help="Enable RViz2 window alongside Gazebo (default: False, Gazebo 3D GUI only for maximum GPU stability)")
+    parser.add_argument("--humans", type=int, default=5, choices=[2, 5, 8, 10], help="Number of dynamic humans (default: 5)")
+    parser.add_argument("--goal-x", type=float, default=8.0, help="Initial target X coordinate at end of corridor (default: 8.0m)")
+    parser.add_argument("--goal-y", type=float, default=0.0, help="Initial target Y coordinate (default: 0.0m)")
+    parser.add_argument("--rviz", action="store_true", default=True, help="Enable RViz2 window (default: True)")
+    parser.add_argument("--no-rviz", dest="rviz", action="store_false", help="Disable RViz2 window (Gazebo only)")
+    parser.add_argument("--seed", type=int, default=None, help="Random seed for personas and positions")
     parser.add_argument("--domain-id", type=int, default=0, help="ROS_DOMAIN_ID (default: 0)")
     args = parser.parse_args()
 
-    if args.humans == 10:
-        base_world = os.path.join(ROOT_DIR, "experiments/gazebo_benchmark/configs/generated/world_ep_0024.sdf")
-    else:
-        base_world = os.path.join(ROOT_DIR, "experiments/gazebo_benchmark/configs/generated/world_ep_0007.sdf")
+    # Step A: Generate Scenario with Persona Distribution
+    scen_data = generate_random_scenario(num_humans=args.humans, seed=args.seed)
+    tmp_scen = tempfile.NamedTemporaryFile(mode="w", suffix="_scenario.json", delete=False)
+    json.dump(scen_data, tmp_scen, indent=2)
+    tmp_scen.close()
+    scen_file = tmp_scen.name
 
-    with open(base_world, "r") as f:
-        sdf_data = f.read()
-
-    # Ensure real-time factor is 1.0 (smooth live interactive speed)
-    sdf_data = re.sub(r'<real_time_factor>.*?</real_time_factor>', '<real_time_factor>1.0</real_time_factor>', sdf_data)
-    # Fix scenario path to results directory so RVO2 plugin can load all human trajectories
-    sdf_data = sdf_data.replace('/pilot_300_dataset/', '/results/pilot_300/pilot_300_dataset/')
-
-    tmp_world = tempfile.NamedTemporaryFile(mode="w", suffix="_live_demo.sdf", delete=False)
-    tmp_world.write(sdf_data)
-    tmp_world.close()
-    active_world_file = tmp_world.name
+    # Step B: Generate World SDF using BenchmarkWorldGenerator
+    gen = BenchmarkWorldGenerator(ROOT_DIR)
+    corr_type = "090" if args.width == "0.90" else "120"
+    active_world_file = gen.generate_world_with_humans(
+        num_humans=args.humans,
+        corridor_type=corr_type,
+        seed=scen_data["seed"],
+        real_time_factor=1.0,
+        out_filename=f"live_demo_{args.humans}h_{scen_data['seed']}.sdf",
+        scenario_file=scen_file,
+        scenario_humans=scen_data["humans"]
+    )
 
     print("=" * 80)
-    print("🌟 DYNAMUHSIM FULL-CORRIDOR LIVE INTERACTIVE DEMO (NAV2 + MPPI)")
+    print("🌟 DYNAMUHSIM FULL-CORRIDOR LIVE INTERACTIVE DEMO (NAV2 MPPI + RVO2)")
     print("=" * 80)
     print(f"  • Corridor Width   : {args.width} m")
-    print(f"  • Dynamic Humans   : {args.humans} walking pedestrians (RVO2 reactive)")
-    print(f"  • Robot Model      : Mecanum (Omnidirectional 4-wheel drive)")
-    print(f"  • Controller       : MPPI (Model Predictive Path Integral)")
-    print(f"  • Costmap Tuning   : inflation_radius = 0.20m (tuned for narrow corridors)")
-    print(f"  • Start Position   : x = -13.0 m, y = 0.0 m")
-    print(f"  • Target Goal      : x = +{args.goal_x:.1f} m, y = {args.goal_y:.1f} m  (~21 METERS TOTAL TRANSIT)")
-    print(f"  • 3D Viewport      : Gazebo Harmonic 3D GUI {'+ RViz2' if args.rviz else '(Gazebo only for GPU stability)'}")
+    print(f"  • Robot Model      : Mecanum (4-wheel omnidirectional drive)")
+    print(f"  • Navigation Goal  : x = +{args.goal_x:.1f} m, y = {args.goal_y:.1f} m  (~21 METERS TOTAL TRANSIT)")
+    print(f"  • Random Seed      : {scen_data['seed']}")
+    print(f"  • 3D Viewport      : Gazebo Harmonic 3D GUI {'+ RViz2' if args.rviz else '(Gazebo only)'}")
     print("=" * 80)
-    print("Starting simulation and navigation stack... Gazebo window will appear on your desktop.")
+    print(f"👥 Pedestrian Crowd Roster ({args.humans} Humans sampled from 40% H1 / 10% H2 / 25% H3 / 15% H4 / 10% H5):")
+    print("  " + "-" * 76)
+    for h in scen_data["humans"]:
+        p = h["persona"]
+        p_info = PERSONA_CONFIGS.get(p, {"name": p, "trait": "", "color": ""})
+        c = p_info["color"]
+        print(f"  • {h['name']}: {c}[{p} - {p_info['name']}]{RESET_COLOR} | "
+              f"Speed: {h['speed']:4.2f} m/s | Pos: ({h['start']['x']:5.2f}, {h['start']['y']:5.2f}) | {p_info['trait']}")
+    print("  " + "-" * 76)
+    print("Starting simulation and navigation stack... Windows will appear on your desktop.")
     print("Press Ctrl+C at any time to exit.\n")
 
     os.environ["ROS_DOMAIN_ID"] = str(args.domain_id)
@@ -129,14 +228,14 @@ def main():
     procs = []
     nav2_log_fp = None
     try:
-        # Step 1: Launch Gazebo + Mecanum robot + 10 Humans
+        # Step 1: Launch Gazebo Simulation (rviz:=false to let Gazebo initialize OpenGL first)
         sim_cmd = [
             "ros2", "launch", "custom_corridor", "corridor_tb3.launch.py",
             f"width:={args.width}",
             f"custom_world:={active_world_file}",
             "obstacle:=human",
             "gui:=true",
-            f"rviz:={'true' if args.rviz else 'false'}",
+            "rviz:=false",
             "robot_model:=mecanum",
             "x:=-13.0", "y:=0.0", "yaw:=0.0",
             "paused:=false"
@@ -144,10 +243,10 @@ def main():
         p_sim = subprocess.Popen(sim_cmd, env=env, preexec_fn=os.setsid)
         procs.append(p_sim)
 
-        print(f"⏳ Step 1/3: Launching Gazebo 3D simulation with {args.humans} pedestrians (6 seconds)...")
+        print(f"⏳ Step 1/3: Launching Gazebo 3D simulation ({args.humans} pedestrians, 6 seconds)...")
         time.sleep(6.0)
 
-        # Step 2: Launch Nav2 MPPI
+        # Step 2: Launch Nav2 MPPI Stack
         nav_map = "corridor_120" if args.width == "1.20" else "corridor_090"
         nav_cmd = [
             "ros2", "launch", "custom_corridor", "nav2_corridor.launch.py",
@@ -178,6 +277,15 @@ def main():
         if not nav2_ready:
             print("⚠️ Lifecycle manager log wait timed out, continuing to action server check...")
 
+        # Step 3: Launch RViz2 (Staggered after Gazebo is fully stabilized to avoid WSLg GPU context clash)
+        if args.rviz:
+            print("⏳ Step 3/3: Opening RViz2 Visualization Window...")
+            rviz_cfg = os.path.join(ROOT_DIR, "install/custom_corridor/share/custom_corridor/rviz/corridor.rviz")
+            rviz_cmd = ["rviz2", "-d", rviz_cfg]
+            p_rviz = subprocess.Popen(rviz_cmd, env=env, preexec_fn=os.setsid)
+            procs.append(p_rviz)
+            time.sleep(2.0)
+
         rclpy.init(domain_id=args.domain_id)
         nav_node = LiveNavigatorNode(target_x=args.goal_x, target_y=args.goal_y)
 
@@ -186,7 +294,7 @@ def main():
             print("\n❌ Timed out waiting for Nav2 action server.")
             return
 
-        print("✨ Step 3/3: Nav2 Navigation Action Server is READY!")
+        print("✨ Nav2 Navigation Action Server is READY!")
         time.sleep(1.0)  # Brief settle for AMCL initial particle cloud and local costmap
 
         # Dispatch Goal synchronously with retry loop
@@ -221,6 +329,7 @@ def main():
         result_future = goal_handle.get_result_async()
         last_print = 0.0
 
+        # Phase 1: Track transit to target goal
         while rclpy.ok() and not result_future.done():
             rclpy.spin_once(nav_node, timeout_sec=0.05)
             now = time.time()
@@ -234,11 +343,23 @@ def main():
                       f"Progress: {dist_traveled:5.1f}m / {total_dist:5.1f}m ({pct:4.1f}%) | "
                       f"Speed: {nav_node.robot_speed:4.2f} m/s", end="", flush=True)
 
-        print("\n\n🏁 ROBOT HAS REACHED THE DESTINATION AT THE END OF THE CORRIDOR!")
-        print("Keeping simulation open for 5 seconds...")
-        time.sleep(5.0)
-        nav_node.destroy_node()
-        rclpy.shutdown()
+        print("\n\n🏁 Initial Goal reached! Entering Interactive Navigation Mode...")
+        print("=" * 80)
+        print("🎮 INTERACTIVE MODE ACTIVE:")
+        print("  • In RViz2, click the '2D Goal Pose' (Nav2 Goal) button at the top toolbar.")
+        print("  • Click & drag anywhere on the corridor map to send a new destination to the robot.")
+        print("  • Watch the robot reactively dodge walking H1-H5 pedestrians in real time!")
+        print("  • Press Ctrl+C in this terminal when finished.")
+        print("=" * 80)
+
+        # Phase 2: Interactive loop - keeps running and listening to RViz2 goal clicks!
+        while rclpy.ok():
+            rclpy.spin_once(nav_node, timeout_sec=0.1)
+            now = time.time()
+            if now - last_print >= 0.5:
+                last_print = now
+                rx, ry = nav_node.robot_pos
+                print(f"\r  [Interactive Robot Pos] x={rx:6.2f}m, y={ry:5.2f}m | Speed: {nav_node.robot_speed:4.2f} m/s  (Click '2D Goal Pose' in RViz2 to move)   ", end="", flush=True)
 
     except KeyboardInterrupt:
         print("\n\n⏹️ Live Demo stopped by user.")
@@ -256,11 +377,9 @@ def main():
         # Ensure orphaned background Gazebo instances in WSL are cleaned up
         for pattern in ["gz sim", "gz-sim-server", "rviz2", "ros_gz_bridge"]:
             subprocess.run(["pkill", "-9", "-f", pattern], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-        if 'active_world_file' in locals() and os.path.exists(active_world_file):
-            try:
-                os.remove(active_world_file)
-            except Exception:
-                pass
+        if 'scen_file' in locals() and os.path.exists(scen_file):
+            try: os.remove(scen_file)
+            except Exception: pass
         print("Done. All processes cleaned up.")
 
 
