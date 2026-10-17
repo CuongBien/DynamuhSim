@@ -459,9 +459,9 @@ public:
         }
       }
 
-      // Smooth rotation towards target yaw (up to 8.0 rad/s ~ 460 deg/s)
+      // Smooth rotation towards target yaw (up to 2.8 rad/s ~ 160 deg/s, natural human turning speed)
       const double diff = NormalizeAngle(targetYaw - human.yaw);
-      human.yaw = NormalizeAngle(human.yaw + std::clamp(diff, -8.0 * dt, 8.0 * dt));
+      human.yaw = NormalizeAngle(human.yaw + std::clamp(diff, -2.8 * dt, 2.8 * dt));
 
       if (speed > 0.05)
       {
