@@ -1,0 +1,147 @@
+{
+  "cases": 30,
+  "aggregates": [
+    {
+      "condition": "sparse",
+      "cases": 3,
+      "success": 3,
+      "collision": 0,
+      "timeout": 0,
+      "invalid_initial_states": 0,
+      "median_seconds": 12.25,
+      "min_clearance_m": 0.03162868855777501,
+      "min_human_pair_clearance_m": 0.022914216062662862,
+      "sum_human_pair_overlap_steps": 0
+    },
+    {
+      "condition": "baseline",
+      "cases": 3,
+      "success": 3,
+      "collision": 0,
+      "timeout": 0,
+      "invalid_initial_states": 0,
+      "median_seconds": 16.0,
+      "min_clearance_m": 0.01723482068085236,
+      "min_human_pair_clearance_m": 0.02223166001129062,
+      "sum_human_pair_overlap_steps": 0
+    },
+    {
+      "condition": "dense",
+      "cases": 3,
+      "success": 3,
+      "collision": 0,
+      "timeout": 0,
+      "invalid_initial_states": 2,
+      "median_seconds": 18.0,
+      "min_clearance_m": 0.016586429674367853,
+      "min_human_pair_clearance_m": -0.3238959799838838,
+      "sum_human_pair_overlap_steps": 4
+    },
+    {
+      "condition": "narrow",
+      "cases": 3,
+      "success": 2,
+      "collision": 1,
+      "timeout": 0,
+      "invalid_initial_states": 1,
+      "median_seconds": 20.5,
+      "min_clearance_m": -0.0010240515049144694,
+      "min_human_pair_clearance_m": -0.5614176419778732,
+      "sum_human_pair_overlap_steps": 1
+    },
+    {
+      "condition": "medium_width",
+      "cases": 3,
+      "success": 3,
+      "collision": 0,
+      "timeout": 0,
+      "invalid_initial_states": 0,
+      "median_seconds": 12.5,
+      "min_clearance_m": 0.023114943589459425,
+      "min_human_pair_clearance_m": 0.020001578108671203,
+      "sum_human_pair_overlap_steps": 0
+    },
+    {
+      "condition": "orca_only",
+      "cases": 3,
+      "success": 3,
+      "collision": 0,
+      "timeout": 0,
+      "invalid_initial_states": 0,
+      "median_seconds": 17.25,
+      "min_clearance_m": 0.019031703603590633,
+      "min_human_pair_clearance_m": 0.01718447850200444,
+      "sum_human_pair_overlap_steps": 0
+    },
+    {
+      "condition": "heterogeneous",
+      "cases": 3,
+      "success": 2,
+      "collision": 1,
+      "timeout": 0,
+      "invalid_initial_states": 2,
+      "median_seconds": 14.5,
+      "min_clearance_m": -0.00543331231132671,
+      "min_human_pair_clearance_m": -0.4131754822404421,
+      "sum_human_pair_overlap_steps": 19
+    },
+    {
+      "condition": "passing",
+      "cases": 3,
+      "success": 3,
+      "collision": 0,
+      "timeout": 0,
+      "invalid_initial_states": 1,
+      "median_seconds": 12.25,
+      "min_clearance_m": 0.03359271462764124,
+      "min_human_pair_clearance_m": -0.2246696857972088,
+      "sum_human_pair_overlap_steps": 1
+    },
+    {
+      "condition": "crossing",
+      "cases": 3,
+      "success": 2,
+      "collision": 1,
+      "timeout": 0,
+      "invalid_initial_states": 1,
+      "median_seconds": 13.5,
+      "min_clearance_m": -0.013951896004877895,
+      "min_human_pair_clearance_m": -0.526945190516996,
+      "sum_human_pair_overlap_steps": 1
+    }
+  ],
+  "visibility_pairs": [
+    {
+      "seed": 1000,
+      "initial_state_identical": true,
+      "visible_status": "Reaching goal",
+      "blind_status": "Collision",
+      "mean_human_position_difference_m": 0.11561191331156843
+    },
+    {
+      "seed": 1001,
+      "initial_state_identical": true,
+      "visible_status": "Reaching goal",
+      "blind_status": "Collision",
+      "mean_human_position_difference_m": 0.015537155685684307
+    },
+    {
+      "seed": 1002,
+      "initial_state_identical": true,
+      "visible_status": "Reaching goal",
+      "blind_status": "Collision",
+      "mean_human_position_difference_m": 0.022156817587166092
+    }
+  ],
+  "invalid_initial_states": [
+    "crossing_s0_visible",
+    "dense_s0_visible",
+    "dense_s2_visible",
+    "heterogeneous_s0_visible",
+    "heterogeneous_s2_visible",
+    "narrow_s0_visible",
+    "passing_s0_visible"
+  ],
+  "rendering_errors": [],
+  "note": "Small 2D exploratory sample with fixed ORCA robot. Width conditions also differ in human count/density. No cross-framework ranking."
+}

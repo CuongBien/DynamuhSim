@@ -99,6 +99,6 @@ hiệu năng hay tỷ lệ va chạm của robot ROS từ các lượt này.
 ## Bằng chứng và trạng thái
 
 Xem [báo cáo vòng đầu](reports/ROUND1.md), video và JSON liên kết trong báo cáo.
-SocNavGym chưa được nối vào Gazebo. Adapter, benchmark RVO2/SocNavGym cùng world,
-CrowdSimPlus đã có vòng thử độc lập tại [round2](round2/README.md); ComplexityNav chưa triển khai. Cần đánh giá phản ứng robot và
-sửa/bao bọc schema observation trước khi coi SocNavGym sẵn sàng tích hợp.
+SocNavGym đã có [adapter Gazebo thử nghiệm](gazebo_adapter/README.md) cho một nhóm 3 người đi cùng nhau hoặc đứng trò chuyện trong nhà xưởng. Clock, robot feedback, pose proxy và LiDAR đã được kiểm tra; chưa benchmark Nav2 chung và chưa đưa formation vào Gazebo.
+
+CrowdSimPlus đã có vòng thử độc lập tại [round2](round2/README.md); ComplexityNav đã có vòng thử độc lập tại [round3](round3/README.md). Hai backend đó chưa nối vào Gazebo. Xem [bảng so sánh](FRAMEWORK_COMPARISON.md) và [báo cáo adapter](gazebo_adapter/reports/ADAPTER_REPORT.md) trước khi chọn hành vi nhóm.

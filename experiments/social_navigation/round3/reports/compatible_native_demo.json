@@ -1,0 +1,13 @@
+{
+  "entrypoint": "upstream crowd_nav/test.py",
+  "policy": "vecmpc with native CV predictor",
+  "config": "external compatible_demo_config.py",
+  "source_unmodified": true,
+  "status": "Reaching goal",
+  "simulation_seconds": 10.0,
+  "changes": [
+    "container-only symlink for hardcoded config path",
+    "external concrete config classes and CV settings",
+    "external launcher returns env.unwrapped for positional reset"
+  ]
+}
