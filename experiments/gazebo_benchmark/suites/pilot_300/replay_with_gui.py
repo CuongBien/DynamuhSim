@@ -101,7 +101,7 @@ class VisualPilotReplayer(Node):
 
 def main():
     parser = argparse.ArgumentParser(description="Replay recorded Pilot Episode with 3D Gazebo GUI and RViz2")
-    parser.add_argument("--episode", type=int, default=30, help="Episode ID to replay (1..300, default: 30)")
+    parser.add_argument("--episode", type=int, default=24, help="Episode ID to replay (1..300, default: 24 [10 humans, 6m transit])")
     parser.add_argument("--gui", action="store_true", default=True, help="Enable Gazebo Harmonic 3D GUI window (default: True)")
     parser.add_argument("--no-gui", dest="gui", action="store_false", help="Disable Gazebo GUI (run headless)")
     parser.add_argument("--rviz", action="store_true", default=True, help="Enable RViz2 visualization window (default: True)")
@@ -214,7 +214,7 @@ def main():
             f"rviz:={'true' if args.rviz else 'false'}",
             "robot_model:=mecanum",
             "x:=-13.0", "y:=0.0", "yaw:=0.0",
-            "paused:=true"
+            "paused:=false"
         ]
 
         p_sim = subprocess.Popen(sim_cmd, env=env, preexec_fn=os.setsid)
@@ -237,23 +237,9 @@ def main():
 
         rclpy.init()
         replayer = VisualPilotReplayer(recorded_cmds, duration_s=duration_s)
-
-        t_spin0 = time.time()
-        while time.time() - t_spin0 < 1.0:
-            rclpy.spin_once(replayer, timeout_sec=0.05)
-
-        # Unpause Gazebo
-        print("▶️ Unpausing Gazebo simulation... Playback started!")
-        unpause_cmd = [
-            "gz", "service", "-s", f"/world/{world_name}/control",
-            "--reqtype", "gz.msgs.WorldControl",
-            "--reptype", "gz.msgs.Boolean",
-            "--timeout", "2000",
-            "--req", "pause: false"
-        ]
-        subprocess.run(unpause_cmd, env=env, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
         replayer.unpaused = True
 
+        print("▶️ Simulation active! Playback started.")
         start_wall = time.time()
         last_print = 0.0
 
