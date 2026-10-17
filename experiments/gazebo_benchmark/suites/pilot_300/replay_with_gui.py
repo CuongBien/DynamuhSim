@@ -164,6 +164,7 @@ def main():
         sdf_content = f.read()
 
     sdf_content = re.sub(r'<real_time_factor>.*?</real_time_factor>', f'<real_time_factor>{args.rtf}</real_time_factor>', sdf_content)
+    sdf_content = sdf_content.replace('/pilot_300_dataset/', '/results/pilot_300/pilot_300_dataset/')
     tmp_world = tempfile.NamedTemporaryFile(mode="w", suffix=f"_visual_ep_{args.episode:04d}.sdf", delete=False)
     tmp_world.write(sdf_content)
     tmp_world.close()
