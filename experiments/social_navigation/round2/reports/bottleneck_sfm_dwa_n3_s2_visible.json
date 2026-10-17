@@ -1,0 +1,125 @@
+{
+  "scenario": "bottleneck",
+  "human_policy": "sfm",
+  "robot_policy": "dwa",
+  "robot_kinematics": "unicycle",
+  "humans": 3,
+  "test_case": 2,
+  "robot_visible": true,
+  "status": "timeout",
+  "compatibility_aliases": [],
+  "steps": 121,
+  "simulation_seconds": 30.25,
+  "wall_seconds": 13.5547926309996,
+  "radius_robot_m": 0.25,
+  "radius_human_m": 0.3,
+  "mean_robot_policy_ms": 63.71740588429396,
+  "minimum_robot_human_clearance_m": -0.03980273183136468,
+  "minimum_human_human_clearance_m": -0.0011421985093645892,
+  "robot_path_m": 2.4205658781705006,
+  "step_counts": {
+    "Collision": 1,
+    "WallCollision": 100,
+    "Frozen": 99,
+    "Danger": 0
+  },
+  "initial_state": {
+    "t": 0.0,
+    "robot": {
+      "id": -1,
+      "x": 0.0,
+      "y": -2.5,
+      "vx": 0.0,
+      "vy": 0.0,
+      "radius": 0.25,
+      "goal": [
+        0.0,
+        2.5
+      ]
+    },
+    "humans": [
+      {
+        "id": 0,
+        "x": 0.404557424159444,
+        "y": -1.5259599562064663,
+        "vx": 0.0,
+        "vy": 0.0,
+        "radius": 0.3,
+        "goal": [
+          0.0,
+          0.0
+        ]
+      },
+      {
+        "id": 1,
+        "x": -0.17293826791102362,
+        "y": -0.4728520386876789,
+        "vx": 0.0,
+        "vy": 0.0,
+        "radius": 0.3,
+        "goal": [
+          0.0,
+          0.0
+        ]
+      },
+      {
+        "id": 2,
+        "x": -0.29605295744943755,
+        "y": 1.2399029421126861,
+        "vx": 0.0,
+        "vy": 0.0,
+        "radius": 0.3,
+        "goal": [
+          0.0,
+          0.0
+        ]
+      }
+    ],
+    "min_robot_human_clearance_m": 0.5047135707649888,
+    "min_human_human_clearance_m": 0.6010568514024244
+  },
+  "static_obstacles": [
+    [
+      [
+        -1.5,
+        -5.0
+      ],
+      [
+        -1.5,
+        5.0
+      ]
+    ],
+    [
+      [
+        1.5,
+        -5.0
+      ],
+      [
+        1.5,
+        5.0
+      ]
+    ],
+    [
+      [
+        -1.5,
+        0.0
+      ],
+      [
+        -0.5,
+        0.0
+      ]
+    ],
+    [
+      [
+        0.5,
+        0.0
+      ],
+      [
+        1.5,
+        0.0
+      ]
+    ]
+  ],
+  "source_commit": "d526a07c013c621fa1ad50894b6ba639f61063de",
+  "note": "Native 2D CrowdSimPlus, no ROS/Nav2 robot, no group membership model. Counts are flagged steps, not independent incidents."
+}

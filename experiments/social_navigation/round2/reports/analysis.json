@@ -1,0 +1,146 @@
+{
+  "cases": 24,
+  "aggregates": [
+    {
+      "scenario": "circle",
+      "human_policy": "orca_plus",
+      "cases": 3,
+      "reached_goal": 3,
+      "collision_free_success": 0,
+      "timeout": 0,
+      "sum_collision_steps": 5,
+      "sum_wall_constraint_steps": 0,
+      "sum_frozen_steps": 2,
+      "median_time_s": 10.5,
+      "minimum_clearance_m": -0.06476701756754266
+    },
+    {
+      "scenario": "circle",
+      "human_policy": "sfm",
+      "cases": 3,
+      "reached_goal": 3,
+      "collision_free_success": 1,
+      "timeout": 0,
+      "sum_collision_steps": 2,
+      "sum_wall_constraint_steps": 0,
+      "sum_frozen_steps": 7,
+      "median_time_s": 14.0,
+      "minimum_clearance_m": -0.09764556894907334
+    },
+    {
+      "scenario": "hallway",
+      "human_policy": "orca_plus",
+      "cases": 3,
+      "reached_goal": 3,
+      "collision_free_success": 3,
+      "timeout": 0,
+      "sum_collision_steps": 0,
+      "sum_wall_constraint_steps": 0,
+      "sum_frozen_steps": 0,
+      "median_time_s": 6.75,
+      "minimum_clearance_m": 0.027175868454765773
+    },
+    {
+      "scenario": "hallway",
+      "human_policy": "sfm",
+      "cases": 3,
+      "reached_goal": 3,
+      "collision_free_success": 2,
+      "timeout": 0,
+      "sum_collision_steps": 1,
+      "sum_wall_constraint_steps": 0,
+      "sum_frozen_steps": 0,
+      "median_time_s": 7.25,
+      "minimum_clearance_m": -0.014272245468666733
+    },
+    {
+      "scenario": "bottleneck",
+      "human_policy": "orca_plus",
+      "cases": 3,
+      "reached_goal": 2,
+      "collision_free_success": 2,
+      "timeout": 1,
+      "sum_collision_steps": 0,
+      "sum_wall_constraint_steps": 0,
+      "sum_frozen_steps": 70,
+      "median_time_s": 7.25,
+      "minimum_clearance_m": 0.005768746926253565
+    },
+    {
+      "scenario": "bottleneck",
+      "human_policy": "sfm",
+      "cases": 3,
+      "reached_goal": 2,
+      "collision_free_success": 2,
+      "timeout": 1,
+      "sum_collision_steps": 1,
+      "sum_wall_constraint_steps": 100,
+      "sum_frozen_steps": 99,
+      "median_time_s": 8.25,
+      "minimum_clearance_m": -0.03980273183136468
+    }
+  ],
+  "visibility_pairs": [
+    {
+      "policy": "orca_plus",
+      "test_case": 0,
+      "initial_state_identical": true,
+      "visible_status": "success",
+      "blind_status": "success",
+      "visible_collision_steps": 1,
+      "blind_collision_steps": 11,
+      "mean_human_position_difference_m": 0.280703038304696
+    },
+    {
+      "policy": "orca_plus",
+      "test_case": 1,
+      "initial_state_identical": true,
+      "visible_status": "success",
+      "blind_status": "success",
+      "visible_collision_steps": 3,
+      "blind_collision_steps": 9,
+      "mean_human_position_difference_m": 0.30920407826823004
+    },
+    {
+      "policy": "orca_plus",
+      "test_case": 2,
+      "initial_state_identical": true,
+      "visible_status": "success",
+      "blind_status": "success",
+      "visible_collision_steps": 1,
+      "blind_collision_steps": 11,
+      "mean_human_position_difference_m": 0.3180308165390507
+    },
+    {
+      "policy": "sfm",
+      "test_case": 0,
+      "initial_state_identical": true,
+      "visible_status": "success",
+      "blind_status": "success",
+      "visible_collision_steps": 0,
+      "blind_collision_steps": 16,
+      "mean_human_position_difference_m": 0.3911747046266191
+    },
+    {
+      "policy": "sfm",
+      "test_case": 1,
+      "initial_state_identical": true,
+      "visible_status": "success",
+      "blind_status": "success",
+      "visible_collision_steps": 1,
+      "blind_collision_steps": 13,
+      "mean_human_position_difference_m": 0.48923356179657396
+    },
+    {
+      "policy": "sfm",
+      "test_case": 2,
+      "initial_state_identical": true,
+      "visible_status": "success",
+      "blind_status": "success",
+      "visible_collision_steps": 1,
+      "blind_collision_steps": 15,
+      "mean_human_position_difference_m": 0.6556836572262824
+    }
+  ],
+  "note": "3 test cases per condition; endpoint/sample metrics, native scenes, DWA unicycle, no ROS integration."
+}
