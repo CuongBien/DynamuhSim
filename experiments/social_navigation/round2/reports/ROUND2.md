@@ -215,4 +215,4 @@ pháp. Container thử nghiệm đã dừng sau các lượt chạy, không dừ
 [Audit bảo toàn](source_preservation.json): 11.537 file gốc không đổi nội dung;
 diff staged của người dùng và diff unstaged ngoài thư mục experiment giống hệt
 snapshot trước vòng 1. Source CrowdSimPlus trong image không có diff. Commit
-91f3620 chỉ chứa vòng 1; file vòng 2 và cập nhật link README hiện chưa commit.
+91f3620 chỉ chứa vòng 1. Vòng 2 và liên kết README đã commit tại 1dbf832; các thay đổi khác của người dùng không được đưa vào commit.
