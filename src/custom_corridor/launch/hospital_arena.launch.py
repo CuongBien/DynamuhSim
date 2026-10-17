@@ -81,28 +81,41 @@ def launch_setup(context):
     existing_resource_path = os.environ.get("GZ_SIM_RESOURCE_PATH", "")
 
     # ---------------------------------------------------------
-    # TurtleBot3 Burger model
+    # Robot model selection (mecanum or burger)
     # ---------------------------------------------------------
-    burger_model = os.path.join(
-        package_share,
-        "models",
-        "turtlebot3_burger",
-        "model.sdf",
-    )
+    robot_model = LaunchConfiguration("robot_model").perform(context).lower().strip()
+    if robot_model not in ["burger", "tb3", "turtlebot3"]:
+        robot_model = "mecanum"
 
-    if not os.path.isfile(burger_model):
-        raise RuntimeError(
-            f"TurtleBot3 Burger model does not exist: {burger_model}"
+    if robot_model == "burger":
+        robot_entity_name = "burger"
+        selected_robot_model = os.path.join(
+            package_share, "models", "turtlebot3_burger", "model.sdf"
         )
+        bridge_config = os.path.join(
+            turtlebot_share, "params", "turtlebot3_burger_bridge.yaml"
+        )
+        urdf_file = os.path.join(
+            description_share, "urdf", "turtlebot3_burger.urdf"
+        )
+        spawn_z_offset = "0.01"
+    else:
+        robot_entity_name = "mecanum_robot"
+        selected_robot_model = os.path.join(
+            package_share, "models", "mecanum_robot", "model.sdf"
+        )
+        bridge_config = os.path.join(
+            package_share, "config", "mecanum_bridge.yaml"
+        )
+        urdf_file = os.path.join(
+            package_share, "urdf", "mecanum_robot.urdf"
+        )
+        spawn_z_offset = "0.04"
 
-    # ---------------------------------------------------------
-    # Bridge configuration
-    # ---------------------------------------------------------
-    bridge_config = os.path.join(
-        turtlebot_share,
-        "params",
-        "turtlebot3_burger_bridge.yaml",
-    )
+    if not os.path.isfile(selected_robot_model):
+        raise RuntimeError(
+            f"Robot model does not exist: {selected_robot_model}"
+        )
 
     # ---------------------------------------------------------
     # Gazebo
@@ -132,7 +145,8 @@ def launch_setup(context):
     )
 
     # ---------------------------------------------------------
-    # Spawn TurtleBot3 Burger
+    # ---------------------------------------------------------
+    # Spawn Robot
     #
     # Hospital world:
     # x = -18
@@ -144,15 +158,15 @@ def launch_setup(context):
         executable="create",
         arguments=[
             "-name",
-            "burger",
+            robot_entity_name,
             "-file",
-            burger_model,
+            selected_robot_model,
             "-x",
             "-18.0",
             "-y",
             "0.0",
             "-z",
-            "0.01",
+            spawn_z_offset,
             "-Y",
             "0.0",
         ],
@@ -176,15 +190,9 @@ def launch_setup(context):
     # ---------------------------------------------------------
     # Robot State Publisher
     # ---------------------------------------------------------
-    urdf_file = os.path.join(
-        description_share,
-        "urdf",
-        "turtlebot3_burger.urdf",
-    )
-
     if not os.path.isfile(urdf_file):
         raise RuntimeError(
-            f"TurtleBot3 URDF does not exist: {urdf_file}"
+            f"Robot URDF does not exist: {urdf_file}"
         )
 
     import xacro
@@ -291,9 +299,19 @@ def generate_launch_description():
         ),
     )
 
+    robot_model_arg = DeclareLaunchArgument(
+        "robot_model",
+        default_value="mecanum",
+        description=(
+            "Robot model: mecanum (small omni) or burger (TurtleBot3)"
+        ),
+        choices=["mecanum", "burger", "tb3", "turtlebot3"],
+    )
+
     return LaunchDescription(
         [
             difficulty_arg,
+            robot_model_arg,
             gui_arg,
             rviz_arg,
             OpaqueFunction(function=launch_setup),

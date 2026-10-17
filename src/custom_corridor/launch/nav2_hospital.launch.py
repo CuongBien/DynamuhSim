@@ -14,10 +14,17 @@ def launch_setup(context, *args, **kwargs):
     controller = LaunchConfiguration("controller").perform(context).lower().strip()
     custom_params = LaunchConfiguration("params_file").perform(context).strip()
 
+    robot_model = LaunchConfiguration("robot_model").perform(context).lower().strip()
+    if robot_model not in ["burger", "tb3", "turtlebot3"]:
+        robot_model = "mecanum"
+
     if custom_params and os.path.exists(custom_params):
         nav2_params = custom_params
-    elif controller == "mppi":
-        nav2_params = os.path.join(package_share, "config", "nav2_mppi.yaml")
+    elif controller in ["mppi", "mppi_mecanum", "mppi_omni"]:
+        if robot_model == "mecanum" or controller in ["mppi_mecanum", "mppi_omni"]:
+            nav2_params = os.path.join(package_share, "config", "nav2_mppi_mecanum.yaml")
+        else:
+            nav2_params = os.path.join(package_share, "config", "nav2_mppi.yaml")
     else:
         nav2_params = os.path.join(package_share, "config", "nav2_corridor.yaml")
 
@@ -295,6 +302,13 @@ def generate_launch_description():
         description="Initial AMCL yaw pose in map frame",
     )
 
+    robot_model_arg = DeclareLaunchArgument(
+        "robot_model",
+        default_value="mecanum",
+        description="Robot model: mecanum or burger",
+        choices=["mecanum", "burger", "tb3", "turtlebot3"],
+    )
+
     return LaunchDescription(
         [
             rmw_implementation,
@@ -302,6 +316,7 @@ def generate_launch_description():
             ros_domain,
             discovery_range,
             controller_arg,
+            robot_model_arg,
             auto_route_arg,
             params_file_arg,
             map_arg,
