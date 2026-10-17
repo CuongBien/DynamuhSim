@@ -223,16 +223,19 @@ def main():
         for p in procs:
             try:
                 os.killpg(os.getpgid(p.pid), signal.SIGTERM)
-                time.sleep(0.5)
+                time.sleep(0.3)
                 os.killpg(os.getpgid(p.pid), signal.SIGKILL)
             except Exception:
                 pass
+        # Ensure orphaned background Gazebo instances in WSL are cleaned up
+        for pattern in ["gz sim", "gz-sim-server", "rviz2", "ros_gz_bridge"]:
+            subprocess.run(["pkill", "-9", "-f", pattern], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
         if 'active_world_file' in locals() and os.path.exists(active_world_file):
             try:
                 os.remove(active_world_file)
             except Exception:
                 pass
-        print("Done. Goodbye!")
+        print("Done. All processes cleaned up.")
 
 
 if __name__ == '__main__':
