@@ -91,20 +91,36 @@ class LiveNavigatorNode(Node):
 def main():
     parser = argparse.ArgumentParser(description="Full-Corridor Live Nav2 MPPI Demo")
     parser.add_argument("--width", type=str, default="1.20", choices=["0.90", "1.20"], help="Corridor width (default: 1.20)")
+    parser.add_argument("--humans", type=int, default=10, choices=[5, 10], help="Number of dynamic humans (default: 10)")
     parser.add_argument("--goal-x", type=float, default=8.0, help="Target X coordinate at the far end of the corridor (default: 8.0m)")
     parser.add_argument("--goal-y", type=float, default=0.0, help="Target Y coordinate (default: 0.0m)")
     parser.add_argument("--domain-id", type=int, default=89, help="ROS_DOMAIN_ID (default: 89)")
     args = parser.parse_args()
 
+    import tempfile, re
+    if args.humans == 10:
+        base_world = os.path.join(ROOT_DIR, "experiments/gazebo_benchmark/configs/generated/world_ep_0024.sdf")
+    else:
+        base_world = os.path.join(ROOT_DIR, "experiments/gazebo_benchmark/configs/generated/world_ep_0007.sdf")
+
+    with open(base_world, "r") as f:
+        sdf_data = f.read()
+    sdf_data = re.sub(r'<real_time_factor>.*?</real_time_factor>', '<real_time_factor>1.0</real_time_factor>', sdf_data)
+    tmp_world = tempfile.NamedTemporaryFile(mode="w", suffix="_live_demo.sdf", delete=False)
+    tmp_world.write(sdf_data)
+    tmp_world.close()
+    active_world_file = tmp_world.name
+
     print("=" * 80)
     print("🌟 DYNAMUHSIM FULL-CORRIDOR LIVE INTERACTIVE DEMO (NAV2 + MPPI)")
     print("=" * 80)
     print(f"  • Corridor Width   : {args.width} m")
+    print(f"  • Dynamic Humans   : {args.humans} walking pedestrians (RVO2 reactive)")
     print(f"  • Robot Model      : Mecanum (Omnidirectional 4-wheel drive)")
     print(f"  • Controller       : MPPI (Model Predictive Path Integral)")
+    print(f"  • Costmap Tuning   : inflation_radius = 0.20m (tuned for narrow corridors)")
     print(f"  • Start Position   : x = -13.0 m, y = 0.0 m")
     print(f"  • Target Goal      : x = +{args.goal_x:.1f} m, y = {args.goal_y:.1f} m  (~21 METERS TOTAL TRANSIT)")
-    print(f"  • Pedestrians      : Active dynamic humans along the entire corridor")
     print("=" * 80)
     print("Starting simulation and navigation stack... Windows will appear on your desktop.")
     print("Press Ctrl+C at any time to exit.\n")
@@ -124,10 +140,11 @@ def main():
 
     procs = []
     try:
-        # Step 1: Launch Gazebo + RViz2 + Mecanum robot + Human
+        # Step 1: Launch Gazebo + RViz2 + Mecanum robot + 10 Humans
         sim_cmd = [
             "ros2", "launch", "custom_corridor", "corridor_tb3.launch.py",
             f"width:={args.width}",
+            f"custom_world:={active_world_file}",
             "obstacle:=human",
             "gui:=true", "rviz:=true",
             "robot_model:=mecanum",
@@ -137,7 +154,7 @@ def main():
         p_sim = subprocess.Popen(sim_cmd, env=env, preexec_fn=os.setsid)
         procs.append(p_sim)
 
-        print("⏳ Step 1/3: Launching Gazebo 3D simulation and RViz2 (5 seconds)...")
+        print(f"⏳ Step 1/3: Launching Gazebo 3D simulation with {args.humans} pedestrians and RViz2 (5 seconds)...")
         time.sleep(5.0)
 
         # Step 2: Launch Nav2 MPPI
@@ -208,6 +225,11 @@ def main():
                 os.killpg(os.getpgid(p.pid), signal.SIGTERM)
                 time.sleep(0.5)
                 os.killpg(os.getpgid(p.pid), signal.SIGKILL)
+            except Exception:
+                pass
+        if 'active_world_file' in locals() and os.path.exists(active_world_file):
+            try:
+                os.remove(active_world_file)
             except Exception:
                 pass
         print("Done. Goodbye!")
