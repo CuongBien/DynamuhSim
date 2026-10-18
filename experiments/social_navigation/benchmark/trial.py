@@ -41,9 +41,17 @@ p.add_argument('--backend',choices=['empty','rvo2','socnavgym'],required=True)
 p.add_argument('--condition',choices=['standing','counterflow'],default='standing')
 p.add_argument('--seed',type=int,default=42)
 p.add_argument('--gui',action='store_true')
+p.add_argument('--report-dir',type=Path,help='Separate output directory; never reuse a completed trial directory')
+p.add_argument('--diagnostics',action='store_true',help='Capture raw sensor, TF, costmap, commands and world poses')
+p.add_argument('--geometry',choices=['native','circle_contact'],default='native')
 p.add_argument('--sim-budget',type=float,default=75.)
 a=p.parse_args()
-name=f'{a.backend}_{a.condition}_s{a.seed}'
+if a.geometry!='native' and (a.backend!='socnavgym' or not a.report_dir):
+    p.error('--geometry circle_contact requires --backend socnavgym and a separate --report-dir')
+if a.diagnostics and not a.report_dir:
+    p.error('--diagnostics requires a separate --report-dir')
+label=a.backend if a.geometry=='native' else f'{a.backend}_{a.geometry}'
+name=f'{label}_{a.condition}_s{a.seed}'
 (HERE/'generated').mkdir(exist_ok=True)
 runtime=Path(tempfile.mkdtemp(prefix=name+'_',dir=HERE/'generated'))
 os.environ.setdefault('ROS_DOMAIN_ID','75')
@@ -51,12 +59,18 @@ os.environ['GZ_PARTITION']=f'dynamuhsim_{name}_{os.getpid()}'
 os.environ['ROS_LOG_DIR']=str(runtime/'ros_logs')
 os.environ.setdefault('ROS_AUTOMATIC_DISCOVERY_RANGE','LOCALHOST')
 os.environ.setdefault('FASTDDS_BUILTIN_TRANSPORTS','UDPv4')
-report=HERE/'reports'
-report.mkdir(exist_ok=True)
+report=a.report_dir.resolve() if a.report_dir else HERE/'reports'
+report.mkdir(exist_ok=True,parents=True)
+if a.report_dir and (report/f'{name}.json').exists():
+    p.error('Trial already exists in --report-dir; choose a new directory')
+diag=None
+if a.diagnostics:
+    from diagnostics import Capture
+    diag=Capture(runtime/'diagnostics.jsonl')
 processes=[]
 node=None
 socket_dir=None
-result=dict(name=name,backend=a.backend,condition=a.condition,seed=a.seed,status='ERROR',
+result=dict(name=name,backend=a.backend,condition=a.condition,seed=a.seed,geometry=a.geometry,status='ERROR',
     protocol_valid=False,runtime=str(runtime.relative_to(HERE)),metrics_clock='simulation',
     commit=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip())
 rows=[]
@@ -71,7 +85,7 @@ latest={}
 files=[]
 try:
     prepare=subprocess.run([str(SOCIAL/'.venv-socnavgym/bin/python'),str(HERE/'worker.py'),
-        '--runtime',str(runtime),'--condition',a.condition,'--seed',str(a.seed),'--prepare'],
+        '--runtime',str(runtime),'--condition',a.condition,'--seed',str(a.seed),'--geometry',a.geometry,'--prepare'],
         capture_output=True,text=True,timeout=90)
     (runtime/'prepare.log').write_text(prepare.stdout+prepare.stderr)
     if prepare.returncode:
@@ -80,6 +94,7 @@ try:
     if a.backend=='empty':
         scene['initial']=[]
         (runtime/'scene.json').write_text(json.dumps(scene,indent=2))
+    result['contact_geometry']=json.loads((runtime/'geometry.json').read_text()) if a.backend=='socnavgym' else None
     result['scene']=scene
     result['scene_sha256']=hashlib.sha256((runtime/'scene.json').read_bytes()).hexdigest()
     result['map_sha256']=hashlib.sha256((SOCIAL/'warehouse/warehouse.pgm').read_bytes()).hexdigest()
@@ -90,7 +105,7 @@ try:
         socket_path=str(Path(socket_dir.name)/'worker.sock')
         workerlog=(runtime/'worker.log').open('w'); files.append(workerlog)
         worker=subprocess.Popen([str(SOCIAL/'.venv-socnavgym/bin/python'),str(HERE/'worker.py'),
-            '--runtime',str(runtime),'--condition',a.condition,'--seed',str(a.seed),'--socket',socket_path],
+            '--runtime',str(runtime),'--condition',a.condition,'--seed',str(a.seed),'--geometry',a.geometry,'--socket',socket_path],
             stdout=workerlog,stderr=subprocess.STDOUT,start_new_session=True)
         processes.append(worker)
         deadline=time.monotonic()+90
@@ -136,6 +151,8 @@ try:
     node=Node('social_navigation_pilot')
     def receive(key,msg):
         counts[key]+=1; latest[key]=msg
+        if diag and key in ('scan','odom','amcl'):
+            diag.ros(key,msg,latest.get('clock'))
     for key,topic,kind in [('scan','/scan',LaserScan),('imu','/imu',Imu),('odom','/odom',Odometry),
             ('clock','/clock',Clock),('amcl','/amcl_pose',PoseWithCovarianceStamped)]:
         node.create_subscription(kind,topic,lambda msg,key=key:receive(key,msg),qos_profile_sensor_data)
@@ -145,9 +162,13 @@ try:
         if state.get('adapter_ok') is False:
             raise RuntimeError('Adapter failure: '+state.get('error','unknown'))
         native_messages+=1
+        if diag: diag.write('native',state,latest.get('clock'))
     topic='/socnavgym/ground_truth' if a.backend=='socnavgym' else '/rvo2_human/ground_truth'
     if a.backend!='empty':
         node.create_subscription(String,topic,native_message,qos_profile_sensor_data)
+    if diag:
+        diag.subscribe(node,lambda:latest.get('clock'))
+        result['diagnostics']=str(diag.path)
     command=node.create_publisher(String,'/rvo2_human/command',10)
     gz=GzNode()
     def pose_message(msg):
@@ -159,6 +180,8 @@ try:
                 latest_poses[pose.name]=dict(x=pose.position.x,y=pose.position.y,z=pose.position.z,
                     yaw=math.atan2(2*(pose.orientation.w*pose.orientation.z+pose.orientation.x*pose.orientation.y),
                                   1-2*(pose.orientation.y**2+pose.orientation.z**2)))
+        if diag and 'mecanum_robot' in latest_poses:
+            diag.gazebo(t,latest_poses)
         if phase!='active' or 'mecanum_robot' not in latest_poses or not all(n in latest_poses for n in names.values()):
             return
         if last_row is not None and t-last_row<.099:
@@ -267,6 +290,9 @@ finally:
     for process in reversed(processes): stop(process)
     if socket_dir: socket_dir.cleanup()
     for f in files: f.close()
+    if diag:
+        result['diagnostic_counts']=diag.counts
+        diag.close()
     (report/f'{name}_trajectory.json').write_text(json.dumps(rows))
     result['samples']=len(rows)
     result['observer_frames']=len(frames)

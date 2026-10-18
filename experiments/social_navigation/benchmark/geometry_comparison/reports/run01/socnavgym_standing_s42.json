@@ -1,0 +1,139 @@
+{
+  "name": "socnavgym_standing_s42",
+  "backend": "socnavgym",
+  "condition": "standing",
+  "seed": 42,
+  "geometry": "native",
+  "status": "SUCCEEDED",
+  "protocol_valid": true,
+  "runtime": "generated/socnavgym_standing_s42_ezmh_iah",
+  "metrics_clock": "simulation",
+  "commit": "18a45ed28254148271529b3c5fc059032151ef12",
+  "contact_geometry": {
+    "policy": "native",
+    "modified_native_behavior": false,
+    "human_contact_shape": "axis_aligned_ellipse",
+    "human_contact_radius": null,
+    "native_ellipse_semiaxes": [
+      0.12,
+      0.36
+    ],
+    "human_proxy_radius": 0.36,
+    "original_reset_robot_radius": 0.2455005863673824,
+    "effective_robot_radius": 0.2455005863673824,
+    "native_robot_radius_fixed_after_reset": false,
+    "robot_radius_is_nominal_proxy_metric_not_full_robot_collision_body": true,
+    "contact_timing": "native pre-update; no swept collision test",
+    "contact_response": "native stop the entire moving group if any member speed is zero",
+    "human_pair_separation_guard": false,
+    "robot_in_group_orca": false,
+    "factory_contacts": "native ellipse predicate",
+    "native_wall_response_unchanged": true
+  },
+  "scene": {
+    "condition": "standing",
+    "seed": 42,
+    "initial": [
+      {
+        "id": 1,
+        "x": -22.78300745138496,
+        "y": -0.10775765993264637,
+        "yaw": -3.3589745259109676,
+        "speed": 0.0,
+        "radius": 0.36,
+        "group_id": 1,
+        "vx": 0.0,
+        "vy": 0.0
+      },
+      {
+        "id": 2,
+        "x": -23.838355933840273,
+        "y": 0.6398219663048469,
+        "yaw": -1.1398798416516307,
+        "speed": 0.0,
+        "radius": 0.36,
+        "group_id": 1,
+        "vx": 0.0,
+        "vy": 0.0
+      },
+      {
+        "id": 3,
+        "x": -23.98637945956686,
+        "y": -0.5693422464822693,
+        "yaw": -5.141137709390063,
+        "speed": 0.0,
+        "radius": 0.36,
+        "group_id": 1,
+        "vx": 0.0,
+        "vy": 0.0
+      }
+    ],
+    "robot_spawn": [
+      -27.0,
+      0.0,
+      0.0
+    ],
+    "robot_goal": [
+      -14.0,
+      0.0,
+      0.0
+    ],
+    "robot_radius": 0.25,
+    "human_radius": 0.36,
+    "group_route": [
+      [
+        -28.0,
+        0.0
+      ],
+      [
+        -21.0,
+        0.0
+      ]
+    ],
+    "preferred_human_speed": 0.8
+  },
+  "scene_sha256": "acc31d920f786f6b67037f64220ffc40c57b06e51bcd0cac2c27d541ed6085d8",
+  "map_sha256": "6538c7c14e4ece9f8e20a57619a49ea4e80bee6cc886499f5e1d21c3b550667b",
+  "nav_params_sha256": "ff73d68dcdc64c29427522c9b87fc9f3850b02326a3a9b1c467e6b9b3d5297a7",
+  "diagnostics": "/home/cuongbien/DynamuhSim/experiments/social_navigation/benchmark/generated/socnavgym_standing_s42_ezmh_iah/diagnostics.jsonl",
+  "initial_position_error_m_max": 3.722145839155691e-15,
+  "sim_seconds": 26.531999999999996,
+  "wall_seconds": 41.14607501199998,
+  "observed_rtf": 0.644824566918281,
+  "action_status": 4,
+  "final_robot_xy": [
+    -14.183933271751314,
+    -0.016671103492379616
+  ],
+  "goal_error_world_m": 0.1846872333129622,
+  "goal_error_amcl_m": 0.20939291248390882,
+  "native_messages": 355,
+  "sensors": {
+    "scan": 178,
+    "imu": 3548,
+    "odom": 985,
+    "clock": 8812,
+    "amcl": 131
+  },
+  "max_human_displacement_m": 3.722145839155691e-15,
+  "robot_path_m": 12.97473152488384,
+  "min_robot_human_clearance_m": -0.010451654899378271,
+  "min_human_pair_clearance_m": 0.49819089540745476,
+  "robot_human_overlap_s": 0.40000000000000036,
+  "human_pair_overlap_s": 0,
+  "robot_stopped_s": 0,
+  "diagnostic_counts": {
+    "tf_static": 4,
+    "native": 355,
+    "gazebo": 1585,
+    "tf": 9902,
+    "scan": 178,
+    "odom": 985,
+    "amcl": 131,
+    "footprint": 420,
+    "costmap": 118,
+    "cmd_vel": 822
+  },
+  "samples": 265,
+  "observer_frames": 80
+}

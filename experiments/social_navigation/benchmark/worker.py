@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
-"""Create common initial scenes, or host the unchanged native group kernel.
-The gate only holds time before Nav2 is ready; it adds no avoidance policy.
+"""Create common scenes and host native or explicitly normalized contact geometry.
+The gate holds people until Nav2 is ready; neither variant adds a robot ORCA agent.
 """
 import argparse
 import json
@@ -14,6 +14,7 @@ HERE=Path(__file__).resolve().parent
 ADAPTER=HERE.parent/'gazebo_adapter'
 sys.path.insert(0,str(ADAPTER))
 from kernel import GroupKernel
+from circle_contact import CircleContact, geometry_description
 
 p=argparse.ArgumentParser()
 p.add_argument('--runtime',type=Path,required=True)
@@ -21,6 +22,7 @@ p.add_argument('--condition',choices=['standing','counterflow'],required=True)
 p.add_argument('--seed',type=int,default=42)
 p.add_argument('--prepare',action='store_true')
 p.add_argument('--socket')
+p.add_argument('--geometry',choices=['native','circle_contact'],default='native')
 a=p.parse_args()
 mode='conversation' if a.condition=='standing' else 'walking'
 layout=json.loads((HERE.parent/'warehouse/layout.json').read_text())
@@ -33,6 +35,9 @@ if a.prepare:
         set_shape='rectangle',min_map_x=60,max_map_x=60,min_map_y=40,max_map_y=40)
     config.write_text(yaml.safe_dump(cfg))
 k=GroupKernel(config,layout,mode,a.seed)
+original_radius=k.env.robot.radius
+contact=CircleContact(k,.25) if a.geometry=='circle_contact' else None
+(a.runtime/'geometry.json').write_text(json.dumps(geometry_description(k,a.geometry,original_radius),indent=2))
 if a.prepare:
     center=-23.5 if a.condition=='standing' else -21.
     initial=k.humans()
@@ -73,10 +78,14 @@ try:
                 active=(a.runtime/'start_gate').exists()
                 begin=time.perf_counter()
                 if req['advance'] and active:
+                    if contact:contact.begin_step()
                     k.advance(req['robot'])
                 previous=req['time']
                 reply=dict(time=req['time'],step=k.steps,humans=k.humans(),active=active,
                     groups=[dict(id=1,members=[1,2,3],type=mode)],compute_ms=1000*(time.perf_counter()-begin))
+                if contact:
+                    reply['contact_geometry']='circle_contact'
+                    reply['robot_contact_ids']=sorted(contact.contact_ids)
                 log.write(json.dumps(dict(**reply,robot=req['robot']))+'\n')
             except Exception as ex:
                 reply=dict(error=str(ex))
