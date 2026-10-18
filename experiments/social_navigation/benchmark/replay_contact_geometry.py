@@ -15,7 +15,8 @@ HERE=Path(__file__).resolve().parent
 sys.path.insert(0,str(HERE.parent/'gazebo_adapter'))
 from kernel import GroupKernel
 from circle_contact import CircleContact
-p=argparse.ArgumentParser();p.add_argument('--trial',required=True,type=Path);p.add_argument('--output',required=True,type=Path);a=p.parse_args()
+from robot_orca import RobotAwareGroups
+p=argparse.ArgumentParser();p.add_argument('--trial',required=True,type=Path);p.add_argument('--output',required=True,type=Path);p.add_argument('--include-robot-orca',action='store_true');a=p.parse_args()
 trial=json.loads(a.trial.read_text());runtime=HERE/trial['runtime'];scene=trial['scene']
 source=runtime/'native_trajectory.jsonl';logged=[json.loads(l) for l in source.open()];inputs=[r for r in logged if r['active']]
 gate=float((runtime/'start_gate').read_text());layout=json.loads((HERE.parent/'warehouse/layout.json').read_text())
@@ -24,9 +25,11 @@ def clear(ro,h):
     qx,qy=abs(c*dx+s*dy)-.12,abs(-s*dx+c*dy)-.1
     return math.hypot(max(qx,0),max(qy,0))+min(max(qx,qy),0)-.36
 results={};parity_errors=[]
-for policy in ['native','circle_contact']:
+policies=['native','circle_contact']+(['robot_orca'] if a.include_robot_orca else [])
+for policy in policies:
     k=GroupKernel(runtime/'config.yaml',layout,'walking',trial['seed'])
-    contact=CircleContact(k,.25) if policy=='circle_contact' else None
+    contact=CircleContact(k,.25) if policy!='native' else None
+    avoidance=RobotAwareGroups(k) if policy=='robot_orca' else None
     for h,state in zip(k.group.humans,scene['initial']):
         h.x=h.initial_x=state['x'];h.y=h.initial_y=state['y'];h.orientation=h.initial_orientation=state['yaw'];h.position_history.clear()
     k.group.x=sum(h.x for h in k.group.humans)/3;k.group.y=sum(h.y for h in k.group.humans)/3
@@ -50,13 +53,13 @@ summary=dict(source_trial=str(a.trial),source_robot_inputs_sha256=hashlib.sha256
     active_inputs=len(inputs),native_replay_max_state_error=max_error,robot_inputs_identical=True,
     interpretation='Open-loop logged robot poses, not closed-loop Gazebo navigation; only human response differs.',results={})
 fig,ax=plt.subplots(figsize=(10,4.5))
-for policy,color in [('native','#cf7328'),('circle_contact','#246bb0')]:
+for policy,color in zip(policies,['#cf7328','#246bb0','#259c61']):
     rows=results[policy];event=min(rows,key=lambda r:r['footprint_clearance']);contacts=[r for r in rows if r['contact_ids']]
     summary['results'][policy]=dict(min_footprint_clearance_m=event['footprint_clearance'],closest_elapsed_s=event['elapsed'],
         first_contact_elapsed_s=contacts[0]['elapsed'] if contacts else None,contact_ticks=len(contacts),
         footprint_overlap_gt_1cm_s=sum(b['time']-a['time'] for a,b in zip(rows,rows[1:]) if b['footprint_clearance']<-.01))
     ax.plot([r['elapsed'] for r in rows],[r['footprint_clearance'] for r in rows],color=color,label=policy)
-ax.set(xlim=(2,10),ylim=(-.3,1.6),xlabel='simulation seconds after goal',ylabel='rectangle-to-circle clearance [m]',title='Identical recorded robot input: geometry response only (open loop)')
+ax.set(xlim=(2,10),ylim=(-.3,1.6),xlabel='simulation seconds after goal',ylabel='rectangle-to-circle clearance [m]',title='Identical recorded robot input: human response (open loop)')
 ax.axhline(0,color='red',ls=':');ax.legend();ax.grid(alpha=.2);fig.tight_layout();fig.savefig(a.output/'same_robot_replay.png',dpi=160);plt.close(fig)
 (a.output/'same_robot_replay.json').write_text(json.dumps(summary,indent=2));(a.output/'same_robot_replay_traces.json').write_text(json.dumps(results))
 print(json.dumps(summary,indent=2))

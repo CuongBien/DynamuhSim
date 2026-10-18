@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Create common scenes and host native or explicitly normalized contact geometry.
-The gate holds people until Nav2 is ready; neither variant adds a robot ORCA agent.
+The gate holds people until Nav2 is ready; robot_orca is an explicit opt-in adapter policy.
 """
 import argparse
 import json
@@ -15,6 +15,7 @@ ADAPTER=HERE.parent/'gazebo_adapter'
 sys.path.insert(0,str(ADAPTER))
 from kernel import GroupKernel
 from circle_contact import CircleContact, geometry_description
+from robot_orca import RobotAwareGroups, behavior_description
 
 p=argparse.ArgumentParser()
 p.add_argument('--runtime',type=Path,required=True)
@@ -23,7 +24,9 @@ p.add_argument('--seed',type=int,default=42)
 p.add_argument('--prepare',action='store_true')
 p.add_argument('--socket')
 p.add_argument('--geometry',choices=['native','circle_contact'],default='native')
+p.add_argument('--robot-avoidance',action='store_true')
 a=p.parse_args()
+if a.robot_avoidance and a.geometry!='circle_contact':p.error('--robot-avoidance requires --geometry circle_contact')
 mode='conversation' if a.condition=='standing' else 'walking'
 layout=json.loads((HERE.parent/'warehouse/layout.json').read_text())
 config=a.runtime/'config.yaml'
@@ -37,7 +40,11 @@ if a.prepare:
 k=GroupKernel(config,layout,mode,a.seed)
 original_radius=k.env.robot.radius
 contact=CircleContact(k,.25) if a.geometry=='circle_contact' else None
-(a.runtime/'geometry.json').write_text(json.dumps(geometry_description(k,a.geometry,original_radius),indent=2))
+avoidance=RobotAwareGroups(k) if a.robot_avoidance else None
+geometry=geometry_description(k,a.geometry,original_radius)
+geometry['robot_in_group_orca']=a.robot_avoidance
+(a.runtime/'geometry.json').write_text(json.dumps(geometry,indent=2))
+(a.runtime/'behavior.json').write_text(json.dumps(behavior_description(k,a.robot_avoidance),indent=2))
 if a.prepare:
     center=-23.5 if a.condition=='standing' else -21.
     initial=k.humans()
@@ -86,6 +93,9 @@ try:
                 if contact:
                     reply['contact_geometry']='circle_contact'
                     reply['robot_contact_ids']=sorted(contact.contact_ids)
+                if avoidance:
+                    reply['group_policy']='robot_orca'
+                    reply['orca_telemetry']=avoidance.last
                 log.write(json.dumps(dict(**reply,robot=req['robot']))+'\n')
             except Exception as ex:
                 reply=dict(error=str(ex))

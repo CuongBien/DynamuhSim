@@ -44,13 +44,18 @@ p.add_argument('--gui',action='store_true')
 p.add_argument('--report-dir',type=Path,help='Separate output directory; never reuse a completed trial directory')
 p.add_argument('--diagnostics',action='store_true',help='Capture raw sensor, TF, costmap, commands and world poses')
 p.add_argument('--geometry',choices=['native','circle_contact'],default='native')
+p.add_argument('--robot-avoidance',action='store_true',help='Experimental robot-aware group ORCA; requires circle_contact')
 p.add_argument('--sim-budget',type=float,default=75.)
 a=p.parse_args()
+if a.robot_avoidance and (a.geometry!='circle_contact' or a.backend!='socnavgym' or not a.report_dir):
+    p.error('--robot-avoidance requires SocNavGym, circle_contact, and separate --report-dir')
+worker_flags=['--robot-avoidance'] if a.robot_avoidance else []
 if a.geometry!='native' and (a.backend!='socnavgym' or not a.report_dir):
     p.error('--geometry circle_contact requires --backend socnavgym and a separate --report-dir')
 if a.diagnostics and not a.report_dir:
     p.error('--diagnostics requires a separate --report-dir')
 label=a.backend if a.geometry=='native' else f'{a.backend}_{a.geometry}'
+if a.robot_avoidance:label+='_robot_orca'
 name=f'{label}_{a.condition}_s{a.seed}'
 (HERE/'generated').mkdir(exist_ok=True)
 runtime=Path(tempfile.mkdtemp(prefix=name+'_',dir=HERE/'generated'))
@@ -70,7 +75,7 @@ if a.diagnostics:
 processes=[]
 node=None
 socket_dir=None
-result=dict(name=name,backend=a.backend,condition=a.condition,seed=a.seed,geometry=a.geometry,status='ERROR',
+result=dict(name=name,backend=a.backend,condition=a.condition,seed=a.seed,geometry=a.geometry,robot_avoidance=a.robot_avoidance,status='ERROR',
     protocol_valid=False,runtime=str(runtime.relative_to(HERE)),metrics_clock='simulation',
     commit=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip())
 rows=[]
@@ -85,7 +90,7 @@ latest={}
 files=[]
 try:
     prepare=subprocess.run([str(SOCIAL/'.venv-socnavgym/bin/python'),str(HERE/'worker.py'),
-        '--runtime',str(runtime),'--condition',a.condition,'--seed',str(a.seed),'--geometry',a.geometry,'--prepare'],
+        '--runtime',str(runtime),'--condition',a.condition,'--seed',str(a.seed),'--geometry',a.geometry,'--prepare',*worker_flags],
         capture_output=True,text=True,timeout=90)
     (runtime/'prepare.log').write_text(prepare.stdout+prepare.stderr)
     if prepare.returncode:
@@ -95,6 +100,7 @@ try:
         scene['initial']=[]
         (runtime/'scene.json').write_text(json.dumps(scene,indent=2))
     result['contact_geometry']=json.loads((runtime/'geometry.json').read_text()) if a.backend=='socnavgym' else None
+    result['group_behavior']=json.loads((runtime/'behavior.json').read_text()) if a.backend=='socnavgym' else None
     result['scene']=scene
     result['scene_sha256']=hashlib.sha256((runtime/'scene.json').read_bytes()).hexdigest()
     result['map_sha256']=hashlib.sha256((SOCIAL/'warehouse/warehouse.pgm').read_bytes()).hexdigest()
@@ -105,7 +111,7 @@ try:
         socket_path=str(Path(socket_dir.name)/'worker.sock')
         workerlog=(runtime/'worker.log').open('w'); files.append(workerlog)
         worker=subprocess.Popen([str(SOCIAL/'.venv-socnavgym/bin/python'),str(HERE/'worker.py'),
-            '--runtime',str(runtime),'--condition',a.condition,'--seed',str(a.seed),'--geometry',a.geometry,'--socket',socket_path],
+            '--runtime',str(runtime),'--condition',a.condition,'--seed',str(a.seed),'--geometry',a.geometry,'--socket',socket_path,*worker_flags],
             stdout=workerlog,stderr=subprocess.STDOUT,start_new_session=True)
         processes.append(worker)
         deadline=time.monotonic()+90
