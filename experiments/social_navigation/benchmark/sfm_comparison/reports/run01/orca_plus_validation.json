@@ -1,0 +1,59 @@
+{
+  "status": "PASS",
+  "checks": [
+    {
+      "case": "30 human updates match upstream full env.step",
+      "max_state_error": 0.0
+    },
+    {
+      "case": "same scripted robot: visible versus invisible changes human trajectory",
+      "max_difference_m": 0.6474594229811352
+    },
+    {
+      "case": "native line constraint prevents crossing circle boundary",
+      "unconstrained_x": 0.08,
+      "constrained_x": 0.03999990000000003
+    },
+    {
+      "case": "stationary fixture holds exactly",
+      "steps": 20
+    }
+  ],
+  "metadata": {
+    "framework": "CrowdSimPlus",
+    "source_commit": "d526a07c013c621fa1ad50894b6ba639f61063de",
+    "source_sha256": {
+      "crowd_sim_plus/envs/crowd_sim_plus.py": "eb1e9e706f3e9c9fc2e4779b2b4fbe11c23d13224a71e47f91c50249aa4717d5",
+      "crowd_sim_plus/envs/policy/orca_plus.py": "4fb102d5762654e1139c5df00f875579d2f6209bce9ea2226f0731493847270b",
+      "crowd_sim_plus/envs/policy/social_force.py": "6acb9fc1566062b73b2e61194582fce9fc256bafaf3f6e6f19d81b1fc4be4e80",
+      "crowd_sim_plus/envs/utils/human_plus.py": "538a6e2462cf5e0b3239212ac89b59d739549b61014f40dc0219b5946c6e355e",
+      "crowd_sim_plus/envs/utils/agent_plus.py": "dd29ad2b481ad1bd082451eabcee17c8ed207e9401bca80c0d1716ac679ca0bd"
+    },
+    "time_step": 0.1,
+    "original_demo_time_step": 0.25,
+    "robot_visible": true,
+    "human_policy": "orca_plus",
+    "human_radius": 0.36,
+    "human_v_pref": 0.8,
+    "robot_radius": 0.25,
+    "orca_safety_space": 0.01,
+    "orca_added_radius": 0.02,
+    "neighbor_dist": 10,
+    "time_horizon": 2.0,
+    "time_horizon_obst": 0.5,
+    "sfm_parameters": null,
+    "static_boxes": 42,
+    "static_line_segments": 168,
+    "group_model": false,
+    "conversation_model": false,
+    "movement_methods": [
+      "Human.act",
+      "CrowdSimPlus.constrain_agent_action_exact",
+      "Human.step"
+    ],
+    "external_scenario": "shared initial poses; individual patrol goals; standing fixture held externally",
+    "robot_controller": "ROS Nav2 only; native robot act/step and full env reward/episode loop not called",
+    "visual_heading": "last nonzero actual velocity; initial scene yaw while stationary",
+    "python_version": "3.8.13 (default, Aug 23 2022, 09:35:56) \n[GCC 10.2.1 20210110]"
+  }
+}
