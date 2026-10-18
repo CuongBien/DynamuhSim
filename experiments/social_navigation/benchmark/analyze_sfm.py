@@ -1,13 +1,16 @@
 #!/usr/bin/env python3
 """Native SFM vs native ORCA+, using dense Gazebo poses and recorded human velocities."""
-import argparse,csv,json,math,statistics
+import argparse,csv,json,math,statistics,sys
 from pathlib import Path
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 from matplotlib.patches import Rectangle
 HERE=Path(__file__).resolve().parent
-p=argparse.ArgumentParser();p.add_argument('report_dir',type=Path);p.add_argument('--goal-layout',choices=['shared','individual'],default='shared');a=p.parse_args();report=a.report_dir
+sys.path.insert(0,str(HERE.parent/'crowdsimplus_adapter'))
+from crossing_metrics import CrossingCounter
+p=argparse.ArgumentParser();p.add_argument('report_dir',type=Path);p.add_argument('--goal-layout',choices=['shared','individual'],default='shared');p.add_argument('--condition',choices=['counterflow','crossing'],default='counterflow');a=p.parse_args();report=a.report_dir
+assert a.condition!='crossing' or a.goal_layout=='individual'
 layout=json.loads((HERE.parent/'warehouse/layout.json').read_text())
 def rect_circle(robot,h,hx=.12,hy=.10):
     dx,dy=h['x']-robot['x'],h['y']-robot['y'];c,s=math.cos(robot['yaw']),math.sin(robot['yaw'])
@@ -17,12 +20,12 @@ def factory(h,b):
     qx,qy=abs(h['x']-b['x'])-b['sx']/2,abs(h['y']-b['y'])-b['sy']/2
     return math.hypot(max(qx,0),max(qy,0))+min(max(qx,qy),0)-.36
 def duration(rows,key):return sum(b['elapsed']-a['elapsed'] for a,b in zip(rows,rows[1:]) if b[key]<-.01)
-entries=[];traces={};native_traces={};scenes={}
+entries=[];traces={};native_traces={};scenes={};crossing_traces={};crossing_events={}
 for policy in ['orca_plus','sfm']:
  for seed in [42,43]:
-    label='crowdsimplus'+('_sfm' if policy=='sfm' else '')+('_individual_goals' if a.goal_layout=='individual' else '');name=f'{label}_counterflow_s{seed}'
+    label='crowdsimplus'+('_sfm' if policy=='sfm' else '')+('_individual_goals' if a.goal_layout=='individual' else '');name=f'{label}_{a.condition}_s{seed}'
     t=json.loads((report/f'{name}.json').read_text());assert t['protocol_valid'] and t['human_policy']==policy
-    assert t.get('goal_layout','shared')==a.goal_layout
+    assert t.get('goal_layout','shared')==a.goal_layout and t['condition']==a.condition
     scenes[(seed,policy)]=t['scene']
     runtime=HERE/t['runtime'];gate=float((runtime/'start_gate').read_text());rows=[]
     for line in Path(t['diagnostics']).open():
@@ -68,14 +71,30 @@ for policy in ['orca_plus','sfm']:
         e.update(arrival_events_native=event_count,arrival_events_pose_matched=len(arrival_errors),
             arrival_events_max_pose_error_m=max(arrival_errors,default=None),
             arrival_events_max_actual_goal_distance_m=max(arrival_distances,default=None))
+    if a.condition=='crossing':
+        counter=CrossingCounter(t['scene']['initial']);progress=[];events=[]
+        for row in rows:
+            for ev in counter.update(row['elapsed'],row['humans']):
+                h=next(h for h in row['humans'] if h['id']==ev['id'])
+                events.append(dict(**ev,robot=row['robot'],person_footprint_clearance_m=rect_circle(row['robot'],h)))
+            progress.append(dict(elapsed=row['elapsed'],counts=counter.counts()))
+        counts=counter.counts();crossing_traces[(seed,policy)]=progress;crossing_events[name]=events
+        e.update(crossings_per_human=[counts[str(i)] for i in [1,2,3]],min_crossings_per_human=min(counts.values()),
+            minimum_robot_gap_per_human_m=[min(rect_circle(row['robot'],next(h for h in row['humans'] if h['id']==hid)) for row in rows) for hid in [1,2,3]],
+            confirmed_crossings_with_robot_gap_lt_1m=sum(ev['person_footprint_clearance_m']<1. for ev in events),
+            observed_gazebo_pose_rate_hz=(len(rows)-1)/(rows[-1]['elapsed']-rows[0]['elapsed']),
+            maximum_gazebo_sample_gap_s=max(y['elapsed']-x['elapsed'] for x,y in zip(rows,rows[1:])))
     entries.append(e)
-summary=dict(goal_layout=a.goal_layout,trials=len(entries),verified_goals=sum(x['goal_verified'] for x in entries),results=entries,
+summary=dict(condition=a.condition,goal_layout=a.goal_layout,trials=len(entries),verified_goals=sum(x['goal_verified'] for x in entries),results=entries,
     notes=['Same scene/map/Nav2 hashes within policy pair, dt .1, preferred speed .8, human radius .36. Native policy parameters unchanged.',
         'SFM is_bottleneck=False in the factory; native special hallway index convention is not applied to factory boxes.',
         'Dense Gazebo geometry samples, -1 cm threshold; not force contact or every physics step.',
         'Recorded velocity change is a descriptive metric, not a validated measure of naturalness.',
         'Two human seeds and one run each; robot/Nav2/AMCL/LiDAR noise not jointly seeded. No statistical ranking.',
         'Original native standalone SFM demo uses .25 s and DWA; Gazebo uses .1 s and Nav2. No group/conversation model.'])
+if a.condition=='crossing':
+ summary['notes'].append('Crossings use actual Gazebo human poses: a confirmed traversal between y <= -.2 and y >= +.2. This is the nominal robot-route centerline, not exact encounter time; robot may deviate. Gap <1 m is descriptive at confirmation only, not a policy or safety threshold.')
+ (report/'crossing_events.json').write_text(json.dumps(crossing_events,indent=2))
 (report/'analysis.json').write_text(json.dumps(summary,indent=2))
 with (report/'results.csv').open('w',newline='') as f:
  w=csv.DictWriter(f,fieldnames=list(entries[0]),lineterminator='\n');w.writeheader();w.writerows(entries)
@@ -88,7 +107,7 @@ for col,seed in enumerate([42,43]):
  axes[0,col].set(title=f'seed {seed}',ylabel='robot footprint clearance [m]')
  axes[1,col].set(ylabel='human pair clearance [m]',xlabel='simulation seconds after goal')
  for ax in axes[:,col]:ax.axhline(0,color='red',ls=':');ax.grid(alpha=.2)
-axes[0,0].legend();fig.suptitle('CrowdSimPlus: native ORCA+ vs native SFM | '+('per-person endpoints' if a.goal_layout=='individual' else 'shared endpoints'))
+axes[0,0].legend();fig.suptitle('CrowdSimPlus: '+a.condition+' | native ORCA+ vs native SFM | '+('per-person endpoints' if a.goal_layout=='individual' else 'shared endpoints'))
 fig.tight_layout();fig.savefig(report/'sfm_clearance.png',dpi=160);plt.close(fig)
 fig,axes=plt.subplots(2,2,figsize=(12,8),sharex=True,sharey=True)
 for row,seed in enumerate([42,43]):
@@ -103,6 +122,7 @@ for row,seed in enumerate([42,43]):
         for hid,color in zip([1,2,3],['#d37b28','#39946a','#9864b3']):
             points=scenes[(seed,policy)]['human_routes'][str(hid)]
             ax.scatter([v[0] for v in points],[v[1] for v in points],marker='x',s=45,color=color)
+    if a.condition=='crossing':ax.axhline(0,color='#777',ls=':',lw=1)
     ax.set(xlim=(-29,-13),ylim=(-3,3),title=f'{policy}, seed {seed}',xlabel='world x [m]',ylabel='world y [m]');ax.set_aspect('equal');ax.grid(alpha=.2)
 axes[0,0].legend(fontsize=8,ncol=4);fig.tight_layout();fig.savefig(report/'sfm_paths.png',dpi=160);plt.close(fig)
 if a.goal_layout=='individual':
@@ -114,4 +134,13 @@ if a.goal_layout=='individual':
         ax.step([v['time']-gate for v in active],[next(h for h in v['humans'] if h['id']==hid)['completed_legs'] for v in active],where='post',label=f'person {hid}',color=color)
     ax.set(title=f'{policy}, seed {seed}',xlabel='simulation seconds after goal',ylabel='completed patrol legs');ax.grid(alpha=.2)
  axes[0,0].legend();fig.tight_layout();fig.savefig(report/'patrol_progress.png',dpi=160);plt.close(fig)
+if a.condition=='crossing':
+ fig,axes=plt.subplots(2,2,figsize=(11,6),sharey=True)
+ for row,seed in enumerate([42,43]):
+  for col,policy in enumerate(['orca_plus','sfm']):
+    ax=axes[row,col];progress=crossing_traces[(seed,policy)]
+    for hid,color in zip([1,2,3],['#d37b28','#39946a','#9864b3']):
+        ax.step([v['elapsed'] for v in progress],[v['counts'][str(hid)] for v in progress],where='post',label=f'person {hid}',color=color)
+    ax.set(title=f'{policy}, seed {seed}',xlabel='simulation seconds after goal',ylabel='confirmed y=0 crossings');ax.grid(alpha=.2)
+ axes[0,0].legend();fig.tight_layout();fig.savefig(report/'crossing_progress.png',dpi=160);plt.close(fig)
 print(json.dumps(summary,indent=2))

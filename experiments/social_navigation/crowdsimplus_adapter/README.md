@@ -75,3 +75,10 @@ Có thêm opt-in `--goal-layout individual` cho counterflow: mỗi người có 
 endpoint riêng. Đây là thay đổi fixture, không phải chỉnh SFM/ORCA+, thêm
 cohesion hoặc cưỡng bức đi theo làn. [Cách chạy và kiểm định](../benchmark/individual_goals/README.md).
 
+## Người đi cắt ngang
+
+`--condition crossing --goal-layout individual` tạo ba người đi qua lại từ
+hai phía của lối chính. Đây là fixture riêng, thay initial poses và đích;
+không cưỡng bức làn, thời điểm nhường hoặc chỉnh native forces.
+[Hướng dẫn và benchmark](../benchmark/crossing/README.md).
+

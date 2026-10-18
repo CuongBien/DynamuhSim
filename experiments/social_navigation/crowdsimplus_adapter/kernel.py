@@ -91,6 +91,6 @@ class CrowdKernel:
             movement_methods=['Human.act','CrowdSimPlus.constrain_agent_action_exact','Human.step'],
             goal_layout=self.scene.get('goal_layout','shared'),human_routes=self.routes,
             arrival_rule='upstream Human.reached_destination; external patrol switches endpoints only on arrival',
-            external_scenario='shared initial poses; '+('separate per-human endpoints' if self.scene.get('goal_layout')=='individual' else 'shared endpoints')+'; standing fixture held externally',
+            external_scenario=('crossing initial poses; ' if self.scene['condition']=='crossing' else 'shared initial poses; ')+('separate per-human endpoints' if self.scene.get('goal_layout')=='individual' else 'shared endpoints')+'; standing fixture held externally',
             robot_controller='ROS Nav2 only; native robot act/step and full env reward/episode loop not called',
             visual_heading='last nonzero actual velocity; initial scene yaw while stationary')

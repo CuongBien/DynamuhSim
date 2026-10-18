@@ -1,0 +1,34 @@
+{
+  "status": "PASS",
+  "trials": 4,
+  "seeds": [
+    42,
+    43
+  ],
+  "policies": [
+    "sfm",
+    "orca_plus"
+  ],
+  "same_scene_within_each_policy_pair": true,
+  "same_map_nav2_as_previous_pilot": true,
+  "fixture_change": "Three separate x positions across main aisle, alternate crossing directions; each has two y endpoints, no lane/timing constraints.",
+  "previous_fixture_modes_unchanged": true,
+  "external_patrol": "native reached_destination criterion, two endpoints per person",
+  "shared_mode_remains_default": true,
+  "clock": "simulation",
+  "validation_before_gazebo": true,
+  "robot_noise_jointly_seeded": false,
+  "source_commit": "d526a07c013c621fa1ad50894b6ba639f61063de",
+  "image_id": "sha256:39929ee8e4fa6d738a381a0b695bf25eaf9fa972cd5b9d8a6854d72f80bd5f3c",
+  "fingerprint": {
+    "sources": {
+      "kernel.py": "e9d79e4265aeac0a41b1d595d8cd9ea8fa11eaec9a9bda3074be32912466d9ff",
+      "crowd_host.py": "87e708f5973eecbc685404f4c61229b2fdbb9335452c972b4f87e2ce1047fc3c",
+      "crossing_scene.py": "def4549e854eae2211e20cd440719070e95ed9b145ae024eb5f7e375b068227a",
+      "crossing_metrics.py": "78c4bf00b07dbba75396c0ff96916e70e8bb243ab4672df58c5995609750da8b",
+      "validate_crossing.py": "0630e023b87a9c6ef34c55715243ac28ffb0ee40032c760470241e159650d262"
+    },
+    "legacy_kernel_sha256": "4cfc3f1aada32aacea8e21c63ed7a6214a31f794710321ebeb1f390317f028cf",
+    "image_id": "sha256:39929ee8e4fa6d738a381a0b695bf25eaf9fa972cd5b9d8a6854d72f80bd5f3c"
+  }
+}

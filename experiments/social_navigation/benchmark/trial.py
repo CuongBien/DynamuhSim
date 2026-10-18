@@ -40,7 +40,7 @@ from crowd_host import prepare_scene as prepare_crowd_scene, convert_world as co
 
 p=argparse.ArgumentParser()
 p.add_argument('--backend',choices=['empty','rvo2','socnavgym','crowdsimplus'],required=True)
-p.add_argument('--condition',choices=['standing','counterflow'],default='standing')
+p.add_argument('--condition',choices=['standing','counterflow','crossing'],default='standing')
 p.add_argument('--seed',type=int,default=42)
 p.add_argument('--gui',action='store_true')
 p.add_argument('--report-dir',type=Path,help='Separate output directory; never reuse a completed trial directory')
@@ -57,7 +57,8 @@ if a.invisible_robot and a.backend!='crowdsimplus':p.error('--invisible-robot re
 if a.robot_avoidance and (a.geometry!='circle_contact' or a.backend!='socnavgym' or not a.report_dir):
     p.error('--robot-avoidance requires SocNavGym, circle_contact, and separate --report-dir')
 if a.human_policy!='orca_plus' and a.backend!='crowdsimplus':p.error('--human-policy sfm requires CrowdSimPlus')
-if a.goal_layout!='shared' and (a.backend!='crowdsimplus' or a.condition!='counterflow'):p.error('--goal-layout individual requires CrowdSimPlus counterflow')
+if a.goal_layout!='shared' and (a.backend!='crowdsimplus' or a.condition not in ('counterflow','crossing')):p.error('--goal-layout individual requires a moving CrowdSimPlus fixture')
+if a.condition=='crossing' and (a.backend!='crowdsimplus' or a.goal_layout!='individual'):p.error('Crossing requires CrowdSimPlus and --goal-layout individual')
 worker_flags=['--robot-avoidance'] if a.robot_avoidance else []
 if a.geometry!='native' and (a.backend!='socnavgym' or not a.report_dir):
     p.error('--geometry circle_contact requires --backend socnavgym and a separate --report-dir')
@@ -312,7 +313,7 @@ try:
         raise RuntimeError('Insufficient measurement/behavior telemetry')
     if a.backend!='empty':
         result['max_human_displacement_m']=max(math.hypot(h['x']-scene['initial'][h['id']-1]['x'],h['y']-scene['initial'][h['id']-1]['y']) for row in rows for h in row['humans'])
-        if a.condition=='counterflow' and result['max_human_displacement_m']<.3:
+        if a.condition in ('counterflow','crossing') and result['max_human_displacement_m']<.3:
             raise RuntimeError('Moving backend never moved after start gate')
     result['robot_path_m']=sum(math.hypot(b['robot']['x']-c['robot']['x'],b['robot']['y']-c['robot']['y']) for c,b in zip(rows,rows[1:]))
     result['min_robot_human_clearance_m']=min((row['robot_human_clearance'] for row in rows if row['robot_human_clearance'] is not None),default=None)
