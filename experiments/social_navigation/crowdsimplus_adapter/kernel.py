@@ -28,7 +28,8 @@ class CrowdKernel:
             x0,x1=b['x']-b['sx']/2,b['x']+b['sx']/2;y0,y1=b['y']-b['sy']/2,b['y']+b['sy']/2
             corners=[(x0,y0),(x1,y0),(x1,y1),(x0,y1)]
             e.static_obstacles.extend([[corners[i],corners[(i+1)%4]] for i in range(4)])
-        robot=Robot(cfg,'robot');robot.time_step=e.time_step;robot.set(-27.,0.,-14.,0.,0.,0.,0.);e.set_robot(robot)
+        self.robot_start=scene.get('robot_start',[-27.,0.,0.]);self.robot_goal=scene.get('robot_goal',[-14.,0.,0.])
+        robot=Robot(cfg,'robot');robot.time_step=e.time_step;robot.set(*self.robot_start[:2],*self.robot_goal[:2],0.,0.,self.robot_start[2]);e.set_robot(robot)
         e.humans=[];self.yaws=[];self.arrivals=[0,0,0]
         route_map=scene.get('human_routes')
         if route_map is not None and set(route_map)!={str(h['id']) for h in scene['initial']}:
@@ -50,7 +51,7 @@ class CrowdKernel:
 
     def advance(self,robot):
         e=self.env;r=e.robot
-        r.set(robot['x'],robot['y'],-14.,0.,robot['vx'],robot['vy'],robot['yaw'])
+        r.set(robot['x'],robot['y'],*self.robot_goal[:2],robot['vx'],robot['vy'],robot['yaw'])
         actions=[]
         if self.scene['condition']=='standing':
             # External stationary fixture, not a native conversation/group model.
@@ -91,6 +92,6 @@ class CrowdKernel:
             movement_methods=['Human.act','CrowdSimPlus.constrain_agent_action_exact','Human.step'],
             goal_layout=self.scene.get('goal_layout','shared'),human_routes=self.routes,
             arrival_rule='upstream Human.reached_destination; external patrol switches endpoints only on arrival',
-            external_scenario=('crossing initial poses; ' if self.scene['condition']=='crossing' else 'shared initial poses; ')+('separate per-human endpoints' if self.scene.get('goal_layout')=='individual' else 'shared endpoints')+'; standing fixture held externally',
+            external_scenario=(self.scene['condition']+' initial poses; ' if self.scene['condition'] in ('crossing','bottleneck') else 'shared initial poses; ')+('separate per-human endpoints' if self.scene.get('goal_layout')=='individual' else 'shared endpoints')+'; standing fixture held externally',
             robot_controller='ROS Nav2 only; native robot act/step and full env reward/episode loop not called',
             visual_heading='last nonzero actual velocity; initial scene yaw while stationary')

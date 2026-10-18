@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Native SFM vs native ORCA+, using dense Gazebo poses and recorded human velocities."""
-import argparse,csv,json,math,statistics,sys
+import argparse,bisect,csv,json,math,statistics,sys
 from pathlib import Path
 import matplotlib
 matplotlib.use('Agg')
@@ -9,8 +9,10 @@ from matplotlib.patches import Rectangle
 HERE=Path(__file__).resolve().parent
 sys.path.insert(0,str(HERE.parent/'crowdsimplus_adapter'))
 from crossing_metrics import CrossingCounter
-p=argparse.ArgumentParser();p.add_argument('report_dir',type=Path);p.add_argument('--goal-layout',choices=['shared','individual'],default='shared');p.add_argument('--condition',choices=['counterflow','crossing'],default='counterflow');a=p.parse_args();report=a.report_dir
-assert a.condition!='crossing' or a.goal_layout=='individual'
+from passage_metrics import PassageCounter
+from footprint_geometry import footprint_box
+p=argparse.ArgumentParser();p.add_argument('report_dir',type=Path);p.add_argument('--goal-layout',choices=['shared','individual'],default='shared');p.add_argument('--condition',choices=['counterflow','crossing','bottleneck'],default='counterflow');a=p.parse_args();report=a.report_dir
+assert a.condition not in ('crossing','bottleneck') or a.goal_layout=='individual'
 layout=json.loads((HERE.parent/'warehouse/layout.json').read_text())
 def rect_circle(robot,h,hx=.12,hy=.10):
     dx,dy=h['x']-robot['x'],h['y']-robot['y'];c,s=math.cos(robot['yaw']),math.sin(robot['yaw'])
@@ -20,16 +22,35 @@ def factory(h,b):
     qx,qy=abs(h['x']-b['x'])-b['sx']/2,abs(h['y']-b['y'])-b['sy']/2
     return math.hypot(max(qx,0),max(qy,0))+min(max(qx,qy),0)-.36
 def duration(rows,key):return sum(b['elapsed']-a['elapsed'] for a,b in zip(rows,rows[1:]) if b[key]<-.01)
-entries=[];traces={};native_traces={};scenes={};crossing_traces={};crossing_events={}
+def localization_matches(amcl,rows,gate):
+    times=[r['elapsed'] for r in rows];matches=[]
+    for raw in amcl:
+        stamp=raw['data']['header']['stamp'];elapsed=stamp['sec']+stamp['nanosec']/1e9-gate
+        if not times[0]<=elapsed<=times[-1]:continue
+        i=bisect.bisect_left(times,elapsed);candidates=rows[max(0,i-1):min(len(rows),i+1)]
+        row=min(candidates,key=lambda r:abs(r['elapsed']-elapsed))
+        if abs(row['elapsed']-elapsed)>.06:continue
+        pose=raw['data']['pose']['pose'];p=pose['position'];q=pose['orientation'];yaw=math.atan2(2*(q['w']*q['z']+q['x']*q['y']),1-2*(q['y']**2+q['z']**2));ro=row['robot']
+        matches.append(dict(elapsed=elapsed,actual=ro,amcl=dict(x=p['x'],y=p['y'],yaw=yaw),
+            position_error_m=math.hypot(p['x']-ro['x'],p['y']-ro['y']),yaw_error_rad=abs(math.atan2(math.sin(yaw-ro['yaw']),math.cos(yaw-ro['yaw']))),time_error_s=abs(row['elapsed']-elapsed)))
+    assert matches,'No matched AMCL samples'
+    return matches
+
+def localization_summary(matches):
+    return dict(amcl_matched_samples=len(matches),amcl_position_error_max_m=max(m['position_error_m'] for m in matches),
+        amcl_position_error_rms_m=math.sqrt(statistics.mean(m['position_error_m']**2 for m in matches)),
+        amcl_yaw_error_max_rad=max(m['yaw_error_rad'] for m in matches),amcl_time_match_error_max_s=max(m['time_error_s'] for m in matches),last_matched_amcl=matches[-1])
+entries=[];traces={};native_traces={};scenes={};crossing_traces={};crossing_events={};passage_events={};passage_traces={};localization_traces={}
 for policy in ['orca_plus','sfm']:
  for seed in [42,43]:
     label='crowdsimplus'+('_sfm' if policy=='sfm' else '')+('_individual_goals' if a.goal_layout=='individual' else '');name=f'{label}_{a.condition}_s{seed}'
     t=json.loads((report/f'{name}.json').read_text());assert t['protocol_valid'] and t['human_policy']==policy
     assert t.get('goal_layout','shared')==a.goal_layout and t['condition']==a.condition
     scenes[(seed,policy)]=t['scene']
-    runtime=HERE/t['runtime'];gate=float((runtime/'start_gate').read_text());rows=[]
+    runtime=HERE/t['runtime'];gate=float((runtime/'start_gate').read_text());rows=[];amcl=[]
     for line in Path(t['diagnostics']).open():
         raw=json.loads(line)
+        if a.condition=='bottleneck' and raw['kind']=='amcl':amcl.append(raw)
         if raw['kind']!='gazebo':continue
         data=raw['data'];poses=data['poses'];elapsed=data['time']-gate
         if not 0<=elapsed<=t['sim_seconds'] or len(poses)!=4:continue
@@ -84,6 +105,22 @@ for policy in ['orca_plus','sfm']:
             confirmed_crossings_with_robot_gap_lt_1m=sum(ev['person_footprint_clearance_m']<1. for ev in events),
             observed_gazebo_pose_rate_hz=(len(rows)-1)/(rows[-1]['elapsed']-rows[0]['elapsed']),
             maximum_gazebo_sample_gap_s=max(y['elapsed']-x['elapsed'] for x,y in zip(rows,rows[1:])))
+    if a.condition=='bottleneck':
+        counter=PassageCounter([dict(id=0,**rows[0]['robot']),*t['scene']['initial']],t['scene']['passage']);progress=[]
+        machines=[b for b in layout['obstacles'] if b['name'] in ('machine_north','machine_south')]
+        for row in rows:
+            counter.update(row['elapsed'],[dict(id=0,**row['robot']),*row['humans']])
+            row['machine_gap']=min(footprint_box(row['robot'],b) for b in machines)
+            p=t['scene']['passage'];ro=row['robot']
+            row['simultaneous_inside']=p['x_min']<=ro['x']<=p['x_max'] and abs(ro['y'])<=p['half_width'] and any(p['x_min']<=h['x']<=p['x_max'] and abs(h['y'])<=p['half_width'] for h in row['humans'])
+            progress.append(dict(elapsed=row['elapsed'],counts=counter.counts()))
+        counts=counter.counts();passage_events[name]=counter.events;passage_traces[(seed,policy)]=progress
+        matches=localization_matches(amcl,rows,gate);localization_traces[name]=matches;e.update(localization_summary(matches))
+        e.update(confirmed_robot_passages=counts['0'],confirmed_human_passages=[counts[str(i)] for i in [1,2,3]],
+            recorded_bypasses=sum(not ev['through_channel'] for ev in counter.events),
+            robot_and_human_inside_channel_s=sum(y['elapsed']-x['elapsed'] for x,y in zip(rows,rows[1:]) if y['simultaneous_inside']),
+            min_robot_machine_footprint_gap_m=min(row['machine_gap'] for row in rows),robot_machine_overlap_gt_1cm_s=duration(rows,'machine_gap'),
+            observed_gazebo_pose_rate_hz=(len(rows)-1)/(rows[-1]['elapsed']-rows[0]['elapsed']),maximum_gazebo_sample_gap_s=max(y['elapsed']-x['elapsed'] for x,y in zip(rows,rows[1:])))
     entries.append(e)
 summary=dict(condition=a.condition,goal_layout=a.goal_layout,trials=len(entries),verified_goals=sum(x['goal_verified'] for x in entries),results=entries,
     notes=['Same scene/map/Nav2 hashes within policy pair, dt .1, preferred speed .8, human radius .36. Native policy parameters unchanged.',
@@ -95,6 +132,20 @@ summary=dict(condition=a.condition,goal_layout=a.goal_layout,trials=len(entries)
 if a.condition=='crossing':
  summary['notes'].append('Crossings use actual Gazebo human poses: a confirmed traversal between y <= -.2 and y >= +.2. This is the nominal robot-route centerline, not exact encounter time; robot may deviate. Gap <1 m is descriptive at confirmation only, not a policy or safety threshold.')
  (report/'crossing_events.json').write_text(json.dumps(crossing_events,indent=2))
+if a.condition=='bottleneck':
+ t=json.loads((report/'empty_bottleneck_s42.json').read_text());rt=HERE/t['runtime'];gate=float((rt/'start_gate').read_text());counter=PassageCounter([dict(id=0,x=8.,y=0.)],t['scene']['passage']);minimum=math.inf;empty_rows=[];amcl=[]
+ for line in (rt/'diagnostics.jsonl').open():
+    raw=json.loads(line)
+    if raw['kind']=='amcl':amcl.append(raw)
+    if raw['kind']!='gazebo' or not gate<=raw['data']['time']<=gate+t['sim_seconds']:continue
+    ro=raw['data']['poses']['mecanum_robot'];counter.update(raw['data']['time']-gate,[dict(id=0,**ro)])
+    empty_rows.append(dict(elapsed=raw['data']['time']-gate,robot=ro))
+    minimum=min(minimum,min(footprint_box(ro,b) for b in layout['obstacles'] if b['name'] in ('machine_north','machine_south')))
+ summary['empty_control']=dict(name=t['name'],status=t['status'],goal_error_world_m=t['goal_error_world_m'],sim_seconds=t['sim_seconds'],confirmed_robot_passages=counter.counts()['0'],min_robot_machine_footprint_gap_m=minimum)
+ matches=localization_matches(amcl,empty_rows,gate);localization_traces[t['name']]=matches;summary['empty_control'].update(localization_summary(matches))
+ (report/'localization_matches.json').write_text(json.dumps(localization_traces,indent=2))
+ summary['notes'].append('Bottleneck x12..20, width1.8m. Full traversal confirms center beyond x11.5 and20.5, with sampled core positions within y+/-0.9; excursions outside that strip count as bypasses. Counts are not force-contact checks. Only AMCL scenario initial pose changes in runtime YAML; controller and sensor params unchanged.')
+ (report/'passage_events.json').write_text(json.dumps(passage_events,indent=2))
 (report/'analysis.json').write_text(json.dumps(summary,indent=2))
 with (report/'results.csv').open('w',newline='') as f:
  w=csv.DictWriter(f,fieldnames=list(entries[0]),lineterminator='\n');w.writeheader();w.writerows(entries)
@@ -115,6 +166,9 @@ for row,seed in enumerate([42,43]):
     ax=axes[row,col];rows=traces[(seed,policy)]
     for b in layout['obstacles']:ax.add_patch(Rectangle((b['x']-b['sx']/2,b['y']-b['sy']/2),b['sx'],b['sy'],color='#d9dde1'))
     ax.plot([x['robot']['x'] for x in rows],[x['robot']['y'] for x in rows],color='#2774b5',label='robot',lw=2)
+    if a.condition=='bottleneck':
+        name=next(e['name'] for e in entries if e['seed']==seed and e['human_policy']==policy);ms=localization_traces[name]
+        ax.plot([m['amcl']['x'] for m in ms],[m['amcl']['y'] for m in ms],color='#2774b5',ls='--',lw=1,label='AMCL')
     for hid,color in zip([1,2,3],['#d37b28','#39946a','#9864b3']):
         hs=[next(h for h in x['humans'] if h['id']==hid) for x in rows]
         ax.plot([h['x'] for h in hs],[h['y'] for h in hs],color=color,label=f'person {hid}')
@@ -123,8 +177,8 @@ for row,seed in enumerate([42,43]):
             points=scenes[(seed,policy)]['human_routes'][str(hid)]
             ax.scatter([v[0] for v in points],[v[1] for v in points],marker='x',s=45,color=color)
     if a.condition=='crossing':ax.axhline(0,color='#777',ls=':',lw=1)
-    ax.set(xlim=(-29,-13),ylim=(-3,3),title=f'{policy}, seed {seed}',xlabel='world x [m]',ylabel='world y [m]');ax.set_aspect('equal');ax.grid(alpha=.2)
-axes[0,0].legend(fontsize=8,ncol=4);fig.tight_layout();fig.savefig(report/'sfm_paths.png',dpi=160);plt.close(fig)
+    ax.set(xlim=((6,26) if a.condition=='bottleneck' else (-29,-13)),ylim=(-3,3),title=f'{policy}, seed {seed}',xlabel='world x [m]',ylabel='world y [m]');ax.set_aspect('equal');ax.grid(alpha=.2)
+axes[0,0].legend(fontsize=8,ncol=5 if a.condition=='bottleneck' else 4);fig.tight_layout();fig.savefig(report/'sfm_paths.png',dpi=160);plt.close(fig)
 if a.goal_layout=='individual':
  fig,axes=plt.subplots(2,2,figsize=(11,6),sharey=True)
  for row,seed in enumerate([42,43]):
@@ -143,4 +197,21 @@ if a.condition=='crossing':
         ax.step([v['elapsed'] for v in progress],[v['counts'][str(hid)] for v in progress],where='post',label=f'person {hid}',color=color)
     ax.set(title=f'{policy}, seed {seed}',xlabel='simulation seconds after goal',ylabel='confirmed y=0 crossings');ax.grid(alpha=.2)
  axes[0,0].legend();fig.tight_layout();fig.savefig(report/'crossing_progress.png',dpi=160);plt.close(fig)
+if a.condition=='bottleneck':
+ fig,axes=plt.subplots(2,2,figsize=(11,6),sharey=True)
+ for row,seed in enumerate([42,43]):
+  for col,policy in enumerate(['orca_plus','sfm']):
+    ax=axes[row,col];progress=passage_traces[(seed,policy)]
+    for hid,color,label in [(0,'#2774b5','robot'),(1,'#d37b28','person 1'),(2,'#39946a','person 2'),(3,'#9864b3','person 3')]:
+        ax.step([v['elapsed'] for v in progress],[v['counts'][str(hid)] for v in progress],where='post',label=label,color=color)
+    ax.set(title=f'{policy}, seed {seed}',xlabel='simulation seconds after goal',ylabel='confirmed channel traversals');ax.grid(alpha=.2)
+ axes[0,0].legend();fig.tight_layout();fig.savefig(report/'passage_progress.png',dpi=160,bbox_inches='tight',pad_inches=.18);plt.close(fig)
+if a.condition=='bottleneck':
+ fig,axes=plt.subplots(2,2,figsize=(11,6),sharey=True)
+ for row,seed in enumerate([42,43]):
+  for col,policy in enumerate(['orca_plus','sfm']):
+    name=next(e['name'] for e in entries if e['seed']==seed and e['human_policy']==policy);ms=localization_traces[name];ax=axes[row,col]
+    ax.plot([m['elapsed'] for m in ms],[m['position_error_m'] for m in ms],label='AMCL position error')
+    ax.set(title=f'{policy}, seed {seed}',xlabel='simulation seconds after goal',ylabel='AMCL vs Gazebo [m]');ax.grid(alpha=.2)
+ fig.tight_layout();fig.savefig(report/'localization_error.png',dpi=160);plt.close(fig)
 print(json.dumps(summary,indent=2))
