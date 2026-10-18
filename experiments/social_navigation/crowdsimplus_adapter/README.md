@@ -69,3 +69,9 @@ và DWA được lưu riêng; không gọi cấu hình Gazebo là demo nguyên b
 [So sánh SFM/ORCA+](../benchmark/sfm_comparison/reports/run01/SFM_GAZEBO_REPORT.md).
 Ma trận có hai seed, chạy từng lượt; chưa phải xếp hạng thống kê.
 
+## Đích tuần tra riêng
+
+Có thêm opt-in `--goal-layout individual` cho counterflow: mỗi người có hai
+endpoint riêng. Đây là thay đổi fixture, không phải chỉnh SFM/ORCA+, thêm
+cohesion hoặc cưỡng bức đi theo làn. [Cách chạy và kiểm định](../benchmark/individual_goals/README.md).
+
