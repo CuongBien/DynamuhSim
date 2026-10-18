@@ -1,0 +1,156 @@
+{
+  "name": "socnavgym_circle_contact_robot_orca_counterflow_s42",
+  "backend": "socnavgym",
+  "condition": "counterflow",
+  "seed": 42,
+  "geometry": "circle_contact",
+  "robot_avoidance": true,
+  "robot_visible": true,
+  "status": "SUCCEEDED",
+  "protocol_valid": true,
+  "runtime": "generated/socnavgym_circle_contact_robot_orca_counterflow_s42__pz3uo9i",
+  "metrics_clock": "simulation",
+  "commit": "954d57784a4b53c2c1236d6d97433a15da94347a",
+  "contact_geometry": {
+    "policy": "circle_contact",
+    "modified_native_behavior": true,
+    "human_contact_shape": "circle",
+    "human_contact_radius": 0.36,
+    "native_ellipse_semiaxes": null,
+    "human_proxy_radius": 0.36,
+    "original_reset_robot_radius": 0.2455005863673824,
+    "effective_robot_radius": 0.25,
+    "native_robot_radius_fixed_after_reset": true,
+    "robot_radius_is_nominal_proxy_metric_not_full_robot_collision_body": true,
+    "contact_timing": "native pre-update; no swept collision test",
+    "contact_response": "native stop the entire moving group if any member speed is zero",
+    "human_pair_separation_guard": false,
+    "robot_in_group_orca": true,
+    "factory_contacts": "exact circle versus oriented box predicate",
+    "native_wall_response_unchanged": true
+  },
+  "group_behavior": {
+    "policy": "robot_orca",
+    "modified_group_solver": true,
+    "robot_in_group_orca": true,
+    "applies_to": "walking group only",
+    "robot_state_source": "measured Gazebo pose and finite-difference world velocity",
+    "robot_radius": 0.25,
+    "group_orca_radius": 1.44,
+    "group_neighbor_distance": 2.88,
+    "time_horizon": 4.861735698828816,
+    "time_horizon_obstacles": 5.6476885381006925,
+    "group_current_velocity": "native zero initialization per solver call",
+    "group_smoothing": "native 0.9 previous + 0.1 new",
+    "responsibility": "RVO2 reciprocal; solved robot velocity is discarded, actual robot controlled by Nav2",
+    "new_swept_guard": false,
+    "new_human_pair_separation": false,
+    "stationary_group_reaction_changed": false
+  },
+  "scene": {
+    "condition": "counterflow",
+    "seed": 42,
+    "initial": [
+      {
+        "id": 1,
+        "x": -20.288109357607617,
+        "y": -0.15528517483599052,
+        "yaw": 3.141592653589793,
+        "speed": 0.0,
+        "radius": 0.36,
+        "group_id": 1,
+        "vx": 0.0,
+        "vy": 0.0
+      },
+      {
+        "id": 2,
+        "x": -21.338355933840273,
+        "y": 0.6398219663048469,
+        "yaw": 3.141592653589793,
+        "speed": 0.0,
+        "radius": 0.36,
+        "group_id": 1,
+        "vx": 0.0,
+        "vy": 0.0
+      },
+      {
+        "id": 3,
+        "x": -21.416163160298385,
+        "y": -0.5308813627463784,
+        "yaw": 3.141592653589793,
+        "speed": 0.0,
+        "radius": 0.36,
+        "group_id": 1,
+        "vx": 0.0,
+        "vy": 0.0
+      }
+    ],
+    "robot_spawn": [
+      -27.0,
+      0.0,
+      0.0
+    ],
+    "robot_goal": [
+      -14.0,
+      0.0,
+      0.0
+    ],
+    "robot_radius": 0.25,
+    "human_radius": 0.36,
+    "group_route": [
+      [
+        -28.0,
+        0.0
+      ],
+      [
+        -21.0,
+        0.0
+      ]
+    ],
+    "preferred_human_speed": 0.8
+  },
+  "scene_sha256": "0e90c8c4aef59d933afd7e0a0f44198aeed5733eb4c3398e5996118aa45a2b86",
+  "map_sha256": "6538c7c14e4ece9f8e20a57619a49ea4e80bee6cc886499f5e1d21c3b550667b",
+  "nav_params_sha256": "ff73d68dcdc64c29427522c9b87fc9f3850b02326a3a9b1c467e6b9b3d5297a7",
+  "diagnostics": "/home/cuongbien/DynamuhSim/experiments/social_navigation/benchmark/generated/socnavgym_circle_contact_robot_orca_counterflow_s42__pz3uo9i/diagnostics.jsonl",
+  "initial_position_error_m_max": 0.0,
+  "sim_seconds": 27.58,
+  "wall_seconds": 29.121468053999706,
+  "observed_rtf": 0.9470676392020699,
+  "action_status": 4,
+  "final_robot_xy": [
+    -14.215440542716175,
+    0.001823020062487201
+  ],
+  "goal_error_world_m": 0.21544825561602568,
+  "goal_error_amcl_m": 0.20394493802064773,
+  "native_messages": 381,
+  "sensors": {
+    "scan": 191,
+    "imu": 3802,
+    "odom": 1056,
+    "clock": 9499,
+    "amcl": 136
+  },
+  "max_human_displacement_m": 9.196700591778862,
+  "robot_path_m": 12.888890462029249,
+  "min_robot_human_clearance_m": 0.1457496705663478,
+  "min_human_pair_clearance_m": 0.44294268224775024,
+  "robot_human_overlap_s": 0,
+  "human_pair_overlap_s": 0,
+  "robot_stopped_s": 0.09999999999999964,
+  "diagnostic_counts": {
+    "tf_static": 4,
+    "native": 381,
+    "gazebo": 1852,
+    "tf": 10711,
+    "scan": 191,
+    "odom": 1056,
+    "amcl": 136,
+    "costmap": 99,
+    "footprint": 295,
+    "cmd_vel": 582
+  },
+  "samples": 273,
+  "observer_frames": 83
+}
