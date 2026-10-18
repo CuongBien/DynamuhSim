@@ -1,0 +1,140 @@
+{
+  "name": "empty_bottleneck_s42",
+  "backend": "empty",
+  "goal_layout": null,
+  "human_policy": null,
+  "condition": "bottleneck",
+  "seed": 42,
+  "geometry": "native",
+  "robot_avoidance": false,
+  "robot_visible": true,
+  "status": "SUCCEEDED",
+  "protocol_valid": true,
+  "runtime": "generated/empty_bottleneck_s42_pttgbkw4",
+  "metrics_clock": "simulation",
+  "commit": "954d57784a4b53c2c1236d6d97433a15da94347a",
+  "contact_geometry": null,
+  "group_behavior": null,
+  "robot_start": [
+    8.0,
+    0.0,
+    0.0
+  ],
+  "robot_goal": [
+    24.5,
+    0.0,
+    0.0
+  ],
+  "scenario_parameter_overrides": [
+    "amcl.initial_pose.x/y/yaw"
+  ],
+  "runtime_nav_params_sha256": "e6e43051eea1db4a1bf70e351bf058b9007a22c9d3d50a7b6412a00c535aa3b1",
+  "scene": {
+    "condition": "bottleneck",
+    "seed": 42,
+    "initial": [],
+    "robot_spawn": [
+      -27.0,
+      0.0,
+      0.0
+    ],
+    "robot_goal": [
+      24.5,
+      0.0,
+      0.0
+    ],
+    "robot_radius": 0.25,
+    "human_radius": 0.36,
+    "preferred_human_speed": 0.8,
+    "goal_layout": "individual",
+    "human_routes": {
+      "1": [
+        [
+          10.5,
+          -0.28884585612336927
+        ],
+        [
+          21.14300129062672,
+          -0.28884585612336927
+        ]
+      ],
+      "2": [
+        [
+          9.1,
+          -0.01799765453047046
+        ],
+        [
+          22.56678528857786,
+          -0.01799765453047046
+        ]
+      ],
+      "3": [
+        [
+          7.7,
+          0.31891769713312096
+        ],
+        [
+          24.02120393849075,
+          0.31891769713312096
+        ]
+      ]
+    },
+    "scenario_version": "factory_bottleneck_v1",
+    "robot_start": [
+      8.0,
+      0.0,
+      0.0
+    ],
+    "passage": {
+      "x_min": 12.0,
+      "x_max": 20.0,
+      "half_width": 0.9,
+      "left_confirmation_x": 11.5,
+      "right_confirmation_x": 20.5
+    },
+    "scenario_definition": "three independent counterflow pedestrians, two private endpoints each; no timing/lane or yielding constraints",
+    "nominal_route_factory_clearance_m_min": 0.22108230286687902
+  },
+  "scene_sha256": "59ef8b7c2bade5e0ab9be82829c71cc621d0a7cfe4bdb3feda8cb76c315a6180",
+  "map_sha256": "6538c7c14e4ece9f8e20a57619a49ea4e80bee6cc886499f5e1d21c3b550667b",
+  "nav_params_sha256": "ff73d68dcdc64c29427522c9b87fc9f3850b02326a3a9b1c467e6b9b3d5297a7",
+  "diagnostics": "/home/cuongbien/DynamuhSim/experiments/social_navigation/benchmark/generated/empty_bottleneck_s42_pttgbkw4/diagnostics.jsonl",
+  "initial_position_error_m_max": 0.0,
+  "sim_seconds": 30.552,
+  "wall_seconds": 30.675320984999416,
+  "observed_rtf": 0.995979798057868,
+  "action_status": 4,
+  "final_robot_xy": [
+    24.526199965683855,
+    -0.06613560545086669
+  ],
+  "goal_error_world_m": 0.0711361828480266,
+  "goal_error_amcl_m": 0.20919300237303057,
+  "native_messages": 0,
+  "sensors": {
+    "scan": 189,
+    "imu": 3771,
+    "odom": 1047,
+    "clock": 9322,
+    "amcl": 150
+  },
+  "robot_path_m": 16.533922407644777,
+  "min_robot_human_clearance_m": null,
+  "min_human_pair_clearance_m": null,
+  "robot_human_overlap_s": 0,
+  "human_pair_overlap_s": 0,
+  "robot_stopped_s": 0.10000000000000053,
+  "diagnostic_counts": {
+    "tf_static": 4,
+    "gazebo": 1766,
+    "tf": 10475,
+    "scan": 189,
+    "odom": 1047,
+    "amcl": 150,
+    "footprint": 311,
+    "costmap": 106,
+    "cmd_vel": 613
+  },
+  "samples": 294,
+  "observer_frames": 92
+}

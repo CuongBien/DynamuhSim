@@ -7,15 +7,19 @@ IMAGE='dynamuhsim-crowdsimplus:round2'
 SOURCE='d526a07c013c621fa1ad50894b6ba639f61063de'
 def prepare_scene(runtime,condition,seed,goal_layout="shared"):
     if goal_layout not in ("shared","individual"):raise ValueError("Unknown goal layout")
-    if goal_layout=="individual" and condition not in ("counterflow","crossing"):raise ValueError("Individual goals require a moving fixture")
-    if condition=='crossing' and goal_layout!='individual':raise ValueError('Crossing requires individual goals')
-    source_condition='counterflow' if condition=='crossing' else condition
+    if goal_layout=="individual" and condition not in ("counterflow","crossing","bottleneck"):raise ValueError("Individual goals require a moving fixture")
+    if condition in ('crossing','bottleneck') and goal_layout!='individual':raise ValueError('Crossing requires individual goals')
+    source_condition='counterflow' if condition in ('crossing','bottleneck') else condition
     source=HERE.parent/'benchmark/reports'/f'socnavgym_{source_condition}_s{seed}.json'
     if not source.exists():raise ValueError('Common fixture currently supports pilot seeds 42/43 only')
     baseline=json.loads(source.read_text());(runtime/'scene.json').write_text(json.dumps(baseline['scene'],indent=2))
     assert hashlib.sha256((runtime/'scene.json').read_bytes()).hexdigest()==baseline['scene_sha256']
     layout=json.loads((HERE.parent/'warehouse/layout.json').read_text())
-    if condition=='crossing':
+    if condition=='bottleneck':
+        from bottleneck_scene import bottleneck_scene
+        scene=bottleneck_scene(baseline['scene'],layout,seed)
+        (runtime/'scene.json').write_text(json.dumps(scene,indent=2))
+    elif condition=='crossing':
         from crossing_scene import crossing_scene
         scene=crossing_scene(baseline['scene'],layout,seed)
         (runtime/'scene.json').write_text(json.dumps(scene,indent=2))

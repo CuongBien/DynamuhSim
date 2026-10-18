@@ -82,3 +82,8 @@ hai phía của lối chính. Đây là fixture riêng, thay initial poses và �
 không cưỡng bức làn, thời điểm nhường hoặc chỉnh native forces.
 [Hướng dẫn và benchmark](../benchmark/crossing/README.md).
 
+## Counterflow trong khe nhà xưởng
+
+`--condition bottleneck --goal-layout individual` đặt ba người đi ngược
+chiều robot qua khe 1,8 m. [Hướng dẫn](../benchmark/bottleneck/README.md).
+Robot spawn/goal và AMCL initialization theo scenario; controller giữ nguyên.

@@ -1,0 +1,122 @@
+{
+  "status": "PASS",
+  "seed": 43,
+  "human_policy": "orca_plus",
+  "checks": [
+    {
+      "case": "30 updates match full native env.step before first patrol turn",
+      "max_state_error": 0.0
+    },
+    {
+      "case": "crossing fixture dynamics unchanged, 30 updates",
+      "max_state_error": 0.0
+    },
+    {
+      "case": "counterflow fixture dynamics unchanged, 30 updates",
+      "max_state_error": 0.0
+    },
+    {
+      "case": "20 s distant robot behavior screen, no forced success criterion",
+      "completed_legs": [
+        1,
+        1,
+        0
+      ],
+      "passages": {
+        "1": 1,
+        "2": 1,
+        "3": 1
+      },
+      "minimum_pair_clearance_m": 0.04192005126280718,
+      "minimum_factory_clearance_m": 0.02003653668408728
+    },
+    {
+      "case": "10 s same scripted robot, visibility response",
+      "max_difference_m": 0.6508979666974818
+    }
+  ],
+  "metadata": {
+    "framework": "CrowdSimPlus",
+    "source_commit": "d526a07c013c621fa1ad50894b6ba639f61063de",
+    "source_sha256": {
+      "crowd_sim_plus/envs/crowd_sim_plus.py": "eb1e9e706f3e9c9fc2e4779b2b4fbe11c23d13224a71e47f91c50249aa4717d5",
+      "crowd_sim_plus/envs/policy/orca_plus.py": "4fb102d5762654e1139c5df00f875579d2f6209bce9ea2226f0731493847270b",
+      "crowd_sim_plus/envs/policy/social_force.py": "6acb9fc1566062b73b2e61194582fce9fc256bafaf3f6e6f19d81b1fc4be4e80",
+      "crowd_sim_plus/envs/utils/human_plus.py": "538a6e2462cf5e0b3239212ac89b59d739549b61014f40dc0219b5946c6e355e",
+      "crowd_sim_plus/envs/utils/agent_plus.py": "dd29ad2b481ad1bd082451eabcee17c8ed207e9401bca80c0d1716ac679ca0bd"
+    },
+    "time_step": 0.1,
+    "original_demo_time_step": 0.25,
+    "robot_visible": true,
+    "human_policy": "orca_plus",
+    "human_radius": 0.36,
+    "human_v_pref": 0.8,
+    "robot_radius": 0.25,
+    "orca_safety_space": 0.01,
+    "orca_added_radius": 0.02,
+    "neighbor_dist": 10,
+    "time_horizon": 2.0,
+    "time_horizon_obst": 0.5,
+    "sfm_parameters": null,
+    "static_boxes": 42,
+    "static_line_segments": 168,
+    "group_model": false,
+    "conversation_model": false,
+    "movement_methods": [
+      "Human.act",
+      "CrowdSimPlus.constrain_agent_action_exact",
+      "Human.step"
+    ],
+    "goal_layout": "individual",
+    "human_routes": [
+      [
+        [
+          10.5,
+          -0.33691585285300957
+        ],
+        [
+          21.223546918716444,
+          -0.33691585285300957
+        ]
+      ],
+      [
+        [
+          9.1,
+          -0.02848534228837112
+        ],
+        [
+          22.595503870579492,
+          -0.02848534228837112
+        ]
+      ],
+      [
+        [
+          7.7,
+          0.31373174112942137
+        ],
+        [
+          24.035154152598636,
+          0.31373174112942137
+        ]
+      ]
+    ],
+    "arrival_rule": "upstream Human.reached_destination; external patrol switches endpoints only on arrival",
+    "external_scenario": "bottleneck initial poses; separate per-human endpoints; standing fixture held externally",
+    "robot_controller": "ROS Nav2 only; native robot act/step and full env reward/episode loop not called",
+    "visual_heading": "last nonzero actual velocity; initial scene yaw while stationary"
+  },
+  "note": "PASS confirms bridge/finite-state checks, not safe behavior or successful passage. Worker probes are not Nav2 trials; native parameters unchanged.",
+  "runtime": "generated/bottleneck_validation_orca_plus_s43_fo_ce3ov",
+  "fingerprint": {
+    "sources": {
+      "kernel.py": "4122df6c256c189d3f4c440894f9582d8e1c811300e6d86664019db23c6ef227",
+      "crowd_host.py": "d8cbb6743fa2022e2c92cbf45b2a1227475d5fe399b17775839140a670a72ac0",
+      "bottleneck_scene.py": "326c60f547a253102f5473a91eeb71f35c48051d1f344c5decb64f48d1ba5ac9",
+      "passage_metrics.py": "e86a911c6b3f1bc81ca40f90cb0768a48e2f8a61d141f424258d8e573e017671",
+      "validate_bottleneck.py": "1c69fce85c3f4a535304e7a6d48be73d7c511927f58b3dea9326430491b7afc8"
+    },
+    "legacy_kernel_sha256": "e9d79e4265aeac0a41b1d595d8cd9ea8fa11eaec9a9bda3074be32912466d9ff",
+    "image_id": "sha256:39929ee8e4fa6d738a381a0b695bf25eaf9fa972cd5b9d8a6854d72f80bd5f3c",
+    "layout_sha256": "31d1cd9841e133766c36f9e44e5b4e4148a61500abcf6e2682166a98d0e4cb06"
+  }
+}
