@@ -1,7 +1,7 @@
 # Nhà xưởng và vòng khảo sát SocNavGym
 
-Tất cả file mới nằm trong `experiments/social_navigation/`. Không sửa launch,
-model, cấu hình Nav2, plugin C++ hay môi trường Python ROS đang có. Dùng workspace
+Tất cả file mới nằm trong `experiments/social_navigation/`. Không sửa launch/model, cấu hình Nav2 gốc, plugin C++ hay môi trường Python ROS
+đang có. Dùng workspace
 `install/` hiện có; không rebuild các thay đổi chưa commit của người dùng.
 
 ## Chạy nhà xưởng trên Ubuntu/WSL
@@ -101,4 +101,36 @@ hiệu năng hay tỷ lệ va chạm của robot ROS từ các lượt này.
 Xem [báo cáo vòng đầu](reports/ROUND1.md), video và JSON liên kết trong báo cáo.
 SocNavGym đã có [adapter Gazebo thử nghiệm](gazebo_adapter/README.md) cho một nhóm 3 người đi cùng nhau hoặc đứng trò chuyện trong nhà xưởng. Clock, robot feedback, pose proxy và LiDAR đã được kiểm tra. Đã có [pilot Nav2 RVO2 ↔ SocNavGym](benchmark/reports/BENCHMARK_REPORT.md) gồm 9 lượt cùng scene/map/params; formation chưa đưa vào Gazebo.
 
-CrowdSimPlus đã có vòng thử độc lập tại [round2](round2/README.md); ComplexityNav đã có vòng thử độc lập tại [round3](round3/README.md). Hai backend đó chưa nối vào Gazebo. Xem [bảng so sánh](FRAMEWORK_COMPARISON.md) và [báo cáo adapter](gazebo_adapter/reports/ADAPTER_REPORT.md) trước khi chọn hành vi nhóm.
+CrowdSimPlus đã có vòng thử độc lập tại [round2](round2/README.md); ComplexityNav đã có vòng thử độc lập tại [round3](round3/README.md). CrowdSimPlus hiện đã có [adapter Gazebo + Nav2](crowdsimplus_adapter/README.md), với [7 lượt thử và GIF](benchmark/crowdsim_comparison/reports/run01/CROWDSIM_GAZEBO_REPORT.md). ComplexityNav chưa nối vào Gazebo. Xem [bảng so sánh](FRAMEWORK_COMPARISON.md) và [báo cáo adapter](gazebo_adapter/reports/ADAPTER_REPORT.md) trước khi chọn hành vi nhóm.
+
+## Tiến độ CrowdSimPlus SFM
+
+Đã kiểm thử native SFM qua container trong Gazebo, cùng robot Mecanum/Nav2:
+[report SFM/ORCA+](benchmark/sfm_comparison/reports/run01/SFM_GAZEBO_REPORT.md).
+Bốn lượt đến đích, không overlap >1 cm trong mẫu đo; SFM có hạn chế dừng quanh
+waypoint chung và không hoàn tất patrol. Chưa có hành vi nhóm/hội thoại.
+
+## Tiến độ fixture đích riêng
+
+Đã kiểm tra SFM/ORCA+ với endpoint riêng: 4/4 goal Gazebo/Nav2 đạt, mỗi người
+hoàn tất 2–4 chặng; không ghi nhận overlap >1 cm trong sample. [Report và GIF](benchmark/individual_goals/reports/run01/INDIVIDUAL_GOALS_REPORT.md).
+Giữ native policy và robot/Nav2; đây vẫn là ba người độc lập, chưa có hội thoại.
+
+## Tiến độ cảnh giao cắt
+
+Đã chạy native SFM/ORCA+ với ba người đi cắt ngang: 4/4 goal Gazebo/Nav2 đạt,
+mỗi người có 4–9 giao cắt được xác nhận bằng pose Gazebo, không ghi nhận
+overlap >1 cm trong sample. [Report, GIF và lệnh demo](benchmark/crossing/reports/run01/CROSSING_REPORT.md).
+Robot có vòng tránh; chưa phải kiểm chứng nhường đường trong lối hẹp.
+
+## Tiến độ lối hẹp
+
+Đã chạy một empty control và bốn lượt có người trong khe 1,8×8 m. Cả SFM và
+ORCA+ qua được ở seed43, bị Nav2 hủy goal ở seed42; ORCA+ seed42 có AMCL drift
+tới 2,23 m. [Report, GIF, chẩn đoán và lệnh demo](benchmark/bottleneck/reports/run01/BOTTLENECK_REPORT.md).
+Chưa dùng các lượt này để xếp hạng simulator; cần tách lỗi định vị trước.
+
+## Các phần đã lưu Git
+
+[Xem sáu commit tính năng và bằng chứng tương ứng](COMMIT_HISTORY.md). Các
+trạng thái “chưa commit” trong report phản ánh thời điểm chạy thí nghiệm.
