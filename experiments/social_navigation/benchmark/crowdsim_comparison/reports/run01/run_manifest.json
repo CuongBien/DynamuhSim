@@ -1,0 +1,87 @@
+{
+  "base_commit": "954d57784a4b53c2c1236d6d97433a15da94347a",
+  "sources_sha256": {
+    "experiments/social_navigation/benchmark/trial.py": "a3912a6a9f02bba36b2d8391267a8ea4e9d73f317403a68283deff8db83f5af0",
+    "experiments/social_navigation/benchmark/worker.py": "ea255ef6d24fdbc7e78424cc606d5103c8e005ba86f3896faa041e6d0ecc723f",
+    "experiments/social_navigation/benchmark/circle_contact.py": "9661cc003c2324357cf15c3714eb8f886ec441723b7f95b10f967aec5c34fc55",
+    "experiments/social_navigation/benchmark/robot_orca.py": "76a98d59c5a80c14cf7f23dc2ef308dbff44a7f19a1f44b5022802d24e9f6c8a",
+    "experiments/social_navigation/benchmark/crowdsim_matrix.py": "bca32d5e323ed550a8955168d103d63990692f7bc3ceeed07044689300a47755",
+    "experiments/social_navigation/benchmark/warehouse.launch.py": "c5e61dab9320d2622df59d617b9b85d02c7e073ade0e2e2aac83a11519e63a1e",
+    "experiments/social_navigation/benchmark/diagnostics.py": "ccddf244a01d07f53cb011d73e1e1ea1c6f2f0b51a44538743205c9ec6239040",
+    "experiments/social_navigation/benchmark/run.sh": "3fd63de389a2022eb97b0aeb6fd26b3c1eab12b32ba20a8676b4557e6340a0e8",
+    "experiments/social_navigation/crowdsimplus_adapter/adapter.cc": "3abded9205fdb54f572a256aeac1ce893f0a125d040532390e8e9d7c3c576cf7",
+    "experiments/social_navigation/crowdsimplus_adapter/kernel.py": "c55af0f9f18485d33255170d1da859305bc4a5ecb407871c9be7fc5de24de486",
+    "experiments/social_navigation/crowdsimplus_adapter/worker.py": "c07543a53ed1ca5adb15220193ab845333be6932669fb7c0ab7eef9c26b3a2e7",
+    "experiments/social_navigation/crowdsimplus_adapter/crowd_host.py": "483f56b9ffd8d5d27e99eb4f2494b05740153df6715b452b67bf81df1760f2b0",
+    "experiments/social_navigation/crowdsimplus_adapter/CMakeLists.txt": "34a5b4901b1e53837450caab8c15072d147da623e598836667d3306e32a3510b",
+    "experiments/social_navigation/crowdsimplus_adapter/build/libcrowdsimplus_adapter.so": "e10de8c01397a1f332879307a89e0e17f5a64d2908e692457683390b6ceeeaaf",
+    "experiments/social_navigation/gazebo_adapter/build/libsocnavgym_adapter.so": "98d468292d934c8ef032d22fa489b7677d64000189f1f61a2fb6a6232b58601d",
+    "experiments/social_navigation/gazebo_adapter/kernel.py": "e360ebb4fd9a58910fd65c77396d47f543be74061cc310682111fc4ba4c1d982",
+    "experiments/social_navigation/warehouse/nav2_warehouse.yaml": "ff73d68dcdc64c29427522c9b87fc9f3850b02326a3a9b1c467e6b9b3d5297a7",
+    "experiments/social_navigation/warehouse/warehouse.pgm": "6538c7c14e4ece9f8e20a57619a49ea4e80bee6cc886499f5e1d21c3b550667b"
+  },
+  "docker_image_id": "sha256:39929ee8e4fa6d738a381a0b695bf25eaf9fa972cd5b9d8a6854d72f80bd5f3c",
+  "upstream_commit": "d526a07c013c621fa1ad50894b6ba639f61063de",
+  "official_demo_rerun": {
+    "runtime": "experiments/social_navigation/crowdsimplus_adapter/generated/official_demo_oykfw079",
+    "exit_code": 0
+  },
+  "command": "bash experiments/social_navigation/benchmark/run.sh crowdsim-matrix --report-dir experiments/social_navigation/benchmark/crowdsim_comparison/reports/run01",
+  "common_human_step": 0.1,
+  "original_crowdsimplus_demo_step": 0.25,
+  "no_robot_or_nav2_changes": true,
+  "raw_captures": [
+    {
+      "name": "crowdsimplus_counterflow_s43",
+      "path": "/home/cuongbien/DynamuhSim/experiments/social_navigation/benchmark/generated/crowdsimplus_counterflow_s43_euctofa7/diagnostics.jsonl",
+      "bytes": 43568571,
+      "sha256": "e73011507b0ee790eb7845532a79bcaf13c7eb13202b89430f7435132d5d71f8"
+    },
+    {
+      "name": "crowdsimplus_standing_s43",
+      "path": "/home/cuongbien/DynamuhSim/experiments/social_navigation/benchmark/generated/crowdsimplus_standing_s43_kdyrgg5w/diagnostics.jsonl",
+      "bytes": 17566093,
+      "sha256": "c0488c0585ab704e99d8f2678426266230b0798cb537f12c72bfb7461c688b8c"
+    },
+    {
+      "name": "socnavgym_circle_contact_robot_orca_counterflow_s42",
+      "path": "/home/cuongbien/DynamuhSim/experiments/social_navigation/benchmark/generated/socnavgym_circle_contact_robot_orca_counterflow_s42__pz3uo9i/diagnostics.jsonl",
+      "bytes": 18690040,
+      "sha256": "da39bc13130cf2269bad0d6ff46f4d2a5133c2bf8e4d39b054a0cc24fa2ab68d"
+    },
+    {
+      "name": "socnavgym_circle_contact_robot_orca_counterflow_s43",
+      "path": "/home/cuongbien/DynamuhSim/experiments/social_navigation/benchmark/generated/socnavgym_circle_contact_robot_orca_counterflow_s43_of67bkpy/diagnostics.jsonl",
+      "bytes": 16864983,
+      "sha256": "87386dd08ca81874a9fb57b51cb026fbc824b63d7b9173ab4243d164a7bc03c4"
+    },
+    {
+      "name": "crowdsimplus_blind_counterflow_s43",
+      "path": "/home/cuongbien/DynamuhSim/experiments/social_navigation/benchmark/generated/crowdsimplus_blind_counterflow_s43_hdc_k8v2/diagnostics.jsonl",
+      "bytes": 26373141,
+      "sha256": "c01c92d009cd344596d6ef3a897d15d9cf09af636dce376289d1485e1eca3ba8"
+    },
+    {
+      "name": "crowdsimplus_counterflow_s42",
+      "path": "/home/cuongbien/DynamuhSim/experiments/social_navigation/benchmark/generated/crowdsimplus_counterflow_s42_5zumzv1x/diagnostics.jsonl",
+      "bytes": 24990543,
+      "sha256": "6857ab49b6fa3319da5f7be42e5d17207aedd9c585ac60ca89c88dfa14a6c46c"
+    },
+    {
+      "name": "crowdsimplus_standing_s42",
+      "path": "/home/cuongbien/DynamuhSim/experiments/social_navigation/benchmark/generated/crowdsimplus_standing_s42_bz6z7cbd/diagnostics.jsonl",
+      "bytes": 18164591,
+      "sha256": "9b39bd021d2eecc947767ec068ce6a9ad2c7f7ae18ed40915b95531f4536f3cc"
+    }
+  ],
+  "analysis_sources_sha256": {
+    "experiments/social_navigation/benchmark/analyze_crowdsim.py": "069a7a0422bb61e099019838f00a29123fbdf566302cbdfe04f25dba0c34077e",
+    "experiments/social_navigation/benchmark/check_crowd_sensors.py": "9437afaea6d53ae3b0b6ef6750d13a28bf972365d1c87463534cbed1500af77b"
+  },
+  "checks": {
+    "goals_verified": 7,
+    "measurement_source_hashes_unchanged": true,
+    "upstream_human_step_parity_error": 0.0,
+    "sensor_evidence": "PASS"
+  }
+}

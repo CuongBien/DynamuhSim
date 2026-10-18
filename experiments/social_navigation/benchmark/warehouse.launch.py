@@ -19,6 +19,6 @@ def generate_launch_description():
         launch_arguments=dict(map=str(root/'warehouse/warehouse.yaml'),params_file=str(root/'warehouse/nav2_warehouse.yaml'),
             robot_model='mecanum',controller='mppi',episode_initial_pose='true').items())
     bridge=Node(package='ros_gz_bridge',executable='parameter_bridge',name='social_benchmark_bridge',
-        arguments=['/socnavgym/ground_truth@std_msgs/msg/String[gz.msgs.StringMsg'],output='screen')
+        arguments=['/socnavgym/ground_truth@std_msgs/msg/String[gz.msgs.StringMsg','/crowdsimplus/ground_truth@std_msgs/msg/String[gz.msgs.StringMsg'],output='screen')
     return LaunchDescription([DeclareLaunchArgument('gui',default_value='false'),sim,bridge,
         TimerAction(period=6.,actions=[nav])])
