@@ -62,3 +62,50 @@ Không sửa thêm avoidance/cohesion để che lỗi native trong lúc đo. Goa
 ## Geometry normalization ablation
 
 [Hướng dẫn native/circle_contact](geometry_comparison/README.md). Biến thể opt-in đổi predicate người sang circle khớp proxy và cố định radius robot danh định sau reset; không thêm né robot hoặc swept guard. Kết quả được lưu riêng, không ghi đè pilot.
+
+## Robot-aware group experiment
+
+[Hướng dẫn và kết quả](avoidance_comparison/README.md): `--robot-avoidance` bổ sung robot đo từ Gazebo vào group ORCA, chỉ trên circle_contact và trong phạm vi một moving group. Đây là adapter policy mới; native và circle_contact mặc định giữ nguyên.
+
+## CrowdSimPlus container backend
+
+[Adapter và cách chạy Gazebo](../crowdsimplus_adapter/README.md). `--backend crowdsimplus` dùng kernel người ORCA+ native trong Docker Python 3.8, robot vẫn do Nav2 điều khiển. Chỉ hỗ trợ fixture seed 42/43 và ba người ở vòng đầu; không có group/conversation model.
+
+## CrowdSimPlus: native SFM versus ORCA+
+
+`--human-policy sfm` chọn SFM upstream trong cùng container, không chỉnh lực hay
+thêm luật giữ nhóm. `--human-policy orca_plus` là mặc định. [Hướng dẫn](../crowdsimplus_adapter/README.md#sfm-native-trong-gazebo)
+và [kết quả](sfm_comparison/reports/run01/SFM_GAZEBO_REPORT.md).
+
+Ma trận yêu cầu hai file `orca_plus_validation.json`/`sfm_validation.json` đã PASS
+trong report directory, rồi chạy tuần tự bốn lượt cùng fixture seed 42/43:
+
+```bash
+bash experiments/social_navigation/benchmark/run.sh sfm-matrix \
+  --report-dir experiments/social_navigation/benchmark/sfm_comparison/reports/run01
+python3 experiments/social_navigation/benchmark/analyze_sfm.py \
+  experiments/social_navigation/benchmark/sfm_comparison/reports/run01
+```
+
+Dùng directory mới khi muốn chạy lại, chuẩn bị fixture bằng `prepare_scene` rồi
+chạy `crowdsimplus_adapter/validate.py --human-policy orca_plus|sfm` bên trong
+container với `/runtime` riêng. `--gui` ở trial sẽ tự đóng khi lượt đo kết thúc;
+đây là lượt benchmark có mục tiêu tự động, không phải demo chạy vô hạn.
+
+## Fixture đích riêng cho từng người
+
+[Hướng dẫn](individual_goals/README.md): `--goal-layout individual` giữ nguyên
+vị trí ban đầu và native policy, tách endpoint của ba người để kiểm tra tuần
+tra. `individual-goals-matrix` tự kiểm định kernel và goal completion trước
+khi chạy SFM/ORCA+ seed 42/43. Mặc định vẫn là shared fixture cũ.
+
+## Cảnh giao cắt SFM/ORCA+
+
+Có opt-in `--condition crossing --goal-layout individual` cho CrowdSimPlus.
+Ba người đi từ hai phía qua lối robot, với native policy giữ nguyên.
+[Cách chạy, kiểm định và báo cáo](crossing/README.md).
+
+## Lối hẹp SFM/ORCA+
+
+Có thêm fixture `--condition bottleneck --goal-layout individual`, dùng khe
+1,8×8 m hiện có trong nhà xưởng. [Cách chạy và kiểm định](bottleneck/README.md).

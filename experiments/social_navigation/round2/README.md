@@ -82,3 +82,7 @@ Dockerfile ghim Python, source và các dependency quan trọng. `requirements.t
 chứa thư viện phân tích/runtime; Gym 0.21 và Torch CPU 1.13.1 được ghim trực tiếp
 trong Dockerfile. HSL/Acados, diffusion prediction và SB3 training không cài vì
 không dùng cho demo DWA/simulator. Manifest và freeze thực tế ở reports.
+
+## Cập nhật sau vòng độc lập
+
+CrowdSimPlus ORCA+ đã được đưa vào [Gazebo qua adapter Docker riêng](../crowdsimplus_adapter/README.md), giữ robot Mecanum/Nav2 hiện tại. Xem [report tích hợp](../benchmark/crowdsim_comparison/reports/run01/CROWDSIM_GAZEBO_REPORT.md); kết quả vòng 2 phía trên vẫn là standalone 2D, không được trộn với benchmark Gazebo.
