@@ -23,7 +23,7 @@ ROS domain mặc định 75; Gazebo partition riêng cho từng trial. Không ch
 - Nhà xưởng 60×40 m; robot bắt đầu `(-27,0,0)`, goal `(-14,0,0)`, lối chính rộng.
 - Standing: ba người quanh `(-23.5,0)`, giữ bố trí conversation ban đầu.
 - Counterflow: ba người quanh `(-21,0)`, đi về `(-28,0)` rồi quay lại `(-21,0)`. Các backend giữ quy tắc chuyển goal native của mình.
-- Initial pose và heading của từng người được sinh xác định theo seed; hash xác nhận cùng bộ pose được nạp vào cả hai backend. Proxy người radius 0.36 m, cao 1.7 m; robot radius native 0.25 m.
+- Initial pose và heading của từng người được sinh xác định theo seed; hash xác nhận cùng bộ pose được nạp vào cả hai backend. Proxy người radius 0.36 m, cao 1.7 m; robot radius danh định 0.25 m. Native reset có margin ±0.01 m; predicate người native dùng ellipse (xem đính chính bên dưới).
 - Cùng file map và Nav2 MPPI parameters. Kiểm tra hash scene/map/parameters theo từng cặp; kiểm tra pose thật trước khi bắt đầu, không chỉ tin dữ liệu đầu vào.
 - Người được giữ yên trong lúc AMCL/Nav2 khởi động. Chỉ mở gate khi `bt_navigator` active và goal đã được chấp nhận. Tất cả thời gian benchmark dùng simulation clock.
 - Ngân sách goal mặc định 75 giây simulation, kèm giới hạn wall time khi simulator bị treo. ABORTED/TIMEOUT là kết quả điều hướng hợp lệ nếu hệ đo vẫn hoạt động; ERROR là lỗi harness/runtime cần xử lý riêng.
@@ -40,7 +40,7 @@ Mỗi trial có JSON kết quả, trajectory JSON đo từ SceneBroadcaster, ả
 
 Có hai quy ước clearance khác nhau:
 
-1. Circle: khoảng cách tâm robot/người trừ 0.25 + 0.36 m. Dùng để đối chiếu radius native, không phải contact sensor.
+1. Circle: khoảng cách tâm robot/người trừ 0.25 + 0.36 m. Đây là metric vòng tròn danh định, khác predicate ellipse native; không phải contact sensor.
 2. Footprint: hình chữ nhật Nav2 0.24×0.20 m, xoay theo yaw robot, so với hình tròn proxy người 0.36 m. Đây là chỉ số chính về khoảng hở theo footprint điều hướng; chưa bao gồm toàn bộ collision geometry của robot.
 
 Các duration overlap chính dùng ngưỡng **trên 1 cm** để loại sai số số học micromet. Giá trị strict `<0` ban đầu vẫn được giữ trong raw report. Thời gian overlap được xấp xỉ từ mẫu pose khoảng 10 Hz; chưa phải bằng chứng không có tiếp xúc giữa mọi physics step.
@@ -54,3 +54,11 @@ RVO2 điều khiển ba người độc lập, còn SocNavGym có một group na
 Source RVO2 hiện tại chỉ thêm tường vào ORCA ở corridor mode; benchmark giữ open-arena và dùng binary sẵn có. SocNavGym nhận 42 khối nhà xưởng. World vật lý giống nhau nhưng khả năng biết vật cản của solver không được khẳng định tương đương; lượt đầu chỉ ở lối chính rộng, không dùng để kết luận về toàn nhà xưởng/bottleneck.
 
 Không sửa thêm avoidance/cohesion để che lỗi native trong lúc đo. Goal success phải được xem cùng clearance, overlap, drift và hình ảnh nhóm. Log shutdown Gazebo có thể chứa lỗi SIGTERM/segfault sau khi đo xong, tương tự các vòng trước.
+
+## Seed 43 diagnostic replay
+
+[Detailed report and run commands](diagnostic/reports/run01/DIAGNOSIS_REPORT.md): an unchanged-parameter replay reproduced proxy overlap. The native collision predicate uses a human ellipse, unlike the Gazebo cylinder; its robot radius also has default reset jitter. Read this correction before interpreting the pilot circle metrics as native contact geometry. Optional `--diagnostics` records passive sensor/TF/costmap telemetry and requires a separate `--report-dir`.
+
+## Geometry normalization ablation
+
+[Hướng dẫn native/circle_contact](geometry_comparison/README.md). Biến thể opt-in đổi predicate người sang circle khớp proxy và cố định radius robot danh định sau reset; không thêm né robot hoặc swept guard. Kết quả được lưu riêng, không ghi đè pilot.
