@@ -7,7 +7,7 @@ matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 from matplotlib.patches import Rectangle
 HERE=Path(__file__).resolve().parent
-p=argparse.ArgumentParser();p.add_argument('report_dir',type=Path);a=p.parse_args();report=a.report_dir
+p=argparse.ArgumentParser();p.add_argument('report_dir',type=Path);p.add_argument('--goal-layout',choices=['shared','individual'],default='shared');a=p.parse_args();report=a.report_dir
 layout=json.loads((HERE.parent/'warehouse/layout.json').read_text())
 def rect_circle(robot,h,hx=.12,hy=.10):
     dx,dy=h['x']-robot['x'],h['y']-robot['y'];c,s=math.cos(robot['yaw']),math.sin(robot['yaw'])
@@ -17,11 +17,13 @@ def factory(h,b):
     qx,qy=abs(h['x']-b['x'])-b['sx']/2,abs(h['y']-b['y'])-b['sy']/2
     return math.hypot(max(qx,0),max(qy,0))+min(max(qx,qy),0)-.36
 def duration(rows,key):return sum(b['elapsed']-a['elapsed'] for a,b in zip(rows,rows[1:]) if b[key]<-.01)
-entries=[];traces={}
+entries=[];traces={};native_traces={};scenes={}
 for policy in ['orca_plus','sfm']:
  for seed in [42,43]:
-    label='crowdsimplus'+('_sfm' if policy=='sfm' else '');name=f'{label}_counterflow_s{seed}'
+    label='crowdsimplus'+('_sfm' if policy=='sfm' else '')+('_individual_goals' if a.goal_layout=='individual' else '');name=f'{label}_counterflow_s{seed}'
     t=json.loads((report/f'{name}.json').read_text());assert t['protocol_valid'] and t['human_policy']==policy
+    assert t.get('goal_layout','shared')==a.goal_layout
+    scenes[(seed,policy)]=t['scene']
     runtime=HERE/t['runtime'];gate=float((runtime/'start_gate').read_text());rows=[]
     for line in Path(t['diagnostics']).open():
         raw=json.loads(line)
@@ -34,10 +36,13 @@ for policy in ['orca_plus','sfm']:
     assert len(rows)>100
     native=[json.loads(l) for l in (runtime/'native_trajectory.jsonl').open()]
     active=[x for x in native if x['active'] and gate<=x['time']<=gate+t['sim_seconds']]
+    native_traces[(seed,policy)]=(gate,active)
     acceleration=[math.hypot(h['vx']-j['vx'],h['vy']-j['vy'])/(b['time']-a['time'])
         for a,b in zip(active,active[1:]) if b['step']>a['step'] for h,j in zip(b['humans'],a['humans'])]
     event=min(rows,key=lambda r:r['clearance']);traces[(seed,policy)]=rows
-    e=dict(name=name,human_policy=policy,seed=seed,status=t['status'],protocol_valid=True,
+    per_human=[sum(h['goal']!=j['goal'] for x,y in zip(active,active[1:]) for h,j in zip(y['humans'],x['humans']) if h['id']==hid) for hid in [1,2,3]]
+    completed=[h.get('completed_legs',per_human[h['id']-1]) for h in active[-1]['humans']]
+    e=dict(name=name,human_policy=policy,goal_layout=a.goal_layout,seed=seed,completed_legs_per_human=completed,min_completed_legs=min(completed),status=t['status'],protocol_valid=True,
         goal_verified=t['status']=='SUCCEEDED' and t['goal_error_world_m']<.5,goal_error_world_m=t['goal_error_world_m'],
         sim_seconds=t['sim_seconds'],robot_path_m=t['robot_path_m'],robot_stopped_s=t['robot_stopped_s'],
         min_footprint_clearance_m=event['clearance'],footprint_overlap_gt_1cm_s=duration(rows,'clearance'),
@@ -49,9 +54,23 @@ for policy in ['orca_plus','sfm']:
         human_goal_switches=sum(h['goal']!=j['goal'] for a,b in zip(active,active[1:]) for h,j in zip(b['humans'],a['humans'])),
         final_human_speed_mean_m_s=statistics.mean(h['speed'] for h in active[-1]['humans']),
         final_human_goal_distance_mean_m=statistics.mean(math.hypot(h['x']-h['goal'][0],h['y']-h['goal'][1]) for h in active[-1]['humans']))
+    if a.goal_layout=='individual':
+        arrival_errors=[];arrival_distances=[];event_count=0
+        for before,after in zip(active,active[1:]):
+            for h,previous in zip(after['humans'],before['humans']):
+                if h['completed_legs']<=previous['completed_legs']:continue
+                event_count+=1;elapsed=after['time']-gate
+                candidates=[(row,next(v for v in row['humans'] if v['id']==h['id'])) for row in rows if elapsed-.002<=row['elapsed']<=elapsed+.03]
+                if not candidates:continue
+                row,actual=min(candidates,key=lambda item:math.hypot(item[1]['x']-h['x'],item[1]['y']-h['y']))
+                arrival_errors.append(math.hypot(actual['x']-h['x'],actual['y']-h['y']))
+                arrival_distances.append(math.hypot(actual['x']-previous['goal'][0],actual['y']-previous['goal'][1]))
+        e.update(arrival_events_native=event_count,arrival_events_pose_matched=len(arrival_errors),
+            arrival_events_max_pose_error_m=max(arrival_errors,default=None),
+            arrival_events_max_actual_goal_distance_m=max(arrival_distances,default=None))
     entries.append(e)
-summary=dict(trials=len(entries),verified_goals=sum(x['goal_verified'] for x in entries),results=entries,
-    notes=['Same scene/map/Nav2 hashes, dt .1, preferred speed .8, human radius .36. Native policy parameters unchanged.',
+summary=dict(goal_layout=a.goal_layout,trials=len(entries),verified_goals=sum(x['goal_verified'] for x in entries),results=entries,
+    notes=['Same scene/map/Nav2 hashes within policy pair, dt .1, preferred speed .8, human radius .36. Native policy parameters unchanged.',
         'SFM is_bottleneck=False in the factory; native special hallway index convention is not applied to factory boxes.',
         'Dense Gazebo geometry samples, -1 cm threshold; not force contact or every physics step.',
         'Recorded velocity change is a descriptive metric, not a validated measure of naturalness.',
@@ -69,7 +88,7 @@ for col,seed in enumerate([42,43]):
  axes[0,col].set(title=f'seed {seed}',ylabel='robot footprint clearance [m]')
  axes[1,col].set(ylabel='human pair clearance [m]',xlabel='simulation seconds after goal')
  for ax in axes[:,col]:ax.axhline(0,color='red',ls=':');ax.grid(alpha=.2)
-axes[0,0].legend();fig.suptitle('CrowdSimPlus: native ORCA+ vs native SFM | same factory fixture')
+axes[0,0].legend();fig.suptitle('CrowdSimPlus: native ORCA+ vs native SFM | '+('per-person endpoints' if a.goal_layout=='individual' else 'shared endpoints'))
 fig.tight_layout();fig.savefig(report/'sfm_clearance.png',dpi=160);plt.close(fig)
 fig,axes=plt.subplots(2,2,figsize=(12,8),sharex=True,sharey=True)
 for row,seed in enumerate([42,43]):
@@ -80,6 +99,19 @@ for row,seed in enumerate([42,43]):
     for hid,color in zip([1,2,3],['#d37b28','#39946a','#9864b3']):
         hs=[next(h for h in x['humans'] if h['id']==hid) for x in rows]
         ax.plot([h['x'] for h in hs],[h['y'] for h in hs],color=color,label=f'person {hid}')
+    if a.goal_layout=='individual':
+        for hid,color in zip([1,2,3],['#d37b28','#39946a','#9864b3']):
+            points=scenes[(seed,policy)]['human_routes'][str(hid)]
+            ax.scatter([v[0] for v in points],[v[1] for v in points],marker='x',s=45,color=color)
     ax.set(xlim=(-29,-13),ylim=(-3,3),title=f'{policy}, seed {seed}',xlabel='world x [m]',ylabel='world y [m]');ax.set_aspect('equal');ax.grid(alpha=.2)
 axes[0,0].legend(fontsize=8,ncol=4);fig.tight_layout();fig.savefig(report/'sfm_paths.png',dpi=160);plt.close(fig)
+if a.goal_layout=='individual':
+ fig,axes=plt.subplots(2,2,figsize=(11,6),sharey=True)
+ for row,seed in enumerate([42,43]):
+  for col,policy in enumerate(['orca_plus','sfm']):
+    ax=axes[row,col];gate,active=native_traces[(seed,policy)]
+    for hid,color in zip([1,2,3],['#d37b28','#39946a','#9864b3']):
+        ax.step([v['time']-gate for v in active],[next(h for h in v['humans'] if h['id']==hid)['completed_legs'] for v in active],where='post',label=f'person {hid}',color=color)
+    ax.set(title=f'{policy}, seed {seed}',xlabel='simulation seconds after goal',ylabel='completed patrol legs');ax.grid(alpha=.2)
+ axes[0,0].legend();fig.tight_layout();fig.savefig(report/'patrol_progress.png',dpi=160);plt.close(fig)
 print(json.dumps(summary,indent=2))

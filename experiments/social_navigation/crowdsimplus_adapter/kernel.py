@@ -29,15 +29,22 @@ class CrowdKernel:
             corners=[(x0,y0),(x1,y0),(x1,y1),(x0,y1)]
             e.static_obstacles.extend([[corners[i],corners[(i+1)%4]] for i in range(4)])
         robot=Robot(cfg,'robot');robot.time_step=e.time_step;robot.set(-27.,0.,-14.,0.,0.,0.,0.);e.set_robot(robot)
-        e.humans=[];self.yaws=[]
-        for state in scene['initial']:
+        e.humans=[];self.yaws=[];self.arrivals=[0,0,0]
+        route_map=scene.get('human_routes')
+        if route_map is not None and set(route_map)!={str(h['id']) for h in scene['initial']}:
+            raise ValueError('Per-human routes must cover all human IDs exactly')
+        self.routes=[route_map[str(h['id'])] if route_map is not None else scene['group_route'] for h in scene['initial']]
+        for route in self.routes:
+            if len(route)!=2 or any(len(point)!=2 or not all(math.isfinite(v) for v in point) for point in route):
+                raise ValueError('Patrol requires two finite XY endpoints per human')
+        for index,state in enumerate(scene['initial']):
             h=Human(cfg,'humans',env=e);h.time_step=e.time_step
             # Human catches configure errors upstream; reject incomplete policies here.
             required=('radius','A','B','KI','A_static','B_static','A_bottleneck','B_bottleneck') if human_policy=='sfm' else ('radius','safety_space','time_horizon')
             for key in required:
                 if not hasattr(h.policy,key):raise RuntimeError('Native policy configuration missing '+key)
             if h.policy.time_step!=e.time_step:raise RuntimeError('Human policy timestep mismatch')
-            gx,gy=scene['group_route'][0]
+            gx,gy=self.routes[index][0]
             h.set(state['x'],state['y'],gx,gy,0.,0.,state['yaw']);e.humans.append(h);self.yaws.append(state['yaw'])
         self.last_actions=[]
 
@@ -60,13 +67,14 @@ class CrowdKernel:
             # Native reached_destination criterion; external patrol instead of episode end.
             for i,h in enumerate(e.humans):
                 if h.reached_destination():
-                    self.targets[i]=1-self.targets[i];h.final_gx,h.final_gy=self.scene['group_route'][self.targets[i]];h.set_g_xy(h.px,h.py)
+                    self.arrivals[i]+=1
+                    self.targets[i]=1-self.targets[i];h.final_gx,h.final_gy=self.routes[i][self.targets[i]];h.set_g_xy(h.px,h.py)
             self.last_actions=[dict(vx=float(a.vx),vy=float(a.vy)) for a in actions]
         e.global_time+=e.time_step;e.global_time_step+=1;self.steps+=1
 
     def humans(self):
         return [dict(id=i+1,x=float(h.px),y=float(h.py),yaw=float(self.yaws[i]),speed=float(math.hypot(h.vx,h.vy)),
-            vx=float(h.vx),vy=float(h.vy),radius=float(h.radius),goal=[float(h.gx),float(h.gy)]) for i,h in enumerate(self.env.humans)]
+            vx=float(h.vx),vy=float(h.vy),radius=float(h.radius),goal=[float(h.gx),float(h.gy)],completed_legs=self.arrivals[i],route_target_index=self.targets[i]) for i,h in enumerate(self.env.humans)]
 
     def metadata(self):
         e=self.env;p=e.humans[0].policy
@@ -81,6 +89,8 @@ class CrowdKernel:
             sfm_parameters={key:getattr(p,key) for key in ['radius','A','B','KI','A_static','B_static','A_bottleneck','B_bottleneck','is_bottleneck']} if self.human_policy=='sfm' else None,
             static_boxes=len(e.static_obstacles)//4,static_line_segments=len(e.static_obstacles),group_model=False,conversation_model=False,
             movement_methods=['Human.act','CrowdSimPlus.constrain_agent_action_exact','Human.step'],
-            external_scenario='shared initial poses; individual patrol goals; standing fixture held externally',
+            goal_layout=self.scene.get('goal_layout','shared'),human_routes=self.routes,
+            arrival_rule='upstream Human.reached_destination; external patrol switches endpoints only on arrival',
+            external_scenario='shared initial poses; '+('separate per-human endpoints' if self.scene.get('goal_layout')=='individual' else 'shared endpoints')+'; standing fixture held externally',
             robot_controller='ROS Nav2 only; native robot act/step and full env reward/episode loop not called',
             visual_heading='last nonzero actual velocity; initial scene yaw while stationary')

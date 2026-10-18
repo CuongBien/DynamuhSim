@@ -1,15 +1,31 @@
 """Host-side bridge setup; no CrowdSimPlus imports in ROS Python 3.12."""
-import hashlib,json,os,shutil,subprocess
+import hashlib,json,math,os,shutil,subprocess
 from pathlib import Path
 import xml.etree.ElementTree as ET
 HERE=Path(__file__).resolve().parent
 IMAGE='dynamuhsim-crowdsimplus:round2'
 SOURCE='d526a07c013c621fa1ad50894b6ba639f61063de'
-def prepare_scene(runtime,condition,seed):
+def prepare_scene(runtime,condition,seed,goal_layout="shared"):
+    if goal_layout not in ("shared","individual"):raise ValueError("Unknown goal layout")
+    if goal_layout=="individual" and condition!="counterflow":raise ValueError("Individual goals require counterflow")
     source=HERE.parent/'benchmark/reports'/f'socnavgym_{condition}_s{seed}.json'
     if not source.exists():raise ValueError('Common fixture currently supports pilot seeds 42/43 only')
     baseline=json.loads(source.read_text());(runtime/'scene.json').write_text(json.dumps(baseline['scene'],indent=2))
     assert hashlib.sha256((runtime/'scene.json').read_bytes()).hexdigest()==baseline['scene_sha256']
+    layout=json.loads((HERE.parent/'warehouse/layout.json').read_text())
+    if goal_layout=='individual':
+        scene=baseline['scene']
+        # Assign endpoints by initial y order, without enforcing lanes in motion.
+        ordered=sorted(scene['initial'],key=lambda h:h['y'])
+        scene['goal_layout']='individual'
+        scene['human_routes']={str(h['id']):[[-28.,y],[-21.,y]] for h,y in zip(ordered,[-1.4,0.,1.4])}
+        for route in scene['human_routes'].values():
+            for x,y in route:
+                for box in layout['obstacles']:
+                    qx,qy=abs(x-box['x'])-box['sx']/2,abs(y-box['y'])-box['sy']/2
+                    clearance=math.hypot(max(qx,0),max(qy,0))+min(max(qx,qy),0)-scene['human_radius']
+                    if clearance<=0:raise ValueError('Human goal intersects factory geometry')
+        (runtime/'scene.json').write_text(json.dumps(scene,indent=2))
     shutil.copyfile(HERE.parent/'warehouse/layout.json',runtime/'layout.json')
 
 def convert_world(runtime):
