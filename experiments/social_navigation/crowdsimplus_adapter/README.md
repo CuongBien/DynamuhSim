@@ -46,3 +46,26 @@ CrowdSimPlus bản này có người tránh nhau và robot, nhưng không có gr
 
 [Report tích hợp](../benchmark/crowdsim_comparison/reports/run01/CROWDSIM_GAZEBO_REPORT.md). Raw captures, log, container validation và official demo rerun nằm trong các thư mục generated/ (ignored); report giữ hash/path để truy xuất.
 
+## SFM native trong Gazebo
+
+Có thể chọn policy người bằng `--human-policy sfm`; mặc định vẫn là `orca_plus`.
+Chỉ hỗ trợ backend `crowdsimplus`. Policy SFM và native static constraint không bị
+chỉnh sửa; robot vẫn do Nav2 điều khiển. SFM không có membership/cohesion hoặc hội thoại.
+
+```bash
+# Dùng thư mục report mới cho mỗi lần chạy.
+bash experiments/social_navigation/benchmark/run.sh trial \
+  --backend crowdsimplus --human-policy sfm --condition counterflow --seed 42 \
+  --gui --diagnostics \
+  --report-dir experiments/social_navigation/benchmark/generated/sfm_demo_01
+```
+
+SFM dùng A/B/KI và các tham số static từ config upstream, timestep benchmark
+0,1 s, human radius 0,36 m, preferred speed 0,8 m/s. Trong nhà xưởng
+`is_bottleneck=False`: nhánh native hallway dựa vào thứ tự segment không được
+áp vào danh sách 168 segment của nhà xưởng. Demo 2D upstream dùng dt 0,25 s
+và DWA được lưu riêng; không gọi cấu hình Gazebo là demo nguyên bản.
+
+[So sánh SFM/ORCA+](../benchmark/sfm_comparison/reports/run01/SFM_GAZEBO_REPORT.md).
+Ma trận có hai seed, chạy từng lượt; chưa phải xếp hạng thống kê.
+

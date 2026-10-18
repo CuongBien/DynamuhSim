@@ -48,12 +48,14 @@ p.add_argument('--diagnostics',action='store_true',help='Capture raw sensor, TF,
 p.add_argument('--geometry',choices=['native','circle_contact'],default='native')
 p.add_argument('--robot-avoidance',action='store_true',help='Experimental robot-aware group ORCA; requires circle_contact')
 p.add_argument('--invisible-robot',action='store_true',help='CrowdSimPlus observation ablation only')
+p.add_argument('--human-policy',choices=['orca_plus','sfm'],default='orca_plus',help='CrowdSimPlus native human policy')
 p.add_argument('--sim-budget',type=float,default=75.)
 a=p.parse_args()
 if a.backend=='crowdsimplus' and not a.report_dir:p.error('CrowdSimPlus requires a separate --report-dir')
 if a.invisible_robot and a.backend!='crowdsimplus':p.error('--invisible-robot requires CrowdSimPlus')
 if a.robot_avoidance and (a.geometry!='circle_contact' or a.backend!='socnavgym' or not a.report_dir):
     p.error('--robot-avoidance requires SocNavGym, circle_contact, and separate --report-dir')
+if a.human_policy!='orca_plus' and a.backend!='crowdsimplus':p.error('--human-policy sfm requires CrowdSimPlus')
 worker_flags=['--robot-avoidance'] if a.robot_avoidance else []
 if a.geometry!='native' and (a.backend!='socnavgym' or not a.report_dir):
     p.error('--geometry circle_contact requires --backend socnavgym and a separate --report-dir')
@@ -61,6 +63,7 @@ if a.diagnostics and not a.report_dir:
     p.error('--diagnostics requires a separate --report-dir')
 label=a.backend if a.geometry=='native' else f'{a.backend}_{a.geometry}'
 if a.robot_avoidance:label+='_robot_orca'
+if a.backend=='crowdsimplus' and a.human_policy!='orca_plus':label+='_'+a.human_policy
 if a.invisible_robot:label+='_blind'
 name=f'{label}_{a.condition}_s{a.seed}'
 (HERE/'generated').mkdir(exist_ok=True)
@@ -82,7 +85,7 @@ processes=[]
 node=None
 socket_dir=None
 container_name=None
-result=dict(name=name,backend=a.backend,condition=a.condition,seed=a.seed,geometry=a.geometry,robot_avoidance=a.robot_avoidance,robot_visible=not a.invisible_robot,status='ERROR',
+result=dict(name=name,backend=a.backend,human_policy=a.human_policy if a.backend=='crowdsimplus' else None,condition=a.condition,seed=a.seed,geometry=a.geometry,robot_avoidance=a.robot_avoidance,robot_visible=not a.invisible_robot,status='ERROR',
     protocol_valid=False,runtime=str(runtime.relative_to(HERE)),metrics_clock='simulation',
     commit=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip())
 rows=[]
@@ -134,7 +137,7 @@ try:
         socket_path=str(Path(socket_dir.name)/'worker.sock')
         container_name=f'dynamuhsim_crowd_{os.getpid()}'
         workerlog=(runtime/'worker.log').open('w'); files.append(workerlog)
-        worker=subprocess.Popen(docker_command(runtime,Path(socket_dir.name),container_name,a.invisible_robot),
+        worker=subprocess.Popen(docker_command(runtime,Path(socket_dir.name),container_name,a.invisible_robot,a.human_policy),
             stdout=workerlog,stderr=subprocess.STDOUT,start_new_session=True)
         processes.append(worker)
         deadline=time.monotonic()+90
@@ -143,6 +146,7 @@ try:
                 raise RuntimeError('CrowdSimPlus container worker not ready: '+str(runtime/'worker.log'))
             time.sleep(.1)
         result['crowdsim_metadata']=json.loads((runtime/'crowdsim_metadata.json').read_text())
+        if result['crowdsim_metadata']['human_policy']!=a.human_policy:raise RuntimeError('Unexpected native human policy')
         if result['crowdsim_metadata']['source_commit']!='d526a07c013c621fa1ad50894b6ba639f61063de':
             raise RuntimeError('Unexpected CrowdSimPlus source revision')
         result['crowdsim_image_id']=subprocess.check_output(['docker','image','inspect','dynamuhsim-crowdsimplus:round2','--format','{{.Id}}'],text=True).strip()
