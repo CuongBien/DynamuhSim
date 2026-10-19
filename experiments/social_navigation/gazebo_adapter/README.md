@@ -66,3 +66,5 @@ GUI WSLg từng gặp một lỗi khởi tạo driver D3D12; lượt thử lại
 Xem [báo cáo kết quả](reports/ADAPTER_REPORT.md), [so sánh ba framework](../FRAMEWORK_COMPARISON.md).
 
 Đã có [pilot ghép cặp với Nav2](../benchmark/reports/BENCHMARK_REPORT.md), dùng gate bắt đầu người sau khi Nav2 sẵn sàng. Protocol đó tách biệt với tùy chọn demo `--nav` ở trên.
+
+Demo hiện kiểm GPU thật trước khi chạy và bổ sung cleanup child detached theo token phiên. [Chi tiết GPU/cleanup](../benchmark/gpu_runtime/README.md). Không đổi native group policy hoặc cấu hình ROS gốc.

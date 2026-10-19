@@ -7,6 +7,7 @@ import os
 import re
 from pathlib import Path
 import signal
+import sys
 import subprocess
 import tempfile
 import time
@@ -132,8 +133,12 @@ def main():
         min_h_h_static_interactions=int(a.mode=='conversation'),max_h_h_static_interactions=int(a.mode=='conversation'),
         set_shape='rectangle',min_map_x=60,max_map_x=60,min_map_y=40,max_map_y=40)
     (runtime/'config.yaml').write_text(yaml.safe_dump(config))
+    sys.path.insert(0,str(ROOT/'benchmark/gpu_runtime'))
+    from runtime_guard import RuntimeGuard,gpu_preflight
+    runtime_guard=RuntimeGuard(runtime)
     processes = []
     try:
+        gpu_preflight(runtime)
         with tempfile.TemporaryDirectory(prefix='socnavgym_') as socket_dir:
             socket_path = str(Path(socket_dir)/'worker.sock')
             worker_log = (runtime/'worker.log').open('w')
@@ -167,8 +172,12 @@ def main():
     except KeyboardInterrupt:
         return 130
     finally:
-        for process in reversed(processes):
-            stop(process)
+        try:
+            for process in reversed(processes):
+                stop(process)
+        finally:
+            cleanup=runtime_guard.cleanup()
+            if cleanup['remaining']:raise RuntimeError('Owned experiment child processes remain after cleanup')
 
 if __name__=='__main__':
     raise SystemExit(main())

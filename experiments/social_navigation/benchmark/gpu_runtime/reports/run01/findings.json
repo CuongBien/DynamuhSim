@@ -1,0 +1,24 @@
+{
+  "observed_before_cleanup": [
+    {
+      "pid": 20529,
+      "comm": "image_bridge",
+      "ps_lifetime_cpu_percent": 98.1
+    },
+    {
+      "pid": 20727,
+      "comm": "goal_pose_bridge",
+      "ps_lifetime_cpu_percent": 97.5
+    },
+    {
+      "pid": 20550,
+      "comm": "robot_state_publisher",
+      "ps_lifetime_cpu_percent": 97.3
+    }
+  ],
+  "completed_trial": "crowdsimplus_sfm_individual_goals_bottleneck_s43_0c7enmwh",
+  "renderer_before_change": "D3D12 (NVIDIA GeForce RTX 4060 Laptop GPU)",
+  "renderer_after_change": "D3D12 (NVIDIA GeForce RTX 4060 Laptop GPU)",
+  "temperature_measured": false,
+  "note": "Lifetime ps CPU percentages show three busy old ROS nodes, not a thermal sensor measurement. Previous benchmark wall times/RTF were not controlled for this residual CPU load."
+}

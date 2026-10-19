@@ -1,0 +1,36 @@
+[
+  {
+    "pid": 20529,
+    "command": "/opt/ros/jazzy/lib/ros_gz_image/image_bridge /camera/image /camera/depth_image --ros-args -r __node:=camera_image_bridge --params-file /tmp/launch_params_pzq7pcbv -r /camera/image:=/camera/color/image_raw -r /camera/depth_image:=/camera/depth/image_rect_raw ",
+    "verified_completed_trial": [
+      {
+        "report": "experiments/social_navigation/benchmark/bottleneck/reports/run01/crowdsimplus_sfm_individual_goals_bottleneck_s43.json",
+        "status": "SUCCEEDED",
+        "protocol_valid": true
+      }
+    ]
+  },
+  {
+    "pid": 20727,
+    "command": "python3 /home/cuongbien/DynamuhSim/install/custom_corridor/lib/custom_corridor/goal_pose_bridge.py --ros-args -r __node:=goal_pose_bridge --params-file /tmp/launch_params_36erus0_ ",
+    "verified_completed_trial": [
+      {
+        "report": "experiments/social_navigation/benchmark/bottleneck/reports/run01/crowdsimplus_sfm_individual_goals_bottleneck_s43.json",
+        "status": "SUCCEEDED",
+        "protocol_valid": true
+      }
+    ],
+    "forced_kill": true
+  },
+  {
+    "pid": 20550,
+    "command": "/opt/ros/jazzy/lib/robot_state_publisher/robot_state_publisher --ros-args -r __node:=robot_state_publisher --params-file /tmp/launch_params_234zt70k ",
+    "verified_completed_trial": [
+      {
+        "report": "experiments/social_navigation/benchmark/bottleneck/reports/run01/crowdsimplus_sfm_individual_goals_bottleneck_s43.json",
+        "status": "SUCCEEDED",
+        "protocol_valid": true
+      }
+    ]
+  }
+]
