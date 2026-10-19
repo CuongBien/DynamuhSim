@@ -119,3 +119,5 @@ chỉnh tham số để thay các kết quả thất bại đã lưu.
 ## Ghi thêm global navigation
 
 `--navigation-diagnostics` bật recorder thụ động cho global plan, global costmap và native particle cloud; tự bật `--diagnostics`. [Cách chạy và phạm vi](navigation_diagnostics/README.md), [hai lượt seed42](navigation_diagnostics/reports/run03/NAVIGATION_DIAGNOSTICS.md). Kết quả chẩn đoán giữ riêng với ma trận bottleneck gốc.
+
+GPU/cleanup: runner kiểm hardware renderer trước khi khởi động và dọn child theo token phiên. [Cách kiểm tra](gpu_runtime/README.md), [kết quả RTX 4060 và xử lý ROS chạy sót](gpu_runtime/reports/run01/GPU_RUNTIME.md).

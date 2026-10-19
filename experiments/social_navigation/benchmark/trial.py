@@ -84,6 +84,9 @@ report=a.report_dir.resolve() if a.report_dir else HERE/'reports'
 report.mkdir(exist_ok=True,parents=True)
 if a.report_dir and (report/f'{name}.json').exists():
     p.error('Trial already exists in --report-dir; choose a new directory')
+sys.path.insert(0,str(HERE/'gpu_runtime'))
+from runtime_guard import RuntimeGuard,gpu_preflight
+runtime_guard=RuntimeGuard(runtime)
 diag=None
 navigation_capture=None
 if a.diagnostics:
@@ -107,6 +110,7 @@ counts={key:0 for key in ['scan','imu','odom','clock','amcl']}
 latest={}
 files=[]
 try:
+    result['rendering']=gpu_preflight(runtime)
     if a.backend=='crowdsimplus' or a.condition=='bottleneck':
         prepare_crowd_scene(runtime,a.condition,a.seed,'individual' if a.condition=='bottleneck' else a.goal_layout)
     else:
@@ -362,8 +366,13 @@ finally:
         result['navigation_capture']=navigation_capture.summary()
     if node:
         node.destroy_node(); rclpy.shutdown()
-    for process in reversed(processes): stop(process)
-    cleanup_container(container_name)
+    try:
+        for process in reversed(processes): stop(process)
+        cleanup_container(container_name)
+    finally:
+        result['process_cleanup']=runtime_guard.cleanup()
+        if result['process_cleanup']['remaining']:
+            result['status']='ERROR';result['protocol_valid']=False;result['error']='Owned child processes remain after cleanup'
     if socket_dir: socket_dir.cleanup()
     for f in files: f.close()
     if diag:
