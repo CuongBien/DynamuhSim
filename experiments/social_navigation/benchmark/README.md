@@ -109,3 +109,9 @@ Ba người đi từ hai phía qua lối robot, với native policy giữ nguyê
 
 Có thêm fixture `--condition bottleneck --goal-layout individual`, dùng khe
 1,8×8 m hiện có trong nhà xưởng. [Cách chạy và kiểm định](bottleneck/README.md).
+
+## Chẩn đoán AMCL từ các lượt lối hẹp
+
+[Công cụ và report offline](localization_diagnosis/README.md) đối chiếu pose,
+odom, scan, TF, local costmap và sensor score. Không chạy lại simulator hoặc
+chỉnh tham số để thay các kết quả thất bại đã lưu.

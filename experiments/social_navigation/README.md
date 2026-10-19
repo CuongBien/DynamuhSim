@@ -134,3 +134,11 @@ Chưa dùng các lượt này để xếp hạng simulator; cần tách lỗi đ
 
 [Xem sáu commit tính năng và bằng chứng tương ứng](COMMIT_HISTORY.md). Các
 trạng thái “chưa commit” trong report phản ánh thời điểm chạy thí nghiệm.
+
+## Chẩn đoán bottleneck offline
+
+Đã đối chiếu năm lượt đã lưu: ORCA+ seed42 có AMCL jump 1,992 m trong khi
+odom khớp Gazebo trong 1 cm. Sensor score dựng lại đã khớp thư viện AMCL
+native; failure SFM có chuỗi khác, cần thêm global plan/particle cloud.
+[Report và bằng chứng](benchmark/localization_diagnosis/reports/run01/LOCALIZATION_DIAGNOSIS.md).
+Chưa chỉnh ROS/Nav2 hoặc thay kết quả benchmark cũ.

@@ -83,3 +83,12 @@ Giữ native parameters/controller; chỉ đổi spawn/goal và AMCL initial pos
 trong runtime config copy. Cần chẩn đoán định vị/scan/costmap trước khi dùng
 kết quả lối hẹp để chọn model. Đây vẫn là ba người độc lập; ComplexityNav
 chưa nối Gazebo, chưa có World Model hoặc chuyển Isaac Sim.
+
+## Sau bottleneck: đã khoanh vùng yếu tố định vị
+
+[Chẩn đoán offline](benchmark/localization_diagnosis/reports/run01/LOCALIZATION_DIAGNOSIS.md)
+xác nhận ORCA+ seed42 có AMCL jump 1,992 m, trong khi odometry khớp Gazebo
+trong khoảng 1 cm. Có mode sensor score cao trong khối occupied, đã kiểm
+với thư viện AMCL native. Đây chưa phải replay PF hoặc bản sửa hành vi.
+SFM seed42 dừng tịnh tiến trước khi tâm AMCL vào occupied; cần thu global
+plan/costmap và particle cloud để tách tiếp. Kết quả 2/4 goal giữ nguyên.
