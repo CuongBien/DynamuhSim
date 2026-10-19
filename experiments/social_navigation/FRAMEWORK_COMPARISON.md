@@ -92,3 +92,5 @@ trong khoảng 1 cm. Có mode sensor score cao trong khối occupied, đã kiể
 với thư viện AMCL native. Đây chưa phải replay PF hoặc bản sửa hành vi.
 SFM seed42 dừng tịnh tiến trước khi tâm AMCL vào occupied; cần thu global
 plan/costmap và particle cloud để tách tiếp. Kết quả 2/4 goal giữ nguyên.
+
+Bổ sung [capture global navigation/particle cloud](benchmark/navigation_diagnostics/reports/run03/NAVIGATION_DIAGNOSTICS.md): SFM/ORCA+ seed42 mới đều qua khe và tới đích, chưa tái hiện failure cũ; không đổi kết quả ma trận gốc hoặc dùng để xếp hạng mô hình.

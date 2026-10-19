@@ -45,6 +45,7 @@ p.add_argument('--seed',type=int,default=42)
 p.add_argument('--gui',action='store_true')
 p.add_argument('--report-dir',type=Path,help='Separate output directory; never reuse a completed trial directory')
 p.add_argument('--diagnostics',action='store_true',help='Capture raw sensor, TF, costmap, commands and world poses')
+p.add_argument('--navigation-diagnostics',action='store_true',help='Also passively capture global plan/costmap, native particle cloud, action status and ROS logs; implies --diagnostics')
 p.add_argument('--geometry',choices=['native','circle_contact'],default='native')
 p.add_argument('--robot-avoidance',action='store_true',help='Experimental robot-aware group ORCA; requires circle_contact')
 p.add_argument('--invisible-robot',action='store_true',help='CrowdSimPlus observation ablation only')
@@ -52,6 +53,7 @@ p.add_argument('--human-policy',choices=['orca_plus','sfm'],default='orca_plus',
 p.add_argument('--goal-layout',choices=['shared','individual'],default='shared',help='CrowdSimPlus waypoint fixture; native policy unchanged')
 p.add_argument('--sim-budget',type=float,default=75.)
 a=p.parse_args()
+if a.navigation_diagnostics:a.diagnostics=True
 if a.backend=='crowdsimplus' and not a.report_dir:p.error('CrowdSimPlus requires a separate --report-dir')
 if a.invisible_robot and a.backend!='crowdsimplus':p.error('--invisible-robot requires CrowdSimPlus')
 if a.robot_avoidance and (a.geometry!='circle_contact' or a.backend!='socnavgym' or not a.report_dir):
@@ -83,6 +85,7 @@ report.mkdir(exist_ok=True,parents=True)
 if a.report_dir and (report/f'{name}.json').exists():
     p.error('Trial already exists in --report-dir; choose a new directory')
 diag=None
+navigation_capture=None
 if a.diagnostics:
     from diagnostics import Capture
     diag=Capture(runtime/'diagnostics.jsonl')
@@ -230,6 +233,9 @@ try:
     if diag:
         diag.subscribe(node,lambda:latest.get('clock'))
         result['diagnostics']=str(diag.path)
+        if a.navigation_diagnostics:
+            from navigation_diagnostics.capture import NavigationCapture
+            navigation_capture=NavigationCapture(diag,node,lambda:latest.get('clock'))
     command=node.create_publisher(String,'/rvo2_human/command',10)
     gz=GzNode()
     def pose_message(msg):
@@ -285,6 +291,10 @@ try:
                 ready=True; break
         wait(lambda:False,.2)
     if not ready: raise RuntimeError('bt_navigator not active')
+    if navigation_capture:
+        if not wait(lambda:all(navigation_capture.counts[k]>0 for k in ['global_costmap','particle_cloud']),15):
+            raise RuntimeError('Missing navigation diagnostic channels: '+str(navigation_capture.counts))
+        navigation_capture.graph('before_goal')
     errors=[math.hypot(latest_poses[names[h['id']]]['x']-h['x'],latest_poses[names[h['id']]]['y']-h['y']) for h in scene['initial']]
     result['initial_position_error_m_max']=max(errors,default=0.)
     if max(errors,default=0.)>.01: raise RuntimeError('People moved during Nav2 warmup')
@@ -347,6 +357,9 @@ except Exception as ex:
     traceback.print_exc()
 finally:
     phase='finished'
+    if navigation_capture and node:
+        navigation_capture.graph('before_shutdown')
+        result['navigation_capture']=navigation_capture.summary()
     if node:
         node.destroy_node(); rclpy.shutdown()
     for process in reversed(processes): stop(process)

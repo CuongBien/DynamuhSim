@@ -115,3 +115,7 @@ Có thêm fixture `--condition bottleneck --goal-layout individual`, dùng khe
 [Công cụ và report offline](localization_diagnosis/README.md) đối chiếu pose,
 odom, scan, TF, local costmap và sensor score. Không chạy lại simulator hoặc
 chỉnh tham số để thay các kết quả thất bại đã lưu.
+
+## Ghi thêm global navigation
+
+`--navigation-diagnostics` bật recorder thụ động cho global plan, global costmap và native particle cloud; tự bật `--diagnostics`. [Cách chạy và phạm vi](navigation_diagnostics/README.md), [hai lượt seed42](navigation_diagnostics/reports/run03/NAVIGATION_DIAGNOSTICS.md). Kết quả chẩn đoán giữ riêng với ma trận bottleneck gốc.
