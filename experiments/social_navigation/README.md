@@ -142,3 +142,5 @@ odom khớp Gazebo trong 1 cm. Sensor score dựng lại đã khớp thư viện
 native; failure SFM có chuỗi khác, cần thêm global plan/particle cloud.
 [Report và bằng chứng](benchmark/localization_diagnosis/reports/run01/LOCALIZATION_DIAGNOSIS.md).
 Chưa chỉnh ROS/Nav2 hoặc thay kết quả benchmark cũ.
+
+Chẩn đoán bổ sung: [global plan/costmap và particle cloud trong Gazebo](benchmark/navigation_diagnostics/reports/run03/NAVIGATION_DIAGNOSTICS.md). Hai lượt mới tới đích nhưng chưa tái hiện/sửa lỗi cũ; benchmark gốc giữ nguyên.
