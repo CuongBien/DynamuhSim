@@ -65,3 +65,5 @@ schema nên vẫn tăng CPU/I/O; thời gian callback được ghi trong result.
 Capture thụ động vẫn có thể ảnh hưởng scheduling/nhiễu của closed loop.
 Mỗi lượt có raw hash, config/scene/image identity và kết quả riêng. Không
 thay thế benchmark cũ bằng các lượt chẩn đoán thành công.
+
+Lưu ý clustering khi spin quanh ±π: canonical atan2 có thể tạo seam giả. [Loạt stability](../stability/README.md) bổ sung circular-mean lift độc lập trước gọi native libpf; xem `*_circular_clusters.json` và report gộp, không coi mọi cluster trong output canonical là internal PF ID đã khôi phục.

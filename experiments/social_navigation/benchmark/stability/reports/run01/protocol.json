@@ -1,0 +1,64 @@
+{
+  "created_utc": "2026-10-19T06:00:49.505536+00:00",
+  "head": "2f2bdff694a5c9fd6a3c9be6c0cefc65ff21412d",
+  "plan": [
+    {
+      "round": 1,
+      "policy": "sfm",
+      "seed": 42,
+      "name": "crowdsimplus_sfm_individual_goals_bottleneck_s42"
+    },
+    {
+      "round": 1,
+      "policy": "orca_plus",
+      "seed": 42,
+      "name": "crowdsimplus_individual_goals_bottleneck_s42"
+    },
+    {
+      "round": 2,
+      "policy": "orca_plus",
+      "seed": 42,
+      "name": "crowdsimplus_individual_goals_bottleneck_s42"
+    },
+    {
+      "round": 2,
+      "policy": "sfm",
+      "seed": 42,
+      "name": "crowdsimplus_sfm_individual_goals_bottleneck_s42"
+    },
+    {
+      "round": 3,
+      "policy": "sfm",
+      "seed": 42,
+      "name": "crowdsimplus_sfm_individual_goals_bottleneck_s42"
+    },
+    {
+      "round": 3,
+      "policy": "orca_plus",
+      "seed": 42,
+      "name": "crowdsimplus_individual_goals_bottleneck_s42"
+    }
+  ],
+  "condition": "bottleneck",
+  "goal_layout": "individual",
+  "sim_budget_s": 75,
+  "cooldown_wall_s": 15,
+  "diagnostics": "--navigation-diagnostics",
+  "gui": false,
+  "goal_failure_policy": "Keep ABORTED/TIMEOUT; continue remaining fixed trials. No cherry-picked retries or replacement of old cohorts.",
+  "infrastructure_stop_policy": "Stop remaining cohort on child exit, invalid trial, missing diagnostic channels, wrong hardware renderer, cleanup failure or leftover owned nodes.",
+  "randomness_scope": "Seed42 fixes people fixture/native policy seeds only; AMCL/LiDAR/MPPI/physics scheduling are not jointly deterministically seeded.",
+  "comparison_scope": "Six within-seed diagnostic repetitions; not simulator ranking, not failure-rate estimate across general environments. Old 2/4 benchmark and later 2/2 diagnostics remain separate.",
+  "source_sha256": {
+    "experiments/social_navigation/benchmark/trial.py": "6f8cc5a7e2d81edb572586eeb8aca59fc2fade68dc6668a093d64fabff2aa3a6",
+    "experiments/social_navigation/benchmark/diagnostics.py": "ccddf244a01d07f53cb011d73e1e1ea1c6f2f0b51a44538743205c9ec6239040",
+    "experiments/social_navigation/benchmark/navigation_diagnostics/capture.py": "8d5be4aa82ea44da90bad0d88cc2bbd5b287ee8458cd58196601ef495fd4e289",
+    "experiments/social_navigation/benchmark/gpu_runtime/runtime_guard.py": "384e1e6ca012527524a92c37aab136588a36e5dc57a98ed6f9d58268648410e3",
+    "experiments/social_navigation/warehouse/nav2_warehouse.yaml": "ff73d68dcdc64c29427522c9b87fc9f3850b02326a3a9b1c467e6b9b3d5297a7",
+    "experiments/social_navigation/warehouse/warehouse.pgm": "6538c7c14e4ece9f8e20a57619a49ea4e80bee6cc886499f5e1d21c3b550667b",
+    "experiments/social_navigation/crowdsimplus_adapter/kernel.py": "4122df6c256c189d3f4c440894f9582d8e1c811300e6d86664019db23c6ef227",
+    "experiments/social_navigation/crowdsimplus_adapter/adapter.cc": "3abded9205fdb54f572a256aeac1ce893f0a125d040532390e8e9d7c3c576cf7",
+    "experiments/social_navigation/crowdsimplus_adapter/crowd_host.py": "d8cbb6743fa2022e2c92cbf45b2a1227475d5fe399b17775839140a670a72ac0",
+    "experiments/social_navigation/benchmark/stability/run.py": "1c6470cb6f7206465801629ee7d1d2ebd8c10908ce42a7467f71f8d8f73ef787"
+  }
+}
