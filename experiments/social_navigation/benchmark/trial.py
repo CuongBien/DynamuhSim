@@ -53,9 +53,13 @@ p.add_argument('--human-policy',choices=['orca_plus','sfm'],default='orca_plus',
 p.add_argument('--goal-layout',choices=['shared','individual'],default='shared',help='CrowdSimPlus waypoint fixture; native policy unchanged')
 p.add_argument('--shutdown-mode',choices=['signals','server_control','wsl_d3d12'],default='signals',help='Experimental ordered server shutdown; runs only after trial measurement')
 p.add_argument('--localization-profile',choices=['baseline','lf_prob','lf_prob_beamskip'],default='baseline',help='Isolated runtime AMCL ablation; leaves warehouse configuration unchanged')
+p.add_argument('--amcl-observer-qos',choices=['sensor_data','transient_local'],default='sensor_data',help='Read-only AMCL subscriber QoS; sensor_data preserves historical behavior')
+p.add_argument('--amcl-late-join-check',action='store_true',help='Read-only real AMCL late-subscriber check before goal; requires transient_local')
 p.add_argument('--sim-budget',type=float,default=75.)
 a=p.parse_args()
 if a.navigation_diagnostics:a.diagnostics=True
+if (a.amcl_observer_qos!='sensor_data' or a.amcl_late_join_check) and not a.report_dir:p.error('AMCL observation changes require a separate --report-dir')
+if a.amcl_late_join_check and a.amcl_observer_qos!='transient_local':p.error('Late-join check requires --amcl-observer-qos transient_local')
 if a.localization_profile!='baseline' and not a.report_dir:p.error('Localization ablation requires separate --report-dir')
 if a.backend=='crowdsimplus' and not a.report_dir:p.error('CrowdSimPlus requires a separate --report-dir')
 if a.invisible_robot and a.backend!='crowdsimplus':p.error('--invisible-robot requires CrowdSimPlus')
@@ -221,13 +225,16 @@ try:
     os.environ['SOCIAL_BENCHMARK_WORLD']=str(runtime/'warehouse.sdf')
     rclpy.init()
     node=Node('social_navigation_pilot')
+    from amcl_observer import observer_qos,publisher_evidence,late_join_check
+    result['amcl_observer_qos']=a.amcl_observer_qos
     def receive(key,msg):
         counts[key]+=1; latest[key]=msg
         if diag and key in ('scan','odom','amcl'):
             diag.ros(key,msg,latest.get('clock'))
     for key,topic,kind in [('scan','/scan',LaserScan),('imu','/imu',Imu),('odom','/odom',Odometry),
             ('clock','/clock',Clock),('amcl','/amcl_pose',PoseWithCovarianceStamped)]:
-        node.create_subscription(kind,topic,lambda msg,key=key:receive(key,msg),qos_profile_sensor_data)
+        node.create_subscription(kind,topic,lambda msg,key=key:receive(key,msg),
+            observer_qos(a.amcl_observer_qos) if key=='amcl' else qos_profile_sensor_data)
     def native_message(msg):
         global native_messages
         state=json.loads(msg.data)
@@ -292,6 +299,14 @@ try:
             and 'mecanum_robot' in latest_poses and all(n in latest_poses for n in names.values())
             and (a.backend not in ('socnavgym','crowdsimplus') or native_messages>=5),100):
         raise RuntimeError(f'Sensors or initial scene not ready: {counts}')
+    result['amcl_publishers']=publisher_evidence(node)
+    result['amcl_first_ready']=dict(count=counts['amcl'],frame_id=latest['amcl'].header.frame_id,
+        stamp_ns=latest['amcl'].header.stamp.sec*1000000000+latest['amcl'].header.stamp.nanosec,
+        clock_ns=latest['clock'].clock.sec*1000000000+latest['clock'].clock.nanosec)
+    if a.amcl_late_join_check:
+        result['amcl_late_join_check']=late_join_check(node,wait)
+        if not result['amcl_late_join_check']['samples']['transient_local']:
+            raise RuntimeError('AMCL durable late subscriber did not receive a pose')
     lifecycle=node.create_client(GetState,'/bt_navigator/get_state')
     client=ActionClient(node,NavigateToPose,'navigate_to_pose')
     deadline=time.monotonic()+90
@@ -382,6 +397,7 @@ finally:
             navigation_capture.graph('before_shutdown')
             result['navigation_capture']=navigation_capture.summary()
         if node:
+            result['amcl_publishers_at_teardown']=publisher_evidence(node)
             node.destroy_node(); rclpy.shutdown()
     except Exception as error:
         result['ros_teardown_error']=str(error)
