@@ -1,0 +1,32 @@
+{
+  "command": [
+    "docker",
+    "run",
+    "--rm",
+    "--name",
+    "dynamuhsim-complexity-contract-01",
+    "--network",
+    "none",
+    "--cpus",
+    "2",
+    "--memory",
+    "4g",
+    "--user",
+    "1000:1000",
+    "-e",
+    "OMP_NUM_THREADS=1",
+    "-e",
+    "OPENBLAS_NUM_THREADS=1",
+    "-e",
+    "MKL_NUM_THREADS=1",
+    "-v",
+    "/home/cuongbien/DynamuhSim/experiments/social_navigation/benchmark/complexitynav_contract:/work",
+    "sha256:edfd591ea7551813419e511b341089ad956b6d3e4c1bd395a326035865ef1d5d",
+    "python",
+    "/work/probe.py",
+    "--report-dir",
+    "/work/reports/run01"
+  ],
+  "exit_code": 1,
+  "wall_seconds": 4.494424882000203
+}
