@@ -1,0 +1,62 @@
+{
+  "created_utc": "2026-10-21T08:20:03.019309+00:00",
+  "head": "a2ef6afa14c7775d0214c51f382c3bc770944fff",
+  "plan": [
+    {
+      "variant": "native",
+      "condition": "standing",
+      "gui": true,
+      "name": "socnavgym_standing_s42"
+    },
+    {
+      "variant": "circle_contact",
+      "condition": "standing",
+      "gui": false,
+      "name": "socnavgym_circle_contact_standing_s42"
+    },
+    {
+      "variant": "robot_orca",
+      "condition": "standing",
+      "gui": false,
+      "name": "socnavgym_circle_contact_robot_orca_standing_s42"
+    },
+    {
+      "variant": "native",
+      "condition": "counterflow",
+      "gui": false,
+      "name": "socnavgym_counterflow_s42"
+    },
+    {
+      "variant": "circle_contact",
+      "condition": "counterflow",
+      "gui": false,
+      "name": "socnavgym_circle_contact_counterflow_s42"
+    },
+    {
+      "variant": "robot_orca",
+      "condition": "counterflow",
+      "gui": false,
+      "name": "socnavgym_circle_contact_robot_orca_counterflow_s42"
+    }
+  ],
+  "seed": 42,
+  "sim_budget_s": 75,
+  "cooldown_wall_s": 15,
+  "localization_profile": "baseline",
+  "shutdown_mode": "wsl_d3d12",
+  "scope": "Six NEW live Gazebo/Nav2 demonstrations of one3-person group. Actual robot input can differ between policies; NOT identical-input replay. One seed, no simulator ranking.",
+  "capture": "--diagnostics plus live observer RGB camera; first standing-native trial opens GUI for manual user check.",
+  "source_sha256": {
+    "experiments/social_navigation/benchmark/group_gazebo_demo/run.py": "5046ae7ebd27ed526e75b96395fcc138fcf0efc3799114ccba2990171c4d8815",
+    "experiments/social_navigation/benchmark/trial.py": "1723f5c9cc0c173886a123fe855285845ea957b87e9fffac1b755a56e8313e82",
+    "experiments/social_navigation/benchmark/diagnostics.py": "ccddf244a01d07f53cb011d73e1e1ea1c6f2f0b51a44538743205c9ec6239040",
+    "experiments/social_navigation/benchmark/worker.py": "ea255ef6d24fdbc7e78424cc606d5103c8e005ba86f3896faa041e6d0ecc723f",
+    "experiments/social_navigation/benchmark/circle_contact.py": "9661cc003c2324357cf15c3714eb8f886ec441723b7f95b10f967aec5c34fc55",
+    "experiments/social_navigation/benchmark/robot_orca.py": "76a98d59c5a80c14cf7f23dc2ef308dbff44a7f19a1f44b5022802d24e9f6c8a",
+    "experiments/social_navigation/benchmark/shutdown_fix/ordered_stop.py": "003debbc1fc1c6b27184b875bec9864c4c3ede6b4144c197c32f60d0811dadd2",
+    "experiments/social_navigation/benchmark/gpu_runtime/runtime_guard.py": "384e1e6ca012527524a92c37aab136588a36e5dc57a98ed6f9d58268648410e3",
+    "experiments/social_navigation/gazebo_adapter/kernel.py": "e360ebb4fd9a58910fd65c77396d47f543be74061cc310682111fc4ba4c1d982",
+    "experiments/social_navigation/warehouse/nav2_warehouse.yaml": "ff73d68dcdc64c29427522c9b87fc9f3850b02326a3a9b1c467e6b9b3d5297a7",
+    "experiments/social_navigation/warehouse/warehouse.pgm": "6538c7c14e4ece9f8e20a57619a49ea4e80bee6cc886499f5e1d21c3b550667b"
+  }
+}

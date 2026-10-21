@@ -67,3 +67,15 @@ Sau các commit này, [cohort12 lượt seed42/43/44](benchmark/localization_val
 Cohort12 lượt sau commit đã kết thúc và kiểm định: baseline5/6, LF-prob+beam-skip5/6 goal thật,1998 cloud đối chiếu,12/12 shutdown sạch/NVIDIA,24 ảnh/GIF decode hợp lệ. Giữ cả hai ABORTED, không retry. Không chọn profile mặc định mới. Source/kết quả cohort12 mới vẫn chưa commit; không sửa các outcome trước đó.
 
 Cohort12 lượt được lưu riêng cùng runner, mở rộng fixture seed44, analyzer, ảnh/GIF và validation. Provenance vẫn là HEADd0a7bbb tại lúc chạy cộng source hashes; commit lưu kết quả sau đó không phải một lần chạy lại. [Kế hoạch tiếp theo](NEXT_STEPS.md) ưu tiên6 probe replay chung cho ORCA+/SFM, rồi quay lại nhóm SocNavGym; chưa thực hiện các bước mới và chưa đổi AMCL mặc định.
+
+
+Các probe hành vi và bản sửa observer đã được lưu riêng:
+
+| Commit | Phần hoàn tất |
+|---|---|
+| `b3f59e2a` | `feat: benchmark native human responses with shared robot replay inputs` |
+| `195f4e85` | `fix: observe retained AMCL poses in isolated Gazebo trials` |
+
+[Replay](benchmark/human_response_replay/README.md) gồm6 CrowdSimPlus +18 SocNavGym, đầu vào robot định trước, native parity và repeatability đạt. Bản sửa AMCL chỉ đổi QoS subscriber theo tùy chọn trong harness; không reset localization hoặc đổi ROS robot. Các report giữ HEAD lúc chạy và source hashes. Native ConfigParser output giữ nguyên blank line cuối để bảo toàn byte và SHA256; kiểm tra whitespace chỉ miễn blank-at-eof cho các artifact này.
+
+Phần commit tiếp theo lưu [Gazebo nhóm](benchmark/group_gazebo_demo/README.md): ba lượt standing và ba lượt counterflow hợp lệ, một startup error gốc được giữ. Sáu action SUCCEEDED, năm lượt đạt sai số thật≤0.20m; GUI kéo/zoom/Pause/Play được người dùng xác nhận. Nhóm cố định ba người, chưa có lifecycle formation trong Gazebo.

@@ -2,7 +2,7 @@
 
 Cơ sở: cohort12 lượt seed42/43/44 cho baseline và LF-prob+beam-skip đều5/6 goal thật. SFM thay đổi2/3→3/3, ORCA+3/3→2/3; đây là mẫu nhỏ, không chứng minh cấu hình mới tốt hơn. Giữ AMCL mặc định và dữ liệu hai failure, chưa chọn framework. [Bằng chứng](benchmark/localization_validation/reports/run01/MULTISEED_REPORT.md).
 
-Kế hoạch này chưa được chạy. Không triển khai World Model, chuyển Isaac Sim, sửa ROS robot source hoặc thêm model học mới.
+Cập nhật: bước1 đã chạy đủ6 probe CrowdSimPlus; bước2 đã chạy18 probe nhóm SocNavGym. [Báo cáo replay](benchmark/human_response_replay/reports/run01/REPLAY_REPORT.md). Bước3 đã có đủ sáu tổ hợp scene/variant hợp lệ sau đợt bổ sung ba lượt đi bộ: sáu action báo SUCCEEDED, năm lượt đạt sai số thật ≤0.20m. Một lỗi khởi tạo cũ được giữ riêng; QoS nhận AMCL đã sửa bằng tùy chọn trong harness. GUI kéo/zoom và Pause/Play đã được người dùng xác nhận. [Báo cáo Gazebo](benchmark/group_gazebo_demo/reports/recovery01/RECOVERY_REPORT.md). Bước4 chưa bắt đầu tích hợp. Không triển khai World Model, chuyển Isaac Sim, sửa ROS robot source hoặc thêm model học mới.
 
 ## 1. Bước triển khai kế tiếp: sáu probe replay cho CrowdSimPlus
 
@@ -42,3 +42,8 @@ Giữ demo độc lập hiện có làm đối chứng. Chỉ nối Gazebo sau k
 ## Điều kiện chọn mô hình
 
 Ưu tiên khả năng đúng mục tiêu (nhóm, đứng tương tác, tránh người/robot), hành vi quan sát được và hạn chế có số đo. Sau đó mới xét chi phí runtime và độ thuận tiện tích hợp. Mỗi đợt có protocol cố định, không thay failure bằng lượt đẹp; chưa mở rộng thêm các ma trận AMCL nếu chưa có câu hỏi chẩn đoán cụ thể.
+
+
+## Công việc kế tiếp sau đợt này
+
+Chốt nghiệm thu và lưu Git các probe replay, báo cáo Gazebo, cùng bản sửa subscriber QoS; chỉ commit khi người dùng yêu cầu. Để đáp ứng mục tiêu formation, bước kỹ thuật kế tiếp là kiểm định lifecycle/ID/reset/geometry của nhóm SocNavGym độc lập (nhóm hình thành/tách ra), vì adapter hiện tại chỉ có nhóm cố định ba người. Sau kiểm định mới mở rộng Gazebo. ComplexityNav tiếp tục chạy riêng, chưa đưa vào ma trận Gazebo hoặc thay kiến trúc robot.

@@ -1,0 +1,118 @@
+{
+  "completed": 4,
+  "planned": 6,
+  "attempts": [
+    {
+      "variant": "native",
+      "condition": "standing",
+      "gui": true,
+      "name": "socnavgym_standing_s42",
+      "sequence": 1,
+      "started_utc": "2026-10-21T08:20:04.941592+00:00",
+      "finished_utc": "2026-10-21T08:21:14.974279+00:00",
+      "runner_returncode": 0,
+      "report": "socnavgym_standing_s42.json",
+      "gpu_before": {
+        "returncode": 0,
+        "rows": "NVIDIA GeForce RTX 4060 Laptop GPU, 36, 12.65, 0, 0",
+        "stderr": ""
+      },
+      "gpu_after": {
+        "returncode": 0,
+        "rows": "NVIDIA GeForce RTX 4060 Laptop GPU, 40, 12.61, 0, 0",
+        "stderr": ""
+      },
+      "status": "SUCCEEDED",
+      "protocol_valid": true,
+      "remaining_nodes": [],
+      "infrastructure_errors": []
+    },
+    {
+      "variant": "circle_contact",
+      "condition": "standing",
+      "gui": false,
+      "name": "socnavgym_circle_contact_standing_s42",
+      "sequence": 2,
+      "started_utc": "2026-10-21T08:21:32.454304+00:00",
+      "finished_utc": "2026-10-21T08:22:25.145362+00:00",
+      "runner_returncode": 0,
+      "report": "socnavgym_circle_contact_standing_s42.json",
+      "gpu_before": {
+        "returncode": 0,
+        "rows": "NVIDIA GeForce RTX 4060 Laptop GPU, 39, 12.36, 0, 0",
+        "stderr": ""
+      },
+      "gpu_after": {
+        "returncode": 0,
+        "rows": "NVIDIA GeForce RTX 4060 Laptop GPU, 41, 12.47, 0, 0",
+        "stderr": ""
+      },
+      "status": "SUCCEEDED",
+      "protocol_valid": true,
+      "remaining_nodes": [],
+      "infrastructure_errors": []
+    },
+    {
+      "variant": "robot_orca",
+      "condition": "standing",
+      "gui": false,
+      "name": "socnavgym_circle_contact_robot_orca_standing_s42",
+      "sequence": 3,
+      "started_utc": "2026-10-21T08:22:43.116595+00:00",
+      "finished_utc": "2026-10-21T08:23:33.343258+00:00",
+      "runner_returncode": 0,
+      "report": "socnavgym_circle_contact_robot_orca_standing_s42.json",
+      "gpu_before": {
+        "returncode": 0,
+        "rows": "NVIDIA GeForce RTX 4060 Laptop GPU, 39, 12.46, 0, 0",
+        "stderr": ""
+      },
+      "gpu_after": {
+        "returncode": 0,
+        "rows": "NVIDIA GeForce RTX 4060 Laptop GPU, 41, 12.45, 0, 0",
+        "stderr": ""
+      },
+      "status": "SUCCEEDED",
+      "protocol_valid": true,
+      "remaining_nodes": [],
+      "infrastructure_errors": []
+    },
+    {
+      "variant": "native",
+      "condition": "counterflow",
+      "gui": false,
+      "name": "socnavgym_counterflow_s42",
+      "sequence": 4,
+      "started_utc": "2026-10-21T08:23:50.770630+00:00",
+      "finished_utc": "2026-10-21T08:25:39.249435+00:00",
+      "runner_returncode": 1,
+      "report": "socnavgym_counterflow_s42.json",
+      "gpu_before": {
+        "returncode": 0,
+        "rows": "NVIDIA GeForce RTX 4060 Laptop GPU, 39, 12.48, 0, 0",
+        "stderr": ""
+      },
+      "gpu_after": {
+        "returncode": 0,
+        "rows": "NVIDIA GeForce RTX 4060 Laptop GPU, 41, 12.47, 0, 0",
+        "stderr": ""
+      },
+      "status": "ERROR",
+      "protocol_valid": false,
+      "remaining_nodes": [],
+      "infrastructure_errors": [
+        "Trial process/protocol failed",
+        "Profile not verified",
+        "Missing amcl"
+      ]
+    }
+  ],
+  "stopped": {
+    "sequence": 4,
+    "reasons": [
+      "Trial process/protocol failed",
+      "Profile not verified",
+      "Missing amcl"
+    ]
+  }
+}
