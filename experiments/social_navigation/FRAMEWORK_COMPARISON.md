@@ -1,5 +1,7 @@
 # Phạm vi đã kiểm tra: demo độc lập và tích hợp Gazebo
 
+Bước kiểm tra tiếp theo là [pilot localization riêng](benchmark/localization_trials/README.md), không thêm simulator mới hoặc thay native hành vi người. [Workaround shutdown](benchmark/shutdown_fix/README.md) chỉ giải quyết vòng đời Gazebo trên WSL D3D12 đã thử.
+
 Đây là bảng so tính năng quan sát được ở các version cụ thể, không xếp hạng
 hiệu năng, độ an toàn hoặc mức tự nhiên của hành vi người.
 
@@ -94,3 +96,5 @@ SFM seed42 dừng tịnh tiến trước khi tâm AMCL vào occupied; cần thu 
 plan/costmap và particle cloud để tách tiếp. Kết quả 2/4 goal giữ nguyên.
 
 Bổ sung [capture global navigation/particle cloud](benchmark/navigation_diagnostics/reports/run03/NAVIGATION_DIAGNOSTICS.md): SFM/ORCA+ seed42 mới đều qua khe và tới đích, chưa tái hiện failure cũ; không đổi kết quả ma trận gốc hoặc dùng để xếp hạng mô hình.
+
+[Loạt lặp seed42 sau cleanup](benchmark/stability/reports/run01/STABILITY_REPORT.md): SFM2/3 và ORCA+1/3 goal; một mode switch AMCL được xác nhận từ cloud, SFM có proxy overlap2,65cm. Không dùng số lượt nhỏ bị ảnh hưởng định vị để chọn framework hoặc kết luận safety.

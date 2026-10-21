@@ -15,7 +15,7 @@ sys.path.insert(0,str(SOCIAL/'crowdsimplus_adapter'))
 from passage_metrics import PassageCounter
 sys.path.insert(0,str(BENCH))
 from footprint_geometry import footprint_box
-p=argparse.ArgumentParser();p.add_argument('--report-dir',type=Path,required=True);a=p.parse_args()
+p=argparse.ArgumentParser();p.add_argument('--report-dir',type=Path,required=True);p.add_argument('--localization-ablation',action='store_true',help='Verify explicit runtime AMCL profile rather than require byte-identical baseline params');a=p.parse_args()
 field=MapField(SOCIAL/'warehouse/warehouse.yaml');boxes=json.loads((SOCIAL/'warehouse/layout.json').read_text())['obstacles']
 sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
 reference=BENCH/'localization_diagnosis/generated/reference'
@@ -149,7 +149,17 @@ for policy in ['sfm','orca_plus']:
     global_pubs=[len(g['publishers'].get('/plan',[])) for g in graphs];amcl_pubs=[len(g['publishers'].get('/amcl_pose',[])) for g in graphs]
     baseline=json.loads((BENCH/'bottleneck/reports/run01'/(name+'.json')).read_text())
     samekeys=['map_sha256','nav_params_sha256','runtime_nav_params_sha256','scene_sha256','crowdsim_image_id']
-    assert all(result[k]==baseline[k] for k in samekeys)
+    compared_keys=samekeys
+    if a.localization_ablation:
+        import yaml
+        from localization_trials.profiles import configure,PROFILES
+        profile=result['localization_profile']
+        expected=configure(yaml.safe_load((SOCIAL/'warehouse/nav2_warehouse.yaml').read_text()),profile,result['robot_start'])
+        assert yaml.safe_load((runtime/'nav2_scenario.yaml').read_text())==expected
+        assert sha(runtime/'nav2_scenario.yaml')==result['runtime_nav_params_sha256']
+        assert result['localization_parameter_overrides']==PROFILES[profile]
+        compared_keys=[key for key in samekeys if key!='runtime_nav_params_sha256']
+    assert all(result[k]==baseline[k] for k in compared_keys)
     scanlags=[r['receipt_sim']-r['_time'] for r in groups['scan'] if active(r) and r['receipt_sim'] is not None]
     summary=dict(name=name,policy=policy,status=result['status'],sim_seconds=result['sim_seconds'],goal_error_world_m=result['goal_error_world_m'],amcl_error_max_m=max(r['error_m'] for r in amcl),
         odom_error_max_m=max(odom_errors),largest_amcl_step_m=distance(jump_before['amcl'],jump_after['amcl']),largest_jump_elapsed_s=jump_after['elapsed'],actual_step_during_largest_jump_m=distance(jump_before['actual'],jump_after['actual']),
@@ -161,7 +171,7 @@ for policy in ['sfm','orca_plus']:
         channel_traversals=passages.counts(),bypass_events=sum(not e['through_channel'] for e in passages.events),dense_samples=len(dense),dense_gap_max_s=max(v['time']-u['time'] for u,v in zip(dense,dense[1:])),
         min_robot_human_footprint_m=min(r['robot_human'] for r in dense),min_robot_human_padded_m=min(r['padded'] for r in dense),min_human_pair_m=min(r['human_pair'] for r in dense),min_robot_machine_footprint_m=min(r['robot_machine'] for r in dense),
         capture_callback_wall_seconds=result['navigation_capture']['callbacks_wall_seconds'],capture_callback_wall_max_seconds=result['navigation_capture']['callback_wall_max_seconds'],observed_rtf=result['observed_rtf'],
-        config_scene_map_image_identical_to_baseline=True,counts=dict(counts))
+        config_scene_map_image_identical_to_baseline=all(result[k]==baseline[k] for k in samekeys),localization_profile=result.get('localization_profile','baseline'),counts=dict(counts))
     summaries.append(summary);timelines[name]=dict(amcl=amcl,particle_cloud=cluster_rows,global_plans=plans,rosout=rosout,jump_before=jump_before,jump_after=jump_after,graphs=graphs)
     selected_cloud=max(cluster_rows,key=lambda r:r['occupied_weight']);cr=nearest(clouds,selected_cloud['time']);samples[name]=dict(cloud=cr,summary=selected_cloud)
     manifests.append(dict(name=name,runtime=str(runtime.relative_to(BENCH)),start_gate=gate,end=end,raw_sha256={f:sha(runtime/f) for f in ['diagnostics.jsonl','start_gate','scene.json','nav2_scenario.yaml','crowdsim_metadata.json']},baseline_comparison={k:result[k] for k in samekeys}))
@@ -207,7 +217,7 @@ fig.colorbar(grid_image,ax=axes[:,1].tolist(),shrink=.7,label='global OccupancyG
 manifest=dict(head=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),trials=manifests,native_library='/opt/ros/jazzy/lib/libpf_lib.so',native_library_sha256=sha(Path('/opt/ros/jazzy/lib/libpf_lib.so')),native_harness_sha256=sha(HERE/'native_clusters.cpp'),native_binary_sha256=sha(binary),reference_manifest=reference_manifest,
     particle_method='Recorded post-resample ParticleCloud weights; re-cluster with installed pf_kdtree and pf_cluster_stats, no original hidden filter replay. Cloud header is AMCL now(), AMCL pose header is scan stamp; match receipts within 0.15 wall s and retain offsets.',
     grid_method='Exact int8 lossless decompression; nearest publication within 1.2 sim s for global grid and 0.35 for local. Padded footprint samples are diagnostic, not contact force or planner service results.',
-    limitations='Two diagnostic reruns only. Old failing trials retained; stochastic process not fully seeded. Passive capture adds CPU/IO load. No tuning or claimed fix.')
+    limitations=('Isolated AMCL ablation; one run per policy/profile, no promotion or proven improvement. See parent protocol/report. Principal-yaw cluster plots need circular-lift reconstruction.' if a.localization_ablation else 'Two diagnostic reruns only. Old failing trials retained; stochastic process not fully seeded. Passive capture adds CPU/IO load. No tuning or claimed fix.'))
 for filename,value in [('summary.json',summaries),('timeline.json',timelines),('manifest.json',manifest),('native_cluster_check.json',native_checks)]: (a.report_dir/filename).write_text(json.dumps(safe(value),indent=2,allow_nan=False))
 with (a.report_dir/'results.csv').open('w',newline='') as f:
     keys=[k for k in summaries[0] if not isinstance(summaries[0][k],(dict,list))];writer=csv.DictWriter(f,fieldnames=keys,extrasaction='ignore',lineterminator='\n');writer.writeheader();writer.writerows(summaries)
