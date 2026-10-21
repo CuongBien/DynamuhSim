@@ -95,3 +95,6 @@ Các phần lifecycle nói trên đã được lưu riêng trước khi bắt đ
 | `b3f0022b26` | `feat: validate six-person SocNavGym lifecycle in Gazebo factory` |
 
 Commit qua index riêng, sau đó chỉ đồng bộ các path experiment đã commit vào index thật;12 mục staged ban đầu và outside worktree giữ byte-for-byte. Source/report giữ HEAD/source hashes lúc đo, không giả định đã chạy lại trên ba commit này. Bước [contract ComplexityNav](benchmark/complexitynav_contract/README.md) thực hiện sau đó và chưa commit: contract đạt nhưng native geometry xuyên kệ, nên chưa nối Gazebo.
+
+
+Commit `b0b3c336` — `test: validate ComplexityNav contracts and expose missing factory geometry` — đã lưu preflight trước khi làm adapter mới; index12 mục và worktree ngoài experiment giữ nguyên. Sau commit này, [adapter hình học ComplexityNav](benchmark/complexitynav_geometry/README.md) mới chạy6 cặp native/variant và reset80 bước, đạt offline nhưng chưa Gazebo. Phần adapter/báo cáo mới đang chưa commit; provenance HEAD/source hash tại lúc chạy giữ riêng.

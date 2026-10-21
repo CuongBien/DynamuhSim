@@ -74,3 +74,10 @@ Bước kỹ thuật tiếp theo là kiểm định contract ComplexityNav trong
 Ba phần SocNavGym đã commit riêng: `2480158` native reference, `779c338` sửa continuous formation, `b3f0022` pilot Gazebo6 người. Phần uncommitted hiện tại là [contract ComplexityNav và báo cáo](benchmark/complexitynav_contract/README.md). ID/frame/clock/pause/reset/native parity đạt ở runtime ghim, nhưng centralized ORCA/SFM đi xuyên kệ thật trong fixture độc lập; gate NOT_READY_FOR_GAZEBO được giữ.
 
 Bước tiếp theo: adapter hình học riêng cho42 AABBs, giữ native đối chứng; kiểm định obstacle/swept disc/robot vận tốc/progress/reset trước khi nối population nhỏ vào Gazebo. Không gọi ledger42 boxes là native avoidance đã hỗ trợ. Sau khi đạt mới đối chiếu proxy/LiDAR rồi chạy các scene chung để chốt framework. Không đổi AMCL mặc định, robot/Nav2 hoặc kiến trúc project.
+
+
+## Sau adapter geometry ComplexityNav —22/10/2026
+
+Preflight native đã commit `b0b3c33`. [Adapter hình học riêng](benchmark/complexitynav_geometry/reports/GEOMETRY_REPORT.md) đã vượt gate offline:6/6 cảnh,1040 update adapter/960 native reference,42 boxes, mixed6 người/robot chuyển động, đi vòng kệ tới đích và hai người qua khe1.8m; reset80 bước khớp. Native xuyên kệ giữ làm đối chứng. Waypoint routing + ORCA safety projection là biến thể chỉnh hành vi, gồm cả nhánh SFM; chưa được gọi là native hoặc benchmark Gazebo.
+
+Bước kế tiếp: commit riêng phần đã đạt, sau đó pilot Gazebo population nhỏ, timestep native0.25s với endpoint/interpolation đúng clock. Worker lỗi phải freeze/fail-until-restart; đối chiếu proxy/LiDAR/actual robot feedback, pause/owned cleanup/GPU trước khi tăng mật độ hoặc chạy bảng so sánh chung. Không thay robot/Nav2, AMCL mặc định hoặc kiến trúc project.
