@@ -1,0 +1,32 @@
+{
+  "key": "socnavgym/walking/circle_contact/head_on",
+  "framework": "SocNavGym",
+  "case": "head_on",
+  "policy": "circle_contact",
+  "mode": "walking",
+  "min_robot_human_circle_m": -0.2609530352571411,
+  "min_robot_human_footprint_m": -0.111708906226376,
+  "min_human_pair_m": -0.016677016101781184,
+  "min_human_machine_m": 0.8910621818035375,
+  "robot_footprint_overlap_beyond_1cm_s": 1.4000000000000001,
+  "human_pair_overlap_beyond_1cm_s": 0.1,
+  "max_position_difference_from_far_m": 1.4451632308229887,
+  "max_velocity_difference_from_far_mps": 0.9933566251927436,
+  "first_velocity_divergence": {
+    "input_time_s": 5.0,
+    "state_time_s": 5.1,
+    "velocity_difference_mps": 0.6580943334772014,
+    "position_difference_m": 0.06580943334772013,
+    "nominal_circle_gap_before_update_m": -0.003438311981517339,
+    "definition": "First actual human velocity difference >0.001m/s against same-policy far trace; proxy pre-overlap metric, not native internal detection time or human intent."
+  },
+  "max_displacement_m": 6.15730358821021,
+  "max_group_radius_m": 1.3685380395299662,
+  "max_pair_distance_m": 2.2726126519862277,
+  "max_inward_gaze_mean_deg": 97.21297545785606,
+  "completed_legs": [
+    null,
+    null,
+    null
+  ]
+}

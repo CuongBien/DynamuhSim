@@ -1,0 +1,32 @@
+{
+  "key": "crowdsimplus/orca_plus/crossing",
+  "framework": "CrowdSimPlus",
+  "case": "crossing",
+  "policy": "orca_plus",
+  "mode": "independent walkers",
+  "min_robot_human_circle_m": 0.04001441881171586,
+  "min_robot_human_footprint_m": 0.13567419172607126,
+  "min_human_pair_m": 0.4143431088968039,
+  "min_human_machine_m": 0.8369474607513566,
+  "robot_footprint_overlap_beyond_1cm_s": 0.0,
+  "human_pair_overlap_beyond_1cm_s": 0.0,
+  "max_position_difference_from_far_m": 1.0197695720101636,
+  "max_velocity_difference_from_far_mps": 1.4653784003999986,
+  "first_velocity_divergence": {
+    "input_time_s": 0.0,
+    "state_time_s": 0.1,
+    "velocity_difference_mps": 0.2882793018247737,
+    "position_difference_m": 0.028827930182476688,
+    "nominal_circle_gap_before_update_m": 2.3622924459960473,
+    "definition": "First actual human velocity difference >0.001m/s against same-policy far trace; proxy pre-overlap metric, not native internal detection time or human intent."
+  },
+  "max_displacement_m": 7.368726083703919,
+  "max_group_radius_m": 1.5599222994778155,
+  "max_pair_distance_m": 2.8137566081081946,
+  "max_inward_gaze_mean_deg": 131.42046419596284,
+  "completed_legs": [
+    2,
+    2,
+    2
+  ]
+}
