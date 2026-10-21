@@ -1,0 +1,568 @@
+{
+  "checks": {
+    "status": "PASS",
+    "native_steps": 4100,
+    "seed_count": 3,
+    "ids_unique_and_preserved": true,
+    "reset_prefix_checked": true,
+    "historical_full_reproduction": false,
+    "native_finish_calls_with_position_snap": 2,
+    "largest_finish_snap_m": 0.3264405843320404,
+    "preserved_files": 11259,
+    "user_index_and_outside_worktree_unchanged": true,
+    "gazebo_lifecycle_acceptance": "NOT_IMPLEMENTED: standalone contract measurements only; native snaps, overlaps and mapping to warehouse need explicit handling/evidence"
+  },
+  "trials": [
+    {
+      "seed": 42,
+      "status": "PASS",
+      "steps": 1200,
+      "events": [
+        {
+          "step": 317,
+          "time": 31.700000000000003,
+          "before": [],
+          "after": [
+            [
+              1,
+              "static",
+              [
+                1,
+                3,
+                8
+              ]
+            ]
+          ]
+        },
+        {
+          "step": 499,
+          "time": 49.900000000000006,
+          "before": [
+            [
+              1,
+              "static",
+              [
+                1,
+                3,
+                8
+              ]
+            ]
+          ],
+          "after": []
+        },
+        {
+          "step": 886,
+          "time": 88.60000000000001,
+          "before": [],
+          "after": [
+            [
+              2,
+              "static",
+              [
+                4,
+                5,
+                6
+              ]
+            ]
+          ]
+        },
+        {
+          "step": 1091,
+          "time": 109.10000000000001,
+          "before": [
+            [
+              2,
+              "static",
+              [
+                4,
+                5,
+                6
+              ]
+            ]
+          ],
+          "after": [
+            [
+              2,
+              "static",
+              [
+                5,
+                6
+              ]
+            ]
+          ]
+        },
+        {
+          "step": 1192,
+          "time": 119.2,
+          "before": [
+            [
+              2,
+              "static",
+              [
+                5,
+                6
+              ]
+            ]
+          ],
+          "after": [
+            [
+              2,
+              "static",
+              [
+                5,
+                6
+              ]
+            ],
+            [
+              3,
+              "static",
+              [
+                3,
+                10,
+                11
+              ]
+            ]
+          ]
+        }
+      ],
+      "native_calls": {
+        "form_human_crowd": 3,
+        "finish_human_crowd_formation": 3,
+        "disperse_static_crowd": 2
+      },
+      "finish_events": [
+        {
+          "step": 317,
+          "time": 31.700000000000003,
+          "approximate": true,
+          "max_position_delta_m": 0.0,
+          "max_yaw_delta_rad": 1.4154338518498852
+        },
+        {
+          "step": 886,
+          "time": 88.60000000000001,
+          "approximate": true,
+          "max_position_delta_m": 0.0,
+          "max_yaw_delta_rad": 0.7238655040534471
+        },
+        {
+          "step": 1192,
+          "time": 119.2,
+          "approximate": true,
+          "max_position_delta_m": 0.0,
+          "max_yaw_delta_rad": 0.3301504947391303
+        }
+      ],
+      "min_human_pair_m": -0.6588003496979733,
+      "pair_overlap_beyond_1cm_s": 24.00000000000007,
+      "min_nominal_robot_human_m": 0.12986142851035698,
+      "robot_overlap_beyond_1cm_s": 0.0,
+      "min_wall_human_m": 0.06867864785275424,
+      "wall_overlap_beyond_1cm_s": 0.0,
+      "max_one_step_displacement_m": 0.09208739856059066,
+      "id_count": 12,
+      "ids_preserved": true,
+      "reset_check": {
+        "steps": 500,
+        "max_state_error": 0.0,
+        "membership_match": true,
+        "groups_before": [
+          {
+            "observer_group_id": 2,
+            "kind": "static",
+            "members": [
+              5,
+              6
+            ],
+            "x": 2.048298499515614,
+            "y": -3.620490583298086
+          },
+          {
+            "observer_group_id": 3,
+            "kind": "static",
+            "members": [
+              3,
+              10,
+              11
+            ],
+            "x": -2.629660174341945,
+            "y": 2.2159839702895407
+          }
+        ],
+        "groups_after": [],
+        "same_numeric_human_ids": true,
+        "new_human_objects": true,
+        "namespace": "Use (reset_epoch,human_id); numeric IDs are reused by native reset"
+      },
+      "observation_outside_space_steps": 1200,
+      "gif_duration_ms": 30000
+    },
+    {
+      "seed": 43,
+      "status": "PASS",
+      "steps": 1200,
+      "events": [
+        {
+          "step": 328,
+          "time": 32.800000000000004,
+          "before": [],
+          "after": [
+            [
+              1,
+              "static",
+              [
+                4,
+                7,
+                12
+              ]
+            ]
+          ]
+        },
+        {
+          "step": 371,
+          "time": 37.1,
+          "before": [
+            [
+              1,
+              "static",
+              [
+                4,
+                7,
+                12
+              ]
+            ]
+          ],
+          "after": []
+        },
+        {
+          "step": 795,
+          "time": 79.5,
+          "before": [],
+          "after": [
+            [
+              2,
+              "static",
+              [
+                2,
+                5,
+                11
+              ]
+            ]
+          ]
+        },
+        {
+          "step": 1036,
+          "time": 103.60000000000001,
+          "before": [
+            [
+              2,
+              "static",
+              [
+                2,
+                5,
+                11
+              ]
+            ]
+          ],
+          "after": [
+            [
+              2,
+              "static",
+              [
+                2,
+                5
+              ]
+            ]
+          ]
+        },
+        {
+          "step": 1113,
+          "time": 111.30000000000001,
+          "before": [
+            [
+              2,
+              "static",
+              [
+                2,
+                5
+              ]
+            ]
+          ],
+          "after": [
+            [
+              2,
+              "static",
+              [
+                2,
+                5
+              ]
+            ],
+            [
+              3,
+              "static",
+              [
+                4,
+                8,
+                10
+              ]
+            ]
+          ]
+        },
+        {
+          "step": 1163,
+          "time": 116.30000000000001,
+          "before": [
+            [
+              2,
+              "static",
+              [
+                2,
+                5
+              ]
+            ],
+            [
+              3,
+              "static",
+              [
+                4,
+                8,
+                10
+              ]
+            ]
+          ],
+          "after": [
+            [
+              2,
+              "static",
+              [
+                2,
+                5
+              ]
+            ]
+          ]
+        }
+      ],
+      "native_calls": {
+        "form_human_crowd": 4,
+        "finish_human_crowd_formation": 3,
+        "disperse_static_crowd": 3
+      },
+      "finish_events": [
+        {
+          "step": 328,
+          "time": 32.800000000000004,
+          "approximate": true,
+          "max_position_delta_m": 0.0,
+          "max_yaw_delta_rad": 1.766905107455033
+        },
+        {
+          "step": 795,
+          "time": 79.5,
+          "approximate": true,
+          "max_position_delta_m": 0.0,
+          "max_yaw_delta_rad": 0.774544565705049
+        },
+        {
+          "step": 1113,
+          "time": 111.30000000000001,
+          "approximate": true,
+          "max_position_delta_m": 0.0,
+          "max_yaw_delta_rad": 0.7189938668898861
+        }
+      ],
+      "min_human_pair_m": -0.5613732615562875,
+      "pair_overlap_beyond_1cm_s": 29.100000000000144,
+      "min_nominal_robot_human_m": 0.36980662628213623,
+      "robot_overlap_beyond_1cm_s": 0.0,
+      "min_wall_human_m": 0.02648153263622921,
+      "wall_overlap_beyond_1cm_s": 0.0,
+      "max_one_step_displacement_m": 0.09254551601701454,
+      "id_count": 12,
+      "ids_preserved": true,
+      "reset_check": null,
+      "observation_outside_space_steps": 1200
+    },
+    {
+      "seed": 44,
+      "status": "PASS",
+      "steps": 1200,
+      "events": [
+        {
+          "step": 250,
+          "time": 25.0,
+          "before": [],
+          "after": [
+            [
+              1,
+              "moving",
+              [
+                3,
+                5,
+                10
+              ]
+            ]
+          ]
+        },
+        {
+          "step": 294,
+          "time": 29.400000000000002,
+          "before": [
+            [
+              1,
+              "moving",
+              [
+                3,
+                5,
+                10
+              ]
+            ]
+          ],
+          "after": []
+        },
+        {
+          "step": 432,
+          "time": 43.2,
+          "before": [],
+          "after": [
+            [
+              2,
+              "static",
+              [
+                2,
+                6,
+                12
+              ]
+            ]
+          ]
+        },
+        {
+          "step": 505,
+          "time": 50.5,
+          "before": [
+            [
+              2,
+              "static",
+              [
+                2,
+                6,
+                12
+              ]
+            ]
+          ],
+          "after": []
+        },
+        {
+          "step": 829,
+          "time": 82.9,
+          "before": [],
+          "after": [
+            [
+              3,
+              "moving",
+              [
+                4,
+                7,
+                8
+              ]
+            ]
+          ]
+        },
+        {
+          "step": 990,
+          "time": 99.0,
+          "before": [
+            [
+              3,
+              "moving",
+              [
+                4,
+                7,
+                8
+              ]
+            ]
+          ],
+          "after": []
+        },
+        {
+          "step": 1104,
+          "time": 110.4,
+          "before": [],
+          "after": [
+            [
+              4,
+              "static",
+              [
+                9,
+                10,
+                11
+              ]
+            ]
+          ]
+        },
+        {
+          "step": 1140,
+          "time": 114.0,
+          "before": [
+            [
+              4,
+              "static",
+              [
+                9,
+                10,
+                11
+              ]
+            ]
+          ],
+          "after": []
+        }
+      ],
+      "native_calls": {
+        "form_human_crowd": 5,
+        "finish_human_crowd_formation": 4,
+        "disperse_moving_crowd": 2,
+        "disperse_static_crowd": 2
+      },
+      "finish_events": [
+        {
+          "step": 250,
+          "time": 25.0,
+          "approximate": false,
+          "max_position_delta_m": 0.3264405843320404,
+          "max_yaw_delta_rad": 0.2950045353116715
+        },
+        {
+          "step": 432,
+          "time": 43.2,
+          "approximate": true,
+          "max_position_delta_m": 0.0,
+          "max_yaw_delta_rad": 1.4409890483618528
+        },
+        {
+          "step": 829,
+          "time": 82.9,
+          "approximate": false,
+          "max_position_delta_m": 0.20489293549990203,
+          "max_yaw_delta_rad": 0.22650792536393727
+        },
+        {
+          "step": 1104,
+          "time": 110.4,
+          "approximate": true,
+          "max_position_delta_m": 0.0,
+          "max_yaw_delta_rad": 1.2184752242791919
+        }
+      ],
+      "min_human_pair_m": -0.698602096946032,
+      "pair_overlap_beyond_1cm_s": 111.69999999999793,
+      "min_nominal_robot_human_m": 0.061138623529347735,
+      "robot_overlap_beyond_1cm_s": 0.0,
+      "min_wall_human_m": 0.009348750433521125,
+      "wall_overlap_beyond_1cm_s": 0.0,
+      "max_one_step_displacement_m": 0.3264405843320404,
+      "id_count": 12,
+      "ids_preserved": true,
+      "reset_check": null,
+      "observation_outside_space_steps": 1200
+    }
+  ]
+}
