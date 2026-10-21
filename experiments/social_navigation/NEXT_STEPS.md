@@ -67,3 +67,10 @@ Bước kế tiếp chuyển sang contract/geometry ComplexityNav trước khi n
 Phần sửa standalone và tích hợp mới vẫn chưa commit. Trước khi mở milestone khác, lưu riêng các phần đã hoàn tất theo yêu cầu commit của người dùng; bảo toàn staging/code ngoài experiment.
 
 Bước kỹ thuật tiếp theo là kiểm định contract ComplexityNav trong runtime độc lập hiện có: ID/frame/clock/reset, robot feedback và42 collision boxes; so native step trước khi nối population nhỏ vào Gazebo. Chỉ sau khi đạt mới chạy chung các scene để so hành vi, tăng mật độ/lối hẹp và chốt bảng chọn mô hình. Không mở thêm ma trận AMCL. Pilot formation hiện tại không thay thế benchmark Nav2 và không chứng minh tính tự nhiên ở mọi cảnh.
+
+
+## Sau kiểm định ComplexityNav —22/10/2026
+
+Ba phần SocNavGym đã commit riêng: `2480158` native reference, `779c338` sửa continuous formation, `b3f0022` pilot Gazebo6 người. Phần uncommitted hiện tại là [contract ComplexityNav và báo cáo](benchmark/complexitynav_contract/README.md). ID/frame/clock/pause/reset/native parity đạt ở runtime ghim, nhưng centralized ORCA/SFM đi xuyên kệ thật trong fixture độc lập; gate NOT_READY_FOR_GAZEBO được giữ.
+
+Bước tiếp theo: adapter hình học riêng cho42 AABBs, giữ native đối chứng; kiểm định obstacle/swept disc/robot vận tốc/progress/reset trước khi nối population nhỏ vào Gazebo. Không gọi ledger42 boxes là native avoidance đã hỗ trợ. Sau khi đạt mới đối chiếu proxy/LiDAR rồi chạy các scene chung để chốt framework. Không đổi AMCL mặc định, robot/Nav2 hoặc kiến trúc project.

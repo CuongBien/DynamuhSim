@@ -84,3 +84,14 @@ Commit `e749fb51` đã lưu phần Gazebo nhóm và GUI nêu trên. Sau commit, 
 
 
 Cập nhật22/10/2026, **chưa có commit mới**: bản sửa lifecycle standalone và [pilot formation trong nhà xưởng Gazebo](benchmark/socnavgym_warehouse_lifecycle/README.md) đã hoàn tất trong working tree. Ba trace offline đạt; hai lượt live120s giữ riêng, seed42 PARTIAL về lifecycle và seed43 PASS gồm nhóm đứng/đi/tan. Adapter mới không sửa vendor, code robot hoặc adapter nhóm cố định. Report giữ HEADe749fb51 và source hashes tại lúc đo; ảnh/GIF từ camera Gazebo thật,4×. Các file lifecycle mới sẽ cần commit riêng khi người dùng yêu cầu.
+
+
+Các phần lifecycle nói trên đã được lưu riêng trước khi bắt đầu ComplexityNav:
+
+| Commit | Nội dung |
+|---|---|
+| `248015807a` | `test: record native SocNavGym formation and reset limitations` |
+| `779c338892` | `fix: preserve continuous SocNavGym group formation motion` |
+| `b3f0022b26` | `feat: validate six-person SocNavGym lifecycle in Gazebo factory` |
+
+Commit qua index riêng, sau đó chỉ đồng bộ các path experiment đã commit vào index thật;12 mục staged ban đầu và outside worktree giữ byte-for-byte. Source/report giữ HEAD/source hashes lúc đo, không giả định đã chạy lại trên ba commit này. Bước [contract ComplexityNav](benchmark/complexitynav_contract/README.md) thực hiện sau đó và chưa commit: contract đạt nhưng native geometry xuyên kệ, nên chưa nối Gazebo.
