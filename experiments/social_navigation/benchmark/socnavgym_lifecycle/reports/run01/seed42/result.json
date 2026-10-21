@@ -1,0 +1,158 @@
+{
+  "seed": 42,
+  "status": "PASS",
+  "scope": "Native 14x14m standalone lifecycle; stationary native robot, full env.step; no ROS/Gazebo, no learned policy",
+  "observer_group_ids": "External monotonic labels assigned to native group object identity within one reset epoch; not upstream persistent group IDs",
+  "initial_observation_in_space": false,
+  "steps": 1200,
+  "observation_outside_space_steps": 1200,
+  "events": [
+    {
+      "step": 317,
+      "time": 31.700000000000003,
+      "before": [],
+      "after": [
+        [
+          1,
+          "static",
+          [
+            1,
+            3,
+            8
+          ]
+        ]
+      ]
+    },
+    {
+      "step": 499,
+      "time": 49.900000000000006,
+      "before": [
+        [
+          1,
+          "static",
+          [
+            1,
+            3,
+            8
+          ]
+        ]
+      ],
+      "after": []
+    },
+    {
+      "step": 886,
+      "time": 88.60000000000001,
+      "before": [],
+      "after": [
+        [
+          2,
+          "static",
+          [
+            4,
+            5,
+            6
+          ]
+        ]
+      ]
+    },
+    {
+      "step": 1091,
+      "time": 109.10000000000001,
+      "before": [
+        [
+          2,
+          "static",
+          [
+            4,
+            5,
+            6
+          ]
+        ]
+      ],
+      "after": [
+        [
+          2,
+          "static",
+          [
+            5,
+            6
+          ]
+        ]
+      ]
+    },
+    {
+      "step": 1192,
+      "time": 119.2,
+      "before": [
+        [
+          2,
+          "static",
+          [
+            5,
+            6
+          ]
+        ]
+      ],
+      "after": [
+        [
+          2,
+          "static",
+          [
+            5,
+            6
+          ]
+        ],
+        [
+          3,
+          "static",
+          [
+            3,
+            10,
+            11
+          ]
+        ]
+      ]
+    }
+  ],
+  "native_call_count": 8,
+  "reset_check": {
+    "steps": 500,
+    "max_state_error": 0.0,
+    "membership_match": true,
+    "groups_before": [
+      {
+        "observer_group_id": 2,
+        "kind": "static",
+        "members": [
+          5,
+          6
+        ],
+        "x": 2.048298499515614,
+        "y": -3.620490583298086
+      },
+      {
+        "observer_group_id": 3,
+        "kind": "static",
+        "members": [
+          3,
+          10,
+          11
+        ],
+        "x": -2.629660174341945,
+        "y": 2.2159839702895407
+      }
+    ],
+    "groups_after": [],
+    "same_numeric_human_ids": true,
+    "new_human_objects": true,
+    "namespace": "Use (reset_epoch,human_id); numeric IDs are reused by native reset"
+  },
+  "wall_seconds": 53.52155609800002,
+  "recorded_steps": 1200,
+  "preview": {
+    "type": "Native SocNavGym 2D render, not Gazebo",
+    "source_interval_sim_s": 1.0,
+    "playback_speed": 4,
+    "gif_duration_ms": 30000
+  }
+}
