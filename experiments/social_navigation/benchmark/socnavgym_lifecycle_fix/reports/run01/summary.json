@@ -1,0 +1,605 @@
+{
+  "validation": {
+    "status": "PASS",
+    "trials": 3,
+    "steps": 4100,
+    "additional_active_reset_steps": 776,
+    "additional_moving_steps": 600,
+    "total_checked_steps": 5476,
+    "active_group_reset": "PASS",
+    "moving_group_regression": "PASS",
+    "failures": [],
+    "original_initial_states_exactly_equal": true,
+    "native_vendor_and_robot_unchanged": true,
+    "preserved_files": 11298,
+    "index_and_outside_worktree_preserved": true,
+    "scope": "Standalone stationary-robot square-room adapter only; no moving-robot/Gazebo/warehouse acceptance"
+  },
+  "trials": [
+    {
+      "seed": 42,
+      "status": "PASS",
+      "issues": [],
+      "steps": 1200,
+      "formations": 3,
+      "dispersal_calls": 3,
+      "membership_changes": 6,
+      "min_swept_pair_m": 0.11169203438567066,
+      "min_swept_robot_m": 0.14420474207067013,
+      "min_swept_wall_m": 0.05623520508512436,
+      "pair_overlap_beyond_1cm_s": 0.0,
+      "max_displacement_per_step_m": 0.08000001081803709,
+      "max_yaw_per_step_rad": 0.15700000000000025,
+      "max_formation_commit_position_change_m": 0.0,
+      "path_by_human_m": {
+        "1": 40.11929217691997,
+        "2": 13.58378250946343,
+        "3": 30.76020742802712,
+        "4": 56.51062865693694,
+        "5": 54.23619255760217,
+        "6": 28.168434084372567,
+        "7": 25.645480460764944,
+        "8": 5.688243619236634,
+        "9": 47.98184834850212,
+        "10": 54.39324146410413,
+        "11": 49.52991137300986,
+        "12": 34.69535499903436
+      },
+      "total_path_m": 441.31261767797423,
+      "sweep_limited_steps": 0,
+      "full_stop_steps": 0,
+      "native_min_sampled_pair_m": -0.6588003496979733,
+      "reset_check": {
+        "steps": 500,
+        "max_state_error": 0.0,
+        "membership_match": true,
+        "groups_before": [],
+        "groups_after": [],
+        "same_numeric_human_ids": true,
+        "new_human_objects": true,
+        "namespace": "Use (reset_epoch,human_id); numeric IDs are reused by native reset"
+      },
+      "events": [
+        {
+          "step": 276,
+          "time": 27.6,
+          "before": [],
+          "after": [
+            [
+              1,
+              "static",
+              [
+                1,
+                3,
+                8
+              ]
+            ]
+          ]
+        },
+        {
+          "step": 499,
+          "time": 49.900000000000006,
+          "before": [
+            [
+              1,
+              "static",
+              [
+                1,
+                3,
+                8
+              ]
+            ]
+          ],
+          "after": []
+        },
+        {
+          "step": 640,
+          "time": 64.0,
+          "before": [],
+          "after": [
+            [
+              2,
+              "static",
+              [
+                2,
+                6,
+                12
+              ]
+            ]
+          ]
+        },
+        {
+          "step": 680,
+          "time": 68.0,
+          "before": [
+            [
+              2,
+              "static",
+              [
+                2,
+                6,
+                12
+              ]
+            ]
+          ],
+          "after": []
+        },
+        {
+          "step": 1055,
+          "time": 105.5,
+          "before": [],
+          "after": [
+            [
+              3,
+              "static",
+              [
+                6,
+                7,
+                12
+              ]
+            ]
+          ]
+        },
+        {
+          "step": 1083,
+          "time": 108.30000000000001,
+          "before": [
+            [
+              3,
+              "static",
+              [
+                6,
+                7,
+                12
+              ]
+            ]
+          ],
+          "after": []
+        }
+      ]
+    },
+    {
+      "seed": 43,
+      "status": "PASS",
+      "issues": [],
+      "steps": 1200,
+      "formations": 3,
+      "dispersal_calls": 2,
+      "membership_changes": 5,
+      "min_swept_pair_m": 0.010000974276084929,
+      "min_swept_robot_m": 0.38288281352249565,
+      "min_swept_wall_m": 0.02648153263622921,
+      "pair_overlap_beyond_1cm_s": 0.0,
+      "max_displacement_per_step_m": 0.08000001096437775,
+      "max_yaw_per_step_rad": 0.15700000000000025,
+      "max_formation_commit_position_change_m": 0.0,
+      "path_by_human_m": {
+        "1": 46.88527393692552,
+        "2": 46.392350058704295,
+        "3": 29.173807786333512,
+        "4": 45.9287169105847,
+        "5": 27.844803500045074,
+        "6": 35.86471653169828,
+        "7": 7.214112012333296,
+        "8": 44.232178230630964,
+        "9": 34.264323190497166,
+        "10": 35.654528248471024,
+        "11": 53.51022911675153,
+        "12": 14.617876047590235
+      },
+      "total_path_m": 421.5829155705656,
+      "sweep_limited_steps": 0,
+      "full_stop_steps": 0,
+      "native_min_sampled_pair_m": -0.5613732615562875,
+      "reset_check": null,
+      "events": [
+        {
+          "step": 303,
+          "time": 30.3,
+          "before": [],
+          "after": [
+            [
+              1,
+              "static",
+              [
+                4,
+                7,
+                12
+              ]
+            ]
+          ]
+        },
+        {
+          "step": 539,
+          "time": 53.900000000000006,
+          "before": [
+            [
+              1,
+              "static",
+              [
+                4,
+                7,
+                12
+              ]
+            ]
+          ],
+          "after": []
+        },
+        {
+          "step": 818,
+          "time": 81.80000000000001,
+          "before": [],
+          "after": [
+            [
+              2,
+              "static",
+              [
+                3,
+                5,
+                6
+              ]
+            ]
+          ]
+        },
+        {
+          "step": 1034,
+          "time": 103.4,
+          "before": [
+            [
+              2,
+              "static",
+              [
+                3,
+                5,
+                6
+              ]
+            ]
+          ],
+          "after": [
+            [
+              2,
+              "static",
+              [
+                3,
+                5
+              ]
+            ]
+          ]
+        },
+        {
+          "step": 1053,
+          "time": 105.30000000000001,
+          "before": [
+            [
+              2,
+              "static",
+              [
+                3,
+                5
+              ]
+            ]
+          ],
+          "after": [
+            [
+              2,
+              "static",
+              [
+                3,
+                5
+              ]
+            ],
+            [
+              3,
+              "static",
+              [
+                1,
+                9,
+                10
+              ]
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "seed": 44,
+      "status": "PASS",
+      "issues": [],
+      "steps": 1200,
+      "formations": 4,
+      "dispersal_calls": 2,
+      "membership_changes": 6,
+      "min_swept_pair_m": 0.00906613327034278,
+      "min_swept_robot_m": 0.05935954435006485,
+      "min_swept_wall_m": 0.009348750433521125,
+      "pair_overlap_beyond_1cm_s": 0.0,
+      "max_displacement_per_step_m": 0.08000001067361981,
+      "max_yaw_per_step_rad": 0.15700000000000025,
+      "max_formation_commit_position_change_m": 0.0,
+      "path_by_human_m": {
+        "1": 16.5472773382662,
+        "2": 31.807535249293597,
+        "3": 8.624821219246593,
+        "4": 33.55691692961108,
+        "5": 18.75266063312187,
+        "6": 21.436634362853397,
+        "7": 42.80228761623447,
+        "8": 54.45890556501792,
+        "9": 47.28370637923847,
+        "10": 8.12981345452631,
+        "11": 37.37664301796205,
+        "12": 37.683193637539716
+      },
+      "total_path_m": 358.4603954029117,
+      "sweep_limited_steps": 0,
+      "full_stop_steps": 0,
+      "native_min_sampled_pair_m": -0.698602096946032,
+      "reset_check": null,
+      "events": [
+        {
+          "step": 168,
+          "time": 16.8,
+          "before": [],
+          "after": [
+            [
+              1,
+              "static",
+              [
+                3,
+                5,
+                10
+              ]
+            ]
+          ]
+        },
+        {
+          "step": 193,
+          "time": 19.3,
+          "before": [
+            [
+              1,
+              "static",
+              [
+                3,
+                5,
+                10
+              ]
+            ]
+          ],
+          "after": [
+            [
+              1,
+              "static",
+              [
+                3,
+                10
+              ]
+            ]
+          ]
+        },
+        {
+          "step": 491,
+          "time": 49.1,
+          "before": [
+            [
+              1,
+              "static",
+              [
+                3,
+                10
+              ]
+            ]
+          ],
+          "after": [
+            [
+              1,
+              "static",
+              [
+                3,
+                10
+              ]
+            ],
+            [
+              2,
+              "static",
+              [
+                1,
+                5,
+                6
+              ]
+            ]
+          ]
+        },
+        {
+          "step": 675,
+          "time": 67.5,
+          "before": [
+            [
+              1,
+              "static",
+              [
+                3,
+                10
+              ]
+            ],
+            [
+              2,
+              "static",
+              [
+                1,
+                5,
+                6
+              ]
+            ]
+          ],
+          "after": [
+            [
+              1,
+              "static",
+              [
+                3,
+                10
+              ]
+            ],
+            [
+              2,
+              "static",
+              [
+                1,
+                5,
+                6
+              ]
+            ],
+            [
+              3,
+              "static",
+              [
+                2,
+                4,
+                12
+              ]
+            ]
+          ]
+        },
+        {
+          "step": 911,
+          "time": 91.10000000000001,
+          "before": [
+            [
+              1,
+              "static",
+              [
+                3,
+                10
+              ]
+            ],
+            [
+              2,
+              "static",
+              [
+                1,
+                5,
+                6
+              ]
+            ],
+            [
+              3,
+              "static",
+              [
+                2,
+                4,
+                12
+              ]
+            ]
+          ],
+          "after": [
+            [
+              1,
+              "static",
+              [
+                3,
+                10
+              ]
+            ],
+            [
+              2,
+              "static",
+              [
+                1,
+                5,
+                6
+              ]
+            ],
+            [
+              3,
+              "static",
+              [
+                2,
+                4,
+                12
+              ]
+            ],
+            [
+              4,
+              "static",
+              [
+                7,
+                9,
+                11
+              ]
+            ]
+          ]
+        },
+        {
+          "step": 1132,
+          "time": 113.2,
+          "before": [
+            [
+              1,
+              "static",
+              [
+                3,
+                10
+              ]
+            ],
+            [
+              2,
+              "static",
+              [
+                1,
+                5,
+                6
+              ]
+            ],
+            [
+              3,
+              "static",
+              [
+                2,
+                4,
+                12
+              ]
+            ],
+            [
+              4,
+              "static",
+              [
+                7,
+                9,
+                11
+              ]
+            ]
+          ],
+          "after": [
+            [
+              1,
+              "static",
+              [
+                3,
+                10
+              ]
+            ],
+            [
+              2,
+              "static",
+              [
+                1,
+                5,
+                6
+              ]
+            ],
+            [
+              3,
+              "static",
+              [
+                2,
+                4,
+                12
+              ]
+            ]
+          ]
+        }
+      ]
+    }
+  ]
+}
