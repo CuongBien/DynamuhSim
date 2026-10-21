@@ -1,0 +1,368 @@
+{
+  "name": "crowdsimplus_sfm_individual_goals_bottleneck_s43",
+  "backend": "crowdsimplus",
+  "goal_layout": "individual",
+  "human_policy": "sfm",
+  "condition": "bottleneck",
+  "seed": 43,
+  "geometry": "native",
+  "robot_avoidance": false,
+  "robot_visible": true,
+  "status": "ABORTED",
+  "protocol_valid": true,
+  "runtime": "generated/crowdsimplus_sfm_individual_goals_bottleneck_s43_si7xn_2a",
+  "metrics_clock": "simulation",
+  "commit": "d0a7bbb2d8c26546b44491d65f0d2be92228e799",
+  "rendering": {
+    "vendor": "Microsoft Corporation",
+    "renderer": "D3D12 (NVIDIA GeForce RTX 4060 Laptop GPU)",
+    "version": "4.6 (Compatibility Profile) Mesa 25.2.8-0ubuntu0.24.04.2",
+    "direct": true,
+    "environment_before": {
+      "DISPLAY": ":0",
+      "WAYLAND_DISPLAY": "wayland-0"
+    },
+    "environment_used": {
+      "DISPLAY": ":0",
+      "WAYLAND_DISPLAY": "wayland-0",
+      "GALLIUM_DRIVER": "d3d12",
+      "MESA_D3D12_DEFAULT_ADAPTER_NAME": "NVIDIA"
+    },
+    "probe_source_sha256": "9a9f5478053290b51f18beed987563a7e3a2349f143e8fccd0ce41bf57ec5bab",
+    "probe_binary_sha256": "37f8608ee330e5c179dcd1975c9053e0b66f055f21a68e41bbaf13ed20d26520",
+    "hardware_verified": true
+  },
+  "contact_geometry": null,
+  "group_behavior": null,
+  "robot_start": [
+    8.0,
+    0.0,
+    0.0
+  ],
+  "robot_goal": [
+    24.5,
+    0.0,
+    0.0
+  ],
+  "scenario_parameter_overrides": [
+    "amcl.initial_pose.x/y/yaw"
+  ],
+  "localization_parameter_overrides": {},
+  "localization_profile": "baseline",
+  "runtime_nav_params_sha256": "e6e43051eea1db4a1bf70e351bf058b9007a22c9d3d50a7b6412a00c535aa3b1",
+  "scene": {
+    "condition": "bottleneck",
+    "seed": 43,
+    "initial": [
+      {
+        "id": 1,
+        "x": 21.223546918716444,
+        "y": -0.33691585285300957,
+        "yaw": 3.141592653589793,
+        "speed": 0.0,
+        "radius": 0.36,
+        "vx": 0.0,
+        "vy": 0.0
+      },
+      {
+        "id": 2,
+        "x": 22.595503870579492,
+        "y": -0.02848534228837112,
+        "yaw": 3.141592653589793,
+        "speed": 0.0,
+        "radius": 0.36,
+        "vx": 0.0,
+        "vy": 0.0
+      },
+      {
+        "id": 3,
+        "x": 24.035154152598636,
+        "y": 0.31373174112942137,
+        "yaw": 3.141592653589793,
+        "speed": 0.0,
+        "radius": 0.36,
+        "vx": 0.0,
+        "vy": 0.0
+      }
+    ],
+    "robot_spawn": [
+      -27.0,
+      0.0,
+      0.0
+    ],
+    "robot_goal": [
+      24.5,
+      0.0,
+      0.0
+    ],
+    "robot_radius": 0.25,
+    "human_radius": 0.36,
+    "preferred_human_speed": 0.8,
+    "goal_layout": "individual",
+    "human_routes": {
+      "1": [
+        [
+          10.5,
+          -0.33691585285300957
+        ],
+        [
+          21.223546918716444,
+          -0.33691585285300957
+        ]
+      ],
+      "2": [
+        [
+          9.1,
+          -0.02848534228837112
+        ],
+        [
+          22.595503870579492,
+          -0.02848534228837112
+        ]
+      ],
+      "3": [
+        [
+          7.7,
+          0.31373174112942137
+        ],
+        [
+          24.035154152598636,
+          0.31373174112942137
+        ]
+      ]
+    },
+    "scenario_version": "factory_bottleneck_v1",
+    "robot_start": [
+      8.0,
+      0.0,
+      0.0
+    ],
+    "passage": {
+      "x_min": 12.0,
+      "x_max": 20.0,
+      "half_width": 0.9,
+      "left_confirmation_x": 11.5,
+      "right_confirmation_x": 20.5
+    },
+    "scenario_definition": "three independent counterflow pedestrians, two private endpoints each; no timing/lane or yielding constraints",
+    "nominal_route_factory_clearance_m_min": 0.20308414714699008
+  },
+  "scene_sha256": "825c26b2e2fe322fe3b2d8f9656e35b13c147afe5c22a4e93cdeb463c117166b",
+  "map_sha256": "6538c7c14e4ece9f8e20a57619a49ea4e80bee6cc886499f5e1d21c3b550667b",
+  "nav_params_sha256": "ff73d68dcdc64c29427522c9b87fc9f3850b02326a3a9b1c467e6b9b3d5297a7",
+  "crowdsim_metadata": {
+    "framework": "CrowdSimPlus",
+    "source_commit": "d526a07c013c621fa1ad50894b6ba639f61063de",
+    "source_sha256": {
+      "crowd_sim_plus/envs/crowd_sim_plus.py": "eb1e9e706f3e9c9fc2e4779b2b4fbe11c23d13224a71e47f91c50249aa4717d5",
+      "crowd_sim_plus/envs/policy/orca_plus.py": "4fb102d5762654e1139c5df00f875579d2f6209bce9ea2226f0731493847270b",
+      "crowd_sim_plus/envs/policy/social_force.py": "6acb9fc1566062b73b2e61194582fce9fc256bafaf3f6e6f19d81b1fc4be4e80",
+      "crowd_sim_plus/envs/utils/human_plus.py": "538a6e2462cf5e0b3239212ac89b59d739549b61014f40dc0219b5946c6e355e",
+      "crowd_sim_plus/envs/utils/agent_plus.py": "dd29ad2b481ad1bd082451eabcee17c8ed207e9401bca80c0d1716ac679ca0bd"
+    },
+    "time_step": 0.1,
+    "original_demo_time_step": 0.25,
+    "robot_visible": true,
+    "human_policy": "sfm",
+    "human_radius": 0.36,
+    "human_v_pref": 0.8,
+    "robot_radius": 0.25,
+    "orca_safety_space": null,
+    "orca_added_radius": null,
+    "neighbor_dist": null,
+    "time_horizon": null,
+    "time_horizon_obst": null,
+    "sfm_parameters": {
+      "radius": 0.36,
+      "A": 3.0,
+      "B": 0.18,
+      "KI": 1.0,
+      "A_static": 2.0,
+      "B_static": 0.025,
+      "A_bottleneck": 6.0,
+      "B_bottleneck": 0.12,
+      "is_bottleneck": false
+    },
+    "static_boxes": 42,
+    "static_line_segments": 168,
+    "group_model": false,
+    "conversation_model": false,
+    "movement_methods": [
+      "Human.act",
+      "CrowdSimPlus.constrain_agent_action_exact",
+      "Human.step"
+    ],
+    "goal_layout": "individual",
+    "human_routes": [
+      [
+        [
+          10.5,
+          -0.33691585285300957
+        ],
+        [
+          21.223546918716444,
+          -0.33691585285300957
+        ]
+      ],
+      [
+        [
+          9.1,
+          -0.02848534228837112
+        ],
+        [
+          22.595503870579492,
+          -0.02848534228837112
+        ]
+      ],
+      [
+        [
+          7.7,
+          0.31373174112942137
+        ],
+        [
+          24.035154152598636,
+          0.31373174112942137
+        ]
+      ]
+    ],
+    "arrival_rule": "upstream Human.reached_destination; external patrol switches endpoints only on arrival",
+    "external_scenario": "bottleneck initial poses; separate per-human endpoints; standing fixture held externally",
+    "robot_controller": "ROS Nav2 only; native robot act/step and full env reward/episode loop not called",
+    "visual_heading": "last nonzero actual velocity; initial scene yaw while stationary"
+  },
+  "crowdsim_image_id": "sha256:39929ee8e4fa6d738a381a0b695bf25eaf9fa972cd5b9d8a6854d72f80bd5f3c",
+  "diagnostics": "/home/cuongbien/DynamuhSim/experiments/social_navigation/benchmark/generated/crowdsimplus_sfm_individual_goals_bottleneck_s43_si7xn_2a/diagnostics.jsonl",
+  "shutdown_preload": {
+    "scope": "gz sim only",
+    "library": "/usr/lib/wsl/lib/libd3d12core.so",
+    "real_gz": "/opt/ros/jazzy/opt/gz_tools_vendor/bin/gz",
+    "wrapper": "/home/cuongbien/DynamuhSim/experiments/social_navigation/benchmark/generated/crowdsimplus_sfm_individual_goals_bottleneck_s43_si7xn_2a/shutdown_bin/gz",
+    "mode": "startup LD_PRELOAD; no system files changed"
+  },
+  "amcl_parameters_readback": {
+    "laser_model_type": "likelihood_field",
+    "do_beamskip": false,
+    "beam_skip_distance": 0.5,
+    "beam_skip_threshold": 0.3,
+    "beam_skip_error_threshold": 0.9,
+    "transform_tolerance": 0.5,
+    "robot_model_type": "nav2_amcl::OmniMotionModel",
+    "max_beams": 60,
+    "min_particles": 500,
+    "max_particles": 2000,
+    "laser_max_range": 3.5,
+    "laser_min_range": 0.12,
+    "update_min_d": 0.05,
+    "update_min_a": 0.05,
+    "alpha1": 0.1,
+    "alpha2": 0.1,
+    "alpha3": 0.1,
+    "alpha4": 0.1,
+    "alpha5": 0.1,
+    "z_hit": 0.5,
+    "z_rand": 0.5,
+    "sigma_hit": 0.2,
+    "laser_likelihood_max_dist": 2.0,
+    "initial_pose.x": 8.0,
+    "initial_pose.y": 0.0,
+    "initial_pose.yaw": 0.0
+  },
+  "initial_position_error_m_max": 0.0,
+  "sim_seconds": 32.932,
+  "wall_seconds": 47.54362036600014,
+  "observed_rtf": 0.6926691687861166,
+  "action_status": 6,
+  "final_robot_xy": [
+    16.6473035361279,
+    -0.25187732903403454
+  ],
+  "goal_error_world_m": 7.856734941602058,
+  "goal_error_amcl_m": 8.177787580712424,
+  "native_messages": 443,
+  "sensors": {
+    "scan": 222,
+    "imu": 4436,
+    "odom": 1233,
+    "clock": 10869,
+    "amcl": 121
+  },
+  "max_human_displacement_m": 16.221741174455616,
+  "robot_path_m": 9.46039293494422,
+  "min_robot_human_clearance_m": 0.11270259913601888,
+  "min_human_pair_clearance_m": 0.002237237162691308,
+  "robot_human_overlap_s": 0,
+  "human_pair_overlap_s": 0,
+  "robot_stopped_s": 10.800000000000008,
+  "server_shutdown": {
+    "status": "STOPPED",
+    "partition": "dynamuhsim_crowdsimplus_sfm_individual_goals_bottleneck_s43_7221",
+    "initial": [
+      {
+        "pid": 7344,
+        "command": "gz sim -r -s /home/cuongbien/DynamuhSim/experiments/social_navigation/benchmark/generated/crowdsimplus_sfm_individual_goals_bottleneck_s43_si7xn_2a/warehouse.sdf                                             "
+      }
+    ],
+    "request_returncode": 0,
+    "response": "data: true",
+    "stderr": "",
+    "elapsed_wall_s": 0.7985888020002676,
+    "remaining": []
+  },
+  "navigation_capture": {
+    "counts": {
+      "navigation_rosout": 229,
+      "particle_cloud": 121,
+      "global_costmap": 26,
+      "navigation_status": 1,
+      "global_plan": 28,
+      "follow_path_status": 57,
+      "behavior_spin_status": 4,
+      "behavior_backup_status": 2
+    },
+    "callbacks_wall_seconds": 2.0975703190069908,
+    "callback_wall_max_seconds": 0.044679907000045205,
+    "global_grid_encoding": "lossless zlib_base64_int8",
+    "particle_cloud_encoding": "full native nav2_msgs/ParticleCloud message",
+    "policy": "Subscribers only; no parameters, services, publishers or action goals added"
+  },
+  "process_cleanup": {
+    "session": "691f482b4cf64a8ba7ec9fa0d432b7ba",
+    "reaped_members": [],
+    "signals": [],
+    "remaining": [],
+    "status": "PASS",
+    "ogre_log_sha256": "46640a982c1463ea973d3bccdc61ab9a4a82880086bcfd36b854bd2883073040",
+    "ogre_renderer_lines": [
+      "14:34:36: GL_RENDERER = D3D12 (NVIDIA GeForce RTX 4060 Laptop GPU)"
+    ]
+  },
+  "gazebo_exit": {
+    "clean": true,
+    "log_lines": [
+      "[INFO] [gz-1]: process has finished cleanly [pid 7344]"
+    ]
+  },
+  "diagnostic_counts": {
+    "tf_static": 4,
+    "navigation_rosout": 229,
+    "native": 443,
+    "gazebo": 2122,
+    "tf": 12112,
+    "scan": 222,
+    "odom": 1233,
+    "amcl": 121,
+    "particle_cloud": 121,
+    "costmap": 152,
+    "footprint": 503,
+    "global_costmap": 26,
+    "navigation_graph": 2,
+    "navigation_status": 1,
+    "global_plan": 28,
+    "cmd_vel": 668,
+    "follow_path_status": 57,
+    "behavior_spin_status": 4,
+    "behavior_backup_status": 2
+  },
+  "samples": 329,
+  "observer_frames": 99
+}

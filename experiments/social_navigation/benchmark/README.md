@@ -1,5 +1,7 @@
 # Pilot RVO2 ↔ SocNavGym với Nav2 trong nhà xưởng
 
+[Cohort nhiều seed](localization_validation/README.md) chạy12 lượt baseline/LF-prob+beam-skip với seed42/43/44, giữ mọi goal outcome và đối chiếu vị trí thật Gazebo.
+
 Bổ sung mới: [shutdown WSL D3D12](shutdown_fix/README.md) có kiểm chứng Gazebo thoát sạch; [localization pilot](localization_trials/README.md) so baseline / LF-prob / LF-prob+beam-skip trên cùng bottleneck. Dùng rõ `--shutdown-mode wsl_d3d12` cho workaround, mặc định lịch sử vẫn giữ.
 
 Harness này so sánh runtime RVO2 đang cài trong workspace với kernel nhóm SocNavGym của adapter, trên cùng Gazebo world, robot Mecanum, LiDAR, map và tham số MPPI. Không sửa code robot hoặc plugin RVO2 gốc.

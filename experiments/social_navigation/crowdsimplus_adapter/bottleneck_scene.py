@@ -2,7 +2,7 @@
 import copy,math,random
 
 def bottleneck_scene(baseline,layout,seed):
-    if seed not in (42,43):raise ValueError('Bottleneck fixture supports seeds 42/43')
+    if not isinstance(seed,int) or seed<0:raise ValueError('Bottleneck fixture requires a nonnegative integer seed')
     scene=copy.deepcopy(baseline);rng=random.Random(seed);humans=[];routes={}
     for index,x in enumerate([21.2,22.6,24.]):
         hid=index+1;y=[-.30,0.,.30][index]+rng.uniform(-.04,.04);x+=rng.uniform(-.06,.06)

@@ -15,7 +15,8 @@ sys.path.insert(0,str(SOCIAL/'crowdsimplus_adapter'))
 from passage_metrics import PassageCounter
 sys.path.insert(0,str(BENCH))
 from footprint_geometry import footprint_box
-p=argparse.ArgumentParser();p.add_argument('--report-dir',type=Path,required=True);p.add_argument('--localization-ablation',action='store_true',help='Verify explicit runtime AMCL profile rather than require byte-identical baseline params');a=p.parse_args()
+p=argparse.ArgumentParser();p.add_argument('--report-dir',type=Path,required=True);p.add_argument('--localization-ablation',action='store_true',help='Verify explicit runtime AMCL profile rather than require byte-identical baseline params');p.add_argument('--seed',type=int,default=42);p.add_argument('--paired-reference',type=Path,help='Baseline directory from same cohort/seed; requires localization ablation');a=p.parse_args()
+if a.paired_reference and not a.localization_ablation:p.error('--paired-reference requires --localization-ablation')
 field=MapField(SOCIAL/'warehouse/warehouse.yaml');boxes=json.loads((SOCIAL/'warehouse/layout.json').read_text())['obstacles']
 sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
 reference=BENCH/'localization_diagnosis/generated/reference'
@@ -55,7 +56,7 @@ def safe(v):
     return v
 summaries=[];timelines={};manifests=[];samples={};native_checks=[]
 for policy in ['sfm','orca_plus']:
-    name='crowdsimplus'+('_sfm' if policy=='sfm' else '')+'_individual_goals_bottleneck_s42'
+    name='crowdsimplus'+('_sfm' if policy=='sfm' else '')+f'_individual_goals_bottleneck_s{a.seed}'
     result=json.loads((a.report_dir/(name+'.json')).read_text());assert result['protocol_valid']
     runtime=BENCH/result['runtime'];gate=float((runtime/'start_gate').read_text());end=gate+result['sim_seconds']
     groups={k:[] for k in ['gazebo','odom','amcl','scan','particle_cloud','global_plan','global_costmap','costmap','navigation_rosout','navigation_graph']};counts=Counter()
@@ -147,7 +148,9 @@ for policy in ['sfm','orca_plus']:
     rosout=[dict(elapsed=r['_time']-gate,level=r['data']['level'],node=r['data']['name'],message=r['data']['msg']) for r in groups['navigation_rosout'] if active(r)]
     graphs=[r['data'] for r in groups['navigation_graph']]
     global_pubs=[len(g['publishers'].get('/plan',[])) for g in graphs];amcl_pubs=[len(g['publishers'].get('/amcl_pose',[])) for g in graphs]
-    baseline=json.loads((BENCH/'bottleneck/reports/run01'/(name+'.json')).read_text())
+    baseline_directory=a.paired_reference or BENCH/'bottleneck/reports/run01'
+    baseline=json.loads((baseline_directory/(name+'.json')).read_text())
+    assert result['seed']==baseline['seed']==a.seed
     samekeys=['map_sha256','nav_params_sha256','runtime_nav_params_sha256','scene_sha256','crowdsim_image_id']
     compared_keys=samekeys
     if a.localization_ablation:
@@ -184,7 +187,7 @@ for ax,su in zip(axes,summaries):
     for pl in trace['global_plans']:
         po=np.array(pl['points']);ax.plot(po[:,0],po[:,1],c='#d99025' if pl['leaves_channel_core'] else '#7aad90',alpha=.15,lw=1)
     ar=trace['amcl'];ax.plot([r['actual']['x'] for r in ar],[r['actual']['y'] for r in ar],label='actual Gazebo',c='#2674b5');ax.plot([r['amcl']['x'] for r in ar],[r['amcl']['y'] for r in ar],label='AMCL publications',c='#c74c3b',marker='.',ms=3)
-    ax.set_title(f"{su['policy']} seed42 | {su['status']} | faint lines: published global plans");ax.legend(fontsize=8)
+    ax.set_title(f"{su['policy']} seed{a.seed} | {su['status']} | faint lines: published global plans");ax.legend(fontsize=8)
 fig.tight_layout();fig.savefig(a.report_dir/'plans_and_trajectory.png',dpi=160);plt.close(fig)
 fig,axes=plt.subplots(4,2,figsize=(13,11),sharex='col')
 for col,su in enumerate(summaries):
@@ -214,7 +217,7 @@ for row,su in enumerate(summaries):
     for po,label,c in [(tr['jump_after']['actual'],'actual','#2674b5'),(tr['jump_after']['amcl'],'AMCL','#c74c3b')]:axes[row,1].scatter([po['x']],[po['y']],c=c,s=35,label=label)
     axes[row,1].set_title(f"{su['policy']} | global grid nearest largest AMCL step | dt {stamp(gd)-target:+.3f}s");axes[row,1].legend(fontsize=7)
 fig.colorbar(grid_image,ax=axes[:,1].tolist(),shrink=.7,label='global OccupancyGrid [1..100]');fig.savefig(a.report_dir/'particles_and_global_grid.png',dpi=160);plt.close(fig)
-manifest=dict(head=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),trials=manifests,native_library='/opt/ros/jazzy/lib/libpf_lib.so',native_library_sha256=sha(Path('/opt/ros/jazzy/lib/libpf_lib.so')),native_harness_sha256=sha(HERE/'native_clusters.cpp'),native_binary_sha256=sha(binary),reference_manifest=reference_manifest,
+manifest=dict(seed=a.seed,paired_reference=str(a.paired_reference) if a.paired_reference else None,head=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),trials=manifests,native_library='/opt/ros/jazzy/lib/libpf_lib.so',native_library_sha256=sha(Path('/opt/ros/jazzy/lib/libpf_lib.so')),native_harness_sha256=sha(HERE/'native_clusters.cpp'),native_binary_sha256=sha(binary),reference_manifest=reference_manifest,
     particle_method='Recorded post-resample ParticleCloud weights; re-cluster with installed pf_kdtree and pf_cluster_stats, no original hidden filter replay. Cloud header is AMCL now(), AMCL pose header is scan stamp; match receipts within 0.15 wall s and retain offsets.',
     grid_method='Exact int8 lossless decompression; nearest publication within 1.2 sim s for global grid and 0.35 for local. Padded footprint samples are diagnostic, not contact force or planner service results.',
     limitations=('Isolated AMCL ablation; one run per policy/profile, no promotion or proven improvement. See parent protocol/report. Principal-yaw cluster plots need circular-lift reconstruction.' if a.localization_ablation else 'Two diagnostic reruns only. Old failing trials retained; stochastic process not fully seeded. Passive capture adds CPU/IO load. No tuning or claimed fix.'))
