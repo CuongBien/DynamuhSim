@@ -79,3 +79,8 @@ Các probe hành vi và bản sửa observer đã được lưu riêng:
 [Replay](benchmark/human_response_replay/README.md) gồm6 CrowdSimPlus +18 SocNavGym, đầu vào robot định trước, native parity và repeatability đạt. Bản sửa AMCL chỉ đổi QoS subscriber theo tùy chọn trong harness; không reset localization hoặc đổi ROS robot. Các report giữ HEAD lúc chạy và source hashes. Native ConfigParser output giữ nguyên blank line cuối để bảo toàn byte và SHA256; kiểm tra whitespace chỉ miễn blank-at-eof cho các artifact này.
 
 Phần commit tiếp theo lưu [Gazebo nhóm](benchmark/group_gazebo_demo/README.md): ba lượt standing và ba lượt counterflow hợp lệ, một startup error gốc được giữ. Sáu action SUCCEEDED, năm lượt đạt sai số thật≤0.20m; GUI kéo/zoom/Pause/Play được người dùng xác nhận. Nhóm cố định ba người, chưa có lifecycle formation trong Gazebo.
+
+Commit `e749fb51` đã lưu phần Gazebo nhóm và GUI nêu trên. Sau commit, [kiểm định lifecycle độc lập](benchmark/socnavgym_lifecycle/README.md) chạy trên HEAD này với source hashes riêng; báo cáo mới chưa commit. Ba seed đều giữ ID/reset contract, nhưng hình học formation chưa đạt để promote vào Gazebo.
+
+
+Cập nhật22/10/2026, **chưa có commit mới**: bản sửa lifecycle standalone và [pilot formation trong nhà xưởng Gazebo](benchmark/socnavgym_warehouse_lifecycle/README.md) đã hoàn tất trong working tree. Ba trace offline đạt; hai lượt live120s giữ riêng, seed42 PARTIAL về lifecycle và seed43 PASS gồm nhóm đứng/đi/tan. Adapter mới không sửa vendor, code robot hoặc adapter nhóm cố định. Report giữ HEADe749fb51 và source hashes tại lúc đo; ảnh/GIF từ camera Gazebo thật,4×. Các file lifecycle mới sẽ cần commit riêng khi người dùng yêu cầu.

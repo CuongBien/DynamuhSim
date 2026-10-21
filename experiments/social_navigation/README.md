@@ -1,5 +1,9 @@
 # Nhà xưởng và vòng khảo sát SocNavGym
 
+[Formation/tách nhóm đã chạy trong Gazebo](benchmark/socnavgym_warehouse_lifecycle/README.md): bản sửa adapter riêng hỗ trợ6 người, đủ42 vật cản nhà xưởng và robot có vận tốc đo thực. Ba trace offline đạt; hai lượt Gazebo120s đạt kiểm tra kỹ thuật. Seed42 chỉ có formation, seed43 có nhóm đứng/đi rồi tan; tâm nhóm đi được2.17m. Camera thật, NVIDIA và GUI đã kiểm chứng. Đây là pilot tại một lối đi, chưa chạy Nav2 hoặc benchmark chọn framework.
+
+[Bản sửa formation độc lập](benchmark/socnavgym_lifecycle_fix/README.md) là cơ sở của adapter trên. [Native reference](benchmark/socnavgym_lifecycle/README.md) vẫn giữ nguyên cả nhảy vị trí và overlap đã đo; không gọi bản sửa là hành vi upstream nguyên bản.
+
 [Probe phản ứng người](benchmark/human_response_replay/README.md):6 CrowdSimPlus +18 SocNavGym offline, cùng input robot định trước; hình replay được gắn nhãn riêng. [Gazebo nhóm — hoàn tất lượt bổ sung](benchmark/group_gazebo_demo/README.md): sửa QoS subscriber AMCL trong harness, ba lượt nhóm đi bộ đã chạy; GUI kéo/zoom và Pause/Play hoạt động. Tổng sáu lượt hợp lệ, năm lượt đạt sai số đích thật ≤0.20m; giữ lại một lỗi khởi tạo cũ.
 
 [Kiểm tra nhiều seed](benchmark/localization_validation/README.md):12 lượt so AMCL gốc với LF-prob+beam-skip, seed42/43/44; dữ liệu giữ riêng với pilot cũ.
@@ -105,7 +109,7 @@ hiệu năng hay tỷ lệ va chạm của robot ROS từ các lượt này.
 ## Bằng chứng và trạng thái
 
 Xem [báo cáo vòng đầu](reports/ROUND1.md), video và JSON liên kết trong báo cáo.
-SocNavGym đã có [adapter Gazebo thử nghiệm](gazebo_adapter/README.md) cho một nhóm 3 người đi cùng nhau hoặc đứng trò chuyện trong nhà xưởng. Clock, robot feedback, pose proxy và LiDAR đã được kiểm tra. Đã có [pilot Nav2 RVO2 ↔ SocNavGym](benchmark/reports/BENCHMARK_REPORT.md) gồm 9 lượt cùng scene/map/params; formation chưa đưa vào Gazebo.
+SocNavGym đã có [adapter Gazebo thử nghiệm](gazebo_adapter/README.md) cho một nhóm 3 người đi cùng nhau hoặc đứng trò chuyện trong nhà xưởng. Clock, robot feedback, pose proxy và LiDAR đã được kiểm tra. Đã có [pilot Nav2 RVO2 ↔ SocNavGym](benchmark/reports/BENCHMARK_REPORT.md) gồm 9 lượt cùng scene/map/params. Formation/tách nhóm hiện có pilot riêng6 người nêu đầu trang; không gộp kết quả vào benchmark Nav2 cũ.
 
 CrowdSimPlus đã có vòng thử độc lập tại [round2](round2/README.md); ComplexityNav đã có vòng thử độc lập tại [round3](round3/README.md). CrowdSimPlus hiện đã có [adapter Gazebo + Nav2](crowdsimplus_adapter/README.md), với [7 lượt thử và GIF](benchmark/crowdsim_comparison/reports/run01/CROWDSIM_GAZEBO_REPORT.md). ComplexityNav chưa nối vào Gazebo. Xem [bảng so sánh](FRAMEWORK_COMPARISON.md) và [báo cáo adapter](gazebo_adapter/reports/ADAPTER_REPORT.md) trước khi chọn hành vi nhóm.
 

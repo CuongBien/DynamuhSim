@@ -1,0 +1,71 @@
+{
+  "status": "PASS_WITH_DECLARED_SCOPE",
+  "recorded_utc": "2026-10-21T17:42:10.657704+00:00",
+  "head": "e749fb51a8a35238544258c9bb01873c302e88ea",
+  "uncommitted": true,
+  "offline": {
+    "valid_cases": 3,
+    "updates": 3600,
+    "failed_schema_attempt_retained": "offline01"
+  },
+  "live": {
+    "live01": {
+      "status": "PARTIAL",
+      "engineering_checks": "PASS",
+      "seed": 42,
+      "sim_budget_s": 120.0,
+      "membership_event_count": 2,
+      "release_event_count": 0
+    },
+    "live02": {
+      "status": "PASS",
+      "engineering_checks": "PASS",
+      "seed": 43,
+      "sim_budget_s": 120.0,
+      "membership_event_count": 6,
+      "release_event_count": 3
+    }
+  },
+  "observed_coverage": [
+    "standing formation",
+    "standing dissolution",
+    "moving formation",
+    "moving group translation",
+    "moving dissolution",
+    "measured robot forward/lateral feedback",
+    "pause/resume",
+    "fresh-session restart"
+  ],
+  "moving_group": {
+    "group_id": 3,
+    "members": [
+      1,
+      2,
+      5
+    ],
+    "start": 76.904,
+    "end": 87.304,
+    "actual_center_path_m": 2.168180663914105
+  },
+  "fresh_session_initial_fixture_equal": true,
+  "in_place_world_reset_supported": false,
+  "archive_byte_identity_checked": 13,
+  "original_files_preserved": 11355,
+  "original_index_and_outside_worktree_preserved": true,
+  "remaining_owned_processes": [],
+  "remaining_workers": [],
+  "wrapper_checks": [
+    "bash syntax",
+    "run.sh analyze --live live01",
+    "run.sh analyze --live live02",
+    "run.sh analyze --offline-only offline02"
+  ],
+  "limits": [
+    "6 humans,2 live seeds,local aisle goal sampling",
+    "No Nav2 cohort in this pilot",
+    "Not upstream-unmodified movement",
+    "Not full-factory/bottleneck or general safety/naturalness certification",
+    "Standing animation quality not accepted",
+    "No new commit this turn"
+  ]
+}
