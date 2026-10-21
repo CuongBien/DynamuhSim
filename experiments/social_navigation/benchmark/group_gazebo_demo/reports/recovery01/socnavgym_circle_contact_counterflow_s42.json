@@ -1,0 +1,305 @@
+{
+  "name": "socnavgym_circle_contact_counterflow_s42",
+  "backend": "socnavgym",
+  "goal_layout": null,
+  "human_policy": null,
+  "condition": "counterflow",
+  "seed": 42,
+  "geometry": "circle_contact",
+  "robot_avoidance": false,
+  "robot_visible": true,
+  "status": "SUCCEEDED",
+  "protocol_valid": true,
+  "runtime": "generated/socnavgym_circle_contact_counterflow_s42_apk629g8",
+  "metrics_clock": "simulation",
+  "commit": "a2ef6afa14c7775d0214c51f382c3bc770944fff",
+  "rendering": {
+    "vendor": "Microsoft Corporation",
+    "renderer": "D3D12 (NVIDIA GeForce RTX 4060 Laptop GPU)",
+    "version": "4.6 (Compatibility Profile) Mesa 25.2.8-0ubuntu0.24.04.2",
+    "direct": true,
+    "environment_before": {
+      "DISPLAY": ":0",
+      "WAYLAND_DISPLAY": "wayland-0"
+    },
+    "environment_used": {
+      "DISPLAY": ":0",
+      "WAYLAND_DISPLAY": "wayland-0",
+      "GALLIUM_DRIVER": "d3d12",
+      "MESA_D3D12_DEFAULT_ADAPTER_NAME": "NVIDIA"
+    },
+    "probe_source_sha256": "9a9f5478053290b51f18beed987563a7e3a2349f143e8fccd0ce41bf57ec5bab",
+    "probe_binary_sha256": "37f8608ee330e5c179dcd1975c9053e0b66f055f21a68e41bbaf13ed20d26520",
+    "hardware_verified": true
+  },
+  "contact_geometry": {
+    "policy": "circle_contact",
+    "modified_native_behavior": true,
+    "human_contact_shape": "circle",
+    "human_contact_radius": 0.36,
+    "native_ellipse_semiaxes": null,
+    "human_proxy_radius": 0.36,
+    "original_reset_robot_radius": 0.2455005863673824,
+    "effective_robot_radius": 0.25,
+    "native_robot_radius_fixed_after_reset": true,
+    "robot_radius_is_nominal_proxy_metric_not_full_robot_collision_body": true,
+    "contact_timing": "native pre-update; no swept collision test",
+    "contact_response": "native stop the entire moving group if any member speed is zero",
+    "human_pair_separation_guard": false,
+    "robot_in_group_orca": false,
+    "factory_contacts": "exact circle versus oriented box predicate",
+    "native_wall_response_unchanged": true
+  },
+  "group_behavior": {
+    "policy": "native",
+    "modified_group_solver": false,
+    "robot_in_group_orca": false,
+    "applies_to": "native modes",
+    "robot_state_source": "measured Gazebo pose and finite-difference world velocity",
+    "robot_radius": 0.25,
+    "group_orca_radius": 1.44,
+    "group_neighbor_distance": 2.88,
+    "time_horizon": 4.861735698828816,
+    "time_horizon_obstacles": 5.6476885381006925,
+    "group_current_velocity": "native zero initialization per solver call",
+    "group_smoothing": "native 0.9 previous + 0.1 new",
+    "responsibility": "RVO2 reciprocal; solved robot velocity is discarded, actual robot controlled by Nav2",
+    "new_swept_guard": false,
+    "new_human_pair_separation": false,
+    "stationary_group_reaction_changed": false
+  },
+  "robot_start": [
+    -27.0,
+    0.0,
+    0.0
+  ],
+  "robot_goal": [
+    -14.0,
+    0.0,
+    0.0
+  ],
+  "localization_profile": "baseline",
+  "runtime_nav_params_sha256": "ff73d68dcdc64c29427522c9b87fc9f3850b02326a3a9b1c467e6b9b3d5297a7",
+  "scene": {
+    "condition": "counterflow",
+    "seed": 42,
+    "initial": [
+      {
+        "id": 1,
+        "x": -20.288109357607617,
+        "y": -0.15528517483599052,
+        "yaw": 3.141592653589793,
+        "speed": 0.0,
+        "radius": 0.36,
+        "group_id": 1,
+        "vx": 0.0,
+        "vy": 0.0
+      },
+      {
+        "id": 2,
+        "x": -21.338355933840273,
+        "y": 0.6398219663048469,
+        "yaw": 3.141592653589793,
+        "speed": 0.0,
+        "radius": 0.36,
+        "group_id": 1,
+        "vx": 0.0,
+        "vy": 0.0
+      },
+      {
+        "id": 3,
+        "x": -21.416163160298385,
+        "y": -0.5308813627463784,
+        "yaw": 3.141592653589793,
+        "speed": 0.0,
+        "radius": 0.36,
+        "group_id": 1,
+        "vx": 0.0,
+        "vy": 0.0
+      }
+    ],
+    "robot_spawn": [
+      -27.0,
+      0.0,
+      0.0
+    ],
+    "robot_goal": [
+      -14.0,
+      0.0,
+      0.0
+    ],
+    "robot_radius": 0.25,
+    "human_radius": 0.36,
+    "group_route": [
+      [
+        -28.0,
+        0.0
+      ],
+      [
+        -21.0,
+        0.0
+      ]
+    ],
+    "preferred_human_speed": 0.8
+  },
+  "scene_sha256": "0e90c8c4aef59d933afd7e0a0f44198aeed5733eb4c3398e5996118aa45a2b86",
+  "map_sha256": "6538c7c14e4ece9f8e20a57619a49ea4e80bee6cc886499f5e1d21c3b550667b",
+  "nav_params_sha256": "ff73d68dcdc64c29427522c9b87fc9f3850b02326a3a9b1c467e6b9b3d5297a7",
+  "amcl_observer_qos": "transient_local",
+  "diagnostics": "/home/cuongbien/DynamuhSim/experiments/social_navigation/benchmark/generated/socnavgym_circle_contact_counterflow_s42_apk629g8/diagnostics.jsonl",
+  "shutdown_preload": {
+    "scope": "gz sim only",
+    "library": "/usr/lib/wsl/lib/libd3d12core.so",
+    "real_gz": "/opt/ros/jazzy/opt/gz_tools_vendor/bin/gz",
+    "wrapper": "/home/cuongbien/DynamuhSim/experiments/social_navigation/benchmark/generated/socnavgym_circle_contact_counterflow_s42_apk629g8/shutdown_bin/gz",
+    "mode": "startup LD_PRELOAD; no system files changed"
+  },
+  "amcl_publishers": [
+    {
+      "node_name": "amcl",
+      "node_namespace": "/",
+      "reliability": "RELIABLE",
+      "durability": "TRANSIENT_LOCAL",
+      "depth": 0
+    }
+  ],
+  "amcl_first_ready": {
+    "count": 1,
+    "frame_id": "map",
+    "stamp_ns": 5400000000,
+    "clock_ns": 5712000000
+  },
+  "amcl_late_join_check": {
+    "wall_seconds": 3.002091946999826,
+    "samples": {
+      "sensor_data": [],
+      "transient_local": [
+        {
+          "frame_id": "map",
+          "stamp_ns": 5400000000,
+          "x": -27.045312060373146,
+          "y": -0.0019297713762815344
+        }
+      ]
+    },
+    "publishers": [
+      {
+        "node_name": "amcl",
+        "node_namespace": "/",
+        "reliability": "RELIABLE",
+        "durability": "TRANSIENT_LOCAL",
+        "depth": 0
+      }
+    ],
+    "scope": "Read-only late subscriptions before goal/start gate; no force-update or reset"
+  },
+  "amcl_parameters_readback": {
+    "laser_model_type": "likelihood_field",
+    "do_beamskip": false,
+    "beam_skip_distance": 0.5,
+    "beam_skip_threshold": 0.3,
+    "beam_skip_error_threshold": 0.9,
+    "transform_tolerance": 0.5,
+    "robot_model_type": "nav2_amcl::OmniMotionModel",
+    "max_beams": 60,
+    "min_particles": 500,
+    "max_particles": 2000,
+    "laser_max_range": 3.5,
+    "laser_min_range": 0.12,
+    "update_min_d": 0.05,
+    "update_min_a": 0.05,
+    "alpha1": 0.1,
+    "alpha2": 0.1,
+    "alpha3": 0.1,
+    "alpha4": 0.1,
+    "alpha5": 0.1,
+    "z_hit": 0.5,
+    "z_rand": 0.5,
+    "sigma_hit": 0.2,
+    "laser_likelihood_max_dist": 2.0,
+    "initial_pose.x": -27.0,
+    "initial_pose.y": 0.0,
+    "initial_pose.yaw": 0.0
+  },
+  "initial_position_error_m_max": 0.0,
+  "sim_seconds": 41.632000000000005,
+  "wall_seconds": 44.862269072000345,
+  "observed_rtf": 0.9279958606905054,
+  "action_status": 4,
+  "final_robot_xy": [
+    -14.13481320245663,
+    -0.09062231428655415
+  ],
+  "goal_error_world_m": 0.16244076890751108,
+  "goal_error_amcl_m": 0.19675765152176264,
+  "native_messages": 516,
+  "sensors": {
+    "scan": 259,
+    "imu": 5168,
+    "odom": 1435,
+    "clock": 12909,
+    "amcl": 156
+  },
+  "max_human_displacement_m": 6.130684494405034,
+  "robot_path_m": 13.072238704416103,
+  "min_robot_human_clearance_m": -0.058965320679472466,
+  "min_human_pair_clearance_m": -0.024058042056164797,
+  "robot_human_overlap_s": 0.8840000000000003,
+  "human_pair_overlap_s": 0.5440000000000005,
+  "robot_stopped_s": 8.840000000000002,
+  "server_shutdown": {
+    "status": "STOPPED",
+    "partition": "dynamuhsim_socnavgym_circle_contact_counterflow_s42_16449",
+    "initial": [
+      {
+        "pid": 16535,
+        "command": "gz sim -r -s /home/cuongbien/DynamuhSim/experiments/social_navigation/benchmark/generated/socnavgym_circle_contact_counterflow_s42_apk629g8/warehouse.sdf                                             "
+      }
+    ],
+    "request_returncode": 0,
+    "response": "data: true",
+    "stderr": "",
+    "elapsed_wall_s": 0.9033779350002078,
+    "remaining": []
+  },
+  "amcl_publishers_at_teardown": [
+    {
+      "node_name": "amcl",
+      "node_namespace": "/",
+      "reliability": "RELIABLE",
+      "durability": "TRANSIENT_LOCAL",
+      "depth": 0
+    }
+  ],
+  "process_cleanup": {
+    "session": "96c2077aa9e646c49908786e8b8dca78",
+    "reaped_members": [],
+    "signals": [],
+    "remaining": [],
+    "status": "PASS",
+    "ogre_log_sha256": "c9a904060e351eeab89c70c440a77b4dd3da12af95e445f7d6087d4eb622a55e",
+    "ogre_renderer_lines": [
+      "15:43:12: GL_RENDERER = D3D12 (NVIDIA GeForce RTX 4060 Laptop GPU)"
+    ]
+  },
+  "gazebo_exit": {
+    "clean": true,
+    "log_lines": [
+      "[INFO] [gz-1]: process has finished cleanly [pid 16535]"
+    ]
+  },
+  "diagnostic_counts": {
+    "tf_static": 4,
+    "gazebo": 2286,
+    "tf": 14563,
+    "scan": 259,
+    "odom": 1435,
+    "native": 516,
+    "amcl": 156,
+    "footprint": 453,
+    "costmap": 151,
+    "cmd_vel": 897
+  },
+  "samples": 391,
+  "observer_frames": 125
+}

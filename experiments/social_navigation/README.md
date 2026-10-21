@@ -1,5 +1,7 @@
 # Nhà xưởng và vòng khảo sát SocNavGym
 
+[Probe phản ứng người](benchmark/human_response_replay/README.md):6 CrowdSimPlus +18 SocNavGym offline, cùng input robot định trước; hình replay được gắn nhãn riêng. [Gazebo nhóm — hoàn tất lượt bổ sung](benchmark/group_gazebo_demo/README.md): sửa QoS subscriber AMCL trong harness, ba lượt nhóm đi bộ đã chạy; GUI kéo/zoom và Pause/Play hoạt động. Tổng sáu lượt hợp lệ, năm lượt đạt sai số đích thật ≤0.20m; giữ lại một lỗi khởi tạo cũ.
+
 [Kiểm tra nhiều seed](benchmark/localization_validation/README.md):12 lượt so AMCL gốc với LF-prob+beam-skip, seed42/43/44; dữ liệu giữ riêng với pilot cũ.
 
 Đợt thử mới: [workaround shutdown Gazebo trên WSL D3D12](benchmark/shutdown_fix/README.md) và [pilot AMCL gồm 3 cấu hình × 2 human policies](benchmark/localization_trials/README.md). Cả hai nằm trong harness thử nghiệm, chưa thay cấu hình robot gốc.
