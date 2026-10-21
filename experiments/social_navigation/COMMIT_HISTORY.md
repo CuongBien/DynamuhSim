@@ -51,3 +51,19 @@ chưa sửa Nav2/human model hoặc bắt đầu framework tiếp theo.
 Bước tiếp theo đã chạy trong working tree, chưa commit mới: [workaround shutdown WSL D3D12](benchmark/shutdown_fix/README.md), ba lifecycle checks (ORCA/SFM/SocNavGym) và [sáu lượt AMCL ablation](benchmark/localization_trials/reports/run01/LOCALIZATION_PILOT.md). Gazebo thoát sạch ở cả ba checks và sáu pilot; tất cả xác nhận fresh Ogre NVIDIA, cleanup không còn owned process/container. Bộ kiểm chứng giữ nguyên Git index và worktree ngoài social_navigation.
 
 Pilot mới giữ từng kết quả: baseline SFM ABORTED, baseline ORCA tới đích; LF-prob SFM tới đích nhưng ORCA báo SUCCEEDED khi vị trí thật còn cách2.597m; LF-prob+beam-skip tới đích cả SFM/ORCA, vị trí thật lệch0.119/0.140m. Chỉ một lượt mỗi ô, chưa promote profile. Dấu âm khe người–người vẫn lưu, lớn nhất khoảng5mm; không đổi native policy. 1009/1009 cloud đối chiếu cluster khớp AMCL sau circular-mean lift. Shutdown workaround chỉ opt-in `--shutdown-mode wsl_d3d12`, default lịch sử và code ROS gốc được giữ.
+
+Các phần nêu trên đã được commit riêng trước cohort nhiều seed mới:
+
+| Commit | Phần hoàn tất |
+|---|---|
+| `25e41573` | `feat: record repeated bottleneck stability and localization failures` |
+| `78bf3905` | `fix: keep WSL D3D12 resident for clean Gazebo shutdown` |
+| `d0a7bbb2` | `feat: benchmark isolated AMCL likelihood and beam skipping profiles` |
+
+Các dòng “chưa commit” ở các đoạn/report phía trước mô tả thời điểm đo. Không chạy lại các cohort cũ để thay provenance. Đã bảo toàn12 mục staged của người dùng ngoài experiment.
+
+Sau các commit này, [cohort12 lượt seed42/43/44](benchmark/localization_validation/README.md) được tạo riêng để so baseline với LF-prob+beam-skip; không thay kết quả pilot6 lượt. Seed44 được sinh mới theo cùng thuật toán bottleneck, seed42/43 giữ nguyên scene byte-for-byte; native policy và robot controller không đổi.
+
+Cohort12 lượt sau commit đã kết thúc và kiểm định: baseline5/6, LF-prob+beam-skip5/6 goal thật,1998 cloud đối chiếu,12/12 shutdown sạch/NVIDIA,24 ảnh/GIF decode hợp lệ. Giữ cả hai ABORTED, không retry. Không chọn profile mặc định mới. Source/kết quả cohort12 mới vẫn chưa commit; không sửa các outcome trước đó.
+
+Cohort12 lượt được lưu riêng cùng runner, mở rộng fixture seed44, analyzer, ảnh/GIF và validation. Provenance vẫn là HEADd0a7bbb tại lúc chạy cộng source hashes; commit lưu kết quả sau đó không phải một lần chạy lại. [Kế hoạch tiếp theo](NEXT_STEPS.md) ưu tiên6 probe replay chung cho ORCA+/SFM, rồi quay lại nhóm SocNavGym; chưa thực hiện các bước mới và chưa đổi AMCL mặc định.

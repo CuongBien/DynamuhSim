@@ -1,5 +1,7 @@
 # Nhà xưởng và vòng khảo sát SocNavGym
 
+[Kiểm tra nhiều seed](benchmark/localization_validation/README.md):12 lượt so AMCL gốc với LF-prob+beam-skip, seed42/43/44; dữ liệu giữ riêng với pilot cũ.
+
 Đợt thử mới: [workaround shutdown Gazebo trên WSL D3D12](benchmark/shutdown_fix/README.md) và [pilot AMCL gồm 3 cấu hình × 2 human policies](benchmark/localization_trials/README.md). Cả hai nằm trong harness thử nghiệm, chưa thay cấu hình robot gốc.
 
 Tất cả file mới nằm trong `experiments/social_navigation/`. Không sửa launch/model, cấu hình Nav2 gốc, plugin C++ hay môi trường Python ROS

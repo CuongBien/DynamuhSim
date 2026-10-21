@@ -1,0 +1,37 @@
+{
+  "python": "3.12.3",
+  "wsl_d3d12_core_sha256": "a4104a2022932d8e6c714f103ebd89db1c5bdbf36fe92151c88d3d93d4e3894d",
+  "measurements": [
+    {
+      "command": [
+        "uname",
+        "-a"
+      ],
+      "returncode": 0,
+      "stdout": "Linux DESKTOP-NVIVQ2U 6.18.33.2-microsoft-standard-WSL2 #1 SMP PREEMPT_DYNAMIC Thu Jun 18 21:54:43 UTC 2026 x86_64 x86_64 x86_64 GNU/Linux",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "dpkg-query",
+        "-W",
+        "libgz-sim8",
+        "libgl1-mesa-dri",
+        "ros-jazzy-nav2-amcl"
+      ],
+      "returncode": 0,
+      "stdout": "libgl1-mesa-dri:amd64\t25.2.8-0ubuntu0.24.04.2\nlibgz-sim8:amd64\t8.15.0-1~noble\nros-jazzy-nav2-amcl\t1.3.13-1noble.20260903.024944",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "nvidia-smi",
+        "--query-gpu=name,driver_version,temperature.gpu",
+        "--format=csv,noheader"
+      ],
+      "returncode": 0,
+      "stdout": "NVIDIA GeForce RTX 4060 Laptop GPU, 610.47, 41",
+      "stderr": ""
+    }
+  ]
+}

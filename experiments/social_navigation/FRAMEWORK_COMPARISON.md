@@ -98,3 +98,9 @@ plan/costmap và particle cloud để tách tiếp. Kết quả 2/4 goal giữ n
 Bổ sung [capture global navigation/particle cloud](benchmark/navigation_diagnostics/reports/run03/NAVIGATION_DIAGNOSTICS.md): SFM/ORCA+ seed42 mới đều qua khe và tới đích, chưa tái hiện failure cũ; không đổi kết quả ma trận gốc hoặc dùng để xếp hạng mô hình.
 
 [Loạt lặp seed42 sau cleanup](benchmark/stability/reports/run01/STABILITY_REPORT.md): SFM2/3 và ORCA+1/3 goal; một mode switch AMCL được xác nhận từ cloud, SFM có proxy overlap2,65cm. Không dùng số lượt nhỏ bị ảnh hưởng định vị để chọn framework hoặc kết luận safety.
+
+## Kiểm tra định vị nhiều seed: chưa chọn profile chung
+
+[Cohort12 lượt](benchmark/localization_validation/reports/run01/MULTISEED_REPORT.md) giữ riêng với các cohort cũ: baseline đạt5/6 goal thật (SFM2/3, ORCA+3/3), LF-prob+beam-skip đạt5/6 (SFM3/3, ORCA+2/3). Không có false-success theo ngưỡng XY thật0.20m trong đợt này. Không kết luận profile mới tốt hơn hoặc policy người nào tự nhiên/an toàn hơn.
+
+Đối chiếu1998 cloud, world và scene từng cặp, native parameters và GPU renderer. Có human-human overlap2.369cm ở baseline SFM seed44 dù goal đạt; dữ liệu vẫn giữ. Native robot/controller/map không đổi. Cấu hình mới chưa promote; mọi lượt shutdown sạch trong mode opt-in WSL D3D12. Phần runner/mở rộng seed44 và kết quả cohort mới chưa commit ở thời điểm ghi chú.
