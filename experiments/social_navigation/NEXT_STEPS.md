@@ -1,5 +1,7 @@
 # Kế hoạch tiếp theo: đánh giá hành vi người, tách khỏi nhiễu định vị
 
+**Trạng thái mới nhất22/10/2026:** [bản sửa formation đã nối Gazebo và kiểm thử](benchmark/socnavgym_warehouse_lifecycle/reports/WAREHOUSE_LIFECYCLE_REPORT.md). Các mục bên dưới giữ tiến trình và quyết định ở thời điểm trước; kế hoạch hiện hành ở cuối trang.
+
 Cơ sở: cohort12 lượt seed42/43/44 cho baseline và LF-prob+beam-skip đều5/6 goal thật. SFM thay đổi2/3→3/3, ORCA+3/3→2/3; đây là mẫu nhỏ, không chứng minh cấu hình mới tốt hơn. Giữ AMCL mặc định và dữ liệu hai failure, chưa chọn framework. [Bằng chứng](benchmark/localization_validation/reports/run01/MULTISEED_REPORT.md).
 
 Cập nhật: bước1 đã chạy đủ6 probe CrowdSimPlus; bước2 đã chạy18 probe nhóm SocNavGym. [Báo cáo replay](benchmark/human_response_replay/reports/run01/REPLAY_REPORT.md). Bước3 đã có đủ sáu tổ hợp scene/variant hợp lệ sau đợt bổ sung ba lượt đi bộ: sáu action báo SUCCEEDED, năm lượt đạt sai số thật ≤0.20m. Một lỗi khởi tạo cũ được giữ riêng; QoS nhận AMCL đã sửa bằng tùy chọn trong harness. GUI kéo/zoom và Pause/Play đã được người dùng xác nhận. [Báo cáo Gazebo](benchmark/group_gazebo_demo/reports/recovery01/RECOVERY_REPORT.md). Bước4 chưa bắt đầu tích hợp. Không triển khai World Model, chuyển Isaac Sim, sửa ROS robot source hoặc thêm model học mới.
@@ -46,4 +48,22 @@ Giữ demo độc lập hiện có làm đối chứng. Chỉ nối Gazebo sau k
 
 ## Công việc kế tiếp sau đợt này
 
-Chốt nghiệm thu và lưu Git các probe replay, báo cáo Gazebo, cùng bản sửa subscriber QoS; chỉ commit khi người dùng yêu cầu. Để đáp ứng mục tiêu formation, bước kỹ thuật kế tiếp là kiểm định lifecycle/ID/reset/geometry của nhóm SocNavGym độc lập (nhóm hình thành/tách ra), vì adapter hiện tại chỉ có nhóm cố định ba người. Sau kiểm định mới mở rộng Gazebo. ComplexityNav tiếp tục chạy riêng, chưa đưa vào ma trận Gazebo hoặc thay kiến trúc robot.
+Đã lưu ba commit: replay `b3f59e2`, observer AMCL `195f4e8`, Gazebo nhóm/GUI `e749fb5`. [Lifecycle SocNavGym](benchmark/socnavgym_lifecycle/README.md) đã kiểm tra ba seed với4100 update native: ID và reset prefix500 bước đạt, nhưng formation có nhảy vị trí tới32.6cm và overlap proxy hình tròn56–70cm. Quyết định: giữ formation độc lập, không promote vào Gazebo trong milestone này; không sửa policy để che hạn chế. Adapter nhóm cố định vẫn giữ nguyên.
+
+Bước kế tiếp chuyển sang contract/geometry ComplexityNav trước khi nối Gazebo: giữ runtime Python3.8 riêng, native human update và source gốc; kiểm tra robot feedback, ID/reset/clock và toàn bộ collision AABB nhà xưởng bằng fixture nhỏ, rồi native parity và LiDAR. Chưa chạy thêm ma trận AMCL hoặc thay kiến trúc robot. Khi backend đủ điều kiện, chạy bộ cảnh chung và chốt bảng lựa chọn; formation không đạt sẽ được ghi là hạn chế của phương án, không giữ toàn dự án chờ vô hạn.
+
+
+## Cập nhật sau yêu cầu sửa formation
+
+Đã triển khai [continuous lifecycle adapter riêng](benchmark/socnavgym_lifecycle_fix/README.md), không sửa vendor hoặc robot.5476 update kiểm chứng: ba seed gốc, reset lúc có nhóm và fixture nhóm đi. Giữ vị trí khi chốt formation, giới hạn quay1.57rad/s, vận tốc0.8m/s, global individual-disc ORCA và swept fallback. Các phép đo độc lập không ghi nhận xuyên proxy; formation/dispersal và chuyển động vẫn hoạt động. Native reference được giữ nguyên.
+
+**Ưu tiên tiếp theo vẫn là SocNavGym:** mở rộng kiểm định obstacle nhà xưởng và robot có vận tốc đo thực, rồi nối formation variant vào Gazebo và kiểm tra actor/proxy/LiDAR/reset/clock. Không chuyển ComplexityNav trước khi chốt phần này. Bản sửa hiện mới nhận robot đứng yên trong phòng vuông native, chưa nghiệm thu Gazebo hay hứa hành vi tự nhiên ở mọi cảnh. Các thay đổi lifecycle mới chưa commit.
+
+
+## Sau pilot formation trong nhà xưởng —22/10/2026
+
+Đã hoàn tất kiểm định obstacle/robot chuyển động và nối adapter riêng vào Gazebo:3 trace offline ×1200 bước,2 lượt live ×120s,6 người,42 AABBs. Seed42 đạt kỹ thuật nhưng chưa thấy tách nhóm; giữ PARTIAL. Seed43 có hai nhóm đứng hình thành/tan và một nhóm đi2.17m rồi tan. Proxy/clock/LiDAR/GPU/shutdown đạt; người dùng xác nhận thấy6 người và kéo/zoom. Chỉ restart session mới được kiểm tra; reset ngay trong world bị từ chối. [Report, hạn chế và camera thật](benchmark/socnavgym_warehouse_lifecycle/reports/WAREHOUSE_LIFECYCLE_REPORT.md).
+
+Phần sửa standalone và tích hợp mới vẫn chưa commit. Trước khi mở milestone khác, lưu riêng các phần đã hoàn tất theo yêu cầu commit của người dùng; bảo toàn staging/code ngoài experiment.
+
+Bước kỹ thuật tiếp theo là kiểm định contract ComplexityNav trong runtime độc lập hiện có: ID/frame/clock/reset, robot feedback và42 collision boxes; so native step trước khi nối population nhỏ vào Gazebo. Chỉ sau khi đạt mới chạy chung các scene để so hành vi, tăng mật độ/lối hẹp và chốt bảng chọn mô hình. Không mở thêm ma trận AMCL. Pilot formation hiện tại không thay thế benchmark Nav2 và không chứng minh tính tự nhiên ở mọi cảnh.
