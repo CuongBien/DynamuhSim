@@ -1,0 +1,32 @@
+{
+  "key": "crowdsimplus/orca_plus/head_on",
+  "framework": "CrowdSimPlus",
+  "case": "head_on",
+  "policy": "orca_plus",
+  "mode": "independent walkers",
+  "min_robot_human_circle_m": 0.040071643826056214,
+  "min_robot_human_footprint_m": 0.16766243920329715,
+  "min_human_pair_m": 0.47274815399169845,
+  "min_human_machine_m": 0.8208229724519823,
+  "robot_footprint_overlap_beyond_1cm_s": 0.0,
+  "human_pair_overlap_beyond_1cm_s": 0.0,
+  "max_position_difference_from_far_m": 0.6487139430462867,
+  "max_velocity_difference_from_far_mps": 1.2691178570331054,
+  "first_velocity_divergence": {
+    "input_time_s": 2.8,
+    "state_time_s": 2.9,
+    "velocity_difference_mps": 0.020669291002624064,
+    "position_difference_m": 0.00206692910026311,
+    "nominal_circle_gap_before_update_m": 1.5214571891725437,
+    "definition": "First actual human velocity difference >0.001m/s against same-policy far trace; proxy pre-overlap metric, not native internal detection time or human intent."
+  },
+  "max_displacement_m": 7.393100387567678,
+  "max_group_radius_m": 1.5255766421348749,
+  "max_pair_distance_m": 2.8454840845646876,
+  "max_inward_gaze_mean_deg": 133.1462261689309,
+  "completed_legs": [
+    2,
+    2,
+    2
+  ]
+}
