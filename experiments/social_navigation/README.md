@@ -1,5 +1,7 @@
 # Nhà xưởng và vòng khảo sát SocNavGym
 
+[ComplexityNav: adapter tránh vật cản đạt offline](benchmark/complexitynav_geometry/README.md):6 cảnh ghép cặp native/variant,1040 update adapter; đi vòng kệ tới đích, hai chiều qua khe1.8m, đủ42 AABBs, reset80 bước. Chưa nối biến thể mới vào Gazebo. Native preflight trước đó đã commit `b0b3c33`; nhánh native vẫn giữ nguyên hạn chế xuyên kệ.
+
 [ComplexityNav: kiểm định trước Gazebo](benchmark/complexitynav_contract/README.md): ID/clock/reset/native-step đạt; hai probe native ORCA/SFM đi xuyên kệ. Đủ42 AABBs được đối chiếu nhưng chưa được native human solver dùng, nên chưa nối Gazebo; bước kế tiếp là adapter hình học riêng. Ba phần SocNavGym đã lưu ở `2480158`, `779c338`, `b3f0022`.
 
 [Formation/tách nhóm đã chạy trong Gazebo](benchmark/socnavgym_warehouse_lifecycle/README.md): bản sửa adapter riêng hỗ trợ6 người, đủ42 vật cản nhà xưởng và robot có vận tốc đo thực. Ba trace offline đạt; hai lượt Gazebo120s đạt kiểm tra kỹ thuật. Seed42 chỉ có formation, seed43 có nhóm đứng/đi rồi tan; tâm nhóm đi được2.17m. Camera thật, NVIDIA và GUI đã kiểm chứng. Đây là pilot tại một lối đi, chưa chạy Nav2 hoặc benchmark chọn framework.

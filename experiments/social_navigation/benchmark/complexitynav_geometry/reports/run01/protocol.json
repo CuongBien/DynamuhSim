@@ -1,0 +1,26 @@
+{
+  "config": {
+    "timestep_s": 0.25,
+    "human_radius_m": 0.3,
+    "robot_radius_m": 0.25,
+    "speed_ceiling_mps": 1.0,
+    "orca_extra_radius_m": 0.02,
+    "roadmap_corner_padding_m": 0.04,
+    "swept_margin_m": 0.002,
+    "static_boxes": 42,
+    "seed": 42,
+    "motion": "Native policy intention at roadmap waypoint, then42-obstacle global disc ORCA projection and exact swept fraction. Explicit modified behavior.",
+    "gate": "All adapter cases: finite, continuous, no measured negative swept gaps, speed<=1.00001m/s. Rack/narrow: each human completes at least one native goal leg within60s. Mixed20s: total travel>5m."
+  },
+  "source_sha256": {
+    "kernel.py": "0868d4df16724fc3e2e3436cc49581c71220b28351fdd0ab2925a0e8f9b76983",
+    "roadmap.py": "77cca14fb7e393cf6e7068673016616e1514573061aaf6606cfb3ce84ed9ff07",
+    "probe.py": "a46bf87963d9c41d9d67ad265a7dfb8c802d275a003d371a55b98ece49a2c180",
+    "generated/swept.py": "693a35314cce682f00c91f6dfeebd5225851663410920cac393a66a7936df5a3",
+    "generated/native_contract.py": "ce10fd8605037f114b8cb0706572e9541d4ad11613394e40ff73111c98eb01fc",
+    "generated/layout.json": "31d1cd9841e133766c36f9e44e5b4e4148a61500abcf6e2682166a98d0e4cb06"
+  },
+  "native_commit": "36acac12a940a20dceb7b4e1d36acc4c7a4e344a",
+  "native_dirty": "",
+  "python": "3.8.13"
+}
