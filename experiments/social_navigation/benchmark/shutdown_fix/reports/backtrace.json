@@ -1,0 +1,9 @@
+{
+  "signal": "SIGSEGV",
+  "pc": "0x7fffb4e89b10",
+  "pre_stop_mapping": "7fffb4e7e000-7fffb51d9000 r-xp 002e2000 00:39 281474976867584            /usr/lib/wsl/lib/libd3d12core.so",
+  "mapped_after_fault": false,
+  "stack": "SIGSEGV, Segmentation fault.\n[gz-1] [Switching to Thread 0x7fffcfdff6c0 (LWP 35415)]\n[gz-1] 0x00007fffb4e89b10 in ?? ()\n[gz-1] #0  0x00007fffb4e89b10 in ?? ()\n[gz-1] #1  0x00007ffff7699420 in ?? () from /lib/x86_64-linux-gnu/libc.so.6\n[gz-1] #2  0x00007ffff769c970 in ?? () from /lib/x86_64-linux-gnu/libc.so.6\n[gz-1] #3  0x00007ffff7729ecc in ?? () from /lib/x86_64-linux-gnu/libc.so.6\n[gz-1] process 35372\n[gz-1] ",
+  "inference": "Fault PC belongs to WSL D3D12 core before stop and library is absent from fault-time mappings; consistent with unloaded driver callback during thread exit. Native symbols unavailable; not proof of exact driver-internal cause.",
+  "debugger": "portable GDB15.1 extracted under ignored workspace; no system package installation"
+}

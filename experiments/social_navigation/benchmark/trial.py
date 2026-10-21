@@ -51,6 +51,7 @@ p.add_argument('--robot-avoidance',action='store_true',help='Experimental robot-
 p.add_argument('--invisible-robot',action='store_true',help='CrowdSimPlus observation ablation only')
 p.add_argument('--human-policy',choices=['orca_plus','sfm'],default='orca_plus',help='CrowdSimPlus native human policy')
 p.add_argument('--goal-layout',choices=['shared','individual'],default='shared',help='CrowdSimPlus waypoint fixture; native policy unchanged')
+p.add_argument('--shutdown-mode',choices=['signals','server_control','wsl_d3d12'],default='signals',help='Experimental ordered server shutdown; runs only after trial measurement')
 p.add_argument('--sim-budget',type=float,default=75.)
 a=p.parse_args()
 if a.navigation_diagnostics:a.diagnostics=True
@@ -269,8 +270,12 @@ try:
     gz.subscribe(Pose_V,'/world/social_warehouse/pose/info',pose_message)
     gz.subscribe(GzImage,'/crowdsimplus/observer' if a.backend=='crowdsimplus' else '/socnavgym/observer',image_message)
     launchlog=(report/f'{name}.log').open('w'); files.append(launchlog)
+    launch_env=None
+    if a.shutdown_mode=='wsl_d3d12':
+        from shutdown_fix.ordered_stop import launch_environment
+        launch_env,result['shutdown_preload']=launch_environment(runtime)
     launch=subprocess.Popen(['ros2','launch',str(HERE/'warehouse.launch.py'),f'gui:={str(a.gui).lower()}'],
-        stdout=launchlog,stderr=subprocess.STDOUT,start_new_session=True)
+        stdout=launchlog,stderr=subprocess.STDOUT,start_new_session=True,env=launch_env)
     processes.append(launch)
     def wait(predicate,seconds):
         deadline=time.monotonic()+seconds
@@ -361,11 +366,20 @@ except Exception as ex:
     traceback.print_exc()
 finally:
     phase='finished'
-    if navigation_capture and node:
-        navigation_capture.graph('before_shutdown')
-        result['navigation_capture']=navigation_capture.summary()
-    if node:
-        node.destroy_node(); rclpy.shutdown()
+    if a.shutdown_mode in ('server_control','wsl_d3d12'):
+        try:
+            from shutdown_fix.ordered_stop import stop_server
+            result['server_shutdown']=stop_server(runtime_guard)
+        except Exception as error:
+            result['server_shutdown']=dict(status='ERROR',error=str(error))
+    try:
+        if navigation_capture and node:
+            navigation_capture.graph('before_shutdown')
+            result['navigation_capture']=navigation_capture.summary()
+        if node:
+            node.destroy_node(); rclpy.shutdown()
+    except Exception as error:
+        result['ros_teardown_error']=str(error)
     try:
         for process in reversed(processes): stop(process)
         cleanup_container(container_name)
@@ -375,6 +389,10 @@ finally:
             result['status']='ERROR';result['protocol_valid']=False;result['error']='Owned child processes remain after cleanup'
     if socket_dir: socket_dir.cleanup()
     for f in files: f.close()
+    if 'launchlog' in globals():
+        log=Path(launchlog.name).read_text(errors='replace')
+        clean='[INFO] [gz-1]: process has finished cleanly' in log
+        result['gazebo_exit']=dict(clean=clean,log_lines=[line for line in log.splitlines() if '[gz-1]' in line and any(key in line for key in ['process has','sending signal','escalating','failed to terminate'])])
     if diag:
         result['diagnostic_counts']=diag.counts
         diag.close()
