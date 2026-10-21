@@ -1,5 +1,7 @@
 # Pilot RVO2 ↔ SocNavGym với Nav2 trong nhà xưởng
 
+Bổ sung mới: [shutdown WSL D3D12](shutdown_fix/README.md) có kiểm chứng Gazebo thoát sạch; [localization pilot](localization_trials/README.md) so baseline / LF-prob / LF-prob+beam-skip trên cùng bottleneck. Dùng rõ `--shutdown-mode wsl_d3d12` cho workaround, mặc định lịch sử vẫn giữ.
+
 Harness này so sánh runtime RVO2 đang cài trong workspace với kernel nhóm SocNavGym của adapter, trên cùng Gazebo world, robot Mecanum, LiDAR, map và tham số MPPI. Không sửa code robot hoặc plugin RVO2 gốc.
 
 ## Chạy
@@ -121,3 +123,7 @@ chỉnh tham số để thay các kết quả thất bại đã lưu.
 `--navigation-diagnostics` bật recorder thụ động cho global plan, global costmap và native particle cloud; tự bật `--diagnostics`. [Cách chạy và phạm vi](navigation_diagnostics/README.md), [hai lượt seed42](navigation_diagnostics/reports/run03/NAVIGATION_DIAGNOSTICS.md). Kết quả chẩn đoán giữ riêng với ma trận bottleneck gốc.
 
 GPU/cleanup: runner kiểm hardware renderer trước khi khởi động và dọn child theo token phiên. [Cách kiểm tra](gpu_runtime/README.md), [kết quả RTX 4060 và xử lý ROS chạy sót](gpu_runtime/reports/run01/GPU_RUNTIME.md).
+
+## Lặp sau GPU/cleanup
+
+Đã chạy sáu lượt seed42 định trước: SFM2/3 goal, ORCA+1/3, có đầy đủ particle/global navigation. [Protocol và cách chạy](stability/README.md), [mode switch, global reroute, overlap và giới hạn](stability/reports/run01/STABILITY_REPORT.md). Không xếp hạng mô hình từ tỷ lệ này.

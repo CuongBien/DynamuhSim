@@ -2,7 +2,7 @@
 
 Các commit dưới đây lưu từng phần công việc đã hoàn tất, theo thứ tự phụ thuộc.
 Không bao gồm các thay đổi cleanup/di chuyển file hoặc phần staged có sẵn
-ngoài `experiments/social_navigation/`. Chưa thực hiện bước chẩn đoán mới.
+ngoài `experiments/social_navigation/`. Các mốc chẩn đoán bổ sung ở cuối trang.
 
 | Commit | Phần công việc | Bằng chứng |
 |---|---|---|
@@ -32,5 +32,22 @@ planner, ORCA+ có max position error 2,23 m. Không dùng tỷ lệ này để 
 framework. Native CrowdSimPlus ở đây vẫn là ba người độc lập; ComplexityNav
 chưa nối Gazebo. Không triển khai World Model hay chuyển Isaac Sim.
 
-Bước tiếp theo: dùng diagnostics đã lưu để tách lỗi AMCL/scan/costmap ở
-bottleneck seed42, trước khi mở rộng benchmark hoặc chọn mô hình người.
+Bước chẩn đoán nêu trên đã được thực hiện trong các commit bổ sung dưới đây.
+
+| Commit bổ sung | Nội dung | Bằng chứng |
+|---|---|---|
+| `1186e1d` | Offline AMCL/scan/TF/costmap và native sensor cross-check | [Report](benchmark/localization_diagnosis/reports/run01/LOCALIZATION_DIAGNOSIS.md) |
+| `e8bf1c0` | Global navigation/particle capture và hai diagnostic reruns | [Report](benchmark/navigation_diagnostics/reports/run03/NAVIGATION_DIAGNOSTICS.md) |
+| `2f2bdff` | Hardware GPU preflight và child-process cleanup | [Report](benchmark/gpu_runtime/reports/run01/GPU_RUNTIME.md) |
+
+Các report bổ sung giữ HEAD tại lúc đo là8dc9913 và trạng thái chưa commit
+lúc đó; không có nghĩa đã đo lại trên từng commit trung gian. Hai Ogre logs
+GPU được lưu ngoại lệ dưới dạng raw evidence; runtime/build logs khác vẫn ignored.
+
+Sau ba commit, [sáu lượt stability](benchmark/stability/reports/run01/STABILITY_REPORT.md)
+chạy trên HEAD2f2bdff, source cố định: SFM2/3, ORCA+1/3. Đã thu mode switch
+và global reroute, có human proxy overlap. Phần stability mới chưa commit;
+chưa sửa Nav2/human model hoặc bắt đầu framework tiếp theo.
+Bước tiếp theo đã chạy trong working tree, chưa commit mới: [workaround shutdown WSL D3D12](benchmark/shutdown_fix/README.md), ba lifecycle checks (ORCA/SFM/SocNavGym) và [sáu lượt AMCL ablation](benchmark/localization_trials/reports/run01/LOCALIZATION_PILOT.md). Gazebo thoát sạch ở cả ba checks và sáu pilot; tất cả xác nhận fresh Ogre NVIDIA, cleanup không còn owned process/container. Bộ kiểm chứng giữ nguyên Git index và worktree ngoài social_navigation.
+
+Pilot mới giữ từng kết quả: baseline SFM ABORTED, baseline ORCA tới đích; LF-prob SFM tới đích nhưng ORCA báo SUCCEEDED khi vị trí thật còn cách2.597m; LF-prob+beam-skip tới đích cả SFM/ORCA, vị trí thật lệch0.119/0.140m. Chỉ một lượt mỗi ô, chưa promote profile. Dấu âm khe người–người vẫn lưu, lớn nhất khoảng5mm; không đổi native policy. 1009/1009 cloud đối chiếu cluster khớp AMCL sau circular-mean lift. Shutdown workaround chỉ opt-in `--shutdown-mode wsl_d3d12`, default lịch sử và code ROS gốc được giữ.

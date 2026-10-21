@@ -52,9 +52,11 @@ p.add_argument('--invisible-robot',action='store_true',help='CrowdSimPlus observ
 p.add_argument('--human-policy',choices=['orca_plus','sfm'],default='orca_plus',help='CrowdSimPlus native human policy')
 p.add_argument('--goal-layout',choices=['shared','individual'],default='shared',help='CrowdSimPlus waypoint fixture; native policy unchanged')
 p.add_argument('--shutdown-mode',choices=['signals','server_control','wsl_d3d12'],default='signals',help='Experimental ordered server shutdown; runs only after trial measurement')
+p.add_argument('--localization-profile',choices=['baseline','lf_prob','lf_prob_beamskip'],default='baseline',help='Isolated runtime AMCL ablation; leaves warehouse configuration unchanged')
 p.add_argument('--sim-budget',type=float,default=75.)
 a=p.parse_args()
 if a.navigation_diagnostics:a.diagnostics=True
+if a.localization_profile!='baseline' and not a.report_dir:p.error('Localization ablation requires separate --report-dir')
 if a.backend=='crowdsimplus' and not a.report_dir:p.error('CrowdSimPlus requires a separate --report-dir')
 if a.invisible_robot and a.backend!='crowdsimplus':p.error('--invisible-robot requires CrowdSimPlus')
 if a.robot_avoidance and (a.geometry!='circle_contact' or a.backend!='socnavgym' or not a.report_dir):
@@ -131,14 +133,15 @@ try:
     result['robot_start']=robot_start;result['robot_goal']=robot_goal
     os.environ['SOCIAL_BENCHMARK_START']=json.dumps(robot_start)
     nav_params=SOCIAL/'warehouse/nav2_warehouse.yaml'
-    if a.condition=='bottleneck':
-        import yaml,copy
-        original=yaml.safe_load(nav_params.read_text());config=copy.deepcopy(original)
-        config['amcl']['ros__parameters']['initial_pose'].update(x=robot_start[0],y=robot_start[1],yaw=robot_start[2])
-        restored=copy.deepcopy(config);restored['amcl']['ros__parameters']['initial_pose']=original['amcl']['ros__parameters']['initial_pose']
-        assert restored==original
+    if a.condition=='bottleneck' or a.localization_profile!='baseline':
+        import yaml
+        from localization_trials.profiles import configure,PROFILES
+        original=yaml.safe_load(nav_params.read_text())
+        config=configure(original,a.localization_profile,robot_start if a.condition=='bottleneck' else None)
         nav_params=runtime/'nav2_scenario.yaml';nav_params.write_text(yaml.safe_dump(config,sort_keys=False))
-        result['scenario_parameter_overrides']=['amcl.initial_pose.x/y/yaw']
+        result['scenario_parameter_overrides']=['amcl.initial_pose.x/y/yaw'] if a.condition=='bottleneck' else []
+        result['localization_parameter_overrides']=PROFILES[a.localization_profile]
+    result['localization_profile']=a.localization_profile
     os.environ['SOCIAL_BENCHMARK_NAV_PARAMS']=str(nav_params)
     result['runtime_nav_params_sha256']=hashlib.sha256(nav_params.read_bytes()).hexdigest()
     result['scene']=scene
@@ -300,6 +303,8 @@ try:
                 ready=True; break
         wait(lambda:False,.2)
     if not ready: raise RuntimeError('bt_navigator not active')
+    from localization_trials.profiles import read_parameters
+    result['amcl_parameters_readback']=read_parameters(node,wait,a.localization_profile,robot_start)
     if navigation_capture:
         if not wait(lambda:all(navigation_capture.counts[k]>0 for k in ['global_costmap','particle_cloud']),15):
             raise RuntimeError('Missing navigation diagnostic channels: '+str(navigation_capture.counts))

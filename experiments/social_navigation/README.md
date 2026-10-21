@@ -1,5 +1,7 @@
 # Nhà xưởng và vòng khảo sát SocNavGym
 
+Đợt thử mới: [workaround shutdown Gazebo trên WSL D3D12](benchmark/shutdown_fix/README.md) và [pilot AMCL gồm 3 cấu hình × 2 human policies](benchmark/localization_trials/README.md). Cả hai nằm trong harness thử nghiệm, chưa thay cấu hình robot gốc.
+
 Tất cả file mới nằm trong `experiments/social_navigation/`. Không sửa launch/model, cấu hình Nav2 gốc, plugin C++ hay môi trường Python ROS
 đang có. Dùng workspace
 `install/` hiện có; không rebuild các thay đổi chưa commit của người dùng.
@@ -144,3 +146,5 @@ native; failure SFM có chuỗi khác, cần thêm global plan/particle cloud.
 Chưa chỉnh ROS/Nav2 hoặc thay kết quả benchmark cũ.
 
 Chẩn đoán bổ sung: [global plan/costmap và particle cloud trong Gazebo](benchmark/navigation_diagnostics/reports/run03/NAVIGATION_DIAGNOSTICS.md). Hai lượt mới tới đích nhưng chưa tái hiện/sửa lỗi cũ; benchmark gốc giữ nguyên.
+
+Lặp sáu lượt sau cleanup: [đã bắt trực tiếp mode AMCL trong khối máy và global reroute](benchmark/stability/reports/run01/STABILITY_REPORT.md). SFM2/3, ORCA+1/3; dữ liệu mới giữ riêng, vẫn chưa có bản sửa Nav2.
