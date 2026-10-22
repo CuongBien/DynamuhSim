@@ -1,0 +1,176 @@
+{
+  "status": "AUDITED_NAV2_PILOT",
+  "model": "socnavgym_initial_groups_v2",
+  "native_dt": 0.1,
+  "condition": "people",
+  "navigation_status": "SUCCEEDED",
+  "action_status": 4,
+  "actual_goal_reached": false,
+  "goal_xy_world_m": 0.21122247108196712,
+  "goal_yaw_world_rad": 0.04715452652678943,
+  "active_seconds": 15.545,
+  "wall_active_seconds": 49.62972020899997,
+  "observed_rtf": 0.31321957759457675,
+  "robot_path_m": 7.818311644967083,
+  "robot_y_range_m": [
+    -0.1333656851594252,
+    0.016242181418202464
+  ],
+  "robot_peak_speed_mps": 0.5992280019651901,
+  "robot_static_disc_gap_m": 1.5999999999992056,
+  "actual_swept_human_gaps_m": {
+    "pair": 0.44098371679588566,
+    "robot": 0.6931034098821466,
+    "static": 0.5350288068464181
+  },
+  "actual_sampled_rotated_footprint_human_gap_m": 0.8005745165852504,
+  "geometry_outcome": "NO_OVERLAP_GT_5MM",
+  "slow_while_near_human_s": 0.3999999999999986,
+  "near_human_seconds": 3.0549999999999997,
+  "amcl_xy_error_m": {
+    "samples": 77,
+    "median": 0.06262492617947964,
+    "p95": 0.14690718078219434,
+    "maximum": 0.15966527778791115
+  },
+  "amcl_yaw_max_rad": 0.029573696350947937,
+  "odom_world_feedback_max_error_m": 0.010404606699960215,
+  "actual_pose_samples": 1907,
+  "proxy_interpolation_error_max_m": 7.55976488852311e-15,
+  "worker": {
+    "native_dt": 0.1,
+    "inactive_transport_steps": 124,
+    "active_native_steps": 161,
+    "first_active_sim": 12.4025,
+    "start_gate_delay_s": 0.04499999999999993,
+    "guard_present_steps": 161
+  },
+  "lidar_human_beams": 7571,
+  "lidar_fraction_within15cm": 0.9768854840840048,
+  "lidar_matched_ids": [
+    1,
+    2,
+    3,
+    5
+  ],
+  "local_costmap_frames": 78,
+  "local_costmap_human_surface_evidence": {
+    "eligible_human_observations": 162,
+    "observations_with_occupied_ring": 158,
+    "matched_ids": [
+      1,
+      2,
+      3
+    ],
+    "scope": "Descriptive occupied cells near measured human surfaces in odom; not source attribution or recall"
+  },
+  "active_command_count": 992,
+  "nvidia": true,
+  "shutdown_clean": true,
+  "goal_sample_sim": 27.995,
+  "post_goal_recording_tail_xy_drift_m": 0.0012380911244101902,
+  "preserved_old_files": 13485,
+  "original_user_staging_and_outside_preserved": true,
+  "scope": "One-seed small Nav2 integration; goal outcome independent from geometry. Slow/near is descriptive, not proof of social yielding.",
+  "scenario": "walking",
+  "seed": 42,
+  "groups": {
+    "segments": [
+      {
+        "id": 2,
+        "type": "moving",
+        "members": [
+          4,
+          5,
+          6
+        ],
+        "initial_object": true,
+        "start": 12.5025,
+        "end": 25.3025,
+        "duration_s": 12.799999999999999,
+        "actual_samples": 129,
+        "actual_centroid_path_m": 5.71892593910459,
+        "actual_centroid_net_m": 5.468728549141365,
+        "actual_member_peak_speed_mps": 0.8000000000000344,
+        "max_pair_diameter_m": 1.870568422617173,
+        "inward_facing_fraction_30deg": 0.041343669250646,
+        "robot_to_centroid_min_m": 4.286232978478956,
+        "moving_travel_coverage": true,
+        "standing_duration_coverage": false
+      },
+      {
+        "id": 1,
+        "type": "moving",
+        "members": [
+          1,
+          2,
+          3
+        ],
+        "initial_object": true,
+        "start": 12.5025,
+        "end": 27.9025,
+        "duration_s": 15.4,
+        "actual_samples": 155,
+        "actual_centroid_path_m": 7.06086076030901,
+        "actual_centroid_net_m": 6.9497394178105205,
+        "actual_member_peak_speed_mps": 0.7998715725354819,
+        "max_pair_diameter_m": 2.0922370603108775,
+        "inward_facing_fraction_30deg": 0.0,
+        "robot_to_centroid_min_m": 1.6600686611313065,
+        "moving_travel_coverage": true,
+        "standing_duration_coverage": false
+      },
+      {
+        "id": 2,
+        "type": "standing",
+        "members": [
+          5,
+          6
+        ],
+        "initial_object": true,
+        "start": 25.4025,
+        "end": 27.9025,
+        "duration_s": 2.5,
+        "actual_samples": 26,
+        "actual_centroid_path_m": 2.0405633811815523e-14,
+        "actual_centroid_net_m": 2.220446049250313e-16,
+        "actual_member_peak_speed_mps": 7.75568462633085e-14,
+        "max_pair_diameter_m": 1.7012348348537787,
+        "inward_facing_fraction_30deg": 0.7115384615384616,
+        "robot_to_centroid_min_m": 3.0886101285382757,
+        "moving_travel_coverage": false,
+        "standing_duration_coverage": true
+      }
+    ],
+    "membership_or_type_changes": [
+      {
+        "time": 25.4025,
+        "removed": [
+          [
+            2,
+            "moving",
+            [
+              4,
+              5,
+              6
+            ]
+          ]
+        ],
+        "added": [
+          [
+            2,
+            "standing",
+            [
+              5,
+              6
+            ]
+          ]
+        ]
+      }
+    ],
+    "moving_travel_covered": true,
+    "standing_duration_covered": true,
+    "new_group_objects": [],
+    "scope": "Initial groups are fixtures, not spontaneous births. Native labels give membership; Gazebo actual poses give travel/spacing/facing. Duration coverage is not subjective naturalness, speech, or group-aware Nav2."
+  }
+}

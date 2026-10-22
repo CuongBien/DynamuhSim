@@ -1,0 +1,10 @@
+#!/usr/bin/env python3
+import gzip,json,sys,math
+from pathlib import Path
+import numpy as np
+from group_audit import measure_groups
+HERE=Path(__file__).resolve().parent;sys.path.insert(0,str(HERE.parent/'socnavgym_response_fix'));from audit_geometry import gaps
+out=HERE/'reports/standing01_v2';load=lambda p:json.loads(p.read_text());r=load(out/'result.json');worker=[json.loads(s) for s in gzip.decompress((out/'worker_trajectory.jsonl.gz').read_bytes()).decode().splitlines()];fault=worker[-1];assert fault['fatal'] and len(r['faults'])==1 and r['faults'][0]['world_pause_requested'];t=fault['request']['time'];required=['mecanum_robot']+[f'common_{i}_proxy' for i in range(1,7)];poses=[json.loads(s) for s in gzip.decompress((out/'gazebo_poses.jsonl.gz').read_bytes()).decode().splitlines()];complete=[row for row in poses if all(n in row['poses'] for n in required)];active=[row for row in complete if r['goal_start_sim']<=row['time']<=t+1e-8];assert len(active)>100
+xy=np.array([[[row['poses'][f'common_{i}_proxy'][k] for k in ['x','y']] for i in range(1,7)] for row in active]);robot=np.array([[row['poses']['mecanum_robot'][k] for k in ['x','y']] for row in active]);boxes=load(HERE.parent.parent/'warehouse/layout.json')['obstacles'];measured=gaps(xy[:-1],xy[1:],robot[:-1],robot[1:],boxes);assert min(measured.values())>=-.005
+validation=dict(status='TERMINAL_STANDING_INFEASIBLE',actual_goal_reached=False,goal_outcome='NOT_COMPLETED_WORKER_FAULT',time=t,active_prefix_sim_s=t-r['goal_start_sim'],successful_native_updates=fault['step'],actual_prefix_swept_gaps=measured,world_pause_requested=True,clock_hold_duration_not_tested_in_this_trial=True,groups=measure_groups([row for row in worker if 'state_time' in row],complete,r,t),cleanup=r['cleanup']['status'],nvidia=r['rendering']['hardware_verified'],scope='Failed static-standing baseline, retained as counterexample. Positive prefix gap is not a successful navigation outcome.')
+(out/'validation.json').write_text(json.dumps(validation,indent=2)+'\n');print(json.dumps({k:v for k,v in validation.items() if k!='groups'},indent=2))
