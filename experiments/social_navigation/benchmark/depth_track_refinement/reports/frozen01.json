@@ -1,0 +1,80 @@
+{
+  "schema": "frozen_refinement/1",
+  "created_utc": "2026-10-22T16:16:26.635921+00:00",
+  "parent_commit": "0e5c90e7157aacf11c9933f58836b8e8c7ddc63c",
+  "inference_was_uncommitted": true,
+  "engine_sha256": {
+    "config.json": "3728358ab3dd0005d485ecb218e76b5bfef47d90e74a2dfce702e53ad3a3e1c2",
+    "refinement.py": "4988dfcbb9e8754c5cb63b801479430d7bb2e59e5d2f7e7601e34634d38758db",
+    "replay.py": "2d0bb2f6a1b5690a8cb42a4c86a8c9d46bb0db647f57487e79f772e0f7134cac",
+    "evaluate.py": "a8797bc49e24aad6fb5854a895af0a9f7fabcd26cc194c3c81d8bf5d8de8ceee",
+    "snapshots/sensor.py": "0fe703e72335c3f768584d051351b8e16f8aa1eb48ecd51b7f8dd6dd767bc7d1",
+    "snapshots/association.py": "13ea3e6615704604c4721a2d85e0d361f2d89ffca5e2cd8f8b64ccb4685d176e"
+  },
+  "config": {
+    "schema": "depth_track_refinement/1",
+    "development": "avoidance_moderate01",
+    "validation": "pilot01",
+    "split": "pilot_only",
+    "training_ready": false,
+    "shape_filter": {
+      "min_vertical_span_m": 1.55,
+      "thin_surface_minor_std_m": 0.025,
+      "constant_profile_shift_m": 0.04,
+      "min_profile_bins": 4,
+      "height_bins": 5
+    },
+    "tracking": {
+      "active_ttl_ns": 500000000,
+      "dormant_ttl_ns": 1500000000,
+      "dormant_min_hits": 5,
+      "dormant_gate_base_m": 0.35,
+      "dormant_gate_growth_mps": 0.25,
+      "dormant_position_margin_m": 0.15,
+      "dormant_max_logshape_distance": 0.55,
+      "active_match_policy": "legacy distance gate, retain comparator",
+      "dormant_policy": "mutual unique geometric/shape candidate, output only when measured"
+    },
+    "comparison_variants": [
+      "baseline",
+      "shape_only",
+      "tracking_only",
+      "combined"
+    ],
+    "validation_limit": "Separate captured run, same simulator/seed/scene family; no generalization or semantic acceptance",
+    "holdout": "HuNavSim untouched",
+    "geometric_comparison_gate": {
+      "min_paired_row_retention": 0.95,
+      "unpaired_rows_must_decrease": true,
+      "fragmentation_proxy_must_decrease": true,
+      "short_gap_identity_changes_must_not_increase": true,
+      "wrong_known_identity_reacquisitions_must_equal_zero": true,
+      "semantic_acceptance": false
+    }
+  },
+  "datasets": {
+    "development": {
+      "normalized": "/home/cuongbien/DynamuhSim/experiments/social_navigation/benchmark/portable_episode/generated/episode01/normalized",
+      "input_sha256": {
+        "depth.npy": "ccbde91a2d1c66cb83dd1073d827ab05d62ae2f1bafb0f3322cf5f3aab830c70",
+        "observations.npz": "3a4b8c0bf275d828eea22df5cd37b6a3bab5aa77d61777594449fbafc0340272",
+        "calibration.json": "a3e812b0cc147b1b3f8615105c8dd4a6ffb93512e98d5a3ddba22949ece7019f",
+        "samples.npz": "beb4126d51df5c09337711c075dbdaeb3f6efeced6969acfb3ceeed4b2981c1b"
+      },
+      "scene_sha256": "361994d13e5ac3a531a051f9fc00f130e2bb9a532c9f5a480e06c9caafe23859",
+      "manifest_sha256": "d48958acf05ff6632b7dd30d56c892ca7c53ec198ead41c79f4d674bb0a0e792"
+    },
+    "validation": {
+      "normalized": "/home/cuongbien/DynamuhSim/experiments/social_navigation/benchmark/dataset_pilot/episodes/pilot01/normalized",
+      "input_sha256": {
+        "depth.npy": "6a581efd0cdecca882cb79dc8e93d6e1b4b094697d1c9034aaad9e9bc928cbcf",
+        "observations.npz": "fda5d6a303a0e97e02bf70d367d03f08230df73080ec9f73c30271863b7e97a1",
+        "calibration.json": "248852db2f18beb762b452acaabf116224f000e4e8664f69008ad6cd63148916",
+        "samples.npz": "a49dc0927139f6d3014b5233ddaf56eeec4338de3ecdc5c705f132a9ace33e3f"
+      },
+      "scene_sha256": "6b77b71ca1bd07571965cafd66913662413f411969c4092b6e67b3735b6aaa62",
+      "manifest_sha256": "69574a1c75c7c3a71f83ffeed85435ea2e57c50f455c24205934ed8b88f63ab5"
+    }
+  },
+  "validation_policy": "Do not change engine/config after validation replay; same-family repeat only, not unseen-domain test"
+}

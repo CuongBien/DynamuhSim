@@ -1,5 +1,13 @@
 # Nhà xưởng và vòng khảo sát SocNavGym
 
+## Cập nhật 22/10/2026 — depth track refinement có giới hạn profile
+
+[Refinement report](benchmark/depth_track_refinement/reports/REFINEMENT_REPORT.md): frozen shape filter + dormant ID được so sánh bốn ablation trên ba recording. Hai lượt mesh depth cải thiện paired ratio 77.74→93.71% và 75.62→90.09%, fragmentation proxy 13→10 và 10→8. Đây là diagnostic hình học, không phải semantic accuracy.
+
+**Validation proxy cũ FAIL:** paired rows 997→603 dù tỷ lệ ghép tăng; prior đã loại trực tiếp 383 baseline-paired rows của người dạng cylinder. Giữ failure và baseline cũ, không triển khai filter hay bật mask train. Lượt mesh bổ sung chọn sau failure, không phải held-out test; navigation nguồn vẫn TIMEOUT. 13 test/audit integrity đạt, không thay kết luận semantic. Bước kế: recording depth mesh với seed/layout khác và nhãn visibility/semantic trước batch; HuNavSim chưa dùng. Không chạy Gazebo mới hoặc sửa ROS trong lượt này.
+
+Mốc lưu: `feat: evaluate depth track refinements across sensor profiles`.
+
 ## Cập nhật 22/10/2026 — pilot track cảm biến và nhãn BEV tương lai
 
 [Perception/target pilot](benchmark/perception_target_pilot/reports/PERCEPTION_TARGET_REPORT.md) chạy offline cùng episode: depth + odom tạo candidate tracks, GT chỉ ở nhánh label. 2577/3315 confirmed candidate rows ghép hình học được (77.74%, median 13.62 cm); đây không phải accuracy detector. Có phân mảnh ID và ứng viên chưa ghép, nên semantic/association/training masks vẫn false.

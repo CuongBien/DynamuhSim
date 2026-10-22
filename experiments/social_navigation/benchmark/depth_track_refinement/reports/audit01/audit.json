@@ -1,0 +1,34 @@
+{
+  "status": "PASS",
+  "scope": "Integrity/causality/comparison reproducibility, not semantic validation",
+  "source_episodes": 3,
+  "distinct_depth_frames": 2454,
+  "frozen_engine_unchanged_between_datasets": true,
+  "development_baseline_exactly_reproduces_previous_run": true,
+  "independent_pair_distances_checked": 24708,
+  "real_prefix_frames_replayed_without_future_odom": 300,
+  "paired_rows_by_variant": {
+    "development": {
+      "baseline": 2577,
+      "shape_only": 2577,
+      "tracking_only": 2579,
+      "combined": 2579
+    },
+    "validation": {
+      "baseline": 997,
+      "shape_only": 605,
+      "tracking_only": 995,
+      "combined": 603
+    },
+    "mesh_repeat": {
+      "baseline": 2797,
+      "shape_only": 2797,
+      "tracking_only": 2801,
+      "combined": 2801
+    }
+  },
+  "initial_proxy_validation": "FAIL retained",
+  "matched_mesh_repeat": "Diagnostic improvement only, prior navigation TIMEOUT retained",
+  "deployment_decision": "Keep previous baseline; new geometry/tracker is experiment only",
+  "training_ready": false
+}

@@ -1,0 +1,38 @@
+{
+  "status": "REPLAYED",
+  "dataset": "mesh_repeat",
+  "frames": 1037,
+  "frozen_sha256": "eb698c7954851fe9606ce32c7861ab749767c9877658f1716a762b23e70820b9",
+  "source_manifest_sha256": "04095ce0248c44869cb8bc5d5c5eb7d8f938a0bfec05151d260d1e553659d55b",
+  "variants": {
+    "baseline": {
+      "candidate_rows": 3810,
+      "confirmed_rows": 3699,
+      "dormant_reacquisitions": 0,
+      "unique_candidate_ids": 61
+    },
+    "shape_only": {
+      "candidate_rows": 3182,
+      "confirmed_rows": 3101,
+      "dormant_reacquisitions": 0,
+      "unique_candidate_ids": 44
+    },
+    "tracking_only": {
+      "candidate_rows": 3810,
+      "confirmed_rows": 3709,
+      "dormant_reacquisitions": 5,
+      "unique_candidate_ids": 56
+    },
+    "combined": {
+      "candidate_rows": 3182,
+      "confirmed_rows": 3109,
+      "dormant_reacquisitions": 4,
+      "unique_candidate_ids": 40
+    }
+  },
+  "shape_rejections": 628,
+  "semantic_person_validated": false,
+  "association_accepted": false,
+  "training_ready": false,
+  "inputs": "Only actual depth/calibration/causal odometry. No GT, future scene, persona or backend feature"
+}
