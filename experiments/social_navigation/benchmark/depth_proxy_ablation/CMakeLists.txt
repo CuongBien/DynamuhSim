@@ -1,0 +1,17 @@
+cmake_minimum_required(VERSION 3.22)
+project(depth_proxy_render_experiment)
+find_package(gz-sim8 REQUIRED)
+find_package(gz-plugin2 REQUIRED COMPONENTS register)
+find_package(gz-rendering8 REQUIRED COMPONENTS ogre2)
+find_package(PkgConfig REQUIRED)
+pkg_check_modules(OGRENEXT REQUIRED IMPORTED_TARGET OGRE-Next)
+find_path(OGRENEXT_HLMS_COMMON OgreHlmsBufferManager.h HINTS ${OGRENEXT_INCLUDE_DIRS} PATH_SUFFIXES Hlms/Common REQUIRED)
+add_library(depth_proxy_filter SHARED depth_proxy_filter.cc)
+target_compile_features(depth_proxy_filter PRIVATE cxx_std_17)
+target_link_libraries(depth_proxy_filter PRIVATE gz-sim8::gz-sim8 gz-plugin2::gz-plugin2 gz-rendering8::ogre2 PkgConfig::OGRENEXT)
+
+target_include_directories(depth_proxy_filter PRIVATE ${OGRENEXT_HLMS_COMMON})
+
+if(NOT "${gz-rendering8_DIR}" MATCHES "/opt/ros/jazzy/opt/gz_rendering_vendor/")
+  message(FATAL_ERROR "Source ROS Jazzy before configuring this experiment; rendering SDK must match the active vendor engine")
+endif()
