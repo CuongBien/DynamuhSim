@@ -101,3 +101,6 @@ Commit `b0b3c336` — `test: validate ComplexityNav contracts and expose missing
 
 
 Commit `be816c3da3` — `feat: route ComplexityNav humans around factory obstacles` — đã lưu adapter offline trước pilot. Sau commit, [ComplexityNav Gazebo pilot](benchmark/complexitynav_gazebo/README.md) đã chạy4 người/60s và fault-freeze test, đạt proxy/LiDAR/clock/NVIDIA/GUI/cleanup; pilot mới chưa commit. Các SHA/HEAD lúc đo được giữ, không gọi đây là lần chạy trên commit lưu kết quả sau này. Staging12 mục của người dùng và outside worktree vẫn giữ nguyên.
+
+
+Commit `c9dffe25` — `feat: validate ComplexityNav Gazebo pilot and terminal worker faults` — đã lưu pilot trước bộ so sánh chung. Raw Ogre/worker console giữ byte-identical, whitespace checks chỉ miễn trailing/blank-at-eof cho4 file log raw, không sửa log để passcheck; source khác kiểm nghiêm. Sau commit, [cohort chung offline36 lượt](benchmark/common_response/README.md) đã chạy đủ6 nhánh và18 near/far pairs, còn chưa commit. Đây không phải Gazebo/Nav2 benchmark chung; metadata ghi rõ native observation/speed và variant khác nhau.

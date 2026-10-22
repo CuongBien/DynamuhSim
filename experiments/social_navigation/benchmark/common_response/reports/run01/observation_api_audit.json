@@ -1,0 +1,35 @@
+{
+  "stage": "POST_RUN_OBSERVATION_API_AUDIT",
+  "source_file": "experiments/social_navigation/vendor/SocNavGym/socnavgym/envs/socnavenv_v2.py",
+  "source_sha256": "9444d03f1d2c407c0a48578135faedd32a80431d5abb22cfe3582c473a826696",
+  "common_external_pose_velocity_trace_dispatched": true,
+  "identical_internal_robot_prediction_assumptions": false,
+  "soc_native": {
+    "robot_goal_world": [
+      3.5,
+      1.5
+    ],
+    "robot_update_action_zero": true,
+    "human_orca_robot_preferred_velocity": "towards dummy robot goal, MAX_ADVANCE_ROBOT",
+    "human_orca_measured_robot_velocity_used": false,
+    "native_robot_orca_agent_radius_m": 0.36
+  },
+  "soc_guarded": {
+    "native_intention_assumption": "same dummy-goal intention as native",
+    "final_projection_measured_robot_velocity_used": true,
+    "projection_robot_radius_plus_padding_m": 0.255
+  },
+  "crowd_native": {
+    "robot_observable_state": "measured position/velocity and nominal radius, original=True"
+  },
+  "complexity_native": {
+    "robot_full_state": "measured position/velocity, dummy goal(26,0)",
+    "robot_preferred_velocity": "native centralized planner infers from dummy goal"
+  },
+  "complexity_geometry": {
+    "native_intention": "same full-state native planner",
+    "final_projection_measured_robot_velocity_used": true,
+    "projection_robot_radius_plus_padding_m": 0.27
+  },
+  "interpretation": "Configuration-level matched physical inputs, not a strict equal-observation/equal-speed native algorithm ablation. Native Soc and native CN serve diagnostic references; do not attribute all differences to a single ORCA/SFM algorithm change. Native perception radii/safety buffers also differ; normalized radii refer to the physical fixture and evaluation metrics."
+}

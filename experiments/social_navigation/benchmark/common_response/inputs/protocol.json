@@ -1,0 +1,67 @@
+{
+  "stage": "OFFLINE_MATCHED_INPUT_RESPONSE",
+  "fixtures": [
+    "opposed_far",
+    "opposed_near",
+    "crossing_far",
+    "crossing_near",
+    "blocked_narrow_far",
+    "blocked_narrow_near"
+  ],
+  "models": {
+    "soc_native_orca": {
+      "dt": 0.1,
+      "runtime": "venv",
+      "behavior": "native individual motion,42-wall factory wrapper; no groups"
+    },
+    "soc_guarded_orca": {
+      "dt": 0.1,
+      "runtime": "venv",
+      "behavior": "native intention plus global disc ORCA/swept guard; no groups"
+    },
+    "crowd_orca_plus": {
+      "dt": 0.1,
+      "runtime": "crowd",
+      "behavior": "native ORCA+ act/constrain/step, external fixed fixture"
+    },
+    "crowd_sfm": {
+      "dt": 0.1,
+      "runtime": "crowd",
+      "behavior": "native SFM act/constrain/step, external fixed fixture"
+    },
+    "complex_native_mixed": {
+      "dt": 0.25,
+      "runtime": "complex",
+      "behavior": "native3ORCA+3SFM; interior obstacles not used"
+    },
+    "complex_geometry_mixed": {
+      "dt": 0.25,
+      "runtime": "complex",
+      "behavior": "3ORCA+3SFM intention + roadmap/ORCA projection; radius-normalized"
+    }
+  },
+  "human_radius": 0.36,
+  "robot_radius": 0.25,
+  "population": 6,
+  "seed": 42,
+  "seconds": 10.0,
+  "input_grid_s": 0.05,
+  "geometry_boxes": 42,
+  "formation_disabled_for_comparison": true,
+  "goals": "Fixed far endpoints; no arrival expected within10s. Group capabilities evaluated separately from saved native/live evidence.",
+  "fairness": "Same initial discs/targets/geometry/continuous robot input, native worker dt retained. Native intended speed differs; raw travel is not a policy ranking. Compare near-vs-far within each model.",
+  "failure_rule": "Keep every outcome and valid prefix. Negative clearance is a measured behavior result, not a harness exclusion. Runtime errors remain errors, not successful safe stops.",
+  "repeated_prefix_steps": 20,
+  "input_sha256": {
+    "inputs/layout.json": "31d1cd9841e133766c36f9e44e5b4e4148a61500abcf6e2682166a98d0e4cb06",
+    "inputs/crossing_near.json": "ff035a69a19420bdfb4e44825830313e1e1a60e401f21b94d5a39750f9cf0fbc",
+    "inputs/socnavgym.yaml": "cd4c606c0100d42fd989e0ff50c00ddc7b59dd231e360dd9106a917351e3bf42",
+    "inputs/opposed_near.json": "bb4f1e93e49da2d335e3236ec407d0f963daffc024417a6c4e87fad6704c8d08",
+    "inputs/crossing_far.json": "e7a4469058b990b228102caa7c75ee4f18bd51acdc29f58db6baad430d810d1f",
+    "inputs/blocked_narrow_near.json": "7c246a392fcefe619a28ef7c7bd9ae183c3c785b4fd40782f7d6bd084f91a3a9",
+    "inputs/crowd_bookkeeping_patch.json": "276c094be668bec51d9ff1b4f4f44d96d92345019812c1c163938a491774ba10",
+    "inputs/blocked_narrow_far.json": "e99656c412593cc96e31146822eb1324b390604a8ad9a257add90e31bb5af2d5",
+    "inputs/opposed_far.json": "28a2ad30921921247be3c1caacbf4466c8be01b8357be42be9c2e838bf03db35",
+    "inputs/images.json": "2c2ef5efbb659534798497f0fb71f53d799aaed800d9607ca4bcf41e9ede1006"
+  }
+}

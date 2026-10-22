@@ -88,3 +88,12 @@ Bước kế tiếp: commit riêng phần đã đạt, sau đó pilot Gazebo pop
 Adapter offline đã commit `be816c3`; [pilot mới](benchmark/complexitynav_gazebo/reports/GAZEBO_PILOT_REPORT.md) chạy4 người trong Gazebo60s, measured robot tiến/ngang,23 arrival, actual proxy/LiDAR/pause/GPU/GUI/cleanup đạt. Fault injection xác nhận freeze rồi restart session mới chạy tốt. Pilot này chưa commit. ComplexityNav geometry variant hiện có Gazebo integration; trained RGL/native geometry chưa được promote.
 
 Bước tiếp theo: commit pilot riêng, chốt protocol bộ cảnh chung cho3 backend (same warehouse/robot inputs, population/attributes/metrics khai báo rõ, native vs adapter variant tách riêng), rồi chạy tuần tự và chốt bảng lựa chọn. Bao gồm phản ứng robot tiến gần, vòng kệ/lối hẹp và nhóm/conversation đúng năng lực backend; không gọi clustering hay người đứng fixture là social formation. Không dùng local-aisle pilot này để kết luận dense crowd hoặc Nav2 đã đạt, không thay AMCL/controller gốc.
+
+
+## Sau cohort chung offline —22/10/2026
+
+Pilot ComplexityNav đã commit `c9dffe2`. [36 phép thử common response](benchmark/common_response/reports/run01/COMMON_RESPONSE_REPORT.md) đã hoàn tất,6 repeat-prefix đạt; đầu vào physical discs/targets/robot trace chung, native dt và prediction assumptions khác nhau được công bố. Guarded Soc, CSP ORCA+ và CN geometry không ghi overlap>1mm ở6 case/control; native Soc/CN và SFM giữ các hạn chế đã đo. Formation tắt trong cohort avoidance, không áp số6/6 cho nhóm.
+
+Theo mục tiêu người đi nhóm/đứng tương tác/formation, ưu tiên SocNavGym lifecycle variant đã có Gazebo; CrowdSimPlus ORCA+ giữ baseline tránh người. CN geometry là biến thể phụ, không gọi clustering là social formation hoặc ngầm dùng RGL chưa có checkpoint. Chưa chuyển backend mặc định của robot.
+
+Bước còn lại: commit cohort này, đưa đúng normalized fixture/config vào cohort Gazebo riêng, đoactual pose/LiDAR/robot path; chỉ sau đó so Nav2 cùngscene nếu cần. Không trộn pilot4 người radius0.3m với cohort6 người radius0.36m thành kết quả chung. Không thêm framework, World Model, Isaac Sim hoặc mở rộng ma trận AMCL.

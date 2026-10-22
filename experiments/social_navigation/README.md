@@ -1,5 +1,7 @@
 # Nhà xưởng và vòng khảo sát SocNavGym
 
+[Đã có bộ so sánh offline chung36 lượt](benchmark/common_response/README.md):6 cấu hình của3 framework,18 cặp far/near, một seed và6 người. Giữ các overlap native/soft-force; ưu tiên SocNavGym lifecycle variant cho mục tiêu nhóm, CrowdSimPlus ORCA+ làm baseline avoidance. Đây chưa phải benchmark chung Gazebo/Nav2. Pilot ComplexityNav đã commit `c9dffe2`.
+
 [ComplexityNav đã chạy pilot Gazebo4 người](benchmark/complexitynav_gazebo/README.md):60s có robot tiến/ngang, actual proxy/clock/LiDAR đạt, đủ4 IDs,98.33% tia human đủ điều kiện khớp15cm; NVIDIA/GUI/shutdown được kiểm chứng. Có thêm lượt lỗi worker để xác nhận freeze. Đây là geometry variant, chưa benchmark Nav2 hoặc dense crowd. Bản offline đã commit `be816c3`.
 
 [ComplexityNav: adapter tránh vật cản đạt offline](benchmark/complexitynav_geometry/README.md):6 cảnh ghép cặp native/variant,1040 update adapter; đi vòng kệ tới đích, hai chiều qua khe1.8m, đủ42 AABBs, reset80 bước. Chưa nối biến thể mới vào Gazebo. Native preflight trước đó đã commit `b0b3c33`; nhánh native vẫn giữ nguyên hạn chế xuyên kệ.
