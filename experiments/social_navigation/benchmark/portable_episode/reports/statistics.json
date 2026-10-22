@@ -1,0 +1,61 @@
+{
+  "sample_count": 823,
+  "independent_episodes": 1,
+  "history_points": 20,
+  "future_points": 30,
+  "sample_hz": 10,
+  "anchor_first_ns": 12300000000,
+  "anchor_last_ns": 94500000000,
+  "goal_valid_count": 629,
+  "goal_invalid_count": 194,
+  "age_ms": {
+    "scan": {
+      "min": 100.0,
+      "median": 150.0,
+      "max": 200.0,
+      "valid_history_elements": 16460
+    },
+    "depth": {
+      "min": 100.0,
+      "median": 100.0,
+      "max": 100.0,
+      "valid_history_elements": 16460
+    },
+    "imu": {
+      "min": 0.0,
+      "median": 0.0,
+      "max": 10.0,
+      "valid_history_elements": 16460
+    },
+    "odom": {
+      "min": 0.0,
+      "median": 15.0,
+      "max": 30.0,
+      "valid_history_elements": 16460
+    },
+    "action": {
+      "min": 0.0,
+      "median": 25.0,
+      "max": 50.0,
+      "valid_history_elements": 16460
+    }
+  },
+  "future_shape": [
+    823,
+    30,
+    6,
+    2
+  ],
+  "input_action_shape": [
+    823,
+    20,
+    3
+  ],
+  "future_action_shape": [
+    823,
+    30,
+    3
+  ],
+  "bev_frames": 823,
+  "depth_frames": 1013
+}
