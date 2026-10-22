@@ -1,0 +1,293 @@
+{
+  "inputs": {
+    "anchor_ns": {
+      "shape": [
+        213
+      ],
+      "dtype": "int64"
+    },
+    "history_query_ns": {
+      "shape": [
+        213,
+        20
+      ],
+      "dtype": "int64"
+    },
+    "scan_stamp_ns": {
+      "shape": [
+        213,
+        20
+      ],
+      "dtype": "int64"
+    },
+    "scan_available_ns": {
+      "shape": [
+        213,
+        20
+      ],
+      "dtype": "int64"
+    },
+    "scan_valid": {
+      "shape": [
+        213,
+        20
+      ],
+      "dtype": "bool"
+    },
+    "scan_ranges_m": {
+      "shape": [
+        213,
+        20,
+        360
+      ],
+      "dtype": "float32"
+    },
+    "scan_ray_valid": {
+      "shape": [
+        213,
+        20,
+        360
+      ],
+      "dtype": "bool"
+    },
+    "imu_stamp_ns": {
+      "shape": [
+        213,
+        20
+      ],
+      "dtype": "int64"
+    },
+    "imu_available_ns": {
+      "shape": [
+        213,
+        20
+      ],
+      "dtype": "int64"
+    },
+    "imu_valid": {
+      "shape": [
+        213,
+        20
+      ],
+      "dtype": "bool"
+    },
+    "imu": {
+      "shape": [
+        213,
+        20,
+        10
+      ],
+      "dtype": "float32"
+    },
+    "odom_stamp_ns": {
+      "shape": [
+        213,
+        20
+      ],
+      "dtype": "int64"
+    },
+    "odom_available_ns": {
+      "shape": [
+        213,
+        20
+      ],
+      "dtype": "int64"
+    },
+    "odom_valid": {
+      "shape": [
+        213,
+        20
+      ],
+      "dtype": "bool"
+    },
+    "odom_local_pose_and_twist": {
+      "shape": [
+        213,
+        20,
+        9
+      ],
+      "dtype": "float32"
+    },
+    "action_stamp_ns": {
+      "shape": [
+        213,
+        20
+      ],
+      "dtype": "int64"
+    },
+    "action_available_ns": {
+      "shape": [
+        213,
+        20
+      ],
+      "dtype": "int64"
+    },
+    "action_valid": {
+      "shape": [
+        213,
+        20
+      ],
+      "dtype": "bool"
+    },
+    "action": {
+      "shape": [
+        213,
+        20,
+        3
+      ],
+      "dtype": "float32"
+    },
+    "depth_stamp_ns": {
+      "shape": [
+        213,
+        20
+      ],
+      "dtype": "int64"
+    },
+    "depth_available_ns": {
+      "shape": [
+        213,
+        20
+      ],
+      "dtype": "int64"
+    },
+    "depth_valid": {
+      "shape": [
+        213,
+        20
+      ],
+      "dtype": "bool"
+    },
+    "depth_index": {
+      "shape": [
+        213,
+        20
+      ],
+      "dtype": "int32"
+    },
+    "goal_xy_from_amcl": {
+      "shape": [
+        213,
+        2
+      ],
+      "dtype": "float64"
+    },
+    "goal_valid": {
+      "shape": [
+        213
+      ],
+      "dtype": "bool"
+    },
+    "goal_stamp_ns": {
+      "shape": [
+        213
+      ],
+      "dtype": "int64"
+    },
+    "goal_available_ns": {
+      "shape": [
+        213
+      ],
+      "dtype": "int64"
+    }
+  },
+  "labels": {
+    "future_stamp_ns": {
+      "shape": [
+        213,
+        30
+      ],
+      "dtype": "int64"
+    },
+    "human_xy_future_m": {
+      "shape": [
+        213,
+        30,
+        6,
+        2
+      ],
+      "dtype": "float64"
+    },
+    "human_xy_at_anchor_m": {
+      "shape": [
+        213,
+        6,
+        2
+      ],
+      "dtype": "float64"
+    },
+    "human_valid": {
+      "shape": [
+        213,
+        30,
+        6
+      ],
+      "dtype": "bool"
+    },
+    "executed_action_query_ns": {
+      "shape": [
+        213,
+        30
+      ],
+      "dtype": "int64"
+    },
+    "executed_action_future": {
+      "shape": [
+        213,
+        30,
+        3
+      ],
+      "dtype": "float32"
+    },
+    "executed_action_stamp_ns": {
+      "shape": [
+        213,
+        30
+      ],
+      "dtype": "int64"
+    },
+    "executed_action_available_ns": {
+      "shape": [
+        213,
+        30
+      ],
+      "dtype": "int64"
+    },
+    "group_id_future": {
+      "shape": [
+        213,
+        30,
+        6
+      ],
+      "dtype": "int32"
+    },
+    "group_mode_future": {
+      "shape": [
+        213,
+        30,
+        6
+      ],
+      "dtype": "int8"
+    },
+    "persona_index": {
+      "shape": [
+        213,
+        6
+      ],
+      "dtype": "int8"
+    },
+    "persona_valid": {
+      "shape": [
+        213,
+        6
+      ],
+      "dtype": "bool"
+    },
+    "human_ids": {
+      "shape": [
+        6
+      ],
+      "dtype": "int32"
+    }
+  }
+}
