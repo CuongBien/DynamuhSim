@@ -1,0 +1,52 @@
+{
+  "status": "PASS",
+  "replayed_captured_robot_interval": true,
+  "fixed_reference": "INFEASIBLE",
+  "yielding_human_ids": [
+    4,
+    5,
+    6
+  ],
+  "speed_cap": 0.2,
+  "independent_swept_gaps": {
+    "pair": 0.5270765814495901,
+    "robot": 0.00504415467742414,
+    "static": 1.5976488710222938
+  },
+  "far_control_exact": true,
+  "projection": {
+    "method": "per_human_support_planes_dykstra",
+    "cycles": 2,
+    "margin_m": 0.02,
+    "predicted_clearance": {
+      "pair": 0.5270765814495901,
+      "robot": 0.00504415467742414,
+      "static": 1.5976488710222938
+    },
+    "max_constraint_residual": 0.0,
+    "velocity_change_norm": 0.19549379013179152,
+    "compute_ms": 3.9775010000084876,
+    "robot_displacement": [
+      0.03771985173270256,
+      -0.005884384112073968
+    ],
+    "target_margin_m": 0.04,
+    "yielding_indices": [
+      3,
+      4,
+      5
+    ],
+    "standing_speed_cap_mps": 0.2,
+    "attempts": [
+      {
+        "margin": 0.04,
+        "status": "REJECTED",
+        "reason": "Separation target exceeds available bounded speed"
+      },
+      {
+        "margin": 0.02,
+        "status": "ACCEPTED"
+      }
+    ]
+  }
+}

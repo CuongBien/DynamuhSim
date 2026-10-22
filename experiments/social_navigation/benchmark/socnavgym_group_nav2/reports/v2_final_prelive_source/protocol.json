@@ -1,0 +1,93 @@
+{
+  "stage": "SOCNAVGYM_INITIAL_GROUPS_NAV2",
+  "baseline_commit": "ebbd45542cd42d8e36672b9c383836161af2a273",
+  "start": [
+    -28.0,
+    0.0,
+    0.0
+  ],
+  "goal": [
+    -20.0,
+    0.0,
+    0.0
+  ],
+  "sim_budget": 45.0,
+  "native_dt": 0.1,
+  "physics_dt": 0.0025,
+  "population": 6,
+  "human_radius": 0.36,
+  "robot_radius": 0.25,
+  "initial_group_centers": [
+    [
+      -25.5,
+      0.0
+    ],
+    [
+      -22.5,
+      0.0
+    ]
+  ],
+  "group_radius": 0.72,
+  "initial_members": [
+    [
+      1,
+      2,
+      3
+    ],
+    [
+      4,
+      5,
+      6
+    ]
+  ],
+  "walking_initial_goal": [
+    -20.5,
+    0.0
+  ],
+  "lifecycle": "Native formation .03/dispersal .01 retained after explicit initial group fixture; no claim spontaneous initial formation",
+  "motion": "Existing lifecycle ContinuousGroups plus response_v2 per-human projection; existing files unchanged",
+  "nav2": "Existing MPPI/AMCL and runtime initial x=-28, no scripted velocity",
+  "gate": "Freeze whole native lifecycle until accepted Nav2 goal",
+  "acceptance": "Report action and actual XY<=.20/yaw<=.25 separately; retain failed goals/geometry/group coverage; abort cohort only on infra/worker/interlock/mapping faults.",
+  "group_coverage": "Moving group >=2s and >=.5m measured centroid travel; standing group >=2s, actual movement and inward facing reported; releases/changes counted by persistent member sets. No naturalness/speech claims.",
+  "plan": [
+    {
+      "name": "walking01_v2",
+      "scenario": "walking",
+      "seed": 42,
+      "gui": true
+    },
+    {
+      "name": "walking02_v2",
+      "scenario": "walking",
+      "seed": 43,
+      "gui": false
+    },
+    {
+      "name": "standing01_v2",
+      "scenario": "standing",
+      "seed": 42,
+      "gui": true
+    },
+    {
+      "name": "standing02_v2",
+      "scenario": "standing",
+      "seed": 43,
+      "gui": false
+    }
+  ],
+  "control": "Reuse committed empty01 and individual SocNavGym v2 as reference, not matched group fixture or ranking",
+  "scope": "Bounded integration pilot, no World Model/Isaac/robot architecture change",
+  "amendment": "After walking01 NVIDIA/WSL GUI startup segfault: preserve original attempt; new fixed four-trial cohort after serialized server/GUI startup and native group goal-radius fixture correction. No change to robot/Nav2/tolerance. Native local8x4 window could not resample1.44m group goal; isolated config now uses actual60x40 factory sampling with origin0 and all42 real walls. Original native sampling algorithm unchanged.",
+  "fixture_contract": "Initial native group members use native interaction goal radius1.44m; actual centroid recomputed after explicit member placement.",
+  "native_sampling_window": [
+    -29.5,
+    29.5,
+    -19.5,
+    19.5
+  ],
+  "kernel_origin": [
+    0.0,
+    0.0
+  ]
+}
