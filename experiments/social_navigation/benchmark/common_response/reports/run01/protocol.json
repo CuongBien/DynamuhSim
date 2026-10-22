@@ -1,0 +1,86 @@
+{
+  "stage": "OFFLINE_MATCHED_INPUT_RESPONSE",
+  "fixtures": [
+    "opposed_far",
+    "opposed_near",
+    "crossing_far",
+    "crossing_near",
+    "blocked_narrow_far",
+    "blocked_narrow_near"
+  ],
+  "models": {
+    "soc_native_orca": {
+      "dt": 0.1,
+      "runtime": "venv",
+      "behavior": "native individual motion,42-wall factory wrapper; no groups"
+    },
+    "soc_guarded_orca": {
+      "dt": 0.1,
+      "runtime": "venv",
+      "behavior": "native intention plus global disc ORCA/swept guard; no groups"
+    },
+    "crowd_orca_plus": {
+      "dt": 0.1,
+      "runtime": "crowd",
+      "behavior": "native ORCA+ act/constrain/step, external fixed fixture"
+    },
+    "crowd_sfm": {
+      "dt": 0.1,
+      "runtime": "crowd",
+      "behavior": "native SFM act/constrain/step, external fixed fixture"
+    },
+    "complex_native_mixed": {
+      "dt": 0.25,
+      "runtime": "complex",
+      "behavior": "native3ORCA+3SFM; interior obstacles not used"
+    },
+    "complex_geometry_mixed": {
+      "dt": 0.25,
+      "runtime": "complex",
+      "behavior": "3ORCA+3SFM intention + roadmap/ORCA projection; radius-normalized"
+    }
+  },
+  "human_radius": 0.36,
+  "robot_radius": 0.25,
+  "population": 6,
+  "seed": 42,
+  "seconds": 10.0,
+  "input_grid_s": 0.05,
+  "geometry_boxes": 42,
+  "formation_disabled_for_comparison": true,
+  "goals": "Fixed far endpoints; no arrival expected within10s. Group capabilities evaluated separately from saved native/live evidence.",
+  "fairness": "Same initial discs/targets/geometry/continuous robot input, native worker dt retained. Native intended speed differs; raw travel is not a policy ranking. Compare near-vs-far within each model.",
+  "failure_rule": "Keep every outcome and valid prefix. Negative clearance is a measured behavior result, not a harness exclusion. Runtime errors remain errors, not successful safe stops.",
+  "repeated_prefix_steps": 20,
+  "input_sha256": {
+    "inputs/layout.json": "31d1cd9841e133766c36f9e44e5b4e4148a61500abcf6e2682166a98d0e4cb06",
+    "inputs/crossing_near.json": "ff035a69a19420bdfb4e44825830313e1e1a60e401f21b94d5a39750f9cf0fbc",
+    "inputs/socnavgym.yaml": "cd4c606c0100d42fd989e0ff50c00ddc7b59dd231e360dd9106a917351e3bf42",
+    "inputs/opposed_near.json": "bb4f1e93e49da2d335e3236ec407d0f963daffc024417a6c4e87fad6704c8d08",
+    "inputs/crossing_far.json": "e7a4469058b990b228102caa7c75ee4f18bd51acdc29f58db6baad430d810d1f",
+    "inputs/blocked_narrow_near.json": "7c246a392fcefe619a28ef7c7bd9ae183c3c785b4fd40782f7d6bd084f91a3a9",
+    "inputs/crowd_bookkeeping_patch.json": "276c094be668bec51d9ff1b4f4f44d96d92345019812c1c163938a491774ba10",
+    "inputs/blocked_narrow_far.json": "e99656c412593cc96e31146822eb1324b390604a8ad9a257add90e31bb5af2d5",
+    "inputs/opposed_far.json": "28a2ad30921921247be3c1caacbf4466c8be01b8357be42be9c2e838bf03db35",
+    "inputs/images.json": "2c2ef5efbb659534798497f0fb71f53d799aaed800d9607ca4bcf41e9ede1006"
+  },
+  "head": "c9dffe25eebd8d9a9b87506dd15d4e01dae6cb04",
+  "source_sha256": {
+    "experiments/social_navigation/benchmark/common_response/reports/run01/source_snapshot/prepare.py": "8c24c67638670477d81a925d6df780325f1569f7f9ee0a4176220f3420fccc08",
+    "experiments/social_navigation/benchmark/common_response/reports/run01/source_snapshot/crowd_kernel_n6.py": "4bd3666b1aacb24cde9ad0f3f658dfcb95fdf75e42b6c26ff39c334b4b95e113",
+    "experiments/social_navigation/benchmark/common_response/reports/run01/source_snapshot/model_worker.py": "74f2ff2e08a105aa7a6d34e01d032bff81fafaac9c8652a25302a747ed39f3be",
+    "experiments/social_navigation/benchmark/common_response/reports/run01/source_snapshot/run.py": "45e50abee762dfa552ebeb2cecd615486ebe30bcfcdf3370b80783c15d4ee00f",
+    "experiments/social_navigation/benchmark/socnavgym_warehouse_lifecycle/kernel.py": "611a86973b6733473e7ff2a3abb2e8b7cc43173f3bc903d00c0a820d6b6d3aed",
+    "experiments/social_navigation/benchmark/socnavgym_warehouse_lifecycle/motion.py": "bef8b4a8a527f2f5725d306f6844bb128099fbcbac977fa684c2188715afbe04",
+    "experiments/social_navigation/benchmark/socnavgym_warehouse_lifecycle/geometry.py": "693a35314cce682f00c91f6dfeebd5225851663410920cac393a66a7936df5a3",
+    "experiments/social_navigation/benchmark/socnavgym_lifecycle_fix/continuous_groups.py": "b3fc3f1c7cfab0570620b823aea31d22047922d402447b5f9b1869cc4652ec60",
+    "experiments/social_navigation/benchmark/complexitynav_geometry/kernel.py": "0868d4df16724fc3e2e3436cc49581c71220b28351fdd0ab2925a0e8f9b76983",
+    "experiments/social_navigation/benchmark/complexitynav_geometry/roadmap.py": "77cca14fb7e393cf6e7068673016616e1514573061aaf6606cfb3ce84ed9ff07",
+    "experiments/social_navigation/benchmark/complexitynav_contract/kernel.py": "ce10fd8605037f114b8cb0706572e9541d4ad11613394e40ff73111c98eb01fc",
+    "experiments/social_navigation/warehouse/layout.json": "31d1cd9841e133766c36f9e44e5b4e4148a61500abcf6e2682166a98d0e4cb06"
+  },
+  "images": {
+    "dynamuhsim-crowdsimplus:round2": "sha256:39929ee8e4fa6d738a381a0b695bf25eaf9fa972cd5b9d8a6854d72f80bd5f3c",
+    "dynamuhsim-complexitynav:round3": "sha256:edfd591ea7551813419e511b341089ad956b6d3e4c1bd395a326035865ef1d5d"
+  }
+}

@@ -1,0 +1,121 @@
+{
+  "case": "blocked_narrow_near",
+  "model": "crowd_sfm",
+  "status": "COMPLETED",
+  "steps": 100,
+  "required_steps": 100,
+  "wall_seconds": 9.912126261999902,
+  "error": null,
+  "metadata": {
+    "framework": "CrowdSimPlus",
+    "source_commit": "d526a07c013c621fa1ad50894b6ba639f61063de",
+    "source_sha256": {
+      "crowd_sim_plus/envs/crowd_sim_plus.py": "eb1e9e706f3e9c9fc2e4779b2b4fbe11c23d13224a71e47f91c50249aa4717d5",
+      "crowd_sim_plus/envs/policy/orca_plus.py": "4fb102d5762654e1139c5df00f875579d2f6209bce9ea2226f0731493847270b",
+      "crowd_sim_plus/envs/policy/social_force.py": "6acb9fc1566062b73b2e61194582fce9fc256bafaf3f6e6f19d81b1fc4be4e80",
+      "crowd_sim_plus/envs/utils/human_plus.py": "538a6e2462cf5e0b3239212ac89b59d739549b61014f40dc0219b5946c6e355e",
+      "crowd_sim_plus/envs/utils/agent_plus.py": "dd29ad2b481ad1bd082451eabcee17c8ed207e9401bca80c0d1716ac679ca0bd"
+    },
+    "time_step": 0.1,
+    "original_demo_time_step": 0.25,
+    "robot_visible": true,
+    "human_policy": "sfm",
+    "human_radius": 0.36,
+    "human_v_pref": 0.8,
+    "robot_radius": 0.25,
+    "orca_safety_space": null,
+    "orca_added_radius": null,
+    "neighbor_dist": null,
+    "time_horizon": null,
+    "time_horizon_obst": null,
+    "sfm_parameters": {
+      "radius": 0.36,
+      "A": 3.0,
+      "B": 0.18,
+      "KI": 1.0,
+      "A_static": 2.0,
+      "B_static": 0.025,
+      "A_bottleneck": 6.0,
+      "B_bottleneck": 0.12,
+      "is_bottleneck": false
+    },
+    "static_boxes": 42,
+    "static_line_segments": 168,
+    "group_model": false,
+    "conversation_model": false,
+    "movement_methods": [
+      "Human.act",
+      "CrowdSimPlus.constrain_agent_action_exact",
+      "Human.step"
+    ],
+    "goal_layout": "individual",
+    "human_routes": [
+      [
+        [
+          25.0,
+          -0.42
+        ],
+        [
+          8.0,
+          -0.42
+        ]
+      ],
+      [
+        [
+          26.0,
+          0.42
+        ],
+        [
+          9.4,
+          0.42
+        ]
+      ],
+      [
+        [
+          27.5,
+          -0.42
+        ],
+        [
+          10.8,
+          -0.42
+        ]
+      ],
+      [
+        [
+          5.0,
+          0.42
+        ],
+        [
+          21.2,
+          0.42
+        ]
+      ],
+      [
+        [
+          4.0,
+          -0.42
+        ],
+        [
+          22.6,
+          -0.42
+        ]
+      ],
+      [
+        [
+          3.0,
+          0.42
+        ],
+        [
+          24.0,
+          0.42
+        ]
+      ]
+    ],
+    "arrival_rule": "upstream Human.reached_destination; external patrol switches endpoints only on arrival",
+    "external_scenario": "shared initial poses; separate per-human endpoints; standing fixture held externally",
+    "robot_controller": "prescribed shared trace, no ROS/Nav2",
+    "visual_heading": "last nonzero actual velocity; initial scene yaw while stationary",
+    "env_module_file": "/opt/CrowdSimPlus/crowd_sim_plus/envs/crowd_sim_plus.py",
+    "env_module_sha256": "eb1e9e706f3e9c9fc2e4779b2b4fbe11c23d13224a71e47f91c50249aa4717d5"
+  }
+}

@@ -1,0 +1,57 @@
+{
+  "internal_prediction_assumptions_equal": false,
+  "status": "AUDITED_WITH_ALL_OUTCOMES_RETAINED",
+  "cases": 36,
+  "models": 6,
+  "completed": 36,
+  "errors": [],
+  "repeat_checks": [
+    {
+      "model": "soc_native_orca",
+      "status": "PASS",
+      "steps": 20
+    },
+    {
+      "model": "soc_guarded_orca",
+      "status": "PASS",
+      "steps": 20
+    },
+    {
+      "model": "crowd_orca_plus",
+      "status": "PASS",
+      "steps": 20
+    },
+    {
+      "model": "crowd_sfm",
+      "status": "PASS",
+      "steps": 20
+    },
+    {
+      "model": "complex_native_mixed",
+      "status": "PASS",
+      "steps": 20
+    },
+    {
+      "model": "complex_geometry_mixed",
+      "status": "PASS",
+      "steps": 20
+    }
+  ],
+  "full_paired_comparisons": 18,
+  "initial_state_and_common_inputs_verified": true,
+  "geometry_boxes": 42,
+  "human_radius": 0.36,
+  "robot_radius": 0.25,
+  "comparison_grid_s": 0.5,
+  "preserved_old_files": 12714,
+  "original_staging_outside_preserved": true,
+  "owned_containers_remaining": 0,
+  "notes": [
+    "Offline scripted disc inputs, not Gazebo/physical-robot replay",
+    "Different native dt/intended speed; no ranking from raw distance or timing",
+    "Flagged tick seconds are sums of flagged intervals, not exact penetration duration",
+    "Native CN missing interior geometry is a negative control",
+    "Groups/conversation capabilities use separate previously recorded evidence",
+    "Shared trace dispatch does not make internal observation APIs equal: Soc native infers robot intent from dummy goal; see observation_api_audit.json"
+  ]
+}

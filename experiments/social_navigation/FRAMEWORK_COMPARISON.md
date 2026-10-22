@@ -1,4 +1,19 @@
-# Phạm vi đã kiểm tra: demo độc lập và tích hợp Gazebo
+# So sánh khả năng đã đo — cập nhật22/10/2026
+
+[Benchmark pilot offline chung36 lượt](benchmark/common_response/reports/run01/COMMON_RESPONSE_REPORT.md) đã hoàn tất với human radius/initial geometry/robot trace chung. Đây là18 cặp far/near, một seed, native dt/speed/observation khác nhau; không phải bảng xếp hạng thuật toán thuần hoặc benchmark chung Gazebo/Nav2.
+
+| Năng lực / trạng thái hiện tại | SocNavGym | CrowdSimPlus | ComplexityNav |
+|---|---|---|---|
+| Nhóm đi có membership, đứng tương tác | Có scene/model riêng; đã quan sát native và Gazebo | Chưa có model giữ nhóm/hội thoại trong bản thử | Clustering/static agents, chưa phải social formation |
+| Formation/tách nhóm | Native có snap/overlap; adapter lifecycle riêng đã đạt pilot Gazebo6 người | Chưa có model tương đương | Chưa có model tương đương |
+| Gazebo đã chạy thật | Nhóm cố định và lifecycle variant, có robot/LiDAR | ORCA+/SFM, có Mecanum/Nav2/crossing/bottleneck | Geometry hybrid4 người/60s; proxy/LiDAR/fault-freeze/NVIDIA/GUI đạt |
+| Benchmark chung offline6 người | Native5/6,guarded6/6 không overlap>1mm; formation tắt ởcohort này | ORCA+6/6,SFM3/6 không overlap>1mm | Native4/6 (không dùng nội vật cản),geometry6/6 không overlap>1mm |
+| Vai trò đề xuất cho mục tiêu hiện tại | **Ứng viên chính cho nhóm/đứng tương tác/formation, dùng variant gắn nhãn rõ** | **ORCA+ làm baseline tránh người; SFM làm đối chứng soft-force** | Phương án phụ cho nghiên cứu; chưa trained RGL, chưa Nav2 |
+
+Các số /6 gồm far control vànear condition, không phải nhiều seed hoặc success probability. Native Soc dự đoán robot từ goal nội bộ; CN native thiếu nội vật cản; hybrid dùng ORCA projection. Giữ signed gaps, không đổi policy để xóa failure. [Kế hoạch còn lại](NEXT_STEPS.md): cohort Gazebo normalized riêng trước khi so chung Nav2; AMCL/controller gốc giữ nguyên.
+
+## Ghi chép các vòng trước — giữ theo thời điểm đo
+
 
 Bước kiểm tra tiếp theo là [pilot localization riêng](benchmark/localization_trials/README.md), không thêm simulator mới hoặc thay native hành vi người. [Workaround shutdown](benchmark/shutdown_fix/README.md) chỉ giải quyết vòng đời Gazebo trên WSL D3D12 đã thử.
 
