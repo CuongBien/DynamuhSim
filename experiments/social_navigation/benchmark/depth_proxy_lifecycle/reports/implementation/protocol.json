@@ -1,0 +1,37 @@
+{
+  "schema": "depth_proxy_lifecycle/1",
+  "scope": "Ordered shutdown mitigation and one isolated standingv3 Nav2 motion sensor pilot; no training/default integration",
+  "original_filter": "depth_proxy_ablation/generated/build_jazzy/libdepth_proxy_filter.so",
+  "shutdown": {
+    "pause_ack_required": true,
+    "paused_stats_same_stamp": true,
+    "settle_wall_seconds": 0.5,
+    "gpu_fence": false,
+    "clean_server_exit_required": true
+  },
+  "motion": {
+    "scenario": "standing",
+    "seed": 42,
+    "robot_goal_world": [
+      -20,
+      0,
+      0
+    ],
+    "source": "Unchanged dataset pilot standingv3/MPPI/AMCL",
+    "goal_xy_m": 0.2,
+    "goal_yaw_rad": 0.25,
+    "minimum_paired_frames": 100,
+    "minimum_active_paired_frames": 50,
+    "minimum_effect_frames": 5,
+    "pixel_effect_threshold_m": 0.02,
+    "minimum_changed_pixels_in_effect_frame": 100,
+    "camera_height": "Native offset .08m above base_link; no height selection",
+    "personas_valid": false
+  },
+  "deferred": [
+    "Driver/root cause of previous intermittent hang",
+    "Social comfort/group-aware planning",
+    "Dynamic contact",
+    "Train readiness"
+  ]
+}

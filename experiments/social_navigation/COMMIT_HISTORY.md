@@ -1,5 +1,13 @@
 # Các phần social navigation đã được commit
 
+## Cập nhật22/10/2026 — đối chứng cảnh03 và pilot depth động
+
+[Lifecycle và pilot động](benchmark/depth_proxy_lifecycle/reports/LIFECYCLE_MOTION_REPORT.md):cảnh03 đã đủbaseline/masked/null, camera ON/OFF/null và LiDAR chẩn đoán khớp bitwise,3exit0 trên NVIDIA với pause→stats dừng→đợi0.5s→stop. Control nguyên bản lượt này cũng đóng sạch; lỗi treo cũ chưa tái hiện/biết root cause, không tuyên bố sửa dứt điểm.
+
+Một pilot standingv3+Nav2 thu153cặp depth thật (68active), robot đi2.662m, người1/3 nhích4.09/11.26cm;153OFF khớp MCAP bitwise, renderer/cleanup đạt. **Điều hướng chưa đạt:** human guard fatal15.2025s, người1 cần0.311m/s trong khi cap0.20; replay offline tái hiện rejection. Lượt này quarantine, không train hoặc tính success. Không sửa ROS/Nav2/native worker/cap/clearance/defaultcamera/pilot cũ. Bước kế: replay và thử planner giảm tốc/tránh nhóm sớm trong runtime riêng, rồi1episode hoàn chỉnh; lifecycle vẫn cần theo dõi. Mốc lưu: `feat: validate ordered shutdown and record depth motion failure`.
+
+Các mục dưới giữ lịch sử theo thời điểm đo.
+
 ## Cập nhật22/10/2026 — ablation trụ trong camera depth (nghiệm thu giới hạn)
 
 [Kiểm trụ depth và LiDAR](benchmark/depth_proxy_ablation/reports/DEPTH_PROXY_REPORT.md):2 cảnh tĩnh,6 fixture GPU NVIDIA sạch,160depth/30scan gốc/30scan chẩn đoán. Chỉ ẩn trụ ở camera OFF giúp thấy mesh người; camera ON và LiDAR chẩn đoán bằng bitwise với baseline,55 định nghĩa collision giữ nguyên. Audit raw/SHA và3test đạt. BEV có khe chân và khác đĩa bảo vệ LiDAR, không dùng để tự cho robot đi giữa nhóm.
