@@ -1,5 +1,7 @@
 # Nhà xưởng và vòng khảo sát SocNavGym
 
+[ComplexityNav đã chạy pilot Gazebo4 người](benchmark/complexitynav_gazebo/README.md):60s có robot tiến/ngang, actual proxy/clock/LiDAR đạt, đủ4 IDs,98.33% tia human đủ điều kiện khớp15cm; NVIDIA/GUI/shutdown được kiểm chứng. Có thêm lượt lỗi worker để xác nhận freeze. Đây là geometry variant, chưa benchmark Nav2 hoặc dense crowd. Bản offline đã commit `be816c3`.
+
 [ComplexityNav: adapter tránh vật cản đạt offline](benchmark/complexitynav_geometry/README.md):6 cảnh ghép cặp native/variant,1040 update adapter; đi vòng kệ tới đích, hai chiều qua khe1.8m, đủ42 AABBs, reset80 bước. Chưa nối biến thể mới vào Gazebo. Native preflight trước đó đã commit `b0b3c33`; nhánh native vẫn giữ nguyên hạn chế xuyên kệ.
 
 [ComplexityNav: kiểm định trước Gazebo](benchmark/complexitynav_contract/README.md): ID/clock/reset/native-step đạt; hai probe native ORCA/SFM đi xuyên kệ. Đủ42 AABBs được đối chiếu nhưng chưa được native human solver dùng, nên chưa nối Gazebo; bước kế tiếp là adapter hình học riêng. Ba phần SocNavGym đã lưu ở `2480158`, `779c338`, `b3f0022`.
