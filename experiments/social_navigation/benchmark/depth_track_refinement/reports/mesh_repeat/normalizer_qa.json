@@ -1,0 +1,417 @@
+{
+  "status": "PASS",
+  "schema": "social_episode/1",
+  "episode": "fixed_source",
+  "sample_count": 802,
+  "candidate_count": 851,
+  "rejected_count": 49,
+  "actual_goal_reached": false,
+  "navigation_status": "TIMEOUT",
+  "goal_xy_error_world_m": 3.759904182388985,
+  "episode_goal_start_ns": 9980000000,
+  "episode_action_end_ns": 100002500000,
+  "observation_end_ns": 103382500000,
+  "sample_anchor_range_ns": [
+    12000000000,
+    97000000000
+  ],
+  "human_ids": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6
+  ],
+  "persona_valid_count": 0,
+  "depth_frames": 1037,
+  "depth_shape": [
+    1037,
+    240,
+    424
+  ],
+  "topic_counts": {
+    "/tf_static": 3,
+    "/clock": 41439,
+    "/tf": 44865,
+    "/dataset/scene_poses": 6447,
+    "/camera/camera_info": 1037,
+    "/camera/depth/image_rect_raw": 1037,
+    "/scan": 519,
+    "/imu": 10360,
+    "/common/ground_truth": 5179,
+    "/odom": 2960,
+    "/map": 1,
+    "/amcl_pose": 158,
+    "/dataset/events": 4,
+    "/navigate_to_pose/_action/status": 3,
+    "/plan": 226,
+    "/cmd_vel": 4571
+  },
+  "modality_counts": {
+    "scan": 519,
+    "imu": 10360,
+    "odom": 2960,
+    "action": 4571,
+    "depth": 1037,
+    "amcl": 158
+  },
+  "clock_monotonic": true,
+  "static_tf_unique": true,
+  "optical_axes_checked": true,
+  "no_future_observations": true,
+  "full_future_labels": true,
+  "raw_readback": true,
+  "group_modes": {
+    "0": "none",
+    "1": "walking",
+    "2": "standing"
+  },
+  "bev_unknown_cells": 2448924,
+  "bev_free_cells": 791156,
+  "bev_occupied_cells": 44912,
+  "m1": "3s future human supervision + executed 3D robot actions; sensor tracker association pending",
+  "m2": "observed current depth-only BEV; future BEV target definition pending",
+  "m3": "masked; no validated H1-H5 supervision",
+  "scope": "One pilot, not a train/validation dataset or persona acceptance",
+  "transport_timing": "Conservative availability=max(header_stamp, bag latest-clock reception stamp); not wall-clock latency metrology",
+  "optional_mcap_warning": "Action status definition absent in self-description; local Jazzy CDR readback succeeded; core topics retain definitions",
+  "rejected": [
+    {
+      "anchor_ns": 84700000000,
+      "reason": "future_label_or_action_gap"
+    },
+    {
+      "anchor_ns": 84800000000,
+      "reason": "future_label_or_action_gap"
+    },
+    {
+      "anchor_ns": 84900000000,
+      "reason": "future_label_or_action_gap"
+    },
+    {
+      "anchor_ns": 85000000000,
+      "reason": "future_label_or_action_gap"
+    },
+    {
+      "anchor_ns": 85100000000,
+      "reason": "future_label_or_action_gap"
+    },
+    {
+      "anchor_ns": 85200000000,
+      "reason": "future_label_or_action_gap"
+    },
+    {
+      "anchor_ns": 85300000000,
+      "reason": "future_label_or_action_gap"
+    },
+    {
+      "anchor_ns": 85400000000,
+      "reason": "future_label_or_action_gap"
+    },
+    {
+      "anchor_ns": 85500000000,
+      "reason": "future_label_or_action_gap"
+    },
+    {
+      "anchor_ns": 85600000000,
+      "reason": "future_label_or_action_gap"
+    },
+    {
+      "anchor_ns": 85700000000,
+      "reason": "future_label_or_action_gap"
+    },
+    {
+      "anchor_ns": 85800000000,
+      "reason": "future_label_or_action_gap"
+    },
+    {
+      "anchor_ns": 85900000000,
+      "reason": "future_label_or_action_gap"
+    },
+    {
+      "anchor_ns": 86000000000,
+      "reason": "future_label_or_action_gap"
+    },
+    {
+      "anchor_ns": 86100000000,
+      "reason": "future_label_or_action_gap"
+    },
+    {
+      "anchor_ns": 86200000000,
+      "reason": "future_label_or_action_gap"
+    },
+    {
+      "anchor_ns": 86300000000,
+      "reason": "future_label_or_action_gap"
+    },
+    {
+      "anchor_ns": 86400000000,
+      "reason": "future_label_or_action_gap"
+    },
+    {
+      "anchor_ns": 86500000000,
+      "reason": "future_label_or_action_gap"
+    },
+    {
+      "anchor_ns": 86600000000,
+      "reason": "future_label_or_action_gap"
+    },
+    {
+      "anchor_ns": 86700000000,
+      "reason": "future_label_or_action_gap"
+    },
+    {
+      "anchor_ns": 86800000000,
+      "reason": "future_label_or_action_gap"
+    },
+    {
+      "anchor_ns": 86900000000,
+      "reason": "future_label_or_action_gap"
+    },
+    {
+      "anchor_ns": 87000000000,
+      "reason": "future_label_or_action_gap"
+    },
+    {
+      "anchor_ns": 87100000000,
+      "reason": "future_label_or_action_gap"
+    },
+    {
+      "anchor_ns": 87200000000,
+      "reason": "future_label_or_action_gap"
+    },
+    {
+      "anchor_ns": 87300000000,
+      "reason": "future_label_or_action_gap"
+    },
+    {
+      "anchor_ns": 87400000000,
+      "reason": "future_label_or_action_gap"
+    },
+    {
+      "anchor_ns": 87500000000,
+      "reason": "future_label_or_action_gap"
+    },
+    {
+      "anchor_ns": 87600000000,
+      "reason": "history_missing_or_stale",
+      "valid": {
+        "scan": 20,
+        "imu": 20,
+        "odom": 20,
+        "action": 19,
+        "depth": 20
+      }
+    },
+    {
+      "anchor_ns": 87700000000,
+      "reason": "history_missing_or_stale",
+      "valid": {
+        "scan": 20,
+        "imu": 20,
+        "odom": 20,
+        "action": 19,
+        "depth": 20
+      }
+    },
+    {
+      "anchor_ns": 87800000000,
+      "reason": "history_missing_or_stale",
+      "valid": {
+        "scan": 20,
+        "imu": 20,
+        "odom": 20,
+        "action": 19,
+        "depth": 20
+      }
+    },
+    {
+      "anchor_ns": 87900000000,
+      "reason": "history_missing_or_stale",
+      "valid": {
+        "scan": 20,
+        "imu": 20,
+        "odom": 20,
+        "action": 19,
+        "depth": 20
+      }
+    },
+    {
+      "anchor_ns": 88000000000,
+      "reason": "history_missing_or_stale",
+      "valid": {
+        "scan": 20,
+        "imu": 20,
+        "odom": 20,
+        "action": 19,
+        "depth": 20
+      }
+    },
+    {
+      "anchor_ns": 88100000000,
+      "reason": "history_missing_or_stale",
+      "valid": {
+        "scan": 20,
+        "imu": 20,
+        "odom": 20,
+        "action": 19,
+        "depth": 20
+      }
+    },
+    {
+      "anchor_ns": 88200000000,
+      "reason": "history_missing_or_stale",
+      "valid": {
+        "scan": 20,
+        "imu": 20,
+        "odom": 20,
+        "action": 19,
+        "depth": 20
+      }
+    },
+    {
+      "anchor_ns": 88300000000,
+      "reason": "history_missing_or_stale",
+      "valid": {
+        "scan": 20,
+        "imu": 20,
+        "odom": 20,
+        "action": 19,
+        "depth": 20
+      }
+    },
+    {
+      "anchor_ns": 88400000000,
+      "reason": "history_missing_or_stale",
+      "valid": {
+        "scan": 20,
+        "imu": 20,
+        "odom": 20,
+        "action": 19,
+        "depth": 20
+      }
+    },
+    {
+      "anchor_ns": 88500000000,
+      "reason": "history_missing_or_stale",
+      "valid": {
+        "scan": 20,
+        "imu": 20,
+        "odom": 20,
+        "action": 19,
+        "depth": 20
+      }
+    },
+    {
+      "anchor_ns": 88600000000,
+      "reason": "history_missing_or_stale",
+      "valid": {
+        "scan": 20,
+        "imu": 20,
+        "odom": 20,
+        "action": 19,
+        "depth": 20
+      }
+    },
+    {
+      "anchor_ns": 88700000000,
+      "reason": "history_missing_or_stale",
+      "valid": {
+        "scan": 20,
+        "imu": 20,
+        "odom": 20,
+        "action": 19,
+        "depth": 20
+      }
+    },
+    {
+      "anchor_ns": 88800000000,
+      "reason": "history_missing_or_stale",
+      "valid": {
+        "scan": 20,
+        "imu": 20,
+        "odom": 20,
+        "action": 19,
+        "depth": 20
+      }
+    },
+    {
+      "anchor_ns": 88900000000,
+      "reason": "history_missing_or_stale",
+      "valid": {
+        "scan": 20,
+        "imu": 20,
+        "odom": 20,
+        "action": 19,
+        "depth": 20
+      }
+    },
+    {
+      "anchor_ns": 89000000000,
+      "reason": "history_missing_or_stale",
+      "valid": {
+        "scan": 20,
+        "imu": 20,
+        "odom": 20,
+        "action": 19,
+        "depth": 20
+      }
+    },
+    {
+      "anchor_ns": 89100000000,
+      "reason": "history_missing_or_stale",
+      "valid": {
+        "scan": 20,
+        "imu": 20,
+        "odom": 20,
+        "action": 19,
+        "depth": 20
+      }
+    },
+    {
+      "anchor_ns": 89200000000,
+      "reason": "history_missing_or_stale",
+      "valid": {
+        "scan": 20,
+        "imu": 20,
+        "odom": 20,
+        "action": 19,
+        "depth": 20
+      }
+    },
+    {
+      "anchor_ns": 89300000000,
+      "reason": "history_missing_or_stale",
+      "valid": {
+        "scan": 20,
+        "imu": 20,
+        "odom": 20,
+        "action": 19,
+        "depth": 20
+      }
+    },
+    {
+      "anchor_ns": 89400000000,
+      "reason": "history_missing_or_stale",
+      "valid": {
+        "scan": 20,
+        "imu": 20,
+        "odom": 20,
+        "action": 19,
+        "depth": 20
+      }
+    },
+    {
+      "anchor_ns": 89500000000,
+      "reason": "history_missing_or_stale",
+      "valid": {
+        "scan": 20,
+        "imu": 20,
+        "odom": 20,
+        "action": 19,
+        "depth": 20
+      }
+    }
+  ]
+}

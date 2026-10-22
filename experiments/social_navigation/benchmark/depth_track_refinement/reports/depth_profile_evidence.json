@@ -1,0 +1,160 @@
+{
+  "legacy_proxy": {
+    "world_sha256": "3c024bd4e30f61bcf3a97a175c0e1451bf9ecad9a94f89a5cf3c805dc19d7332",
+    "robot_sha256": "470070177a479e11f5b39ae5045d90cec888b0a719842688bd56cc193119320e",
+    "depth_filter_plugins": [],
+    "human_proxy_visuals": [
+      {
+        "name": "common_1_proxy",
+        "radius_m": 0.36,
+        "length_m": 1.7
+      },
+      {
+        "name": "common_2_proxy",
+        "radius_m": 0.36,
+        "length_m": 1.7
+      },
+      {
+        "name": "common_3_proxy",
+        "radius_m": 0.36,
+        "length_m": 1.7
+      },
+      {
+        "name": "common_4_proxy",
+        "radius_m": 0.36,
+        "length_m": 1.7
+      },
+      {
+        "name": "common_5_proxy",
+        "radius_m": 0.36,
+        "length_m": 1.7
+      },
+      {
+        "name": "common_6_proxy",
+        "radius_m": 0.36,
+        "length_m": 1.7
+      }
+    ],
+    "cameras": [
+      {
+        "name": "depth_camera",
+        "topic": "camera/depth_image",
+        "visibility_mask": null,
+        "type": "depth_camera"
+      }
+    ]
+  },
+  "mesh_development": {
+    "world_sha256": "db0fba633926439b79e884845c79f038f9766dea8d89110a90e10cd34d20db9d",
+    "robot_sha256": "14c15412664eb37dd2f0fb2d61a79b09f98722f204f97d97212f0ec814ad3d9f",
+    "depth_filter_plugins": [
+      {
+        "filename": "/home/cuongbien/DynamuhSim/experiments/social_navigation/benchmark/depth_proxy_ablation/generated/build_jazzy/libdepth_proxy_filter.so",
+        "name": "depth_proxy_experiment::Filter"
+      }
+    ],
+    "human_proxy_visuals": [
+      {
+        "name": "common_1_proxy",
+        "radius_m": 0.36,
+        "length_m": 1.7
+      },
+      {
+        "name": "common_2_proxy",
+        "radius_m": 0.36,
+        "length_m": 1.7
+      },
+      {
+        "name": "common_3_proxy",
+        "radius_m": 0.36,
+        "length_m": 1.7
+      },
+      {
+        "name": "common_4_proxy",
+        "radius_m": 0.36,
+        "length_m": 1.7
+      },
+      {
+        "name": "common_5_proxy",
+        "radius_m": 0.36,
+        "length_m": 1.7
+      },
+      {
+        "name": "common_6_proxy",
+        "radius_m": 0.36,
+        "length_m": 1.7
+      }
+    ],
+    "cameras": [
+      {
+        "name": "proxy_low_off",
+        "topic": "camera/depth_image",
+        "visibility_mask": null,
+        "type": "depth_camera"
+      },
+      {
+        "name": "proxy_low_on",
+        "topic": "/proxy_check/on/depth",
+        "visibility_mask": null,
+        "type": "depth_camera"
+      }
+    ]
+  },
+  "mesh_repeat": {
+    "world_sha256": "3a4513a99b4f5b995110764fa266dc1dd45a86a506c312037305e0ffc81b7548",
+    "robot_sha256": "14c15412664eb37dd2f0fb2d61a79b09f98722f204f97d97212f0ec814ad3d9f",
+    "depth_filter_plugins": [
+      {
+        "filename": "/home/cuongbien/DynamuhSim/experiments/social_navigation/benchmark/depth_proxy_ablation/generated/build_jazzy/libdepth_proxy_filter.so",
+        "name": "depth_proxy_experiment::Filter"
+      }
+    ],
+    "human_proxy_visuals": [
+      {
+        "name": "common_1_proxy",
+        "radius_m": 0.36,
+        "length_m": 1.7
+      },
+      {
+        "name": "common_2_proxy",
+        "radius_m": 0.36,
+        "length_m": 1.7
+      },
+      {
+        "name": "common_3_proxy",
+        "radius_m": 0.36,
+        "length_m": 1.7
+      },
+      {
+        "name": "common_4_proxy",
+        "radius_m": 0.36,
+        "length_m": 1.7
+      },
+      {
+        "name": "common_5_proxy",
+        "radius_m": 0.36,
+        "length_m": 1.7
+      },
+      {
+        "name": "common_6_proxy",
+        "radius_m": 0.36,
+        "length_m": 1.7
+      }
+    ],
+    "cameras": [
+      {
+        "name": "proxy_low_off",
+        "topic": "camera/depth_image",
+        "visibility_mask": null,
+        "type": "depth_camera"
+      },
+      {
+        "name": "proxy_low_on",
+        "topic": "/proxy_check/on/depth",
+        "visibility_mask": null,
+        "type": "depth_camera"
+      }
+    ]
+  },
+  "read_only_xml_note": "For metadata parsing only, replace unbound literal gz:expressed_in token in memory; no file serialization or runtime edits"
+}
