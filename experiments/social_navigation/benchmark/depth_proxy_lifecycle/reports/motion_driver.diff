@@ -1,0 +1,76 @@
+--- dataset_pilot/trial.py
++++ runtime motion driver
+@@ -19,18 +19,22 @@
+ from gz.msgs10.pose_v_pb2 import Pose_V
+ from gz.msgs10.image_pb2 import Image as GzImage
+ from PIL import Image
+-HERE=Path(__file__).resolve().parent;BENCH=HERE.parent;BASE=BENCH/'socnavgym_group_nav2';SOCIAL=BENCH.parent;REPO=SOCIAL.parent.parent;FIX=BENCH/'socnavgym_response_fix';COMMON=BENCH/'common_response'
++HERE=Path('/home/cuongbien/DynamuhSim/experiments/social_navigation/benchmark/dataset_pilot');BENCH=HERE.parent;BASE=BENCH/'socnavgym_group_nav2';SOCIAL=BENCH.parent;REPO=SOCIAL.parent.parent;FIX=BENCH/'socnavgym_response_fix';COMMON=BENCH/'common_response'
+ sys.path.insert(0,str(SOCIAL/'gazebo_adapter'));from run import make_world,stop
+ sys.path.insert(0,str(BENCH/'gpu_runtime'));from runtime_guard import RuntimeGuard,gpu_preflight
+ sys.path.insert(0,str(BENCH));from shutdown_fix.ordered_stop import launch_environment,stop_server
+ from amcl_observer import observer_qos,publisher_evidence
+ from recording import Recording
+-from prepare import prepare_camera
++from motion_prepare import prepare_camera,add_filter
++from pair_recording import Pairs
++from quiesce import stop_paused
++original_stop=stop_server
++def stop_server(guard):return stop_paused(guard,original_stop)
+ p=argparse.ArgumentParser();p.add_argument('--scenario',choices=['walking','standing'],required=True);p.add_argument('--seed',type=int,choices=[42,43],required=True);p.add_argument('--report-dir',type=Path,required=True);p.add_argument('--gui',action='store_true');a=p.parse_args();a.condition='people'
+ plan=json.loads((BASE/'protocol.json').read_text());out=a.report_dir.resolve();out.mkdir(parents=True,exist_ok=False);runtime=HERE/'generated'/out.name;runtime.mkdir(exist_ok=False)
+ lock=(BENCH/'common_gazebo/generated/domain91.lock').open('a');fcntl.flock(lock,fcntl.LOCK_EX|fcntl.LOCK_NB)
+ os.environ.update(ROS_DOMAIN_ID='91',GZ_PARTITION='dynamuhsim_group_nav2_'+str(os.getpid()),ROS_LOG_DIR=str(runtime/'ros_logs'),QT_QPA_PLATFORM='xcb',ROS_AUTOMATIC_DISCOVERY_RANGE='LOCALHOST',FASTDDS_BUILTIN_TRANSPORTS='UDPv4')
+-sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest();guard=RuntimeGuard(runtime);processes=[];files=[];node=None;frames=[];poses=[];states=[];scans=[];odom=[];amcl=[];commands=[];paths=[];costmaps=[];feedback=[];roslogs=[];tfrows=[];faults=[];latest={};counts=collections.Counter();recording=None;worker=None;gui_process=None;handle=None;phase='warmup';client=None;tfbuffer=None
++sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest();guard=RuntimeGuard(runtime);processes=[];files=[];node=None;frames=[];poses=[];states=[];scans=[];odom=[];amcl=[];commands=[];paths=[];costmaps=[];feedback=[];roslogs=[];tfrows=[];faults=[];latest={};counts=collections.Counter();recording=None;pairs=None;worker=None;gui_process=None;handle=None;phase='warmup';client=None;tfbuffer=None
+ result=dict(status='ERROR',condition=a.condition,scenario=a.scenario,seed=a.seed,model='socnavgym_initial_groups_v2',native_dt=.1,gui=a.gui,head=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),runtime=str(runtime.relative_to(REPO)),robot_start=plan['start'],robot_goal=plan['goal'],sim_budget_s=plan['sim_budget'],response_variant='bounded_reactive_standing_v3' if a.scenario=='standing' else 'walking_response_v2',no_scripted_robot_velocity_publisher=True)
+ source=[Path(__file__),BASE/'worker.py',BASE/'fixture.py',BASE/'reactive_motion.py',BASE/'standing_projection.py',BASE/'config.yaml',HERE/'warehouse.launch.py',BASE/'protocol.json',FIX/'projection.py',FIX/'responsive_motion.py',FIX/'adapter.cc',FIX/'build/libresponse_adapter.so',COMMON/'model_worker.py',COMMON/'inputs/crossing_near.json',SOCIAL/'warehouse/nav2_warehouse.yaml',SOCIAL/'warehouse/warehouse.yaml',SOCIAL/'warehouse/warehouse.pgm',SOCIAL/'warehouse/warehouse.sdf',REPO/'src/custom_corridor/launch/nav2_corridor.launch.py',REPO/'src/custom_corridor/launch/publish_episode_initial_pose.py']
+ source += [BENCH/'socnavgym_warehouse_lifecycle'/n for n in ['kernel.py','motion.py','geometry.py','config.yaml']]+[BENCH/'socnavgym_lifecycle_fix/continuous_groups.py',SOCIAL/'vendor/SocNavGym/socnavgym/envs/socnavenv_v2.py',SOCIAL/'vendor/SocNavGym/socnavgym/envs/utils/human_human.py']
+@@ -63,11 +67,11 @@
+         name=item.get('name','')
+         if name.startswith('socnavgym_'):item.set('name',name.replace('socnavgym_','common_',1))
+     observer=world.find("model[@name='common_observer']");observer.find('pose').text='-24 -5 12 0 1.17 1.57079632679';observer.find('.//topic').text='/common/observer';observer.find('.//update_rate').text='1';observer.find('.//image/width').text='640';observer.find('.//image/height').text='480'
+-    ET.indent(tree);tree.write(runtime/'warehouse.sdf',encoding='unicode');config=yaml.safe_load((SOCIAL/'warehouse/nav2_warehouse.yaml').read_text());original=copy.deepcopy(config);config['amcl']['ros__parameters']['initial_pose'].update(x=-28.,y=0.,yaw=0.)
++    add_filter(world);ET.indent(tree);tree.write(runtime/'warehouse.sdf',encoding='unicode');config=yaml.safe_load((SOCIAL/'warehouse/nav2_warehouse.yaml').read_text());original=copy.deepcopy(config);config['amcl']['ros__parameters']['initial_pose'].update(x=-28.,y=0.,yaw=0.)
+     changed=copy.deepcopy(config);changed['amcl']['ros__parameters']['initial_pose']=original['amcl']['ros__parameters']['initial_pose'];assert changed==original
+     (runtime/'nav2_runtime.yaml').write_text(yaml.safe_dump(config,sort_keys=False));result['runtime_nav_params_sha256']=sha(runtime/'nav2_runtime.yaml');result['runtime_world_sha256']=sha(runtime/'warehouse.sdf')
+     launch_env.update(NAV2_PILOT_WORLD=str(runtime/'warehouse.sdf'),NAV2_PILOT_PARAMS=str(runtime/'nav2_runtime.yaml'),DATASET_CAMERA_LAUNCH=str(runtime/'mecanum_camera.launch.py'),DATASET_ROBOT_SDF=str(runtime/'mecanum_camera.sdf'))
+-    rclpy.init();node=Node('dataset_pilot',parameter_overrides=[rclpy.parameter.Parameter('use_sim_time',value=True)]);gz=GzNode();tfbuffer=Buffer();tflistener=TransformListener(tfbuffer,node);recording=Recording(node,out)
++    rclpy.init();node=Node('dataset_pilot',parameter_overrides=[rclpy.parameter.Parameter('use_sim_time',value=True)]);gz=GzNode();tfbuffer=Buffer();tflistener=TransformListener(tfbuffer,node);recording=Recording(node,out);pairs=Pairs(node,out,lambda:phase)
+     def receive(key,msg):
+         counts[key]+=1;latest[key]=msg
+         if key=='gt':
+@@ -92,7 +96,7 @@
+     def camera(msg):
+         if phase=='active':frames.append((msg.header.stamp.sec+msg.header.stamp.nsec/1e9,msg.width,msg.height,msg.step,bytes(msg.data)))
+     gz.subscribe(Pose_V,'/world/social_warehouse/pose/info',scene);gz.subscribe(GzImage,'/common/observer',camera)
+-    f=(out/'launch.log').open('w');files.append(f);launch=subprocess.Popen(['ros2','launch',str(HERE/'warehouse.launch.py'),'gui:=false'],stdout=f,stderr=subprocess.STDOUT,start_new_session=True,env=launch_env);processes.append(launch)
++    f=(out/'launch.log').open('w');files.append(f);pair_log=(out/'pair_bridge.log').open('w');files.append(pair_log);processes.append(subprocess.Popen(['ros2','run','ros_gz_bridge','parameter_bridge','/proxy_check/on/depth@sensor_msgs/msg/Image[gz.msgs.Image'],stdout=pair_log,stderr=subprocess.STDOUT,start_new_session=True,env=launch_env));launch=subprocess.Popen(['ros2','launch',str(HERE/'warehouse.launch.py'),'gui:=false'],stdout=f,stderr=subprocess.STDOUT,start_new_session=True,env=launch_env);processes.append(launch)
+     def capture_tf():
+         if not poses:return
+         try:
+@@ -115,7 +119,7 @@
+     assert ready,'bt_navigator not active';assert wait(lambda:counts['local_costmap']>0,10),'Local costmap missing';capture_tf();assert tfrows,'map->base TF missing'
+     if a.gui:
+         gui_log=(runtime/'gui.log').open('w');files.append(gui_log);gui_process=subprocess.Popen(['gz','sim','-g'],stdout=gui_log,stderr=subprocess.STDOUT,start_new_session=True,env=launch_env);processes.append(gui_process);wait(lambda:False,3.);result['gui_start_mode']='Separate GUI after server sensors/AMCL/Nav2 ready'
+-    assert wait(recording.ready,30),'Full recorder/depth/calibration not ready'
++    assert wait(lambda:recording.ready() and pairs.ready(),30),'Full recorder/depth/calibration not ready'
+     recording.event('ready',round(simtime()*1e9),scenario=a.scenario,seed=a.seed)
+     result['amcl_publishers']=publisher_evidence(node);result['cmd_vel_publishers_before_goal']=[dict(node=e.node_name,namespace=e.node_namespace) for e in node.get_publishers_info_by_topic('/cmd_vel')];assert all(e['node'] in ['controller_server','behavior_server'] for e in result['cmd_vel_publishers_before_goal'])
+     robot=poses[-1]['poses']['mecanum_robot'];assert math.hypot(robot['x']+28,robot['y'])<.02,'Robot moved in warmup'
+@@ -140,13 +144,14 @@
+     tail_start=simtime();phase='label_tail';assert wait(lambda:simtime()-tail_start>=3.2,45),'Future label tail incomplete'
+     recording.event('observation_end',round(simtime()*1e9))
+     wait(lambda:False,.5)
+-    result['counts']=dict(counts);result['cmd_vel_publishers_after_goal']=[dict(node=e.node_name,namespace=e.node_namespace) for e in node.get_publishers_info_by_topic('/cmd_vel')];result['status']='MEASURED';result['amcl_final_pose']=endpoint(latest['amcl'].pose.pose)
++    result['counts']=dict(counts);result['experiment']='Depth-only proxy motion pilot, native camera height, no default changes';result['cmd_vel_publishers_after_goal']=[dict(node=e.node_name,namespace=e.node_namespace) for e in node.get_publishers_info_by_topic('/cmd_vel')];result['status']='MEASURED';result['amcl_final_pose']=endpoint(latest['amcl'].pose.pose)
+ except Exception as error:result['error']=str(error);traceback.print_exc()
+ finally:
+     phase='finished'
+     if result['status']=='ERROR' and handle:
+         try:handle.cancel_goal_async()
+         except Exception:pass
++    if pairs:result['depth_pairs']=pairs.close()
+     if recording:
+         try:result['recording']=recording.close()
+         except Exception as error:result['recording_error']=str(error)

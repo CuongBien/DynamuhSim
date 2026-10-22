@@ -1,0 +1,18 @@
+{
+  "human_id": 1,
+  "native_dt_s": 0.1,
+  "human_radius_m": 0.36,
+  "robot_nominal_radius_m": 0.25,
+  "center_distance_m": 0.6144729962021451,
+  "nominal_disc_gap_m": 0.004472996202145141,
+  "robot_approach_along_normal_mps": 0.33578270949089667,
+  "standing_speed_cap_mps": 0.2,
+  "required_normal_speed_mps": {
+    "0.04": 0.6910527474694457,
+    "0.02": 0.49105274746944544,
+    "0.002": 0.3110527474694453
+  },
+  "interpretation": "Human1 constraint alone exceeds its0.2m/s cap even at2mm margin; no need to attribute failure to wall constraints or depth rendering",
+  "formula": "(human_radius+robot_radius+margin-distance)/dt + dot(normal,robot_velocity)",
+  "limits": "Nominal disc/projection criterion, not a dynamic physical contact or proof of cause of robot route"
+}

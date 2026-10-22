@@ -1,0 +1,315 @@
+{
+  "status": "PASS",
+  "accepted_scope": {
+    "status": "PASS",
+    "scope": "One static third-scene control; mitigation, root cause unresolved",
+    "fixtures": 3,
+    "original_filter_sha256": "b55c0570daf7c5fc7b907b5deeaa2f080d970b9152e5d5c623af7cfe8e014e87",
+    "shutdown_source_sha256": {
+      "quiesce.py": "99ec9550118519a288fdcd5c61ca178dc4ba62e8b9f817db45cb961c71acd0e2",
+      "static_control.py": "b16ed129c6fb2ab6bfdc4c4fd1ae3f82dd379bcef0db3fcee4ea12fa758f4187"
+    }
+  },
+  "results": [
+    {
+      "snapshot": "snapshot03",
+      "source_stamp_ns": 33802500000,
+      "collision_definitions_equal": true,
+      "camera": [
+        {
+          "level": "low",
+          "world_camera_height_m": 0.12,
+          "original_vs_tagged_all_camera": {
+            "max_abs_diff_m": 0.0,
+            "finite_mask_changes": 0,
+            "changed_pixels": 0
+          },
+          "reference_parity_pass": true,
+          "paired_on_vs_off": {
+            "max_abs_diff_m": 0.0,
+            "finite_mask_changes": 0,
+            "changed_pixels": 0
+          },
+          "off_vs_null_visuals": {
+            "max_abs_diff_m": 0.0,
+            "finite_mask_changes": 0,
+            "changed_pixels": 0
+          },
+          "retained_human_nearer_pixels_per_frame": 0.0,
+          "human_visual_retained": false,
+          "changed_pixels_per_frame": 0.0,
+          "bev": {
+            "on": {
+              "unknown": 3154,
+              "free": 909,
+              "occupied": 33,
+              "free_in_conservative_proxy_disc": 0
+            },
+            "off": {
+              "unknown": 3154,
+              "free": 909,
+              "occupied": 33,
+              "free_in_conservative_proxy_disc": 0
+            },
+            "null": {
+              "unknown": 3154,
+              "free": 909,
+              "occupied": 33,
+              "free_in_conservative_proxy_disc": 0
+            }
+          }
+        },
+        {
+          "level": "high",
+          "world_camera_height_m": 0.39999999999999997,
+          "original_vs_tagged_all_camera": {
+            "max_abs_diff_m": 0.0,
+            "finite_mask_changes": 0,
+            "changed_pixels": 0
+          },
+          "reference_parity_pass": true,
+          "paired_on_vs_off": {
+            "max_abs_diff_m": 0.0,
+            "finite_mask_changes": 0,
+            "changed_pixels": 0
+          },
+          "off_vs_null_visuals": {
+            "max_abs_diff_m": 0.0,
+            "finite_mask_changes": 0,
+            "changed_pixels": 0
+          },
+          "retained_human_nearer_pixels_per_frame": 0.0,
+          "human_visual_retained": false,
+          "changed_pixels_per_frame": 0.0,
+          "bev": {
+            "on": {
+              "unknown": 2845,
+              "free": 1218,
+              "occupied": 33,
+              "free_in_conservative_proxy_disc": 0
+            },
+            "off": {
+              "unknown": 2845,
+              "free": 1218,
+              "occupied": 33,
+              "free_in_conservative_proxy_disc": 0
+            },
+            "null": {
+              "unknown": 2845,
+              "free": 1218,
+              "occupied": 33,
+              "free_in_conservative_proxy_disc": 0
+            }
+          }
+        }
+      ],
+      "lidar": {
+        "native": {
+          "baseline_vs_masked": {
+            "max_abs_diff_m": 0.057436466217041016,
+            "finite_mask_changes": 0,
+            "changed_pixels": 756
+          },
+          "masked_vs_null": {
+            "max_abs_diff_m": 0.037096500396728516,
+            "finite_mask_changes": 310,
+            "changed_pixels": 310
+          },
+          "difference_std_m": 0.014284624718129635,
+          "difference_median_abs_m": 0.01001739501953125
+        },
+        "geometry": {
+          "baseline_vs_masked": {
+            "max_abs_diff_m": 0.0,
+            "finite_mask_changes": 0,
+            "changed_pixels": 0
+          },
+          "masked_vs_null": {
+            "max_abs_diff_m": 0.0,
+            "finite_mask_changes": 310,
+            "changed_pixels": 310
+          },
+          "difference_std_m": 0.0,
+          "difference_median_abs_m": 0.0,
+          "parity_pass": true
+        }
+      }
+    }
+  ],
+  "fixtures": 3,
+  "depth_frames": 80,
+  "native_scan_frames": 15,
+  "diagnostic_scan_frames": 15,
+  "runtime_capability": "static sensor-selective mask only",
+  "default_project_changed": false,
+  "training_ready": false,
+  "navigation_tested": false,
+  "collision_dynamics_tested": false,
+  "raw_files": {
+    "snapshot03/null_visuals/robot_low.urdf": {
+      "bytes": 3789,
+      "sha256": "4160a19068b85694eae58795584b9d7313655204f489bc4be5d38c07ca363277"
+    },
+    "snapshot03/null_visuals/result.json": {
+      "bytes": 9045,
+      "sha256": "f88a20e134901d23f22f88152b2e1153fead85e207e3c0e0d394b7c3433f896b"
+    },
+    "snapshot03/null_visuals/depth_high_null.npy": {
+      "bytes": 4070528,
+      "sha256": "79605a2b00aa946f62a631fe881641e8bbb9aa2b3d6420628f1a53a10c1b79d5"
+    },
+    "snapshot03/null_visuals/bridge.log": {
+      "bytes": 1339,
+      "sha256": "874934d8e44c1199dfb43fd53b1f212476483e05bb0fecc6e223e3e0828ef29b"
+    },
+    "snapshot03/null_visuals/depth_low_null.npy": {
+      "bytes": 4070528,
+      "sha256": "5b124cdacadb2ce3f7e5ee345801bd8c31f0dfaa895712036caf2b9514fa3ff7"
+    },
+    "snapshot03/null_visuals/snapshot.json": {
+      "bytes": 1135,
+      "sha256": "e05367c5ebe6d56788d08feab407b6bc0cfc2a2c9acf3a43a3ae9ef2a0bb85f4"
+    },
+    "snapshot03/null_visuals/warehouse.sdf": {
+      "bytes": 75182,
+      "sha256": "e6a0c4f9090174044e85eb03f8761b76aaa53fb13a14a243737930e28016a424"
+    },
+    "snapshot03/null_visuals/scan_geometry.npz": {
+      "bytes": 15208,
+      "sha256": "a2154842742b85fda15c42abc16e197048e001a4bcafb9228dcdd717bdd84a87"
+    },
+    "snapshot03/null_visuals/fixture.json": {
+      "bytes": 337,
+      "sha256": "0db8020ec2cac8df95d2eb521fddb2c767cfd3375bf7a959dd7a7b9adbafb46e"
+    },
+    "snapshot03/null_visuals/robot_high.urdf": {
+      "bytes": 3804,
+      "sha256": "5692d101368ebb6a0b6c774fea5de59e915662c287303af11e33c39c39a45cd9"
+    },
+    "snapshot03/null_visuals/scan_native.npz": {
+      "bytes": 15208,
+      "sha256": "3a320ea4d5a1e75f35a4bb483a9899e2403cda4e5b9f68500ba134a46b98977e"
+    },
+    "snapshot03/null_visuals/gazebo.log": {
+      "bytes": 1797,
+      "sha256": "5d43a7059b9203655e260dce98e02e04b4bba136365ab086a0864c27c845251e"
+    },
+    "snapshot03/baseline/robot_low.urdf": {
+      "bytes": 3789,
+      "sha256": "4160a19068b85694eae58795584b9d7313655204f489bc4be5d38c07ca363277"
+    },
+    "snapshot03/baseline/result.json": {
+      "bytes": 8921,
+      "sha256": "73839ecc1c68c595e4ff6f49a19f135f57a6bd6d67818d16e8bba4cc5efa3f4b"
+    },
+    "snapshot03/baseline/depth_low_on.npy": {
+      "bytes": 4070528,
+      "sha256": "5b124cdacadb2ce3f7e5ee345801bd8c31f0dfaa895712036caf2b9514fa3ff7"
+    },
+    "snapshot03/baseline/bridge.log": {
+      "bytes": 1275,
+      "sha256": "f1583feb8b4c3d39604f455192d5f6138e872045c6f31c1182d17eded5393c55"
+    },
+    "snapshot03/baseline/snapshot.json": {
+      "bytes": 1135,
+      "sha256": "e05367c5ebe6d56788d08feab407b6bc0cfc2a2c9acf3a43a3ae9ef2a0bb85f4"
+    },
+    "snapshot03/baseline/warehouse.sdf": {
+      "bytes": 83042,
+      "sha256": "94f1e0b0289ffbedf9348b3a99bf6238db4539673f43492bab8cc7d741b3e2f1"
+    },
+    "snapshot03/baseline/scan_geometry.npz": {
+      "bytes": 15208,
+      "sha256": "ec9216d0c982c0e75b88a81c3696bfec5735bbe1617af8c44a932dbdb1994458"
+    },
+    "snapshot03/baseline/fixture.json": {
+      "bytes": 325,
+      "sha256": "ad23850802fe570eae6d5e43656f29cd1da1d9512e1dffc1868157c45e98835e"
+    },
+    "snapshot03/baseline/depth_high_on.npy": {
+      "bytes": 4070528,
+      "sha256": "79605a2b00aa946f62a631fe881641e8bbb9aa2b3d6420628f1a53a10c1b79d5"
+    },
+    "snapshot03/baseline/robot_high.urdf": {
+      "bytes": 3804,
+      "sha256": "5692d101368ebb6a0b6c774fea5de59e915662c287303af11e33c39c39a45cd9"
+    },
+    "snapshot03/baseline/scan_native.npz": {
+      "bytes": 15208,
+      "sha256": "5c208a6e1e75f7df418d79f01c0dbbecd137a7cb6e6ff8627e6e153371105415"
+    },
+    "snapshot03/baseline/gazebo.log": {
+      "bytes": 1777,
+      "sha256": "edbbc308af019520075563b3e17360f5d1cd37a362c835cfe30a5e1835c17c4a"
+    },
+    "snapshot03/masked/robot_low.urdf": {
+      "bytes": 3789,
+      "sha256": "4160a19068b85694eae58795584b9d7313655204f489bc4be5d38c07ca363277"
+    },
+    "snapshot03/masked/result.json": {
+      "bytes": 10825,
+      "sha256": "9a38e5bd42b4a0cb4a7b9e6759bbdff27ed1d654855bac5d90e2fa7d94a5d98e"
+    },
+    "snapshot03/masked/depth_low_on.npy": {
+      "bytes": 4070528,
+      "sha256": "5b124cdacadb2ce3f7e5ee345801bd8c31f0dfaa895712036caf2b9514fa3ff7"
+    },
+    "snapshot03/masked/bridge.log": {
+      "bytes": 2051,
+      "sha256": "6ec8dd0ed98a57c13ddfb296845bbd1fb742ad391dcda8d90909b46036a605be"
+    },
+    "snapshot03/masked/snapshot.json": {
+      "bytes": 1135,
+      "sha256": "e05367c5ebe6d56788d08feab407b6bc0cfc2a2c9acf3a43a3ae9ef2a0bb85f4"
+    },
+    "snapshot03/masked/warehouse.sdf": {
+      "bytes": 85204,
+      "sha256": "9a7b7d7288f9037b39a3354d603dc4678ae89e70a9a5040e28be5d1450d92c79"
+    },
+    "snapshot03/masked/scan_geometry.npz": {
+      "bytes": 15208,
+      "sha256": "ec9216d0c982c0e75b88a81c3696bfec5735bbe1617af8c44a932dbdb1994458"
+    },
+    "snapshot03/masked/fixture.json": {
+      "bytes": 415,
+      "sha256": "b8557e4b77a147010384452e5077eecb000801382b3e5ceb55f783132c2fd9f3"
+    },
+    "snapshot03/masked/depth_high_on.npy": {
+      "bytes": 4070528,
+      "sha256": "79605a2b00aa946f62a631fe881641e8bbb9aa2b3d6420628f1a53a10c1b79d5"
+    },
+    "snapshot03/masked/robot_high.urdf": {
+      "bytes": 3804,
+      "sha256": "5692d101368ebb6a0b6c774fea5de59e915662c287303af11e33c39c39a45cd9"
+    },
+    "snapshot03/masked/scan_native.npz": {
+      "bytes": 15208,
+      "sha256": "f0a86a724feea396c62a50f112f75724372b3923552705e77f58ca6fc312c2d8"
+    },
+    "snapshot03/masked/depth_low_off.npy": {
+      "bytes": 4070528,
+      "sha256": "5b124cdacadb2ce3f7e5ee345801bd8c31f0dfaa895712036caf2b9514fa3ff7"
+    },
+    "snapshot03/masked/depth_high_off.npy": {
+      "bytes": 4070528,
+      "sha256": "79605a2b00aa946f62a631fe881641e8bbb9aa2b3d6420628f1a53a10c1b79d5"
+    },
+    "snapshot03/masked/gazebo.log": {
+      "bytes": 2951,
+      "sha256": "276c414a9fe9f1a77f32b4f05eec2e6f14b8ff00294472dd237c98b18d324d63"
+    }
+  },
+  "analysis_source_sha256": {
+    "experiments/social_navigation/benchmark/depth_proxy_ablation/analyze.py": "f880ad67ba7b06beaa3fe02154d9da916c57d0a1fbb7ff9ac36f1991031a08a4",
+    "experiments/social_navigation/benchmark/depth_proxy_ablation/protocol.json": "3ac1abcaebcfd3101514c8d21c34c252273725b26354a21a311cd0f20ee10d3a",
+    "experiments/social_navigation/benchmark/camera_height_ab/geometry.py": "b04eec9361ead8c30bb9178f42faf26e8c1f0da3c2798e02071a66b4f6a65374",
+    "experiments/social_navigation/benchmark/camera_height_ab/analyze.py": "4b93f020709af412e277e40ff1ce3ce72ff8954f8225530aa3816be88e39d56b",
+    "experiments/social_navigation/benchmark/dataset_pilot/dataset_core.py": "1bee12f29d587a09e08d0a44388bc8767131b90e0bee7ddb101e9a03b347ef3e"
+  },
+  "caveats": [
+    "Depth mask success is not proof of real human appearance or train readiness",
+    "LiDAR keeps conservative cylinder while depth sees mesh; modality geometry mismatch must be reported",
+    "Structural collision parity is not a dynamic contact test",
+    "3 static poses are not a navigation or social behavior benchmark"
+  ]
+}
