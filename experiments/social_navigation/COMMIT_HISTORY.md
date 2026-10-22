@@ -98,3 +98,6 @@ Commit qua index riêng, sau đó chỉ đồng bộ các path experiment đã c
 
 
 Commit `b0b3c336` — `test: validate ComplexityNav contracts and expose missing factory geometry` — đã lưu preflight trước khi làm adapter mới; index12 mục và worktree ngoài experiment giữ nguyên. Sau commit này, [adapter hình học ComplexityNav](benchmark/complexitynav_geometry/README.md) mới chạy6 cặp native/variant và reset80 bước, đạt offline nhưng chưa Gazebo. Phần adapter/báo cáo mới đang chưa commit; provenance HEAD/source hash tại lúc chạy giữ riêng.
+
+
+Commit `be816c3da3` — `feat: route ComplexityNav humans around factory obstacles` — đã lưu adapter offline trước pilot. Sau commit, [ComplexityNav Gazebo pilot](benchmark/complexitynav_gazebo/README.md) đã chạy4 người/60s và fault-freeze test, đạt proxy/LiDAR/clock/NVIDIA/GUI/cleanup; pilot mới chưa commit. Các SHA/HEAD lúc đo được giữ, không gọi đây là lần chạy trên commit lưu kết quả sau này. Staging12 mục của người dùng và outside worktree vẫn giữ nguyên.

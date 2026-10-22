@@ -81,3 +81,10 @@ Bước tiếp theo: adapter hình học riêng cho42 AABBs, giữ native đối
 Preflight native đã commit `b0b3c33`. [Adapter hình học riêng](benchmark/complexitynav_geometry/reports/GEOMETRY_REPORT.md) đã vượt gate offline:6/6 cảnh,1040 update adapter/960 native reference,42 boxes, mixed6 người/robot chuyển động, đi vòng kệ tới đích và hai người qua khe1.8m; reset80 bước khớp. Native xuyên kệ giữ làm đối chứng. Waypoint routing + ORCA safety projection là biến thể chỉnh hành vi, gồm cả nhánh SFM; chưa được gọi là native hoặc benchmark Gazebo.
 
 Bước kế tiếp: commit riêng phần đã đạt, sau đó pilot Gazebo population nhỏ, timestep native0.25s với endpoint/interpolation đúng clock. Worker lỗi phải freeze/fail-until-restart; đối chiếu proxy/LiDAR/actual robot feedback, pause/owned cleanup/GPU trước khi tăng mật độ hoặc chạy bảng so sánh chung. Không thay robot/Nav2, AMCL mặc định hoặc kiến trúc project.
+
+
+## Sau pilot ComplexityNav Gazebo —22/10/2026
+
+Adapter offline đã commit `be816c3`; [pilot mới](benchmark/complexitynav_gazebo/reports/GAZEBO_PILOT_REPORT.md) chạy4 người trong Gazebo60s, measured robot tiến/ngang,23 arrival, actual proxy/LiDAR/pause/GPU/GUI/cleanup đạt. Fault injection xác nhận freeze rồi restart session mới chạy tốt. Pilot này chưa commit. ComplexityNav geometry variant hiện có Gazebo integration; trained RGL/native geometry chưa được promote.
+
+Bước tiếp theo: commit pilot riêng, chốt protocol bộ cảnh chung cho3 backend (same warehouse/robot inputs, population/attributes/metrics khai báo rõ, native vs adapter variant tách riêng), rồi chạy tuần tự và chốt bảng lựa chọn. Bao gồm phản ứng robot tiến gần, vòng kệ/lối hẹp và nhóm/conversation đúng năng lực backend; không gọi clustering hay người đứng fixture là social formation. Không dùng local-aisle pilot này để kết luận dense crowd hoặc Nav2 đã đạt, không thay AMCL/controller gốc.
