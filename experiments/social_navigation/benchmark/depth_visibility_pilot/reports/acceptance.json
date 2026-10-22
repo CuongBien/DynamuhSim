@@ -1,0 +1,26 @@
+{
+  "schema": "static_visibility_acceptance/1",
+  "label_harness": "PASS under protocol v2 numeric stability, same-time full/control bitwise",
+  "legacy_strict_interframe_bitwise": "FAIL retained, not relabelled",
+  "static_scene_count": 1,
+  "frames_per_mode": 5,
+  "measured_images": 75,
+  "visible_people_eligible": 4,
+  "filtered_person_owned_proposals": 4,
+  "filtered_nonperson_proposals": 2,
+  "no_human_control_nonperson_proposals": 2,
+  "claim_if_all_proposals_treated_as_person": {
+    "precision": 0.6666666666666666,
+    "recall_visible_people": 1.0,
+    "scope": "Single designed static scene; not population detector accuracy"
+  },
+  "semantic_person_validated": false,
+  "association_accepted": false,
+  "training_ready": false,
+  "persona_validated": false,
+  "hu_nav_sim_used": false,
+  "dynamic_labels_applied": false,
+  "max_interframe_depth_delta_m": 1.6689300537109375e-06,
+  "decision": "Keep geometry candidates unknown; add semantic person-vs-object stage before association supervision/batch",
+  "next": "Develop and validate a sensor-only semantic person detector against this fixed visibility/clutter fixture, then dynamic occlusion and a fresh independent scene; leave ROS default and navigation TIMEOUT unchanged"
+}
