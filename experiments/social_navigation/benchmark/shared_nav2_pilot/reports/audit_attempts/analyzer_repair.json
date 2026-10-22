@@ -1,0 +1,6 @@
+{
+  "reason": "Asynchronous pose callbacks continue during ordered shutdown. Compare goal verdict to exact recorded final_world_pose in active actual Gazebo stream, not last shutdown sample.",
+  "scope": "Analyzer only; no simulator rerun, no goal/threshold/worker/source changes.",
+  "original_analyzer": "../source_snapshot/shared_nav2_pilot/analyze.py",
+  "packaging_only_change": "cohort.py now refuses when initial_execution.json exists, before any log or receipt write; original execution source retained in source_snapshot"
+}

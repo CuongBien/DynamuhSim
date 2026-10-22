@@ -1,0 +1,55 @@
+{
+  "worlds": [
+    {
+      "name": "people01",
+      "world_equal_except_socket_and_native_dt": true,
+      "nav2_yaml_byte_identical": true
+    },
+    {
+      "name": "people02",
+      "world_equal_except_socket_and_native_dt": true,
+      "nav2_yaml_byte_identical": true
+    },
+    {
+      "name": "crowd01",
+      "world_equal_except_socket_and_native_dt": true,
+      "nav2_yaml_byte_identical": true
+    },
+    {
+      "name": "crowd02",
+      "world_equal_except_socket_and_native_dt": true,
+      "nav2_yaml_byte_identical": true
+    },
+    {
+      "name": "complex01",
+      "world_equal_except_socket_and_native_dt": true,
+      "nav2_yaml_byte_identical": true
+    },
+    {
+      "name": "complex02",
+      "world_equal_except_socket_and_native_dt": true,
+      "nav2_yaml_byte_identical": true
+    }
+  ],
+  "installed_launch": [
+    {
+      "name": "nav2_corridor.launch.py",
+      "sha256": "0cc475f181f679d5b728d7d2a700d3c2b676987f697c9adbffff1762c8f799e0",
+      "installed_equals_source": true
+    },
+    {
+      "name": "corridor_tb3.launch.py",
+      "sha256": "697a5dd1571e6741483e5019db88e74877b4786ad7a5384427a92576fd05f0ef",
+      "installed_equals_source": true
+    },
+    {
+      "name": "publish_episode_initial_pose.py",
+      "sha256": "1b54e51430bfa21e410891c3e8b1b55cec604683abf3fd3b6e9eb968ebd89728",
+      "installed_equals_source": true
+    }
+  ],
+  "excluded_world_fields": [
+    "socket path",
+    "planning_dt .1/.25; native difference"
+  ]
+}
