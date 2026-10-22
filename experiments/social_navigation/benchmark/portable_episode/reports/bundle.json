@@ -1,0 +1,22 @@
+{
+  "schema": "social_bundle/1",
+  "episode_id": "socnavgym_standing42_earlyavoid_01",
+  "split": "pilot_only",
+  "training_ready": false,
+  "paths": {
+    "samples": "normalized/samples.npz",
+    "labels": "normalized/labels.npz",
+    "depth": "normalized/depth.npy",
+    "bev": "normalized/bev_observed.npz",
+    "calibration": "normalized/calibration.json",
+    "task_masks": "supervision_masks.npz",
+    "raw_bag": "raw_bag",
+    "config_snapshot": "config_snapshot",
+    "provenance": "provenance.json",
+    "label_roles": "label_roles.json"
+  },
+  "sample_count": 823,
+  "units": "SI, int64 simulation ns",
+  "data_portability": "NumPy/JSON reader needs neither ROS nor simulator",
+  "simulation_replay_portability": "Historical SDF/launch paths require asset/environment remapping; not a standalone simulator distribution"
+}

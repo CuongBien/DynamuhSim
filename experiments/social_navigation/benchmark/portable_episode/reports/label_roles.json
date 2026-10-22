@@ -1,0 +1,15 @@
+{
+  "schema": "social_label_roles/1",
+  "observations": "normalized/samples.npz; no human GT, persona, simulator ID or future feature",
+  "labels": "normalized/labels.npz",
+  "trajectory_gt_available": "Enough actual simulator scene positions to interpolate3s LABELS; not visibility or detections",
+  "sensor_track_association_valid": "False: sensor tracker/association not validated; not a negative claim about visibility",
+  "m1_track_aligned_supervision_valid": "False until input track IDs can be associated to simulator label IDs",
+  "persona_valid": "False with persona_index=-1; standing is not automatically H4",
+  "future_bev_target_valid": "False: only current observed depth BEV exists; target definition pending",
+  "current_depth_bev_available": "Current depth-derived observation, not future labels or a safe planning costmap",
+  "episode_training_eligible": "False: this export is data-format QA, not permission to train",
+  "future_actions": "Executed Nav2 commands in LABELS at t..t+2.9s, conditions for candidate-action branch; not measured future observations",
+  "split": "pilot_only; overlapping windows stay in same episode/seed/scene split; HuNavSim held out",
+  "grouping": "Native group IDs/modes are labels only; lifecycle may disperse; IDs persistent within this episode only"
+}

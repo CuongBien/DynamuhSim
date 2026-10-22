@@ -1,0 +1,291 @@
+{
+  "schema": "social_sample_example/1",
+  "episode_id": "socnavgym_standing42_earlyavoid_01",
+  "sample_index": 0,
+  "anchor_ns": 12300000000,
+  "inputs": {
+    "anchor_ns": {
+      "shape": [],
+      "dtype": "int64"
+    },
+    "history_query_ns": {
+      "shape": [
+        20
+      ],
+      "dtype": "int64"
+    },
+    "scan_stamp_ns": {
+      "shape": [
+        20
+      ],
+      "dtype": "int64"
+    },
+    "scan_available_ns": {
+      "shape": [
+        20
+      ],
+      "dtype": "int64"
+    },
+    "scan_valid": {
+      "shape": [
+        20
+      ],
+      "dtype": "bool"
+    },
+    "scan_ranges_m": {
+      "shape": [
+        20,
+        360
+      ],
+      "dtype": "float32"
+    },
+    "scan_ray_valid": {
+      "shape": [
+        20,
+        360
+      ],
+      "dtype": "bool"
+    },
+    "imu_stamp_ns": {
+      "shape": [
+        20
+      ],
+      "dtype": "int64"
+    },
+    "imu_available_ns": {
+      "shape": [
+        20
+      ],
+      "dtype": "int64"
+    },
+    "imu_valid": {
+      "shape": [
+        20
+      ],
+      "dtype": "bool"
+    },
+    "imu": {
+      "shape": [
+        20,
+        10
+      ],
+      "dtype": "float32"
+    },
+    "odom_stamp_ns": {
+      "shape": [
+        20
+      ],
+      "dtype": "int64"
+    },
+    "odom_available_ns": {
+      "shape": [
+        20
+      ],
+      "dtype": "int64"
+    },
+    "odom_valid": {
+      "shape": [
+        20
+      ],
+      "dtype": "bool"
+    },
+    "odom_local_pose_and_twist": {
+      "shape": [
+        20,
+        9
+      ],
+      "dtype": "float32"
+    },
+    "action_stamp_ns": {
+      "shape": [
+        20
+      ],
+      "dtype": "int64"
+    },
+    "action_available_ns": {
+      "shape": [
+        20
+      ],
+      "dtype": "int64"
+    },
+    "action_valid": {
+      "shape": [
+        20
+      ],
+      "dtype": "bool"
+    },
+    "action": {
+      "shape": [
+        20,
+        3
+      ],
+      "dtype": "float32"
+    },
+    "depth_stamp_ns": {
+      "shape": [
+        20
+      ],
+      "dtype": "int64"
+    },
+    "depth_available_ns": {
+      "shape": [
+        20
+      ],
+      "dtype": "int64"
+    },
+    "depth_valid": {
+      "shape": [
+        20
+      ],
+      "dtype": "bool"
+    },
+    "depth_index": {
+      "shape": [
+        20
+      ],
+      "dtype": "int32"
+    },
+    "goal_xy_from_amcl": {
+      "shape": [
+        2
+      ],
+      "dtype": "float64"
+    },
+    "goal_valid": {
+      "shape": [],
+      "dtype": "bool"
+    },
+    "goal_stamp_ns": {
+      "shape": [],
+      "dtype": "int64"
+    },
+    "goal_available_ns": {
+      "shape": [],
+      "dtype": "int64"
+    },
+    "depth_history": {
+      "shape": [
+        20,
+        240,
+        424
+      ],
+      "dtype": "float32"
+    },
+    "current_bev": {
+      "shape": [
+        64,
+        64
+      ],
+      "dtype": "int8"
+    },
+    "camera_k": {
+      "shape": [
+        9
+      ],
+      "dtype": "float64"
+    },
+    "optical_to_base_link": {
+      "shape": [
+        4,
+        4
+      ],
+      "dtype": "float64"
+    }
+  },
+  "labels": {
+    "future_stamp_ns": {
+      "shape": [
+        30
+      ],
+      "dtype": "int64"
+    },
+    "human_xy_future_m": {
+      "shape": [
+        30,
+        6,
+        2
+      ],
+      "dtype": "float64"
+    },
+    "human_xy_at_anchor_m": {
+      "shape": [
+        6,
+        2
+      ],
+      "dtype": "float64"
+    },
+    "human_valid": {
+      "shape": [
+        30,
+        6
+      ],
+      "dtype": "bool"
+    },
+    "executed_action_query_ns": {
+      "shape": [
+        30
+      ],
+      "dtype": "int64"
+    },
+    "executed_action_future": {
+      "shape": [
+        30,
+        3
+      ],
+      "dtype": "float32"
+    },
+    "executed_action_stamp_ns": {
+      "shape": [
+        30
+      ],
+      "dtype": "int64"
+    },
+    "executed_action_available_ns": {
+      "shape": [
+        30
+      ],
+      "dtype": "int64"
+    },
+    "group_id_future": {
+      "shape": [
+        30,
+        6
+      ],
+      "dtype": "int32"
+    },
+    "group_mode_future": {
+      "shape": [
+        30,
+        6
+      ],
+      "dtype": "int8"
+    },
+    "persona_index": {
+      "shape": [
+        6
+      ],
+      "dtype": "int8"
+    },
+    "persona_valid": {
+      "shape": [
+        6
+      ],
+      "dtype": "bool"
+    },
+    "human_ids": {
+      "shape": [
+        6
+      ],
+      "dtype": "int32"
+    }
+  },
+  "training_ready": false,
+  "role": "One actual complete sample for review only; not an independent episode",
+  "time_alignment": {
+    "anchor_ns": 12300000000,
+    "latest_depth_stamp_ns": 12200000000,
+    "depth_age_ns": 100000000,
+    "bev_frame": "base_link at depth measurement time",
+    "bev_motion_compensated_to_anchor": false
+  }
+}
