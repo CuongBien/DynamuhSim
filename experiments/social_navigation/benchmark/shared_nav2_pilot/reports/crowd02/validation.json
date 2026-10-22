@@ -1,0 +1,81 @@
+{
+  "status": "AUDITED_NAV2_PILOT",
+  "model": "crowd_orca_plus",
+  "native_dt": 0.1,
+  "container_image": "sha256:39929ee8e4fa6d738a381a0b695bf25eaf9fa972cd5b9d8a6854d72f80bd5f3c",
+  "condition": "people",
+  "navigation_status": "SUCCEEDED",
+  "action_status": 4,
+  "actual_goal_reached": false,
+  "goal_xy_world_m": 0.20591899126885613,
+  "goal_yaw_world_rad": 0.22464094356811326,
+  "active_seconds": 27.2575,
+  "wall_active_seconds": 78.76088180100032,
+  "observed_rtf": 0.3460791623546019,
+  "robot_path_m": 9.292257841639962,
+  "robot_y_range_m": [
+    -0.10622668772664148,
+    1.0199980305046084
+  ],
+  "robot_peak_speed_mps": 0.5818801489476751,
+  "robot_static_disc_gap_m": 1.4284734859236556,
+  "actual_swept_human_gaps_m": {
+    "pair": 0.03999868712012644,
+    "robot": 0.02875925568887583,
+    "static": 0.020000379314912275
+  },
+  "actual_sampled_rotated_footprint_human_gap_m": 0.1303337879100433,
+  "geometry_outcome": "NO_OVERLAP_GT_5MM",
+  "slow_while_near_human_s": 0.16999999999999993,
+  "near_human_seconds": 11.8475,
+  "amcl_xy_error_m": {
+    "samples": 113,
+    "median": 0.0963848974308797,
+    "p95": 0.1717284642408508,
+    "maximum": 0.19506980160001144
+  },
+  "amcl_yaw_max_rad": 0.044142387889046564,
+  "odom_world_feedback_max_error_m": 0.010134807050587261,
+  "actual_pose_samples": 2243,
+  "proxy_interpolation_error_max_m": 9.940564631993887e-07,
+  "worker": {
+    "native_dt": 0.1,
+    "inactive_transport_steps": 93,
+    "active_native_steps": 275,
+    "first_active_sim": 9.3025,
+    "start_gate_delay_s": 0.057500000000000995,
+    "guard_present_steps": 0
+  },
+  "lidar_human_beams": 7798,
+  "lidar_fraction_within15cm": 0.9938445755321877,
+  "lidar_matched_ids": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6
+  ],
+  "local_costmap_frames": 116,
+  "local_costmap_human_surface_evidence": {
+    "eligible_human_observations": 183,
+    "observations_with_occupied_ring": 180,
+    "matched_ids": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "scope": "Descriptive occupied cells near measured human surfaces in odom; not source attribution or recall"
+  },
+  "active_command_count": 1573,
+  "nvidia": true,
+  "shutdown_clean": true,
+  "goal_sample_sim": 36.6,
+  "post_goal_recording_tail_xy_drift_m": 6.284475138280862e-06,
+  "preserved_old_files": 13322,
+  "original_user_staging_and_outside_preserved": true,
+  "scope": "One-seed small Nav2 integration; goal outcome independent from geometry. Slow/near is descriptive, not proof of social yielding."
+}

@@ -1,0 +1,5 @@
+Traceback (most recent call last):
+  File "/home/cuongbien/DynamuhSim/experiments/social_navigation/benchmark/shared_nav2_pilot/analyze.py", line 28, in <module>
+    robot=complete[-1]['poses']['mecanum_robot'];goal=plan['goal'];xy_error=math.hypot(robot['x']-goal[0],robot['y']-goal[1]);yaw_error=abs(math.atan2(math.sin(robot['yaw']-goal[2]),math.cos(robot['yaw']-goal[2])));assert abs(xy_error-result['goal_xy_error_world_m'])<1e-10 and abs(yaw_error-result['goal_yaw_error_world_rad'])<1e-10
+                                                                                                                                                                                                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError

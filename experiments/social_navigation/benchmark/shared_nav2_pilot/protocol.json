@@ -1,0 +1,58 @@
+{
+  "stage": "SHARED_TASK_NAV2_CROWD_CN_PILOT",
+  "baseline_commit": "bb45f1b4a57836e5923a1ea57f82826683a992b2",
+  "start": [
+    -28.0,
+    0.0,
+    0.0
+  ],
+  "goal": [
+    -20.0,
+    0.0,
+    0.0
+  ],
+  "scene": "common_response crossing_near, six individuals",
+  "population": 6,
+  "human_radius": 0.36,
+  "robot_radius": 0.25,
+  "native_dt": {
+    "crowd_orca_plus": 0.1,
+    "complex_geometry_mixed": 0.25
+  },
+  "physics_dt": 0.0025,
+  "seed": 42,
+  "nav2": "Existing warehouse MPPI/AMCL params; runtime copy changes only initial pose x=-28",
+  "sim_budget": 45.0,
+  "warmup_gate": "Native humans frozen until NavigateToPose goal accepted; no scripted robot velocity publisher",
+  "acceptance": "Report action status and actual final world XY<=0.20m and yaw<=0.25rad separately; keep failed goals/overlaps. First empty control must be actually reached before people trials.",
+  "plan": [
+    {
+      "name": "crowd01",
+      "model": "crowd_orca_plus",
+      "condition": "people",
+      "gui": true
+    },
+    {
+      "name": "crowd02",
+      "model": "crowd_orca_plus",
+      "condition": "people",
+      "gui": false
+    },
+    {
+      "name": "complex01",
+      "model": "complex_geometry_mixed",
+      "condition": "people",
+      "gui": true
+    },
+    {
+      "name": "complex02",
+      "model": "complex_geometry_mixed",
+      "condition": "people",
+      "gui": false
+    }
+  ],
+  "scope": "Small integration pilot, not simulator ranking or broad navigation success estimate; no group formation/World Model/Isaac migration",
+  "failure": "Keep every outcome. Goal abort/timeout/false-success are results. Stop on infrastructure, worker/interlock, geometry mapping or cleanup faults; no replacement trials.",
+  "empty_control": "Reuse committed socnavgym_nav2_pilot/reports/empty01; same robot/world/start/goal/runtime YAML, already actually reached.",
+  "comparison": "Compare with two committed SocNavGym v2 people trials; same physical fixtures and Nav2 task, not equal native speed/observation/internal robot intent or synchronized AMCL/MPPI random seeds. Preserve native dt. No performance or population success-rate ranking."
+}
