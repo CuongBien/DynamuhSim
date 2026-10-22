@@ -1,0 +1,116 @@
+{
+  "schema": "early_avoidance_pilot/1",
+  "scope": "One experimental Nav2 configuration on standingv3 seed42; unchanged ROS sources, native human policy, geometry, sensors and depth filter",
+  "parent_failure": "depth_proxy_lifecycle/generated/runs/motion01",
+  "planner_parameters": {
+    "robot_radius_m": 0.25,
+    "footprint_padding_m": 0.01,
+    "inflation_radius_m": 0.8,
+    "cost_scaling_factor": 3.0,
+    "vx_max": 0.15,
+    "vx_min": -0.1,
+    "vy_max": 0.1,
+    "cost_critic_consider_footprint": false
+  },
+  "budget": {
+    "sim_s": 90,
+    "previous_sim_s": 45,
+    "reason": "8m/.15mps already requires53.3s before detours; budget set before this trial",
+    "wall_s": 540
+  },
+  "unchanged": {
+    "start": [
+      -28,
+      0,
+      0
+    ],
+    "goal": [
+      -20,
+      0,
+      0
+    ],
+    "scenario": "standing",
+    "seed": 42,
+    "people": 6,
+    "standing_speed_cap_mps": 0.2,
+    "native_guard_floor_m": 0.002,
+    "goal_xy_m": 0.2,
+    "goal_yaw_rad": 0.25,
+    "camera": "native low OFF plus paired ON diagnostic",
+    "sensor_source": "same as motion01",
+    "backend": "same standingv3 worker"
+  },
+  "acceptance": {
+    "action_succeeded": true,
+    "actual_xy_max_m": 0.2,
+    "actual_yaw_max_rad": 0.25,
+    "no_adapter_fault": true,
+    "no_nominal_overlap_over_m": 0.005,
+    "no_group_hull_intrusion": true,
+    "complete_future_tail_s": 3.0,
+    "clean_gpu_exit": true
+  },
+  "diagnostics": [
+    "actual nominal robot-human gaps",
+    "group convex hull center/disc intrusion (metric only, not available to planner)",
+    "active ON/OFF pairs and callback balance",
+    "source/config/worker invariance",
+    "native human speed cap",
+    "raw image and MCAP roundtrip"
+  ],
+  "limitations": [
+    "Combined footprint/inflation/speed treatment; cannot attribute effects to one parameter",
+    "LiDAR obstacle inflation is not a semantic group-aware planner",
+    "One seed is not success-rate or generalization evidence",
+    "AMCL uncertainty remains",
+    "Shutdown pause is mitigation, driver root cause unresolved",
+    "No dataset batch or World Model/Isaac"
+  ],
+  "official_sources": [
+    "https://raw.githubusercontent.com/ros-navigation/navigation2/jazzy/nav2_mppi_controller/src/critics/cost_critic.cpp",
+    "https://raw.githubusercontent.com/ros-navigation/navigation2/jazzy/nav2_costmap_2d/plugins/inflation_layer.cpp"
+  ],
+  "oracle_control": {
+    "name": "avoidance_truth01",
+    "reason": "avoidance01 timed out with severe odom/map-vs-Gazebo divergence; keep that failure",
+    "changes": "Only simulated robot odometry/TF from measured Gazebo pose; native drive topics diverted; AMCL TF disabled; same footprint/inflation/speed, goal and90s budget",
+    "not_a_production_fix": true,
+    "no_human_pose_to_planner": true,
+    "plan": "One bounded control, no automatic retries"
+  },
+  "angular_sampling_control": {
+    "name": "avoidance_truth_wide01",
+    "parent": "avoidance_truth01",
+    "change_only": "FollowPath.wz_std:0.3\u21921.2",
+    "reason": "Truth control also timed out; median command_wz1.8rad/s, actual3.23rad/s; test whether broader angular proposals can escape saturated turning",
+    "other_parameters": "Same robot-truth pose, speeds, geometry, inflation, human policy, goal90s budget and20cm/0.25rad acceptance",
+    "scope": "One adaptive hypothesis test, not a repeated substitute for failures",
+    "root_cause_not_proven": true
+  },
+  "physics_setup_correction": {
+    "name": "avoidance_fixed01",
+    "reason": "ElementTree changed literal gz:expressed_in to ns0:expressed_in in parent motion_prepare; gz-physics7 DART checks literal name",
+    "change": "Restore original gz literal prefix in4wheel friction directions, no numeric change",
+    "control": "Same early-avoidance parameters and90s, original AMCL and native odometry, no oracle/no wide angular proposals",
+    "invalid_prior_dynamic_runs": [
+      "depth_proxy_lifecycle/motion01",
+      "avoidance01",
+      "avoidance_truth01",
+      "avoidance_truth_wide01"
+    ],
+    "limits": "Prior metrics remain measured but cannot establish robot physics parity; static depth comparison unaffected by motion error",
+    "primary_source": "https://raw.githubusercontent.com/gazebosim/gz-physics/gz-physics7/dartsim/src/SDFFeatures.cc"
+  },
+  "moderate_speed_variant": {
+    "name": "avoidance_moderate01",
+    "parent": "avoidance_fixed01",
+    "reason": "Corrected friction restores localization (medianXY0.120m/yaw0.009rad), but .15/.10mps cap timed out90s; test .30/.20 with same early inflation",
+    "changes": {
+      "vx_max": 0.3,
+      "vx_min": -0.15,
+      "vy_max": 0.2
+    },
+    "unchanged": "Original AMCL/odometry, restored original wheel friction semantics, inflation .8/radius .25, native people/camera/filter,90s budget and goal thresholds",
+    "plan": "One final configuration trial; preserve every previous outcome"
+  }
+}

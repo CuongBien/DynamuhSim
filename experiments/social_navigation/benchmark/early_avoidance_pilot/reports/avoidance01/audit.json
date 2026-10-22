@@ -1,0 +1,46 @@
+{
+  "status": "EVIDENCE_PASS_SETUP_INVALID",
+  "scope": "Raw/provenance verification; navigation outcome is independently retained in summary.json",
+  "run": "avoidance01",
+  "trial_result": "MEASURED",
+  "navigation_acceptance": "FAIL",
+  "mcap_off_images_bitwise_equal": 1022,
+  "mcap_off_images_total": 1026,
+  "mcap_missing_in_aux_stamps": [
+    2600000000,
+    2700000000,
+    3600000000,
+    3700000000
+  ],
+  "aux_missing_in_mcap_stamps": [],
+  "paired_raw_images_hashed": 2044,
+  "topics": {
+    "/tf_static": 3,
+    "/clock": 41038,
+    "/tf": 44459,
+    "/dataset/scene_poses": 6205,
+    "/camera/camera_info": 1027,
+    "/camera/depth/image_rect_raw": 1026,
+    "/scan": 513,
+    "/imu": 10260,
+    "/common/ground_truth": 5129,
+    "/odom": 2931,
+    "/map": 1,
+    "/amcl_pose": 176,
+    "/dataset/events": 4,
+    "/navigate_to_pose/_action/status": 3,
+    "/plan": 207,
+    "/cmd_vel": 4192
+  },
+  "parent_source_files_native_worker_vendor_filter_unchanged": true,
+  "friction_native_parser": {
+    "friction_directions": 4,
+    "recognized_gz_base_link_frames": 0
+  },
+  "native_robot_physics_semantics_valid": false,
+  "valid_original_robot_nav_trial": false,
+  "physical_world_equal_after_socket_normalization": true,
+  "robot_model_declared_changes_only": true,
+  "oracle_robot_pose_only": false,
+  "training_ready": false
+}
