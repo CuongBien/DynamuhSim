@@ -1,0 +1,44 @@
+{
+  "stage": "BOUNDED_NAV2_SOCNAVGYM_V2_PILOT",
+  "baseline_commit": "8aaa357a89b9b6d9933e579ac1968c2563920dcf",
+  "start": [
+    -28.0,
+    0.0,
+    0.0
+  ],
+  "goal": [
+    -20.0,
+    0.0,
+    0.0
+  ],
+  "scene": "common_response crossing_near, six individuals",
+  "population": 6,
+  "human_radius": 0.36,
+  "robot_radius": 0.25,
+  "native_dt": 0.1,
+  "physics_dt": 0.0025,
+  "seed": 42,
+  "nav2": "Existing warehouse MPPI/AMCL params; runtime copy changes only initial pose x=-28",
+  "sim_budget": 45.0,
+  "warmup_gate": "Native humans frozen until NavigateToPose goal accepted; no scripted robot velocity publisher",
+  "acceptance": "Report action status and actual final world XY<=0.20m and yaw<=0.25rad separately; keep failed goals/overlaps. First empty control must be actually reached before people trials.",
+  "plan": [
+    {
+      "name": "empty01",
+      "condition": "empty",
+      "gui": false
+    },
+    {
+      "name": "people01",
+      "condition": "people",
+      "gui": true
+    },
+    {
+      "name": "people02",
+      "condition": "people",
+      "gui": false
+    }
+  ],
+  "scope": "Small integration pilot, not simulator ranking or broad navigation success estimate; no group formation/World Model/Isaac migration",
+  "failure": "Keep every attempt. Stop on infrastructure/interlock/cleanup faults; do not replace failed Nav2 outcomes with retries."
+}

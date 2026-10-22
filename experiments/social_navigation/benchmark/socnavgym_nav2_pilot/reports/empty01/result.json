@@ -1,0 +1,199 @@
+{
+  "status": "MEASURED",
+  "condition": "empty",
+  "gui": false,
+  "head": "8aaa357a89b9b6d9933e579ac1968c2563920dcf",
+  "runtime": "experiments/social_navigation/benchmark/socnavgym_nav2_pilot/generated/empty01",
+  "robot_start": [
+    -28.0,
+    0.0,
+    0.0
+  ],
+  "robot_goal": [
+    -20.0,
+    0.0,
+    0.0
+  ],
+  "sim_budget_s": 45.0,
+  "response_variant": "v2_frozen_until_goal_accepted",
+  "no_scripted_robot_velocity_publisher": true,
+  "source_sha256": {
+    "experiments/social_navigation/benchmark/socnavgym_nav2_pilot/trial.py": "02ad3a4989a9e339cb69605a44177daa0ab2d8434d9c7e9240a4aafb5e30eedf",
+    "experiments/social_navigation/benchmark/socnavgym_nav2_pilot/worker.py": "948b36bf965f45bab20ba5c65a5ac144baa9147701947a66881262ffdb08d52e",
+    "experiments/social_navigation/benchmark/socnavgym_nav2_pilot/warehouse.launch.py": "9b815a3627ee8a4baa193d236c265c89a8d40c89bdbe7f22dfe076b4fa95b1b9",
+    "experiments/social_navigation/benchmark/socnavgym_nav2_pilot/protocol.json": "6a552b3024bb4255c057a4f027721715ce704b5a6e8c9fee44ebb0bbe6359d33",
+    "experiments/social_navigation/benchmark/socnavgym_response_fix/projection.py": "260d0775a10bc6b510c217a26e02a877a4394ef3f3f56475740ea14d52c841d9",
+    "experiments/social_navigation/benchmark/socnavgym_response_fix/responsive_motion.py": "7e94fb78bb1a6552c7c6b17654bf90ba2a937145837916b783ddeaa36b45a4c4",
+    "experiments/social_navigation/benchmark/socnavgym_response_fix/adapter.cc": "ffbcda748dc1dba4e06beb79c6e8fa93c77da25fbe2348b10f92062c36279abb",
+    "experiments/social_navigation/benchmark/socnavgym_response_fix/build/libresponse_adapter.so": "524fe8e945daad94319d7ac1a5f6377a5f36cbf6c505bb580e50e2e73102e984",
+    "experiments/social_navigation/benchmark/common_response/model_worker.py": "74f2ff2e08a105aa7a6d34e01d032bff81fafaac9c8652a25302a747ed39f3be",
+    "experiments/social_navigation/benchmark/common_response/inputs/crossing_near.json": "ff035a69a19420bdfb4e44825830313e1e1a60e401f21b94d5a39750f9cf0fbc",
+    "experiments/social_navigation/warehouse/nav2_warehouse.yaml": "ff73d68dcdc64c29427522c9b87fc9f3850b02326a3a9b1c467e6b9b3d5297a7",
+    "experiments/social_navigation/warehouse/warehouse.yaml": "389ed7597a08167e99e97a3ce1b83a4818deede6a57aac99f14660e6cf59cea0",
+    "experiments/social_navigation/warehouse/warehouse.pgm": "6538c7c14e4ece9f8e20a57619a49ea4e80bee6cc886499f5e1d21c3b550667b",
+    "experiments/social_navigation/warehouse/warehouse.sdf": "4563ff06990ff352dd96c0b33c63ccd01763c8f39debed31f5761d022dcdbc8d",
+    "src/custom_corridor/launch/nav2_corridor.launch.py": "0cc475f181f679d5b728d7d2a700d3c2b676987f697c9adbffff1762c8f799e0",
+    "src/custom_corridor/launch/publish_episode_initial_pose.py": "1b54e51430bfa21e410891c3e8b1b55cec604683abf3fd3b6e9eb968ebd89728"
+  },
+  "rendering": {
+    "vendor": "Microsoft Corporation",
+    "renderer": "D3D12 (NVIDIA GeForce RTX 4060 Laptop GPU)",
+    "version": "4.6 (Compatibility Profile) Mesa 25.2.8-0ubuntu0.24.04.2",
+    "direct": true,
+    "environment_before": {
+      "DISPLAY": ":0",
+      "WAYLAND_DISPLAY": "wayland-0"
+    },
+    "environment_used": {
+      "DISPLAY": ":0",
+      "WAYLAND_DISPLAY": "wayland-0",
+      "GALLIUM_DRIVER": "d3d12",
+      "MESA_D3D12_DEFAULT_ADAPTER_NAME": "NVIDIA"
+    },
+    "probe_source_sha256": "9a9f5478053290b51f18beed987563a7e3a2349f143e8fccd0ce41bf57ec5bab",
+    "probe_binary_sha256": "37f8608ee330e5c179dcd1975c9053e0b66f055f21a68e41bbaf13ed20d26520",
+    "hardware_verified": true
+  },
+  "shutdown_preload": {
+    "scope": "gz sim only",
+    "library": "/usr/lib/wsl/lib/libd3d12core.so",
+    "real_gz": "/opt/ros/jazzy/opt/gz_tools_vendor/bin/gz",
+    "wrapper": "/home/cuongbien/DynamuhSim/experiments/social_navigation/benchmark/socnavgym_nav2_pilot/generated/empty01/shutdown_bin/gz",
+    "mode": "startup LD_PRELOAD; no system files changed"
+  },
+  "runtime_nav_params_sha256": "ebeaecb19f03dcf12bef11fb6225daf26f0482fca7ecbbfdeee18dc8726e0019",
+  "runtime_world_sha256": "b5506f4f467d0a31c84f18733fae684affd71868821cdb130728a1622ce0dbed",
+  "amcl_publishers": [
+    {
+      "node_name": "amcl",
+      "node_namespace": "/",
+      "reliability": "RELIABLE",
+      "durability": "TRANSIENT_LOCAL",
+      "depth": 0
+    }
+  ],
+  "cmd_vel_publishers_before_goal": [
+    {
+      "node": "controller_server",
+      "namespace": "/"
+    },
+    {
+      "node": "behavior_server",
+      "namespace": "/"
+    },
+    {
+      "node": "behavior_server",
+      "namespace": "/"
+    },
+    {
+      "node": "behavior_server",
+      "namespace": "/"
+    }
+  ],
+  "goal_start_sim": 9.3125,
+  "before_goal_world_pose": {
+    "x": -28.000000000000796,
+    "y": 9.556889508721618e-22,
+    "yaw": 7.800578472067971e-22
+  },
+  "action_end_sim": 25.0325,
+  "active_sim_seconds": 15.719999999999999,
+  "wall_seconds": 15.785987444000057,
+  "action_status": 4,
+  "navigation_status": "SUCCEEDED",
+  "action_error_code": 0,
+  "action_error_msg": "",
+  "final_world_pose": {
+    "x": -20.176247389513097,
+    "y": -0.027758721591057127,
+    "yaw": -0.04117051372427882
+  },
+  "goal_xy_error_world_m": 0.17841997907900137,
+  "goal_yaw_error_world_rad": 0.04117051372427882,
+  "actual_goal_reached": true,
+  "counts": {
+    "imu": 2541,
+    "clock": 9989,
+    "scan": 128,
+    "odom": 726,
+    "log": 143,
+    "amcl": 77,
+    "local_costmap": 56,
+    "plan": 16,
+    "cmd": 315
+  },
+  "cmd_vel_publishers_after_goal": [
+    {
+      "node": "controller_server",
+      "namespace": "/"
+    },
+    {
+      "node": "behavior_server",
+      "namespace": "/"
+    },
+    {
+      "node": "behavior_server",
+      "namespace": "/"
+    },
+    {
+      "node": "behavior_server",
+      "namespace": "/"
+    }
+  ],
+  "amcl_final_pose": {
+    "x": -20.17271810168253,
+    "y": -0.06823216995433307,
+    "yaw": -0.05185939254303707
+  },
+  "server_shutdown": {
+    "status": "STOPPED",
+    "partition": "dynamuhsim_nav2_v2_4898",
+    "initial": [
+      {
+        "pid": 4953,
+        "command": "gz sim -r -s /home/cuongbien/DynamuhSim/experiments/social_navigation/benchmark/socnavgym_nav2_pilot/generated/empty01/warehouse.sdf                                             "
+      }
+    ],
+    "request_returncode": 0,
+    "response": "data: true",
+    "stderr": "",
+    "elapsed_wall_s": 0.8042481419997785,
+    "remaining": []
+  },
+  "cleanup": {
+    "session": "436bc2f91839458ead1c06f931f821da",
+    "reaped_members": [],
+    "signals": [],
+    "remaining": [],
+    "status": "PASS",
+    "ogre_log_sha256": "84ea0c0509b5ed3d4f10e571dbe0b0613112b5cf4f431e88a80fb8fec21f6311",
+    "ogre_renderer_lines": [
+      "12:32:35: GL_RENDERER = D3D12 (NVIDIA GeForce RTX 4060 Laptop GPU)"
+    ]
+  },
+  "faults": [],
+  "gazebo_clean_exit": true,
+  "media": {
+    "source": "Live Gazebo observer RGB, not AI",
+    "frame_times": [
+      10.0,
+      11.0,
+      12.0,
+      13.0,
+      14.0,
+      15.0,
+      16.0,
+      17.0,
+      18.0,
+      19.0,
+      20.0,
+      21.0,
+      22.0,
+      23.0,
+      24.0,
+      25.0
+    ],
+    "playback_speed": 4,
+    "gif_duration_ms": 4000
+  }
+}
