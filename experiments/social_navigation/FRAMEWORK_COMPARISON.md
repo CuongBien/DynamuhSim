@@ -1,5 +1,13 @@
 # So sánh khả năng đã đo — cập nhật22/10/2026
 
+## Cập nhật 23/10/2026 — sửa gap association, kiểm seed44 mới
+
+[Identity guard](benchmark/depth_identity_guard/reports/IDENTITY_GUARD_REPORT.md): candidate05 chặn case GT5→GT6 ở seed43 (pairing changes1→0), giữ đủ1983 paired rows; mesh42 giữ fragmentation10, repeat42 giảm8→7. Các bản01–04 chưa đạt được giữ code/hash/kết quả. 14 behavior tests và audit đạt; code/gate chốt trước seed44.
+
+Seed44 mới trên NVIDIA:1023depth bitwise,801cửa sổ/1episode. Parent/guard cùng2587paired,0pairing changes,fragmentation7: kiểm không suy giảm, chưa chứng minh cải thiện trên seed này. **Navigation TIMEOUT90.04s, goal còn4.012m** giữ nguyên. Identity-safety gate đạt; gate đầy đủ cũ vẫn FAIL trên43/44 vì fragmentation không giảm. Semantic/association/H1–H5/train vẫnfalse; không thay mặc định ROS. Bước kế: visibility/person-instance và semantic association trước batch; HuNavSim chưa dùng.
+
+Mốc lưu: `fix: guard depth track identities across observation gaps`.
+
 ## Cập nhật 22/10/2026 — đã thu và kiểm chứng seed 43 mới
 
 [Seed43 report](benchmark/depth_seed43_validation/reports/SEED43_REPORT.md): một recording mới trên NVIDIA, cùng layout/depth mesh/Nav2, đổi seed 42→43; frozen engine trước capture, không tune. Có 1051 depth khớp raw bitwise, 802 cửa sổ/1 episode, dữ liệu/cleanup/audit đạt; quỹ đạo người thực tế khác seed42. **Navigation TIMEOUT 90.025 s, goal còn 3.7013 m**, không đổi thành success.

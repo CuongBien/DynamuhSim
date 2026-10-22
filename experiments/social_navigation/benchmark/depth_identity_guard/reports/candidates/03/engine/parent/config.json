@@ -1,0 +1,41 @@
+{
+  "schema": "depth_track_refinement/1",
+  "development": "avoidance_moderate01",
+  "validation": "pilot01",
+  "split": "pilot_only",
+  "training_ready": false,
+  "shape_filter": {
+    "min_vertical_span_m": 1.55,
+    "thin_surface_minor_std_m": 0.025,
+    "constant_profile_shift_m": 0.04,
+    "min_profile_bins": 4,
+    "height_bins": 5
+  },
+  "tracking": {
+    "active_ttl_ns": 500000000,
+    "dormant_ttl_ns": 1500000000,
+    "dormant_min_hits": 5,
+    "dormant_gate_base_m": 0.35,
+    "dormant_gate_growth_mps": 0.25,
+    "dormant_position_margin_m": 0.15,
+    "dormant_max_logshape_distance": 0.55,
+    "active_match_policy": "legacy distance gate, retain comparator",
+    "dormant_policy": "mutual unique geometric/shape candidate, output only when measured"
+  },
+  "comparison_variants": [
+    "baseline",
+    "shape_only",
+    "tracking_only",
+    "combined"
+  ],
+  "validation_limit": "Separate captured run, same simulator/seed/scene family; no generalization or semantic acceptance",
+  "holdout": "HuNavSim untouched",
+  "geometric_comparison_gate": {
+    "min_paired_row_retention": 0.95,
+    "unpaired_rows_must_decrease": true,
+    "fragmentation_proxy_must_decrease": true,
+    "short_gap_identity_changes_must_not_increase": true,
+    "wrong_known_identity_reacquisitions_must_equal_zero": true,
+    "semantic_acceptance": false
+  }
+}

@@ -1,0 +1,41 @@
+{
+  "schema": "depth_identity_guard/1",
+  "active": {
+    "position_slack_m": 0.18,
+    "max_displacement_speed_mps": 1.5,
+    "residual_base_m": 0.3,
+    "residual_growth_mps": 1.5,
+    "ambiguity_margin_m": 0.08,
+    "gap_shape_check_after_ns": 150000000,
+    "max_gap_logshape_distance": 0.55,
+    "policy": "Preserve continuous legacy matching; displacement/shape/mutual-margin guard after >150ms gap; abstain when established tracks compete"
+  },
+  "parent_shape_and_dormant_params": "Byte-identical parent/config.json; shape filter remains mesh-only experimental",
+  "ambiguity_policy": "Retain unknown measured proposal track_id=-1 when established tracks compete or gap reassociation is ambiguous; no synthetic observations",
+  "regression_sources": [
+    "avoidance_moderate01",
+    "avoidance_fixed01",
+    "depth_seed43_01"
+  ],
+  "stress_source": "legacy_proxy_pilot01",
+  "new_validation_seed": 44,
+  "new_identity_gate": {
+    "min_paired_retention_vs_parent": 0.95,
+    "short_gap_pair_changes_must_be_zero": true,
+    "fragmentation_must_not_increase_vs_parent": true,
+    "known_wrong_reacquisitions_must_equal_zero": true,
+    "geometry_only": true
+  },
+  "legacy_full_gate": "Also report original strict fragmentation-reduction gate against baseline; do not relabel it if it fails",
+  "training_ready": false,
+  "semantic_person_validated": false,
+  "association_accepted": false,
+  "hu_nav_sim_used": false,
+  "comparison_variants": [
+    "baseline",
+    "parent",
+    "shape_only",
+    "combined"
+  ],
+  "validation_limit": "Dataset roles in frozen manifest: seeds42/43 are regression; unseen seed44 only after final engine freeze; same layout/backend"
+}
