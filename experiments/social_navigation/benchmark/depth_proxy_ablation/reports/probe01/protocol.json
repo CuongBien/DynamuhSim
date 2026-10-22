@@ -1,0 +1,77 @@
+{
+  "schema": "depth_proxy_ablation/1",
+  "purpose": "Isolate proxy appearance in depth while checking unchanged GPU LiDAR and collision definitions",
+  "snapshots": "snapshots.json",
+  "conditions": [
+    "baseline",
+    "masked",
+    "null_visuals"
+  ],
+  "proxy_flag": 4,
+  "all_mask": 4294967295,
+  "depth_no_proxy_mask": 4294967291,
+  "cameras": {
+    "heights_world_m": [
+      0.12,
+      0.4
+    ],
+    "width": 424,
+    "height": 240,
+    "hz": 10,
+    "near_m": 0.28,
+    "far_m": 5.0,
+    "fov_rad": 1.518436
+  },
+  "conditions_detail": {
+    "baseline": "Original proxy visual flags, low/high camera all-visible; native and noise-free diagnostic LiDAR",
+    "masked": "Proxy visuals tagged flag0x00000004; simultaneous all-visible and proxy-excluded camera at each height; both LiDARs all-visible; all collision elements retained",
+    "null_visuals": "Human actor/proxy visuals absent as diagnostic negative control; all collision elements retained; low/high camera and LiDARs"
+  },
+  "validity": {
+    "depth_frames_per_camera": 10,
+    "lidar_scans_per_sensor": 5,
+    "min_stamp_ns": 1000000000,
+    "max_wall_s": 45,
+    "depth_static_tolerance_m": 0.0001,
+    "reference_depth_tolerance_m": 0.0001,
+    "lidar_geometry_tolerance_m": 1e-05,
+    "mesh_contribution_min_m": 0.02
+  },
+  "scope": "Frozen recorded positions and actor animation_time0; no Nav2, robot drive, native human policy, default sensor change or training",
+  "metrics": [
+    "Depth baseline vs all-mask in tagged world",
+    "Depth proxy-excluded vs all-mask",
+    "Depth proxy-excluded vs null-visual control proves retained human geometry",
+    "Noise-free LiDAR baseline vs tagged world",
+    "Native LiDAR raw differences (nominal source noise retained)",
+    "Collision definitions canonical equality",
+    "BEV observed regions and conservative-proxy conflicts"
+  ],
+  "limits": [
+    "Depth mask success is not proof of real human appearance or train readiness",
+    "LiDAR keeps conservative cylinder while depth sees mesh; modality geometry mismatch must be reported",
+    "Structural collision parity is not a dynamic contact test",
+    "3 static poses are not a navigation or social behavior benchmark"
+  ],
+  "sources": [
+    "https://sdformat.org/spec/1.11/sensor/",
+    "https://sdformat.org/spec/1.12/visual/",
+    "https://gazebosim.org/api/sensors/8/classgz_1_1sensors_1_1Lidar.html"
+  ],
+  "engine_reserved_flags": {
+    "visibility_all": 268435455,
+    "selection": 268435456,
+    "gui": 1,
+    "selectable": 2
+  },
+  "amendment": "run01/02 used reserved selection flag0x10000000, causing both depth cameras to exclude proxy; retained invalid setup. Final user layer uses non-reserved0x4, still same geometry and unchanged stability tolerance. run03 non-reserved flags preserved all-camera/LiDAR but SDF per-depth mask had no image effect. run04 adds isolated per-camera listener; no system library patch. run04 direct apt-renderer linkage caused a startup ABI conflict before hooks ran; failure preserved. run05 links only matching ROS Jazzy vendor renderer/OgreNext. run05 filter worked with exact reference and geometry-LiDAR parity, but hidden branch exceeded 10um repeat threshold (14.2um). run06 uses declared100um numerical repeat tolerance, without changing finite-mask/reference/LiDAR/collision criteria.",
+  "render_workaround": "Ogre2 per-camera pre/post render listener temporarily removes proxy visibility and restores it after each selected depth camera; unchanged all-visible camera and LiDAR are controls",
+  "build_runtime": "Use ROS Jazzy vendor gz-rendering and OgreNext2.3.3, not apt OgreNext2.3.1; configure with ROS setup in fresh generated/build_jazzy",
+  "numeric_tolerance_amendment": {
+    "original_m": 1e-05,
+    "final_m": 0.0001,
+    "observed_run05_max_m": 1.4185905456542969e-05,
+    "reason": "Only hidden-proxy branch showed stable-valid-mask subpixel float variation; original/all-camera reference remained bitwise equal and diagnostic LiDAR exactly equal; final bound is 0.1mm vs BEV100mm cell; no navigation/geometry threshold changed",
+    "not_reclassified": "run05 retained ERROR; run06 is fresh cohort under explicit amended numerical tolerance"
+  }
+}

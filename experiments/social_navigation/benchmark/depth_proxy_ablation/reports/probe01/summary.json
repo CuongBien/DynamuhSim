@@ -1,0 +1,305 @@
+{
+  "status": "PASS",
+  "results": [
+    {
+      "snapshot": "snapshot01",
+      "source_stamp_ns": 12602500000,
+      "collision_definitions_equal": true,
+      "camera": [
+        {
+          "level": "low",
+          "world_camera_height_m": 0.12,
+          "original_vs_tagged_all_camera": {
+            "max_abs_diff_m": 0.0,
+            "finite_mask_changes": 0,
+            "changed_pixels": 0
+          },
+          "reference_parity_pass": true,
+          "paired_on_vs_off": {
+            "max_abs_diff_m": 3.8204398155212402,
+            "finite_mask_changes": 195510,
+            "changed_pixels": 465580
+          },
+          "off_vs_null_visuals": {
+            "max_abs_diff_m": 3.5380234718322754,
+            "finite_mask_changes": 200890,
+            "changed_pixels": 222420
+          },
+          "retained_human_nearer_pixels_per_frame": 22242.0,
+          "human_visual_retained": true,
+          "changed_pixels_per_frame": 46558.0,
+          "bev": {
+            "on": {
+              "unknown": 3628,
+              "free": 431,
+              "occupied": 37,
+              "free_in_conservative_proxy_disc": 0
+            },
+            "off": {
+              "unknown": 2934,
+              "free": 1062,
+              "occupied": 100,
+              "free_in_conservative_proxy_disc": 42
+            },
+            "null": {
+              "unknown": 3013,
+              "free": 1076,
+              "occupied": 7,
+              "free_in_conservative_proxy_disc": 76
+            }
+          }
+        },
+        {
+          "level": "high",
+          "world_camera_height_m": 0.39999999999999997,
+          "original_vs_tagged_all_camera": {
+            "max_abs_diff_m": 0.0,
+            "finite_mask_changes": 0,
+            "changed_pixels": 0
+          },
+          "reference_parity_pass": true,
+          "paired_on_vs_off": {
+            "max_abs_diff_m": 3.7844643592834473,
+            "finite_mask_changes": 191480,
+            "changed_pixels": 637380
+          },
+          "off_vs_null_visuals": {
+            "max_abs_diff_m": 3.5214285850524902,
+            "finite_mask_changes": 241420,
+            "changed_pixels": 286420
+          },
+          "retained_human_nearer_pixels_per_frame": 28642.0,
+          "human_visual_retained": true,
+          "changed_pixels_per_frame": 63738.0,
+          "bev": {
+            "on": {
+              "unknown": 3566,
+              "free": 493,
+              "occupied": 37,
+              "free_in_conservative_proxy_disc": 0
+            },
+            "off": {
+              "unknown": 2607,
+              "free": 1379,
+              "occupied": 110,
+              "free_in_conservative_proxy_disc": 39
+            },
+            "null": {
+              "unknown": 2451,
+              "free": 1638,
+              "occupied": 7,
+              "free_in_conservative_proxy_disc": 119
+            }
+          }
+        }
+      ],
+      "lidar": {
+        "native": {
+          "baseline_vs_masked": {
+            "max_abs_diff_m": 0.044710397720336914,
+            "finite_mask_changes": 0,
+            "changed_pixels": 837
+          },
+          "masked_vs_null": {
+            "max_abs_diff_m": 0.042284250259399414,
+            "finite_mask_changes": 370,
+            "changed_pixels": 370
+          },
+          "difference_std_m": 0.0142039330676198,
+          "difference_median_abs_m": 0.009994268417358398
+        },
+        "geometry": {
+          "baseline_vs_masked": {
+            "max_abs_diff_m": 0.0,
+            "finite_mask_changes": 0,
+            "changed_pixels": 0
+          },
+          "masked_vs_null": {
+            "max_abs_diff_m": 0.0,
+            "finite_mask_changes": 370,
+            "changed_pixels": 370
+          },
+          "difference_std_m": 0.0,
+          "difference_median_abs_m": 0.0,
+          "parity_pass": true
+        }
+      }
+    }
+  ],
+  "fixtures": 3,
+  "depth_frames": 80,
+  "native_scan_frames": 15,
+  "diagnostic_scan_frames": 15,
+  "runtime_capability": "static sensor-selective mask only",
+  "default_project_changed": false,
+  "training_ready": false,
+  "navigation_tested": false,
+  "collision_dynamics_tested": false,
+  "raw_files": {
+    "snapshot01/null_visuals/robot_low.urdf": {
+      "bytes": 3789,
+      "sha256": "4160a19068b85694eae58795584b9d7313655204f489bc4be5d38c07ca363277"
+    },
+    "snapshot01/null_visuals/result.json": {
+      "bytes": 8159,
+      "sha256": "d1b308e58d257d964ac55493aad48ae83df2a5025a52da403d4b02bb257fc6af"
+    },
+    "snapshot01/null_visuals/depth_high_null.npy": {
+      "bytes": 4070528,
+      "sha256": "a8714cb17f755d863a74507e5cf0e544a6b8bbcfa88def0c7aaebb2289a46ac4"
+    },
+    "snapshot01/null_visuals/bridge.log": {
+      "bytes": 1339,
+      "sha256": "c895b652a840f392c77772884d1e6d7e67d2a2d10177448d654339af65693e5b"
+    },
+    "snapshot01/null_visuals/depth_low_null.npy": {
+      "bytes": 4070528,
+      "sha256": "41b81401c128a1cba33e261324024066155e0420632e0b541891bdb16cb720ce"
+    },
+    "snapshot01/null_visuals/snapshot.json": {
+      "bytes": 1053,
+      "sha256": "b3b154fe104120b21520d1185d656d84dfdec35fe46d66d103de828327d9e3be"
+    },
+    "snapshot01/null_visuals/warehouse.sdf": {
+      "bytes": 75014,
+      "sha256": "908788f01718654e63fb3186551438041ea35dd3fec57e147b863aa9b4eebfcd"
+    },
+    "snapshot01/null_visuals/scan_geometry.npz": {
+      "bytes": 15208,
+      "sha256": "50189218aba76449dfed50925eb3771fd915da94bc46e08faaf74c63a273ff3d"
+    },
+    "snapshot01/null_visuals/fixture.json": {
+      "bytes": 337,
+      "sha256": "a143ada1f5b83912a4ca24220bbc65a844f79873dcb516daeb90733312e7fba8"
+    },
+    "snapshot01/null_visuals/robot_high.urdf": {
+      "bytes": 3804,
+      "sha256": "5692d101368ebb6a0b6c774fea5de59e915662c287303af11e33c39c39a45cd9"
+    },
+    "snapshot01/null_visuals/scan_native.npz": {
+      "bytes": 15208,
+      "sha256": "0dc96a59fd161b3528cb4c27b2b3cf270948c3677e8bda470e853a5a6119a1dd"
+    },
+    "snapshot01/null_visuals/gazebo.log": {
+      "bytes": 1785,
+      "sha256": "aa59490ae245df1524ad8cc3dfc7613cd3dbff2de298f5f6ed685bab4b049164"
+    },
+    "snapshot01/baseline/robot_low.urdf": {
+      "bytes": 3789,
+      "sha256": "4160a19068b85694eae58795584b9d7313655204f489bc4be5d38c07ca363277"
+    },
+    "snapshot01/baseline/result.json": {
+      "bytes": 8035,
+      "sha256": "ca9f6e959eb9d04b04d477fa457a342146d96f440f9d42c8740ecd9d113a0670"
+    },
+    "snapshot01/baseline/depth_low_on.npy": {
+      "bytes": 4070528,
+      "sha256": "61ac0d602a062e1fda66c3ea04e197a494e3274056a6114631f6e5026a72e4ec"
+    },
+    "snapshot01/baseline/bridge.log": {
+      "bytes": 1275,
+      "sha256": "704fd0acdbd0dc2bcb3a45ff29f6998fcc9389a3c954a11e21314de06579ea1c"
+    },
+    "snapshot01/baseline/snapshot.json": {
+      "bytes": 1053,
+      "sha256": "b3b154fe104120b21520d1185d656d84dfdec35fe46d66d103de828327d9e3be"
+    },
+    "snapshot01/baseline/warehouse.sdf": {
+      "bytes": 82702,
+      "sha256": "48496c56954cf213d0a13f8ad96bf42ccbabf781d31b5f79e8f4d4b480fd24de"
+    },
+    "snapshot01/baseline/scan_geometry.npz": {
+      "bytes": 15208,
+      "sha256": "b50135690ff42b92f21b9a38e5bfd969e078816dc935bc4713fabc6d15cf4cca"
+    },
+    "snapshot01/baseline/fixture.json": {
+      "bytes": 325,
+      "sha256": "04e869705b62230ed0d685de880d2d530f4ad7da84d67900f84be3e58fb34af3"
+    },
+    "snapshot01/baseline/depth_high_on.npy": {
+      "bytes": 4070528,
+      "sha256": "2cdc7c84af8b246f922fb9d634eca76a0e7fa6d4307da203b9661ab1778b0f37"
+    },
+    "snapshot01/baseline/robot_high.urdf": {
+      "bytes": 3804,
+      "sha256": "5692d101368ebb6a0b6c774fea5de59e915662c287303af11e33c39c39a45cd9"
+    },
+    "snapshot01/baseline/scan_native.npz": {
+      "bytes": 15208,
+      "sha256": "9ffa10cc6e0b161b12a531b297eba83959cd1152b2094a2d67f80dffb0095b45"
+    },
+    "snapshot01/baseline/gazebo.log": {
+      "bytes": 1765,
+      "sha256": "00b6729858dfbde12897993d37dd4fe396695fed8828a3d67fc7b89055f28a0a"
+    },
+    "snapshot01/masked/robot_low.urdf": {
+      "bytes": 3789,
+      "sha256": "4160a19068b85694eae58795584b9d7313655204f489bc4be5d38c07ca363277"
+    },
+    "snapshot01/masked/result.json": {
+      "bytes": 10045,
+      "sha256": "8f71cd1adb2198c5598f5c838b4c325c912735e55999c441d7a65cdfa69c528e"
+    },
+    "snapshot01/masked/depth_low_on.npy": {
+      "bytes": 4070528,
+      "sha256": "61ac0d602a062e1fda66c3ea04e197a494e3274056a6114631f6e5026a72e4ec"
+    },
+    "snapshot01/masked/bridge.log": {
+      "bytes": 2051,
+      "sha256": "44ed0787627466a4b8686093b43c9d8b7c0a0a5086de2490f2cc624d4fce8931"
+    },
+    "snapshot01/masked/snapshot.json": {
+      "bytes": 1053,
+      "sha256": "b3b154fe104120b21520d1185d656d84dfdec35fe46d66d103de828327d9e3be"
+    },
+    "snapshot01/masked/warehouse.sdf": {
+      "bytes": 84864,
+      "sha256": "da930d9a70fe7fb038684ca2cba9545ccfc66c9d4ed0e9e653605e2f869cd9e3"
+    },
+    "snapshot01/masked/scan_geometry.npz": {
+      "bytes": 15208,
+      "sha256": "b50135690ff42b92f21b9a38e5bfd969e078816dc935bc4713fabc6d15cf4cca"
+    },
+    "snapshot01/masked/fixture.json": {
+      "bytes": 415,
+      "sha256": "fe1e3522c20f84c85398aa7c4d412479839027083718f98d2eb1a02cdc353da7"
+    },
+    "snapshot01/masked/depth_high_on.npy": {
+      "bytes": 4070528,
+      "sha256": "2cdc7c84af8b246f922fb9d634eca76a0e7fa6d4307da203b9661ab1778b0f37"
+    },
+    "snapshot01/masked/robot_high.urdf": {
+      "bytes": 3804,
+      "sha256": "5692d101368ebb6a0b6c774fea5de59e915662c287303af11e33c39c39a45cd9"
+    },
+    "snapshot01/masked/scan_native.npz": {
+      "bytes": 15208,
+      "sha256": "62612db9723b8a5dc4e8dd30264f8a41001a0970f4b80d1598d3c0851ebb531a"
+    },
+    "snapshot01/masked/depth_low_off.npy": {
+      "bytes": 4070528,
+      "sha256": "08489ca2813185278fe9d0de82ad8059b032a2227e5697fb89747d9b6d68b926"
+    },
+    "snapshot01/masked/depth_high_off.npy": {
+      "bytes": 4070528,
+      "sha256": "92e579c687917cf971f06a659a2856a3e22f62d6cba80b2ee0bbfb14406f7fa5"
+    },
+    "snapshot01/masked/gazebo.log": {
+      "bytes": 2933,
+      "sha256": "e69f83f24dbc262425afa1b20a58b76698d4d147d3da3e086ab75fccceac080b"
+    }
+  },
+  "analysis_source_sha256": {
+    "experiments/social_navigation/benchmark/depth_proxy_ablation/analyze.py": "03a87568a09723633ce7c32a03064eeb4bb9b71aa5f003ab076df1b7d37de571",
+    "experiments/social_navigation/benchmark/depth_proxy_ablation/protocol.json": "b4e5b605d0310ce400b88e16ead582f97cd08cb6a4d02d2b4938175393688c88",
+    "experiments/social_navigation/benchmark/camera_height_ab/geometry.py": "b04eec9361ead8c30bb9178f42faf26e8c1f0da3c2798e02071a66b4f6a65374",
+    "experiments/social_navigation/benchmark/camera_height_ab/analyze.py": "4b93f020709af412e277e40ff1ce3ce72ff8954f8225530aa3816be88e39d56b",
+    "experiments/social_navigation/benchmark/dataset_pilot/dataset_core.py": "1bee12f29d587a09e08d0a44388bc8767131b90e0bee7ddb101e9a03b347ef3e"
+  },
+  "caveats": [
+    "Depth mask success is not proof of real human appearance or train readiness",
+    "LiDAR keeps conservative cylinder while depth sees mesh; modality geometry mismatch must be reported",
+    "Structural collision parity is not a dynamic contact test",
+    "3 static poses are not a navigation or social behavior benchmark"
+  ]
+}

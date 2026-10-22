@@ -1,0 +1,598 @@
+{
+  "note": "data_and_exit_ok alone is not scientific validity: run01-05 setup/mask/ABI/tolerance failures excluded. Accepted final scope is run06/snapshot01 and run07/snapshot02 only.",
+  "attempts": [
+    {
+      "path": "generated/runs/run01/snapshot01/baseline/result.json",
+      "sha256": "cdb4290403fb893c331954ac468271ea2a676f4189e315b881b48378964f02d7",
+      "status": "MEASURED",
+      "gazebo_returncode": 0,
+      "data_and_exit_ok": true,
+      "error": null,
+      "render_hook_log": [],
+      "cleanup": {
+        "session": "45a88aa7e239401b96eed7d80b2a0813",
+        "reaped_members": [],
+        "signals": [],
+        "remaining": [],
+        "status": "PASS",
+        "ogre_log_sha256": "e22598ec72ceaa3ff9fb359260dff321677fa3650990075b870dbd75dd2c9ddc",
+        "ogre_renderer_lines": [
+          "17:16:41: GL_RENDERER = D3D12 (NVIDIA GeForce RTX 4060 Laptop GPU)"
+        ]
+      }
+    },
+    {
+      "path": "generated/runs/run01/snapshot01/masked/result.json",
+      "sha256": "b1a56904ecf6a71a593ed92f00843d8a8d6bdde3188378c5119f4dd64e88d8ca",
+      "status": "ERROR",
+      "gazebo_returncode": 0,
+      "data_and_exit_ok": false,
+      "error": "Unfrozen depth: low_on",
+      "render_hook_log": [],
+      "cleanup": {
+        "session": "3c63763a78fc40308422b6454ab4ee3d",
+        "reaped_members": [],
+        "signals": [],
+        "remaining": [],
+        "status": "PASS",
+        "ogre_log_sha256": "dcb7af240323224944b2f5b8ea351ebbc658078f1c286b7a5045fe639c11e3e0",
+        "ogre_renderer_lines": [
+          "17:16:51: GL_RENDERER = D3D12 (NVIDIA GeForce RTX 4060 Laptop GPU)"
+        ]
+      }
+    },
+    {
+      "path": "generated/runs/run02/snapshot01/baseline/result.json",
+      "sha256": "b6bbbe97db9239fdfa1a315bcabf994cb3adfd36361143cbc8dade0b99411f38",
+      "status": "MEASURED",
+      "gazebo_returncode": 0,
+      "data_and_exit_ok": true,
+      "error": null,
+      "render_hook_log": [],
+      "cleanup": {
+        "session": "5b65ad2ea63d46269ee6bd5e15587e6b",
+        "reaped_members": [],
+        "signals": [],
+        "remaining": [],
+        "status": "PASS",
+        "ogre_log_sha256": "5663cd3043e29c6bac4064ea045e3885813ec9a7d9e852278402ded5dd047a9d",
+        "ogre_renderer_lines": [
+          "17:19:12: GL_RENDERER = D3D12 (NVIDIA GeForce RTX 4060 Laptop GPU)"
+        ]
+      }
+    },
+    {
+      "path": "generated/runs/run02/snapshot01/masked/result.json",
+      "sha256": "c7cb73cb8643d57920507445cbc9cb838f40df0cc54bc89469e6332c155a286b",
+      "status": "ERROR",
+      "gazebo_returncode": 0,
+      "data_and_exit_ok": false,
+      "error": "Depth repeat tolerance failed",
+      "render_hook_log": [],
+      "cleanup": {
+        "session": "7a0bebb462a5443a9fa3b9997bf29238",
+        "reaped_members": [],
+        "signals": [],
+        "remaining": [],
+        "status": "PASS",
+        "ogre_log_sha256": "7c873ff34413178a4ebcb9e22111b6007a65d56c04dd12df8848d239020a84a2",
+        "ogre_renderer_lines": [
+          "17:19:21: GL_RENDERER = D3D12 (NVIDIA GeForce RTX 4060 Laptop GPU)"
+        ]
+      }
+    },
+    {
+      "path": "generated/runs/run03/snapshot01/baseline/result.json",
+      "sha256": "2ee6c766731cd69b45d7069d8df90c76d3802ca4914c2d307416f769acca58fe",
+      "status": "MEASURED",
+      "gazebo_returncode": 0,
+      "data_and_exit_ok": true,
+      "error": null,
+      "render_hook_log": [],
+      "cleanup": {
+        "session": "8b51f17a7e4b4776962e5c00fb777331",
+        "reaped_members": [],
+        "signals": [],
+        "remaining": [],
+        "status": "PASS",
+        "ogre_log_sha256": "1c9c202902e37091d5da0e05f39e64b7da1c9e0f3579fac6df6e554f84b06c87",
+        "ogre_renderer_lines": [
+          "17:21:30: GL_RENDERER = D3D12 (NVIDIA GeForce RTX 4060 Laptop GPU)"
+        ]
+      }
+    },
+    {
+      "path": "generated/runs/run03/snapshot01/masked/result.json",
+      "sha256": "7d3a4ab289ebfab999cd8f1909773be9c1a84bd51577d5e2322e127c795baa50",
+      "status": "MEASURED",
+      "gazebo_returncode": 0,
+      "data_and_exit_ok": true,
+      "error": null,
+      "render_hook_log": [],
+      "cleanup": {
+        "session": "1659f9f6bfa9403783f463b9c55f0b96",
+        "reaped_members": [],
+        "signals": [],
+        "remaining": [],
+        "status": "PASS",
+        "ogre_log_sha256": "565b6b87a2166e42f0fc688cdd359c659b8fca99c781cd9cbac9ae3c967ddd81",
+        "ogre_renderer_lines": [
+          "17:21:40: GL_RENDERER = D3D12 (NVIDIA GeForce RTX 4060 Laptop GPU)"
+        ]
+      }
+    },
+    {
+      "path": "generated/runs/run03/snapshot01/null_visuals/result.json",
+      "sha256": "7e8bcdb9fdec19f5392b3c4a986b9c58d2ae558d2725308a40e659cff45a5e76",
+      "status": "MEASURED",
+      "gazebo_returncode": 0,
+      "data_and_exit_ok": true,
+      "error": null,
+      "render_hook_log": [],
+      "cleanup": {
+        "session": "2563c2e871ec4952948d1a5b73b772c7",
+        "reaped_members": [],
+        "signals": [],
+        "remaining": [],
+        "status": "PASS",
+        "ogre_log_sha256": "e059c75982bcbd9d25000095a9b67c5fa34c1bf2331ef469f11e7c74abeb56ba",
+        "ogre_renderer_lines": [
+          "17:21:49: GL_RENDERER = D3D12 (NVIDIA GeForce RTX 4060 Laptop GPU)"
+        ]
+      }
+    },
+    {
+      "path": "generated/runs/run03/snapshot02/baseline/result.json",
+      "sha256": "02dbda67dde7bc9aebb4ab1051b813337bc82bec5102fbfed66cae7480c399d6",
+      "status": "MEASURED",
+      "gazebo_returncode": 0,
+      "data_and_exit_ok": true,
+      "error": null,
+      "render_hook_log": [],
+      "cleanup": {
+        "session": "f1a50c19dcb84bd0ac41004170a623e2",
+        "reaped_members": [],
+        "signals": [],
+        "remaining": [],
+        "status": "PASS",
+        "ogre_log_sha256": "aba34ec1d7bf2f66bc38c672804614d53093f797c36fbb22f173c488470da9df",
+        "ogre_renderer_lines": [
+          "17:21:58: GL_RENDERER = D3D12 (NVIDIA GeForce RTX 4060 Laptop GPU)"
+        ]
+      }
+    },
+    {
+      "path": "generated/runs/run03/snapshot02/masked/result.json",
+      "sha256": "457327c4d1039fb3c18a9474a8f8a5bce5a72577f821cb0957e72a5d3ac8bb12",
+      "status": "MEASURED",
+      "gazebo_returncode": 0,
+      "data_and_exit_ok": true,
+      "error": null,
+      "render_hook_log": [],
+      "cleanup": {
+        "session": "020ad1a7d6dc4ecfa5d44c12d2d19191",
+        "reaped_members": [],
+        "signals": [],
+        "remaining": [],
+        "status": "PASS",
+        "ogre_log_sha256": "5c43a1bbcca188a4f15308a3220b99bd05967a91f98b0e030001f1dd2e2632ca",
+        "ogre_renderer_lines": [
+          "17:22:08: GL_RENDERER = D3D12 (NVIDIA GeForce RTX 4060 Laptop GPU)"
+        ]
+      }
+    },
+    {
+      "path": "generated/runs/run03/snapshot02/null_visuals/result.json",
+      "sha256": "8cd5fb1ec7e0d85f95acf7a631693b87dbb75b050dab6297a517506ae381a6a1",
+      "status": "MEASURED",
+      "gazebo_returncode": 0,
+      "data_and_exit_ok": true,
+      "error": null,
+      "render_hook_log": [],
+      "cleanup": {
+        "session": "de2c061f6ebd4682a93e1325b245be78",
+        "reaped_members": [],
+        "signals": [],
+        "remaining": [],
+        "status": "PASS",
+        "ogre_log_sha256": "890b61770adeebcc1d744c402d3aa69dba1e1c62b154c1aa2badd3294ec73f09",
+        "ogre_renderer_lines": [
+          "17:22:17: GL_RENDERER = D3D12 (NVIDIA GeForce RTX 4060 Laptop GPU)"
+        ]
+      }
+    },
+    {
+      "path": "generated/runs/run03/snapshot03/baseline/result.json",
+      "sha256": "86a4f9c74365e97475ace56e87df3aefb99651341688edbc4ee9b3dacbb2fcaf",
+      "status": "MEASURED",
+      "gazebo_returncode": 0,
+      "data_and_exit_ok": true,
+      "error": null,
+      "render_hook_log": [],
+      "cleanup": {
+        "session": "513d41d5d3a64e9fa8926a9b44f9960d",
+        "reaped_members": [],
+        "signals": [],
+        "remaining": [],
+        "status": "PASS",
+        "ogre_log_sha256": "a2187e4759ab7088669b0b3e17a6160403002c0ea79de47187a9d1904c99296d",
+        "ogre_renderer_lines": [
+          "17:22:26: GL_RENDERER = D3D12 (NVIDIA GeForce RTX 4060 Laptop GPU)"
+        ]
+      }
+    },
+    {
+      "path": "generated/runs/run03/snapshot03/masked/result.json",
+      "sha256": "5ddbab27b37967f98b766bf84d68da355dff67fc07410223633911b3c6636576",
+      "status": "MEASURED",
+      "gazebo_returncode": 0,
+      "data_and_exit_ok": true,
+      "error": null,
+      "render_hook_log": [],
+      "cleanup": {
+        "session": "98c7499974094e54b1775860f887a610",
+        "reaped_members": [],
+        "signals": [],
+        "remaining": [],
+        "status": "PASS",
+        "ogre_log_sha256": "c48af244f0bf0f116adc0cace73176c6b5508a93eeb62d4c7d2148c0402a2721",
+        "ogre_renderer_lines": [
+          "17:22:36: GL_RENDERER = D3D12 (NVIDIA GeForce RTX 4060 Laptop GPU)"
+        ]
+      }
+    },
+    {
+      "path": "generated/runs/run03/snapshot03/null_visuals/result.json",
+      "sha256": "4cb60a68e6788ec23307eeefbb4d2ecbde740f246cd04fcaf34c5ef2c92408d4",
+      "status": "MEASURED",
+      "gazebo_returncode": 0,
+      "data_and_exit_ok": true,
+      "error": null,
+      "render_hook_log": [],
+      "cleanup": {
+        "session": "e000eb1d052d41beb67f9556b1328bb4",
+        "reaped_members": [],
+        "signals": [],
+        "remaining": [],
+        "status": "PASS",
+        "ogre_log_sha256": "3700b1b6a58ab03b95140ada3d5a0c7ce0f8ab1ea59435702385a123ad136491",
+        "ogre_renderer_lines": [
+          "17:22:45: GL_RENDERER = D3D12 (NVIDIA GeForce RTX 4060 Laptop GPU)"
+        ]
+      }
+    },
+    {
+      "path": "generated/runs/run04/snapshot01/baseline/result.json",
+      "sha256": "80bc678ae8b01c3c6fa39cf4ccc8a4faf8ba535de1a07b6ffa51590bcc64bd35",
+      "status": "MEASURED",
+      "gazebo_returncode": 0,
+      "data_and_exit_ok": true,
+      "error": null,
+      "render_hook_log": [],
+      "cleanup": {
+        "session": "63746736772445f09a4618bc0ec0d5ba",
+        "reaped_members": [],
+        "signals": [],
+        "remaining": [],
+        "status": "PASS",
+        "ogre_log_sha256": "83f887e5f8f8d86593c659d862801154073a501604e3036a1b73b1778da417aa",
+        "ogre_renderer_lines": [
+          "17:35:04: GL_RENDERER = D3D12 (NVIDIA GeForce RTX 4060 Laptop GPU)"
+        ]
+      }
+    },
+    {
+      "path": "generated/runs/run04/snapshot01/masked/result.json",
+      "sha256": "698ce91112acb6a664fc8a0a0c41381f050db1589c9e9b538e6ade62e50f87d7",
+      "status": "ERROR",
+      "gazebo_returncode": -6,
+      "data_and_exit_ok": false,
+      "error": "Owned process exited",
+      "render_hook_log": [],
+      "cleanup": {
+        "session": "617ba7b176e644558fd36130234e8d31",
+        "reaped_members": [],
+        "signals": [],
+        "remaining": [],
+        "status": "PASS",
+        "ogre_log_sha256": "dd21ddb70f427e34f5f10817f4358836f360c48aed438a34e30a440d57d0c599",
+        "ogre_renderer_lines": [
+          "17:35:15: GL_RENDERER = D3D12 (NVIDIA GeForce RTX 4060 Laptop GPU)"
+        ]
+      }
+    },
+    {
+      "path": "generated/runs/run05/snapshot01/baseline/result.json",
+      "sha256": "4553043f8762fe6b3b3be5c084bd361f0f38d421ed7156ea9c63a05acb423500",
+      "status": "MEASURED",
+      "gazebo_returncode": 0,
+      "data_and_exit_ok": true,
+      "error": null,
+      "render_hook_log": [],
+      "cleanup": {
+        "session": "61fdec431d5a4f27837b502e5f0413a7",
+        "reaped_members": [],
+        "signals": [],
+        "remaining": [],
+        "status": "PASS",
+        "ogre_log_sha256": "6fbb052f54e0569ccc42ad90315445351a97355fcfbea5e0c5bc03bbb90c62d1",
+        "ogre_renderer_lines": [
+          "17:39:58: GL_RENDERER = D3D12 (NVIDIA GeForce RTX 4060 Laptop GPU)"
+        ]
+      }
+    },
+    {
+      "path": "generated/runs/run05/snapshot01/masked/result.json",
+      "sha256": "f9eb90aaed7853677c40e14e37557d4a4bb10fdf26f07c9219739d8adf1289ed",
+      "status": "ERROR",
+      "gazebo_returncode": 0,
+      "data_and_exit_ok": false,
+      "error": "Depth repeat tolerance failed",
+      "render_hook_log": [
+        "[DepthProxyFilter] proxies=6",
+        "[DepthProxyFilter] registered=mecanum_robot::camera_link::proxy_low_off",
+        "[DepthProxyFilter] registered=mecanum_robot::camera_link::proxy_high_off",
+        "[DepthProxyFilter] pre_render proxies=6",
+        "[DepthProxyFilter] post_render restored",
+        "[DepthProxyFilter] teardown pre=52 post=52"
+      ],
+      "cleanup": {
+        "session": "ca6e795d7609494b8f357c9b53012481",
+        "reaped_members": [],
+        "signals": [],
+        "remaining": [],
+        "status": "PASS",
+        "ogre_log_sha256": "318639e930c4380d4f7253693ac32832eb1b6c89eb2b7a886693e4bedc988f36",
+        "ogre_renderer_lines": [
+          "17:40:07: GL_RENDERER = D3D12 (NVIDIA GeForce RTX 4060 Laptop GPU)"
+        ]
+      }
+    },
+    {
+      "path": "generated/runs/run06/snapshot01/baseline/result.json",
+      "sha256": "ca9f6e959eb9d04b04d477fa457a342146d96f440f9d42c8740ecd9d113a0670",
+      "status": "MEASURED",
+      "gazebo_returncode": 0,
+      "data_and_exit_ok": true,
+      "error": null,
+      "render_hook_log": [],
+      "cleanup": {
+        "session": "be86466eec354ac08cb2f1cc45258fdb",
+        "reaped_members": [],
+        "signals": [],
+        "remaining": [],
+        "status": "PASS",
+        "ogre_log_sha256": "465c36bffa7f207e4ec46ba7c4a52d49ade32d97edaa1814c00d35ebc68c9053",
+        "ogre_renderer_lines": [
+          "17:42:08: GL_RENDERER = D3D12 (NVIDIA GeForce RTX 4060 Laptop GPU)"
+        ]
+      }
+    },
+    {
+      "path": "generated/runs/run06/snapshot01/masked/result.json",
+      "sha256": "8f71cd1adb2198c5598f5c838b4c325c912735e55999c441d7a65cdfa69c528e",
+      "status": "MEASURED",
+      "gazebo_returncode": 0,
+      "data_and_exit_ok": true,
+      "error": null,
+      "render_hook_log": [
+        "[DepthProxyFilter] proxies=6",
+        "[DepthProxyFilter] registered=mecanum_robot::camera_link::proxy_low_off",
+        "[DepthProxyFilter] registered=mecanum_robot::camera_link::proxy_high_off",
+        "[DepthProxyFilter] pre_render proxies=6",
+        "[DepthProxyFilter] post_render restored",
+        "[DepthProxyFilter] teardown pre=46 post=46"
+      ],
+      "cleanup": {
+        "session": "56a8ed81a4334e66aadffba09f7056fa",
+        "reaped_members": [],
+        "signals": [],
+        "remaining": [],
+        "status": "PASS",
+        "ogre_log_sha256": "56bb23bb2003eed029a687c6799c408f1668ac01113a3907977327c2b465b887",
+        "ogre_renderer_lines": [
+          "17:42:17: GL_RENDERER = D3D12 (NVIDIA GeForce RTX 4060 Laptop GPU)"
+        ]
+      }
+    },
+    {
+      "path": "generated/runs/run06/snapshot01/null_visuals/result.json",
+      "sha256": "d1b308e58d257d964ac55493aad48ae83df2a5025a52da403d4b02bb257fc6af",
+      "status": "MEASURED",
+      "gazebo_returncode": 0,
+      "data_and_exit_ok": true,
+      "error": null,
+      "render_hook_log": [],
+      "cleanup": {
+        "session": "ab200024fff544e7ad90c1fdb915d24c",
+        "reaped_members": [],
+        "signals": [],
+        "remaining": [],
+        "status": "PASS",
+        "ogre_log_sha256": "11c9880c64382e2adfe32d14216f800ee71c14b26e7ac5e9e57aa63b3a064192",
+        "ogre_renderer_lines": [
+          "17:42:27: GL_RENDERER = D3D12 (NVIDIA GeForce RTX 4060 Laptop GPU)"
+        ]
+      }
+    },
+    {
+      "path": "generated/runs/run06/snapshot02/baseline/result.json",
+      "sha256": "9183dd780d19c03d4edc753d82e2e9d79ff61cb493a75b8e95c1d80de5eb5111",
+      "status": "ERROR",
+      "gazebo_returncode": 1,
+      "data_and_exit_ok": false,
+      "error": "Owned process exited",
+      "render_hook_log": [],
+      "cleanup": {
+        "session": "592d38bfbe474678a6b8dae2b7bf571f",
+        "reaped_members": [],
+        "signals": [],
+        "remaining": [],
+        "status": "PASS",
+        "ogre_log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "ogre_renderer_lines": []
+      }
+    },
+    {
+      "path": "generated/runs/run07/snapshot02/baseline/result.json",
+      "sha256": "7f909a76752ecc03e7d2fd7a88eebf15f45a6558641c75bb225b96ea8947429c",
+      "status": "MEASURED",
+      "gazebo_returncode": 0,
+      "data_and_exit_ok": true,
+      "error": null,
+      "render_hook_log": [],
+      "cleanup": {
+        "session": "def31cb43dc64fbe94de4b19225f3cd4",
+        "reaped_members": [],
+        "signals": [],
+        "remaining": [],
+        "status": "PASS",
+        "ogre_log_sha256": "55bac396fa0aad8e8b0d0725f5e742d797a33d4e10cde2192fe4b61c0a4d71c0",
+        "ogre_renderer_lines": [
+          "17:46:15: GL_RENDERER = D3D12 (NVIDIA GeForce RTX 4060 Laptop GPU)"
+        ]
+      }
+    },
+    {
+      "path": "generated/runs/run07/snapshot02/masked/result.json",
+      "sha256": "e47b99c4fd93372ca9fe7e53855c185e8d8d5351114848acdf335b47b0503c8e",
+      "status": "MEASURED",
+      "gazebo_returncode": 0,
+      "data_and_exit_ok": true,
+      "error": null,
+      "render_hook_log": [
+        "[DepthProxyFilter] proxies=6",
+        "[DepthProxyFilter] registered=mecanum_robot::camera_link::proxy_low_off",
+        "[DepthProxyFilter] registered=mecanum_robot::camera_link::proxy_high_off",
+        "[DepthProxyFilter] pre_render proxies=6",
+        "[DepthProxyFilter] post_render restored",
+        "[DepthProxyFilter] teardown pre=48 post=48"
+      ],
+      "cleanup": {
+        "session": "bcc74f273ba8495a89134a7358233e12",
+        "reaped_members": [],
+        "signals": [],
+        "remaining": [],
+        "status": "PASS",
+        "ogre_log_sha256": "f795ede37574138c7b979c35aa257831b594a34d202b754b6d0891186f24dc39",
+        "ogre_renderer_lines": [
+          "17:46:27: GL_RENDERER = D3D12 (NVIDIA GeForce RTX 4060 Laptop GPU)"
+        ]
+      }
+    },
+    {
+      "path": "generated/runs/run07/snapshot02/null_visuals/result.json",
+      "sha256": "e2d258748535411a93954a89d6887654b3ef2c706f580c2a5d7d18c9ad5f7e7f",
+      "status": "MEASURED",
+      "gazebo_returncode": 0,
+      "data_and_exit_ok": true,
+      "error": null,
+      "render_hook_log": [],
+      "cleanup": {
+        "session": "0f0e06dfb0ff48d397997dcef665a105",
+        "reaped_members": [],
+        "signals": [],
+        "remaining": [],
+        "status": "PASS",
+        "ogre_log_sha256": "be59983f65f60bc6bab526d0e0d3e1b31b619e5b607861aef24d076056b0c603",
+        "ogre_renderer_lines": [
+          "17:46:40: GL_RENDERER = D3D12 (NVIDIA GeForce RTX 4060 Laptop GPU)"
+        ]
+      }
+    },
+    {
+      "path": "generated/runs/run07/snapshot03/baseline/result.json",
+      "sha256": "7d9f805bcef34a9f4b9409f5d0919b9b1b04778f7d068f162dbe6c7a80831d1f",
+      "status": "MEASURED",
+      "gazebo_returncode": 0,
+      "data_and_exit_ok": true,
+      "error": null,
+      "render_hook_log": [],
+      "cleanup": {
+        "session": "deccba5021ff47e592f650c5987255bc",
+        "reaped_members": [],
+        "signals": [],
+        "remaining": [],
+        "status": "PASS",
+        "ogre_log_sha256": "3278338d44ac722d45030e13b6cf8350198dc2b26bfdcd029b9ff260d2ae8967",
+        "ogre_renderer_lines": [
+          "17:46:52: GL_RENDERER = D3D12 (NVIDIA GeForce RTX 4060 Laptop GPU)"
+        ]
+      }
+    },
+    {
+      "path": "generated/runs/run07/snapshot03/masked/result.json",
+      "sha256": "cfcc2e3715007bc16bc2f3c0edfe45e2a47daa0013fe1e5b6fc3a378ed30de93",
+      "status": "MEASURED",
+      "gazebo_returncode": -9,
+      "data_and_exit_ok": false,
+      "error": null,
+      "render_hook_log": [
+        "[DepthProxyFilter] proxies=6",
+        "[DepthProxyFilter] registered=mecanum_robot::camera_link::proxy_low_off",
+        "[DepthProxyFilter] registered=mecanum_robot::camera_link::proxy_high_off",
+        "[DepthProxyFilter] pre_render proxies=6",
+        "[DepthProxyFilter] post_render restored",
+        "[DepthProxyFilter] teardown pre=50 post=50"
+      ],
+      "cleanup": {
+        "session": "fa13b4abc4cc434e9c365771fd61b436",
+        "reaped_members": [],
+        "signals": [],
+        "remaining": [],
+        "status": "PASS",
+        "ogre_log_sha256": "e587d65722092b806a4ceaf9e37f8d492bbf3bfdcdd3794a3f1a130e5f2fed15",
+        "ogre_renderer_lines": [
+          "17:47:05: GL_RENDERER = D3D12 (NVIDIA GeForce RTX 4060 Laptop GPU)"
+        ]
+      }
+    },
+    {
+      "path": "generated/runs/run08/snapshot03/baseline/result.json",
+      "sha256": "926c3baaf1059e1f449a6f76b3adf981bd7cb89697a73507336d30f7daac3acb",
+      "status": "MEASURED",
+      "gazebo_returncode": 0,
+      "data_and_exit_ok": true,
+      "error": null,
+      "render_hook_log": [],
+      "cleanup": {
+        "session": "83b1b67c4306449284aa0a3d765af7d3",
+        "reaped_members": [],
+        "signals": [],
+        "remaining": [],
+        "status": "PASS",
+        "ogre_log_sha256": "fc28efcd17c7780c3076f083b085966a7bc2a9db4e80d2325621af83b35b230b",
+        "ogre_renderer_lines": [
+          "17:51:30: GL_RENDERER = D3D12 (NVIDIA GeForce RTX 4060 Laptop GPU)"
+        ]
+      }
+    },
+    {
+      "path": "generated/runs/run08/snapshot03/masked/result.json",
+      "sha256": "e6ecfad3d6c05ceff33dc53d2215015c1a3123126cd84b2d46eff0569cb0ab40",
+      "status": "MEASURED",
+      "gazebo_returncode": -9,
+      "data_and_exit_ok": false,
+      "error": null,
+      "render_hook_log": [
+        "[DepthProxyFilter] proxies=6",
+        "[DepthProxyFilter] registered=mecanum_robot::camera_link::proxy_low_off",
+        "[DepthProxyFilter] registered=mecanum_robot::camera_link::proxy_high_off",
+        "[DepthProxyFilter] pre_render proxies=6",
+        "[DepthProxyFilter] post_render restored",
+        "[DepthProxyFilter] teardown pre=46 post=46"
+      ],
+      "cleanup": {
+        "session": "70c406d8662c4f21b0e850722f3f753f",
+        "reaped_members": [],
+        "signals": [],
+        "remaining": [],
+        "status": "PASS",
+        "ogre_log_sha256": "4a61d6f726f1483fca426cbe438bd617ace3d786a996ed912ec235f526ff8a4c",
+        "ogre_renderer_lines": [
+          "17:51:42: GL_RENDERER = D3D12 (NVIDIA GeForce RTX 4060 Laptop GPU)"
+        ]
+      }
+    }
+  ]
+}
