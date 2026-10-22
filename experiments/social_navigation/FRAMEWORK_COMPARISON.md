@@ -1,5 +1,11 @@
 # So sánh khả năng đã đo — cập nhật22/10/2026
 
+## Cập nhật 23/10/2026 — pixel visibility và clutter control
+
+[Visibility report](benchmark/depth_visibility_pilot/reports/VISIBILITY_REPORT.md): một fixture tĩnh native mesh,15camera×5timestamp=75ảnh GPU NVIDIA. Nhãn10649pixel người không mâu thuẫn, ownership ổn định; audit57070pixel/9test đạt. Bốn người nhìn thấy đều có proposal, nhưng shape filter vẫn giữ2cụm đồ vật cả khi ẩn hết người: chưa thể gọi track là người hoặc bật association/train. Người phía sau chỉ còn11.92%silhouette nhìn thấy; chưa có fully-occluded case thật hoặc dynamic semantic acceptance.
+
+Giữ lỗi wiring01–03 và strict inter-frame bitwise FAIL04. Protocol2 chốt trước05 dùng tolerance số học1mm đã có cho label, vẫn yêu cầu full/control cùng timestamp khớp từng byte;05 đạt numeric gate, strict bitwise vẫnfalse. Không thay inference/ROS/Nav2/dataset cũ; H1–H5/trainfalse, HuNavSim chưa dùng, navigationTIMEOUT giữ riêng. Bước tiếp: semantic person-vs-object sensor-only, kiểm lại clutter rồi động/occlusion và scene mới trước batch. Mốc lưu: `feat: add static depth visibility and clutter validation`.
+
 ## Cập nhật 23/10/2026 — sửa gap association, kiểm seed44 mới
 
 [Identity guard](benchmark/depth_identity_guard/reports/IDENTITY_GUARD_REPORT.md): candidate05 chặn case GT5→GT6 ở seed43 (pairing changes1→0), giữ đủ1983 paired rows; mesh42 giữ fragmentation10, repeat42 giảm8→7. Các bản01–04 chưa đạt được giữ code/hash/kết quả. 14 behavior tests và audit đạt; code/gate chốt trước seed44.

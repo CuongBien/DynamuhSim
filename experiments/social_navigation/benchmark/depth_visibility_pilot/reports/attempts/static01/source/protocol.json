@@ -1,0 +1,35 @@
+{
+  "schema": "static_depth_visibility/1",
+  "scope": "Label-only static frozen mesh intervention; no dynamic dataset semantic certification",
+  "camera": "original low camera, 424x240, original intrinsics/clip, rate 1Hz",
+  "modes": [
+    "full",
+    "control",
+    "null",
+    "drop1",
+    "drop2",
+    "drop3",
+    "drop4",
+    "drop5",
+    "drop6",
+    "only1",
+    "only2",
+    "only3",
+    "only4",
+    "only5",
+    "only6"
+  ],
+  "warmup_ns": 2000000000,
+  "frames": 5,
+  "max_wall_s": 100,
+  "depth_equality_tolerance_m": 0.001,
+  "visible_min_pixels": 20,
+  "proposal_purity": 0.8,
+  "proposal_person_support_min_points": 5,
+  "occlusion_partial_ratio": 0.98,
+  "training_ready": false,
+  "acceptance": {
+    "label_harness": "GPU NVIDIA; clean exit; balanced callbacks; full/control bitwise; five-frame stability; six actor geometry mappings; leave-one-out and isolated-depth ownership agree except explicitly masked boundary pixels",
+    "detector": "Report only; no retrospective threshold tuning; any observed false positive/negative prevents acceptance"
+  }
+}

@@ -1,0 +1,5 @@
+{
+  "finding": "Gazebo DepthCameraSensor publishes /visibility/<mode>/camera_info despite configured camera_info_topic ending /info; ROS bridge was listening on /info",
+  "evidence": "Native gz topic inventory queried in owned visibility_44708 partition during static02; all fifteen camera_info topics present alongside bridged but unpublished info subscriptions",
+  "action": "Stop diagnostic capture gracefully after root cause identified; change experimental info bridge/topic suffix to camera_info; preserve attempt and sources"
+}
