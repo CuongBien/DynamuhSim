@@ -1,0 +1,11 @@
+--- oracle narrow angular proposals
++++ oracle wide angular proposals
+@@ -70,7 +70,7 @@
+     observer=world.find("model[@name='common_observer']");observer.find('pose').text='-24 -5 12 0 1.17 1.57079632679';observer.find('.//topic').text='/common/observer';observer.find('.//update_rate').text='1';observer.find('.//image/width').text='640';observer.find('.//image/height').text='480'
+     add_filter(world);ET.indent(tree);tree.write(runtime/'warehouse.sdf',encoding='unicode');config=yaml.safe_load((SOCIAL/'warehouse/nav2_warehouse.yaml').read_text());original=copy.deepcopy(config);config['amcl']['ros__parameters']['initial_pose'].update(x=-28.,y=0.,yaw=0.)
+     changed=copy.deepcopy(config);changed['amcl']['ros__parameters']['initial_pose']=original['amcl']['ros__parameters']['initial_pose'];assert changed==original
+-    before_treatment=copy.deepcopy(config);apply_runtime_config(config);config['amcl']['ros__parameters']['tf_broadcast']=False;(out/'config_changes.json').write_text(json.dumps(changes(before_treatment,config),indent=2)+'\n')
++    before_treatment=copy.deepcopy(config);apply_runtime_config(config);config['controller_server']['ros__parameters']['FollowPath']['wz_std']=1.2;config['amcl']['ros__parameters']['tf_broadcast']=False;(out/'config_changes.json').write_text(json.dumps(changes(before_treatment,config),indent=2)+'\n')
+     (runtime/'nav2_runtime.yaml').write_text(yaml.safe_dump(config,sort_keys=False));result['runtime_nav_params_sha256']=sha(runtime/'nav2_runtime.yaml');result['runtime_world_sha256']=sha(runtime/'warehouse.sdf')
+     launch_env.update(NAV2_PILOT_WORLD=str(runtime/'warehouse.sdf'),NAV2_PILOT_PARAMS=str(runtime/'nav2_runtime.yaml'),DATASET_CAMERA_LAUNCH=str(runtime/'mecanum_camera.launch.py'),DATASET_ROBOT_SDF=str(runtime/'mecanum_camera.sdf'))
+     truth_log=(out/'truth_odometry.log').open('w');files.append(truth_log);processes.append(subprocess.Popen([sys.executable,str(Path(os.environ['EARLY_AVOIDANCE_DIR'])/'truth_odometry.py')],stdout=truth_log,stderr=subprocess.STDOUT,start_new_session=True,env=launch_env))

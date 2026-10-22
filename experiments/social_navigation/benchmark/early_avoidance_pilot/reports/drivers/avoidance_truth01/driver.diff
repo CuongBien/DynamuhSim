@@ -1,0 +1,40 @@
+--- parent frozen motion_driver.py
++++ runtime early avoidance driver
+@@ -28,10 +28,11 @@
+ from motion_prepare import prepare_camera,add_filter
+ from pair_recording import Pairs
+ from quiesce import stop_paused
++from config_runtime import apply_runtime_config,changes,capture_live_parameters
+ original_stop=stop_server
+ def stop_server(guard):return stop_paused(guard,original_stop)
+ p=argparse.ArgumentParser();p.add_argument('--scenario',choices=['walking','standing'],required=True);p.add_argument('--seed',type=int,choices=[42,43],required=True);p.add_argument('--report-dir',type=Path,required=True);p.add_argument('--gui',action='store_true');a=p.parse_args();a.condition='people'
+-plan=json.loads((BASE/'protocol.json').read_text());out=a.report_dir.resolve();out.mkdir(parents=True,exist_ok=False);runtime=HERE/'generated'/out.name;runtime.mkdir(exist_ok=False)
++plan=json.loads((BASE/'protocol.json').read_text());plan['sim_budget']=90.;out=a.report_dir.resolve();out.mkdir(parents=True,exist_ok=False);runtime=HERE/'generated'/out.name;runtime.mkdir(exist_ok=False)
+ lock=(BENCH/'common_gazebo/generated/domain91.lock').open('a');fcntl.flock(lock,fcntl.LOCK_EX|fcntl.LOCK_NB)
+ os.environ.update(ROS_DOMAIN_ID='91',GZ_PARTITION='dynamuhsim_group_nav2_'+str(os.getpid()),ROS_LOG_DIR=str(runtime/'ros_logs'),QT_QPA_PLATFORM='xcb',ROS_AUTOMATIC_DISCOVERY_RANGE='LOCALHOST',FASTDDS_BUILTIN_TRANSPORTS='UDPv4')
+ sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest();guard=RuntimeGuard(runtime);processes=[];files=[];node=None;frames=[];poses=[];states=[];scans=[];odom=[];amcl=[];commands=[];paths=[];costmaps=[];feedback=[];roslogs=[];tfrows=[];faults=[];latest={};counts=collections.Counter();recording=None;pairs=None;worker=None;gui_process=None;handle=None;phase='warmup';client=None;tfbuffer=None
+@@ -69,6 +70,7 @@
+     observer=world.find("model[@name='common_observer']");observer.find('pose').text='-24 -5 12 0 1.17 1.57079632679';observer.find('.//topic').text='/common/observer';observer.find('.//update_rate').text='1';observer.find('.//image/width').text='640';observer.find('.//image/height').text='480'
+     add_filter(world);ET.indent(tree);tree.write(runtime/'warehouse.sdf',encoding='unicode');config=yaml.safe_load((SOCIAL/'warehouse/nav2_warehouse.yaml').read_text());original=copy.deepcopy(config);config['amcl']['ros__parameters']['initial_pose'].update(x=-28.,y=0.,yaw=0.)
+     changed=copy.deepcopy(config);changed['amcl']['ros__parameters']['initial_pose']=original['amcl']['ros__parameters']['initial_pose'];assert changed==original
++    before_treatment=copy.deepcopy(config);apply_runtime_config(config);(out/'config_changes.json').write_text(json.dumps(changes(before_treatment,config),indent=2)+'\n')
+     (runtime/'nav2_runtime.yaml').write_text(yaml.safe_dump(config,sort_keys=False));result['runtime_nav_params_sha256']=sha(runtime/'nav2_runtime.yaml');result['runtime_world_sha256']=sha(runtime/'warehouse.sdf')
+     launch_env.update(NAV2_PILOT_WORLD=str(runtime/'warehouse.sdf'),NAV2_PILOT_PARAMS=str(runtime/'nav2_runtime.yaml'),DATASET_CAMERA_LAUNCH=str(runtime/'mecanum_camera.launch.py'),DATASET_ROBOT_SDF=str(runtime/'mecanum_camera.sdf'))
+     rclpy.init();node=Node('dataset_pilot',parameter_overrides=[rclpy.parameter.Parameter('use_sim_time',value=True)]);gz=GzNode();tfbuffer=Buffer();tflistener=TransformListener(tfbuffer,node);recording=Recording(node,out);pairs=Pairs(node,out,lambda:phase)
+@@ -120,6 +122,7 @@
+     if a.gui:
+         gui_log=(runtime/'gui.log').open('w');files.append(gui_log);gui_process=subprocess.Popen(['gz','sim','-g'],stdout=gui_log,stderr=subprocess.STDOUT,start_new_session=True,env=launch_env);processes.append(gui_process);wait(lambda:False,3.);result['gui_start_mode']='Separate GUI after server sensors/AMCL/Nav2 ready'
+     assert wait(lambda:recording.ready() and pairs.ready(),30),'Full recorder/depth/calibration not ready'
++    result['live_parameters']=capture_live_parameters(node,wait,out)
+     recording.event('ready',round(simtime()*1e9),scenario=a.scenario,seed=a.seed)
+     result['amcl_publishers']=publisher_evidence(node);result['cmd_vel_publishers_before_goal']=[dict(node=e.node_name,namespace=e.node_namespace) for e in node.get_publishers_info_by_topic('/cmd_vel')];assert all(e['node'] in ['controller_server','behavior_server'] for e in result['cmd_vel_publishers_before_goal'])
+     robot=poses[-1]['poses']['mecanum_robot'];assert math.hypot(robot['x']+28,robot['y'])<.02,'Robot moved in warmup'
+@@ -144,7 +147,7 @@
+     tail_start=simtime();phase='label_tail';assert wait(lambda:simtime()-tail_start>=3.2,45),'Future label tail incomplete'
+     recording.event('observation_end',round(simtime()*1e9))
+     wait(lambda:False,.5)
+-    result['counts']=dict(counts);result['experiment']='Depth-only proxy motion pilot, native camera height, no default changes';result['cmd_vel_publishers_after_goal']=[dict(node=e.node_name,namespace=e.node_namespace) for e in node.get_publishers_info_by_topic('/cmd_vel')];result['status']='MEASURED';result['amcl_final_pose']=endpoint(latest['amcl'].pose.pose)
++    result['counts']=dict(counts);result['experiment']='Conservative Nav2 footprint/inflation/speed pilot; native sensors/standingv3 unchanged';result['cmd_vel_publishers_after_goal']=[dict(node=e.node_name,namespace=e.node_namespace) for e in node.get_publishers_info_by_topic('/cmd_vel')];result['status']='MEASURED';result['amcl_final_pose']=endpoint(latest['amcl'].pose.pose)
+ except Exception as error:result['error']=str(error);traceback.print_exc()
+ finally:
+     phase='finished'

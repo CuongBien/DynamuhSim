@@ -1,5 +1,15 @@
 # Kế hoạch tiếp theo: đánh giá hành vi người, tách khỏi nhiễu định vị
 
+## Cập nhật22/10/2026 — một episode tránh nhóm sớm đã tới đích thật
+
+[Pilot Nav2 tránh sớm](benchmark/early_avoidance_pilot/reports/EARLY_AVOIDANCE_REPORT.md):profile runtime radius0.25m/inflation0.8m, speed0.30/0.20mps đạt1lượt standingv3 seed42, AMCL/odom gốc:87.31sim s trong budget90s, goal thật14.42cm/0.069rad, nominal gapmin59.25cm, không hull intrusion nhóm standing theo metric. Đủ tail3.35s;16topicMCAP,1013depth/507scan/10120IMU;1008cặp depth đối chứng.5frame phụ thiếu đều warmup, shared OFF khớp raw bitwise; GPU NVIDIA/cleanup đạt.
+
+**Đính chính mốc động trước:**camera copier làm gz:expressed_in→ns0:expressed_in, khiến Gazebo bỏ frame ma sát4bánh; canonical XML audit đã bỏ sót. [Errata](benchmark/early_avoidance_pilot/reports/ERRATA.md). Fix riêng33427f4 khôi phục literal prefix trong runtime, SDKtest gốc4/bad0/fix4; src/robot và dataset pilot cũ không đổi. Ba lượt exploratory setup sai bị loại; slow fixed vẫn timeout và giữ FAIL. Không coi oracle/wz_std là fix hay tính success rate.
+
+Chỉ là1pilot cấu hình riêng, chưa default/robust social nav/train-ready. Native nhóm có thể tan; H1–H5 vẫn masked, association/futureBEV còn thiếu. Bước kế: chuẩn hóa episode đạt và provenance thành sample portable, rồi xác nhận độc lập nhỏ trước batch. Mốc lưu: `feat: complete an early avoidance pilot with native robot physics`.
+
+Các mục dưới giữ lịch sử theo thời điểm đo.
+
 ## Cập nhật22/10/2026 — đối chứng cảnh03 và pilot depth động
 
 [Lifecycle và pilot động](benchmark/depth_proxy_lifecycle/reports/LIFECYCLE_MOTION_REPORT.md):cảnh03 đã đủbaseline/masked/null, camera ON/OFF/null và LiDAR chẩn đoán khớp bitwise,3exit0 trên NVIDIA với pause→stats dừng→đợi0.5s→stop. Control nguyên bản lượt này cũng đóng sạch; lỗi treo cũ chưa tái hiện/biết root cause, không tuyên bố sửa dứt điểm.

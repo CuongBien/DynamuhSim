@@ -1,0 +1,12 @@
+--- slow corrected physics
++++ moderate corrected physics
+@@ -28,7 +28,8 @@
+ from namespace_prepare import prepare_camera,add_filter
+ from pair_recording import Pairs
+ from quiesce import stop_paused
+-from config_runtime import apply_runtime_config,changes,capture_live_parameters
++from config_runtime import changes
++from moderate_config import apply_runtime_config,capture_live_parameters
+ original_stop=stop_server
+ def stop_server(guard):return stop_paused(guard,original_stop)
+ p=argparse.ArgumentParser();p.add_argument('--scenario',choices=['walking','standing'],required=True);p.add_argument('--seed',type=int,choices=[42,43],required=True);p.add_argument('--report-dir',type=Path,required=True);p.add_argument('--gui',action='store_true');a=p.parse_args();a.condition='people'

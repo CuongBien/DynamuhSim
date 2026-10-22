@@ -1,0 +1,11 @@
+--- incorrect namespace prefix
++++ restore original literal gz friction prefix
+@@ -25,7 +25,7 @@
+ sys.path.insert(0,str(BENCH));from shutdown_fix.ordered_stop import launch_environment,stop_server
+ from amcl_observer import observer_qos,publisher_evidence
+ from recording import Recording
+-from motion_prepare import prepare_camera,add_filter
++from namespace_prepare import prepare_camera,add_filter
+ from pair_recording import Pairs
+ from quiesce import stop_paused
+ from config_runtime import apply_runtime_config,changes,capture_live_parameters
