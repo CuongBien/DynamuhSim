@@ -1,5 +1,13 @@
 # Kế hoạch tiếp theo: đánh giá hành vi người, tách khỏi nhiễu định vị
 
+## Cập nhật 22/10/2026 — đã thu và kiểm chứng seed 43 mới
+
+[Seed43 report](benchmark/depth_seed43_validation/reports/SEED43_REPORT.md): một recording mới trên NVIDIA, cùng layout/depth mesh/Nav2, đổi seed 42→43; frozen engine trước capture, không tune. Có 1051 depth khớp raw bitwise, 802 cửa sổ/1 episode, dữ liệu/cleanup/audit đạt; quỹ đạo người thực tế khác seed42. **Navigation TIMEOUT 90.025 s, goal còn 3.7013 m**, không đổi thành success.
+
+Combined giữ 1983 paired rows, unpaired 900→268, paired ratio 68.78→88.09%; fragmentation 9→9 và còn một pairing change nên **gate kết hợp FAIL**. Chưa nghiệm thu re-ID/semantic/association/train, baseline cũ giữ nguyên. Case GT5→GT6 ở 13.5→13.9 s đã lưu LABEL ONLY cho regression; nếu dùng để tune bản sau phải kiểm trên seed mới khác. Không thu batch hoặc sửa ROS; HuNavSim chưa dùng.
+
+Mốc lưu: `feat: validate frozen depth tracking on a new seed`.
+
 ## Cập nhật 22/10/2026 — depth track refinement có giới hạn profile
 
 [Refinement report](benchmark/depth_track_refinement/reports/REFINEMENT_REPORT.md): frozen shape filter + dormant ID được so sánh bốn ablation trên ba recording. Hai lượt mesh depth cải thiện paired ratio 77.74→93.71% và 75.62→90.09%, fragmentation proxy 13→10 và 10→8. Đây là diagnostic hình học, không phải semantic accuracy.
