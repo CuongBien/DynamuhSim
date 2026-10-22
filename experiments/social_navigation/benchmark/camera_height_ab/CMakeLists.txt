@@ -1,0 +1,7 @@
+cmake_minimum_required(VERSION 3.22)
+project(camera_height_experiment)
+find_package(gz-sim8 REQUIRED)
+find_package(gz-plugin2 REQUIRED COMPONENTS register)
+add_library(freeze_actors SHARED freeze_actors.cc)
+target_compile_features(freeze_actors PRIVATE cxx_std_17)
+target_link_libraries(freeze_actors PRIVATE gz-sim8::gz-sim8 gz-plugin2::gz-plugin2)

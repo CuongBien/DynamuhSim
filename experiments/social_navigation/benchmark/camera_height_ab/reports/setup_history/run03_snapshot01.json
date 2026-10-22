@@ -1,0 +1,139 @@
+{
+  "status": "ERROR",
+  "snapshot_index": 1,
+  "source_snapshot": {
+    "schema": "social_scene/1",
+    "stamp_ns": 12602500000,
+    "frame_id": "world",
+    "robot": {
+      "x": -27.274503240636555,
+      "y": 0.018019533080191382,
+      "yaw": -0.18975399801755036
+    },
+    "humans": [
+      {
+        "id": 1,
+        "x": -24.78,
+        "y": 0.0,
+        "yaw": 3.141592653589793
+      },
+      {
+        "id": 2,
+        "x": -25.86,
+        "y": 0.6235382907247964,
+        "yaw": -1.0471975511965985
+      },
+      {
+        "id": 3,
+        "x": -25.859999999999996,
+        "y": -0.6235382907247974,
+        "yaw": 1.0471975511965985
+      },
+      {
+        "id": 4,
+        "x": -21.78,
+        "y": 0.0,
+        "yaw": 3.141592653589793
+      },
+      {
+        "id": 5,
+        "x": -22.86,
+        "y": 0.6235382907247964,
+        "yaw": -1.0471975511965985
+      },
+      {
+        "id": 6,
+        "x": -22.859999999999996,
+        "y": -0.6235382907247954,
+        "yaw": 1.0471975511965985
+      }
+    ],
+    "phase": "active",
+    "source": "gazebo_pose_info",
+    "persona": null,
+    "persona_valid": false,
+    "persona_reason": "backend_personas_not_validated",
+    "_received_ns": 12605000000
+  },
+  "paired": true,
+  "fixture": "Frozen world; no native human step or Nav2 action",
+  "runtime": "experiments/social_navigation/benchmark/camera_height_ab/generated/run03/snapshot01",
+  "frames_target": 10,
+  "rendering": {
+    "vendor": "Microsoft Corporation",
+    "renderer": "D3D12 (NVIDIA GeForce RTX 4060 Laptop GPU)",
+    "version": "4.6 (Compatibility Profile) Mesa 25.2.8-0ubuntu0.24.04.2",
+    "direct": true,
+    "environment_before": {
+      "DISPLAY": ":0",
+      "WAYLAND_DISPLAY": "wayland-0"
+    },
+    "environment_used": {
+      "DISPLAY": ":0",
+      "WAYLAND_DISPLAY": "wayland-0",
+      "GALLIUM_DRIVER": "d3d12",
+      "MESA_D3D12_DEFAULT_ADAPTER_NAME": "NVIDIA"
+    },
+    "probe_source_sha256": "9a9f5478053290b51f18beed987563a7e3a2349f143e8fccd0ce41bf57ec5bab",
+    "probe_binary_sha256": "37f8608ee330e5c179dcd1975c9053e0b66f055f21a68e41bbaf13ed20d26520",
+    "hardware_verified": true
+  },
+  "shutdown_mode": {
+    "scope": "gz sim only",
+    "library": "/usr/lib/wsl/lib/libd3d12core.so",
+    "real_gz": "/opt/ros/jazzy/opt/gz_tools_vendor/bin/gz",
+    "wrapper": "/home/cuongbien/DynamuhSim/experiments/social_navigation/benchmark/camera_height_ab/generated/run03/snapshot01/shutdown_bin/gz",
+    "mode": "startup LD_PRELOAD; no system files changed"
+  },
+  "error": "Paired depth not ready within wall budget",
+  "received_counts": {
+    "low": 0,
+    "high": 0
+  },
+  "camera_info_received": [
+    "high",
+    "low"
+  ],
+  "server_shutdown": {
+    "status": "STILL_RUNNING",
+    "partition": "camera_height_22012_1",
+    "initial": [
+      {
+        "pid": 22055,
+        "command": "gz sim -r -s /home/cuongbien/DynamuhSim/experiments/social_navigation/benchmark/camera_height_ab/generated/run03/snapshot01/warehouse.sdf                                             "
+      }
+    ],
+    "request_returncode": 0,
+    "response": "data: true",
+    "stderr": "",
+    "elapsed_wall_s": 8.352210166998702,
+    "remaining": [
+      {
+        "pid": 22055,
+        "command": "gz sim -r -s /home/cuongbien/DynamuhSim/experiments/social_navigation/benchmark/camera_height_ab/generated/run03/snapshot01/warehouse.sdf                                             "
+      }
+    ]
+  },
+  "cleanup": {
+    "session": "d8fdd6559e7e4b43a521aa0457cc942d",
+    "reaped_members": [],
+    "signals": [],
+    "remaining": [],
+    "status": "PASS",
+    "ogre_log_sha256": "f7cfac2808dc55dc21b6be9acadecd39b811e68a4cc5f6ceb3bef0536526434e",
+    "ogre_renderer_lines": [
+      "16:50:36: GL_RENDERER = D3D12 (NVIDIA GeForce RTX 4060 Laptop GPU)"
+    ]
+  },
+  "gazebo_returncode": -9,
+  "source_sha256": {
+    "experiments/social_navigation/benchmark/camera_height_ab/capture.py": "07ea5c8f2131c32438de832ff732b130c3efad048e70b5404cf9972929fe200d",
+    "experiments/social_navigation/benchmark/camera_height_ab/fixture.py": "c1e42dff7290e1b23e6970716dbfb3aab4cedaf491918ecab8ab52a14f836292",
+    "experiments/social_navigation/benchmark/camera_height_ab/protocol.json": "d1fcb7be090487d1885db46222a1225c31755d581f8bc1bc0e3809792ca1973e",
+    "experiments/social_navigation/benchmark/camera_height_ab/run.sh": "7ffdfe3115c51acd29707728fd07a96d6a0a062ea3718ebba15b5c0ceb73bee6",
+    "src/custom_corridor/models/mecanum_robot/model.sdf": "98923f28252af56e93ae570c9da74dfd41390decf004142c97a35b61f351074e",
+    "src/custom_corridor/urdf/mecanum_robot.urdf": "9ac85e9fb1297a907078667d981ea03fcb4fc084fb61aee36ef2d5cbe3cfda84",
+    "experiments/social_navigation/gazebo_adapter/run.py": "f4596403abace27667399a90d92252fc1355d3ef054947818ce632b21c43b8c9",
+    "experiments/social_navigation/warehouse/warehouse.sdf": "4563ff06990ff352dd96c0b33c63ccd01763c8f39debed31f5761d022dcdbc8d"
+  }
+}
