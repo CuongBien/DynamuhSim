@@ -1,0 +1,201 @@
+{
+  "schema": "perception_pilot_example/1",
+  "sample_index": 411,
+  "anchor_ns": 53400000000,
+  "inputs": {
+    "anchor_ns": {
+      "shape": [],
+      "dtype": "int64"
+    },
+    "history_query_ns": {
+      "shape": [
+        20
+      ],
+      "dtype": "int64"
+    },
+    "depth_stamp_ns": {
+      "shape": [
+        20
+      ],
+      "dtype": "int64"
+    },
+    "depth_available_ns": {
+      "shape": [
+        20
+      ],
+      "dtype": "int64"
+    },
+    "track_id": {
+      "shape": [
+        16
+      ],
+      "dtype": "int32"
+    },
+    "xy_vxy": {
+      "shape": [
+        20,
+        16,
+        4
+      ],
+      "dtype": "float32"
+    },
+    "observed_valid": {
+      "shape": [
+        20,
+        16
+      ],
+      "dtype": "bool"
+    },
+    "confirmed_hits": {
+      "shape": [
+        20,
+        16
+      ],
+      "dtype": "int32"
+    },
+    "semantic_person_valid": {
+      "shape": [
+        16
+      ],
+      "dtype": "bool"
+    },
+    "association_accepted": {
+      "shape": [
+        16
+      ],
+      "dtype": "bool"
+    },
+    "anchor_odom_stamp_ns": {
+      "shape": [],
+      "dtype": "int64"
+    },
+    "current_bev": {
+      "shape": [
+        64,
+        64
+      ],
+      "dtype": "int8"
+    },
+    "current_bev_valid": {
+      "shape": [],
+      "dtype": "bool"
+    },
+    "bev_source_odom_stamp_ns": {
+      "shape": [],
+      "dtype": "int64"
+    }
+  },
+  "labels": {
+    "anchor_ns": {
+      "shape": [],
+      "dtype": "int64"
+    },
+    "offset_ns": {
+      "shape": [
+        3
+      ],
+      "dtype": "int64"
+    },
+    "query_ns": {
+      "shape": [
+        3
+      ],
+      "dtype": "int64"
+    },
+    "depth_index": {
+      "shape": [
+        3
+      ],
+      "dtype": "int32"
+    },
+    "depth_stamp_ns": {
+      "shape": [
+        3
+      ],
+      "dtype": "int64"
+    },
+    "depth_time_error_ns": {
+      "shape": [
+        3
+      ],
+      "dtype": "int64"
+    },
+    "anchor_pose_world_gt": {
+      "shape": [
+        3
+      ],
+      "dtype": "float64"
+    },
+    "future_pose_world_gt": {
+      "shape": [
+        3,
+        3
+      ],
+      "dtype": "float64"
+    },
+    "occupancy": {
+      "shape": [
+        3,
+        64,
+        64
+      ],
+      "dtype": "int8"
+    },
+    "frame_valid": {
+      "shape": [
+        3
+      ],
+      "dtype": "bool"
+    },
+    "cell_observed_valid": {
+      "shape": [
+        3,
+        64,
+        64
+      ],
+      "dtype": "bool"
+    },
+    "training_eligible": {
+      "shape": [],
+      "dtype": "bool"
+    }
+  },
+  "gt_association_diagnostics": {
+    "anchor_ns": {
+      "shape": [],
+      "dtype": "int64"
+    },
+    "track_id": {
+      "shape": [
+        16
+      ],
+      "dtype": "int32"
+    },
+    "gt_human_id": {
+      "shape": [
+        16
+      ],
+      "dtype": "int32"
+    },
+    "geometric_history_consistent": {
+      "shape": [
+        16
+      ],
+      "dtype": "bool"
+    },
+    "history_pair_valid": {
+      "shape": [
+        20,
+        16
+      ],
+      "dtype": "bool"
+    },
+    "association_accepted": {
+      "shape": [
+        16
+      ],
+      "dtype": "bool"
+    }
+  },
+  "training_ready": false
+}

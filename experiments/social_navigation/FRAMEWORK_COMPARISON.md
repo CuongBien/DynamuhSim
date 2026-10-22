@@ -1,5 +1,13 @@
 # So sánh khả năng đã đo — cập nhật22/10/2026
 
+## Cập nhật 22/10/2026 — pilot track cảm biến và nhãn BEV tương lai
+
+[Perception/target pilot](benchmark/perception_target_pilot/reports/PERCEPTION_TARGET_REPORT.md) chạy offline cùng episode: depth + odom tạo candidate tracks, GT chỉ ở nhánh label. 2577/3315 confirmed candidate rows ghép hình học được (77.74%, median 13.62 cm); đây không phải accuracy detector. Có phân mảnh ID và ứng viên chưa ghép, nên semantic/association/training masks vẫn false.
+
+Đã dựng 2469 target BEV ở +0.5/+1/+3 s cho 823 cửa sổ: future depth thực quan sát, warp về khung robot tại anchor, unknown được mask khỏi loss. GT ego poses chỉ dùng cho LABEL; input BEV warp bằng odom nhân quả và vẫn có sai số ước lượng. 12 test và audit độc lập đạt; portable bundle gốc/raw/ROS không đổi. Bước kế: nghiệm thu person detector từ depth, occlusion/đứt ID và alignment trên episode độc lập trước batch/train. Giữ HuNavSim cho test cuối.
+
+Mốc lưu: `feat: prototype sensor tracks and anchor-frame future depth BEV labels`.
+
 ## Cập nhật 22/10/2026 — đã xuất portable episode, chưa train-ready
 
 [Portable episode](benchmark/portable_episode/reports/PORTABLE_EPISODE_REPORT.md): đã xuất **823 cửa sổ từ 1 episode**, history 2 s / nhãn tương lai 3 s, đủ **1013 ảnh depth khớp raw từng byte**. Loader NumPy đọc được ở thư mục khác mà không cần ROS/Gazebo; input và ground-truth supervision đọc riêng. Bundle đầy đủ khoảng 539 MB ở `benchmark/portable_episode/generated/episode01/`; Git giữ công cụ, báo cáo và một mẫu nhỏ.

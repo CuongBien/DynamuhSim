@@ -1,0 +1,61 @@
+{
+  "schema": "perception_labels_pilot/1",
+  "source_bundle_manifest_sha256": "205981f83555d141481823feea00ae21295015c42f1f946c42ce0d27fa1922b4",
+  "sensor_manifest_sha256": "8c8a94dcf1ba0abfaea5d7eb236ea5855caa3bbd7daa5388f7f81198a8a1da48",
+  "scene_sha256": "361994d13e5ac3a531a051f9fc00f130e2bb9a532c9f5a480e06c9caafe23859",
+  "contract": {
+    "schema": "perception_target_pilot/1",
+    "split": "pilot_only",
+    "training_ready": false,
+    "human_inputs": "Class-agnostic depth geometry candidate tracks, causal odometry, no simulator human state",
+    "history": "20 queries at 10Hz; missing observations are zero with valid=false; no backward filling",
+    "track_frame": "estimated robot anchor frame via causal odometry ZOH; coordinates are estimates, no GT correction",
+    "association_gate_m": 0.6,
+    "association_ambiguity_margin_m": 0.15,
+    "association_role": "GT-side geometric diagnostic only; not semantic person-detector acceptance",
+    "max_slots": 16,
+    "bev_future_offsets_ns": [
+      500000000,
+      1000000000,
+      3000000000
+    ],
+    "bev_future_depth_tolerance_ns": 50000000,
+    "bev_target": "Observed future occupancy from actual depth, warped into true robot anchor axes using simulator ego poses LABEL ONLY",
+    "bev_target_excludes": "No complete-world occupancy, no unseen-area completion, no persona or social-space cost",
+    "bev_grid": {
+      "x_m": [
+        0,
+        6.4
+      ],
+      "y_m": [
+        -3.2,
+        3.2
+      ],
+      "cell_m": 0.1,
+      "height_m": [
+        0.03,
+        1.8
+      ],
+      "unknown": -1,
+      "free": 0,
+      "occupied": 1
+    },
+    "bev_cell_loss_valid": "Per-cell target != unknown, additionally require depth and GT pose temporal support",
+    "bev_time_frame": "Source depth at selected future measurement stamp; all targets frozen at anchor SE2 frame",
+    "input_bev": "Current depth warped to estimated anchor using only causal odometry; ZOH timing residual retained",
+    "alignment_caveat": "Input odom delta can differ from label GT delta; no oracle in inputs",
+    "mask_policy": "Original sealed bundle unchanged; all training/semantic/association acceptance stays false in pilot",
+    "persona": "H1-H5 schema retained, not validated or inferred from posture",
+    "holdout": "HuNavSim reserved for final test; no tuning/train",
+    "acceptance": "Geometry/timing/source-integrity tests can pass while perception readiness fails"
+  },
+  "source_sha256": {
+    "build_labels.py": "3f638133240c966f4de5c02a33544f07d174dc638850497769a06b795e858f15",
+    "sensor.py": "0fe703e72335c3f768584d051351b8e16f8aa1eb48ecd51b7f8dd6dd767bc7d1",
+    "geometry.py": "214928e004785fb0ff26ff0614c8f879ea118dabfbc716efbf46bde31163cf4f",
+    "association.py": "13ea3e6615704604c4721a2d85e0d361f2d89ffca5e2cd8f8b64ccb4685d176e",
+    "contract.json": "6e9302667e49519f48ec11f73262255c330006e4d8f31e11be676a6e5459ab69"
+  },
+  "association_accepted": false,
+  "training_ready": false
+}

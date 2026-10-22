@@ -1,0 +1,36 @@
+{
+  "schema": "sensor_candidate_pilot/1",
+  "config": {
+    "stride": 4,
+    "depth_min_m": 0.28,
+    "depth_max_m": 5.0,
+    "cluster_cell_m": 0.08,
+    "min_points": 10,
+    "min_top_m": 0.18,
+    "min_vertical_span_m": 0.1,
+    "max_xy_extent_m": 1.2,
+    "max_track_gap_ns": 500000000,
+    "min_confirmed_hits": 3,
+    "match_base_m": 0.3,
+    "max_speed_mps": 1.5
+  },
+  "frames": 1013,
+  "samples": 823,
+  "candidate_track_ids": 56,
+  "confirmed_rows": 3315,
+  "all_candidate_rows": 3413,
+  "truncated_slots": 0,
+  "semantic_person_detector_validated": false,
+  "association_accepted": false,
+  "training_ready": false,
+  "frame": "causal odom estimate of base_link at anchor; ZOH poses, no simulator GT alignment",
+  "velocity": "Smoothed finite differences of surface-cluster centroids in odom; may include residual ego-motion error",
+  "current_bev": "Depth reprojected using causal odom ZOH delta to estimated anchor; not perfect GT-aligned pose",
+  "imports": "NumPy + SciPy; no ROS, simulator, pretrained weights or GT input",
+  "source_bundle_manifest_sha256": "205981f83555d141481823feea00ae21295015c42f1f946c42ce0d27fa1922b4",
+  "source_sha256": {
+    "track_episode.py": "a4e903f12388492878d1acd56c00703c0603f690ada868077bc086e00285219d",
+    "sensor.py": "0fe703e72335c3f768584d051351b8e16f8aa1eb48ecd51b7f8dd6dd767bc7d1",
+    "geometry.py": "214928e004785fb0ff26ff0614c8f879ea118dabfbc716efbf46bde31163cf4f"
+  }
+}
