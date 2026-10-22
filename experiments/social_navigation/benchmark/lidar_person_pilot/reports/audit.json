@@ -1,0 +1,42 @@
+{
+  "status": "PASS",
+  "scope": "Integrity audit; semantic quality gate FAIL remains",
+  "conditions": {
+    "full": {
+      "capture_pass": true,
+      "actual_gpu": [
+        "01:10:25: GL_RENDERER = D3D12 (NVIDIA GeForce RTX 4060 Laptop GPU)"
+      ],
+      "scan_count": 20,
+      "frames": 5,
+      "frames_with_legal_scan": 4,
+      "false_supported_rows": 4,
+      "true_supported_person_rows": 1,
+      "restricted_gate": false
+    },
+    "null": {
+      "capture_pass": true,
+      "actual_gpu": [
+        "01:12:02: GL_RENDERER = D3D12 (NVIDIA GeForce RTX 4060 Laptop GPU)"
+      ],
+      "scan_count": 20,
+      "frames": 5,
+      "frames_with_legal_scan": 4,
+      "false_supported_rows": 3,
+      "true_supported_person_rows": 0,
+      "restricted_gate": false
+    }
+  },
+  "native_ray_geometry_checks": 14360,
+  "real_prefix_scans_replayed": 6,
+  "causal_selection_checks": 10,
+  "capture_source_checks_from_archived_version": 4,
+  "preexisting_files_unchanged": 15102,
+  "model_cuda": true,
+  "semantic_person_validated": false,
+  "association_accepted": false,
+  "training_ready": false,
+  "availability_limit": "Receive-clock max(header,latest observed sim clock); discrete clock does not measure wall-time callback latency or ordering within equal clock ticks",
+  "original_engine_manifest_retained": true,
+  "serialization_only_revision_declared": true
+}

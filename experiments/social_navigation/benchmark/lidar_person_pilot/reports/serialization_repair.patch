@@ -1,0 +1,30 @@
+--- engine01/infer.py
++++ engine02/infer.py
+@@ -12,6 +12,9 @@
+ from sensor_adapter import prepare_scan,corroborate
+ 
+ def sha(p):return hashlib.sha256(Path(p).read_bytes()).hexdigest()
++def json_value(value):
++ if isinstance(value,np.generic):return value.item()
++ raise TypeError('Unsupported JSON type: '+type(value).__name__)
+ def verify():
+  frozen=json.loads((HERE/'frozen.json').read_text());assert all(sha(REPO/p)==h for p,h in frozen['engine_sha256'].items());return frozen
+ 
+@@ -31,7 +34,7 @@
+   score=np.asarray(confidence).reshape(-1);keep=np.flatnonzero(score>=cfg['confidence_threshold'])
+   predictions.append(dict(scan_index=i,stamp_ns=int(stamps[i]),available_ns=int(available[i]),detections_xy_base=xy.tolist(),scores=score.tolist(),retained_indices=keep.tolist(),instance_mask=mask.tolist(),original_ray_indices=index.tolist(),ray_grid=meta));metadata.append(meta)
+  with (out/'detections_SENSOR_ONLY.jsonl').open('w') as f:
+-  for row in predictions:f.write(json.dumps(row,allow_nan=False)+'\n')
++  for row in predictions:f.write(json.dumps(row,allow_nan=False,default=json_value)+'\n')
+  fusion=[];params=cfg['semantic_fusion']
+  for i,stamp in enumerate(depth_stamp):
+   valid=(stamps<=stamp)&(available<=depth_available[i])&(stamp-stamps<=params['max_scan_age_ns']);valid_indices=np.flatnonzero(valid);j=int(valid_indices[np.argmax(stamps[valid_indices])]) if len(valid_indices) else -1
+@@ -43,7 +46,7 @@
+   for k,p in enumerate(proposals):decisions[k].update(xy_base=p['xy'].tolist(),point_count=p['points'],semantic_class='unknown_geometry_candidate',semantic_valid=False,training_ready=False)
+   fusion.append(dict(depth_index=i,stamp_ns=int(stamp),available_ns=int(depth_available[i]),selected_scan_index=j,selected_scan_stamp_ns=int(stamps[j]) if j>=0 else -1,selected_scan_available_ns=int(available[j]) if j>=0 else -1,proposals=decisions))
+  with (out/'corroboration_SENSOR_ONLY.jsonl').open('w') as f:
+-  for row in fusion:f.write(json.dumps(row,allow_nan=False)+'\n')
++  for row in fusion:f.write(json.dumps(row,allow_nan=False,default=json_value)+'\n')
+  verify();assert all(sha(capture/n)==h for n,h in input_hash.items())
+  result=dict(schema='pretrained_lidar_sensor_pilot/1',input_sha256=input_hash,frozen_sha256=sha(HERE/'frozen.json'),checkpoint_sha256=sha(checkpoint),cuda=True,torch=torch.__version__,cuda_version=torch.version.cuda,gpu=torch.cuda.get_device_name(0),parameter_device=str(next(detector._model.parameters()).device),model_eval=not detector._model.training,weights_trained_here=False,scan_count=len(stamps),depth_frames=len(depth_stamp),threshold=cfg['confidence_threshold'],scan_rate_hz=float(1e9/np.median(np.diff(stamps))),all_detection_outputs_retained=True,all_depth_proposals_retained=True,confirmed_person_semantics=False,training_ready=False,recurrence_reset='New Detector instance for each run; synthetic smoke not carried into sensor inference',elapsed_s=durations,first_scan_elapsed_s=durations[0],median_warm_elapsed_s=float(np.median(durations[2:])),cuda_max_allocated_bytes=torch.cuda.max_memory_allocated(),semantic_support_rows=sum(v['semantic_status']=='person_supported_experimental' for row in fusion for v in row['proposals']))
+  (out/'result.json').write_text(json.dumps(result,indent=2)+'\n');print(json.dumps({k:v for k,v in result.items() if k!='elapsed_s'},indent=2))
