@@ -1,0 +1,250 @@
+{
+  "status": "RECORDED",
+  "gui": false,
+  "sim_budget_s": 10.0,
+  "runtime": "experiments/social_navigation/benchmark/socnavgym_response_fix/generated/opposed01",
+  "scope": "Common6-person Gazebo integration, actual robot feedback, no Nav2; physical start fixture shared with offline",
+  "model": "soc_guarded_orca",
+  "case": "opposed_near",
+  "native_dt": 0.1,
+  "fault_after_updates": null,
+  "fault_mode": "error",
+  "response_variant": "per_human_support_planes_dykstra_v2",
+  "head": "9ab3c9fa3b9e715933186cc475d70fb310e7c2dc",
+  "source_sha256": {
+    "experiments/social_navigation/benchmark/socnavgym_response_fix/worker.py": "4fce7aa1c35737a7f1b8c0543fecfda94524e2a9e0be5067cfcc3141a1a1f787",
+    "experiments/social_navigation/benchmark/socnavgym_response_fix/runtime.py": "a3e150a32e13b40eff3985d576155031eb27be5ecd02177070e85ad1bc4c8032",
+    "experiments/social_navigation/benchmark/socnavgym_response_fix/projection.py": "260d0775a10bc6b510c217a26e02a877a4394ef3f3f56475740ea14d52c841d9",
+    "experiments/social_navigation/benchmark/socnavgym_response_fix/responsive_motion.py": "7e94fb78bb1a6552c7c6b17654bf90ba2a937145837916b783ddeaa36b45a4c4",
+    "experiments/social_navigation/benchmark/socnavgym_response_fix/adapter.cc": "ffbcda748dc1dba4e06beb79c6e8fa93c77da25fbe2348b10f92062c36279abb",
+    "experiments/social_navigation/benchmark/socnavgym_response_fix/warehouse.launch.py": "e4a0758bb8b46ea2b57aee03699b02482feffc97130d62b97de4c18610656aff",
+    "experiments/social_navigation/benchmark/socnavgym_response_fix/verify_live.py": "92120aac02630f3e5877a73789886148c1dc469a71ada3a54192a830eb2775d8",
+    "experiments/social_navigation/benchmark/socnavgym_response_fix/build/libresponse_adapter.so": "524fe8e945daad94319d7ac1a5f6377a5f36cbf6c505bb580e50e2e73102e984",
+    "experiments/social_navigation/benchmark/common_response/model_worker.py": "74f2ff2e08a105aa7a6d34e01d032bff81fafaac9c8652a25302a747ed39f3be",
+    "experiments/social_navigation/benchmark/common_response/inputs/protocol.json": "854bb3633ee52702fadd9d3eae26220310def6ac0d05dfc32d2de875ea9af3f6",
+    "experiments/social_navigation/benchmark/common_response/inputs/opposed_near.json": "bb4f1e93e49da2d335e3236ec407d0f963daffc024417a6c4e87fad6704c8d08",
+    "experiments/social_navigation/warehouse/layout.json": "31d1cd9841e133766c36f9e44e5b4e4148a61500abcf6e2682166a98d0e4cb06",
+    "experiments/social_navigation/gazebo_adapter/run.py": "f4596403abace27667399a90d92252fc1355d3ef054947818ce632b21c43b8c9",
+    "experiments/social_navigation/benchmark/common_response/reports/run01/source_snapshot/prepare.py": "8c24c67638670477d81a925d6df780325f1569f7f9ee0a4176220f3420fccc08",
+    "experiments/social_navigation/benchmark/common_response/reports/run01/source_snapshot/crowd_kernel_n6.py": "4bd3666b1aacb24cde9ad0f3f658dfcb95fdf75e42b6c26ff39c334b4b95e113",
+    "experiments/social_navigation/benchmark/common_response/reports/run01/source_snapshot/model_worker.py": "74f2ff2e08a105aa7a6d34e01d032bff81fafaac9c8652a25302a747ed39f3be",
+    "experiments/social_navigation/benchmark/common_response/reports/run01/source_snapshot/run.py": "45e50abee762dfa552ebeb2cecd615486ebe30bcfcdf3370b80783c15d4ee00f",
+    "experiments/social_navigation/benchmark/socnavgym_warehouse_lifecycle/kernel.py": "611a86973b6733473e7ff2a3abb2e8b7cc43173f3bc903d00c0a820d6b6d3aed",
+    "experiments/social_navigation/benchmark/socnavgym_warehouse_lifecycle/motion.py": "bef8b4a8a527f2f5725d306f6844bb128099fbcbac977fa684c2188715afbe04",
+    "experiments/social_navigation/benchmark/socnavgym_warehouse_lifecycle/geometry.py": "693a35314cce682f00c91f6dfeebd5225851663410920cac393a66a7936df5a3",
+    "experiments/social_navigation/benchmark/socnavgym_lifecycle_fix/continuous_groups.py": "b3fc3f1c7cfab0570620b823aea31d22047922d402447b5f9b1869cc4652ec60",
+    "experiments/social_navigation/benchmark/complexitynav_geometry/kernel.py": "0868d4df16724fc3e2e3436cc49581c71220b28351fdd0ab2925a0e8f9b76983",
+    "experiments/social_navigation/benchmark/complexitynav_geometry/roadmap.py": "77cca14fb7e393cf6e7068673016616e1514573061aaf6606cfb3ce84ed9ff07",
+    "experiments/social_navigation/benchmark/complexitynav_contract/kernel.py": "ce10fd8605037f114b8cb0706572e9541d4ad11613394e40ff73111c98eb01fc"
+  },
+  "rendering": {
+    "vendor": "Microsoft Corporation",
+    "renderer": "D3D12 (NVIDIA GeForce RTX 4060 Laptop GPU)",
+    "version": "4.6 (Compatibility Profile) Mesa 25.2.8-0ubuntu0.24.04.2",
+    "direct": true,
+    "environment_before": {
+      "DISPLAY": ":0",
+      "WAYLAND_DISPLAY": "wayland-0"
+    },
+    "environment_used": {
+      "DISPLAY": ":0",
+      "WAYLAND_DISPLAY": "wayland-0",
+      "GALLIUM_DRIVER": "d3d12",
+      "MESA_D3D12_DEFAULT_ADAPTER_NAME": "NVIDIA"
+    },
+    "probe_source_sha256": "9a9f5478053290b51f18beed987563a7e3a2349f143e8fccd0ce41bf57ec5bab",
+    "probe_binary_sha256": "37f8608ee330e5c179dcd1975c9053e0b66f055f21a68e41bbaf13ed20d26520",
+    "hardware_verified": true
+  },
+  "shutdown_preload": {
+    "scope": "gz sim only",
+    "library": "/usr/lib/wsl/lib/libd3d12core.so",
+    "real_gz": "/opt/ros/jazzy/opt/gz_tools_vendor/bin/gz",
+    "wrapper": "/home/cuongbien/DynamuhSim/experiments/social_navigation/benchmark/socnavgym_response_fix/generated/opposed01/shutdown_bin/gz",
+    "mode": "startup LD_PRELOAD; no system files changed"
+  },
+  "worker_command": [
+    "/home/cuongbien/DynamuhSim/experiments/social_navigation/.venv-socnavgym/bin/python",
+    "/home/cuongbien/DynamuhSim/experiments/social_navigation/benchmark/socnavgym_response_fix/worker.py",
+    "--common",
+    "/home/cuongbien/DynamuhSim/experiments/social_navigation/benchmark/common_response",
+    "--runtime",
+    "/home/cuongbien/DynamuhSim/experiments/social_navigation/benchmark/socnavgym_response_fix/generated/opposed01",
+    "--socket",
+    "/tmp/cnav_live_r324n5n5/worker.sock",
+    "--model",
+    "soc_guarded_orca",
+    "--case",
+    "opposed_near"
+  ],
+  "ready": {
+    "humans": [
+      {
+        "id": 1,
+        "x": -25.0,
+        "y": -0.6,
+        "radius": 0.36,
+        "native_goal": [
+          -11.0,
+          -0.6
+        ],
+        "vx": 0.0,
+        "vy": 0.0,
+        "yaw": 0.0,
+        "speed": 0.0
+      },
+      {
+        "id": 2,
+        "x": -25.0,
+        "y": 0.6,
+        "radius": 0.36,
+        "native_goal": [
+          -11.0,
+          0.6
+        ],
+        "vx": 0.0,
+        "vy": 0.0,
+        "yaw": 0.0,
+        "speed": 0.0
+      },
+      {
+        "id": 3,
+        "x": -23.0,
+        "y": -0.6,
+        "radius": 0.36,
+        "native_goal": [
+          -9.0,
+          -0.6
+        ],
+        "vx": 0.0,
+        "vy": 0.0,
+        "yaw": 0.0,
+        "speed": 0.0
+      },
+      {
+        "id": 4,
+        "x": -23.0,
+        "y": 0.6,
+        "radius": 0.36,
+        "native_goal": [
+          -9.0,
+          0.6
+        ],
+        "vx": 0.0,
+        "vy": 0.0,
+        "yaw": 0.0,
+        "speed": 0.0
+      },
+      {
+        "id": 5,
+        "x": -21.0,
+        "y": -0.6,
+        "radius": 0.36,
+        "native_goal": [
+          -7.0,
+          -0.6
+        ],
+        "vx": 0.0,
+        "vy": 0.0,
+        "yaw": 0.0,
+        "speed": 0.0
+      },
+      {
+        "id": 6,
+        "x": -21.0,
+        "y": 0.6,
+        "radius": 0.36,
+        "native_goal": [
+          -7.0,
+          0.6
+        ],
+        "vx": 0.0,
+        "vy": 0.0,
+        "yaw": 0.0,
+        "speed": 0.0
+      }
+    ],
+    "obstacles": 42,
+    "native_dt": 0.1,
+    "robot_radius": 0.25,
+    "human_radius": 0.36,
+    "epoch": 0,
+    "model": "soc_guarded_orca",
+    "case": "opposed_near",
+    "runner_sha256": "74f2ff2e08a105aa7a6d34e01d032bff81fafaac9c8652a25302a747ed39f3be",
+    "metadata": {
+      "dt": 0.1,
+      "static_boxes": 42,
+      "motion_ceiling": 0.8,
+      "initial_groups": [],
+      "native_motion": false,
+      "env_module_file": "/home/cuongbien/DynamuhSim/experiments/social_navigation/benchmark/socnavgym_warehouse_lifecycle/kernel.py",
+      "env_module_sha256": "611a86973b6733473e7ff2a3abb2e8b7cc43173f3bc903d00c0a820d6b6d3aed"
+    },
+    "response_variant": "per_human_support_planes_dykstra_v2",
+    "fault_after_updates": null,
+    "fault_mode": "error"
+  },
+  "measurement_start_sim": 0.0025,
+  "sensor_counts": {
+    "gt": 505,
+    "clock": 4038,
+    "scan": 51,
+    "imu": 1010,
+    "odom": 288
+  },
+  "sim_seconds_observed": 10.08,
+  "cmd_vel_publishers": [
+    "common_integration_verifier"
+  ],
+  "server_shutdown": {
+    "status": "STOPPED",
+    "partition": "dynamuhsim_response_2885",
+    "initial": [
+      {
+        "pid": 2941,
+        "command": "gz sim -r -s /home/cuongbien/DynamuhSim/experiments/social_navigation/benchmark/socnavgym_response_fix/generated/opposed01/warehouse.sdf                                             "
+      }
+    ],
+    "request_returncode": 0,
+    "response": "data: true",
+    "stderr": "",
+    "elapsed_wall_s": 1.0489194780000162,
+    "remaining": []
+  },
+  "container_stop": {
+    "status": "ALREADY_EXITED"
+  },
+  "container_remaining": "",
+  "faults": [],
+  "cleanup": {
+    "session": "d206ca1a769e4a89b2726e9920bdc56f",
+    "reaped_members": [],
+    "signals": [],
+    "remaining": [],
+    "status": "PASS",
+    "ogre_log_sha256": "25b4624dbdfb5eee932ba90bd5100736965377a34ab1dc016b1a588a77586fd8",
+    "ogre_renderer_lines": [
+      "12:07:40: GL_RENDERER = D3D12 (NVIDIA GeForce RTX 4060 Laptop GPU)"
+    ]
+  },
+  "gazebo_clean_exit": true,
+  "media": {
+    "source": "Live Gazebo RGB observer camera, not screen recording or AI",
+    "frame_times": [
+      0.005,
+      1.0,
+      2.0,
+      3.0,
+      4.0,
+      5.0,
+      6.0,
+      7.0,
+      8.0,
+      9.0,
+      10.0
+    ],
+    "playback_speed": 4,
+    "gif_duration_ms": 2750
+  }
+}

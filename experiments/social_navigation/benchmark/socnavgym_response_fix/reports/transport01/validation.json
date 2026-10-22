@@ -1,0 +1,25 @@
+{
+  "status": "PASS",
+  "models": [
+    {
+      "model": "soc_guarded_orca",
+      "status": "PASS",
+      "exact_saved_steps": 20,
+      "terminal_bad_clock": true,
+      "command": [
+        "/home/cuongbien/DynamuhSim/experiments/social_navigation/.venv-socnavgym/bin/python",
+        "/home/cuongbien/DynamuhSim/experiments/social_navigation/benchmark/socnavgym_response_fix/worker.py",
+        "--common",
+        "/home/cuongbien/DynamuhSim/experiments/social_navigation/benchmark/common_response",
+        "--runtime",
+        "/home/cuongbien/DynamuhSim/experiments/social_navigation/benchmark/socnavgym_response_fix/generated/transport_soc_guarded_orca_deda1d",
+        "--socket",
+        "/tmp/commonipc_pxu7l0iy/worker.sock",
+        "--model",
+        "soc_guarded_orca",
+        "--case",
+        "crossing_near"
+      ]
+    }
+  ]
+}
