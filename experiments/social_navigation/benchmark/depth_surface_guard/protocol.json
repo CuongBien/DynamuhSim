@@ -1,0 +1,29 @@
+{
+  "schema": "depth_planar_surface_guard/1",
+  "device": "cuda",
+  "seed": 20261023,
+  "line_trials": 192,
+  "plane_tolerance_m": 0.005,
+  "min_cluster_points": 60,
+  "min_plane_points": 20,
+  "min_plane_vertical_span_m": 0.25,
+  "min_explained_fraction": 0.98,
+  "max_planes": 2,
+  "min_normal_angle_deg": 80.0,
+  "semantic_policy": "Only veto experimental person support when strong planar surface evidence; retain raw proposal/position, unknown otherwise; never infer person from nonplanarity",
+  "camera_and_lidar": "Existing calibration, no RGB",
+  "regression": [
+    "lidar_person_pilot full01/null01"
+  ],
+  "fresh": "One new fixed fixture after source freeze; rotated boxes plus curved cylinder negative control",
+  "acceptance": {
+    "no_person_owned_cluster_with_planar_veto": true,
+    "regression_boxes_flagged": 2,
+    "all_raw_proposals_retained": true,
+    "all_prior_true_person_support_retained": true,
+    "planar_box_false_support_suppressed": true,
+    "curved_objects_may_remain_unknown_or_false_positive": true,
+    "semantic_gate_stays_separate": true
+  },
+  "training_ready": false
+}

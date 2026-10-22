@@ -1,0 +1,48 @@
+{
+  "status": "PASS",
+  "kind": "Surface-only integrity/retention audit; overall person semantics still FAIL",
+  "cases": {
+    "regression_full": {
+      "rows": 30,
+      "object_surface_rows": 10,
+      "person_surface_rows": 0,
+      "false_support_withdrawn": 4,
+      "true_support_withdrawn": 0,
+      "remaining_false_support": 0,
+      "remaining_true_support": 1,
+      "all_raw_measurements_retained": true,
+      "legacy_semantic_gate": false
+    },
+    "regression_null": {
+      "rows": 10,
+      "object_surface_rows": 10,
+      "person_surface_rows": 0,
+      "false_support_withdrawn": 3,
+      "true_support_withdrawn": 0,
+      "remaining_false_support": 0,
+      "remaining_true_support": 0,
+      "all_raw_measurements_retained": true,
+      "legacy_semantic_gate": true
+    },
+    "fresh": {
+      "rows": 35,
+      "object_surface_rows": 10,
+      "person_surface_rows": 0,
+      "false_support_withdrawn": 1,
+      "true_support_withdrawn": 0,
+      "remaining_false_support": 1,
+      "remaining_true_support": 0,
+      "all_raw_measurements_retained": true,
+      "legacy_semantic_gate": false
+    }
+  },
+  "proposal_cpu_gpu_comparisons": 75,
+  "saved_plane_point_residual_checks": 18270,
+  "source_unchanged_after_freeze": true,
+  "new_scene_source_unchanged_after_capture": true,
+  "preexisting_files_unchanged": 15221,
+  "fresh_gpu_capture": true,
+  "training_ready": false,
+  "semantic_person_validated": false,
+  "association_accepted": false
+}
