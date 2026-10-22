@@ -1,0 +1,146 @@
+{
+  "schema": "identity_guard_frozen/1",
+  "created_utc": "2026-10-22T17:16:26.091656+00:00",
+  "parent_commit": "cf0f0d1db0145b82e24fec1d55ccb1f5780ace85",
+  "inference_uncommitted": true,
+  "engine_sha256": {
+    "config.json": "acfca77ddb5e7d29db74bf2f62c62cbbdc05cccbf757ff48a55fbe411902f234",
+    "guard_tracker.py": "43e34e41126bf9b8c2ea89e4d394cb12832dcbbbf04b49880846553592af7263",
+    "replay.py": "c4051c7c4d8bba885b90b5d7880032d96d558925e7ebc1aaaf3290d8bddcc697",
+    "parent/refinement.py": "4988dfcbb9e8754c5cb63b801479430d7bb2e59e5d2f7e7601e34634d38758db",
+    "parent/config.json": "3728358ab3dd0005d485ecb218e76b5bfef47d90e74a2dfce702e53ad3a3e1c2",
+    "parent/snapshots/sensor.py": "0fe703e72335c3f768584d051351b8e16f8aa1eb48ecd51b7f8dd6dd767bc7d1",
+    "parent/snapshots/association.py": "13ea3e6615704604c4721a2d85e0d361f2d89ffca5e2cd8f8b64ccb4685d176e",
+    "parent/evaluate.py": "a8797bc49e24aad6fb5854a895af0a9f7fabcd26cc194c3c81d8bf5d8de8ceee",
+    "evaluate.py": "e77f8ed6658da88ea5954a12c6a471f39a8ec8f5fb3d3445e0576f5a32606507",
+    "freeze.py": "34cb9f85f71ffc9a0c8d3e53789b40a11aa3d86d30d20a2bd8eb7b5b49886bf4"
+  },
+  "config": {
+    "schema": "depth_identity_guard/1",
+    "active": {
+      "position_slack_m": 0.18,
+      "max_displacement_speed_mps": 1.5,
+      "residual_base_m": 0.3,
+      "residual_growth_mps": 1.5,
+      "ambiguity_margin_m": 0.08,
+      "gap_shape_check_after_ns": 150000000,
+      "max_gap_logshape_distance": 0.55,
+      "policy": "Preserve continuous legacy matching; displacement/shape/mutual-margin guard after >150ms gap; abstain when established tracks compete",
+      "gap_cues": "Reject if BOTH displacement and shape disagree; either cue alone can reflect partial visibility",
+      "conflict_policy": "Margin only against established competitors whose nearest eligible proposal is the same column",
+      "phase_policy": "Associate clear continuous observations first; reassociate gap tracks only to remaining proposals, then dormant tracks",
+      "gap_resolution": "Iterative mutual-nearest peeling: remove clear accepted rows/columns before evaluating remaining alternatives"
+    },
+    "parent_shape_and_dormant_params": "Byte-identical parent/config.json; shape filter remains mesh-only experimental",
+    "ambiguity_policy": "Retain unknown measured proposal track_id=-1 when established tracks compete or gap reassociation is ambiguous; no synthetic observations",
+    "regression_sources": [
+      "avoidance_moderate01",
+      "avoidance_fixed01",
+      "depth_seed43_01"
+    ],
+    "stress_source": "legacy_proxy_pilot01",
+    "new_validation_seed": 44,
+    "new_identity_gate": {
+      "min_paired_retention_vs_parent": 0.95,
+      "short_gap_pair_changes_must_be_zero": true,
+      "fragmentation_must_not_increase_vs_parent": true,
+      "known_wrong_reacquisitions_must_equal_zero": true,
+      "geometry_only": true
+    },
+    "legacy_full_gate": "Also report original strict fragmentation-reduction gate against baseline; do not relabel it if it fails",
+    "training_ready": false,
+    "semantic_person_validated": false,
+    "association_accepted": false,
+    "hu_nav_sim_used": false,
+    "comparison_variants": [
+      "baseline",
+      "parent",
+      "shape_only",
+      "combined"
+    ],
+    "validation_limit": "Dataset roles in frozen manifest: seeds42/43 are regression; unseen seed44 only after final engine freeze; same layout/backend"
+  },
+  "datasets": {
+    "mesh42": {
+      "normalized": "/home/cuongbien/DynamuhSim/experiments/social_navigation/benchmark/portable_episode/generated/episode01/normalized",
+      "role": "development_regression",
+      "input_sha256": {
+        "depth.npy": "ccbde91a2d1c66cb83dd1073d827ab05d62ae2f1bafb0f3322cf5f3aab830c70",
+        "observations.npz": "3a4b8c0bf275d828eea22df5cd37b6a3bab5aa77d61777594449fbafc0340272",
+        "calibration.json": "a3e812b0cc147b1b3f8615105c8dd4a6ffb93512e98d5a3ddba22949ece7019f",
+        "samples.npz": "beb4126d51df5c09337711c075dbdaeb3f6efeced6969acfb3ceeed4b2981c1b"
+      },
+      "scene_sha256": "361994d13e5ac3a531a051f9fc00f130e2bb9a532c9f5a480e06c9caafe23859",
+      "manifest_sha256": "d48958acf05ff6632b7dd30d56c892ca7c53ec198ead41c79f4d674bb0a0e792"
+    },
+    "repeat42": {
+      "normalized": "/home/cuongbien/DynamuhSim/experiments/social_navigation/benchmark/depth_track_refinement/generated/fixed_source/normalized",
+      "role": "development_regression",
+      "input_sha256": {
+        "depth.npy": "7d0fe2fb912c35a4d876e79e3c159b3d57fe0a6a8a757b547da5beac91fea66e",
+        "observations.npz": "ee2888fd604dfe8435134fa09f88be60502b842397f77e4bfcffd0504c67277c",
+        "calibration.json": "a3e812b0cc147b1b3f8615105c8dd4a6ffb93512e98d5a3ddba22949ece7019f",
+        "samples.npz": "2f5cc20c9b9a2d569bbae4108230d608820b006338d5139c1642c6f114e1f723"
+      },
+      "scene_sha256": "cbc36c00f53acc225862d83eeffdecc1af1219c90ef53742aba51da54ba1afb8",
+      "manifest_sha256": "04095ce0248c44869cb8bc5d5c5eb7d8f938a0bfec05151d260d1e553659d55b"
+    },
+    "regression43": {
+      "normalized": "/home/cuongbien/DynamuhSim/experiments/social_navigation/benchmark/depth_seed43_validation/generated/runs/depth_seed43_01/normalized",
+      "role": "development_regression",
+      "input_sha256": {
+        "depth.npy": "096a39d54d1425436a27092ca80d2aca99b5921e91e69ad1c2b71abd47181afb",
+        "observations.npz": "83f1bcd143a17f3d145f5a87404fa063c652febbe6d0ee9c07f8dc28f4d07c5e",
+        "calibration.json": "a3e812b0cc147b1b3f8615105c8dd4a6ffb93512e98d5a3ddba22949ece7019f",
+        "samples.npz": "685deb03a5ae014f8c932d5887f62886d0f2eb37aaa2678c81100920dc3cd854"
+      },
+      "scene_sha256": "55dddfe09e2aecb4b41d99a9d75501db542136c162a8c52b51677595662fa330",
+      "manifest_sha256": "141351a444bfa4618c1e1aab5c25b4267a1344d5d162d38b95aec5a0a62519e9"
+    },
+    "proxy_stress": {
+      "normalized": "/home/cuongbien/DynamuhSim/experiments/social_navigation/benchmark/dataset_pilot/episodes/pilot01/normalized",
+      "role": "stress",
+      "input_sha256": {
+        "depth.npy": "6a581efd0cdecca882cb79dc8e93d6e1b4b094697d1c9034aaad9e9bc928cbcf",
+        "observations.npz": "fda5d6a303a0e97e02bf70d367d03f08230df73080ec9f73c30271863b7e97a1",
+        "calibration.json": "248852db2f18beb762b452acaabf116224f000e4e8664f69008ad6cd63148916",
+        "samples.npz": "a49dc0927139f6d3014b5233ddaf56eeec4338de3ecdc5c705f132a9ace33e3f"
+      },
+      "scene_sha256": "6b77b71ca1bd07571965cafd66913662413f411969c4092b6e67b3735b6aaa62",
+      "manifest_sha256": "69574a1c75c7c3a71f83ffeed85435ea2e57c50f455c24205934ed8b88f63ab5"
+    },
+    "seed44": {
+      "normalized": "/home/cuongbien/DynamuhSim/experiments/social_navigation/benchmark/depth_identity_guard/generated/runs/identity_seed44_01/normalized",
+      "role": "new_seed_validation_for_sealed_engine_only",
+      "input_sha256": {
+        "depth.npy": "001c5bf20d919e560c8f69b5804afd441544d74c205fbb289bfe8955cc17c45f",
+        "observations.npz": "df60f4f773ce590827a1dc5867e99af7caaa69d8ab42ae25396bfd281396e224",
+        "calibration.json": "a3e812b0cc147b1b3f8615105c8dd4a6ffb93512e98d5a3ddba22949ece7019f",
+        "samples.npz": "24f5c1a8fad0613885a38a48eda1c6f7c7244011fa97a3f6d6996af87ca21e60"
+      },
+      "scene_sha256": "84bbbdb3d707e662c3c409f7fa5803fdb35c91d2b298ba5018e1f8419e487e55",
+      "manifest_sha256": "5f831501d5ede129336c6673f4d0029c1ba5afd216a86c07612b84b4eabefc0c"
+    }
+  },
+  "seed44_policy": "No seed44 raw/labels are available before final freeze; one later GPU capture, no tuning after inspecting it",
+  "training_ready": false,
+  "seal": {
+    "created_utc": "2026-10-22T17:18:20.920673+00:00",
+    "selected_candidate_sha256": "7a71e16b16286a5655e8320d4edceeeb1a33eebbf5833cd0527cfad64288b40d",
+    "selected_tag": "05",
+    "regression_gate_sha256": {
+      "mesh42": "6e20d408bf98afc5db283e3f082e73fbcbd24b4c4c991fd32bb1b1414ce1e8fa",
+      "repeat42": "508d618ef90009c4ddb9a2285e76d1104ad2a4a1d2e0dda00b7ccff6673e53de",
+      "regression43": "58bd00ac6ca3b929efa79e5a48fb4d166462f7e2bbdaffd82d4d5456f22e2826"
+    },
+    "seed44_raw_exists_at_seal": false,
+    "policy": "No algorithm/config/gate changes after seed44 is captured; candidate failures retained"
+  },
+  "holdout_capture": {
+    "added_utc": "2026-10-22T17:26:07.207125+00:00",
+    "sealed_before_capture_sha256": "88df2b6ea4f4663ea715c1d203043ede0e14abe82e94c8d3d4907303afb82401",
+    "capture_manifest_sha256": "5bc437fa34e31e36ca5a44cb30ae47f07166a629c73862efe323d924f468a238",
+    "seed": 44,
+    "tuned_on_seed44": false
+  }
+}

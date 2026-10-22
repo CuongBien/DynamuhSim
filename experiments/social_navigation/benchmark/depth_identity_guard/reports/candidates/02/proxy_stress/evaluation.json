@@ -1,0 +1,121 @@
+{
+  "dataset": "proxy_stress",
+  "frozen_sha256": "07513dea94a7ed923649f4d713fbf2e0692384ff28148cc96ba4402272e0f34f",
+  "variants": {
+    "baseline": {
+      "frames": 404,
+      "confirmed_candidate_rows": 1091,
+      "paired_rows": 997,
+      "unpaired_rows": 94,
+      "pairing_rate": 0.9138405132905592,
+      "distance_median_m": 0.3539388333126232,
+      "distance_p95_m": 0.36003798942754,
+      "distinct_ids_per_gt_human": {
+        "1": 2,
+        "2": 1,
+        "3": 1,
+        "4": 1,
+        "5": 2,
+        "6": 2
+      },
+      "fragmentation_proxy": 3,
+      "paired_identity_changes_within_500ms": 0,
+      "dormant_reacquisitions_confirmed": 0,
+      "dormant_reacquisitions_paired": 0,
+      "dormant_reacquisitions_wrong_known_identity": 0,
+      "unique_paired_frame_person": 997,
+      "semantic_person_validated": false,
+      "association_accepted": false,
+      "training_ready": false
+    },
+    "parent": {
+      "frames": 404,
+      "confirmed_candidate_rows": 653,
+      "paired_rows": 603,
+      "unpaired_rows": 50,
+      "pairing_rate": 0.9234303215926493,
+      "distance_median_m": 0.33630734137226614,
+      "distance_p95_m": 0.36003368672970215,
+      "distinct_ids_per_gt_human": {
+        "1": 2,
+        "2": 1,
+        "3": 1,
+        "4": 1,
+        "5": 2,
+        "6": 2
+      },
+      "fragmentation_proxy": 3,
+      "paired_identity_changes_within_500ms": 0,
+      "dormant_reacquisitions_confirmed": 2,
+      "dormant_reacquisitions_paired": 0,
+      "dormant_reacquisitions_wrong_known_identity": 0,
+      "unique_paired_frame_person": 603,
+      "semantic_person_validated": false,
+      "association_accepted": false,
+      "training_ready": false
+    },
+    "shape_only": {
+      "frames": 404,
+      "confirmed_candidate_rows": 649,
+      "paired_rows": 605,
+      "unpaired_rows": 44,
+      "pairing_rate": 0.9322033898305084,
+      "distance_median_m": 0.33666407874843823,
+      "distance_p95_m": 0.3600326370147014,
+      "distinct_ids_per_gt_human": {
+        "1": 2,
+        "2": 1,
+        "3": 1,
+        "4": 1,
+        "5": 2,
+        "6": 2
+      },
+      "fragmentation_proxy": 3,
+      "paired_identity_changes_within_500ms": 0,
+      "dormant_reacquisitions_confirmed": 0,
+      "dormant_reacquisitions_paired": 0,
+      "dormant_reacquisitions_wrong_known_identity": 0,
+      "unique_paired_frame_person": 605,
+      "semantic_person_validated": false,
+      "association_accepted": false,
+      "training_ready": false
+    },
+    "combined": {
+      "frames": 404,
+      "confirmed_candidate_rows": 649,
+      "paired_rows": 603,
+      "unpaired_rows": 46,
+      "pairing_rate": 0.9291217257318952,
+      "distance_median_m": 0.33630734137226614,
+      "distance_p95_m": 0.36003368672970215,
+      "distinct_ids_per_gt_human": {
+        "1": 2,
+        "2": 1,
+        "3": 1,
+        "4": 1,
+        "5": 2,
+        "6": 2
+      },
+      "fragmentation_proxy": 3,
+      "paired_identity_changes_within_500ms": 0,
+      "dormant_reacquisitions_confirmed": 1,
+      "dormant_reacquisitions_paired": 0,
+      "dormant_reacquisitions_wrong_known_identity": 0,
+      "unique_paired_frame_person": 603,
+      "semantic_person_validated": false,
+      "association_accepted": false,
+      "training_ready": false
+    }
+  },
+  "comparison": {
+    "pair_rows_retained_fraction": 0.60481444332999,
+    "unpaired_row_delta": -48,
+    "fragmentation_proxy_delta": 0,
+    "paired_identity_change_delta": 0,
+    "geometric_improvement": false,
+    "semantic_or_training_acceptance": false
+  },
+  "metric_scope": "Geometric gates only, not semantic precision/recall/MOTA/IDF1; no visibility labels",
+  "validation_scope": "Dataset roles in frozen manifest: seeds42/43 are regression; unseen seed44 only after final engine freeze; same layout/backend",
+  "training_ready": false
+}

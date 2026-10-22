@@ -1,0 +1,57 @@
+{
+  "status": "PASS",
+  "scope": "Integrity and geometric association validation only; not semantic person/visibility or train acceptance",
+  "datasets": {
+    "mesh42": {
+      "role": "development_regression",
+      "identity_gate": true,
+      "legacy_full_gate": true,
+      "paired_retention": 1.0,
+      "fragmentation": 10,
+      "pairing_changes": 0
+    },
+    "repeat42": {
+      "role": "development_regression",
+      "identity_gate": true,
+      "legacy_full_gate": true,
+      "paired_retention": 1.0,
+      "fragmentation": 7,
+      "pairing_changes": 0
+    },
+    "regression43": {
+      "role": "development_regression",
+      "identity_gate": true,
+      "legacy_full_gate": false,
+      "paired_retention": 1.0,
+      "fragmentation": 9,
+      "pairing_changes": 0
+    },
+    "proxy_stress": {
+      "role": "stress",
+      "identity_gate": true,
+      "legacy_full_gate": false,
+      "paired_retention": 1.0,
+      "fragmentation": 3,
+      "pairing_changes": 0
+    },
+    "seed44": {
+      "role": "new_seed_validation_for_sealed_engine_only",
+      "identity_gate": true,
+      "legacy_full_gate": false,
+      "paired_retention": 1.0,
+      "fragmentation": 7,
+      "pairing_changes": 0
+    }
+  },
+  "independent_pair_distances_checked": 42596,
+  "causal_prefix_frames_replayed": 1000,
+  "archived_engine_files_sha_verified": 32,
+  "all_sensor_proposals_retained": true,
+  "ambiguous_proposals_withheld_from_identity": 0,
+  "parent_streams_exactly_reproduced_on_regressions": true,
+  "new_seed_raw_depth_bitwise_equal": 1023,
+  "frozen_before_seed44": true,
+  "algorithm_changed_after_holdout": false,
+  "training_ready": false,
+  "association_accepted": false
+}

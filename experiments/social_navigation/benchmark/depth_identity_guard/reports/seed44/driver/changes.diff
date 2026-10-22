@@ -1,0 +1,13 @@
+--- validated parent driver
++++ owned runtime and seed44 parser input only
+@@ -32,8 +32,8 @@
+ from moderate_config import apply_runtime_config,capture_live_parameters
+ original_stop=stop_server
+ def stop_server(guard):return stop_paused(guard,original_stop)
+-p=argparse.ArgumentParser();p.add_argument('--scenario',choices=['walking','standing'],required=True);p.add_argument('--seed',type=int,choices=[42,43],required=True);p.add_argument('--report-dir',type=Path,required=True);p.add_argument('--gui',action='store_true');a=p.parse_args();a.condition='people'
+-plan=json.loads((BASE/'protocol.json').read_text());plan['sim_budget']=90.;out=a.report_dir.resolve();out.mkdir(parents=True,exist_ok=False);runtime=HERE/'generated'/out.name;runtime.mkdir(exist_ok=False)
++p=argparse.ArgumentParser();p.add_argument('--scenario',choices=['walking','standing'],required=True);p.add_argument('--seed',type=int,choices=[44],required=True);p.add_argument('--report-dir',type=Path,required=True);p.add_argument('--gui',action='store_true');a=p.parse_args();a.condition='people'
++plan=json.loads((BASE/'protocol.json').read_text());plan['sim_budget']=90.;out=a.report_dir.resolve();out.mkdir(parents=True,exist_ok=False);runtime=Path('/home/cuongbien/DynamuhSim/experiments/social_navigation/benchmark/depth_identity_guard/generated/runtime')/out.name;runtime.mkdir(exist_ok=False)
+ lock=(BENCH/'common_gazebo/generated/domain91.lock').open('a');fcntl.flock(lock,fcntl.LOCK_EX|fcntl.LOCK_NB)
+ os.environ.update(ROS_DOMAIN_ID='91',GZ_PARTITION='dynamuhsim_group_nav2_'+str(os.getpid()),ROS_LOG_DIR=str(runtime/'ros_logs'),QT_QPA_PLATFORM='xcb',ROS_AUTOMATIC_DISCOVERY_RANGE='LOCALHOST',FASTDDS_BUILTIN_TRANSPORTS='UDPv4')
+ sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest();guard=RuntimeGuard(runtime);processes=[];files=[];node=None;frames=[];poses=[];states=[];scans=[];odom=[];amcl=[];commands=[];paths=[];costmaps=[];feedback=[];roslogs=[];tfrows=[];faults=[];latest={};counts=collections.Counter();recording=None;pairs=None;worker=None;gui_process=None;handle=None;phase='warmup';client=None;tfbuffer=None
