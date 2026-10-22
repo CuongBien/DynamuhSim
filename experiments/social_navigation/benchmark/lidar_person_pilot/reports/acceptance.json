@@ -1,0 +1,41 @@
+{
+  "schema": "pretrained_lidar_person_acceptance/1",
+  "capture_integrity": "PASS",
+  "cuda_inference": "PASS",
+  "upstream_compatibility": "PASS",
+  "sensor_only_inference": "PASS for audited file/data contract",
+  "quality_gate": "FAIL",
+  "full": {
+    "depth_frames": 5,
+    "supported_rows": 5,
+    "false_supported_rows": 4,
+    "unknown_rows": 25,
+    "eligible_person_rows": 20,
+    "supported_person_rows": 1
+  },
+  "null_control": {
+    "depth_frames": 5,
+    "supported_rows": 3,
+    "false_supported_rows": 3,
+    "unknown_rows": 7,
+    "eligible_person_rows": 0,
+    "supported_person_rows": 0
+  },
+  "frames_with_lidar_per_condition": 4,
+  "first_depth_frame_has_no_eligible_scan": true,
+  "repeated_static_scene_not_independent_episodes": true,
+  "inference_math_and_threshold_frozen_before_capture": true,
+  "json_serialization_fixed_after_capture": true,
+  "model": "DR-SPAAM JRDB ann pretrained",
+  "confidence": 0.5,
+  "semantic_person_validated": false,
+  "association_accepted": false,
+  "training_ready": false,
+  "persona_validated": false,
+  "hu_nav_sim_used": false,
+  "world_model_trained": false,
+  "deployment": "Experiment only, ROS/default tracker unchanged",
+  "decision": "Do not promote this pretrained LiDAR model with the current sensor/profile; retain unknown geometry and all raw proposals; do not lower thresholds or remove failed runs",
+  "next": "Depth surface evidence for planar-object rejection with abstention; preserve LiDAR+depth inputs, original candidates and separate semantic acceptance",
+  "user_input_choice": "User confirmed existing LiDAR + depth only; no RGB"
+}

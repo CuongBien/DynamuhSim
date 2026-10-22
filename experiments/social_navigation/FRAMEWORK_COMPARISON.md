@@ -1,5 +1,11 @@
 # So sánh khả năng đã đo — cập nhật22/10/2026
 
+## Cập nhật 23/10/2026 — pretrained LiDAR semantic pilot chưa đạt
+
+[DR-SPAAM report](benchmark/lidar_person_pilot/reports/LIDAR_PERSON_REPORT.md): API gốc/checkpoint JRDB ann chạy PyTorch2.7.1 CUDA12.8 trên RTX4060 trong venv riêng, parity88tensors/60312cutout/3synthetic sequences đạt. Hai capture GPU cùng fixture full/null đóng sạch:150depth+40scan. Full4frame khả dụng có5supported rows=1người+4đồ vật; null3false rows; cả qualitygate FAIL. Không hạ confidence0.5 hoặc bỏ các cụm chưa rõ.
+
+Math/model/config chốt trước capture; chỉ sửa JSON NumPy-bool writer sau capture/trước quality evaluation, nguồn cũ/diff/failure được giữ. Audit14360rays/6real-prefix/10causal selections và9test đạt; integrity không thay semanticFAIL. Không ROS/Nav2/default/WorldModel/train/HuNavSim. Người dùng chốt giữLiDAR+depth, không RGB. Bước tiếp: conservative depth surface/object evidence với abstention, regression cũ rồi fixture mới. Mốc lưu: `feat: evaluate pretrained LiDAR person detection on GPU`.
+
 ## Cập nhật 23/10/2026 — pixel visibility và clutter control
 
 [Visibility report](benchmark/depth_visibility_pilot/reports/VISIBILITY_REPORT.md): một fixture tĩnh native mesh,15camera×5timestamp=75ảnh GPU NVIDIA. Nhãn10649pixel người không mâu thuẫn, ownership ổn định; audit57070pixel/9test đạt. Bốn người nhìn thấy đều có proposal, nhưng shape filter vẫn giữ2cụm đồ vật cả khi ẩn hết người: chưa thể gọi track là người hoặc bật association/train. Người phía sau chỉ còn11.92%silhouette nhìn thấy; chưa có fully-occluded case thật hoặc dynamic semantic acceptance.

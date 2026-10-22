@@ -1,0 +1,89 @@
+{
+  "schema": "social_scene/1",
+  "source": "designed_static_visibility_fixture_not_recorded_dynamic_pose",
+  "robot": {
+    "x": -28.0,
+    "y": 0.0,
+    "yaw": 0.0
+  },
+  "humans": [
+    {
+      "id": 1,
+      "x": -25.8,
+      "y": 0.0,
+      "yaw": 3.141592653589793
+    },
+    {
+      "id": 2,
+      "x": -24.8,
+      "y": 0.0,
+      "yaw": 3.141592653589793
+    },
+    {
+      "id": 3,
+      "x": -25.5,
+      "y": 1.0,
+      "yaw": 3.141592653589793
+    },
+    {
+      "id": 4,
+      "x": -25.3,
+      "y": -1.4,
+      "yaw": 3.141592653589793
+    },
+    {
+      "id": 5,
+      "x": -29.0,
+      "y": 0.0,
+      "yaw": 3.141592653589793
+    },
+    {
+      "id": 6,
+      "x": -21.0,
+      "y": 0.0,
+      "yaw": 3.141592653589793
+    }
+  ],
+  "purpose": {
+    "1": "front human",
+    "2": "behind human1; measure actual occlusion, do not assume fully hidden",
+    "3": "behind partial-height box",
+    "4": "side visible near clutter",
+    "5": "behind camera, outside field",
+    "6": "beyond detector 5m range"
+  },
+  "clutter": [
+    {
+      "name": "visibility_occluder",
+      "pose": [
+        -26.5,
+        0.9,
+        0.28,
+        0,
+        0,
+        0
+      ],
+      "box": [
+        0.4,
+        0.55,
+        0.56
+      ]
+    },
+    {
+      "name": "visibility_clutter",
+      "pose": [
+        -26.2,
+        -1.2,
+        0.6,
+        0,
+        0,
+        0
+      ],
+      "box": [
+        0.28,
+        0.28,
+        1.2
+      ]
+    }
+  ]
+}

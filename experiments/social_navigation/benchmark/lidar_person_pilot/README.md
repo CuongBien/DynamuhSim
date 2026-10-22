@@ -1,0 +1,54 @@
+# Pretrained LiDAR person pilot — DR-SPAAM
+
+**CUDA execution works, but detection quality FAILS on the current simulated sensor/profile.** This experiment does not promote DR-SPAAM to ROS or enable semantic/training masks. User confirmed keeping existing LiDAR + depth inputs; no RGB is added.
+
+[Measured report](reports/LIDAR_PERSON_REPORT.md) · [acceptance](reports/acceptance.json) · [audit](reports/audit.json) · [full midpoint](reports/full01/midpoint/semantic_review.png) · [no-human midpoint](reports/null01/midpoint/semantic_review.png).
+
+## Source and environment
+
+Use the [authors' repository](https://github.com/RWTHVision/2D_lidar_person_detection), pinned commit d12e90225d52ba6c85d20061f1e7286d6a64aade, and their fully supervised JRDB checkpoint ckpt_jrdb_ann_dr_spaam_e20.pth. [upstream.json](upstream.json) records the official model-zoo link, checkpoint SHA and source hashes. Original/compatible inference sources and GPL-3.0 licenses are retained. Only NumPy int-alias conversion and restricted CPU-mapped checkpoint loading change upstream code; [parity](reports/compatibility_parity.json) verifies identical cutouts, tensors and synthetic outputs.
+
+A separate experiment venv uses Python3.12.3, PyTorch2.7.1+cu128 and CUDA12.8 on RTX4060. Ubuntu/ROS/default Python and existing SocNavGym environment are unchanged. The venv reuses system/user NumPy1.26.4/SciPy1.11.4/OpenCV4.6 read-only, so it is not a hermetic container. [Environment](reports/environment.json), [CUDA lock](requirements-cuda.lock.txt). Original upstream ROS node is ROS1; this trial uses plain Python offline, without a Jazzy node integration claim.
+
+## Recreate setup in this existing workspace
+
+No system apt installation is required. This machine lacks ensurepip for new venvs, so existing pip bootstraps only the new target environment:
+
+```bash
+TASK=experiments/social_navigation/benchmark/lidar_person_pilot
+python3 -m venv --without-pip --system-site-packages "$TASK/generated/venv"
+PIP_CACHE_DIR="$PWD/$TASK/generated/pip_cache" \
+ experiments/social_navigation/.venv-socnavgym/bin/python -m pip \
+ --python "$TASK/generated/venv" install -r "$TASK/requirements-cuda.lock.txt" \
+ --index-url https://download.pytorch.org/whl/cu128
+python3 "$TASK/download_checkpoint.py"
+bash "$TASK/run.sh" test
+```
+
+CUDA smoke/parity scripts use fixed output names which refuse overwrite. Their existing measured results are in reports/. The inherited visibility/actor-freezer plugins must already be built with the ROS Jazzy vendor SDK, as in the preceding stage.
+
+## Capture and inference
+
+Use new output paths; keep failed runs. Each capture is headless on NVIDIA, bounded, domain91 locked, and cleans only its own partition/token. Native LiDAR definition is unchanged except topic:360rays,0–2pi inclusive,3.5m range,5Hz,1cm Gaussian noise, height0.12m above base. LiDAR still sees human collision cylinders; depth sees native mesh. Full and no-human controls preserve clutter and sensor definitions.
+
+```bash
+bash "$TASK/run.sh" capture --condition full --output "$TASK/generated/runs/manual_full"
+bash "$TASK/run.sh" capture --condition null --output "$TASK/generated/runs/manual_null"
+bash "$TASK/run.sh" infer --capture "$TASK/generated/runs/manual_full" --output "$TASK/generated/manual_infer"
+bash "$TASK/run.sh" evaluate --capture "$TASK/generated/runs/manual_full" \
+ --inference "$TASK/generated/manual_infer" --output "$TASK/generated/manual_eval"
+# Audit this workspace's fixed recorded artifacts:
+"$TASK/generated/venv/bin/python" "$TASK/audit.py" --output "$TASK/generated/manual_audit"
+```
+
+Inference reads only native scans, full depth, timestamps/receive-clock availability, calibration and frozen source/weights. No actor IDs, counterfactual depth or pixel labels enter the model. The duplicated final bearing is removed and existing rays cyclically ordered, with no interpolation; model FOV is358.9972degrees over359 unique rays. No-return handling follows the author's node. No y-flip or coordinate fit to GT is applied. The fixed confidence is0.5, panoramic=true, stride1. New model instance resets recurrence per condition.
+
+Positive LiDAR detections can corroborate a depth proposal only with unique mutual spatial pairing (0.6m/0.15m margin), using a scan already available under the stored contract and no older than250ms. Every depth proposal is retained; lack of a detection means unknown. Even supported candidates keep semantic_valid=false pending acceptance. At t2s the first depth has no eligible scan; t3–6s have valid inputs. Receive-clock availability does not resolve callback ordering within an equal clock tick or measure wall latency.
+
+## What failed
+
+Across four usable repeated static frames, full scene has5 supported proposal rows:1 person-owned and4 object-owned. No-human control has3 false supported rows. Counts are repeated observations, not five independent people/episodes or a population precision estimate. All four visible people remain as geometry, mostly unknown. Both predeclared gates FAIL, including the no-human control; excluding cold start does not fix this. No confidence sweep/fine-tune or failure replacement was done.
+
+Inference math/config were frozen before scan capture. First JSON write failed on a NumPy bool scalar. Only serialization was repaired after capture, before quality evaluation; original engine and [exact diff](reports/serialization_repair.patch) remain. [Audit](reports/audit.json) confirms the two changed captured files from the archived manifest/source and all unchanged math/config/weights. Original 9 tests, CUDA smoke and upstream parity passed. Sensor raw capture150images/40scans/cleanup passed; those infrastructure results do not turn semantic FAIL into PASS.
+
+Git keeps source, small raw scan arrays, representative LABEL ONLY views, complete prediction JSONLs, reports and true measured plots. Full depth stacks/CUDA packages/weights remain local under generated/ and are not backed up by Git. No World Model training, dataset batch, HuNavSim, original ROS/tracker changes or navigation TIMEOUT repair occurred. Next is conservative depth surface evidence on the fixed regression and a new clutter fixture; this will remain separate from validated person semantics.

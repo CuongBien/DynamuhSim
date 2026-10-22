@@ -1,0 +1,24 @@
+--- upstream/detector.py
++++ runtime/detector.py
+@@ -49,7 +49,7 @@
+                 )
+             )
+ 
+-        ckpt = torch.load(ckpt_file)
++        ckpt = torch.load(ckpt_file, map_location="cpu", weights_only=True)
+         self._model.load_state_dict(ckpt["model_state"])
+ 
+         self._model.eval()
+--- upstream/utils/utils.py
++++ runtime/utils/utils.py
+@@ -216,8 +216,8 @@
+     outbound_mask = np.logical_or(inds_ct < 0, inds_ct > num_pts - 1)
+ 
+     # cutout (linear interp)
+-    inds_ct_low = _clip(np.floor(inds_ct), 0, num_pts - 1).astype(np.int)
+-    inds_ct_high = _clip(inds_ct_low + 1, 0, num_pts - 1).astype(np.int)
++    inds_ct_low = _clip(np.floor(inds_ct), 0, num_pts - 1).astype(int)
++    inds_ct_high = _clip(inds_ct_low + 1, 0, num_pts - 1).astype(int)
+     inds_ct_ratio = _clip(inds_ct - inds_ct_low, 0.0, 1.0)
+     inds_offset = (
+         np.arange(num_scans).reshape(1, num_scans, 1) * num_pts
