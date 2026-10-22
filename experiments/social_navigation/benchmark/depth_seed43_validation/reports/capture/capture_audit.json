@@ -1,0 +1,56 @@
+{
+  "status": "PASS",
+  "checks": {
+    "measured": true,
+    "seed43": true,
+    "no_adapter_fault": true,
+    "recorder_clean": true,
+    "source_unchanged": true,
+    "original_friction": true,
+    "camera_exact_mesh_profile": true,
+    "nav2_profile_exact": true,
+    "actual_nvidia_renderer": true,
+    "tail_at_least_3s": true,
+    "events_complete": true,
+    "render_callbacks_balanced": true,
+    "paired_active_depth": true,
+    "clean_shutdown": true
+  },
+  "seed": 43,
+  "protocol_sha256": "e7b9262479700df782e866c6cd4c0fd1308ddf8d286e486078ab1c855e07b7b3",
+  "capture_manifest_sha256": "d46af392a1b6cf9d1bff0e7849f1cef8609c1d73628fecdf134098f0232f38d8",
+  "native_friction": {
+    "friction_directions": 4,
+    "recognized_gz_base_link_frames": 4
+  },
+  "runtime_sha256": {
+    "mecanum_camera.sdf": "14c15412664eb37dd2f0fb2d61a79b09f98722f204f97d97212f0ec814ad3d9f",
+    "warehouse.sdf": "ba3ef38fe349d7de9155428df047bbdc4f785ca1cdf5524a6d95bf8954a84221",
+    "nav2_runtime.yaml": "3147f1999c0568c41389e7765ebf3d24eca231fb613e4841706d05cb5d65afd6"
+  },
+  "navigation": {
+    "status": "TIMEOUT",
+    "actual_goal_reached": false,
+    "active_sim_seconds": 90.025,
+    "goal_xy_error_m": 3.701305314006786,
+    "goal_yaw_error_rad": 2.978661947046558
+  },
+  "complete_label_tail_s": 3.3975,
+  "renderer_lines": [
+    "23:38:25: GL_RENDERER = D3D12 (NVIDIA GeForce RTX 4060 Laptop GPU)"
+  ],
+  "paired_frames": 1042,
+  "active_paired_frames": 902,
+  "active_different_on_off_frames": 688,
+  "seed_diversity": {
+    "common_native_steps": 911,
+    "first_human_xy_difference_native_step": 39,
+    "max_human_xy_difference_m": 28.566518717896173,
+    "observed_trajectory_diverged": true,
+    "scope": "New capture/seed with same explicit initial groups; coupled robot inputs also differ, not isolated RNG causal attribution"
+  },
+  "semantic_person_validated": false,
+  "association_accepted": false,
+  "training_ready": false,
+  "hu_nav_sim_used": false
+}

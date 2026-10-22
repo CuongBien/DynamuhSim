@@ -1,0 +1,115 @@
+{
+  "schema": "new_seed_capture_sources/1",
+  "created_utc": "2026-10-22T16:38:13.982560+00:00",
+  "protocol": {
+    "schema": "depth_new_seed_validation/1",
+    "run": "depth_seed43_01",
+    "scenario": "standing",
+    "seed": 43,
+    "previous_seed": 42,
+    "change": "Only human simulator RNG seed; same initial explicit groups, world, sensors, robot, native policy and runtime Nav2 profile",
+    "initial_layout_changed": false,
+    "independence": "New capture/seed, same layout, simulator and sensor profile; not cross-layout/backend generalization",
+    "robot_feedback": "Native odometry and AMCL, no oracle",
+    "nav2_profile": "moderate radius .25+padding .01, inflation .8/scaling3, vx .30/-.15, vy .20",
+    "camera": "Native low camera, mesh depth (proxy OFF) plus paired proxy ON diagnostic; LiDAR conservative proxy unchanged",
+    "budget": {
+      "active_sim_s": 90,
+      "active_wall_s": 540,
+      "attempts": 1
+    },
+    "preflight": {
+      "nvidia_hardware_renderer_required": true,
+      "native_gz_friction_frames_required": 4,
+      "source_robot_unchanged": true
+    },
+    "data_gate": {
+      "no_adapter_fault": true,
+      "recording_exit_zero": true,
+      "closed_bag_readback": true,
+      "complete_label_tail_s": 3,
+      "clean_owned_shutdown": true,
+      "mesh_profile_required": true
+    },
+    "comparison": {
+      "variants": [
+        "baseline",
+        "shape_only",
+        "tracking_only",
+        "combined"
+      ],
+      "frozen_engine": "depth_track_refinement/reports/frozen01.json",
+      "tuning_on_new_episode": false,
+      "geometric_gate": "Exact predeclared gate from depth_track_refinement, separate from navigation/semantic acceptance"
+    },
+    "mask_policy": "Persona, semantic association and training eligibility remain false; geometry PASS is not person detector validation",
+    "holdout": "HuNavSim untouched",
+    "training_ready": false
+  },
+  "parent_driver_sha256": "6973c9be6b833f4c805c22076a3229ddfa3a628c7f7e07821d697dcd8a52939d",
+  "driver_sha256": "b78297c264fddb2461c1c37a911f8359765dec1ee40bd6b09eb73d9d4f72367a",
+  "parent_commit": "5e5de7ee702e2edd13440253ef291df92e39ae58",
+  "driver_change": "Runtime output location only; seed43 passed as CLI argument",
+  "inference_frozen_sha256": "caac675b4ea87d1bc0c41a530d10a2ce596565904de7b89fce6920b536d47835",
+  "inference_engine_sha256": {
+    "config.json": "3728358ab3dd0005d485ecb218e76b5bfef47d90e74a2dfce702e53ad3a3e1c2",
+    "refinement.py": "4988dfcbb9e8754c5cb63b801479430d7bb2e59e5d2f7e7601e34634d38758db",
+    "replay.py": "2d0bb2f6a1b5690a8cb42a4c86a8c9d46bb0db647f57487e79f772e0f7134cac",
+    "evaluate.py": "a8797bc49e24aad6fb5854a895af0a9f7fabcd26cc194c3c81d8bf5d8de8ceee",
+    "snapshots/sensor.py": "0fe703e72335c3f768584d051351b8e16f8aa1eb48ecd51b7f8dd6dd767bc7d1",
+    "snapshots/association.py": "13ea3e6615704604c4721a2d85e0d361f2d89ffca5e2cd8f8b64ccb4685d176e"
+  },
+  "inference_config": {
+    "schema": "depth_track_refinement/1",
+    "development": "avoidance_moderate01",
+    "validation": "pilot01",
+    "split": "pilot_only",
+    "training_ready": false,
+    "shape_filter": {
+      "min_vertical_span_m": 1.55,
+      "thin_surface_minor_std_m": 0.025,
+      "constant_profile_shift_m": 0.04,
+      "min_profile_bins": 4,
+      "height_bins": 5
+    },
+    "tracking": {
+      "active_ttl_ns": 500000000,
+      "dormant_ttl_ns": 1500000000,
+      "dormant_min_hits": 5,
+      "dormant_gate_base_m": 0.35,
+      "dormant_gate_growth_mps": 0.25,
+      "dormant_position_margin_m": 0.15,
+      "dormant_max_logshape_distance": 0.55,
+      "active_match_policy": "legacy distance gate, retain comparator",
+      "dormant_policy": "mutual unique geometric/shape candidate, output only when measured"
+    },
+    "comparison_variants": [
+      "baseline",
+      "shape_only",
+      "tracking_only",
+      "combined"
+    ],
+    "validation_limit": "Separate captured run, same simulator/seed/scene family; no generalization or semantic acceptance",
+    "holdout": "HuNavSim untouched",
+    "geometric_comparison_gate": {
+      "min_paired_row_retention": 0.95,
+      "unpaired_rows_must_decrease": true,
+      "fragmentation_proxy_must_decrease": true,
+      "short_gap_identity_changes_must_not_increase": true,
+      "wrong_known_identity_reacquisitions_must_equal_zero": true,
+      "semantic_acceptance": false
+    }
+  },
+  "helper_sha256": {
+    "experiments/social_navigation/benchmark/depth_seed43_validation/capture.py": "1d658874b27871f6eb2f79cdc75aa8d97a4b9ce37df7ac4c1aa11bbe6d14144d",
+    "experiments/social_navigation/benchmark/depth_seed43_validation/protocol.json": "e7b9262479700df782e866c6cd4c0fd1308ddf8d286e486078ab1c855e07b7b3",
+    "experiments/social_navigation/benchmark/early_avoidance_pilot/namespace_prepare.py": "c77e3433da71d521df10cf88135a28185d5d17c2a4d0393cd665b4a1459c167a",
+    "experiments/social_navigation/benchmark/early_avoidance_pilot/moderate_config.py": "87958fd6540596e005c567d0b0f5443c7308122415fefbb8a8007da80fecabc0",
+    "experiments/social_navigation/benchmark/early_avoidance_pilot/config_runtime.py": "bc52f34396ce14a0a22c4d52d73877418db562c694700748adaae75cec840afa",
+    "experiments/social_navigation/benchmark/depth_proxy_lifecycle/motion_prepare.py": "7dec9c233d6a304c84bc1a5923b3a671b3e2ae1e336ab07ab706700fdb542742",
+    "experiments/social_navigation/benchmark/depth_proxy_lifecycle/quiesce.py": "99ec9550118519a288fdcd5c61ca178dc4ba62e8b9f817db45cb961c71acd0e2",
+    "experiments/social_navigation/benchmark/depth_proxy_lifecycle/pair_recording.py": "0e69167d1ef367b51c788be4c0e2b7459e844b058eba6464ce478ffb4ec98c7e",
+    "experiments/social_navigation/benchmark/gpu_runtime/runtime_guard.py": "384e1e6ca012527524a92c37aab136588a36e5dc57a98ed6f9d58268648410e3",
+    "experiments/social_navigation/benchmark/depth_proxy_ablation/generated/build_jazzy/libdepth_proxy_filter.so": "b55c0570daf7c5fc7b907b5deeaa2f080d970b9152e5d5c623af7cfe8e014e87"
+  }
+}

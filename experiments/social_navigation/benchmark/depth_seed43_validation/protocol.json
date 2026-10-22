@@ -1,0 +1,45 @@
+{
+  "schema": "depth_new_seed_validation/1",
+  "run": "depth_seed43_01",
+  "scenario": "standing",
+  "seed": 43,
+  "previous_seed": 42,
+  "change": "Only human simulator RNG seed; same initial explicit groups, world, sensors, robot, native policy and runtime Nav2 profile",
+  "initial_layout_changed": false,
+  "independence": "New capture/seed, same layout, simulator and sensor profile; not cross-layout/backend generalization",
+  "robot_feedback": "Native odometry and AMCL, no oracle",
+  "nav2_profile": "moderate radius .25+padding .01, inflation .8/scaling3, vx .30/-.15, vy .20",
+  "camera": "Native low camera, mesh depth (proxy OFF) plus paired proxy ON diagnostic; LiDAR conservative proxy unchanged",
+  "budget": {
+    "active_sim_s": 90,
+    "active_wall_s": 540,
+    "attempts": 1
+  },
+  "preflight": {
+    "nvidia_hardware_renderer_required": true,
+    "native_gz_friction_frames_required": 4,
+    "source_robot_unchanged": true
+  },
+  "data_gate": {
+    "no_adapter_fault": true,
+    "recording_exit_zero": true,
+    "closed_bag_readback": true,
+    "complete_label_tail_s": 3,
+    "clean_owned_shutdown": true,
+    "mesh_profile_required": true
+  },
+  "comparison": {
+    "variants": [
+      "baseline",
+      "shape_only",
+      "tracking_only",
+      "combined"
+    ],
+    "frozen_engine": "depth_track_refinement/reports/frozen01.json",
+    "tuning_on_new_episode": false,
+    "geometric_gate": "Exact predeclared gate from depth_track_refinement, separate from navigation/semantic acceptance"
+  },
+  "mask_policy": "Persona, semantic association and training eligibility remain false; geometry PASS is not person detector validation",
+  "holdout": "HuNavSim untouched",
+  "training_ready": false
+}

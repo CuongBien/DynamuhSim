@@ -1,0 +1,61 @@
+{
+  "status": "PASS",
+  "gpu": {
+    "vendor": "Microsoft Corporation",
+    "renderer": "D3D12 (NVIDIA GeForce RTX 4060 Laptop GPU)",
+    "version": "4.6 (Compatibility Profile) Mesa 25.2.8-0ubuntu0.24.04.2",
+    "direct": true,
+    "environment_before": {
+      "DISPLAY": ":0",
+      "WAYLAND_DISPLAY": "wayland-0"
+    },
+    "environment_used": {
+      "DISPLAY": ":0",
+      "WAYLAND_DISPLAY": "wayland-0",
+      "GALLIUM_DRIVER": "d3d12",
+      "MESA_D3D12_DEFAULT_ADAPTER_NAME": "NVIDIA"
+    },
+    "probe_source_sha256": "9a9f5478053290b51f18beed987563a7e3a2349f143e8fccd0ce41bf57ec5bab",
+    "probe_binary_sha256": "37f8608ee330e5c179dcd1975c9053e0b66f055f21a68e41bbaf13ed20d26520",
+    "hardware_verified": true
+  },
+  "native_friction": {
+    "friction_directions": 4,
+    "recognized_gz_base_link_frames": 4
+  },
+  "camera_sha256": "14c15412664eb37dd2f0fb2d61a79b09f98722f204f97d97212f0ec814ad3d9f",
+  "protocol_sha256": "e7b9262479700df782e866c6cd4c0fd1308ddf8d286e486078ab1c855e07b7b3",
+  "inference_engine_sha256": {
+    "config.json": "3728358ab3dd0005d485ecb218e76b5bfef47d90e74a2dfce702e53ad3a3e1c2",
+    "refinement.py": "4988dfcbb9e8754c5cb63b801479430d7bb2e59e5d2f7e7601e34634d38758db",
+    "replay.py": "2d0bb2f6a1b5690a8cb42a4c86a8c9d46bb0db647f57487e79f772e0f7134cac",
+    "evaluate.py": "a8797bc49e24aad6fb5854a895af0a9f7fabcd26cc194c3c81d8bf5d8de8ceee",
+    "snapshots/sensor.py": "0fe703e72335c3f768584d051351b8e16f8aa1eb48ecd51b7f8dd6dd767bc7d1",
+    "snapshots/association.py": "13ea3e6615704604c4721a2d85e0d361f2d89ffca5e2cd8f8b64ccb4685d176e"
+  },
+  "camera_metadata": {
+    "mecanum_camera.launch.py": {
+      "original": "src/custom_corridor/launch/corridor_tb3.launch.py",
+      "original_sha256": "697a5dd1571e6741483e5019db88e74877b4786ad7a5384427a92576fd05f0ef",
+      "runtime_sha256": "e2a342b3383f8283c06063d34cebe38d1a1e1c7811e0038a6525914cff35a985"
+    },
+    "mecanum_camera.sdf": {
+      "original": "src/custom_corridor/models/mecanum_robot/model.sdf",
+      "original_sha256": "98923f28252af56e93ae570c9da74dfd41390decf004142c97a35b61f351074e",
+      "runtime_sha256": "470070177a479e11f5b39ae5045d90cec888b0a719842688bd56cc193119320e"
+    },
+    "depth_proxy_motion": {
+      "default_camera": "OFF experiment only",
+      "on_control": "/proxy_check/on/depth",
+      "camera_pose_unchanged": true,
+      "extra_sensor_only": true,
+      "sha256": "657f1c52f0be3b59b46a47fa0092587ba774b6b34e5ccdccd7fe8d74973a72c7"
+    },
+    "friction_prefix_repair": {
+      "literal_gz_expressed_in_count": 4,
+      "scope": "Runtime serialization only; restores original Gazebo friction frame",
+      "sha256": "14c15412664eb37dd2f0fb2d61a79b09f98722f204f97d97212f0ec814ad3d9f"
+    }
+  },
+  "source_robot_unchanged": true
+}
