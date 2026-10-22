@@ -1,0 +1,24 @@
+{
+  "stage": "COMMON_GAZEBO_NEAR_CONDITION_PILOT",
+  "models": [
+    "soc_guarded_orca",
+    "crowd_orca_plus",
+    "complex_geometry_mixed"
+  ],
+  "cases": [
+    "crossing_near",
+    "opposed_near",
+    "blocked_narrow_near"
+  ],
+  "seconds": 10,
+  "population": 6,
+  "human_radius": 0.36,
+  "robot_radius": 0.25,
+  "physics_dt": 0.0025,
+  "gui_first_crossing": true,
+  "nav2": false,
+  "formation": false,
+  "command": "Same world-frame velocity script dispatched by simulation time; physical robot state fed back, no teleporting or claim actual paths identical.",
+  "negative_outcomes": "Retain every attempt and negative gap; integration validation is separate from geometry outcome.",
+  "upstream_commit": "ff79dbfe250837cc05eb23128756dfd4668c2f14"
+}

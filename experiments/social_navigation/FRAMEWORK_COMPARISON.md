@@ -1,5 +1,11 @@
 # So sánh khả năng đã đo — cập nhật22/10/2026
 
+## Cập nhật22/10/2026 — cohort Gazebo chung
+
+Offline36 ca đã commit **`ff79dbf`** (`feat: benchmark shared offline social navigation scenarios`). [Cohort Gazebo chung](benchmark/common_gazebo/reports/COMMON_GAZEBO_REPORT.md) đã thực hiện9 lượt (3 cấu hình ×3 near scenes,6 người/radius0.36m):8 hoàn tất10s; SocNavGym guarded crossing lỗi terminal tại5.5025s. Có actual poses/LiDAR/camera thật, GPU NVIDIA, shutdown/cleanup; không có Nav2 hoặc formation trong cohort này.
+
+Soc crossing còn gap+5.12mm trước fault nhưng robot trôi khi teardown gây signed gap−10.83cm. Chưa nghiệm thu cấu hình này cho tương tác sát robot/Nav2; bước kế là sửa proposal né robot và dừng robot khi worker fault trong phiên bản mới, tái kiểm đúng ca lỗi. Giữ SocNavGym cho mục tiêu nhóm theo bằng chứng lifecycle trước, CrowdSimPlus ORCA+ làm baseline và ComplexityNav geometry làm biến thể phụ. Không suy từ8 lượt hoàn tất ra an toàn/tự nhiên mọi cảnh. Kết quả Gazebo mới chưa commit; không sửa code robot/vendor hay staging ngoài experiment.
+
 [Benchmark pilot offline chung36 lượt](benchmark/common_response/reports/run01/COMMON_RESPONSE_REPORT.md) đã hoàn tất với human radius/initial geometry/robot trace chung. Đây là18 cặp far/near, một seed, native dt/speed/observation khác nhau; không phải bảng xếp hạng thuật toán thuần hoặc benchmark chung Gazebo/Nav2.
 
 | Năng lực / trạng thái hiện tại | SocNavGym | CrowdSimPlus | ComplexityNav |

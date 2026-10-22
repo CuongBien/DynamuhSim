@@ -1,0 +1,16 @@
+{
+  "status": "SOURCE_DIAGNOSIS_NO_POLICY_CHANGE",
+  "source": "experiments/social_navigation/benchmark/socnavgym_warehouse_lifecycle/geometry.py",
+  "source_sha256": "693a35314cce682f00c91f6dfeebd5225851663410920cac393a66a7936df5a3",
+  "motion_source": "experiments/social_navigation/benchmark/socnavgym_warehouse_lifecycle/motion.py",
+  "motion_sha256": "bef8b4a8a527f2f5725d306f6844bb128099fbcbac977fa684c2188715afbe04",
+  "facts": [
+    "WarehouseMotion builds one reciprocal ORCA proposal with the robot as an agent, then tests actual fixed robot displacement separately.",
+    "admissible_fraction tests33 common scales1,31/32,...,0 of that one six-human displacement proposal.",
+    "Scaling human motion down is not assumed safe against an approaching robot; every candidate is swept-tested.",
+    "If none passes2mm gaps, it raises the measured terminal error. This is failure of the candidate family, not proof no feasible velocity exists."
+  ],
+  "observed_case": "soc_crossing01",
+  "root_cause_confidence": "Source-confirmed limited proposal family; exact failed internal candidate velocities are not logged, so no claim about the unique cause of its infeasibility.",
+  "next_change": "Add and test an alternative human avoidance proposal and prompt robot-stop handling in a new version; keep this baseline and frozen kernel unchanged."
+}
