@@ -1,0 +1,1877 @@
+{
+  "schema": "pretrained_lidar_label_diagnostic/1",
+  "condition": "full",
+  "counts": {
+    "depth_frames": 5,
+    "supported_rows": 1,
+    "false_supported_rows": 1,
+    "unknown_rows": 34,
+    "eligible_person_rows": 20,
+    "supported_person_rows": 0
+  },
+  "restricted_static_gate_pass": false,
+  "rows": [
+    {
+      "depth_index": 0,
+      "stamp_ns": 2000000000,
+      "available_ns": 2005000000,
+      "selected_scan_index": -1,
+      "eligible_people": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "supported_people": [],
+      "unsupported_visible_people": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "supported_proposals": [],
+      "false_supported_proposals": [],
+      "unknown_proposals": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "all_proposals_retained": true,
+      "proposals_LABEL_ONLY": [
+        {
+          "proposal_index": 0,
+          "xy_base": [
+            1.4148061227741133,
+            0.9273393045646309
+          ],
+          "point_count": 624,
+          "label_counts": {
+            "0": 624
+          },
+          "classification": "non_person",
+          "person_id": null,
+          "person_purity": 0.0,
+          "sensor_decision": {
+            "proposal_index": 0,
+            "semantic_status": "unknown",
+            "person_confidence": null,
+            "learned_detection_index": null,
+            "association_accepted": false,
+            "xy_base": [
+              1.4148061227741133,
+              0.9273393045646309
+            ],
+            "point_count": 624,
+            "semantic_class": "unknown_geometry_candidate",
+            "semantic_valid": false,
+            "training_ready": false,
+            "surface_evidence": {
+              "point_count": 624,
+              "planar_surface_evidence": true,
+              "explained_fraction": 1.0,
+              "planes": [
+                {
+                  "normal_xy": [
+                    -0.9209248291749829,
+                    -0.3897402455598202
+                  ],
+                  "offset_m": -1.6643515316331712,
+                  "points": 624,
+                  "vertical_span_m": 0.5072461952761096
+                }
+              ],
+              "semantic_class": "unknown_geometry_candidate",
+              "semantic_valid": false,
+              "reason": "strong_vertical_planar_surface"
+            },
+            "prior_semantic_status": "unknown",
+            "support_vetoed_by_planar_surface": false
+          }
+        },
+        {
+          "proposal_index": 1,
+          "xy_base": [
+            1.5449622225772641,
+            -0.5424879470297779
+          ],
+          "point_count": 448,
+          "label_counts": {
+            "0": 448
+          },
+          "classification": "non_person",
+          "person_id": null,
+          "person_purity": 0.0,
+          "sensor_decision": {
+            "proposal_index": 1,
+            "semantic_status": "unknown",
+            "person_confidence": null,
+            "learned_detection_index": null,
+            "association_accepted": false,
+            "xy_base": [
+              1.5449622225772641,
+              -0.5424879470297779
+            ],
+            "point_count": 448,
+            "semantic_class": "unknown_geometry_candidate",
+            "semantic_valid": false,
+            "training_ready": false,
+            "surface_evidence": {
+              "point_count": 448,
+              "planar_surface_evidence": false,
+              "explained_fraction": 0.2857142857142857,
+              "planes": [
+                {
+                  "normal_xy": [
+                    0.9853317276977848,
+                    -0.17064989420476792
+                  ],
+                  "offset_m": 1.6008862582286985,
+                  "points": 128,
+                  "vertical_span_m": 0.7841371670338113
+                }
+              ],
+              "semantic_class": "unknown_geometry_candidate",
+              "semantic_valid": false,
+              "reason": "unexplained_surface_retained"
+            },
+            "prior_semantic_status": "unknown",
+            "support_vetoed_by_planar_surface": false
+          }
+        },
+        {
+          "proposal_index": 2,
+          "xy_base": [
+            1.9472435665162657,
+            -1.2105203568894356
+          ],
+          "point_count": 371,
+          "label_counts": {
+            "0": 371
+          },
+          "classification": "non_person",
+          "person_id": null,
+          "person_purity": 0.0,
+          "sensor_decision": {
+            "proposal_index": 2,
+            "semantic_status": "unknown",
+            "person_confidence": null,
+            "learned_detection_index": null,
+            "association_accepted": false,
+            "xy_base": [
+              1.9472435665162657,
+              -1.2105203568894356
+            ],
+            "point_count": 371,
+            "semantic_class": "unknown_geometry_candidate",
+            "semantic_valid": false,
+            "training_ready": false,
+            "surface_evidence": {
+              "point_count": 371,
+              "planar_surface_evidence": true,
+              "explained_fraction": 1.0,
+              "planes": [
+                {
+                  "normal_xy": [
+                    0.8778282352291112,
+                    -0.47897556246070017
+                  ],
+                  "offset_m": 2.2891550523673185,
+                  "points": 371,
+                  "vertical_span_m": 0.9175414419411849
+                }
+              ],
+              "semantic_class": "unknown_geometry_candidate",
+              "semantic_valid": false,
+              "reason": "strong_vertical_planar_surface"
+            },
+            "prior_semantic_status": "unknown",
+            "support_vetoed_by_planar_surface": false
+          }
+        },
+        {
+          "proposal_index": 3,
+          "xy_base": [
+            2.3881353092066337,
+            1.4258248130437765
+          ],
+          "point_count": 125,
+          "label_counts": {
+            "3": 125
+          },
+          "classification": "pure_person",
+          "person_id": 3,
+          "person_purity": 1.0,
+          "sensor_decision": {
+            "proposal_index": 3,
+            "semantic_status": "unknown",
+            "person_confidence": null,
+            "learned_detection_index": null,
+            "association_accepted": false,
+            "xy_base": [
+              2.3881353092066337,
+              1.4258248130437765
+            ],
+            "point_count": 125,
+            "semantic_class": "unknown_geometry_candidate",
+            "semantic_valid": false,
+            "training_ready": false,
+            "surface_evidence": {
+              "point_count": 125,
+              "planar_surface_evidence": false,
+              "explained_fraction": 0.248,
+              "planes": [
+                {
+                  "normal_xy": [
+                    -0.8096426669739089,
+                    -0.5869231225768637
+                  ],
+                  "offset_m": -2.74781549825578,
+                  "points": 31,
+                  "vertical_span_m": 0.3875987942568321
+                }
+              ],
+              "semantic_class": "unknown_geometry_candidate",
+              "semantic_valid": false,
+              "reason": "unexplained_surface_retained"
+            },
+            "prior_semantic_status": "unknown",
+            "support_vetoed_by_planar_surface": false
+          }
+        },
+        {
+          "proposal_index": 4,
+          "xy_base": [
+            2.7735874605135793,
+            -0.26885346749893113
+          ],
+          "point_count": 198,
+          "label_counts": {
+            "1": 198
+          },
+          "classification": "pure_person",
+          "person_id": 1,
+          "person_purity": 1.0,
+          "sensor_decision": {
+            "proposal_index": 4,
+            "semantic_status": "unknown",
+            "person_confidence": null,
+            "learned_detection_index": null,
+            "association_accepted": false,
+            "xy_base": [
+              2.7735874605135793,
+              -0.26885346749893113
+            ],
+            "point_count": 198,
+            "semantic_class": "unknown_geometry_candidate",
+            "semantic_valid": false,
+            "training_ready": false,
+            "surface_evidence": {
+              "point_count": 198,
+              "planar_surface_evidence": false,
+              "explained_fraction": 0.15151515151515152,
+              "planes": [
+                {
+                  "normal_xy": [
+                    -0.10681528347263201,
+                    -0.994278882012819
+                  ],
+                  "offset_m": -0.012817834027586239,
+                  "points": 30,
+                  "vertical_span_m": 1.3996980545101496
+                }
+              ],
+              "semantic_class": "unknown_geometry_candidate",
+              "semantic_valid": false,
+              "reason": "unexplained_surface_retained"
+            },
+            "prior_semantic_status": "unknown",
+            "support_vetoed_by_planar_surface": false
+          }
+        },
+        {
+          "proposal_index": 5,
+          "xy_base": [
+            3.230846281055454,
+            -1.6678232509422861
+          ],
+          "point_count": 19,
+          "label_counts": {
+            "4": 19
+          },
+          "classification": "pure_person",
+          "person_id": 4,
+          "person_purity": 1.0,
+          "sensor_decision": {
+            "proposal_index": 5,
+            "semantic_status": "unknown",
+            "person_confidence": null,
+            "learned_detection_index": null,
+            "association_accepted": false,
+            "xy_base": [
+              3.230846281055454,
+              -1.6678232509422861
+            ],
+            "point_count": 19,
+            "semantic_class": "unknown_geometry_candidate",
+            "semantic_valid": false,
+            "training_ready": false,
+            "surface_evidence": {
+              "point_count": 19,
+              "planar_surface_evidence": false,
+              "explained_fraction": 0.0,
+              "planes": [],
+              "semantic_class": "unknown_geometry_candidate",
+              "semantic_valid": false,
+              "reason": "insufficient_points"
+            },
+            "prior_semantic_status": "unknown",
+            "support_vetoed_by_planar_surface": false
+          }
+        },
+        {
+          "proposal_index": 6,
+          "xy_base": [
+            3.996437783238382,
+            -0.20829134238634223
+          ],
+          "point_count": 30,
+          "label_counts": {
+            "2": 30
+          },
+          "classification": "pure_person",
+          "person_id": 2,
+          "person_purity": 1.0,
+          "sensor_decision": {
+            "proposal_index": 6,
+            "semantic_status": "unknown",
+            "person_confidence": null,
+            "learned_detection_index": null,
+            "association_accepted": false,
+            "xy_base": [
+              3.996437783238382,
+              -0.20829134238634223
+            ],
+            "point_count": 30,
+            "semantic_class": "unknown_geometry_candidate",
+            "semantic_valid": false,
+            "training_ready": false,
+            "surface_evidence": {
+              "point_count": 30,
+              "planar_surface_evidence": false,
+              "explained_fraction": 0.0,
+              "planes": [],
+              "semantic_class": "unknown_geometry_candidate",
+              "semantic_valid": false,
+              "reason": "insufficient_points"
+            },
+            "prior_semantic_status": "unknown",
+            "support_vetoed_by_planar_surface": false
+          }
+        }
+      ],
+      "label_qa": {
+        "contradictions": 0,
+        "overlap_pixels": 0,
+        "uncertain_pixels": 0
+      }
+    },
+    {
+      "depth_index": 1,
+      "stamp_ns": 3000000000,
+      "available_ns": 3005000000,
+      "selected_scan_index": 4,
+      "eligible_people": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "supported_people": [],
+      "unsupported_visible_people": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "supported_proposals": [],
+      "false_supported_proposals": [],
+      "unknown_proposals": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "all_proposals_retained": true,
+      "proposals_LABEL_ONLY": [
+        {
+          "proposal_index": 0,
+          "xy_base": [
+            1.4148061227741133,
+            0.9273393045646309
+          ],
+          "point_count": 624,
+          "label_counts": {
+            "0": 624
+          },
+          "classification": "non_person",
+          "person_id": null,
+          "person_purity": 0.0,
+          "sensor_decision": {
+            "proposal_index": 0,
+            "semantic_status": "unknown",
+            "person_confidence": null,
+            "learned_detection_index": null,
+            "association_accepted": false,
+            "xy_base": [
+              1.4148061227741133,
+              0.9273393045646309
+            ],
+            "point_count": 624,
+            "semantic_class": "unknown_geometry_candidate",
+            "semantic_valid": false,
+            "training_ready": false,
+            "surface_evidence": {
+              "point_count": 624,
+              "planar_surface_evidence": true,
+              "explained_fraction": 1.0,
+              "planes": [
+                {
+                  "normal_xy": [
+                    -0.9209248291749829,
+                    -0.3897402455598202
+                  ],
+                  "offset_m": -1.6643515316331712,
+                  "points": 624,
+                  "vertical_span_m": 0.5072461952761096
+                }
+              ],
+              "semantic_class": "unknown_geometry_candidate",
+              "semantic_valid": false,
+              "reason": "strong_vertical_planar_surface"
+            },
+            "prior_semantic_status": "unknown",
+            "support_vetoed_by_planar_surface": false
+          }
+        },
+        {
+          "proposal_index": 1,
+          "xy_base": [
+            1.5449622225772641,
+            -0.5424879470297779
+          ],
+          "point_count": 448,
+          "label_counts": {
+            "0": 448
+          },
+          "classification": "non_person",
+          "person_id": null,
+          "person_purity": 0.0,
+          "sensor_decision": {
+            "proposal_index": 1,
+            "semantic_status": "unknown",
+            "person_confidence": null,
+            "learned_detection_index": null,
+            "association_accepted": false,
+            "xy_base": [
+              1.5449622225772641,
+              -0.5424879470297779
+            ],
+            "point_count": 448,
+            "semantic_class": "unknown_geometry_candidate",
+            "semantic_valid": false,
+            "training_ready": false,
+            "surface_evidence": {
+              "point_count": 448,
+              "planar_surface_evidence": false,
+              "explained_fraction": 0.2857142857142857,
+              "planes": [
+                {
+                  "normal_xy": [
+                    0.9853317276977848,
+                    -0.17064989420476792
+                  ],
+                  "offset_m": 1.6008862582286985,
+                  "points": 128,
+                  "vertical_span_m": 0.7841371670338113
+                }
+              ],
+              "semantic_class": "unknown_geometry_candidate",
+              "semantic_valid": false,
+              "reason": "unexplained_surface_retained"
+            },
+            "prior_semantic_status": "unknown",
+            "support_vetoed_by_planar_surface": false
+          }
+        },
+        {
+          "proposal_index": 2,
+          "xy_base": [
+            1.9472435665162657,
+            -1.2105203568894356
+          ],
+          "point_count": 371,
+          "label_counts": {
+            "0": 371
+          },
+          "classification": "non_person",
+          "person_id": null,
+          "person_purity": 0.0,
+          "sensor_decision": {
+            "proposal_index": 2,
+            "semantic_status": "unknown",
+            "person_confidence": null,
+            "learned_detection_index": null,
+            "association_accepted": false,
+            "xy_base": [
+              1.9472435665162657,
+              -1.2105203568894356
+            ],
+            "point_count": 371,
+            "semantic_class": "unknown_geometry_candidate",
+            "semantic_valid": false,
+            "training_ready": false,
+            "surface_evidence": {
+              "point_count": 371,
+              "planar_surface_evidence": true,
+              "explained_fraction": 1.0,
+              "planes": [
+                {
+                  "normal_xy": [
+                    0.8778282352291112,
+                    -0.47897556246070017
+                  ],
+                  "offset_m": 2.2891550523673185,
+                  "points": 371,
+                  "vertical_span_m": 0.9175414419411849
+                }
+              ],
+              "semantic_class": "unknown_geometry_candidate",
+              "semantic_valid": false,
+              "reason": "strong_vertical_planar_surface"
+            },
+            "prior_semantic_status": "unknown",
+            "support_vetoed_by_planar_surface": false
+          }
+        },
+        {
+          "proposal_index": 3,
+          "xy_base": [
+            2.3881353092066337,
+            1.4258248130437765
+          ],
+          "point_count": 125,
+          "label_counts": {
+            "3": 125
+          },
+          "classification": "pure_person",
+          "person_id": 3,
+          "person_purity": 1.0,
+          "sensor_decision": {
+            "proposal_index": 3,
+            "semantic_status": "unknown",
+            "person_confidence": null,
+            "learned_detection_index": null,
+            "association_accepted": false,
+            "xy_base": [
+              2.3881353092066337,
+              1.4258248130437765
+            ],
+            "point_count": 125,
+            "semantic_class": "unknown_geometry_candidate",
+            "semantic_valid": false,
+            "training_ready": false,
+            "surface_evidence": {
+              "point_count": 125,
+              "planar_surface_evidence": false,
+              "explained_fraction": 0.248,
+              "planes": [
+                {
+                  "normal_xy": [
+                    -0.8096426669739089,
+                    -0.5869231225768637
+                  ],
+                  "offset_m": -2.74781549825578,
+                  "points": 31,
+                  "vertical_span_m": 0.3875987942568321
+                }
+              ],
+              "semantic_class": "unknown_geometry_candidate",
+              "semantic_valid": false,
+              "reason": "unexplained_surface_retained"
+            },
+            "prior_semantic_status": "unknown",
+            "support_vetoed_by_planar_surface": false
+          }
+        },
+        {
+          "proposal_index": 4,
+          "xy_base": [
+            2.7735874605135793,
+            -0.26885346749893113
+          ],
+          "point_count": 198,
+          "label_counts": {
+            "1": 198
+          },
+          "classification": "pure_person",
+          "person_id": 1,
+          "person_purity": 1.0,
+          "sensor_decision": {
+            "proposal_index": 4,
+            "semantic_status": "unknown",
+            "person_confidence": null,
+            "learned_detection_index": null,
+            "association_accepted": false,
+            "xy_base": [
+              2.7735874605135793,
+              -0.26885346749893113
+            ],
+            "point_count": 198,
+            "semantic_class": "unknown_geometry_candidate",
+            "semantic_valid": false,
+            "training_ready": false,
+            "surface_evidence": {
+              "point_count": 198,
+              "planar_surface_evidence": false,
+              "explained_fraction": 0.15151515151515152,
+              "planes": [
+                {
+                  "normal_xy": [
+                    -0.10681528347263201,
+                    -0.994278882012819
+                  ],
+                  "offset_m": -0.012817834027586239,
+                  "points": 30,
+                  "vertical_span_m": 1.3996980545101496
+                }
+              ],
+              "semantic_class": "unknown_geometry_candidate",
+              "semantic_valid": false,
+              "reason": "unexplained_surface_retained"
+            },
+            "prior_semantic_status": "unknown",
+            "support_vetoed_by_planar_surface": false
+          }
+        },
+        {
+          "proposal_index": 5,
+          "xy_base": [
+            3.230846281055454,
+            -1.6678232509422861
+          ],
+          "point_count": 19,
+          "label_counts": {
+            "4": 19
+          },
+          "classification": "pure_person",
+          "person_id": 4,
+          "person_purity": 1.0,
+          "sensor_decision": {
+            "proposal_index": 5,
+            "semantic_status": "unknown",
+            "person_confidence": null,
+            "learned_detection_index": null,
+            "association_accepted": false,
+            "xy_base": [
+              3.230846281055454,
+              -1.6678232509422861
+            ],
+            "point_count": 19,
+            "semantic_class": "unknown_geometry_candidate",
+            "semantic_valid": false,
+            "training_ready": false,
+            "surface_evidence": {
+              "point_count": 19,
+              "planar_surface_evidence": false,
+              "explained_fraction": 0.0,
+              "planes": [],
+              "semantic_class": "unknown_geometry_candidate",
+              "semantic_valid": false,
+              "reason": "insufficient_points"
+            },
+            "prior_semantic_status": "unknown",
+            "support_vetoed_by_planar_surface": false
+          }
+        },
+        {
+          "proposal_index": 6,
+          "xy_base": [
+            3.996437783238382,
+            -0.20829134238634223
+          ],
+          "point_count": 30,
+          "label_counts": {
+            "2": 30
+          },
+          "classification": "pure_person",
+          "person_id": 2,
+          "person_purity": 1.0,
+          "sensor_decision": {
+            "proposal_index": 6,
+            "semantic_status": "unknown",
+            "person_confidence": null,
+            "learned_detection_index": null,
+            "association_accepted": false,
+            "xy_base": [
+              3.996437783238382,
+              -0.20829134238634223
+            ],
+            "point_count": 30,
+            "semantic_class": "unknown_geometry_candidate",
+            "semantic_valid": false,
+            "training_ready": false,
+            "surface_evidence": {
+              "point_count": 30,
+              "planar_surface_evidence": false,
+              "explained_fraction": 0.0,
+              "planes": [],
+              "semantic_class": "unknown_geometry_candidate",
+              "semantic_valid": false,
+              "reason": "insufficient_points"
+            },
+            "prior_semantic_status": "unknown",
+            "support_vetoed_by_planar_surface": false
+          }
+        }
+      ],
+      "label_qa": {
+        "contradictions": 0,
+        "overlap_pixels": 0,
+        "uncertain_pixels": 0
+      }
+    },
+    {
+      "depth_index": 2,
+      "stamp_ns": 4000000000,
+      "available_ns": 4005000000,
+      "selected_scan_index": 9,
+      "eligible_people": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "supported_people": [],
+      "unsupported_visible_people": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "supported_proposals": [],
+      "false_supported_proposals": [],
+      "unknown_proposals": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "all_proposals_retained": true,
+      "proposals_LABEL_ONLY": [
+        {
+          "proposal_index": 0,
+          "xy_base": [
+            1.4148061227741133,
+            0.9273393045646309
+          ],
+          "point_count": 624,
+          "label_counts": {
+            "0": 624
+          },
+          "classification": "non_person",
+          "person_id": null,
+          "person_purity": 0.0,
+          "sensor_decision": {
+            "proposal_index": 0,
+            "semantic_status": "unknown",
+            "person_confidence": null,
+            "learned_detection_index": null,
+            "association_accepted": false,
+            "xy_base": [
+              1.4148061227741133,
+              0.9273393045646309
+            ],
+            "point_count": 624,
+            "semantic_class": "unknown_geometry_candidate",
+            "semantic_valid": false,
+            "training_ready": false,
+            "surface_evidence": {
+              "point_count": 624,
+              "planar_surface_evidence": true,
+              "explained_fraction": 1.0,
+              "planes": [
+                {
+                  "normal_xy": [
+                    -0.9209248291749829,
+                    -0.3897402455598202
+                  ],
+                  "offset_m": -1.6643515316331712,
+                  "points": 624,
+                  "vertical_span_m": 0.5072461952761096
+                }
+              ],
+              "semantic_class": "unknown_geometry_candidate",
+              "semantic_valid": false,
+              "reason": "strong_vertical_planar_surface"
+            },
+            "prior_semantic_status": "unknown",
+            "support_vetoed_by_planar_surface": false
+          }
+        },
+        {
+          "proposal_index": 1,
+          "xy_base": [
+            1.5449622225772641,
+            -0.5424879470297779
+          ],
+          "point_count": 448,
+          "label_counts": {
+            "0": 448
+          },
+          "classification": "non_person",
+          "person_id": null,
+          "person_purity": 0.0,
+          "sensor_decision": {
+            "proposal_index": 1,
+            "semantic_status": "unknown",
+            "person_confidence": null,
+            "learned_detection_index": null,
+            "association_accepted": false,
+            "xy_base": [
+              1.5449622225772641,
+              -0.5424879470297779
+            ],
+            "point_count": 448,
+            "semantic_class": "unknown_geometry_candidate",
+            "semantic_valid": false,
+            "training_ready": false,
+            "surface_evidence": {
+              "point_count": 448,
+              "planar_surface_evidence": false,
+              "explained_fraction": 0.2857142857142857,
+              "planes": [
+                {
+                  "normal_xy": [
+                    0.9853317276977848,
+                    -0.17064989420476792
+                  ],
+                  "offset_m": 1.6008862582286985,
+                  "points": 128,
+                  "vertical_span_m": 0.7841371670338113
+                }
+              ],
+              "semantic_class": "unknown_geometry_candidate",
+              "semantic_valid": false,
+              "reason": "unexplained_surface_retained"
+            },
+            "prior_semantic_status": "unknown",
+            "support_vetoed_by_planar_surface": false
+          }
+        },
+        {
+          "proposal_index": 2,
+          "xy_base": [
+            1.9472435665162657,
+            -1.2105203568894356
+          ],
+          "point_count": 371,
+          "label_counts": {
+            "0": 371
+          },
+          "classification": "non_person",
+          "person_id": null,
+          "person_purity": 0.0,
+          "sensor_decision": {
+            "proposal_index": 2,
+            "semantic_status": "unknown",
+            "person_confidence": null,
+            "learned_detection_index": null,
+            "association_accepted": false,
+            "xy_base": [
+              1.9472435665162657,
+              -1.2105203568894356
+            ],
+            "point_count": 371,
+            "semantic_class": "unknown_geometry_candidate",
+            "semantic_valid": false,
+            "training_ready": false,
+            "surface_evidence": {
+              "point_count": 371,
+              "planar_surface_evidence": true,
+              "explained_fraction": 1.0,
+              "planes": [
+                {
+                  "normal_xy": [
+                    0.8778282352291112,
+                    -0.47897556246070017
+                  ],
+                  "offset_m": 2.2891550523673185,
+                  "points": 371,
+                  "vertical_span_m": 0.9175414419411849
+                }
+              ],
+              "semantic_class": "unknown_geometry_candidate",
+              "semantic_valid": false,
+              "reason": "strong_vertical_planar_surface"
+            },
+            "prior_semantic_status": "unknown",
+            "support_vetoed_by_planar_surface": false
+          }
+        },
+        {
+          "proposal_index": 3,
+          "xy_base": [
+            2.3881353092066337,
+            1.4258248130437765
+          ],
+          "point_count": 125,
+          "label_counts": {
+            "3": 125
+          },
+          "classification": "pure_person",
+          "person_id": 3,
+          "person_purity": 1.0,
+          "sensor_decision": {
+            "proposal_index": 3,
+            "semantic_status": "unknown",
+            "person_confidence": null,
+            "learned_detection_index": null,
+            "association_accepted": false,
+            "xy_base": [
+              2.3881353092066337,
+              1.4258248130437765
+            ],
+            "point_count": 125,
+            "semantic_class": "unknown_geometry_candidate",
+            "semantic_valid": false,
+            "training_ready": false,
+            "surface_evidence": {
+              "point_count": 125,
+              "planar_surface_evidence": false,
+              "explained_fraction": 0.248,
+              "planes": [
+                {
+                  "normal_xy": [
+                    -0.8096426669739089,
+                    -0.5869231225768637
+                  ],
+                  "offset_m": -2.74781549825578,
+                  "points": 31,
+                  "vertical_span_m": 0.3875987942568321
+                }
+              ],
+              "semantic_class": "unknown_geometry_candidate",
+              "semantic_valid": false,
+              "reason": "unexplained_surface_retained"
+            },
+            "prior_semantic_status": "unknown",
+            "support_vetoed_by_planar_surface": false
+          }
+        },
+        {
+          "proposal_index": 4,
+          "xy_base": [
+            2.7735874605135793,
+            -0.26885346749893113
+          ],
+          "point_count": 198,
+          "label_counts": {
+            "1": 198
+          },
+          "classification": "pure_person",
+          "person_id": 1,
+          "person_purity": 1.0,
+          "sensor_decision": {
+            "proposal_index": 4,
+            "semantic_status": "unknown",
+            "person_confidence": null,
+            "learned_detection_index": null,
+            "association_accepted": false,
+            "xy_base": [
+              2.7735874605135793,
+              -0.26885346749893113
+            ],
+            "point_count": 198,
+            "semantic_class": "unknown_geometry_candidate",
+            "semantic_valid": false,
+            "training_ready": false,
+            "surface_evidence": {
+              "point_count": 198,
+              "planar_surface_evidence": false,
+              "explained_fraction": 0.15151515151515152,
+              "planes": [
+                {
+                  "normal_xy": [
+                    -0.10681528347263201,
+                    -0.994278882012819
+                  ],
+                  "offset_m": -0.012817834027586239,
+                  "points": 30,
+                  "vertical_span_m": 1.3996980545101496
+                }
+              ],
+              "semantic_class": "unknown_geometry_candidate",
+              "semantic_valid": false,
+              "reason": "unexplained_surface_retained"
+            },
+            "prior_semantic_status": "unknown",
+            "support_vetoed_by_planar_surface": false
+          }
+        },
+        {
+          "proposal_index": 5,
+          "xy_base": [
+            3.230846281055454,
+            -1.6678232509422861
+          ],
+          "point_count": 19,
+          "label_counts": {
+            "4": 19
+          },
+          "classification": "pure_person",
+          "person_id": 4,
+          "person_purity": 1.0,
+          "sensor_decision": {
+            "proposal_index": 5,
+            "semantic_status": "unknown",
+            "person_confidence": null,
+            "learned_detection_index": null,
+            "association_accepted": false,
+            "xy_base": [
+              3.230846281055454,
+              -1.6678232509422861
+            ],
+            "point_count": 19,
+            "semantic_class": "unknown_geometry_candidate",
+            "semantic_valid": false,
+            "training_ready": false,
+            "surface_evidence": {
+              "point_count": 19,
+              "planar_surface_evidence": false,
+              "explained_fraction": 0.0,
+              "planes": [],
+              "semantic_class": "unknown_geometry_candidate",
+              "semantic_valid": false,
+              "reason": "insufficient_points"
+            },
+            "prior_semantic_status": "unknown",
+            "support_vetoed_by_planar_surface": false
+          }
+        },
+        {
+          "proposal_index": 6,
+          "xy_base": [
+            3.996437783238382,
+            -0.20829134238634223
+          ],
+          "point_count": 30,
+          "label_counts": {
+            "2": 30
+          },
+          "classification": "pure_person",
+          "person_id": 2,
+          "person_purity": 1.0,
+          "sensor_decision": {
+            "proposal_index": 6,
+            "semantic_status": "unknown",
+            "person_confidence": null,
+            "learned_detection_index": null,
+            "association_accepted": false,
+            "xy_base": [
+              3.996437783238382,
+              -0.20829134238634223
+            ],
+            "point_count": 30,
+            "semantic_class": "unknown_geometry_candidate",
+            "semantic_valid": false,
+            "training_ready": false,
+            "surface_evidence": {
+              "point_count": 30,
+              "planar_surface_evidence": false,
+              "explained_fraction": 0.0,
+              "planes": [],
+              "semantic_class": "unknown_geometry_candidate",
+              "semantic_valid": false,
+              "reason": "insufficient_points"
+            },
+            "prior_semantic_status": "unknown",
+            "support_vetoed_by_planar_surface": false
+          }
+        }
+      ],
+      "label_qa": {
+        "contradictions": 0,
+        "overlap_pixels": 0,
+        "uncertain_pixels": 0
+      }
+    },
+    {
+      "depth_index": 3,
+      "stamp_ns": 5000000000,
+      "available_ns": 5005000000,
+      "selected_scan_index": 14,
+      "eligible_people": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "supported_people": [],
+      "unsupported_visible_people": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "supported_proposals": [
+        1
+      ],
+      "false_supported_proposals": [
+        1
+      ],
+      "unknown_proposals": [
+        0,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "all_proposals_retained": true,
+      "proposals_LABEL_ONLY": [
+        {
+          "proposal_index": 0,
+          "xy_base": [
+            1.4148061227741133,
+            0.9273393045646309
+          ],
+          "point_count": 624,
+          "label_counts": {
+            "0": 624
+          },
+          "classification": "non_person",
+          "person_id": null,
+          "person_purity": 0.0,
+          "sensor_decision": {
+            "proposal_index": 0,
+            "semantic_status": "unknown",
+            "person_confidence": null,
+            "learned_detection_index": null,
+            "association_accepted": false,
+            "xy_base": [
+              1.4148061227741133,
+              0.9273393045646309
+            ],
+            "point_count": 624,
+            "semantic_class": "unknown_geometry_candidate",
+            "semantic_valid": false,
+            "training_ready": false,
+            "surface_evidence": {
+              "point_count": 624,
+              "planar_surface_evidence": true,
+              "explained_fraction": 1.0,
+              "planes": [
+                {
+                  "normal_xy": [
+                    -0.9209248291749829,
+                    -0.3897402455598202
+                  ],
+                  "offset_m": -1.6643515316331712,
+                  "points": 624,
+                  "vertical_span_m": 0.5072461952761096
+                }
+              ],
+              "semantic_class": "unknown_geometry_candidate",
+              "semantic_valid": false,
+              "reason": "strong_vertical_planar_surface"
+            },
+            "prior_semantic_status": "unknown",
+            "support_vetoed_by_planar_surface": false
+          }
+        },
+        {
+          "proposal_index": 1,
+          "xy_base": [
+            1.5449622225772641,
+            -0.5424879470297779
+          ],
+          "point_count": 448,
+          "label_counts": {
+            "0": 448
+          },
+          "classification": "non_person",
+          "person_id": null,
+          "person_purity": 0.0,
+          "sensor_decision": {
+            "proposal_index": 1,
+            "semantic_status": "person_supported_experimental",
+            "person_confidence": 0.6367906332015991,
+            "learned_detection_index": 2,
+            "association_accepted": false,
+            "corroboration_distance_m": 0.14896901101969132,
+            "xy_base": [
+              1.5449622225772641,
+              -0.5424879470297779
+            ],
+            "point_count": 448,
+            "semantic_class": "unknown_geometry_candidate",
+            "semantic_valid": false,
+            "training_ready": false,
+            "surface_evidence": {
+              "point_count": 448,
+              "planar_surface_evidence": false,
+              "explained_fraction": 0.2857142857142857,
+              "planes": [
+                {
+                  "normal_xy": [
+                    0.9853317276977848,
+                    -0.17064989420476792
+                  ],
+                  "offset_m": 1.6008862582286985,
+                  "points": 128,
+                  "vertical_span_m": 0.7841371670338113
+                }
+              ],
+              "semantic_class": "unknown_geometry_candidate",
+              "semantic_valid": false,
+              "reason": "unexplained_surface_retained"
+            },
+            "prior_semantic_status": "person_supported_experimental",
+            "support_vetoed_by_planar_surface": false
+          }
+        },
+        {
+          "proposal_index": 2,
+          "xy_base": [
+            1.9472435665162657,
+            -1.2105203568894356
+          ],
+          "point_count": 371,
+          "label_counts": {
+            "0": 371
+          },
+          "classification": "non_person",
+          "person_id": null,
+          "person_purity": 0.0,
+          "sensor_decision": {
+            "proposal_index": 2,
+            "semantic_status": "unknown",
+            "person_confidence": null,
+            "learned_detection_index": null,
+            "association_accepted": false,
+            "xy_base": [
+              1.9472435665162657,
+              -1.2105203568894356
+            ],
+            "point_count": 371,
+            "semantic_class": "unknown_geometry_candidate",
+            "semantic_valid": false,
+            "training_ready": false,
+            "surface_evidence": {
+              "point_count": 371,
+              "planar_surface_evidence": true,
+              "explained_fraction": 1.0,
+              "planes": [
+                {
+                  "normal_xy": [
+                    0.8778282352291112,
+                    -0.47897556246070017
+                  ],
+                  "offset_m": 2.2891550523673185,
+                  "points": 371,
+                  "vertical_span_m": 0.9175414419411849
+                }
+              ],
+              "semantic_class": "unknown_geometry_candidate",
+              "semantic_valid": false,
+              "reason": "strong_vertical_planar_surface"
+            },
+            "prior_semantic_status": "unknown",
+            "support_vetoed_by_planar_surface": false
+          }
+        },
+        {
+          "proposal_index": 3,
+          "xy_base": [
+            2.3881353092066337,
+            1.4258248130437765
+          ],
+          "point_count": 125,
+          "label_counts": {
+            "3": 125
+          },
+          "classification": "pure_person",
+          "person_id": 3,
+          "person_purity": 1.0,
+          "sensor_decision": {
+            "proposal_index": 3,
+            "semantic_status": "unknown",
+            "person_confidence": null,
+            "learned_detection_index": null,
+            "association_accepted": false,
+            "xy_base": [
+              2.3881353092066337,
+              1.4258248130437765
+            ],
+            "point_count": 125,
+            "semantic_class": "unknown_geometry_candidate",
+            "semantic_valid": false,
+            "training_ready": false,
+            "surface_evidence": {
+              "point_count": 125,
+              "planar_surface_evidence": false,
+              "explained_fraction": 0.248,
+              "planes": [
+                {
+                  "normal_xy": [
+                    -0.8096426669739089,
+                    -0.5869231225768637
+                  ],
+                  "offset_m": -2.74781549825578,
+                  "points": 31,
+                  "vertical_span_m": 0.3875987942568321
+                }
+              ],
+              "semantic_class": "unknown_geometry_candidate",
+              "semantic_valid": false,
+              "reason": "unexplained_surface_retained"
+            },
+            "prior_semantic_status": "unknown",
+            "support_vetoed_by_planar_surface": false
+          }
+        },
+        {
+          "proposal_index": 4,
+          "xy_base": [
+            2.7735874605135793,
+            -0.26885346749893113
+          ],
+          "point_count": 198,
+          "label_counts": {
+            "1": 198
+          },
+          "classification": "pure_person",
+          "person_id": 1,
+          "person_purity": 1.0,
+          "sensor_decision": {
+            "proposal_index": 4,
+            "semantic_status": "unknown",
+            "person_confidence": null,
+            "learned_detection_index": null,
+            "association_accepted": false,
+            "xy_base": [
+              2.7735874605135793,
+              -0.26885346749893113
+            ],
+            "point_count": 198,
+            "semantic_class": "unknown_geometry_candidate",
+            "semantic_valid": false,
+            "training_ready": false,
+            "surface_evidence": {
+              "point_count": 198,
+              "planar_surface_evidence": false,
+              "explained_fraction": 0.15151515151515152,
+              "planes": [
+                {
+                  "normal_xy": [
+                    -0.10681528347263201,
+                    -0.994278882012819
+                  ],
+                  "offset_m": -0.012817834027586239,
+                  "points": 30,
+                  "vertical_span_m": 1.3996980545101496
+                }
+              ],
+              "semantic_class": "unknown_geometry_candidate",
+              "semantic_valid": false,
+              "reason": "unexplained_surface_retained"
+            },
+            "prior_semantic_status": "unknown",
+            "support_vetoed_by_planar_surface": false
+          }
+        },
+        {
+          "proposal_index": 5,
+          "xy_base": [
+            3.230846281055454,
+            -1.6678232509422861
+          ],
+          "point_count": 19,
+          "label_counts": {
+            "4": 19
+          },
+          "classification": "pure_person",
+          "person_id": 4,
+          "person_purity": 1.0,
+          "sensor_decision": {
+            "proposal_index": 5,
+            "semantic_status": "unknown",
+            "person_confidence": null,
+            "learned_detection_index": null,
+            "association_accepted": false,
+            "xy_base": [
+              3.230846281055454,
+              -1.6678232509422861
+            ],
+            "point_count": 19,
+            "semantic_class": "unknown_geometry_candidate",
+            "semantic_valid": false,
+            "training_ready": false,
+            "surface_evidence": {
+              "point_count": 19,
+              "planar_surface_evidence": false,
+              "explained_fraction": 0.0,
+              "planes": [],
+              "semantic_class": "unknown_geometry_candidate",
+              "semantic_valid": false,
+              "reason": "insufficient_points"
+            },
+            "prior_semantic_status": "unknown",
+            "support_vetoed_by_planar_surface": false
+          }
+        },
+        {
+          "proposal_index": 6,
+          "xy_base": [
+            3.996437783238382,
+            -0.20829134238634223
+          ],
+          "point_count": 30,
+          "label_counts": {
+            "2": 30
+          },
+          "classification": "pure_person",
+          "person_id": 2,
+          "person_purity": 1.0,
+          "sensor_decision": {
+            "proposal_index": 6,
+            "semantic_status": "unknown",
+            "person_confidence": null,
+            "learned_detection_index": null,
+            "association_accepted": false,
+            "xy_base": [
+              3.996437783238382,
+              -0.20829134238634223
+            ],
+            "point_count": 30,
+            "semantic_class": "unknown_geometry_candidate",
+            "semantic_valid": false,
+            "training_ready": false,
+            "surface_evidence": {
+              "point_count": 30,
+              "planar_surface_evidence": false,
+              "explained_fraction": 0.0,
+              "planes": [],
+              "semantic_class": "unknown_geometry_candidate",
+              "semantic_valid": false,
+              "reason": "insufficient_points"
+            },
+            "prior_semantic_status": "unknown",
+            "support_vetoed_by_planar_surface": false
+          }
+        }
+      ],
+      "label_qa": {
+        "contradictions": 0,
+        "overlap_pixels": 0,
+        "uncertain_pixels": 0
+      }
+    },
+    {
+      "depth_index": 4,
+      "stamp_ns": 6000000000,
+      "available_ns": 6005000000,
+      "selected_scan_index": 19,
+      "eligible_people": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "supported_people": [],
+      "unsupported_visible_people": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "supported_proposals": [],
+      "false_supported_proposals": [],
+      "unknown_proposals": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "all_proposals_retained": true,
+      "proposals_LABEL_ONLY": [
+        {
+          "proposal_index": 0,
+          "xy_base": [
+            1.4148061227741133,
+            0.9273393045646309
+          ],
+          "point_count": 624,
+          "label_counts": {
+            "0": 624
+          },
+          "classification": "non_person",
+          "person_id": null,
+          "person_purity": 0.0,
+          "sensor_decision": {
+            "proposal_index": 0,
+            "semantic_status": "unknown",
+            "person_confidence": null,
+            "learned_detection_index": null,
+            "association_accepted": false,
+            "xy_base": [
+              1.4148061227741133,
+              0.9273393045646309
+            ],
+            "point_count": 624,
+            "semantic_class": "unknown_geometry_candidate",
+            "semantic_valid": false,
+            "training_ready": false,
+            "surface_evidence": {
+              "point_count": 624,
+              "planar_surface_evidence": true,
+              "explained_fraction": 1.0,
+              "planes": [
+                {
+                  "normal_xy": [
+                    -0.9209248291749829,
+                    -0.3897402455598202
+                  ],
+                  "offset_m": -1.6643515316331712,
+                  "points": 624,
+                  "vertical_span_m": 0.5072461952761096
+                }
+              ],
+              "semantic_class": "unknown_geometry_candidate",
+              "semantic_valid": false,
+              "reason": "strong_vertical_planar_surface"
+            },
+            "prior_semantic_status": "unknown",
+            "support_vetoed_by_planar_surface": false
+          }
+        },
+        {
+          "proposal_index": 1,
+          "xy_base": [
+            1.5449622225772641,
+            -0.5424879470297779
+          ],
+          "point_count": 448,
+          "label_counts": {
+            "0": 448
+          },
+          "classification": "non_person",
+          "person_id": null,
+          "person_purity": 0.0,
+          "sensor_decision": {
+            "proposal_index": 1,
+            "semantic_status": "unknown",
+            "person_confidence": null,
+            "learned_detection_index": null,
+            "association_accepted": false,
+            "xy_base": [
+              1.5449622225772641,
+              -0.5424879470297779
+            ],
+            "point_count": 448,
+            "semantic_class": "unknown_geometry_candidate",
+            "semantic_valid": false,
+            "training_ready": false,
+            "surface_evidence": {
+              "point_count": 448,
+              "planar_surface_evidence": false,
+              "explained_fraction": 0.2857142857142857,
+              "planes": [
+                {
+                  "normal_xy": [
+                    0.9853317276977848,
+                    -0.17064989420476792
+                  ],
+                  "offset_m": 1.6008862582286985,
+                  "points": 128,
+                  "vertical_span_m": 0.7841371670338113
+                }
+              ],
+              "semantic_class": "unknown_geometry_candidate",
+              "semantic_valid": false,
+              "reason": "unexplained_surface_retained"
+            },
+            "prior_semantic_status": "unknown",
+            "support_vetoed_by_planar_surface": false
+          }
+        },
+        {
+          "proposal_index": 2,
+          "xy_base": [
+            1.9472435665162657,
+            -1.2105203568894356
+          ],
+          "point_count": 371,
+          "label_counts": {
+            "0": 371
+          },
+          "classification": "non_person",
+          "person_id": null,
+          "person_purity": 0.0,
+          "sensor_decision": {
+            "proposal_index": 2,
+            "semantic_status": "unknown",
+            "person_confidence": 0.5789029598236084,
+            "learned_detection_index": 2,
+            "association_accepted": false,
+            "corroboration_distance_m": 0.11724110095978095,
+            "xy_base": [
+              1.9472435665162657,
+              -1.2105203568894356
+            ],
+            "point_count": 371,
+            "semantic_class": "unknown_geometry_candidate",
+            "semantic_valid": false,
+            "training_ready": false,
+            "surface_evidence": {
+              "point_count": 371,
+              "planar_surface_evidence": true,
+              "explained_fraction": 1.0,
+              "planes": [
+                {
+                  "normal_xy": [
+                    0.8778282352291112,
+                    -0.47897556246070017
+                  ],
+                  "offset_m": 2.2891550523673185,
+                  "points": 371,
+                  "vertical_span_m": 0.9175414419411849
+                }
+              ],
+              "semantic_class": "unknown_geometry_candidate",
+              "semantic_valid": false,
+              "reason": "strong_vertical_planar_surface"
+            },
+            "prior_semantic_status": "person_supported_experimental",
+            "support_vetoed_by_planar_surface": true
+          }
+        },
+        {
+          "proposal_index": 3,
+          "xy_base": [
+            2.3881353092066337,
+            1.4258248130437765
+          ],
+          "point_count": 125,
+          "label_counts": {
+            "3": 125
+          },
+          "classification": "pure_person",
+          "person_id": 3,
+          "person_purity": 1.0,
+          "sensor_decision": {
+            "proposal_index": 3,
+            "semantic_status": "unknown",
+            "person_confidence": null,
+            "learned_detection_index": null,
+            "association_accepted": false,
+            "xy_base": [
+              2.3881353092066337,
+              1.4258248130437765
+            ],
+            "point_count": 125,
+            "semantic_class": "unknown_geometry_candidate",
+            "semantic_valid": false,
+            "training_ready": false,
+            "surface_evidence": {
+              "point_count": 125,
+              "planar_surface_evidence": false,
+              "explained_fraction": 0.248,
+              "planes": [
+                {
+                  "normal_xy": [
+                    -0.8096426669739089,
+                    -0.5869231225768637
+                  ],
+                  "offset_m": -2.74781549825578,
+                  "points": 31,
+                  "vertical_span_m": 0.3875987942568321
+                }
+              ],
+              "semantic_class": "unknown_geometry_candidate",
+              "semantic_valid": false,
+              "reason": "unexplained_surface_retained"
+            },
+            "prior_semantic_status": "unknown",
+            "support_vetoed_by_planar_surface": false
+          }
+        },
+        {
+          "proposal_index": 4,
+          "xy_base": [
+            2.7735874605135793,
+            -0.26885346749893113
+          ],
+          "point_count": 198,
+          "label_counts": {
+            "1": 198
+          },
+          "classification": "pure_person",
+          "person_id": 1,
+          "person_purity": 1.0,
+          "sensor_decision": {
+            "proposal_index": 4,
+            "semantic_status": "unknown",
+            "person_confidence": null,
+            "learned_detection_index": null,
+            "association_accepted": false,
+            "xy_base": [
+              2.7735874605135793,
+              -0.26885346749893113
+            ],
+            "point_count": 198,
+            "semantic_class": "unknown_geometry_candidate",
+            "semantic_valid": false,
+            "training_ready": false,
+            "surface_evidence": {
+              "point_count": 198,
+              "planar_surface_evidence": false,
+              "explained_fraction": 0.15151515151515152,
+              "planes": [
+                {
+                  "normal_xy": [
+                    -0.10681528347263201,
+                    -0.994278882012819
+                  ],
+                  "offset_m": -0.012817834027586239,
+                  "points": 30,
+                  "vertical_span_m": 1.3996980545101496
+                }
+              ],
+              "semantic_class": "unknown_geometry_candidate",
+              "semantic_valid": false,
+              "reason": "unexplained_surface_retained"
+            },
+            "prior_semantic_status": "unknown",
+            "support_vetoed_by_planar_surface": false
+          }
+        },
+        {
+          "proposal_index": 5,
+          "xy_base": [
+            3.230846281055454,
+            -1.6678232509422861
+          ],
+          "point_count": 19,
+          "label_counts": {
+            "4": 19
+          },
+          "classification": "pure_person",
+          "person_id": 4,
+          "person_purity": 1.0,
+          "sensor_decision": {
+            "proposal_index": 5,
+            "semantic_status": "unknown",
+            "person_confidence": null,
+            "learned_detection_index": null,
+            "association_accepted": false,
+            "xy_base": [
+              3.230846281055454,
+              -1.6678232509422861
+            ],
+            "point_count": 19,
+            "semantic_class": "unknown_geometry_candidate",
+            "semantic_valid": false,
+            "training_ready": false,
+            "surface_evidence": {
+              "point_count": 19,
+              "planar_surface_evidence": false,
+              "explained_fraction": 0.0,
+              "planes": [],
+              "semantic_class": "unknown_geometry_candidate",
+              "semantic_valid": false,
+              "reason": "insufficient_points"
+            },
+            "prior_semantic_status": "unknown",
+            "support_vetoed_by_planar_surface": false
+          }
+        },
+        {
+          "proposal_index": 6,
+          "xy_base": [
+            3.996437783238382,
+            -0.20829134238634223
+          ],
+          "point_count": 30,
+          "label_counts": {
+            "2": 30
+          },
+          "classification": "pure_person",
+          "person_id": 2,
+          "person_purity": 1.0,
+          "sensor_decision": {
+            "proposal_index": 6,
+            "semantic_status": "unknown",
+            "person_confidence": null,
+            "learned_detection_index": null,
+            "association_accepted": false,
+            "xy_base": [
+              3.996437783238382,
+              -0.20829134238634223
+            ],
+            "point_count": 30,
+            "semantic_class": "unknown_geometry_candidate",
+            "semantic_valid": false,
+            "training_ready": false,
+            "surface_evidence": {
+              "point_count": 30,
+              "planar_surface_evidence": false,
+              "explained_fraction": 0.0,
+              "planes": [],
+              "semantic_class": "unknown_geometry_candidate",
+              "semantic_valid": false,
+              "reason": "insufficient_points"
+            },
+            "prior_semantic_status": "unknown",
+            "support_vetoed_by_planar_surface": false
+          }
+        }
+      ],
+      "label_qa": {
+        "contradictions": 0,
+        "overlap_pixels": 0,
+        "uncertain_pixels": 0
+      }
+    }
+  ],
+  "semantic_person_validated": false,
+  "association_accepted": false,
+  "training_ready": false,
+  "independent_scenes": 1,
+  "condition_role": "Known development fixture; null is a negative control of the same layout",
+  "inference_result_sha256": "6f262e16b157f3da3f80d15dcb48e03ceb252a43b72963a19ff678636982a778",
+  "sensor_predictions_sha256": {
+    "detections_SENSOR_ONLY.jsonl": "0891692aab632489c3828087b44983e53538cd6002434d8572b8ed0e1896ec45",
+    "corroboration_SENSOR_ONLY.jsonl": "1069e2370cf4e3f509f299eec1bba3dbea22709309c02d7d2c463b8f31fe5c63"
+  },
+  "source_sha256": {
+    "experiments/social_navigation/benchmark/lidar_person_pilot/evaluate.py": "6aaf1ae308655ebce14e7fa177e0aec7d26239c2af72b2b011806926b9cf9533",
+    "experiments/social_navigation/benchmark/depth_visibility_pilot/analyze.py": "cdf87168c00c64d9e3b1d2d901ded8d62be72d3f10996de83cbef71c2f702847",
+    "experiments/social_navigation/benchmark/depth_visibility_pilot/labels.py": "fa6a94dcf23b1909de2d5756d96d733ff7cc4d6ca5a9309f55b48e21eec2cc38",
+    "experiments/social_navigation/benchmark/lidar_person_pilot/protocol.json": "3844df7ad0f6890038b03ba261ab8dc2363c51b3b6725677974c7baf3e10492a",
+    "experiments/social_navigation/benchmark/lidar_person_pilot/calibration_SENSOR_ONLY.json": "c0756478c922671db240f06ad344ec9247c0f83bc960ec50f2b3f3a83e149768"
+  }
+}

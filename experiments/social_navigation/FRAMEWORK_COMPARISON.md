@@ -1,5 +1,11 @@
 # So sánh khả năng đã đo — cập nhật22/10/2026
 
+## Cập nhật 23/10/2026 — depth planar-surface veto có nghiệm thu giới hạn
+
+[Surface guard](benchmark/depth_surface_guard/reports/SURFACE_GUARD_REPORT.md): giữLiDAR+depth theo người dùng, khôngRGB. Quy tắc CUDA chốt trước regression và fixture mới: rút8false-support rows trên hộp, không gắn planar cho người, giữ75proposal/40person-owned rows và true support1→1. Cũfull/null sai4→0/3→0; cảnh mới hộp xoay+trụ cong sai2→1, còn nhận nhầm trụ tại5s và thiếu recall.
+
+7test/75CPU–GPU comparisons/18270point residual audit đạt. Cảnh mới75depth+20scan GPU NVIDIA đóng sạch; source/config không đổi saufreeze. Chỉ surface-only gatePASS; full semantic vẫnFAIL, không defaultROS/Nav2/WorldModeltrain/HuNavSim, H1–H5 masked. Bước kế: bộ mẫu perception depth có nhãn nhỏ cho người/vật cong/chuyển động/occlusion; chưa batch trainWorldModel. Mốc lưu: `feat: add depth surface veto with independent clutter checks`.
+
 ## Cập nhật 23/10/2026 — pretrained LiDAR semantic pilot chưa đạt
 
 [DR-SPAAM report](benchmark/lidar_person_pilot/reports/LIDAR_PERSON_REPORT.md): API gốc/checkpoint JRDB ann chạy PyTorch2.7.1 CUDA12.8 trên RTX4060 trong venv riêng, parity88tensors/60312cutout/3synthetic sequences đạt. Hai capture GPU cùng fixture full/null đóng sạch:150depth+40scan. Full4frame khả dụng có5supported rows=1người+4đồ vật; null3false rows; cả qualitygate FAIL. Không hạ confidence0.5 hoặc bỏ các cụm chưa rõ.
