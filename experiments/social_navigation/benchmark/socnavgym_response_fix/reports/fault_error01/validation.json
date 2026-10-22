@@ -1,0 +1,84 @@
+{
+  "status": "PASS_TERMINAL_PAUSE_INTERLOCK",
+  "error": null,
+  "observed_seconds": 5.46,
+  "worker_updates": 55,
+  "projection": {
+    "margins_used_m": [
+      0.04
+    ],
+    "cycles_max": 46,
+    "compute_ms_max": 11.717960000055427,
+    "altered_proposals": 10,
+    "native_plus_guard_compute_ms_max": 358.7004319999778
+  },
+  "population": 6,
+  "native_dt": 0.1,
+  "physics_step_s": 0.0025,
+  "actual_pose_samples": 548,
+  "proxy_comparison_samples": 2724,
+  "proxy_position_error_max_m": 0.001369035341030044,
+  "actual_swept_gap_m": {
+    "pair": 0.04069102696140192,
+    "robot": 0.04085440249219663,
+    "static": 0.7713708498984763
+  },
+  "full_recording_including_teardown_gap_m": {
+    "pair": 0.04069102696140192,
+    "robot": 0.04085440249219663,
+    "static": 0.7713708498984763
+  },
+  "assessment_end_sim": 5.5025,
+  "robot_displacement_xy_m": [
+    3.919685670230855,
+    -1.2822226854690437e-15
+  ],
+  "robot_prediction_error_max_m": 0.01679061638413161,
+  "robot_odom_feedback_error_max_m": 0.013124631683119503,
+  "human_speed_max_mps": 0.8000000000002307,
+  "human_yaw_rate_max_radps": 1.5700000000004157,
+  "human_path_total_m": 13.239569171678362,
+  "actual_goal_arrivals": [],
+  "freeze_check": null,
+  "lidar_human_beams": 2595,
+  "lidar_within_15cm_fraction": 0.9915221579961464,
+  "lidar_matched_ids": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6
+  ],
+  "pause_check": null,
+  "interlock": {
+    "clock_before": 5.5024999999999995,
+    "clock_after": 5.5024999999999995,
+    "wall_observation_s": 1.2,
+    "pose_sample_start": 361,
+    "manual_resume_attempted": true,
+    "resume_clock_delta_s": 0.002500000000000391,
+    "repaused_clock_delta_s": 0.0,
+    "post_fault_actual_samples": 204,
+    "robot_drift_from_fault_input_max_m": 0.0,
+    "human_frozen_error_max_m": 3.614624287906422e-15
+  },
+  "nvidia": true,
+  "fresh_ogre": true,
+  "shutdown_clean": true,
+  "owned_process_container_cleanup": true,
+  "gui_user_confirmation": null,
+  "preserved_old_source_evidence_files": 13040,
+  "intentional_status_documents": [
+    "experiments/social_navigation/COMMIT_HISTORY.md",
+    "experiments/social_navigation/FRAMEWORK_COMPARISON.md",
+    "experiments/social_navigation/NEXT_STEPS.md",
+    "experiments/social_navigation/README.md"
+  ],
+  "original_user_index_outside_preserved": true,
+  "model": "soc_guarded_orca",
+  "case": "crossing_near",
+  "robot_script_position_error_max_m": 0.2221888530515166,
+  "geometry_outcome": "NO_OVERLAP_GT_5MM",
+  "scope": "SocNavGym response projection v2;6 individuals, bounded actual robot command, optional terminal simulation-pause test; no Nav2/group/general safety claim"
+}

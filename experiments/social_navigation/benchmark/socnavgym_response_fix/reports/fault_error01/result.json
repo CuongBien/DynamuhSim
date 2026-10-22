@@ -1,0 +1,361 @@
+{
+  "status": "EXPECTED_FAULT_RECORDED",
+  "gui": false,
+  "sim_budget_s": 10.0,
+  "runtime": "experiments/social_navigation/benchmark/socnavgym_response_fix/generated/fault_error01",
+  "scope": "Common6-person Gazebo integration, actual robot feedback, no Nav2; physical start fixture shared with offline",
+  "model": "soc_guarded_orca",
+  "case": "crossing_near",
+  "native_dt": 0.1,
+  "fault_after_updates": 55,
+  "fault_mode": "error",
+  "response_variant": "per_human_support_planes_dykstra_v2",
+  "head": "9ab3c9fa3b9e715933186cc475d70fb310e7c2dc",
+  "source_sha256": {
+    "experiments/social_navigation/benchmark/socnavgym_response_fix/worker.py": "4fce7aa1c35737a7f1b8c0543fecfda94524e2a9e0be5067cfcc3141a1a1f787",
+    "experiments/social_navigation/benchmark/socnavgym_response_fix/runtime.py": "a3e150a32e13b40eff3985d576155031eb27be5ecd02177070e85ad1bc4c8032",
+    "experiments/social_navigation/benchmark/socnavgym_response_fix/projection.py": "260d0775a10bc6b510c217a26e02a877a4394ef3f3f56475740ea14d52c841d9",
+    "experiments/social_navigation/benchmark/socnavgym_response_fix/responsive_motion.py": "7e94fb78bb1a6552c7c6b17654bf90ba2a937145837916b783ddeaa36b45a4c4",
+    "experiments/social_navigation/benchmark/socnavgym_response_fix/adapter.cc": "ffbcda748dc1dba4e06beb79c6e8fa93c77da25fbe2348b10f92062c36279abb",
+    "experiments/social_navigation/benchmark/socnavgym_response_fix/warehouse.launch.py": "e4a0758bb8b46ea2b57aee03699b02482feffc97130d62b97de4c18610656aff",
+    "experiments/social_navigation/benchmark/socnavgym_response_fix/verify_live.py": "92120aac02630f3e5877a73789886148c1dc469a71ada3a54192a830eb2775d8",
+    "experiments/social_navigation/benchmark/socnavgym_response_fix/build/libresponse_adapter.so": "524fe8e945daad94319d7ac1a5f6377a5f36cbf6c505bb580e50e2e73102e984",
+    "experiments/social_navigation/benchmark/common_response/model_worker.py": "74f2ff2e08a105aa7a6d34e01d032bff81fafaac9c8652a25302a747ed39f3be",
+    "experiments/social_navigation/benchmark/common_response/inputs/protocol.json": "854bb3633ee52702fadd9d3eae26220310def6ac0d05dfc32d2de875ea9af3f6",
+    "experiments/social_navigation/benchmark/common_response/inputs/crossing_near.json": "ff035a69a19420bdfb4e44825830313e1e1a60e401f21b94d5a39750f9cf0fbc",
+    "experiments/social_navigation/warehouse/layout.json": "31d1cd9841e133766c36f9e44e5b4e4148a61500abcf6e2682166a98d0e4cb06",
+    "experiments/social_navigation/gazebo_adapter/run.py": "f4596403abace27667399a90d92252fc1355d3ef054947818ce632b21c43b8c9",
+    "experiments/social_navigation/benchmark/common_response/reports/run01/source_snapshot/prepare.py": "8c24c67638670477d81a925d6df780325f1569f7f9ee0a4176220f3420fccc08",
+    "experiments/social_navigation/benchmark/common_response/reports/run01/source_snapshot/crowd_kernel_n6.py": "4bd3666b1aacb24cde9ad0f3f658dfcb95fdf75e42b6c26ff39c334b4b95e113",
+    "experiments/social_navigation/benchmark/common_response/reports/run01/source_snapshot/model_worker.py": "74f2ff2e08a105aa7a6d34e01d032bff81fafaac9c8652a25302a747ed39f3be",
+    "experiments/social_navigation/benchmark/common_response/reports/run01/source_snapshot/run.py": "45e50abee762dfa552ebeb2cecd615486ebe30bcfcdf3370b80783c15d4ee00f",
+    "experiments/social_navigation/benchmark/socnavgym_warehouse_lifecycle/kernel.py": "611a86973b6733473e7ff2a3abb2e8b7cc43173f3bc903d00c0a820d6b6d3aed",
+    "experiments/social_navigation/benchmark/socnavgym_warehouse_lifecycle/motion.py": "bef8b4a8a527f2f5725d306f6844bb128099fbcbac977fa684c2188715afbe04",
+    "experiments/social_navigation/benchmark/socnavgym_warehouse_lifecycle/geometry.py": "693a35314cce682f00c91f6dfeebd5225851663410920cac393a66a7936df5a3",
+    "experiments/social_navigation/benchmark/socnavgym_lifecycle_fix/continuous_groups.py": "b3fc3f1c7cfab0570620b823aea31d22047922d402447b5f9b1869cc4652ec60",
+    "experiments/social_navigation/benchmark/complexitynav_geometry/kernel.py": "0868d4df16724fc3e2e3436cc49581c71220b28351fdd0ab2925a0e8f9b76983",
+    "experiments/social_navigation/benchmark/complexitynav_geometry/roadmap.py": "77cca14fb7e393cf6e7068673016616e1514573061aaf6606cfb3ce84ed9ff07",
+    "experiments/social_navigation/benchmark/complexitynav_contract/kernel.py": "ce10fd8605037f114b8cb0706572e9541d4ad11613394e40ff73111c98eb01fc"
+  },
+  "rendering": {
+    "vendor": "Microsoft Corporation",
+    "renderer": "D3D12 (NVIDIA GeForce RTX 4060 Laptop GPU)",
+    "version": "4.6 (Compatibility Profile) Mesa 25.2.8-0ubuntu0.24.04.2",
+    "direct": true,
+    "environment_before": {
+      "DISPLAY": ":0",
+      "WAYLAND_DISPLAY": "wayland-0"
+    },
+    "environment_used": {
+      "DISPLAY": ":0",
+      "WAYLAND_DISPLAY": "wayland-0",
+      "GALLIUM_DRIVER": "d3d12",
+      "MESA_D3D12_DEFAULT_ADAPTER_NAME": "NVIDIA"
+    },
+    "probe_source_sha256": "9a9f5478053290b51f18beed987563a7e3a2349f143e8fccd0ce41bf57ec5bab",
+    "probe_binary_sha256": "37f8608ee330e5c179dcd1975c9053e0b66f055f21a68e41bbaf13ed20d26520",
+    "hardware_verified": true
+  },
+  "shutdown_preload": {
+    "scope": "gz sim only",
+    "library": "/usr/lib/wsl/lib/libd3d12core.so",
+    "real_gz": "/opt/ros/jazzy/opt/gz_tools_vendor/bin/gz",
+    "wrapper": "/home/cuongbien/DynamuhSim/experiments/social_navigation/benchmark/socnavgym_response_fix/generated/fault_error01/shutdown_bin/gz",
+    "mode": "startup LD_PRELOAD; no system files changed"
+  },
+  "worker_command": [
+    "/home/cuongbien/DynamuhSim/experiments/social_navigation/.venv-socnavgym/bin/python",
+    "/home/cuongbien/DynamuhSim/experiments/social_navigation/benchmark/socnavgym_response_fix/worker.py",
+    "--common",
+    "/home/cuongbien/DynamuhSim/experiments/social_navigation/benchmark/common_response",
+    "--runtime",
+    "/home/cuongbien/DynamuhSim/experiments/social_navigation/benchmark/socnavgym_response_fix/generated/fault_error01",
+    "--socket",
+    "/tmp/cnav_live_katnd2uh/worker.sock",
+    "--model",
+    "soc_guarded_orca",
+    "--case",
+    "crossing_near",
+    "--fault-after-updates",
+    "55",
+    "--fault-mode",
+    "error"
+  ],
+  "ready": {
+    "humans": [
+      {
+        "id": 1,
+        "x": -26.0,
+        "y": -1.8,
+        "radius": 0.36,
+        "native_goal": [
+          -26.0,
+          10.0
+        ],
+        "vx": 0.0,
+        "vy": 0.0,
+        "yaw": 1.5707963267948966,
+        "speed": 0.0
+      },
+      {
+        "id": 2,
+        "x": -26.0,
+        "y": 1.8,
+        "radius": 0.36,
+        "native_goal": [
+          -26.0,
+          -10.0
+        ],
+        "vx": 0.0,
+        "vy": 0.0,
+        "yaw": -1.5707963267948966,
+        "speed": 0.0
+      },
+      {
+        "id": 3,
+        "x": -24.0,
+        "y": -1.8,
+        "radius": 0.36,
+        "native_goal": [
+          -24.0,
+          10.0
+        ],
+        "vx": 0.0,
+        "vy": 0.0,
+        "yaw": 1.5707963267948966,
+        "speed": 0.0
+      },
+      {
+        "id": 4,
+        "x": -24.0,
+        "y": 1.8,
+        "radius": 0.36,
+        "native_goal": [
+          -24.0,
+          -10.0
+        ],
+        "vx": 0.0,
+        "vy": 0.0,
+        "yaw": -1.5707963267948966,
+        "speed": 0.0
+      },
+      {
+        "id": 5,
+        "x": -22.0,
+        "y": -1.8,
+        "radius": 0.36,
+        "native_goal": [
+          -22.0,
+          10.0
+        ],
+        "vx": 0.0,
+        "vy": 0.0,
+        "yaw": 1.5707963267948966,
+        "speed": 0.0
+      },
+      {
+        "id": 6,
+        "x": -22.0,
+        "y": 1.8,
+        "radius": 0.36,
+        "native_goal": [
+          -22.0,
+          -10.0
+        ],
+        "vx": 0.0,
+        "vy": 0.0,
+        "yaw": -1.5707963267948966,
+        "speed": 0.0
+      }
+    ],
+    "obstacles": 42,
+    "native_dt": 0.1,
+    "robot_radius": 0.25,
+    "human_radius": 0.36,
+    "epoch": 0,
+    "model": "soc_guarded_orca",
+    "case": "crossing_near",
+    "runner_sha256": "74f2ff2e08a105aa7a6d34e01d032bff81fafaac9c8652a25302a747ed39f3be",
+    "metadata": {
+      "dt": 0.1,
+      "static_boxes": 42,
+      "motion_ceiling": 0.8,
+      "initial_groups": [],
+      "native_motion": false,
+      "env_module_file": "/home/cuongbien/DynamuhSim/experiments/social_navigation/benchmark/socnavgym_warehouse_lifecycle/kernel.py",
+      "env_module_sha256": "611a86973b6733473e7ff2a3abb2e8b7cc43173f3bc903d00c0a820d6b6d3aed"
+    },
+    "response_variant": "per_human_support_planes_dykstra_v2",
+    "fault_after_updates": 55,
+    "fault_mode": "error"
+  },
+  "measurement_start_sim": 0.0025,
+  "interlock_check": {
+    "clock_before": 5.5024999999999995,
+    "clock_after": 5.5024999999999995,
+    "wall_observation_s": 1.2,
+    "pose_sample_start": 361,
+    "manual_resume_attempted": true,
+    "resume_clock_delta_s": 0.002500000000000391,
+    "repaused_clock_delta_s": 0.0
+  },
+  "sensor_counts": {
+    "clock": 3611,
+    "scan": 28,
+    "imu": 550,
+    "gt": 275,
+    "odom": 157
+  },
+  "sim_seconds_observed": 5.46,
+  "cmd_vel_publishers": [
+    "common_integration_verifier"
+  ],
+  "server_shutdown": {
+    "status": "STOPPED",
+    "partition": "dynamuhsim_response_2123",
+    "initial": [
+      {
+        "pid": 2179,
+        "command": "gz sim -r -s /home/cuongbien/DynamuhSim/experiments/social_navigation/benchmark/socnavgym_response_fix/generated/fault_error01/warehouse.sdf                                             "
+      }
+    ],
+    "request_returncode": 0,
+    "response": "data: true",
+    "stderr": "",
+    "elapsed_wall_s": 1.0780896429999984,
+    "remaining": []
+  },
+  "container_stop": {
+    "status": "ALREADY_EXITED"
+  },
+  "container_remaining": "",
+  "faults": [
+    {
+      "adapter_ok": false,
+      "error": "INJECTED worker failure for pause interlock",
+      "fatal": true,
+      "last_applied_humans": [
+        {
+          "id": 1,
+          "native_goal": [
+            -26.0,
+            10.0
+          ],
+          "radius": 0.36,
+          "speed": 0.530500427816077,
+          "vx": 0.07268914580343733,
+          "vy": 0.5254969000816345,
+          "x": -24.838746057456806,
+          "y": 1.268924048675807,
+          "yaw": 1.4371559882665188
+        },
+        {
+          "id": 2,
+          "native_goal": [
+            -26.0,
+            -10.0
+          ],
+          "radius": 0.36,
+          "speed": 0.547614136411995,
+          "vx": -0.013731114566333247,
+          "vy": -0.5474419593811031,
+          "x": -26.189199225064364,
+          "y": 0.6972723716124893,
+          "yaw": -1.650123556512174
+        },
+        {
+          "id": 3,
+          "native_goal": [
+            -24.0,
+            10.0
+          ],
+          "radius": 0.36,
+          "speed": 0.44007836219094665,
+          "vx": 0.4314892635165535,
+          "vy": -0.08652155996402455,
+          "x": -23.006960654450715,
+          "y": -0.8616227626378963,
+          "yaw": -0.09829629935159262
+        },
+        {
+          "id": 4,
+          "native_goal": [
+            -24.0,
+            -10.0
+          ],
+          "radius": 0.36,
+          "speed": 0.48902393797362814,
+          "vx": 0.2555858039390557,
+          "vy": -0.4169176282385545,
+          "x": -23.68676212627807,
+          "y": -0.519809889280078,
+          "yaw": -1.0193427693272408
+        },
+        {
+          "id": 5,
+          "native_goal": [
+            -22.0,
+            10.0
+          ],
+          "radius": 0.36,
+          "speed": 0.4253987417385018,
+          "vx": 0.09267293661832099,
+          "vy": 0.4151816666126254,
+          "x": -22.159991940269244,
+          "y": 0.25747792087495314,
+          "yaw": 1.350923073013269
+        },
+        {
+          "id": 6,
+          "native_goal": [
+            -22.0,
+            -10.0
+          ],
+          "radius": 0.36,
+          "speed": 0.4178575849471866,
+          "vx": 0.002387778833501386,
+          "vy": -0.4178507626056671,
+          "x": -21.193541557942524,
+          "y": -0.31879128562286485,
+          "yaw": -1.567041272932623
+        }
+      ],
+      "restart_required": true,
+      "robot_input": {
+        "omega": 6.293163048320785e-15,
+        "vx": 0.7499996868844465,
+        "vy": -1.9800697573272765e-16,
+        "x": -24.08031432976994,
+        "y": -1.2822217297800928e-15,
+        "yaw": -2.6838544145265223e-14
+      },
+      "time": 5.5025,
+      "world_pause_requested": true
+    }
+  ],
+  "cleanup": {
+    "session": "9cadb32d6735410e895451bb87bcce07",
+    "reaped_members": [],
+    "signals": [],
+    "remaining": [],
+    "status": "PASS",
+    "ogre_log_sha256": "6cb45ff405f16fff174d3a35733d5c44690208af9e22fb6a1eaf577131fb41e9",
+    "ogre_renderer_lines": [
+      "12:05:21: GL_RENDERER = D3D12 (NVIDIA GeForce RTX 4060 Laptop GPU)"
+    ]
+  },
+  "gazebo_clean_exit": true,
+  "media": {
+    "source": "Live Gazebo RGB observer camera, not screen recording or AI",
+    "frame_times": [
+      0.005,
+      1.0,
+      2.0,
+      3.0,
+      4.0,
+      5.0
+    ],
+    "playback_speed": 4,
+    "gif_duration_ms": 1500
+  }
+}

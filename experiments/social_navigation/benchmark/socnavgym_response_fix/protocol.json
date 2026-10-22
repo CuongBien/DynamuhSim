@@ -1,0 +1,54 @@
+{
+  "stage": "SOCNAVGYM_RESPONSE_AND_TERMINAL_PAUSE_REPAIR",
+  "baseline_commit": "9ab3c9fa3b9e715933186cc475d70fb310e7c2dc",
+  "scope": "Isolated v2 adapter, original ROS/Nav2/native/vendor and all baseline reports unchanged",
+  "population": 6,
+  "human_radius": 0.36,
+  "robot_radius": 0.25,
+  "native_dt": 0.1,
+  "physics_dt": 0.0025,
+  "target_margin_m": 0.04,
+  "fallback_endpoint_margins_m": [
+    0.02,
+    0.002
+  ],
+  "strict_predicted_swept_floor_m": 0.002,
+  "planner": "Original ORCA proposal projected onto per-human support halfspaces and per-agent speed discs; fixed measured robot velocity",
+  "fault_handling": "On fatal reply/socket loss, plugin publishes zero velocity and emits world Pause synchronously; terminal state re-pauses on Play. This is a simulation interlock, not physical braking.",
+  "live_plan": [
+    {
+      "report": "crossing01",
+      "case": "crossing_near",
+      "gui": true
+    },
+    {
+      "report": "fault_error01",
+      "case": "crossing_near",
+      "fault": "error",
+      "after_updates": 55
+    },
+    {
+      "report": "fault_disconnect01",
+      "case": "crossing_near",
+      "fault": "disconnect",
+      "after_updates": 55
+    },
+    {
+      "report": "opposed01",
+      "case": "opposed_near"
+    },
+    {
+      "report": "narrow01",
+      "case": "blocked_narrow_near"
+    },
+    {
+      "report": "crossing02",
+      "case": "crossing_near"
+    }
+  ],
+  "acceptance": "Both crossing sessions complete10s; opposed/narrow regressions complete10s; independent actual-pose/LiDAR audit and no overlap>5mm including teardown; fault interlock clock stable1.2s and re-paused after Play within1-2physics ticks; robot drift<=5mm from fault input.",
+  "formation": false,
+  "nav2": false,
+  "seed": 42,
+  "failed_legacy_request_reconstructed": true
+}

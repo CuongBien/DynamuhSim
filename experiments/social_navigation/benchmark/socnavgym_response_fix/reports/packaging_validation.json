@@ -1,0 +1,41 @@
+{
+  "status": "PASS_PACKAGED_RESPONSE_FIX",
+  "baseline_commit": "9ab3c9fa3b9e715933186cc475d70fb310e7c2dc",
+  "normal_live_sessions": 4,
+  "controlled_fault_sessions": 2,
+  "offline_cases": 6,
+  "offline_updates": 600,
+  "exact_ipc_prefix_steps": 20,
+  "geometry_unit_cases": 5,
+  "legacy_exact_prefix_steps": 55,
+  "legacy_failing_request_reconstructed": true,
+  "live_full_recording_minimum_robot_gap_m": 0.03987456534798317,
+  "live_hardware_renderer_nvidia": true,
+  "minimum_selected_lidar_within15cm_fraction": 0.989409984871407,
+  "terminal_interlock_is_simulation_pause": true,
+  "physical_emergency_braking_validated": false,
+  "nav2": false,
+  "formation": false,
+  "python_files_parsed": 35,
+  "json_files_parsed": 43,
+  "compressed_console_logs": 15,
+  "pngs_decoded": 19,
+  "gif_frames_decoded": 56,
+  "preserved_old_files": 13040,
+  "intentional_status_documents": [
+    "experiments/social_navigation/COMMIT_HISTORY.md",
+    "experiments/social_navigation/FRAMEWORK_COMPARISON.md",
+    "experiments/social_navigation/NEXT_STEPS.md",
+    "experiments/social_navigation/README.md"
+  ],
+  "original_staging_and_outside_preserved": true,
+  "source_and_locked_input_hashes_verified": true,
+  "plugin_binary_sha256": "524fe8e945daad94319d7ac1a5f6377a5f36cbf6c505bb580e50e2e73102e984",
+  "no_owned_workers_remaining": true,
+  "limitations": [
+    "One seed and10s normal cases; not general safety or naturalness guarantee",
+    "No new group/formation verification",
+    "Control Play after terminal fault advances one2.5ms tick then re-pauses",
+    "Known legacy failure retained; two development harness/target attempts retained"
+  ]
+}

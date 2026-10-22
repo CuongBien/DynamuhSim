@@ -1,0 +1,118 @@
+[
+  {
+    "name": "approaching_robot_requires_new_direction",
+    "status": "PASS",
+    "displacements": [
+      [
+        0.075,
+        0.0
+      ]
+    ],
+    "audit": {
+      "method": "per_human_support_planes_dykstra",
+      "cycles": 2,
+      "margin_m": 0.04,
+      "predicted_clearance": {
+        "pair": 1000000000.0,
+        "robot": 0.040000000000000036,
+        "static": 27.164182549169375
+      },
+      "max_constraint_residual": 0.0,
+      "velocity_change_norm": 0.7499999999999999,
+      "compute_ms": 0.5935420000469094,
+      "robot_displacement": [
+        0.075,
+        0.0
+      ],
+      "target_margin_m": 0.04,
+      "attempts": [
+        {
+          "margin": 0.04,
+          "status": "ACCEPTED"
+        }
+      ]
+    }
+  },
+  {
+    "name": "opposed_humans",
+    "status": "PASS",
+    "displacements": [
+      [
+        0.0,
+        0.0
+      ],
+      [
+        0.0,
+        0.0
+      ]
+    ],
+    "audit": {
+      "method": "per_human_support_planes_dykstra",
+      "cycles": 2,
+      "margin_m": 0.04,
+      "predicted_clearance": {
+        "pair": 0.040000000000000036,
+        "robot": 13.26603689819251,
+        "static": 26.949785791909832
+      },
+      "max_constraint_residual": 0.0,
+      "velocity_change_norm": 1.131370849898476,
+      "compute_ms": 0.5423710000513893,
+      "robot_displacement": [
+        0.0,
+        0.0
+      ],
+      "target_margin_m": 0.04,
+      "attempts": [
+        {
+          "margin": 0.04,
+          "status": "ACCEPTED"
+        }
+      ]
+    }
+  },
+  {
+    "name": "solid_wall",
+    "status": "PASS",
+    "displacements": [
+      [
+        5.551115123125783e-17,
+        0.0
+      ]
+    ],
+    "audit": {
+      "method": "per_human_support_planes_dykstra",
+      "cycles": 2,
+      "margin_m": 0.04,
+      "predicted_clearance": {
+        "pair": 1000000000.0,
+        "robot": 14.182227688891219,
+        "static": 0.039999999999999925
+      },
+      "max_constraint_residual": 0.0,
+      "velocity_change_norm": 0.7999999999999994,
+      "compute_ms": 0.3742690000763105,
+      "robot_displacement": [
+        0.0,
+        0.0
+      ],
+      "target_margin_m": 0.04,
+      "attempts": [
+        {
+          "margin": 0.04,
+          "status": "ACCEPTED"
+        }
+      ]
+    }
+  },
+  {
+    "name": "stationary_human_cannot_escape",
+    "status": "PASS_TERMINAL_REJECTION",
+    "error": "No validated bounded per-human proposal; terminal stop required: [{'margin': 0.04, 'status': 'REJECTED', 'reason': 'Separation target exceeds available bounded speed'}, {'margin': 0.02, 'status': 'REJECTED', 'reason': 'Separation target exceeds available bounded speed'}, {'margin': 0.002, 'status': 'REJECTED', 'reason': 'Separation target exceeds available bounded speed'}]"
+  },
+  {
+    "name": "initial_overlap",
+    "status": "PASS_TERMINAL_REJECTION",
+    "error": "Projection starts without2mm clearance; terminal stop required"
+  }
+]
