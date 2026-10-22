@@ -1,0 +1,68 @@
+{
+  "schema": "camera_height_ab/1",
+  "purpose": "Isolate camera-height effect on depth and observed BEV; no social-policy or navigation acceptance",
+  "source_episode": "experiments/social_navigation/benchmark/dataset_pilot/episodes/pilot01/normalized/human_states.jsonl",
+  "source_depth": "experiments/social_navigation/benchmark/dataset_pilot/episodes/pilot01/normalized/depth.npy",
+  "source_index": "experiments/social_navigation/benchmark/dataset_pilot/episodes/pilot01/normalized/observations.npz",
+  "target_snapshot_ns": [
+    12600000000,
+    23100000000,
+    33800000000
+  ],
+  "camera_offsets_base_link_m": {
+    "low": [
+      0.12,
+      0,
+      0.08
+    ],
+    "high": [
+      0.12,
+      0,
+      0.36
+    ]
+  },
+  "fixture_base_link_world_z_m": 0.04,
+  "fixture_world_camera_height_m": {
+    "low": 0.12,
+    "high": 0.4
+  },
+  "paired_capture": "Two depth sensors simultaneously in each frozen snapshot; horizontal position/orientation and K/clip/update_rate identical",
+  "robot": "Static copy of existing geometry; no drive plugin, no Nav2 or human worker; original sources untouched",
+  "humans": "Six static cylinder proxies, actor world trajectory and animation_time=0 held by isolated FreezeActors plugin using existing adapter Actor APIs",
+  "proxy": {
+    "radius_m": 0.36,
+    "height_m": 1.7,
+    "original_transparency": 0.65
+  },
+  "depth": {
+    "width": 424,
+    "height": 240,
+    "horizontal_fov_rad": 1.518436,
+    "near_m": 0.28,
+    "far_m": 5.0,
+    "hz": 10
+  },
+  "validity": {
+    "frames_per_camera": 10,
+    "min_stamp_ns": 1000000000,
+    "max_wall_s_per_snapshot": 40,
+    "optical_floor_error_m": 0.01,
+    "paired_timestamp_required": true,
+    "depth_repeat_max_m": 1e-05
+  },
+  "metrics": [
+    "finite_depth_fraction",
+    "floor_match_fraction",
+    "proxy_surface_match_fraction",
+    "BEV_unknown_free_occupied",
+    "known_obstacle_free_cell_conflicts"
+  ],
+  "limits": [
+    "40cm is experimental, not chosen mount height",
+    "Static camera-only comparison, not closed-loop Nav2 rerun",
+    "Simple BEV projection retained unchanged from dataset pilot",
+    "Opaque-like depth returns from proxy are measured, not assumed from RGB transparency",
+    "More free cells alone is not a quality criterion"
+  ],
+  "amendment": "run01 camera_info bridge mismatch retained; run02 paired observations retain unintended animation; run03 script-only freezing stalled renderer (scoped teardown retained); run04 manual trajectory/animation-time freeze plus measured repeat stability gate"
+}
