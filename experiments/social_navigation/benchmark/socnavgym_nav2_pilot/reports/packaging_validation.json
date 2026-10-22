@@ -1,0 +1,53 @@
+{
+  "status": "PASS_PACKAGED_SMALL_NAV2_PILOT",
+  "baseline_commit": "8aaa357a89b9b6d9933e579ac1968c2563920dcf",
+  "planned_trials": 3,
+  "completed_trials": 3,
+  "nav2_succeeded": 3,
+  "actual_xy_yaw_goals_reached": 3,
+  "empty_control": 1,
+  "people_trials": 2,
+  "population": 6,
+  "all_renderer_nvidia": true,
+  "goal_xy_errors_m": [
+    0.17841997907900137,
+    0.1786335936046235,
+    0.14543850795419633
+  ],
+  "people_robot_disc_min_gaps_m": [
+    0.061763321758768974,
+    0.1971041612888308
+  ],
+  "people_observed_rtf": [
+    0.24131451903196283,
+    0.3968576025568961
+  ],
+  "gate_warmup_frozen_ticks": 10,
+  "exact_post_gate_prefix_steps": 20,
+  "only_runtime_initial_pose_changed": true,
+  "scripted_robot_velocity_publisher": false,
+  "people_geometry_overlaps_over5mm": false,
+  "no_worker_faults": true,
+  "preserved_old_files": 13217,
+  "intentional_status_documents": [
+    "experiments/social_navigation/COMMIT_HISTORY.md",
+    "experiments/social_navigation/FRAMEWORK_COMPARISON.md",
+    "experiments/social_navigation/NEXT_STEPS.md",
+    "experiments/social_navigation/README.md"
+  ],
+  "original_user_staging_and_outside_preserved": true,
+  "source_and_locked_input_hashes_verified": true,
+  "pngs_decoded": 10,
+  "gif_frames_decoded": 74,
+  "python_files_parsed": 13,
+  "json_files_parsed": 17,
+  "additional_byte_exact_archives": 9,
+  "no_owned_workers_remaining": true,
+  "limitations": [
+    "One fixture seed; no success-rate or general-safety claim",
+    "AMCL/MPPI/physics random seeds not synchronized; GUI and RTF differ",
+    "No group/formation or other-framework Nav2 comparison in this cohort",
+    "Goal checks action/XY/yaw, not prolonged standstill",
+    "No Nav2 action-state test under injected worker fault"
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "status": "PASS",
+  "frozen_warmup_transport_steps": 10,
+  "native_step_during_warmup": 0,
+  "exact_post_gate_offline_steps": 20,
+  "terminal_bad_clock": true,
+  "command": [
+    "/home/cuongbien/DynamuhSim/experiments/social_navigation/.venv-socnavgym/bin/python",
+    "/home/cuongbien/DynamuhSim/experiments/social_navigation/benchmark/socnavgym_nav2_pilot/worker.py",
+    "--common",
+    "/home/cuongbien/DynamuhSim/experiments/social_navigation/benchmark/common_response",
+    "--runtime",
+    "/home/cuongbien/DynamuhSim/experiments/social_navigation/benchmark/socnavgym_nav2_pilot/generated/gate01",
+    "--socket",
+    "/tmp/navgate_nzprobpb/worker.sock",
+    "--model",
+    "soc_guarded_orca",
+    "--case",
+    "crossing_near"
+  ]
+}
