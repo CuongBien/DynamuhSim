@@ -1,0 +1,11 @@
+--- /home/cuongbien/DynamuhSim/src/custom_corridor/models/mecanum_robot/model.sdf
++++ mecanum_camera.sdf
+@@ -173,7 +173,7 @@
+         <visualize>false</visualize>
+         <update_rate>10</update_rate>
+         <topic>camera/depth_image</topic>
+-        <gz_frame_id>camera_link</gz_frame_id>
++        <gz_frame_id>camera_optical_frame</gz_frame_id>
+         <camera>
+           <camera_info_topic>camera/camera_info</camera_info_topic>
+           <!-- 87 deg Horizontal FOV = 1.518436 rad -->

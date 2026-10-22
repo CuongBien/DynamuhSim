@@ -1,0 +1,134 @@
+{
+  "schema": "social_calibration/1",
+  "depth_topic": "/camera/depth/image_rect_raw",
+  "frame_id": "camera_optical_frame",
+  "width": 424,
+  "height": 240,
+  "k": [
+    223.40148705705286,
+    0.0,
+    212.0,
+    0.0,
+    223.40148705705283,
+    120.0,
+    0.0,
+    0.0,
+    1.0
+  ],
+  "p": [
+    223.40148705705286,
+    0.0,
+    212.0,
+    0.0,
+    0.0,
+    223.40148705705283,
+    120.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0
+  ],
+  "d": [
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0
+  ],
+  "distortion_model": "plumb_bob",
+  "optical_to_base_link": [
+    [
+      4.896638650109253e-12,
+      4.896583138958022e-12,
+      1.0,
+      0.12
+    ],
+    [
+      -1.0,
+      0.0,
+      4.896583138958022e-12,
+      0.0
+    ],
+    [
+      5.551115123125783e-17,
+      -1.0,
+      4.896638650109253e-12,
+      0.08
+    ],
+    [
+      0.0,
+      0.0,
+      0.0,
+      1.0
+    ]
+  ],
+  "depth_unit": "m",
+  "valid_depth_range_m": [
+    0.28,
+    5.0
+  ],
+  "tf_static": {
+    "camera_imu_frame": [
+      "camera_link",
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      1.0
+    ],
+    "camera_optical_frame": [
+      "camera_link",
+      0.0,
+      0.0,
+      0.0,
+      -0.5,
+      0.4999999999975517,
+      -0.5,
+      0.5000000000024483
+    ],
+    "base_link": [
+      "base_footprint",
+      0.0,
+      0.0,
+      0.04,
+      0.0,
+      0.0,
+      0.0,
+      1.0
+    ],
+    "camera_link": [
+      "base_link",
+      0.12,
+      0.0,
+      0.08,
+      0.0,
+      0.0,
+      0.0,
+      1.0
+    ],
+    "imu_link": [
+      "base_link",
+      0.0,
+      0.0,
+      0.06,
+      0.0,
+      0.0,
+      0.0,
+      1.0
+    ],
+    "base_scan": [
+      "base_link",
+      0.0,
+      0.0,
+      0.12,
+      0.0,
+      0.0,
+      0.0,
+      1.0
+    ]
+  },
+  "caveat": "Planar labels and base_link-local BEV; SDF/URDF base height is not a validated world 3D calibration"
+}
