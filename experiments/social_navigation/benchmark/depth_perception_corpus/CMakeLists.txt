@@ -1,0 +1,7 @@
+cmake_minimum_required(VERSION 3.22)
+project(perception_corpus_motion)
+find_package(gz-sim8 REQUIRED)
+find_package(gz-plugin2 REQUIRED COMPONENTS register)
+add_library(corpus_motion SHARED corpus_motion.cc)
+target_compile_features(corpus_motion PRIVATE cxx_std_17)
+target_link_libraries(corpus_motion PRIVATE gz-sim8::gz-sim8 gz-plugin2::gz-plugin2)
