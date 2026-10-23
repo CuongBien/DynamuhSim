@@ -1,0 +1,122 @@
+{
+  "schema": "depth_person_classifier_pilot/1",
+  "source_corpus": "experiments/social_navigation/benchmark/depth_perception_corpus/generated/corpus01",
+  "source_commit": "deecebd2667fb56c84a4ccaf6c697700aa8192be",
+  "modalities": [
+    "depth",
+    "native_lidar"
+  ],
+  "rgb": false,
+  "splits": {
+    "train": [
+      "p001",
+      "p002",
+      "p003"
+    ],
+    "validation": [
+      "p004",
+      "p005"
+    ],
+    "test": [
+      "p006",
+      "p007"
+    ]
+  },
+  "test_policy": "This stage authorizes one evaluation of the validation-selected frozen model on both test scenes; no test tuning or candidate comparison. The old corpus protocol describes its earlier collection milestone.",
+  "candidates": [
+    {
+      "name": "depth_linear",
+      "modality": "depth",
+      "hidden": 0
+    },
+    {
+      "name": "fusion_linear",
+      "modality": "fusion",
+      "hidden": 0
+    },
+    {
+      "name": "depth_mlp16",
+      "modality": "depth",
+      "hidden": 16
+    },
+    {
+      "name": "fusion_mlp16",
+      "modality": "fusion",
+      "hidden": 16
+    }
+  ],
+  "seed": 17,
+  "optimizer": {
+    "name": "AdamW",
+    "lr": 0.01,
+    "weight_decay": 0.01,
+    "steps": 600,
+    "full_batch": true
+  },
+  "normalization": "Train-only mean/std, std floor1e-3; lidar statistics from eligible local patches only",
+  "weights": "Equal total per train scene, equal per frame within scene, equal per present class within frame; valid rows only",
+  "feature_contract": {
+    "depth_features": 30,
+    "lidar_features": 8,
+    "absolute_xy_input": false,
+    "absolute_z_input": true,
+    "scene_or_time_input": false,
+    "point_count_input": true,
+    "lidar_radius_m": 0.6,
+    "lidar_min_local_points": 3,
+    "lidar_duplicate_last_ray_removed": true,
+    "lidar_missing": "Zero gated lidar residual, never automatic environment label; keep every sample",
+    "depth_z_bins_m": [
+      0.04,
+      0.3,
+      0.6,
+      0.9,
+      1.2,
+      1.5,
+      1.8
+    ],
+    "lidar_pose_relative_to_base_link": [
+      0,
+      0,
+      0.12,
+      0,
+      0,
+      0
+    ]
+  },
+  "thresholds": [
+    0.1,
+    0.15,
+    0.2,
+    0.25,
+    0.3,
+    0.35,
+    0.4,
+    0.45,
+    0.5,
+    0.55,
+    0.6,
+    0.65,
+    0.7,
+    0.75,
+    0.8,
+    0.85,
+    0.9
+  ],
+  "validation_selection": "Lexicographic: quality-gate pass, minimum scene balanced accuracy, macro scene balanced accuracy, global balanced accuracy, lower FPR, recall, fewer parameters, threshold closest0.5, fixed candidate order",
+  "quality_gate": {
+    "global_recall_min": 0.9,
+    "global_fpr_max": 0.1,
+    "global_balanced_accuracy_min": 0.9,
+    "per_scene_recall_min": 0.75,
+    "per_scene_fpr_max": 0.25
+  },
+  "acceptance_scope": "Only this tiny same-avatar simulator corpus; quality PASS does not authorize ROS deployment, H1-H5, re-ID/association or World Model training eligibility",
+  "training_run_limit": "Four fixed candidates, one seed, fixed steps; no additional tuning after test",
+  "baseline_reference": "All-person prediction is reported on validation only; no learned model uses labels as inputs",
+  "numeric_parity": {
+    "cuda_numpy_logit_abs_max": 0.0001,
+    "probability_abs_max": 1e-05,
+    "test_threshold_decisions_must_match": true
+  }
+}

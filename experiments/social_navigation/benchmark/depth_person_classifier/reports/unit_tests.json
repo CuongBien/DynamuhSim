@@ -1,0 +1,9 @@
+{
+  "status": "PASS",
+  "tests": 10,
+  "command": "bash experiments/social_navigation/benchmark/depth_person_classifier/run.sh test",
+  "executed_before_training": true,
+  "observed_runtime_s": 1.225,
+  "evidence": "Tool execution returned exit0, ten dots and OK before source freeze/fitting",
+  "coverage": ["finite 30+8 sensor descriptors", "depth translation/permutation invariance", "label independence", "missing scan behavior", "native scan local patch", "scene/frame/class weighting", "metrics and invalid-label masking", "test default denial", "four CUDA-NumPy forwards and missing lidar residual"]
+}
