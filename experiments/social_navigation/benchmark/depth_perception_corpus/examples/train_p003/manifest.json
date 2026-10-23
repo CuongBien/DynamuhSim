@@ -1,0 +1,46 @@
+{
+  "schema": "portable_depth_perception_corpus/1",
+  "scenes": [
+    {
+      "scene_id": "p003",
+      "split": "train",
+      "family": "A",
+      "moving": true,
+      "frames": 5,
+      "proposals": 40,
+      "person_samples": 20,
+      "environment_samples": 20,
+      "ambiguous_samples": 0,
+      "all_proposals_retained": true,
+      "raw_frame_indices": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ]
+    }
+  ],
+  "splits": {
+    "train": [
+      "p003"
+    ],
+    "validation": [],
+    "test": []
+  },
+  "input_modalities": [
+    "depth",
+    "native_lidar"
+  ],
+  "source_frozen_sha256": "08d331b6573bbc2999b7767d3d60db83677d222468ea38149d35930ed84a9d94",
+  "class_indices": {
+    "unknown": -1,
+    "environment": 0,
+    "person": 1
+  },
+  "data_use": "Train-only 5-frame example subset of corpus01; not a separate dataset",
+  "classifier_validated": false,
+  "world_model_training_ready": false,
+  "persona_valid": false,
+  "hu_nav_sim_used": false
+}

@@ -1,0 +1,50 @@
+{
+  "schema": "depth_perception_corpus/1",
+  "scenes": 7,
+  "splits": {
+    "train": [
+      "p001",
+      "p002",
+      "p003"
+    ],
+    "validation": [
+      "p004",
+      "p005"
+    ],
+    "test": [
+      "p006",
+      "p007"
+    ]
+  },
+  "split_unit": "Whole scene/family; family A train, B validation, C test; no frame/counterfactual splits",
+  "test_use": "Automated integrity/label QA only; no model evaluation, tuning or preview",
+  "modalities": [
+    "depth",
+    "native_lidar"
+  ],
+  "rgb": false,
+  "static_frame_selection": "Fixed midpoint index2, one frame per scene; repeated static frames excluded from learning export",
+  "moving_frame_selection": "All five synchronized 1Hz frames, episode stays in one split",
+  "label_rules": {
+    "person_purity": 0.9,
+    "min_person_points": 5,
+    "nonperson_requires_all_points_environment": true,
+    "ambiguous_label": -1,
+    "person_label": 1,
+    "environment_label": 0,
+    "visible_min_pixels": 20,
+    "max_unknown_pixel_fraction": 0.005,
+    "null_effect_without_owner": "Mask unknown, never label environment",
+    "one_person_id_only_for_valid_person": true
+  },
+  "semantic_h1_h5_valid": false,
+  "classification_source": "Rendered pixel ownership only, not learned detector or simulator-nearest-center heuristic",
+  "proposal_source": "Unfiltered geometry baseline to include rejected curved objects; full depth provided for alternate proposal methods",
+  "training_status": "Perception development pilot only; no model trained/validated and no World Model training eligibility",
+  "dataset_limits": [
+    "One warehouse and one human mesh, multiple poses/animation phases; not real-world or cross-simulator validation",
+    "Scripted diagnostic motion, not native social policy behavior",
+    "Camera keeps original low calibration; visibility fraction is in-view silhouette, not whole body",
+    "Dataset size is a pilot, not a complete training corpus"
+  ]
+}

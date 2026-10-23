@@ -1,0 +1,16 @@
+--- frozen/audit.py
++++ reports/audit02.py
+@@ -5,0 +6 @@
++sys.path.insert(0,str(Path(__file__).resolve().parent.parent))
+@@ -34 +35,4 @@
+-    if sample['scan_valid']:assert sample['scan_stamp_ns']<=sample['depth_stamp_ns'] and sample['scan_available_ns']<=sample['depth_available_ns'] and sample['depth_stamp_ns']-sample['scan_stamp_ns']<=250000000
++    eligible=np.flatnonzero((laser['stamp_ns']<=sample['depth_stamp_ns'])&(laser['available_ns']<=sample['depth_available_ns'])&(sample['depth_stamp_ns']-laser['stamp_ns']<=250000000));assert sample['scan_valid']==bool(len(eligible))
++    if sample['scan_valid']:
++     j=eligible[np.argmax(laser['stamp_ns'][eligible])];assert sample['scan_stamp_ns']==int(laser['stamp_ns'][j]) and sample['scan_available_ns']==int(laser['available_ns'][j]);np.testing.assert_array_equal(sample['scan_ranges'],laser['ranges'][j])
++    else:assert sample['scan_stamp_ns']==-1 and sample['scan_available_ns']==-1 and np.isnan(sample['scan_ranges']).all()
+@@ -42 +46 @@
+- assert all(len(v)==1 for v in family_splits.values());assert len(scenes)==len(manifest['scenes'])==7;assert sample_count>0 and valid_scans==sample_count
++ assert all(len(v)==1 for v in family_splits.values());assert len(scenes)==len(manifest['scenes'])==7;assert sample_count>0 and valid_scans>0
+@@ -45 +49 @@
+- result=dict(status='PASS',scenes=reports,total_frames=sum(v['frames'] for v in reports),total_proposals=sample_count,causal_lidar_samples=valid_scans,max_unknown_pixel_fraction=max_unknown,visible_person_frame_instances_below_90pct_in_view=occluded,whole_family_splits=True,millimetre_quantized_cross_split_duplicate_frames=0,test_model_evaluations=0,test_previews=0,classifier_validated=False,world_model_training_ready=False)
++ result=dict(status='PASS',scenes=reports,total_frames=sum(v['frames'] for v in reports),total_proposals=sample_count,causal_lidar_samples=valid_scans,masked_missing_lidar_samples=sample_count-valid_scans,missing_scan_policy_checked=True,auditor_version=2,max_unknown_pixel_fraction=max_unknown,visible_person_frame_instances_below_90pct_in_view=occluded,whole_family_splits=True,millimetre_quantized_cross_split_duplicate_frames=0,test_model_evaluations=0,test_previews=0,classifier_validated=False,world_model_training_ready=False)

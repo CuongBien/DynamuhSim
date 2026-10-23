@@ -1,0 +1,62 @@
+{
+  "schema": "perception_corpus_capture/1",
+  "scope": "Static and scripted moving depth label capture; no model inference",
+  "camera": "original low camera, 424x240, original intrinsics/clip, rate 1Hz",
+  "modes": [
+    "full",
+    "control",
+    "null",
+    "drop1",
+    "drop2",
+    "drop3",
+    "drop4",
+    "drop5",
+    "drop6",
+    "only1",
+    "only2",
+    "only3",
+    "only4",
+    "only5",
+    "only6"
+  ],
+  "warmup_ns": 2000000000,
+  "frames": 5,
+  "max_wall_s": 100,
+  "depth_equality_tolerance_m": 0.001,
+  "visible_min_pixels": 20,
+  "proposal_purity": 0.8,
+  "proposal_person_support_min_points": 5,
+  "occlusion_partial_ratio": 0.98,
+  "training_ready": false,
+  "acceptance": {
+    "label_harness": "GPU NVIDIA; clean exit; balanced callbacks; full/control bitwise at each timestamp; no finite-mask changes and <=1mm inter-frame depth difference; six actor mappings; isolated and leave-one-out ownership agree; report legacy strict inter-frame bitwise gate separately",
+    "detector": "Report only; no retrospective threshold tuning; any observed false positive/negative prevents acceptance"
+  },
+  "static_depth_tolerance_m": 0.001,
+  "revision_reason": "static04 failed strict inter-frame bitwise equality at 4 pixels with max 1.66893e-6m difference and no finite-mask/ownership changes. Keep original failure; declare numeric <= existing 1mm ownership tolerance before new static05. Same-time full/control must still be bitwise equal; detector unchanged.",
+  "scan_topic": "/person/scan",
+  "min_scans": 15,
+  "model": "DR-SPAAM",
+  "checkpoint": "ckpt_jrdb_ann_dr_spaam_e20.pth",
+  "confidence_threshold": 0.5,
+  "panoramic_scan": true,
+  "stride": 1,
+  "scan_preprocessing": "Official zero/NaN/Inf ->29.99; remove duplicated 2pi endpoint and cyclically order rays into centered monotonic grid; no interpolation",
+  "semantic_fusion": {
+    "position_gate_m": 0.6,
+    "ambiguity_margin_m": 0.15,
+    "policy": "Mutual-nearest positive corroboration only; no learned detection means unknown, not non-person; retain every depth proposal",
+    "max_scan_age_ns": 250000000
+  },
+  "validation": {
+    "development": "Existing fixed clutter fixture",
+    "acceptance": "No supported non-person depth clusters in full or no-human controls; report supported/missed visible people separately; no training readiness from one fixture",
+    "no_threshold_sweep": true,
+    "dynamic_next": "Only after fixed scene diagnosis",
+    "min_supported_visible_people": 3,
+    "minimum_visible_support_fraction": 0.75,
+    "reject_all_is_not_pass": true
+  },
+  "motion_actual_min_m": 0.15,
+  "motion_proxy_actor_tolerance_m": 0.005
+}

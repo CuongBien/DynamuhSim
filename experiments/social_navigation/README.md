@@ -1,5 +1,11 @@
 # Nhà xưởng và vòng khảo sát SocNavGym
 
+## Cập nhật23/10/2026 — bộ pilot perception có nhãn đã xuất
+
+[Corpus report](benchmark/depth_perception_corpus/reports/CORPUS_REPORT.md):7cảnh GPU NVIDIA,525depth đối chứng/140scan native; xuất19frame/132proposal (64người,68môi trường), chia toàn họ bố cục train/validation/test trước thu. Static chỉ giữ midpoint; đầu vào depth+LiDAR tách LABEL, khôngRGB/H1–H5. 3frame đầu/21proposal thiếu scan nhân quả được mask, không dùng scan tương lai.
+
+9test và auditor02/portable QA đạt (84sample đổi nhãn không đổi input,13frame bỏ tương lai không đổi); auditor01 có giả định dư về scan và được giữ FAIL/source/diff. Không model test/tuning/preview test. [Mẫu train](benchmark/depth_perception_corpus/examples/train_p003/manifest.json) và [GIF replay thật](benchmark/depth_perception_corpus/reports/media/depth_labels.gif) lưu Git; full bundle/raw ở generated cần backup riêng. Chỉ nghiệm thu data pilot, một mesh/nhà xưởng và scripted motion; chưa detector/association/train WorldModel, không sửa ROS/Nav2/HuNavSim. Bước kế: baseline person-vs-environment trên train/validation rồi đóng băng trước test. Mốc lưu: `feat: add a labelled depth perception pilot corpus`.
+
 ## Cập nhật 23/10/2026 — depth planar-surface veto có nghiệm thu giới hạn
 
 [Surface guard](benchmark/depth_surface_guard/reports/SURFACE_GUARD_REPORT.md): giữLiDAR+depth theo người dùng, khôngRGB. Quy tắc CUDA chốt trước regression và fixture mới: rút8false-support rows trên hộp, không gắn planar cho người, giữ75proposal/40person-owned rows và true support1→1. Cũfull/null sai4→0/3→0; cảnh mới hộp xoay+trụ cong sai2→1, còn nhận nhầm trụ tại5s và thiếu recall.
