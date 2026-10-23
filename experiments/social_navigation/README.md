@@ -1,5 +1,11 @@
 # Nhà xưởng và vòng khảo sát SocNavGym
 
+## Cập nhật — đã thu batch đầu dữ liệu chuyển động cho WM
+
+[WM batch report](benchmark/wm_episode_batch/reports/WM_BATCH_REPORT.md): 10 lượt SocNavGym với 5 seed mới × standing/walking; **8 episode hợp lệ, 2 cách ly** vì Gazebo shutdown exit255. Không retry/thay thế/nới clean-exit gate. Có 5,106 cửa sổ, 5,094 target WM observed BEV hợp lệ; split 5 train / 2 validation / 1 test theo seed family. Test chỉ còn standing49. 6,696 depth khớp MCAP, 8 tests và audit causal/frame/portable/duplicate đạt.
+
+Input sensor/action history 2 s; future observed BEV +0.5/+1/+3 s và executed-action condition đọc riêng. GT chỉ ở LABEL; H1–H5/association/RL reward masked. Chưa fit/tune WM, HuNavSim chưa dùng. Full bundle khoảng 3.01 GB/raw ở generated cần backup riêng; Git có code/freeze/reports/window mẫu và media ghi thật. Bước kế: train thử WM observed BEV trên train/validation, chưa RL online hoặc đổi kiến trúc robot. Mốc lưu: `feat: collect a masked sensor-action pilot dataset for world models`.
+
 ## Cập nhật23/10/2026 — hoàn thành train thử classifier người/vật
 
 [Classifier report](benchmark/depth_person_classifier/reports/CLASSIFIER_REPORT.md):4cấu hình train CUDA RTX4060 trên54train/30validation; chọn linear depth31tham số,threshold0.5 trước khi mở48test. Validation11/12người,0/18đồ vật nhận nhầm; test23/24người,0/24đồ vật nhận nhầm, còn1FN dưới che khuất. Gate pilot đặt trước fit đạt; không suy ra end-to-end detector recall hoặc tổng quát ngoài một avatar/nhà xưởng.
