@@ -1,0 +1,80 @@
+{
+  "status": "PASS",
+  "schema": "social_episode/1",
+  "episode": "wm_walking_48",
+  "sample_count": 850,
+  "candidate_count": 850,
+  "rejected_count": 0,
+  "actual_goal_reached": false,
+  "navigation_status": "TIMEOUT",
+  "goal_xy_error_world_m": 1.310027287974917,
+  "episode_goal_start_ns": 9905000000,
+  "episode_action_end_ns": 99910000000,
+  "observation_end_ns": 103305000000,
+  "sample_anchor_range_ns": [
+    12000000000,
+    96900000000
+  ],
+  "human_ids": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6
+  ],
+  "persona_valid_count": 0,
+  "depth_frames": 1036,
+  "depth_shape": [
+    1036,
+    240,
+    424
+  ],
+  "topic_counts": {
+    "/tf_static": 3,
+    "/dataset/scene_poses": 6243,
+    "/clock": 41430,
+    "/tf": 44854,
+    "/camera/camera_info": 1036,
+    "/camera/depth/image_rect_raw": 1036,
+    "/scan": 518,
+    "/imu": 10358,
+    "/common/ground_truth": 5178,
+    "/odom": 2959,
+    "/map": 1,
+    "/amcl_pose": 228,
+    "/dataset/events": 4,
+    "/navigate_to_pose/_action/status": 3,
+    "/plan": 205,
+    "/cmd_vel": 4128
+  },
+  "modality_counts": {
+    "scan": 518,
+    "imu": 10358,
+    "odom": 2959,
+    "action": 4128,
+    "depth": 1036,
+    "amcl": 228
+  },
+  "clock_monotonic": true,
+  "static_tf_unique": true,
+  "optical_axes_checked": true,
+  "no_future_observations": true,
+  "full_future_labels": true,
+  "raw_readback": true,
+  "group_modes": {
+    "0": "none",
+    "1": "walking",
+    "2": "standing"
+  },
+  "bev_unknown_cells": 2796118,
+  "bev_free_cells": 655941,
+  "bev_occupied_cells": 29541,
+  "m1": "3s future human supervision + executed 3D robot actions; sensor tracker association pending",
+  "m2": "observed current depth-only BEV; future BEV target definition pending",
+  "m3": "masked; no validated H1-H5 supervision",
+  "scope": "One pilot, not a train/validation dataset or persona acceptance",
+  "transport_timing": "Conservative availability=max(header_stamp, bag latest-clock reception stamp); not wall-clock latency metrology",
+  "optional_mcap_warning": "Action status definition absent in self-description; local Jazzy CDR readback succeeded; core topics retain definitions",
+  "rejected": []
+}

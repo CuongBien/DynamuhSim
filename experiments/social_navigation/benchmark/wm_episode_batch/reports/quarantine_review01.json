@@ -1,0 +1,25 @@
+{
+  "schema": "wm_collection_review_amendment/1",
+  "reason": "After four accepted captures, standing47 had measured TIMEOUT and closed MCAP but Gazebo exited255 at teardown. Original strict clean-exit acceptance remains FAIL.",
+  "quarantined": [
+    {
+      "episode_id": "wm_standing_47",
+      "raw_result_sha256": "9a4f32facc2c4618c173c1856e725a791e4d63a0046f21c479761337bb2e248f",
+      "capture_audit_sha256": "ee067a01b4a519d004e9fbcf98ae1202235c3707433a7d0b79927a8a453c7013",
+      "gazebo_exit_code": 255,
+      "recorder_exit_code": 0,
+      "worker_faults": 0,
+      "filter_callbacks_balanced": [
+        1028,
+        1028
+      ]
+    }
+  ],
+  "decision": "Keep failed attempt, exclude from all train/validation/test bundles, do not retry/replace this seed/mode. Resume only the five originally planned unattempted episodes with identical frozen driver/world/physics/Nav2; abort for any new infrastructure fault and review separately.",
+  "root_cause": "Not proven. Failure during shutdown, no claim to have fixed driver root cause.",
+  "expected_attempts": 10,
+  "expected_accepted_if_remaining_clean": 9,
+  "criteria_changed": false,
+  "source_capture_freeze_sha256": "b5e7f29991315fe0d0452f839990b6c5ea1ce7f529ea27d22c492b3be87b4a01",
+  "source_export_freeze_sha256": "e6e424e3ed38fd832324f4cf81667513a9480447343478c76cedfc98d58767b2"
+}
