@@ -1,0 +1,4294 @@
+{
+  "status": "TRAINED_AND_FROZEN_BEFORE_TEST",
+  "device": "cuda:0",
+  "gpu_name": "NVIDIA GeForce RTX 4060 Laptop GPU",
+  "cuda_version": "12.8",
+  "torch_version": "2.7.1+cu128",
+  "gpu_memory_bytes": 8585216000,
+  "seed": 17,
+  "steps": 600,
+  "train_samples": 54,
+  "validation_samples": 30,
+  "train_scene_weight_totals": {
+    "p001": 0.3333333134651184,
+    "p002": 0.3333333134651184,
+    "p003": 0.3333333432674408
+  },
+  "train_local_lidar_valid": 29,
+  "validation_local_lidar_valid": 20,
+  "candidates": [
+    {
+      "name": "depth_linear",
+      "modality": "depth",
+      "hidden": 0,
+      "parameters": 31,
+      "parameter_device": "cuda:0",
+      "gradient_device": "cuda:0",
+      "parameter_change_l2": 3.5094797611236572,
+      "parity": [
+        {
+          "split": "train",
+          "rows": 54,
+          "max_logit_error": 1.9073486328125e-06,
+          "max_probability_error": 1.30385160446167e-08
+        },
+        {
+          "split": "validation",
+          "rows": 30,
+          "max_logit_error": 1.430511474609375e-06,
+          "max_probability_error": 1.862645149230957e-09
+        }
+      ],
+      "final_weighted_train_bce": 0.004018381237983704
+    },
+    {
+      "name": "fusion_linear",
+      "modality": "fusion",
+      "hidden": 0,
+      "parameters": 40,
+      "parameter_device": "cuda:0",
+      "gradient_device": "cuda:0",
+      "parameter_change_l2": 3.799457550048828,
+      "parity": [
+        {
+          "split": "train",
+          "rows": 54,
+          "max_logit_error": 1.9073486328125e-06,
+          "max_probability_error": 7.450580596923828e-09
+        },
+        {
+          "split": "validation",
+          "rows": 30,
+          "max_logit_error": 1.9073486328125e-06,
+          "max_probability_error": 2.3283064365386963e-09
+        }
+      ],
+      "final_weighted_train_bce": 0.0028756968677043915
+    },
+    {
+      "name": "depth_mlp16",
+      "modality": "depth",
+      "hidden": 16,
+      "parameters": 513,
+      "parameter_device": "cuda:0",
+      "gradient_device": "cuda:0",
+      "parameter_change_l2": 4.861169815063477,
+      "parity": [
+        {
+          "split": "train",
+          "rows": 54,
+          "max_logit_error": 1.9073486328125e-06,
+          "max_probability_error": 4.3655745685100555e-10
+        },
+        {
+          "split": "validation",
+          "rows": 30,
+          "max_logit_error": 9.5367431640625e-07,
+          "max_probability_error": 1.7462298274040222e-10
+        }
+      ],
+      "final_weighted_train_bce": 0.0002290716947754845
+    },
+    {
+      "name": "fusion_mlp16",
+      "modality": "fusion",
+      "hidden": 16,
+      "parameters": 594,
+      "parameter_device": "cuda:0",
+      "gradient_device": "cuda:0",
+      "parameter_change_l2": 4.997363090515137,
+      "parity": [
+        {
+          "split": "train",
+          "rows": 54,
+          "max_logit_error": 1.9073486328125e-06,
+          "max_probability_error": 1.1641532182693481e-09
+        },
+        {
+          "split": "validation",
+          "rows": 30,
+          "max_logit_error": 1.430511474609375e-06,
+          "max_probability_error": 2.9103830456733704e-10
+        }
+      ],
+      "final_weighted_train_bce": 0.00019692815840244293
+    }
+  ],
+  "threshold_grid_scores": [
+    {
+      "candidate": "depth_linear",
+      "threshold": 0.1,
+      "rank": [
+        1,
+        0.95,
+        0.975,
+        0.9583333333333333,
+        -0.0,
+        0.9166666666666666,
+        -31,
+        -0.4,
+        0
+      ],
+      "metrics": {
+        "overall": {
+          "samples": 30,
+          "tp": 11,
+          "fn": 1,
+          "fp": 0,
+          "tn": 18,
+          "recall": 0.9166666666666666,
+          "fpr": 0.0,
+          "precision": 1.0,
+          "balanced_accuracy": 0.9583333333333333,
+          "accuracy": 0.9666666666666667,
+          "f1": 0.9565217391304348
+        },
+        "by_scene": {
+          "p004": {
+            "samples": 5,
+            "tp": 2,
+            "fn": 0,
+            "fp": 0,
+            "tn": 3,
+            "recall": 1.0,
+            "fpr": 0.0,
+            "precision": 1.0,
+            "balanced_accuracy": 1.0,
+            "accuracy": 1.0,
+            "f1": 1.0
+          },
+          "p005": {
+            "samples": 25,
+            "tp": 9,
+            "fn": 1,
+            "fp": 0,
+            "tn": 15,
+            "recall": 0.9,
+            "fpr": 0.0,
+            "precision": 1.0,
+            "balanced_accuracy": 0.95,
+            "accuracy": 0.96,
+            "f1": 0.9473684210526316
+          }
+        },
+        "min_scene_balanced_accuracy": 0.95,
+        "macro_scene_balanced_accuracy": 0.975
+      }
+    },
+    {
+      "candidate": "depth_linear",
+      "threshold": 0.15,
+      "rank": [
+        1,
+        0.95,
+        0.975,
+        0.9583333333333333,
+        -0.0,
+        0.9166666666666666,
+        -31,
+        -0.35,
+        0
+      ],
+      "metrics": {
+        "overall": {
+          "samples": 30,
+          "tp": 11,
+          "fn": 1,
+          "fp": 0,
+          "tn": 18,
+          "recall": 0.9166666666666666,
+          "fpr": 0.0,
+          "precision": 1.0,
+          "balanced_accuracy": 0.9583333333333333,
+          "accuracy": 0.9666666666666667,
+          "f1": 0.9565217391304348
+        },
+        "by_scene": {
+          "p004": {
+            "samples": 5,
+            "tp": 2,
+            "fn": 0,
+            "fp": 0,
+            "tn": 3,
+            "recall": 1.0,
+            "fpr": 0.0,
+            "precision": 1.0,
+            "balanced_accuracy": 1.0,
+            "accuracy": 1.0,
+            "f1": 1.0
+          },
+          "p005": {
+            "samples": 25,
+            "tp": 9,
+            "fn": 1,
+            "fp": 0,
+            "tn": 15,
+            "recall": 0.9,
+            "fpr": 0.0,
+            "precision": 1.0,
+            "balanced_accuracy": 0.95,
+            "accuracy": 0.96,
+            "f1": 0.9473684210526316
+          }
+        },
+        "min_scene_balanced_accuracy": 0.95,
+        "macro_scene_balanced_accuracy": 0.975
+      }
+    },
+    {
+      "candidate": "depth_linear",
+      "threshold": 0.2,
+      "rank": [
+        1,
+        0.95,
+        0.975,
+        0.9583333333333333,
+        -0.0,
+        0.9166666666666666,
+        -31,
+        -0.3,
+        0
+      ],
+      "metrics": {
+        "overall": {
+          "samples": 30,
+          "tp": 11,
+          "fn": 1,
+          "fp": 0,
+          "tn": 18,
+          "recall": 0.9166666666666666,
+          "fpr": 0.0,
+          "precision": 1.0,
+          "balanced_accuracy": 0.9583333333333333,
+          "accuracy": 0.9666666666666667,
+          "f1": 0.9565217391304348
+        },
+        "by_scene": {
+          "p004": {
+            "samples": 5,
+            "tp": 2,
+            "fn": 0,
+            "fp": 0,
+            "tn": 3,
+            "recall": 1.0,
+            "fpr": 0.0,
+            "precision": 1.0,
+            "balanced_accuracy": 1.0,
+            "accuracy": 1.0,
+            "f1": 1.0
+          },
+          "p005": {
+            "samples": 25,
+            "tp": 9,
+            "fn": 1,
+            "fp": 0,
+            "tn": 15,
+            "recall": 0.9,
+            "fpr": 0.0,
+            "precision": 1.0,
+            "balanced_accuracy": 0.95,
+            "accuracy": 0.96,
+            "f1": 0.9473684210526316
+          }
+        },
+        "min_scene_balanced_accuracy": 0.95,
+        "macro_scene_balanced_accuracy": 0.975
+      }
+    },
+    {
+      "candidate": "depth_linear",
+      "threshold": 0.25,
+      "rank": [
+        1,
+        0.95,
+        0.975,
+        0.9583333333333333,
+        -0.0,
+        0.9166666666666666,
+        -31,
+        -0.25,
+        0
+      ],
+      "metrics": {
+        "overall": {
+          "samples": 30,
+          "tp": 11,
+          "fn": 1,
+          "fp": 0,
+          "tn": 18,
+          "recall": 0.9166666666666666,
+          "fpr": 0.0,
+          "precision": 1.0,
+          "balanced_accuracy": 0.9583333333333333,
+          "accuracy": 0.9666666666666667,
+          "f1": 0.9565217391304348
+        },
+        "by_scene": {
+          "p004": {
+            "samples": 5,
+            "tp": 2,
+            "fn": 0,
+            "fp": 0,
+            "tn": 3,
+            "recall": 1.0,
+            "fpr": 0.0,
+            "precision": 1.0,
+            "balanced_accuracy": 1.0,
+            "accuracy": 1.0,
+            "f1": 1.0
+          },
+          "p005": {
+            "samples": 25,
+            "tp": 9,
+            "fn": 1,
+            "fp": 0,
+            "tn": 15,
+            "recall": 0.9,
+            "fpr": 0.0,
+            "precision": 1.0,
+            "balanced_accuracy": 0.95,
+            "accuracy": 0.96,
+            "f1": 0.9473684210526316
+          }
+        },
+        "min_scene_balanced_accuracy": 0.95,
+        "macro_scene_balanced_accuracy": 0.975
+      }
+    },
+    {
+      "candidate": "depth_linear",
+      "threshold": 0.3,
+      "rank": [
+        1,
+        0.95,
+        0.975,
+        0.9583333333333333,
+        -0.0,
+        0.9166666666666666,
+        -31,
+        -0.2,
+        0
+      ],
+      "metrics": {
+        "overall": {
+          "samples": 30,
+          "tp": 11,
+          "fn": 1,
+          "fp": 0,
+          "tn": 18,
+          "recall": 0.9166666666666666,
+          "fpr": 0.0,
+          "precision": 1.0,
+          "balanced_accuracy": 0.9583333333333333,
+          "accuracy": 0.9666666666666667,
+          "f1": 0.9565217391304348
+        },
+        "by_scene": {
+          "p004": {
+            "samples": 5,
+            "tp": 2,
+            "fn": 0,
+            "fp": 0,
+            "tn": 3,
+            "recall": 1.0,
+            "fpr": 0.0,
+            "precision": 1.0,
+            "balanced_accuracy": 1.0,
+            "accuracy": 1.0,
+            "f1": 1.0
+          },
+          "p005": {
+            "samples": 25,
+            "tp": 9,
+            "fn": 1,
+            "fp": 0,
+            "tn": 15,
+            "recall": 0.9,
+            "fpr": 0.0,
+            "precision": 1.0,
+            "balanced_accuracy": 0.95,
+            "accuracy": 0.96,
+            "f1": 0.9473684210526316
+          }
+        },
+        "min_scene_balanced_accuracy": 0.95,
+        "macro_scene_balanced_accuracy": 0.975
+      }
+    },
+    {
+      "candidate": "depth_linear",
+      "threshold": 0.35,
+      "rank": [
+        1,
+        0.95,
+        0.975,
+        0.9583333333333333,
+        -0.0,
+        0.9166666666666666,
+        -31,
+        -0.15000000000000002,
+        0
+      ],
+      "metrics": {
+        "overall": {
+          "samples": 30,
+          "tp": 11,
+          "fn": 1,
+          "fp": 0,
+          "tn": 18,
+          "recall": 0.9166666666666666,
+          "fpr": 0.0,
+          "precision": 1.0,
+          "balanced_accuracy": 0.9583333333333333,
+          "accuracy": 0.9666666666666667,
+          "f1": 0.9565217391304348
+        },
+        "by_scene": {
+          "p004": {
+            "samples": 5,
+            "tp": 2,
+            "fn": 0,
+            "fp": 0,
+            "tn": 3,
+            "recall": 1.0,
+            "fpr": 0.0,
+            "precision": 1.0,
+            "balanced_accuracy": 1.0,
+            "accuracy": 1.0,
+            "f1": 1.0
+          },
+          "p005": {
+            "samples": 25,
+            "tp": 9,
+            "fn": 1,
+            "fp": 0,
+            "tn": 15,
+            "recall": 0.9,
+            "fpr": 0.0,
+            "precision": 1.0,
+            "balanced_accuracy": 0.95,
+            "accuracy": 0.96,
+            "f1": 0.9473684210526316
+          }
+        },
+        "min_scene_balanced_accuracy": 0.95,
+        "macro_scene_balanced_accuracy": 0.975
+      }
+    },
+    {
+      "candidate": "depth_linear",
+      "threshold": 0.4,
+      "rank": [
+        1,
+        0.95,
+        0.975,
+        0.9583333333333333,
+        -0.0,
+        0.9166666666666666,
+        -31,
+        -0.09999999999999998,
+        0
+      ],
+      "metrics": {
+        "overall": {
+          "samples": 30,
+          "tp": 11,
+          "fn": 1,
+          "fp": 0,
+          "tn": 18,
+          "recall": 0.9166666666666666,
+          "fpr": 0.0,
+          "precision": 1.0,
+          "balanced_accuracy": 0.9583333333333333,
+          "accuracy": 0.9666666666666667,
+          "f1": 0.9565217391304348
+        },
+        "by_scene": {
+          "p004": {
+            "samples": 5,
+            "tp": 2,
+            "fn": 0,
+            "fp": 0,
+            "tn": 3,
+            "recall": 1.0,
+            "fpr": 0.0,
+            "precision": 1.0,
+            "balanced_accuracy": 1.0,
+            "accuracy": 1.0,
+            "f1": 1.0
+          },
+          "p005": {
+            "samples": 25,
+            "tp": 9,
+            "fn": 1,
+            "fp": 0,
+            "tn": 15,
+            "recall": 0.9,
+            "fpr": 0.0,
+            "precision": 1.0,
+            "balanced_accuracy": 0.95,
+            "accuracy": 0.96,
+            "f1": 0.9473684210526316
+          }
+        },
+        "min_scene_balanced_accuracy": 0.95,
+        "macro_scene_balanced_accuracy": 0.975
+      }
+    },
+    {
+      "candidate": "depth_linear",
+      "threshold": 0.45,
+      "rank": [
+        1,
+        0.95,
+        0.975,
+        0.9583333333333333,
+        -0.0,
+        0.9166666666666666,
+        -31,
+        -0.04999999999999999,
+        0
+      ],
+      "metrics": {
+        "overall": {
+          "samples": 30,
+          "tp": 11,
+          "fn": 1,
+          "fp": 0,
+          "tn": 18,
+          "recall": 0.9166666666666666,
+          "fpr": 0.0,
+          "precision": 1.0,
+          "balanced_accuracy": 0.9583333333333333,
+          "accuracy": 0.9666666666666667,
+          "f1": 0.9565217391304348
+        },
+        "by_scene": {
+          "p004": {
+            "samples": 5,
+            "tp": 2,
+            "fn": 0,
+            "fp": 0,
+            "tn": 3,
+            "recall": 1.0,
+            "fpr": 0.0,
+            "precision": 1.0,
+            "balanced_accuracy": 1.0,
+            "accuracy": 1.0,
+            "f1": 1.0
+          },
+          "p005": {
+            "samples": 25,
+            "tp": 9,
+            "fn": 1,
+            "fp": 0,
+            "tn": 15,
+            "recall": 0.9,
+            "fpr": 0.0,
+            "precision": 1.0,
+            "balanced_accuracy": 0.95,
+            "accuracy": 0.96,
+            "f1": 0.9473684210526316
+          }
+        },
+        "min_scene_balanced_accuracy": 0.95,
+        "macro_scene_balanced_accuracy": 0.975
+      }
+    },
+    {
+      "candidate": "depth_linear",
+      "threshold": 0.5,
+      "rank": [
+        1,
+        0.95,
+        0.975,
+        0.9583333333333333,
+        -0.0,
+        0.9166666666666666,
+        -31,
+        -0.0,
+        0
+      ],
+      "metrics": {
+        "overall": {
+          "samples": 30,
+          "tp": 11,
+          "fn": 1,
+          "fp": 0,
+          "tn": 18,
+          "recall": 0.9166666666666666,
+          "fpr": 0.0,
+          "precision": 1.0,
+          "balanced_accuracy": 0.9583333333333333,
+          "accuracy": 0.9666666666666667,
+          "f1": 0.9565217391304348
+        },
+        "by_scene": {
+          "p004": {
+            "samples": 5,
+            "tp": 2,
+            "fn": 0,
+            "fp": 0,
+            "tn": 3,
+            "recall": 1.0,
+            "fpr": 0.0,
+            "precision": 1.0,
+            "balanced_accuracy": 1.0,
+            "accuracy": 1.0,
+            "f1": 1.0
+          },
+          "p005": {
+            "samples": 25,
+            "tp": 9,
+            "fn": 1,
+            "fp": 0,
+            "tn": 15,
+            "recall": 0.9,
+            "fpr": 0.0,
+            "precision": 1.0,
+            "balanced_accuracy": 0.95,
+            "accuracy": 0.96,
+            "f1": 0.9473684210526316
+          }
+        },
+        "min_scene_balanced_accuracy": 0.95,
+        "macro_scene_balanced_accuracy": 0.975
+      }
+    },
+    {
+      "candidate": "depth_linear",
+      "threshold": 0.55,
+      "rank": [
+        1,
+        0.95,
+        0.975,
+        0.9583333333333333,
+        -0.0,
+        0.9166666666666666,
+        -31,
+        -0.050000000000000044,
+        0
+      ],
+      "metrics": {
+        "overall": {
+          "samples": 30,
+          "tp": 11,
+          "fn": 1,
+          "fp": 0,
+          "tn": 18,
+          "recall": 0.9166666666666666,
+          "fpr": 0.0,
+          "precision": 1.0,
+          "balanced_accuracy": 0.9583333333333333,
+          "accuracy": 0.9666666666666667,
+          "f1": 0.9565217391304348
+        },
+        "by_scene": {
+          "p004": {
+            "samples": 5,
+            "tp": 2,
+            "fn": 0,
+            "fp": 0,
+            "tn": 3,
+            "recall": 1.0,
+            "fpr": 0.0,
+            "precision": 1.0,
+            "balanced_accuracy": 1.0,
+            "accuracy": 1.0,
+            "f1": 1.0
+          },
+          "p005": {
+            "samples": 25,
+            "tp": 9,
+            "fn": 1,
+            "fp": 0,
+            "tn": 15,
+            "recall": 0.9,
+            "fpr": 0.0,
+            "precision": 1.0,
+            "balanced_accuracy": 0.95,
+            "accuracy": 0.96,
+            "f1": 0.9473684210526316
+          }
+        },
+        "min_scene_balanced_accuracy": 0.95,
+        "macro_scene_balanced_accuracy": 0.975
+      }
+    },
+    {
+      "candidate": "depth_linear",
+      "threshold": 0.6,
+      "rank": [
+        1,
+        0.95,
+        0.975,
+        0.9583333333333333,
+        -0.0,
+        0.9166666666666666,
+        -31,
+        -0.09999999999999998,
+        0
+      ],
+      "metrics": {
+        "overall": {
+          "samples": 30,
+          "tp": 11,
+          "fn": 1,
+          "fp": 0,
+          "tn": 18,
+          "recall": 0.9166666666666666,
+          "fpr": 0.0,
+          "precision": 1.0,
+          "balanced_accuracy": 0.9583333333333333,
+          "accuracy": 0.9666666666666667,
+          "f1": 0.9565217391304348
+        },
+        "by_scene": {
+          "p004": {
+            "samples": 5,
+            "tp": 2,
+            "fn": 0,
+            "fp": 0,
+            "tn": 3,
+            "recall": 1.0,
+            "fpr": 0.0,
+            "precision": 1.0,
+            "balanced_accuracy": 1.0,
+            "accuracy": 1.0,
+            "f1": 1.0
+          },
+          "p005": {
+            "samples": 25,
+            "tp": 9,
+            "fn": 1,
+            "fp": 0,
+            "tn": 15,
+            "recall": 0.9,
+            "fpr": 0.0,
+            "precision": 1.0,
+            "balanced_accuracy": 0.95,
+            "accuracy": 0.96,
+            "f1": 0.9473684210526316
+          }
+        },
+        "min_scene_balanced_accuracy": 0.95,
+        "macro_scene_balanced_accuracy": 0.975
+      }
+    },
+    {
+      "candidate": "depth_linear",
+      "threshold": 0.65,
+      "rank": [
+        1,
+        0.95,
+        0.975,
+        0.9583333333333333,
+        -0.0,
+        0.9166666666666666,
+        -31,
+        -0.15000000000000002,
+        0
+      ],
+      "metrics": {
+        "overall": {
+          "samples": 30,
+          "tp": 11,
+          "fn": 1,
+          "fp": 0,
+          "tn": 18,
+          "recall": 0.9166666666666666,
+          "fpr": 0.0,
+          "precision": 1.0,
+          "balanced_accuracy": 0.9583333333333333,
+          "accuracy": 0.9666666666666667,
+          "f1": 0.9565217391304348
+        },
+        "by_scene": {
+          "p004": {
+            "samples": 5,
+            "tp": 2,
+            "fn": 0,
+            "fp": 0,
+            "tn": 3,
+            "recall": 1.0,
+            "fpr": 0.0,
+            "precision": 1.0,
+            "balanced_accuracy": 1.0,
+            "accuracy": 1.0,
+            "f1": 1.0
+          },
+          "p005": {
+            "samples": 25,
+            "tp": 9,
+            "fn": 1,
+            "fp": 0,
+            "tn": 15,
+            "recall": 0.9,
+            "fpr": 0.0,
+            "precision": 1.0,
+            "balanced_accuracy": 0.95,
+            "accuracy": 0.96,
+            "f1": 0.9473684210526316
+          }
+        },
+        "min_scene_balanced_accuracy": 0.95,
+        "macro_scene_balanced_accuracy": 0.975
+      }
+    },
+    {
+      "candidate": "depth_linear",
+      "threshold": 0.7,
+      "rank": [
+        1,
+        0.95,
+        0.975,
+        0.9583333333333333,
+        -0.0,
+        0.9166666666666666,
+        -31,
+        -0.19999999999999996,
+        0
+      ],
+      "metrics": {
+        "overall": {
+          "samples": 30,
+          "tp": 11,
+          "fn": 1,
+          "fp": 0,
+          "tn": 18,
+          "recall": 0.9166666666666666,
+          "fpr": 0.0,
+          "precision": 1.0,
+          "balanced_accuracy": 0.9583333333333333,
+          "accuracy": 0.9666666666666667,
+          "f1": 0.9565217391304348
+        },
+        "by_scene": {
+          "p004": {
+            "samples": 5,
+            "tp": 2,
+            "fn": 0,
+            "fp": 0,
+            "tn": 3,
+            "recall": 1.0,
+            "fpr": 0.0,
+            "precision": 1.0,
+            "balanced_accuracy": 1.0,
+            "accuracy": 1.0,
+            "f1": 1.0
+          },
+          "p005": {
+            "samples": 25,
+            "tp": 9,
+            "fn": 1,
+            "fp": 0,
+            "tn": 15,
+            "recall": 0.9,
+            "fpr": 0.0,
+            "precision": 1.0,
+            "balanced_accuracy": 0.95,
+            "accuracy": 0.96,
+            "f1": 0.9473684210526316
+          }
+        },
+        "min_scene_balanced_accuracy": 0.95,
+        "macro_scene_balanced_accuracy": 0.975
+      }
+    },
+    {
+      "candidate": "depth_linear",
+      "threshold": 0.75,
+      "rank": [
+        1,
+        0.95,
+        0.975,
+        0.9583333333333333,
+        -0.0,
+        0.9166666666666666,
+        -31,
+        -0.25,
+        0
+      ],
+      "metrics": {
+        "overall": {
+          "samples": 30,
+          "tp": 11,
+          "fn": 1,
+          "fp": 0,
+          "tn": 18,
+          "recall": 0.9166666666666666,
+          "fpr": 0.0,
+          "precision": 1.0,
+          "balanced_accuracy": 0.9583333333333333,
+          "accuracy": 0.9666666666666667,
+          "f1": 0.9565217391304348
+        },
+        "by_scene": {
+          "p004": {
+            "samples": 5,
+            "tp": 2,
+            "fn": 0,
+            "fp": 0,
+            "tn": 3,
+            "recall": 1.0,
+            "fpr": 0.0,
+            "precision": 1.0,
+            "balanced_accuracy": 1.0,
+            "accuracy": 1.0,
+            "f1": 1.0
+          },
+          "p005": {
+            "samples": 25,
+            "tp": 9,
+            "fn": 1,
+            "fp": 0,
+            "tn": 15,
+            "recall": 0.9,
+            "fpr": 0.0,
+            "precision": 1.0,
+            "balanced_accuracy": 0.95,
+            "accuracy": 0.96,
+            "f1": 0.9473684210526316
+          }
+        },
+        "min_scene_balanced_accuracy": 0.95,
+        "macro_scene_balanced_accuracy": 0.975
+      }
+    },
+    {
+      "candidate": "depth_linear",
+      "threshold": 0.8,
+      "rank": [
+        1,
+        0.95,
+        0.975,
+        0.9583333333333333,
+        -0.0,
+        0.9166666666666666,
+        -31,
+        -0.30000000000000004,
+        0
+      ],
+      "metrics": {
+        "overall": {
+          "samples": 30,
+          "tp": 11,
+          "fn": 1,
+          "fp": 0,
+          "tn": 18,
+          "recall": 0.9166666666666666,
+          "fpr": 0.0,
+          "precision": 1.0,
+          "balanced_accuracy": 0.9583333333333333,
+          "accuracy": 0.9666666666666667,
+          "f1": 0.9565217391304348
+        },
+        "by_scene": {
+          "p004": {
+            "samples": 5,
+            "tp": 2,
+            "fn": 0,
+            "fp": 0,
+            "tn": 3,
+            "recall": 1.0,
+            "fpr": 0.0,
+            "precision": 1.0,
+            "balanced_accuracy": 1.0,
+            "accuracy": 1.0,
+            "f1": 1.0
+          },
+          "p005": {
+            "samples": 25,
+            "tp": 9,
+            "fn": 1,
+            "fp": 0,
+            "tn": 15,
+            "recall": 0.9,
+            "fpr": 0.0,
+            "precision": 1.0,
+            "balanced_accuracy": 0.95,
+            "accuracy": 0.96,
+            "f1": 0.9473684210526316
+          }
+        },
+        "min_scene_balanced_accuracy": 0.95,
+        "macro_scene_balanced_accuracy": 0.975
+      }
+    },
+    {
+      "candidate": "depth_linear",
+      "threshold": 0.85,
+      "rank": [
+        1,
+        0.95,
+        0.975,
+        0.9583333333333333,
+        -0.0,
+        0.9166666666666666,
+        -31,
+        -0.35,
+        0
+      ],
+      "metrics": {
+        "overall": {
+          "samples": 30,
+          "tp": 11,
+          "fn": 1,
+          "fp": 0,
+          "tn": 18,
+          "recall": 0.9166666666666666,
+          "fpr": 0.0,
+          "precision": 1.0,
+          "balanced_accuracy": 0.9583333333333333,
+          "accuracy": 0.9666666666666667,
+          "f1": 0.9565217391304348
+        },
+        "by_scene": {
+          "p004": {
+            "samples": 5,
+            "tp": 2,
+            "fn": 0,
+            "fp": 0,
+            "tn": 3,
+            "recall": 1.0,
+            "fpr": 0.0,
+            "precision": 1.0,
+            "balanced_accuracy": 1.0,
+            "accuracy": 1.0,
+            "f1": 1.0
+          },
+          "p005": {
+            "samples": 25,
+            "tp": 9,
+            "fn": 1,
+            "fp": 0,
+            "tn": 15,
+            "recall": 0.9,
+            "fpr": 0.0,
+            "precision": 1.0,
+            "balanced_accuracy": 0.95,
+            "accuracy": 0.96,
+            "f1": 0.9473684210526316
+          }
+        },
+        "min_scene_balanced_accuracy": 0.95,
+        "macro_scene_balanced_accuracy": 0.975
+      }
+    },
+    {
+      "candidate": "depth_linear",
+      "threshold": 0.9,
+      "rank": [
+        1,
+        0.95,
+        0.975,
+        0.9583333333333333,
+        -0.0,
+        0.9166666666666666,
+        -31,
+        -0.4,
+        0
+      ],
+      "metrics": {
+        "overall": {
+          "samples": 30,
+          "tp": 11,
+          "fn": 1,
+          "fp": 0,
+          "tn": 18,
+          "recall": 0.9166666666666666,
+          "fpr": 0.0,
+          "precision": 1.0,
+          "balanced_accuracy": 0.9583333333333333,
+          "accuracy": 0.9666666666666667,
+          "f1": 0.9565217391304348
+        },
+        "by_scene": {
+          "p004": {
+            "samples": 5,
+            "tp": 2,
+            "fn": 0,
+            "fp": 0,
+            "tn": 3,
+            "recall": 1.0,
+            "fpr": 0.0,
+            "precision": 1.0,
+            "balanced_accuracy": 1.0,
+            "accuracy": 1.0,
+            "f1": 1.0
+          },
+          "p005": {
+            "samples": 25,
+            "tp": 9,
+            "fn": 1,
+            "fp": 0,
+            "tn": 15,
+            "recall": 0.9,
+            "fpr": 0.0,
+            "precision": 1.0,
+            "balanced_accuracy": 0.95,
+            "accuracy": 0.96,
+            "f1": 0.9473684210526316
+          }
+        },
+        "min_scene_balanced_accuracy": 0.95,
+        "macro_scene_balanced_accuracy": 0.975
+      }
+    },
+    {
+      "candidate": "fusion_linear",
+      "threshold": 0.1,
+      "rank": [
+        1,
+        0.95,
+        0.975,
+        0.9583333333333333,
+        -0.0,
+        0.9166666666666666,
+        -40,
+        -0.4,
+        -1
+      ],
+      "metrics": {
+        "overall": {
+          "samples": 30,
+          "tp": 11,
+          "fn": 1,
+          "fp": 0,
+          "tn": 18,
+          "recall": 0.9166666666666666,
+          "fpr": 0.0,
+          "precision": 1.0,
+          "balanced_accuracy": 0.9583333333333333,
+          "accuracy": 0.9666666666666667,
+          "f1": 0.9565217391304348
+        },
+        "by_scene": {
+          "p004": {
+            "samples": 5,
+            "tp": 2,
+            "fn": 0,
+            "fp": 0,
+            "tn": 3,
+            "recall": 1.0,
+            "fpr": 0.0,
+            "precision": 1.0,
+            "balanced_accuracy": 1.0,
+            "accuracy": 1.0,
+            "f1": 1.0
+          },
+          "p005": {
+            "samples": 25,
+            "tp": 9,
+            "fn": 1,
+            "fp": 0,
+            "tn": 15,
+            "recall": 0.9,
+            "fpr": 0.0,
+            "precision": 1.0,
+            "balanced_accuracy": 0.95,
+            "accuracy": 0.96,
+            "f1": 0.9473684210526316
+          }
+        },
+        "min_scene_balanced_accuracy": 0.95,
+        "macro_scene_balanced_accuracy": 0.975
+      }
+    },
+    {
+      "candidate": "fusion_linear",
+      "threshold": 0.15,
+      "rank": [
+        1,
+        0.95,
+        0.975,
+        0.9583333333333333,
+        -0.0,
+        0.9166666666666666,
+        -40,
+        -0.35,
+        -1
+      ],
+      "metrics": {
+        "overall": {
+          "samples": 30,
+          "tp": 11,
+          "fn": 1,
+          "fp": 0,
+          "tn": 18,
+          "recall": 0.9166666666666666,
+          "fpr": 0.0,
+          "precision": 1.0,
+          "balanced_accuracy": 0.9583333333333333,
+          "accuracy": 0.9666666666666667,
+          "f1": 0.9565217391304348
+        },
+        "by_scene": {
+          "p004": {
+            "samples": 5,
+            "tp": 2,
+            "fn": 0,
+            "fp": 0,
+            "tn": 3,
+            "recall": 1.0,
+            "fpr": 0.0,
+            "precision": 1.0,
+            "balanced_accuracy": 1.0,
+            "accuracy": 1.0,
+            "f1": 1.0
+          },
+          "p005": {
+            "samples": 25,
+            "tp": 9,
+            "fn": 1,
+            "fp": 0,
+            "tn": 15,
+            "recall": 0.9,
+            "fpr": 0.0,
+            "precision": 1.0,
+            "balanced_accuracy": 0.95,
+            "accuracy": 0.96,
+            "f1": 0.9473684210526316
+          }
+        },
+        "min_scene_balanced_accuracy": 0.95,
+        "macro_scene_balanced_accuracy": 0.975
+      }
+    },
+    {
+      "candidate": "fusion_linear",
+      "threshold": 0.2,
+      "rank": [
+        1,
+        0.95,
+        0.975,
+        0.9583333333333333,
+        -0.0,
+        0.9166666666666666,
+        -40,
+        -0.3,
+        -1
+      ],
+      "metrics": {
+        "overall": {
+          "samples": 30,
+          "tp": 11,
+          "fn": 1,
+          "fp": 0,
+          "tn": 18,
+          "recall": 0.9166666666666666,
+          "fpr": 0.0,
+          "precision": 1.0,
+          "balanced_accuracy": 0.9583333333333333,
+          "accuracy": 0.9666666666666667,
+          "f1": 0.9565217391304348
+        },
+        "by_scene": {
+          "p004": {
+            "samples": 5,
+            "tp": 2,
+            "fn": 0,
+            "fp": 0,
+            "tn": 3,
+            "recall": 1.0,
+            "fpr": 0.0,
+            "precision": 1.0,
+            "balanced_accuracy": 1.0,
+            "accuracy": 1.0,
+            "f1": 1.0
+          },
+          "p005": {
+            "samples": 25,
+            "tp": 9,
+            "fn": 1,
+            "fp": 0,
+            "tn": 15,
+            "recall": 0.9,
+            "fpr": 0.0,
+            "precision": 1.0,
+            "balanced_accuracy": 0.95,
+            "accuracy": 0.96,
+            "f1": 0.9473684210526316
+          }
+        },
+        "min_scene_balanced_accuracy": 0.95,
+        "macro_scene_balanced_accuracy": 0.975
+      }
+    },
+    {
+      "candidate": "fusion_linear",
+      "threshold": 0.25,
+      "rank": [
+        1,
+        0.95,
+        0.975,
+        0.9583333333333333,
+        -0.0,
+        0.9166666666666666,
+        -40,
+        -0.25,
+        -1
+      ],
+      "metrics": {
+        "overall": {
+          "samples": 30,
+          "tp": 11,
+          "fn": 1,
+          "fp": 0,
+          "tn": 18,
+          "recall": 0.9166666666666666,
+          "fpr": 0.0,
+          "precision": 1.0,
+          "balanced_accuracy": 0.9583333333333333,
+          "accuracy": 0.9666666666666667,
+          "f1": 0.9565217391304348
+        },
+        "by_scene": {
+          "p004": {
+            "samples": 5,
+            "tp": 2,
+            "fn": 0,
+            "fp": 0,
+            "tn": 3,
+            "recall": 1.0,
+            "fpr": 0.0,
+            "precision": 1.0,
+            "balanced_accuracy": 1.0,
+            "accuracy": 1.0,
+            "f1": 1.0
+          },
+          "p005": {
+            "samples": 25,
+            "tp": 9,
+            "fn": 1,
+            "fp": 0,
+            "tn": 15,
+            "recall": 0.9,
+            "fpr": 0.0,
+            "precision": 1.0,
+            "balanced_accuracy": 0.95,
+            "accuracy": 0.96,
+            "f1": 0.9473684210526316
+          }
+        },
+        "min_scene_balanced_accuracy": 0.95,
+        "macro_scene_balanced_accuracy": 0.975
+      }
+    },
+    {
+      "candidate": "fusion_linear",
+      "threshold": 0.3,
+      "rank": [
+        1,
+        0.95,
+        0.975,
+        0.9583333333333333,
+        -0.0,
+        0.9166666666666666,
+        -40,
+        -0.2,
+        -1
+      ],
+      "metrics": {
+        "overall": {
+          "samples": 30,
+          "tp": 11,
+          "fn": 1,
+          "fp": 0,
+          "tn": 18,
+          "recall": 0.9166666666666666,
+          "fpr": 0.0,
+          "precision": 1.0,
+          "balanced_accuracy": 0.9583333333333333,
+          "accuracy": 0.9666666666666667,
+          "f1": 0.9565217391304348
+        },
+        "by_scene": {
+          "p004": {
+            "samples": 5,
+            "tp": 2,
+            "fn": 0,
+            "fp": 0,
+            "tn": 3,
+            "recall": 1.0,
+            "fpr": 0.0,
+            "precision": 1.0,
+            "balanced_accuracy": 1.0,
+            "accuracy": 1.0,
+            "f1": 1.0
+          },
+          "p005": {
+            "samples": 25,
+            "tp": 9,
+            "fn": 1,
+            "fp": 0,
+            "tn": 15,
+            "recall": 0.9,
+            "fpr": 0.0,
+            "precision": 1.0,
+            "balanced_accuracy": 0.95,
+            "accuracy": 0.96,
+            "f1": 0.9473684210526316
+          }
+        },
+        "min_scene_balanced_accuracy": 0.95,
+        "macro_scene_balanced_accuracy": 0.975
+      }
+    },
+    {
+      "candidate": "fusion_linear",
+      "threshold": 0.35,
+      "rank": [
+        1,
+        0.95,
+        0.975,
+        0.9583333333333333,
+        -0.0,
+        0.9166666666666666,
+        -40,
+        -0.15000000000000002,
+        -1
+      ],
+      "metrics": {
+        "overall": {
+          "samples": 30,
+          "tp": 11,
+          "fn": 1,
+          "fp": 0,
+          "tn": 18,
+          "recall": 0.9166666666666666,
+          "fpr": 0.0,
+          "precision": 1.0,
+          "balanced_accuracy": 0.9583333333333333,
+          "accuracy": 0.9666666666666667,
+          "f1": 0.9565217391304348
+        },
+        "by_scene": {
+          "p004": {
+            "samples": 5,
+            "tp": 2,
+            "fn": 0,
+            "fp": 0,
+            "tn": 3,
+            "recall": 1.0,
+            "fpr": 0.0,
+            "precision": 1.0,
+            "balanced_accuracy": 1.0,
+            "accuracy": 1.0,
+            "f1": 1.0
+          },
+          "p005": {
+            "samples": 25,
+            "tp": 9,
+            "fn": 1,
+            "fp": 0,
+            "tn": 15,
+            "recall": 0.9,
+            "fpr": 0.0,
+            "precision": 1.0,
+            "balanced_accuracy": 0.95,
+            "accuracy": 0.96,
+            "f1": 0.9473684210526316
+          }
+        },
+        "min_scene_balanced_accuracy": 0.95,
+        "macro_scene_balanced_accuracy": 0.975
+      }
+    },
+    {
+      "candidate": "fusion_linear",
+      "threshold": 0.4,
+      "rank": [
+        1,
+        0.95,
+        0.975,
+        0.9583333333333333,
+        -0.0,
+        0.9166666666666666,
+        -40,
+        -0.09999999999999998,
+        -1
+      ],
+      "metrics": {
+        "overall": {
+          "samples": 30,
+          "tp": 11,
+          "fn": 1,
+          "fp": 0,
+          "tn": 18,
+          "recall": 0.9166666666666666,
+          "fpr": 0.0,
+          "precision": 1.0,
+          "balanced_accuracy": 0.9583333333333333,
+          "accuracy": 0.9666666666666667,
+          "f1": 0.9565217391304348
+        },
+        "by_scene": {
+          "p004": {
+            "samples": 5,
+            "tp": 2,
+            "fn": 0,
+            "fp": 0,
+            "tn": 3,
+            "recall": 1.0,
+            "fpr": 0.0,
+            "precision": 1.0,
+            "balanced_accuracy": 1.0,
+            "accuracy": 1.0,
+            "f1": 1.0
+          },
+          "p005": {
+            "samples": 25,
+            "tp": 9,
+            "fn": 1,
+            "fp": 0,
+            "tn": 15,
+            "recall": 0.9,
+            "fpr": 0.0,
+            "precision": 1.0,
+            "balanced_accuracy": 0.95,
+            "accuracy": 0.96,
+            "f1": 0.9473684210526316
+          }
+        },
+        "min_scene_balanced_accuracy": 0.95,
+        "macro_scene_balanced_accuracy": 0.975
+      }
+    },
+    {
+      "candidate": "fusion_linear",
+      "threshold": 0.45,
+      "rank": [
+        1,
+        0.95,
+        0.975,
+        0.9583333333333333,
+        -0.0,
+        0.9166666666666666,
+        -40,
+        -0.04999999999999999,
+        -1
+      ],
+      "metrics": {
+        "overall": {
+          "samples": 30,
+          "tp": 11,
+          "fn": 1,
+          "fp": 0,
+          "tn": 18,
+          "recall": 0.9166666666666666,
+          "fpr": 0.0,
+          "precision": 1.0,
+          "balanced_accuracy": 0.9583333333333333,
+          "accuracy": 0.9666666666666667,
+          "f1": 0.9565217391304348
+        },
+        "by_scene": {
+          "p004": {
+            "samples": 5,
+            "tp": 2,
+            "fn": 0,
+            "fp": 0,
+            "tn": 3,
+            "recall": 1.0,
+            "fpr": 0.0,
+            "precision": 1.0,
+            "balanced_accuracy": 1.0,
+            "accuracy": 1.0,
+            "f1": 1.0
+          },
+          "p005": {
+            "samples": 25,
+            "tp": 9,
+            "fn": 1,
+            "fp": 0,
+            "tn": 15,
+            "recall": 0.9,
+            "fpr": 0.0,
+            "precision": 1.0,
+            "balanced_accuracy": 0.95,
+            "accuracy": 0.96,
+            "f1": 0.9473684210526316
+          }
+        },
+        "min_scene_balanced_accuracy": 0.95,
+        "macro_scene_balanced_accuracy": 0.975
+      }
+    },
+    {
+      "candidate": "fusion_linear",
+      "threshold": 0.5,
+      "rank": [
+        1,
+        0.95,
+        0.975,
+        0.9583333333333333,
+        -0.0,
+        0.9166666666666666,
+        -40,
+        -0.0,
+        -1
+      ],
+      "metrics": {
+        "overall": {
+          "samples": 30,
+          "tp": 11,
+          "fn": 1,
+          "fp": 0,
+          "tn": 18,
+          "recall": 0.9166666666666666,
+          "fpr": 0.0,
+          "precision": 1.0,
+          "balanced_accuracy": 0.9583333333333333,
+          "accuracy": 0.9666666666666667,
+          "f1": 0.9565217391304348
+        },
+        "by_scene": {
+          "p004": {
+            "samples": 5,
+            "tp": 2,
+            "fn": 0,
+            "fp": 0,
+            "tn": 3,
+            "recall": 1.0,
+            "fpr": 0.0,
+            "precision": 1.0,
+            "balanced_accuracy": 1.0,
+            "accuracy": 1.0,
+            "f1": 1.0
+          },
+          "p005": {
+            "samples": 25,
+            "tp": 9,
+            "fn": 1,
+            "fp": 0,
+            "tn": 15,
+            "recall": 0.9,
+            "fpr": 0.0,
+            "precision": 1.0,
+            "balanced_accuracy": 0.95,
+            "accuracy": 0.96,
+            "f1": 0.9473684210526316
+          }
+        },
+        "min_scene_balanced_accuracy": 0.95,
+        "macro_scene_balanced_accuracy": 0.975
+      }
+    },
+    {
+      "candidate": "fusion_linear",
+      "threshold": 0.55,
+      "rank": [
+        1,
+        0.95,
+        0.975,
+        0.9583333333333333,
+        -0.0,
+        0.9166666666666666,
+        -40,
+        -0.050000000000000044,
+        -1
+      ],
+      "metrics": {
+        "overall": {
+          "samples": 30,
+          "tp": 11,
+          "fn": 1,
+          "fp": 0,
+          "tn": 18,
+          "recall": 0.9166666666666666,
+          "fpr": 0.0,
+          "precision": 1.0,
+          "balanced_accuracy": 0.9583333333333333,
+          "accuracy": 0.9666666666666667,
+          "f1": 0.9565217391304348
+        },
+        "by_scene": {
+          "p004": {
+            "samples": 5,
+            "tp": 2,
+            "fn": 0,
+            "fp": 0,
+            "tn": 3,
+            "recall": 1.0,
+            "fpr": 0.0,
+            "precision": 1.0,
+            "balanced_accuracy": 1.0,
+            "accuracy": 1.0,
+            "f1": 1.0
+          },
+          "p005": {
+            "samples": 25,
+            "tp": 9,
+            "fn": 1,
+            "fp": 0,
+            "tn": 15,
+            "recall": 0.9,
+            "fpr": 0.0,
+            "precision": 1.0,
+            "balanced_accuracy": 0.95,
+            "accuracy": 0.96,
+            "f1": 0.9473684210526316
+          }
+        },
+        "min_scene_balanced_accuracy": 0.95,
+        "macro_scene_balanced_accuracy": 0.975
+      }
+    },
+    {
+      "candidate": "fusion_linear",
+      "threshold": 0.6,
+      "rank": [
+        1,
+        0.95,
+        0.975,
+        0.9583333333333333,
+        -0.0,
+        0.9166666666666666,
+        -40,
+        -0.09999999999999998,
+        -1
+      ],
+      "metrics": {
+        "overall": {
+          "samples": 30,
+          "tp": 11,
+          "fn": 1,
+          "fp": 0,
+          "tn": 18,
+          "recall": 0.9166666666666666,
+          "fpr": 0.0,
+          "precision": 1.0,
+          "balanced_accuracy": 0.9583333333333333,
+          "accuracy": 0.9666666666666667,
+          "f1": 0.9565217391304348
+        },
+        "by_scene": {
+          "p004": {
+            "samples": 5,
+            "tp": 2,
+            "fn": 0,
+            "fp": 0,
+            "tn": 3,
+            "recall": 1.0,
+            "fpr": 0.0,
+            "precision": 1.0,
+            "balanced_accuracy": 1.0,
+            "accuracy": 1.0,
+            "f1": 1.0
+          },
+          "p005": {
+            "samples": 25,
+            "tp": 9,
+            "fn": 1,
+            "fp": 0,
+            "tn": 15,
+            "recall": 0.9,
+            "fpr": 0.0,
+            "precision": 1.0,
+            "balanced_accuracy": 0.95,
+            "accuracy": 0.96,
+            "f1": 0.9473684210526316
+          }
+        },
+        "min_scene_balanced_accuracy": 0.95,
+        "macro_scene_balanced_accuracy": 0.975
+      }
+    },
+    {
+      "candidate": "fusion_linear",
+      "threshold": 0.65,
+      "rank": [
+        1,
+        0.95,
+        0.975,
+        0.9583333333333333,
+        -0.0,
+        0.9166666666666666,
+        -40,
+        -0.15000000000000002,
+        -1
+      ],
+      "metrics": {
+        "overall": {
+          "samples": 30,
+          "tp": 11,
+          "fn": 1,
+          "fp": 0,
+          "tn": 18,
+          "recall": 0.9166666666666666,
+          "fpr": 0.0,
+          "precision": 1.0,
+          "balanced_accuracy": 0.9583333333333333,
+          "accuracy": 0.9666666666666667,
+          "f1": 0.9565217391304348
+        },
+        "by_scene": {
+          "p004": {
+            "samples": 5,
+            "tp": 2,
+            "fn": 0,
+            "fp": 0,
+            "tn": 3,
+            "recall": 1.0,
+            "fpr": 0.0,
+            "precision": 1.0,
+            "balanced_accuracy": 1.0,
+            "accuracy": 1.0,
+            "f1": 1.0
+          },
+          "p005": {
+            "samples": 25,
+            "tp": 9,
+            "fn": 1,
+            "fp": 0,
+            "tn": 15,
+            "recall": 0.9,
+            "fpr": 0.0,
+            "precision": 1.0,
+            "balanced_accuracy": 0.95,
+            "accuracy": 0.96,
+            "f1": 0.9473684210526316
+          }
+        },
+        "min_scene_balanced_accuracy": 0.95,
+        "macro_scene_balanced_accuracy": 0.975
+      }
+    },
+    {
+      "candidate": "fusion_linear",
+      "threshold": 0.7,
+      "rank": [
+        1,
+        0.95,
+        0.975,
+        0.9583333333333333,
+        -0.0,
+        0.9166666666666666,
+        -40,
+        -0.19999999999999996,
+        -1
+      ],
+      "metrics": {
+        "overall": {
+          "samples": 30,
+          "tp": 11,
+          "fn": 1,
+          "fp": 0,
+          "tn": 18,
+          "recall": 0.9166666666666666,
+          "fpr": 0.0,
+          "precision": 1.0,
+          "balanced_accuracy": 0.9583333333333333,
+          "accuracy": 0.9666666666666667,
+          "f1": 0.9565217391304348
+        },
+        "by_scene": {
+          "p004": {
+            "samples": 5,
+            "tp": 2,
+            "fn": 0,
+            "fp": 0,
+            "tn": 3,
+            "recall": 1.0,
+            "fpr": 0.0,
+            "precision": 1.0,
+            "balanced_accuracy": 1.0,
+            "accuracy": 1.0,
+            "f1": 1.0
+          },
+          "p005": {
+            "samples": 25,
+            "tp": 9,
+            "fn": 1,
+            "fp": 0,
+            "tn": 15,
+            "recall": 0.9,
+            "fpr": 0.0,
+            "precision": 1.0,
+            "balanced_accuracy": 0.95,
+            "accuracy": 0.96,
+            "f1": 0.9473684210526316
+          }
+        },
+        "min_scene_balanced_accuracy": 0.95,
+        "macro_scene_balanced_accuracy": 0.975
+      }
+    },
+    {
+      "candidate": "fusion_linear",
+      "threshold": 0.75,
+      "rank": [
+        1,
+        0.95,
+        0.975,
+        0.9583333333333333,
+        -0.0,
+        0.9166666666666666,
+        -40,
+        -0.25,
+        -1
+      ],
+      "metrics": {
+        "overall": {
+          "samples": 30,
+          "tp": 11,
+          "fn": 1,
+          "fp": 0,
+          "tn": 18,
+          "recall": 0.9166666666666666,
+          "fpr": 0.0,
+          "precision": 1.0,
+          "balanced_accuracy": 0.9583333333333333,
+          "accuracy": 0.9666666666666667,
+          "f1": 0.9565217391304348
+        },
+        "by_scene": {
+          "p004": {
+            "samples": 5,
+            "tp": 2,
+            "fn": 0,
+            "fp": 0,
+            "tn": 3,
+            "recall": 1.0,
+            "fpr": 0.0,
+            "precision": 1.0,
+            "balanced_accuracy": 1.0,
+            "accuracy": 1.0,
+            "f1": 1.0
+          },
+          "p005": {
+            "samples": 25,
+            "tp": 9,
+            "fn": 1,
+            "fp": 0,
+            "tn": 15,
+            "recall": 0.9,
+            "fpr": 0.0,
+            "precision": 1.0,
+            "balanced_accuracy": 0.95,
+            "accuracy": 0.96,
+            "f1": 0.9473684210526316
+          }
+        },
+        "min_scene_balanced_accuracy": 0.95,
+        "macro_scene_balanced_accuracy": 0.975
+      }
+    },
+    {
+      "candidate": "fusion_linear",
+      "threshold": 0.8,
+      "rank": [
+        1,
+        0.95,
+        0.975,
+        0.9583333333333333,
+        -0.0,
+        0.9166666666666666,
+        -40,
+        -0.30000000000000004,
+        -1
+      ],
+      "metrics": {
+        "overall": {
+          "samples": 30,
+          "tp": 11,
+          "fn": 1,
+          "fp": 0,
+          "tn": 18,
+          "recall": 0.9166666666666666,
+          "fpr": 0.0,
+          "precision": 1.0,
+          "balanced_accuracy": 0.9583333333333333,
+          "accuracy": 0.9666666666666667,
+          "f1": 0.9565217391304348
+        },
+        "by_scene": {
+          "p004": {
+            "samples": 5,
+            "tp": 2,
+            "fn": 0,
+            "fp": 0,
+            "tn": 3,
+            "recall": 1.0,
+            "fpr": 0.0,
+            "precision": 1.0,
+            "balanced_accuracy": 1.0,
+            "accuracy": 1.0,
+            "f1": 1.0
+          },
+          "p005": {
+            "samples": 25,
+            "tp": 9,
+            "fn": 1,
+            "fp": 0,
+            "tn": 15,
+            "recall": 0.9,
+            "fpr": 0.0,
+            "precision": 1.0,
+            "balanced_accuracy": 0.95,
+            "accuracy": 0.96,
+            "f1": 0.9473684210526316
+          }
+        },
+        "min_scene_balanced_accuracy": 0.95,
+        "macro_scene_balanced_accuracy": 0.975
+      }
+    },
+    {
+      "candidate": "fusion_linear",
+      "threshold": 0.85,
+      "rank": [
+        1,
+        0.95,
+        0.975,
+        0.9583333333333333,
+        -0.0,
+        0.9166666666666666,
+        -40,
+        -0.35,
+        -1
+      ],
+      "metrics": {
+        "overall": {
+          "samples": 30,
+          "tp": 11,
+          "fn": 1,
+          "fp": 0,
+          "tn": 18,
+          "recall": 0.9166666666666666,
+          "fpr": 0.0,
+          "precision": 1.0,
+          "balanced_accuracy": 0.9583333333333333,
+          "accuracy": 0.9666666666666667,
+          "f1": 0.9565217391304348
+        },
+        "by_scene": {
+          "p004": {
+            "samples": 5,
+            "tp": 2,
+            "fn": 0,
+            "fp": 0,
+            "tn": 3,
+            "recall": 1.0,
+            "fpr": 0.0,
+            "precision": 1.0,
+            "balanced_accuracy": 1.0,
+            "accuracy": 1.0,
+            "f1": 1.0
+          },
+          "p005": {
+            "samples": 25,
+            "tp": 9,
+            "fn": 1,
+            "fp": 0,
+            "tn": 15,
+            "recall": 0.9,
+            "fpr": 0.0,
+            "precision": 1.0,
+            "balanced_accuracy": 0.95,
+            "accuracy": 0.96,
+            "f1": 0.9473684210526316
+          }
+        },
+        "min_scene_balanced_accuracy": 0.95,
+        "macro_scene_balanced_accuracy": 0.975
+      }
+    },
+    {
+      "candidate": "fusion_linear",
+      "threshold": 0.9,
+      "rank": [
+        1,
+        0.95,
+        0.975,
+        0.9583333333333333,
+        -0.0,
+        0.9166666666666666,
+        -40,
+        -0.4,
+        -1
+      ],
+      "metrics": {
+        "overall": {
+          "samples": 30,
+          "tp": 11,
+          "fn": 1,
+          "fp": 0,
+          "tn": 18,
+          "recall": 0.9166666666666666,
+          "fpr": 0.0,
+          "precision": 1.0,
+          "balanced_accuracy": 0.9583333333333333,
+          "accuracy": 0.9666666666666667,
+          "f1": 0.9565217391304348
+        },
+        "by_scene": {
+          "p004": {
+            "samples": 5,
+            "tp": 2,
+            "fn": 0,
+            "fp": 0,
+            "tn": 3,
+            "recall": 1.0,
+            "fpr": 0.0,
+            "precision": 1.0,
+            "balanced_accuracy": 1.0,
+            "accuracy": 1.0,
+            "f1": 1.0
+          },
+          "p005": {
+            "samples": 25,
+            "tp": 9,
+            "fn": 1,
+            "fp": 0,
+            "tn": 15,
+            "recall": 0.9,
+            "fpr": 0.0,
+            "precision": 1.0,
+            "balanced_accuracy": 0.95,
+            "accuracy": 0.96,
+            "f1": 0.9473684210526316
+          }
+        },
+        "min_scene_balanced_accuracy": 0.95,
+        "macro_scene_balanced_accuracy": 0.975
+      }
+    },
+    {
+      "candidate": "depth_mlp16",
+      "threshold": 0.1,
+      "rank": [
+        1,
+        0.95,
+        0.975,
+        0.9583333333333333,
+        -0.0,
+        0.9166666666666666,
+        -513,
+        -0.4,
+        -2
+      ],
+      "metrics": {
+        "overall": {
+          "samples": 30,
+          "tp": 11,
+          "fn": 1,
+          "fp": 0,
+          "tn": 18,
+          "recall": 0.9166666666666666,
+          "fpr": 0.0,
+          "precision": 1.0,
+          "balanced_accuracy": 0.9583333333333333,
+          "accuracy": 0.9666666666666667,
+          "f1": 0.9565217391304348
+        },
+        "by_scene": {
+          "p004": {
+            "samples": 5,
+            "tp": 2,
+            "fn": 0,
+            "fp": 0,
+            "tn": 3,
+            "recall": 1.0,
+            "fpr": 0.0,
+            "precision": 1.0,
+            "balanced_accuracy": 1.0,
+            "accuracy": 1.0,
+            "f1": 1.0
+          },
+          "p005": {
+            "samples": 25,
+            "tp": 9,
+            "fn": 1,
+            "fp": 0,
+            "tn": 15,
+            "recall": 0.9,
+            "fpr": 0.0,
+            "precision": 1.0,
+            "balanced_accuracy": 0.95,
+            "accuracy": 0.96,
+            "f1": 0.9473684210526316
+          }
+        },
+        "min_scene_balanced_accuracy": 0.95,
+        "macro_scene_balanced_accuracy": 0.975
+      }
+    },
+    {
+      "candidate": "depth_mlp16",
+      "threshold": 0.15,
+      "rank": [
+        1,
+        0.95,
+        0.975,
+        0.9583333333333333,
+        -0.0,
+        0.9166666666666666,
+        -513,
+        -0.35,
+        -2
+      ],
+      "metrics": {
+        "overall": {
+          "samples": 30,
+          "tp": 11,
+          "fn": 1,
+          "fp": 0,
+          "tn": 18,
+          "recall": 0.9166666666666666,
+          "fpr": 0.0,
+          "precision": 1.0,
+          "balanced_accuracy": 0.9583333333333333,
+          "accuracy": 0.9666666666666667,
+          "f1": 0.9565217391304348
+        },
+        "by_scene": {
+          "p004": {
+            "samples": 5,
+            "tp": 2,
+            "fn": 0,
+            "fp": 0,
+            "tn": 3,
+            "recall": 1.0,
+            "fpr": 0.0,
+            "precision": 1.0,
+            "balanced_accuracy": 1.0,
+            "accuracy": 1.0,
+            "f1": 1.0
+          },
+          "p005": {
+            "samples": 25,
+            "tp": 9,
+            "fn": 1,
+            "fp": 0,
+            "tn": 15,
+            "recall": 0.9,
+            "fpr": 0.0,
+            "precision": 1.0,
+            "balanced_accuracy": 0.95,
+            "accuracy": 0.96,
+            "f1": 0.9473684210526316
+          }
+        },
+        "min_scene_balanced_accuracy": 0.95,
+        "macro_scene_balanced_accuracy": 0.975
+      }
+    },
+    {
+      "candidate": "depth_mlp16",
+      "threshold": 0.2,
+      "rank": [
+        1,
+        0.95,
+        0.975,
+        0.9583333333333333,
+        -0.0,
+        0.9166666666666666,
+        -513,
+        -0.3,
+        -2
+      ],
+      "metrics": {
+        "overall": {
+          "samples": 30,
+          "tp": 11,
+          "fn": 1,
+          "fp": 0,
+          "tn": 18,
+          "recall": 0.9166666666666666,
+          "fpr": 0.0,
+          "precision": 1.0,
+          "balanced_accuracy": 0.9583333333333333,
+          "accuracy": 0.9666666666666667,
+          "f1": 0.9565217391304348
+        },
+        "by_scene": {
+          "p004": {
+            "samples": 5,
+            "tp": 2,
+            "fn": 0,
+            "fp": 0,
+            "tn": 3,
+            "recall": 1.0,
+            "fpr": 0.0,
+            "precision": 1.0,
+            "balanced_accuracy": 1.0,
+            "accuracy": 1.0,
+            "f1": 1.0
+          },
+          "p005": {
+            "samples": 25,
+            "tp": 9,
+            "fn": 1,
+            "fp": 0,
+            "tn": 15,
+            "recall": 0.9,
+            "fpr": 0.0,
+            "precision": 1.0,
+            "balanced_accuracy": 0.95,
+            "accuracy": 0.96,
+            "f1": 0.9473684210526316
+          }
+        },
+        "min_scene_balanced_accuracy": 0.95,
+        "macro_scene_balanced_accuracy": 0.975
+      }
+    },
+    {
+      "candidate": "depth_mlp16",
+      "threshold": 0.25,
+      "rank": [
+        1,
+        0.95,
+        0.975,
+        0.9583333333333333,
+        -0.0,
+        0.9166666666666666,
+        -513,
+        -0.25,
+        -2
+      ],
+      "metrics": {
+        "overall": {
+          "samples": 30,
+          "tp": 11,
+          "fn": 1,
+          "fp": 0,
+          "tn": 18,
+          "recall": 0.9166666666666666,
+          "fpr": 0.0,
+          "precision": 1.0,
+          "balanced_accuracy": 0.9583333333333333,
+          "accuracy": 0.9666666666666667,
+          "f1": 0.9565217391304348
+        },
+        "by_scene": {
+          "p004": {
+            "samples": 5,
+            "tp": 2,
+            "fn": 0,
+            "fp": 0,
+            "tn": 3,
+            "recall": 1.0,
+            "fpr": 0.0,
+            "precision": 1.0,
+            "balanced_accuracy": 1.0,
+            "accuracy": 1.0,
+            "f1": 1.0
+          },
+          "p005": {
+            "samples": 25,
+            "tp": 9,
+            "fn": 1,
+            "fp": 0,
+            "tn": 15,
+            "recall": 0.9,
+            "fpr": 0.0,
+            "precision": 1.0,
+            "balanced_accuracy": 0.95,
+            "accuracy": 0.96,
+            "f1": 0.9473684210526316
+          }
+        },
+        "min_scene_balanced_accuracy": 0.95,
+        "macro_scene_balanced_accuracy": 0.975
+      }
+    },
+    {
+      "candidate": "depth_mlp16",
+      "threshold": 0.3,
+      "rank": [
+        1,
+        0.95,
+        0.975,
+        0.9583333333333333,
+        -0.0,
+        0.9166666666666666,
+        -513,
+        -0.2,
+        -2
+      ],
+      "metrics": {
+        "overall": {
+          "samples": 30,
+          "tp": 11,
+          "fn": 1,
+          "fp": 0,
+          "tn": 18,
+          "recall": 0.9166666666666666,
+          "fpr": 0.0,
+          "precision": 1.0,
+          "balanced_accuracy": 0.9583333333333333,
+          "accuracy": 0.9666666666666667,
+          "f1": 0.9565217391304348
+        },
+        "by_scene": {
+          "p004": {
+            "samples": 5,
+            "tp": 2,
+            "fn": 0,
+            "fp": 0,
+            "tn": 3,
+            "recall": 1.0,
+            "fpr": 0.0,
+            "precision": 1.0,
+            "balanced_accuracy": 1.0,
+            "accuracy": 1.0,
+            "f1": 1.0
+          },
+          "p005": {
+            "samples": 25,
+            "tp": 9,
+            "fn": 1,
+            "fp": 0,
+            "tn": 15,
+            "recall": 0.9,
+            "fpr": 0.0,
+            "precision": 1.0,
+            "balanced_accuracy": 0.95,
+            "accuracy": 0.96,
+            "f1": 0.9473684210526316
+          }
+        },
+        "min_scene_balanced_accuracy": 0.95,
+        "macro_scene_balanced_accuracy": 0.975
+      }
+    },
+    {
+      "candidate": "depth_mlp16",
+      "threshold": 0.35,
+      "rank": [
+        1,
+        0.95,
+        0.975,
+        0.9583333333333333,
+        -0.0,
+        0.9166666666666666,
+        -513,
+        -0.15000000000000002,
+        -2
+      ],
+      "metrics": {
+        "overall": {
+          "samples": 30,
+          "tp": 11,
+          "fn": 1,
+          "fp": 0,
+          "tn": 18,
+          "recall": 0.9166666666666666,
+          "fpr": 0.0,
+          "precision": 1.0,
+          "balanced_accuracy": 0.9583333333333333,
+          "accuracy": 0.9666666666666667,
+          "f1": 0.9565217391304348
+        },
+        "by_scene": {
+          "p004": {
+            "samples": 5,
+            "tp": 2,
+            "fn": 0,
+            "fp": 0,
+            "tn": 3,
+            "recall": 1.0,
+            "fpr": 0.0,
+            "precision": 1.0,
+            "balanced_accuracy": 1.0,
+            "accuracy": 1.0,
+            "f1": 1.0
+          },
+          "p005": {
+            "samples": 25,
+            "tp": 9,
+            "fn": 1,
+            "fp": 0,
+            "tn": 15,
+            "recall": 0.9,
+            "fpr": 0.0,
+            "precision": 1.0,
+            "balanced_accuracy": 0.95,
+            "accuracy": 0.96,
+            "f1": 0.9473684210526316
+          }
+        },
+        "min_scene_balanced_accuracy": 0.95,
+        "macro_scene_balanced_accuracy": 0.975
+      }
+    },
+    {
+      "candidate": "depth_mlp16",
+      "threshold": 0.4,
+      "rank": [
+        1,
+        0.95,
+        0.975,
+        0.9583333333333333,
+        -0.0,
+        0.9166666666666666,
+        -513,
+        -0.09999999999999998,
+        -2
+      ],
+      "metrics": {
+        "overall": {
+          "samples": 30,
+          "tp": 11,
+          "fn": 1,
+          "fp": 0,
+          "tn": 18,
+          "recall": 0.9166666666666666,
+          "fpr": 0.0,
+          "precision": 1.0,
+          "balanced_accuracy": 0.9583333333333333,
+          "accuracy": 0.9666666666666667,
+          "f1": 0.9565217391304348
+        },
+        "by_scene": {
+          "p004": {
+            "samples": 5,
+            "tp": 2,
+            "fn": 0,
+            "fp": 0,
+            "tn": 3,
+            "recall": 1.0,
+            "fpr": 0.0,
+            "precision": 1.0,
+            "balanced_accuracy": 1.0,
+            "accuracy": 1.0,
+            "f1": 1.0
+          },
+          "p005": {
+            "samples": 25,
+            "tp": 9,
+            "fn": 1,
+            "fp": 0,
+            "tn": 15,
+            "recall": 0.9,
+            "fpr": 0.0,
+            "precision": 1.0,
+            "balanced_accuracy": 0.95,
+            "accuracy": 0.96,
+            "f1": 0.9473684210526316
+          }
+        },
+        "min_scene_balanced_accuracy": 0.95,
+        "macro_scene_balanced_accuracy": 0.975
+      }
+    },
+    {
+      "candidate": "depth_mlp16",
+      "threshold": 0.45,
+      "rank": [
+        1,
+        0.95,
+        0.975,
+        0.9583333333333333,
+        -0.0,
+        0.9166666666666666,
+        -513,
+        -0.04999999999999999,
+        -2
+      ],
+      "metrics": {
+        "overall": {
+          "samples": 30,
+          "tp": 11,
+          "fn": 1,
+          "fp": 0,
+          "tn": 18,
+          "recall": 0.9166666666666666,
+          "fpr": 0.0,
+          "precision": 1.0,
+          "balanced_accuracy": 0.9583333333333333,
+          "accuracy": 0.9666666666666667,
+          "f1": 0.9565217391304348
+        },
+        "by_scene": {
+          "p004": {
+            "samples": 5,
+            "tp": 2,
+            "fn": 0,
+            "fp": 0,
+            "tn": 3,
+            "recall": 1.0,
+            "fpr": 0.0,
+            "precision": 1.0,
+            "balanced_accuracy": 1.0,
+            "accuracy": 1.0,
+            "f1": 1.0
+          },
+          "p005": {
+            "samples": 25,
+            "tp": 9,
+            "fn": 1,
+            "fp": 0,
+            "tn": 15,
+            "recall": 0.9,
+            "fpr": 0.0,
+            "precision": 1.0,
+            "balanced_accuracy": 0.95,
+            "accuracy": 0.96,
+            "f1": 0.9473684210526316
+          }
+        },
+        "min_scene_balanced_accuracy": 0.95,
+        "macro_scene_balanced_accuracy": 0.975
+      }
+    },
+    {
+      "candidate": "depth_mlp16",
+      "threshold": 0.5,
+      "rank": [
+        1,
+        0.95,
+        0.975,
+        0.9583333333333333,
+        -0.0,
+        0.9166666666666666,
+        -513,
+        -0.0,
+        -2
+      ],
+      "metrics": {
+        "overall": {
+          "samples": 30,
+          "tp": 11,
+          "fn": 1,
+          "fp": 0,
+          "tn": 18,
+          "recall": 0.9166666666666666,
+          "fpr": 0.0,
+          "precision": 1.0,
+          "balanced_accuracy": 0.9583333333333333,
+          "accuracy": 0.9666666666666667,
+          "f1": 0.9565217391304348
+        },
+        "by_scene": {
+          "p004": {
+            "samples": 5,
+            "tp": 2,
+            "fn": 0,
+            "fp": 0,
+            "tn": 3,
+            "recall": 1.0,
+            "fpr": 0.0,
+            "precision": 1.0,
+            "balanced_accuracy": 1.0,
+            "accuracy": 1.0,
+            "f1": 1.0
+          },
+          "p005": {
+            "samples": 25,
+            "tp": 9,
+            "fn": 1,
+            "fp": 0,
+            "tn": 15,
+            "recall": 0.9,
+            "fpr": 0.0,
+            "precision": 1.0,
+            "balanced_accuracy": 0.95,
+            "accuracy": 0.96,
+            "f1": 0.9473684210526316
+          }
+        },
+        "min_scene_balanced_accuracy": 0.95,
+        "macro_scene_balanced_accuracy": 0.975
+      }
+    },
+    {
+      "candidate": "depth_mlp16",
+      "threshold": 0.55,
+      "rank": [
+        1,
+        0.95,
+        0.975,
+        0.9583333333333333,
+        -0.0,
+        0.9166666666666666,
+        -513,
+        -0.050000000000000044,
+        -2
+      ],
+      "metrics": {
+        "overall": {
+          "samples": 30,
+          "tp": 11,
+          "fn": 1,
+          "fp": 0,
+          "tn": 18,
+          "recall": 0.9166666666666666,
+          "fpr": 0.0,
+          "precision": 1.0,
+          "balanced_accuracy": 0.9583333333333333,
+          "accuracy": 0.9666666666666667,
+          "f1": 0.9565217391304348
+        },
+        "by_scene": {
+          "p004": {
+            "samples": 5,
+            "tp": 2,
+            "fn": 0,
+            "fp": 0,
+            "tn": 3,
+            "recall": 1.0,
+            "fpr": 0.0,
+            "precision": 1.0,
+            "balanced_accuracy": 1.0,
+            "accuracy": 1.0,
+            "f1": 1.0
+          },
+          "p005": {
+            "samples": 25,
+            "tp": 9,
+            "fn": 1,
+            "fp": 0,
+            "tn": 15,
+            "recall": 0.9,
+            "fpr": 0.0,
+            "precision": 1.0,
+            "balanced_accuracy": 0.95,
+            "accuracy": 0.96,
+            "f1": 0.9473684210526316
+          }
+        },
+        "min_scene_balanced_accuracy": 0.95,
+        "macro_scene_balanced_accuracy": 0.975
+      }
+    },
+    {
+      "candidate": "depth_mlp16",
+      "threshold": 0.6,
+      "rank": [
+        1,
+        0.95,
+        0.975,
+        0.9583333333333333,
+        -0.0,
+        0.9166666666666666,
+        -513,
+        -0.09999999999999998,
+        -2
+      ],
+      "metrics": {
+        "overall": {
+          "samples": 30,
+          "tp": 11,
+          "fn": 1,
+          "fp": 0,
+          "tn": 18,
+          "recall": 0.9166666666666666,
+          "fpr": 0.0,
+          "precision": 1.0,
+          "balanced_accuracy": 0.9583333333333333,
+          "accuracy": 0.9666666666666667,
+          "f1": 0.9565217391304348
+        },
+        "by_scene": {
+          "p004": {
+            "samples": 5,
+            "tp": 2,
+            "fn": 0,
+            "fp": 0,
+            "tn": 3,
+            "recall": 1.0,
+            "fpr": 0.0,
+            "precision": 1.0,
+            "balanced_accuracy": 1.0,
+            "accuracy": 1.0,
+            "f1": 1.0
+          },
+          "p005": {
+            "samples": 25,
+            "tp": 9,
+            "fn": 1,
+            "fp": 0,
+            "tn": 15,
+            "recall": 0.9,
+            "fpr": 0.0,
+            "precision": 1.0,
+            "balanced_accuracy": 0.95,
+            "accuracy": 0.96,
+            "f1": 0.9473684210526316
+          }
+        },
+        "min_scene_balanced_accuracy": 0.95,
+        "macro_scene_balanced_accuracy": 0.975
+      }
+    },
+    {
+      "candidate": "depth_mlp16",
+      "threshold": 0.65,
+      "rank": [
+        1,
+        0.95,
+        0.975,
+        0.9583333333333333,
+        -0.0,
+        0.9166666666666666,
+        -513,
+        -0.15000000000000002,
+        -2
+      ],
+      "metrics": {
+        "overall": {
+          "samples": 30,
+          "tp": 11,
+          "fn": 1,
+          "fp": 0,
+          "tn": 18,
+          "recall": 0.9166666666666666,
+          "fpr": 0.0,
+          "precision": 1.0,
+          "balanced_accuracy": 0.9583333333333333,
+          "accuracy": 0.9666666666666667,
+          "f1": 0.9565217391304348
+        },
+        "by_scene": {
+          "p004": {
+            "samples": 5,
+            "tp": 2,
+            "fn": 0,
+            "fp": 0,
+            "tn": 3,
+            "recall": 1.0,
+            "fpr": 0.0,
+            "precision": 1.0,
+            "balanced_accuracy": 1.0,
+            "accuracy": 1.0,
+            "f1": 1.0
+          },
+          "p005": {
+            "samples": 25,
+            "tp": 9,
+            "fn": 1,
+            "fp": 0,
+            "tn": 15,
+            "recall": 0.9,
+            "fpr": 0.0,
+            "precision": 1.0,
+            "balanced_accuracy": 0.95,
+            "accuracy": 0.96,
+            "f1": 0.9473684210526316
+          }
+        },
+        "min_scene_balanced_accuracy": 0.95,
+        "macro_scene_balanced_accuracy": 0.975
+      }
+    },
+    {
+      "candidate": "depth_mlp16",
+      "threshold": 0.7,
+      "rank": [
+        1,
+        0.95,
+        0.975,
+        0.9583333333333333,
+        -0.0,
+        0.9166666666666666,
+        -513,
+        -0.19999999999999996,
+        -2
+      ],
+      "metrics": {
+        "overall": {
+          "samples": 30,
+          "tp": 11,
+          "fn": 1,
+          "fp": 0,
+          "tn": 18,
+          "recall": 0.9166666666666666,
+          "fpr": 0.0,
+          "precision": 1.0,
+          "balanced_accuracy": 0.9583333333333333,
+          "accuracy": 0.9666666666666667,
+          "f1": 0.9565217391304348
+        },
+        "by_scene": {
+          "p004": {
+            "samples": 5,
+            "tp": 2,
+            "fn": 0,
+            "fp": 0,
+            "tn": 3,
+            "recall": 1.0,
+            "fpr": 0.0,
+            "precision": 1.0,
+            "balanced_accuracy": 1.0,
+            "accuracy": 1.0,
+            "f1": 1.0
+          },
+          "p005": {
+            "samples": 25,
+            "tp": 9,
+            "fn": 1,
+            "fp": 0,
+            "tn": 15,
+            "recall": 0.9,
+            "fpr": 0.0,
+            "precision": 1.0,
+            "balanced_accuracy": 0.95,
+            "accuracy": 0.96,
+            "f1": 0.9473684210526316
+          }
+        },
+        "min_scene_balanced_accuracy": 0.95,
+        "macro_scene_balanced_accuracy": 0.975
+      }
+    },
+    {
+      "candidate": "depth_mlp16",
+      "threshold": 0.75,
+      "rank": [
+        1,
+        0.95,
+        0.975,
+        0.9583333333333333,
+        -0.0,
+        0.9166666666666666,
+        -513,
+        -0.25,
+        -2
+      ],
+      "metrics": {
+        "overall": {
+          "samples": 30,
+          "tp": 11,
+          "fn": 1,
+          "fp": 0,
+          "tn": 18,
+          "recall": 0.9166666666666666,
+          "fpr": 0.0,
+          "precision": 1.0,
+          "balanced_accuracy": 0.9583333333333333,
+          "accuracy": 0.9666666666666667,
+          "f1": 0.9565217391304348
+        },
+        "by_scene": {
+          "p004": {
+            "samples": 5,
+            "tp": 2,
+            "fn": 0,
+            "fp": 0,
+            "tn": 3,
+            "recall": 1.0,
+            "fpr": 0.0,
+            "precision": 1.0,
+            "balanced_accuracy": 1.0,
+            "accuracy": 1.0,
+            "f1": 1.0
+          },
+          "p005": {
+            "samples": 25,
+            "tp": 9,
+            "fn": 1,
+            "fp": 0,
+            "tn": 15,
+            "recall": 0.9,
+            "fpr": 0.0,
+            "precision": 1.0,
+            "balanced_accuracy": 0.95,
+            "accuracy": 0.96,
+            "f1": 0.9473684210526316
+          }
+        },
+        "min_scene_balanced_accuracy": 0.95,
+        "macro_scene_balanced_accuracy": 0.975
+      }
+    },
+    {
+      "candidate": "depth_mlp16",
+      "threshold": 0.8,
+      "rank": [
+        1,
+        0.95,
+        0.975,
+        0.9583333333333333,
+        -0.0,
+        0.9166666666666666,
+        -513,
+        -0.30000000000000004,
+        -2
+      ],
+      "metrics": {
+        "overall": {
+          "samples": 30,
+          "tp": 11,
+          "fn": 1,
+          "fp": 0,
+          "tn": 18,
+          "recall": 0.9166666666666666,
+          "fpr": 0.0,
+          "precision": 1.0,
+          "balanced_accuracy": 0.9583333333333333,
+          "accuracy": 0.9666666666666667,
+          "f1": 0.9565217391304348
+        },
+        "by_scene": {
+          "p004": {
+            "samples": 5,
+            "tp": 2,
+            "fn": 0,
+            "fp": 0,
+            "tn": 3,
+            "recall": 1.0,
+            "fpr": 0.0,
+            "precision": 1.0,
+            "balanced_accuracy": 1.0,
+            "accuracy": 1.0,
+            "f1": 1.0
+          },
+          "p005": {
+            "samples": 25,
+            "tp": 9,
+            "fn": 1,
+            "fp": 0,
+            "tn": 15,
+            "recall": 0.9,
+            "fpr": 0.0,
+            "precision": 1.0,
+            "balanced_accuracy": 0.95,
+            "accuracy": 0.96,
+            "f1": 0.9473684210526316
+          }
+        },
+        "min_scene_balanced_accuracy": 0.95,
+        "macro_scene_balanced_accuracy": 0.975
+      }
+    },
+    {
+      "candidate": "depth_mlp16",
+      "threshold": 0.85,
+      "rank": [
+        1,
+        0.95,
+        0.975,
+        0.9583333333333333,
+        -0.0,
+        0.9166666666666666,
+        -513,
+        -0.35,
+        -2
+      ],
+      "metrics": {
+        "overall": {
+          "samples": 30,
+          "tp": 11,
+          "fn": 1,
+          "fp": 0,
+          "tn": 18,
+          "recall": 0.9166666666666666,
+          "fpr": 0.0,
+          "precision": 1.0,
+          "balanced_accuracy": 0.9583333333333333,
+          "accuracy": 0.9666666666666667,
+          "f1": 0.9565217391304348
+        },
+        "by_scene": {
+          "p004": {
+            "samples": 5,
+            "tp": 2,
+            "fn": 0,
+            "fp": 0,
+            "tn": 3,
+            "recall": 1.0,
+            "fpr": 0.0,
+            "precision": 1.0,
+            "balanced_accuracy": 1.0,
+            "accuracy": 1.0,
+            "f1": 1.0
+          },
+          "p005": {
+            "samples": 25,
+            "tp": 9,
+            "fn": 1,
+            "fp": 0,
+            "tn": 15,
+            "recall": 0.9,
+            "fpr": 0.0,
+            "precision": 1.0,
+            "balanced_accuracy": 0.95,
+            "accuracy": 0.96,
+            "f1": 0.9473684210526316
+          }
+        },
+        "min_scene_balanced_accuracy": 0.95,
+        "macro_scene_balanced_accuracy": 0.975
+      }
+    },
+    {
+      "candidate": "depth_mlp16",
+      "threshold": 0.9,
+      "rank": [
+        1,
+        0.95,
+        0.975,
+        0.9583333333333333,
+        -0.0,
+        0.9166666666666666,
+        -513,
+        -0.4,
+        -2
+      ],
+      "metrics": {
+        "overall": {
+          "samples": 30,
+          "tp": 11,
+          "fn": 1,
+          "fp": 0,
+          "tn": 18,
+          "recall": 0.9166666666666666,
+          "fpr": 0.0,
+          "precision": 1.0,
+          "balanced_accuracy": 0.9583333333333333,
+          "accuracy": 0.9666666666666667,
+          "f1": 0.9565217391304348
+        },
+        "by_scene": {
+          "p004": {
+            "samples": 5,
+            "tp": 2,
+            "fn": 0,
+            "fp": 0,
+            "tn": 3,
+            "recall": 1.0,
+            "fpr": 0.0,
+            "precision": 1.0,
+            "balanced_accuracy": 1.0,
+            "accuracy": 1.0,
+            "f1": 1.0
+          },
+          "p005": {
+            "samples": 25,
+            "tp": 9,
+            "fn": 1,
+            "fp": 0,
+            "tn": 15,
+            "recall": 0.9,
+            "fpr": 0.0,
+            "precision": 1.0,
+            "balanced_accuracy": 0.95,
+            "accuracy": 0.96,
+            "f1": 0.9473684210526316
+          }
+        },
+        "min_scene_balanced_accuracy": 0.95,
+        "macro_scene_balanced_accuracy": 0.975
+      }
+    },
+    {
+      "candidate": "fusion_mlp16",
+      "threshold": 0.1,
+      "rank": [
+        1,
+        0.95,
+        0.975,
+        0.9583333333333333,
+        -0.0,
+        0.9166666666666666,
+        -594,
+        -0.4,
+        -3
+      ],
+      "metrics": {
+        "overall": {
+          "samples": 30,
+          "tp": 11,
+          "fn": 1,
+          "fp": 0,
+          "tn": 18,
+          "recall": 0.9166666666666666,
+          "fpr": 0.0,
+          "precision": 1.0,
+          "balanced_accuracy": 0.9583333333333333,
+          "accuracy": 0.9666666666666667,
+          "f1": 0.9565217391304348
+        },
+        "by_scene": {
+          "p004": {
+            "samples": 5,
+            "tp": 2,
+            "fn": 0,
+            "fp": 0,
+            "tn": 3,
+            "recall": 1.0,
+            "fpr": 0.0,
+            "precision": 1.0,
+            "balanced_accuracy": 1.0,
+            "accuracy": 1.0,
+            "f1": 1.0
+          },
+          "p005": {
+            "samples": 25,
+            "tp": 9,
+            "fn": 1,
+            "fp": 0,
+            "tn": 15,
+            "recall": 0.9,
+            "fpr": 0.0,
+            "precision": 1.0,
+            "balanced_accuracy": 0.95,
+            "accuracy": 0.96,
+            "f1": 0.9473684210526316
+          }
+        },
+        "min_scene_balanced_accuracy": 0.95,
+        "macro_scene_balanced_accuracy": 0.975
+      }
+    },
+    {
+      "candidate": "fusion_mlp16",
+      "threshold": 0.15,
+      "rank": [
+        1,
+        0.95,
+        0.975,
+        0.9583333333333333,
+        -0.0,
+        0.9166666666666666,
+        -594,
+        -0.35,
+        -3
+      ],
+      "metrics": {
+        "overall": {
+          "samples": 30,
+          "tp": 11,
+          "fn": 1,
+          "fp": 0,
+          "tn": 18,
+          "recall": 0.9166666666666666,
+          "fpr": 0.0,
+          "precision": 1.0,
+          "balanced_accuracy": 0.9583333333333333,
+          "accuracy": 0.9666666666666667,
+          "f1": 0.9565217391304348
+        },
+        "by_scene": {
+          "p004": {
+            "samples": 5,
+            "tp": 2,
+            "fn": 0,
+            "fp": 0,
+            "tn": 3,
+            "recall": 1.0,
+            "fpr": 0.0,
+            "precision": 1.0,
+            "balanced_accuracy": 1.0,
+            "accuracy": 1.0,
+            "f1": 1.0
+          },
+          "p005": {
+            "samples": 25,
+            "tp": 9,
+            "fn": 1,
+            "fp": 0,
+            "tn": 15,
+            "recall": 0.9,
+            "fpr": 0.0,
+            "precision": 1.0,
+            "balanced_accuracy": 0.95,
+            "accuracy": 0.96,
+            "f1": 0.9473684210526316
+          }
+        },
+        "min_scene_balanced_accuracy": 0.95,
+        "macro_scene_balanced_accuracy": 0.975
+      }
+    },
+    {
+      "candidate": "fusion_mlp16",
+      "threshold": 0.2,
+      "rank": [
+        1,
+        0.95,
+        0.975,
+        0.9583333333333333,
+        -0.0,
+        0.9166666666666666,
+        -594,
+        -0.3,
+        -3
+      ],
+      "metrics": {
+        "overall": {
+          "samples": 30,
+          "tp": 11,
+          "fn": 1,
+          "fp": 0,
+          "tn": 18,
+          "recall": 0.9166666666666666,
+          "fpr": 0.0,
+          "precision": 1.0,
+          "balanced_accuracy": 0.9583333333333333,
+          "accuracy": 0.9666666666666667,
+          "f1": 0.9565217391304348
+        },
+        "by_scene": {
+          "p004": {
+            "samples": 5,
+            "tp": 2,
+            "fn": 0,
+            "fp": 0,
+            "tn": 3,
+            "recall": 1.0,
+            "fpr": 0.0,
+            "precision": 1.0,
+            "balanced_accuracy": 1.0,
+            "accuracy": 1.0,
+            "f1": 1.0
+          },
+          "p005": {
+            "samples": 25,
+            "tp": 9,
+            "fn": 1,
+            "fp": 0,
+            "tn": 15,
+            "recall": 0.9,
+            "fpr": 0.0,
+            "precision": 1.0,
+            "balanced_accuracy": 0.95,
+            "accuracy": 0.96,
+            "f1": 0.9473684210526316
+          }
+        },
+        "min_scene_balanced_accuracy": 0.95,
+        "macro_scene_balanced_accuracy": 0.975
+      }
+    },
+    {
+      "candidate": "fusion_mlp16",
+      "threshold": 0.25,
+      "rank": [
+        1,
+        0.95,
+        0.975,
+        0.9583333333333333,
+        -0.0,
+        0.9166666666666666,
+        -594,
+        -0.25,
+        -3
+      ],
+      "metrics": {
+        "overall": {
+          "samples": 30,
+          "tp": 11,
+          "fn": 1,
+          "fp": 0,
+          "tn": 18,
+          "recall": 0.9166666666666666,
+          "fpr": 0.0,
+          "precision": 1.0,
+          "balanced_accuracy": 0.9583333333333333,
+          "accuracy": 0.9666666666666667,
+          "f1": 0.9565217391304348
+        },
+        "by_scene": {
+          "p004": {
+            "samples": 5,
+            "tp": 2,
+            "fn": 0,
+            "fp": 0,
+            "tn": 3,
+            "recall": 1.0,
+            "fpr": 0.0,
+            "precision": 1.0,
+            "balanced_accuracy": 1.0,
+            "accuracy": 1.0,
+            "f1": 1.0
+          },
+          "p005": {
+            "samples": 25,
+            "tp": 9,
+            "fn": 1,
+            "fp": 0,
+            "tn": 15,
+            "recall": 0.9,
+            "fpr": 0.0,
+            "precision": 1.0,
+            "balanced_accuracy": 0.95,
+            "accuracy": 0.96,
+            "f1": 0.9473684210526316
+          }
+        },
+        "min_scene_balanced_accuracy": 0.95,
+        "macro_scene_balanced_accuracy": 0.975
+      }
+    },
+    {
+      "candidate": "fusion_mlp16",
+      "threshold": 0.3,
+      "rank": [
+        1,
+        0.95,
+        0.975,
+        0.9583333333333333,
+        -0.0,
+        0.9166666666666666,
+        -594,
+        -0.2,
+        -3
+      ],
+      "metrics": {
+        "overall": {
+          "samples": 30,
+          "tp": 11,
+          "fn": 1,
+          "fp": 0,
+          "tn": 18,
+          "recall": 0.9166666666666666,
+          "fpr": 0.0,
+          "precision": 1.0,
+          "balanced_accuracy": 0.9583333333333333,
+          "accuracy": 0.9666666666666667,
+          "f1": 0.9565217391304348
+        },
+        "by_scene": {
+          "p004": {
+            "samples": 5,
+            "tp": 2,
+            "fn": 0,
+            "fp": 0,
+            "tn": 3,
+            "recall": 1.0,
+            "fpr": 0.0,
+            "precision": 1.0,
+            "balanced_accuracy": 1.0,
+            "accuracy": 1.0,
+            "f1": 1.0
+          },
+          "p005": {
+            "samples": 25,
+            "tp": 9,
+            "fn": 1,
+            "fp": 0,
+            "tn": 15,
+            "recall": 0.9,
+            "fpr": 0.0,
+            "precision": 1.0,
+            "balanced_accuracy": 0.95,
+            "accuracy": 0.96,
+            "f1": 0.9473684210526316
+          }
+        },
+        "min_scene_balanced_accuracy": 0.95,
+        "macro_scene_balanced_accuracy": 0.975
+      }
+    },
+    {
+      "candidate": "fusion_mlp16",
+      "threshold": 0.35,
+      "rank": [
+        1,
+        0.95,
+        0.975,
+        0.9583333333333333,
+        -0.0,
+        0.9166666666666666,
+        -594,
+        -0.15000000000000002,
+        -3
+      ],
+      "metrics": {
+        "overall": {
+          "samples": 30,
+          "tp": 11,
+          "fn": 1,
+          "fp": 0,
+          "tn": 18,
+          "recall": 0.9166666666666666,
+          "fpr": 0.0,
+          "precision": 1.0,
+          "balanced_accuracy": 0.9583333333333333,
+          "accuracy": 0.9666666666666667,
+          "f1": 0.9565217391304348
+        },
+        "by_scene": {
+          "p004": {
+            "samples": 5,
+            "tp": 2,
+            "fn": 0,
+            "fp": 0,
+            "tn": 3,
+            "recall": 1.0,
+            "fpr": 0.0,
+            "precision": 1.0,
+            "balanced_accuracy": 1.0,
+            "accuracy": 1.0,
+            "f1": 1.0
+          },
+          "p005": {
+            "samples": 25,
+            "tp": 9,
+            "fn": 1,
+            "fp": 0,
+            "tn": 15,
+            "recall": 0.9,
+            "fpr": 0.0,
+            "precision": 1.0,
+            "balanced_accuracy": 0.95,
+            "accuracy": 0.96,
+            "f1": 0.9473684210526316
+          }
+        },
+        "min_scene_balanced_accuracy": 0.95,
+        "macro_scene_balanced_accuracy": 0.975
+      }
+    },
+    {
+      "candidate": "fusion_mlp16",
+      "threshold": 0.4,
+      "rank": [
+        1,
+        0.95,
+        0.975,
+        0.9583333333333333,
+        -0.0,
+        0.9166666666666666,
+        -594,
+        -0.09999999999999998,
+        -3
+      ],
+      "metrics": {
+        "overall": {
+          "samples": 30,
+          "tp": 11,
+          "fn": 1,
+          "fp": 0,
+          "tn": 18,
+          "recall": 0.9166666666666666,
+          "fpr": 0.0,
+          "precision": 1.0,
+          "balanced_accuracy": 0.9583333333333333,
+          "accuracy": 0.9666666666666667,
+          "f1": 0.9565217391304348
+        },
+        "by_scene": {
+          "p004": {
+            "samples": 5,
+            "tp": 2,
+            "fn": 0,
+            "fp": 0,
+            "tn": 3,
+            "recall": 1.0,
+            "fpr": 0.0,
+            "precision": 1.0,
+            "balanced_accuracy": 1.0,
+            "accuracy": 1.0,
+            "f1": 1.0
+          },
+          "p005": {
+            "samples": 25,
+            "tp": 9,
+            "fn": 1,
+            "fp": 0,
+            "tn": 15,
+            "recall": 0.9,
+            "fpr": 0.0,
+            "precision": 1.0,
+            "balanced_accuracy": 0.95,
+            "accuracy": 0.96,
+            "f1": 0.9473684210526316
+          }
+        },
+        "min_scene_balanced_accuracy": 0.95,
+        "macro_scene_balanced_accuracy": 0.975
+      }
+    },
+    {
+      "candidate": "fusion_mlp16",
+      "threshold": 0.45,
+      "rank": [
+        1,
+        0.95,
+        0.975,
+        0.9583333333333333,
+        -0.0,
+        0.9166666666666666,
+        -594,
+        -0.04999999999999999,
+        -3
+      ],
+      "metrics": {
+        "overall": {
+          "samples": 30,
+          "tp": 11,
+          "fn": 1,
+          "fp": 0,
+          "tn": 18,
+          "recall": 0.9166666666666666,
+          "fpr": 0.0,
+          "precision": 1.0,
+          "balanced_accuracy": 0.9583333333333333,
+          "accuracy": 0.9666666666666667,
+          "f1": 0.9565217391304348
+        },
+        "by_scene": {
+          "p004": {
+            "samples": 5,
+            "tp": 2,
+            "fn": 0,
+            "fp": 0,
+            "tn": 3,
+            "recall": 1.0,
+            "fpr": 0.0,
+            "precision": 1.0,
+            "balanced_accuracy": 1.0,
+            "accuracy": 1.0,
+            "f1": 1.0
+          },
+          "p005": {
+            "samples": 25,
+            "tp": 9,
+            "fn": 1,
+            "fp": 0,
+            "tn": 15,
+            "recall": 0.9,
+            "fpr": 0.0,
+            "precision": 1.0,
+            "balanced_accuracy": 0.95,
+            "accuracy": 0.96,
+            "f1": 0.9473684210526316
+          }
+        },
+        "min_scene_balanced_accuracy": 0.95,
+        "macro_scene_balanced_accuracy": 0.975
+      }
+    },
+    {
+      "candidate": "fusion_mlp16",
+      "threshold": 0.5,
+      "rank": [
+        1,
+        0.95,
+        0.975,
+        0.9583333333333333,
+        -0.0,
+        0.9166666666666666,
+        -594,
+        -0.0,
+        -3
+      ],
+      "metrics": {
+        "overall": {
+          "samples": 30,
+          "tp": 11,
+          "fn": 1,
+          "fp": 0,
+          "tn": 18,
+          "recall": 0.9166666666666666,
+          "fpr": 0.0,
+          "precision": 1.0,
+          "balanced_accuracy": 0.9583333333333333,
+          "accuracy": 0.9666666666666667,
+          "f1": 0.9565217391304348
+        },
+        "by_scene": {
+          "p004": {
+            "samples": 5,
+            "tp": 2,
+            "fn": 0,
+            "fp": 0,
+            "tn": 3,
+            "recall": 1.0,
+            "fpr": 0.0,
+            "precision": 1.0,
+            "balanced_accuracy": 1.0,
+            "accuracy": 1.0,
+            "f1": 1.0
+          },
+          "p005": {
+            "samples": 25,
+            "tp": 9,
+            "fn": 1,
+            "fp": 0,
+            "tn": 15,
+            "recall": 0.9,
+            "fpr": 0.0,
+            "precision": 1.0,
+            "balanced_accuracy": 0.95,
+            "accuracy": 0.96,
+            "f1": 0.9473684210526316
+          }
+        },
+        "min_scene_balanced_accuracy": 0.95,
+        "macro_scene_balanced_accuracy": 0.975
+      }
+    },
+    {
+      "candidate": "fusion_mlp16",
+      "threshold": 0.55,
+      "rank": [
+        1,
+        0.95,
+        0.975,
+        0.9583333333333333,
+        -0.0,
+        0.9166666666666666,
+        -594,
+        -0.050000000000000044,
+        -3
+      ],
+      "metrics": {
+        "overall": {
+          "samples": 30,
+          "tp": 11,
+          "fn": 1,
+          "fp": 0,
+          "tn": 18,
+          "recall": 0.9166666666666666,
+          "fpr": 0.0,
+          "precision": 1.0,
+          "balanced_accuracy": 0.9583333333333333,
+          "accuracy": 0.9666666666666667,
+          "f1": 0.9565217391304348
+        },
+        "by_scene": {
+          "p004": {
+            "samples": 5,
+            "tp": 2,
+            "fn": 0,
+            "fp": 0,
+            "tn": 3,
+            "recall": 1.0,
+            "fpr": 0.0,
+            "precision": 1.0,
+            "balanced_accuracy": 1.0,
+            "accuracy": 1.0,
+            "f1": 1.0
+          },
+          "p005": {
+            "samples": 25,
+            "tp": 9,
+            "fn": 1,
+            "fp": 0,
+            "tn": 15,
+            "recall": 0.9,
+            "fpr": 0.0,
+            "precision": 1.0,
+            "balanced_accuracy": 0.95,
+            "accuracy": 0.96,
+            "f1": 0.9473684210526316
+          }
+        },
+        "min_scene_balanced_accuracy": 0.95,
+        "macro_scene_balanced_accuracy": 0.975
+      }
+    },
+    {
+      "candidate": "fusion_mlp16",
+      "threshold": 0.6,
+      "rank": [
+        1,
+        0.95,
+        0.975,
+        0.9583333333333333,
+        -0.0,
+        0.9166666666666666,
+        -594,
+        -0.09999999999999998,
+        -3
+      ],
+      "metrics": {
+        "overall": {
+          "samples": 30,
+          "tp": 11,
+          "fn": 1,
+          "fp": 0,
+          "tn": 18,
+          "recall": 0.9166666666666666,
+          "fpr": 0.0,
+          "precision": 1.0,
+          "balanced_accuracy": 0.9583333333333333,
+          "accuracy": 0.9666666666666667,
+          "f1": 0.9565217391304348
+        },
+        "by_scene": {
+          "p004": {
+            "samples": 5,
+            "tp": 2,
+            "fn": 0,
+            "fp": 0,
+            "tn": 3,
+            "recall": 1.0,
+            "fpr": 0.0,
+            "precision": 1.0,
+            "balanced_accuracy": 1.0,
+            "accuracy": 1.0,
+            "f1": 1.0
+          },
+          "p005": {
+            "samples": 25,
+            "tp": 9,
+            "fn": 1,
+            "fp": 0,
+            "tn": 15,
+            "recall": 0.9,
+            "fpr": 0.0,
+            "precision": 1.0,
+            "balanced_accuracy": 0.95,
+            "accuracy": 0.96,
+            "f1": 0.9473684210526316
+          }
+        },
+        "min_scene_balanced_accuracy": 0.95,
+        "macro_scene_balanced_accuracy": 0.975
+      }
+    },
+    {
+      "candidate": "fusion_mlp16",
+      "threshold": 0.65,
+      "rank": [
+        1,
+        0.95,
+        0.975,
+        0.9583333333333333,
+        -0.0,
+        0.9166666666666666,
+        -594,
+        -0.15000000000000002,
+        -3
+      ],
+      "metrics": {
+        "overall": {
+          "samples": 30,
+          "tp": 11,
+          "fn": 1,
+          "fp": 0,
+          "tn": 18,
+          "recall": 0.9166666666666666,
+          "fpr": 0.0,
+          "precision": 1.0,
+          "balanced_accuracy": 0.9583333333333333,
+          "accuracy": 0.9666666666666667,
+          "f1": 0.9565217391304348
+        },
+        "by_scene": {
+          "p004": {
+            "samples": 5,
+            "tp": 2,
+            "fn": 0,
+            "fp": 0,
+            "tn": 3,
+            "recall": 1.0,
+            "fpr": 0.0,
+            "precision": 1.0,
+            "balanced_accuracy": 1.0,
+            "accuracy": 1.0,
+            "f1": 1.0
+          },
+          "p005": {
+            "samples": 25,
+            "tp": 9,
+            "fn": 1,
+            "fp": 0,
+            "tn": 15,
+            "recall": 0.9,
+            "fpr": 0.0,
+            "precision": 1.0,
+            "balanced_accuracy": 0.95,
+            "accuracy": 0.96,
+            "f1": 0.9473684210526316
+          }
+        },
+        "min_scene_balanced_accuracy": 0.95,
+        "macro_scene_balanced_accuracy": 0.975
+      }
+    },
+    {
+      "candidate": "fusion_mlp16",
+      "threshold": 0.7,
+      "rank": [
+        1,
+        0.95,
+        0.975,
+        0.9583333333333333,
+        -0.0,
+        0.9166666666666666,
+        -594,
+        -0.19999999999999996,
+        -3
+      ],
+      "metrics": {
+        "overall": {
+          "samples": 30,
+          "tp": 11,
+          "fn": 1,
+          "fp": 0,
+          "tn": 18,
+          "recall": 0.9166666666666666,
+          "fpr": 0.0,
+          "precision": 1.0,
+          "balanced_accuracy": 0.9583333333333333,
+          "accuracy": 0.9666666666666667,
+          "f1": 0.9565217391304348
+        },
+        "by_scene": {
+          "p004": {
+            "samples": 5,
+            "tp": 2,
+            "fn": 0,
+            "fp": 0,
+            "tn": 3,
+            "recall": 1.0,
+            "fpr": 0.0,
+            "precision": 1.0,
+            "balanced_accuracy": 1.0,
+            "accuracy": 1.0,
+            "f1": 1.0
+          },
+          "p005": {
+            "samples": 25,
+            "tp": 9,
+            "fn": 1,
+            "fp": 0,
+            "tn": 15,
+            "recall": 0.9,
+            "fpr": 0.0,
+            "precision": 1.0,
+            "balanced_accuracy": 0.95,
+            "accuracy": 0.96,
+            "f1": 0.9473684210526316
+          }
+        },
+        "min_scene_balanced_accuracy": 0.95,
+        "macro_scene_balanced_accuracy": 0.975
+      }
+    },
+    {
+      "candidate": "fusion_mlp16",
+      "threshold": 0.75,
+      "rank": [
+        1,
+        0.95,
+        0.975,
+        0.9583333333333333,
+        -0.0,
+        0.9166666666666666,
+        -594,
+        -0.25,
+        -3
+      ],
+      "metrics": {
+        "overall": {
+          "samples": 30,
+          "tp": 11,
+          "fn": 1,
+          "fp": 0,
+          "tn": 18,
+          "recall": 0.9166666666666666,
+          "fpr": 0.0,
+          "precision": 1.0,
+          "balanced_accuracy": 0.9583333333333333,
+          "accuracy": 0.9666666666666667,
+          "f1": 0.9565217391304348
+        },
+        "by_scene": {
+          "p004": {
+            "samples": 5,
+            "tp": 2,
+            "fn": 0,
+            "fp": 0,
+            "tn": 3,
+            "recall": 1.0,
+            "fpr": 0.0,
+            "precision": 1.0,
+            "balanced_accuracy": 1.0,
+            "accuracy": 1.0,
+            "f1": 1.0
+          },
+          "p005": {
+            "samples": 25,
+            "tp": 9,
+            "fn": 1,
+            "fp": 0,
+            "tn": 15,
+            "recall": 0.9,
+            "fpr": 0.0,
+            "precision": 1.0,
+            "balanced_accuracy": 0.95,
+            "accuracy": 0.96,
+            "f1": 0.9473684210526316
+          }
+        },
+        "min_scene_balanced_accuracy": 0.95,
+        "macro_scene_balanced_accuracy": 0.975
+      }
+    },
+    {
+      "candidate": "fusion_mlp16",
+      "threshold": 0.8,
+      "rank": [
+        1,
+        0.95,
+        0.975,
+        0.9583333333333333,
+        -0.0,
+        0.9166666666666666,
+        -594,
+        -0.30000000000000004,
+        -3
+      ],
+      "metrics": {
+        "overall": {
+          "samples": 30,
+          "tp": 11,
+          "fn": 1,
+          "fp": 0,
+          "tn": 18,
+          "recall": 0.9166666666666666,
+          "fpr": 0.0,
+          "precision": 1.0,
+          "balanced_accuracy": 0.9583333333333333,
+          "accuracy": 0.9666666666666667,
+          "f1": 0.9565217391304348
+        },
+        "by_scene": {
+          "p004": {
+            "samples": 5,
+            "tp": 2,
+            "fn": 0,
+            "fp": 0,
+            "tn": 3,
+            "recall": 1.0,
+            "fpr": 0.0,
+            "precision": 1.0,
+            "balanced_accuracy": 1.0,
+            "accuracy": 1.0,
+            "f1": 1.0
+          },
+          "p005": {
+            "samples": 25,
+            "tp": 9,
+            "fn": 1,
+            "fp": 0,
+            "tn": 15,
+            "recall": 0.9,
+            "fpr": 0.0,
+            "precision": 1.0,
+            "balanced_accuracy": 0.95,
+            "accuracy": 0.96,
+            "f1": 0.9473684210526316
+          }
+        },
+        "min_scene_balanced_accuracy": 0.95,
+        "macro_scene_balanced_accuracy": 0.975
+      }
+    },
+    {
+      "candidate": "fusion_mlp16",
+      "threshold": 0.85,
+      "rank": [
+        1,
+        0.95,
+        0.975,
+        0.9583333333333333,
+        -0.0,
+        0.9166666666666666,
+        -594,
+        -0.35,
+        -3
+      ],
+      "metrics": {
+        "overall": {
+          "samples": 30,
+          "tp": 11,
+          "fn": 1,
+          "fp": 0,
+          "tn": 18,
+          "recall": 0.9166666666666666,
+          "fpr": 0.0,
+          "precision": 1.0,
+          "balanced_accuracy": 0.9583333333333333,
+          "accuracy": 0.9666666666666667,
+          "f1": 0.9565217391304348
+        },
+        "by_scene": {
+          "p004": {
+            "samples": 5,
+            "tp": 2,
+            "fn": 0,
+            "fp": 0,
+            "tn": 3,
+            "recall": 1.0,
+            "fpr": 0.0,
+            "precision": 1.0,
+            "balanced_accuracy": 1.0,
+            "accuracy": 1.0,
+            "f1": 1.0
+          },
+          "p005": {
+            "samples": 25,
+            "tp": 9,
+            "fn": 1,
+            "fp": 0,
+            "tn": 15,
+            "recall": 0.9,
+            "fpr": 0.0,
+            "precision": 1.0,
+            "balanced_accuracy": 0.95,
+            "accuracy": 0.96,
+            "f1": 0.9473684210526316
+          }
+        },
+        "min_scene_balanced_accuracy": 0.95,
+        "macro_scene_balanced_accuracy": 0.975
+      }
+    },
+    {
+      "candidate": "fusion_mlp16",
+      "threshold": 0.9,
+      "rank": [
+        1,
+        0.95,
+        0.975,
+        0.9583333333333333,
+        -0.0,
+        0.9166666666666666,
+        -594,
+        -0.4,
+        -3
+      ],
+      "metrics": {
+        "overall": {
+          "samples": 30,
+          "tp": 11,
+          "fn": 1,
+          "fp": 0,
+          "tn": 18,
+          "recall": 0.9166666666666666,
+          "fpr": 0.0,
+          "precision": 1.0,
+          "balanced_accuracy": 0.9583333333333333,
+          "accuracy": 0.9666666666666667,
+          "f1": 0.9565217391304348
+        },
+        "by_scene": {
+          "p004": {
+            "samples": 5,
+            "tp": 2,
+            "fn": 0,
+            "fp": 0,
+            "tn": 3,
+            "recall": 1.0,
+            "fpr": 0.0,
+            "precision": 1.0,
+            "balanced_accuracy": 1.0,
+            "accuracy": 1.0,
+            "f1": 1.0
+          },
+          "p005": {
+            "samples": 25,
+            "tp": 9,
+            "fn": 1,
+            "fp": 0,
+            "tn": 15,
+            "recall": 0.9,
+            "fpr": 0.0,
+            "precision": 1.0,
+            "balanced_accuracy": 0.95,
+            "accuracy": 0.96,
+            "f1": 0.9473684210526316
+          }
+        },
+        "min_scene_balanced_accuracy": 0.95,
+        "macro_scene_balanced_accuracy": 0.975
+      }
+    }
+  ],
+  "selected_candidate": "depth_linear",
+  "selected_threshold": 0.5,
+  "selected_validation_metrics": {
+    "overall": {
+      "samples": 30,
+      "tp": 11,
+      "fn": 1,
+      "fp": 0,
+      "tn": 18,
+      "recall": 0.9166666666666666,
+      "fpr": 0.0,
+      "precision": 1.0,
+      "balanced_accuracy": 0.9583333333333333,
+      "accuracy": 0.9666666666666667,
+      "f1": 0.9565217391304348
+    },
+    "by_scene": {
+      "p004": {
+        "samples": 5,
+        "tp": 2,
+        "fn": 0,
+        "fp": 0,
+        "tn": 3,
+        "recall": 1.0,
+        "fpr": 0.0,
+        "precision": 1.0,
+        "balanced_accuracy": 1.0,
+        "accuracy": 1.0,
+        "f1": 1.0
+      },
+      "p005": {
+        "samples": 25,
+        "tp": 9,
+        "fn": 1,
+        "fp": 0,
+        "tn": 15,
+        "recall": 0.9,
+        "fpr": 0.0,
+        "precision": 1.0,
+        "balanced_accuracy": 0.95,
+        "accuracy": 0.96,
+        "f1": 0.9473684210526316
+      }
+    },
+    "min_scene_balanced_accuracy": 0.95,
+    "macro_scene_balanced_accuracy": 0.975
+  },
+  "selected_validation_quality_gate": true,
+  "validation_all_person_reference": {
+    "overall": {
+      "samples": 30,
+      "tp": 12,
+      "fn": 0,
+      "fp": 18,
+      "tn": 0,
+      "recall": 1.0,
+      "fpr": 1.0,
+      "precision": 0.4,
+      "balanced_accuracy": 0.5,
+      "accuracy": 0.4,
+      "f1": 0.5714285714285715
+    },
+    "by_scene": {
+      "p004": {
+        "samples": 5,
+        "tp": 2,
+        "fn": 0,
+        "fp": 3,
+        "tn": 0,
+        "recall": 1.0,
+        "fpr": 1.0,
+        "precision": 0.4,
+        "balanced_accuracy": 0.5,
+        "accuracy": 0.4,
+        "f1": 0.5714285714285715
+      },
+      "p005": {
+        "samples": 25,
+        "tp": 10,
+        "fn": 0,
+        "fp": 15,
+        "tn": 0,
+        "recall": 1.0,
+        "fpr": 1.0,
+        "precision": 0.4,
+        "balanced_accuracy": 0.5,
+        "accuracy": 0.4,
+        "f1": 0.5714285714285715
+      }
+    },
+    "min_scene_balanced_accuracy": 0.5,
+    "macro_scene_balanced_accuracy": 0.5
+  },
+  "elapsed_wall_s": 18.82984201699992,
+  "test_opened": false
+}

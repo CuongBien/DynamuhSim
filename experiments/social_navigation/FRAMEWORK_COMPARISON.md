@@ -1,5 +1,11 @@
 # So sánh khả năng đã đo — cập nhật22/10/2026
 
+## Cập nhật23/10/2026 — hoàn thành train thử classifier người/vật
+
+[Classifier report](benchmark/depth_person_classifier/reports/CLASSIFIER_REPORT.md):4cấu hình train CUDA RTX4060 trên54train/30validation; chọn linear depth31tham số,threshold0.5 trước khi mở48test. Validation11/12người,0/18đồ vật nhận nhầm; test23/24người,0/24đồ vật nhận nhầm, còn1FN dưới che khuất. Gate pilot đặt trước fit đạt; không suy ra end-to-end detector recall hoặc tổng quát ngoài một avatar/nhà xưởng.
+
+10tests và audit68choice/132portable replay đạt; model/features/normalization/testseal/trọng số/reports/GIF validation thật lưu Git. Corpus/ROS/Nav2/staged user giữ nguyên, HuNavSim chưa dùng, H1–H5/association/WMtraining vẫnfalse. Mốc classifier đã đóng; bước kế quay lại thu episode robot chuyển động phục vụ WM/RL với nhãn chưa đủ tin cậy được mask, không chờ detector hoàn hảo. Mốc lưu: `feat: train and validate a depth person classifier pilot`.
+
 ## Cập nhật23/10/2026 — bộ pilot perception có nhãn đã xuất
 
 [Corpus report](benchmark/depth_perception_corpus/reports/CORPUS_REPORT.md):7cảnh GPU NVIDIA,525depth đối chứng/140scan native; xuất19frame/132proposal (64người,68môi trường), chia toàn họ bố cục train/validation/test trước thu. Static chỉ giữ midpoint; đầu vào depth+LiDAR tách LABEL, khôngRGB/H1–H5. 3frame đầu/21proposal thiếu scan nhân quả được mask, không dùng scan tương lai.
