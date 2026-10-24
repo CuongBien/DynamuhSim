@@ -1,6 +1,7 @@
 """Bounded action execution, independently testable without ROS/Gazebo."""
-import math
 import time
+
+from dynamuhsim.analysis.geometry import pose_errors
 
 
 def wait_for(predicate, seconds, *, spin_once, processes, monotonic=time.monotonic):
@@ -16,8 +17,7 @@ def wait_for(predicate, seconds, *, spin_once, processes, monotonic=time.monoton
 
 def goal_metrics(robot, action_status):
     """The existing task goal is (-20, 0, 0); status alone never proves arrival."""
-    xy = math.hypot(robot["x"] + 20, robot["y"])
-    angle = abs(math.atan2(math.sin(robot["yaw"]), math.cos(robot["yaw"])))
+    xy, angle = pose_errors(robot, (-20., 0., 0.))
     return dict(final_world_pose=robot, goal_xy_error_world_m=xy, goal_yaw_error_world_rad=angle,
                 actual_goal_reached=action_status == 4 and xy <= .2 and angle <= .25)
 

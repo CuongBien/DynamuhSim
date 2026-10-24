@@ -1,14 +1,13 @@
 """Versioned capture hooks. New runs never execute report snapshots or rewrite source."""
 from pathlib import Path, PurePosixPath
-from types import SimpleNamespace
 import copy
 import datetime
-import hashlib
 import json
 import math
 import shutil
 import subprocess
 
+from dynamuhsim.analysis.evidence import sha256_file
 from .nav2_trial import source_files
 from .profiles import PROFILES
 from dynamuhsim.simulation.capture import prepare_camera, apply_nav2_treatment, config_changes
@@ -17,7 +16,7 @@ CAMERA_SHA256 = "14c15412664eb37dd2f0fb2d61a79b09f98722f204f97d97212f0ec814ad3d9
 
 
 def sha(path):
-    return hashlib.sha256(Path(path).read_bytes()).hexdigest()
+    return sha256_file(path)
 
 
 def dump(path, value):
