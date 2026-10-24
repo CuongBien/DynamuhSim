@@ -1,0 +1,26 @@
+<sdf version="1.8">
+  <world name="social_warehouse">
+    <physics>
+      <max_step_size>.0025</max_step_size>
+      <real_time_factor>1.0</real_time_factor>
+    </physics>
+    <model name="common_observer">
+      <pose>-24 -5 12 0 1.17 1.57079632679</pose>
+      <link name="camera">
+        <sensor name="rgb">
+          <topic>/common/observer</topic>
+          <update_rate>1</update_rate>
+          <camera>
+            <image>
+              <width>640</width>
+              <height>480</height>
+            </image>
+          </camera>
+        </sensor>
+      </link>
+    </model>
+    <model name="common_1_proxy">
+      <pose>1 2 0 0 0 0</pose>
+    </model>
+  </world>
+</sdf>

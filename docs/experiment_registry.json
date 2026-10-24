@@ -1,0 +1,70 @@
+{
+  "schema": "dynamuhsim_experiment_registry/1",
+  "scope": "First migration: three bounded warehouse Nav2 pilots. Other experiments retain their existing entrypoints.",
+  "shared_implementation": "python/dynamuhsim/runtime/nav2_trial.py",
+  "experiments": [
+    {
+      "name": "socnavgym_nav2_pilot",
+      "runtime": "shared",
+      "entrypoint": "tools/nav2_trial.py --experiment socnavgym_nav2_pilot",
+      "compatibility_entrypoint": "experiments/social_navigation/benchmark/socnavgym_nav2_pilot/trial.py",
+      "protocol": "experiments/social_navigation/benchmark/socnavgym_nav2_pilot/protocol.json",
+      "worker": "existing SocNavGym response-v2 worker",
+      "modes": [
+        "empty",
+        "people"
+      ]
+    },
+    {
+      "name": "socnavgym_group_nav2",
+      "runtime": "shared",
+      "entrypoint": "tools/nav2_trial.py --experiment socnavgym_group_nav2",
+      "compatibility_entrypoint": "experiments/social_navigation/benchmark/socnavgym_group_nav2/trial.py",
+      "protocol": "experiments/social_navigation/benchmark/socnavgym_group_nav2/protocol.json",
+      "worker": "existing native-initial-group worker",
+      "modes": [
+        "walking",
+        "standing"
+      ],
+      "seeds": [
+        42,
+        43
+      ]
+    },
+    {
+      "name": "shared_nav2_pilot",
+      "runtime": "shared",
+      "entrypoint": "tools/nav2_trial.py --experiment shared_nav2_pilot",
+      "compatibility_entrypoint": "experiments/social_navigation/benchmark/shared_nav2_pilot/trial.py",
+      "protocol": "experiments/social_navigation/benchmark/shared_nav2_pilot/protocol.json",
+      "worker": "existing pinned Docker runtime",
+      "models": [
+        "crowd_orca_plus",
+        "complex_geometry_mixed"
+      ]
+    }
+  ],
+  "preserved_capture_pipeline": [
+    {
+      "name": "dataset_pilot",
+      "runtime": "existing_frozen_pipeline",
+      "reason": "Used by historical source generation/capture contracts; not migrated or archived in this change."
+    },
+    {
+      "name": "depth_proxy_lifecycle",
+      "runtime": "existing_frozen_pipeline",
+      "reason": "Used by historical source generation/capture contracts; not migrated or archived in this change."
+    },
+    {
+      "name": "early_avoidance_pilot",
+      "runtime": "existing_frozen_pipeline",
+      "reason": "Used by historical source generation/capture contracts; not migrated or archived in this change."
+    },
+    {
+      "name": "wm_episode_batch",
+      "runtime": "existing_frozen_pipeline",
+      "reason": "Used by historical source generation/capture contracts; not migrated or archived in this change."
+    }
+  ],
+  "historical_evidence": "Existing reports, source snapshots and freeze manifests remain unchanged; use their recorded source commit to reproduce them."
+}

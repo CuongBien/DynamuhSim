@@ -1,0 +1,451 @@
+{
+  "source_commit": "9833565fa546d55cb0e553f8388bf4a703c59583",
+  "messages": [
+    {
+      "key": "clock",
+      "message": {
+        "clock": {
+          "sec": 12,
+          "nanosec": 300000000
+        }
+      }
+    },
+    {
+      "key": "gt",
+      "message": {
+        "data": "{\"adapter_ok\": true, \"step\": 7, \"humans\": [{\"id\": 1, \"x\": 1, \"y\": 2}]}"
+      }
+    },
+    {
+      "key": "scan",
+      "message": {
+        "header": {
+          "stamp": {
+            "sec": 12,
+            "nanosec": 250000000
+          },
+          "frame_id": "map"
+        },
+        "ranges": [
+          1.0,
+          2.0,
+          null,
+          null
+        ],
+        "angle_min": 0.0,
+        "angle_increment": 0.1,
+        "range_min": 0.1,
+        "range_max": 10.0
+      }
+    },
+    {
+      "key": "odom",
+      "message": {
+        "header": {
+          "stamp": {
+            "sec": 12,
+            "nanosec": 250000000
+          },
+          "frame_id": "map"
+        },
+        "pose": {
+          "pose": {
+            "position": {
+              "x": -20.15,
+              "y": 0.02,
+              "z": 0.0
+            },
+            "orientation": {
+              "x": 0.0,
+              "y": 0.0,
+              "z": 0.04997916927067833,
+              "w": 0.9987502603949663
+            }
+          }
+        }
+      }
+    },
+    {
+      "key": "amcl",
+      "message": {
+        "header": {
+          "stamp": {
+            "sec": 12,
+            "nanosec": 250000000
+          },
+          "frame_id": "map"
+        },
+        "pose": {
+          "pose": {
+            "position": {
+              "x": -20.15,
+              "y": 0.02,
+              "z": 0.0
+            },
+            "orientation": {
+              "x": 0.0,
+              "y": 0.0,
+              "z": 0.04997916927067833,
+              "w": 0.9987502603949663
+            }
+          },
+          "covariance": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        }
+      }
+    },
+    {
+      "key": "cmd",
+      "message": {
+        "header": {
+          "stamp": {
+            "sec": 12,
+            "nanosec": 250000000
+          },
+          "frame_id": "map"
+        },
+        "twist": {
+          "linear": {
+            "x": 0.2,
+            "y": -0.1
+          },
+          "angular": {
+            "z": 0.3
+          }
+        }
+      }
+    },
+    {
+      "key": "plan",
+      "message": {
+        "header": {
+          "stamp": {
+            "sec": 12,
+            "nanosec": 250000000
+          },
+          "frame_id": "map"
+        },
+        "poses": [
+          {
+            "pose": {
+              "position": {
+                "x": -20.15,
+                "y": 0.02,
+                "z": 0.0
+              },
+              "orientation": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.04997916927067833,
+                "w": 0.9987502603949663
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "key": "local_costmap",
+      "message": {
+        "header": {
+          "stamp": {
+            "sec": 12,
+            "nanosec": 250000000
+          },
+          "frame_id": "map"
+        },
+        "info": {
+          "width": 2,
+          "height": 2,
+          "resolution": 0.1,
+          "origin": {
+            "position": {
+              "x": -20.15,
+              "y": 0.02,
+              "z": 0.0
+            },
+            "orientation": {
+              "x": 0.0,
+              "y": 0.0,
+              "z": 0.04997916927067833,
+              "w": 0.9987502603949663
+            }
+          }
+        },
+        "data": [
+          -1,
+          0,
+          50,
+          100
+        ]
+      }
+    },
+    {
+      "key": "log",
+      "message": {
+        "level": 30,
+        "name": "test_controller",
+        "msg": "fixed warning"
+      }
+    },
+    {
+      "key": "log",
+      "message": {
+        "level": 20,
+        "name": "test_controller",
+        "msg": "ignored info"
+      }
+    }
+  ],
+  "scene": {
+    "header": {
+      "stamp": {
+        "sec": 12,
+        "nsec": 350000000
+      }
+    },
+    "pose": [
+      {
+        "name": "mecanum_robot",
+        "position": {
+          "x": -20.15,
+          "y": 0.02,
+          "z": 0.0
+        },
+        "orientation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.04997916927067833,
+          "w": 0.9987502603949663
+        }
+      },
+      {
+        "name": "common_1_proxy",
+        "position": {
+          "x": -20.15,
+          "y": 0.02,
+          "z": 0.0
+        },
+        "orientation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.04997916927067833,
+          "w": 0.9987502603949663
+        }
+      },
+      {
+        "name": "unrelated",
+        "position": {
+          "x": -20.15,
+          "y": 0.02,
+          "z": 0.0
+        },
+        "orientation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.04997916927067833,
+          "w": 0.9987502603949663
+        }
+      }
+    ]
+  },
+  "feedback": {
+    "feedback": {
+      "distance_remaining": 2.3,
+      "number_of_recoveries": 1
+    }
+  },
+  "expected": {
+    "gazebo_poses": [
+      {
+        "time": 12.35,
+        "poses": {
+          "mecanum_robot": {
+            "x": -20.15,
+            "y": 0.02,
+            "yaw": 0.09999999999999999
+          },
+          "common_1_proxy": {
+            "x": -20.15,
+            "y": 0.02,
+            "yaw": 0.09999999999999999
+          }
+        },
+        "phase": "active"
+      }
+    ],
+    "ground_truth": [
+      {
+        "adapter_ok": true,
+        "step": 7,
+        "humans": [
+          {
+            "id": 1,
+            "x": 1,
+            "y": 2
+          }
+        ]
+      }
+    ],
+    "scans": [
+      {
+        "time": 12.25,
+        "ranges": [
+          1.0,
+          2.0,
+          null,
+          null
+        ],
+        "angle_min": 0.0,
+        "angle_increment": 0.1,
+        "range_min": 0.1,
+        "range_max": 10.0
+      }
+    ],
+    "odom": [
+      {
+        "time": 12.25,
+        "x": -20.15,
+        "y": 0.02,
+        "yaw": 0.09999999999999999
+      }
+    ],
+    "amcl": [
+      {
+        "time": 12.25,
+        "x": -20.15,
+        "y": 0.02,
+        "yaw": 0.09999999999999999,
+        "covariance": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      }
+    ],
+    "commands": [
+      {
+        "time": 12.25,
+        "observed_sim": 12.3,
+        "vx": 0.2,
+        "vy": -0.1,
+        "wz": 0.3,
+        "phase": "active"
+      }
+    ],
+    "plans": [
+      {
+        "time": 12.25,
+        "poses": [
+          {
+            "x": -20.15,
+            "y": 0.02,
+            "yaw": 0.09999999999999999
+          }
+        ],
+        "phase": "active"
+      }
+    ],
+    "local_costmaps": [
+      {
+        "time": 12.25,
+        "frame": "map",
+        "width": 2,
+        "height": 2,
+        "resolution": 0.1,
+        "origin": {
+          "x": -20.15,
+          "y": 0.02,
+          "yaw": 0.09999999999999999
+        },
+        "data": "eJz7z2CUAgAEyAGW",
+        "phase": "active"
+      }
+    ],
+    "feedback": [
+      {
+        "time": 12.3,
+        "distance_remaining": 2.3,
+        "recoveries": 1
+      }
+    ],
+    "roslogs": [
+      {
+        "time": 12.3,
+        "level": 30,
+        "node": "test_controller",
+        "text": "fixed warning"
+      }
+    ],
+    "tf": []
+  }
+}

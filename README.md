@@ -1,5 +1,7 @@
 # DynamuhSim 🤖
 
+**Luồng hiện tại:** [Dữ liệu và baseline WM](docs/START_HERE_CURRENT.md) · [Runtime Nav2 dùng chung](docs/SHARED_NAV2_RUNTIME.md) · [Registry experiment](docs/experiment_registry.json)
+
 > **Multi-Sensor Perception and Proactive Yielding for Patrol Robots in Narrow, Dynamic Indoor Environments**
 
 DynamuhSim is a simulation and evaluation framework built on **ROS 2 Jazzy** and **Gazebo Sim 8 (Harmonic)**. It provides parametric narrow corridor environments, dynamic human-like moving obstacles with ground-truth streaming, Nav2 navigation stack integration, automated batch trial orchestration, and an offline evaluation framework computing clearance, trajectory quality, and reaction metrics.
