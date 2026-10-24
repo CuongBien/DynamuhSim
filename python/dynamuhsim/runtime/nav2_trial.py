@@ -111,7 +111,7 @@ def source_files(repo, profile, entrypoint):
     return files
 
 
-def run_trial(profile, args, repo, entrypoint, *, dependencies=None):
+def run_trial(profile, args, repo, entrypoint, *, dependencies=None, capture=None):
     deps = dependencies if dependencies is not None else load_dependencies(repo)
     social = repo / "experiments/social_navigation"
     benchmark = social / "benchmark"
@@ -121,14 +121,14 @@ def run_trial(profile, args, repo, entrypoint, *, dependencies=None):
     out = args.report_dir.resolve()
     # Preserve prior attempts: neither report nor runtime directory is overwritten.
     out.mkdir(parents=True, exist_ok=False)
-    runtime = stage / "generated" / out.name
+    runtime = capture.runtime_dir if capture is not None else stage / "generated" / out.name
     runtime.parent.mkdir(parents=True, exist_ok=True)
     runtime.mkdir(exist_ok=False)
     recording = TrialRecording()
     result = dict(status="ERROR", condition=args.condition, gui=args.gui,
                   head=subprocess.check_output(["git", "-C", str(repo), "rev-parse", "HEAD"], text=True).strip(),
                   runtime=str(runtime.relative_to(repo)), robot_start=plan["start"], robot_goal=plan["goal"],
-                  sim_budget_s=plan["sim_budget"], no_scripted_robot_velocity_publisher=True,
+                  sim_budget_s=capture.config["sim_budget_s"] if capture is not None else plan["sim_budget"], no_scripted_robot_velocity_publisher=True,
                   **profile.result_fields(args, dt))
     processes, files, accepted_handles = [], [], []
     node = guard = gui_process = socket_dir = lock = launch = None
@@ -143,9 +143,14 @@ def run_trial(profile, args, repo, entrypoint, *, dependencies=None):
                           ROS_LOG_DIR=str(runtime / "ros_logs"), QT_QPA_PLATFORM="xcb",
                           ROS_AUTOMATIC_DISCOVERY_RANGE="LOCALHOST", FASTDDS_BUILTIN_TRANSPORTS="UDPv4")
         guard = deps.gpu.RuntimeGuard(runtime)
-        result["source_sha256"] = {str(path.relative_to(repo)): sha(path) for path in source_files(repo, profile, entrypoint)}
+        sources = source_files(repo, profile, entrypoint)
+        if capture is not None:
+            sources += capture.source_paths()
+        result["source_sha256"] = {str(path.relative_to(repo)): sha(path) for path in sources}
         (out / "protocol.json").write_text(json.dumps(result, indent=2) + "\n")
         profile.validate_gates(benchmark)
+        if capture is not None:
+            capture.prepare(runtime, result)
         result["rendering"] = deps.gpu.gpu_preflight(runtime)
         launch_env, result["shutdown_preload"] = deps.shutdown.launch_environment(runtime)
         socket_dir = tempfile.TemporaryDirectory(prefix="nav2v2_")
@@ -176,9 +181,13 @@ def run_trial(profile, args, repo, entrypoint, *, dependencies=None):
         tree = configure_world(ET.parse(runtime / "warehouse.sdf"),
                                benchmark / "socnavgym_response_fix/build/libresponse_adapter.so",
                                args.condition, dt, planning_dt_text=None if profile.container_worker else ".1")
+        if capture is not None:
+            capture.configure_world(tree)
         ET.indent(tree)
         tree.write(runtime / "warehouse.sdf", encoding="unicode")
         config = runtime_nav2_config(deps.yaml.safe_load((social / "warehouse/nav2_warehouse.yaml").read_text()))
+        if capture is not None:
+            config = capture.configure_nav(config, out)
         (runtime / "nav2_runtime.yaml").write_text(deps.yaml.safe_dump(config, sort_keys=False))
         result.update(runtime_nav_params_sha256=sha(runtime / "nav2_runtime.yaml"), runtime_world_sha256=sha(runtime / "warehouse.sdf"))
         launch_env.update(NAV2_PILOT_WORLD=str(runtime / "warehouse.sdf"), NAV2_PILOT_PARAMS=str(runtime / "nav2_runtime.yaml"))
@@ -187,6 +196,10 @@ def run_trial(profile, args, repo, entrypoint, *, dependencies=None):
         gz = deps.GzNode()
         tfbuffer = deps.Buffer()
         tflistener = deps.TransformListener(tfbuffer, node)
+        if capture is not None:
+            capture.attach(node, out, recording)
+            launch_env["DATASET_ROBOT_SDF"] = str(runtime / "mecanum_camera.sdf")
+            capture.start_bridge(runtime, out, launch_env, processes, files)
         topics = [("gt", "/common/ground_truth", deps.String), ("scan", "/scan", deps.LaserScan),
                   ("imu", "/imu", deps.Imu), ("odom", "/odom", deps.Odometry), ("clock", "/clock", deps.Clock),
                   ("amcl", "/amcl_pose", deps.PoseWithCovarianceStamped), ("cmd", "/cmd_vel", deps.TwistStamped),
@@ -200,7 +213,8 @@ def run_trial(profile, args, repo, entrypoint, *, dependencies=None):
         log = (out / "launch.log").open("w")
         files.append(log)
         gui = False if profile.groups else args.gui
-        launch = subprocess.Popen(["ros2", "launch", str(stage / "warehouse.launch.py"), f"gui:={str(gui).lower()}"],
+        launch_file = repo / "tools/capture_warehouse.launch.py" if capture is not None else stage / "warehouse.launch.py"
+        launch = subprocess.Popen(["ros2", "launch", str(launch_file), f"gui:={str(gui).lower()}"],
                                   stdout=log, stderr=subprocess.STDOUT, start_new_session=True, env=launch_env)
         processes.append(launch)
 
@@ -215,8 +229,13 @@ def run_trial(profile, args, repo, entrypoint, *, dependencies=None):
             except Exception:
                 pass  # A missing TF sample is handled by the explicit readiness gate below.
 
+        def spin_once():
+            if capture is not None:
+                capture.check_health()
+            deps.rclpy.spin_once(node, timeout_sec=.02)
+
         def wait(predicate, seconds):
-            return wait_for(predicate, seconds, spin_once=lambda: deps.rclpy.spin_once(node, timeout_sec=.02), processes=processes)
+            return wait_for(predicate, seconds, spin_once=spin_once, processes=processes)
 
         def robot_pose():
             return recording.rows["gazebo_poses"][-1]["poses"]["mecanum_robot"]
@@ -251,6 +270,8 @@ def run_trial(profile, args, repo, entrypoint, *, dependencies=None):
             processes.append(gui_process)
             wait(lambda: False, 3.)
             result["gui_start_mode"] = "Separate GUI after server sensors/AMCL/Nav2 ready"
+        if capture is not None:
+            capture.ready(node, wait, out, result, recording)
         result["amcl_publishers"] = deps.observer.publisher_evidence(node)
         publishers = lambda: [dict(node=item.node_name, namespace=item.node_namespace) for item in node.get_publishers_info_by_topic("/cmd_vel")]
         result["cmd_vel_publishers_before_goal"] = publishers()
@@ -268,11 +289,14 @@ def run_trial(profile, args, repo, entrypoint, *, dependencies=None):
         goal.pose.pose.position.y = 0.
         goal.pose.pose.orientation.w = 1.
         result["before_goal_world_pose"] = robot
-        execute_goal(client, goal, recording, runtime, result, wait, capture_tf, on_accepted=accepted_handles.append)
+        execute_goal(client, goal, recording, runtime, result, wait, capture_tf, on_accepted=accepted_handles.append,
+                     on_started=capture.started if capture is not None else lambda start: None)
         wait(lambda: False, .4)
         capture_tf()
         recording.phase = "finished"
         result.update(goal_metrics(robot_pose(), result["action_status"]))
+        if capture is not None:
+            capture.finish(wait, recording, result)
         result.update(counts=dict(recording.counts), cmd_vel_publishers_after_goal=publishers(),
                       status="MEASURED", amcl_final_pose=endpoint(recording.latest["amcl"].pose.pose))
     except Exception as error:
@@ -285,12 +309,21 @@ def run_trial(profile, args, repo, entrypoint, *, dependencies=None):
                 accepted_handles[-1].cancel_goal_async()
             except Exception:
                 pass
+        if capture is not None:
+            recording.scene_sink = None
+            try:
+                capture.close(result)
+            except Exception as error:
+                result["recording_error"] = str(error)
+                result["status"] = "ERROR"
+                result.setdefault("error", "Capture close failed: " + str(error))
         if gui_process is not None:
             deps.adapter.stop(gui_process)
             result["gui_returncode"] = gui_process.returncode
         if guard is not None:
             try:
-                result["server_shutdown"] = deps.shutdown.stop_server(guard)
+                result["server_shutdown"] = (capture.stop_server(guard, deps.shutdown.stop_server)
+                                             if capture is not None else deps.shutdown.stop_server(guard))
             except Exception as error:
                 result["shutdown_error"] = str(error)
         if container_name:

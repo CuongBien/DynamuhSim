@@ -22,7 +22,7 @@ def goal_metrics(robot, action_status):
                 actual_goal_reached=action_status == 4 and xy <= .2 and angle <= .25)
 
 
-def execute_goal(client, goal, recording, runtime, result, wait, capture_tf, *, on_accepted=lambda handle: None, monotonic=time.monotonic):
+def execute_goal(client, goal, recording, runtime, result, wait, capture_tf, *, on_accepted=lambda handle: None, on_started=lambda start: None, monotonic=time.monotonic):
     future = client.send_goal_async(goal, feedback_callback=recording.feedback)
     if not wait(future.done, 10):
         raise RuntimeError("No goal response")
@@ -33,6 +33,7 @@ def execute_goal(client, goal, recording, runtime, result, wait, capture_tf, *, 
     on_accepted(handle)
     start = recording.simtime()
     recording.phase = "active"
+    on_started(start)
     (runtime / "start_gate").write_text(str(start))
     result["goal_start_sim"] = start
     pending = handle.get_result_async()

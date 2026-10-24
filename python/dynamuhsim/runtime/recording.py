@@ -29,6 +29,7 @@ class TrialRecording:
         self.rows = {key: [] for key in self.STREAMS}
         self.frames = []
         self.faults = []
+        self.scene_sink = None
 
     def simtime(self):
         clock = self.latest.get("clock")
@@ -71,6 +72,8 @@ class TrialRecording:
         if entities:
             self.rows["gazebo_poses"].append(dict(time=msg.header.stamp.sec + msg.header.stamp.nsec / 1e9,
                                                   poses=entities, phase=self.phase))
+            if self.scene_sink is not None:
+                self.scene_sink(msg.header.stamp.sec * 1_000_000_000 + msg.header.stamp.nsec, entities, self.phase)
 
     def camera(self, msg):
         if self.phase == "active":

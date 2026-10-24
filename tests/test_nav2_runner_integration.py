@@ -159,7 +159,7 @@ class RunnerHarness:
                   observer=NS(observer_qos=lambda mode: "transient-local", publisher_evidence=lambda node: []),
                   yaml=NS(safe_load=json.loads, safe_dump=lambda value, sort_keys: json.dumps(value)))
 
-    def run(self):
+    def run(self, capture=None):
         with ExitStack() as stack:
             stack.enter_context(patch.object(trial, "source_files", return_value=[self.entry, self.stage / "protocol.json"]))
             stack.enter_context(patch.object(trial.subprocess, "Popen", side_effect=self.popen))
@@ -169,7 +169,7 @@ class RunnerHarness:
             stack.enter_context(patch.object(trial, "execute_goal", partial(execute_goal, monotonic=self.now)))
             stack.enter_context(redirect_stdout(io.StringIO()))
             stack.enter_context(redirect_stderr(io.StringIO()))
-            code = trial.run_trial(self.profile, self.args, self.root, self.entry, dependencies=self.dependencies())
+            code = trial.run_trial(self.profile, self.args, self.root, self.entry, dependencies=self.dependencies(), capture=capture)
         return code, json.loads((self.args.report_dir / "result.json").read_text())
 
 

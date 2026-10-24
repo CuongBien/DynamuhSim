@@ -1,6 +1,6 @@
 {
   "schema": "dynamuhsim_experiment_registry/1",
-  "scope": "First migration: three bounded warehouse Nav2 pilots. Other experiments retain their existing entrypoints.",
+  "scope": "Three shared Nav2 pilots plus versioned capture API for new runs. Historical capture drivers/manifests remain preserved.",
   "shared_implementation": "python/dynamuhsim/runtime/nav2_trial.py",
   "experiments": [
     {
@@ -48,23 +48,40 @@
     {
       "name": "dataset_pilot",
       "runtime": "existing_frozen_pipeline",
-      "reason": "Used by historical source generation/capture contracts; not migrated or archived in this change."
+      "reason": "Historical frozen pipeline for reproducing accepted/quarantined results. Use the versioned capture API for fresh episodes; no historical manifest or driver is rewritten."
     },
     {
       "name": "depth_proxy_lifecycle",
       "runtime": "existing_frozen_pipeline",
-      "reason": "Used by historical source generation/capture contracts; not migrated or archived in this change."
+      "reason": "Historical frozen pipeline for reproducing accepted/quarantined results. Use the versioned capture API for fresh episodes; no historical manifest or driver is rewritten."
     },
     {
       "name": "early_avoidance_pilot",
       "runtime": "existing_frozen_pipeline",
-      "reason": "Used by historical source generation/capture contracts; not migrated or archived in this change."
+      "reason": "Historical frozen pipeline for reproducing accepted/quarantined results. Use the versioned capture API for fresh episodes; no historical manifest or driver is rewritten."
     },
     {
       "name": "wm_episode_batch",
       "runtime": "existing_frozen_pipeline",
-      "reason": "Used by historical source generation/capture contracts; not migrated or archived in this change."
+      "reason": "Historical frozen pipeline for reproducing accepted/quarantined results. Use the versioned capture API for fresh episodes; no historical manifest or driver is rewritten."
     }
   ],
-  "historical_evidence": "Existing reports, source snapshots and freeze manifests remain unchanged; use their recorded source commit to reproduce them."
+  "historical_evidence": "Existing reports, source snapshots and freeze manifests remain unchanged; use their recorded source commit to reproduce them.",
+  "new_capture_pipeline": {
+    "entrypoint": "tools/capture_episode.py {prepare,verify,run}",
+    "launch": "tools/capture_warehouse.launch.py",
+    "runtime": "python/dynamuhsim/runtime/nav2_trial.py with CaptureContext hooks",
+    "config": "configs/capture/moderate.json",
+    "freeze_schema": "dynamuhsim_capture_freeze/2",
+    "camera_fixture": "python/dynamuhsim/simulation/capture.py",
+    "recording": "python/dynamuhsim/runtime/capture_recording.py",
+    "guide": "docs/CAPTURE_RUNTIME.md",
+    "replaces_for_new_runs": [
+      "dataset_pilot/trial.py",
+      "depth_proxy_lifecycle/motion.py",
+      "early_avoidance_pilot/run_validated.py",
+      "wm_episode_batch/capture.py"
+    ],
+    "historical_cohort_export_status": "Existing frozen cohort capture/resume/export commands retained for dataset01 reproduction; new API captures fresh standalone episodes and does not append to dataset01."
+  }
 }
