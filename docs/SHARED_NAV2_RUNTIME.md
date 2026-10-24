@@ -27,6 +27,14 @@ python3 tools/nav2_trial.py --experiment socnavgym_group_nav2 --help
 
 Không cần pip install để chạy các entry point từ source. `pyproject.toml` cung cấp package editable nếu một môi trường phát triển muốn cài; không cài lại dependency ROS/native framework thông qua package này.
 
+Với checkout/worktree mới, dựng dependency ignored cho backend dùng chung trước lượt chạy:
+
+```bash
+python3 experiments/social_navigation/benchmark/common_response/preflight.py
+```
+
+Preflight hiện có đối chiếu input/hash đã khóa và dựng `common_response/generated/crowd_kernel_n6.py` cùng `complexitynav_geometry/generated/{native_contract.py,swept.py,layout.json}`. Không cần chạy lại cohort offline để có các file này. Có Docker image chưa đủ để chạy ComplexityNav nếu thiếu các file được mount từ host. Vendor/venv SocNavGym, ROS packages và adapter `.so` vẫn cần chuẩn bị riêng.
+
 ## Chạy một lượt mới
 
 Trước khi chạy thật cần ROS2 Jazzy/Gazebo và package robot đã build, NVIDIA renderer, adapter `.so`, vendor/venv SocNavGym hoặc Docker images được pin cho backend tương ứng. Các gate cũ vẫn bắt buộc; CLI không tự dựng hay chạy lại chúng. Source ROS và workspace install phải thuộc checkout/runtime phù hợp.
@@ -68,7 +76,7 @@ python3 tools/nav2_trial.py \
 - Goal action và tọa độ Gazebo thật được đánh giá riêng. XY≤0,20m và yaw≤0,25rad vẫn bắt buộc để actual_goal_reached.
 - Budget simulation/wall clock, hủy action khi timeout và lỗi worker terminal được giữ.
 - Nhóm mở GUI riêng sau readiness. Shared backend giữ Docker image/worker runtime đang pin và native dt.
-- Teardown giữ thứ tự GUI (nếu có), server, container thuộc phiên, owned processes, ROS và RuntimeGuard cleanup. Không kill theo tên process chung.
+- Teardown giữ thứ tự GUI (nếu có), server, container thuộc phiên, owned processes, ROS và RuntimeGuard cleanup. ROS launch nhận SIGINT tại parent và có 15s để tự dừng node con; chỉ fallback sang process group khi hết grace period. Không kill theo tên process chung.
 - source_sha256 của lượt mới ghi cả entry point và các module dùng chung; kết quả cũ không được sửa hash để mang tên implementation mới.
 
 ## Phần lịch sử và pipeline chưa chuyển
@@ -86,3 +94,38 @@ python3 -m unittest discover -s tests -p 'test_nav2*.py' -v
 Fixtures `tests/fixtures/nav2_runtime/` được trích bằng thực thi riêng callback/config thuần từ commit9833565. Tests đối chiếu world bytes, telemetry JSONL, launch arguments, CLI, goal success-vs-true-pose, timeout, accepted-handle cleanup và lỗi worker. Integration tests dùng endpoint/process giả trong bộ nhớ cho năm cấu hình worker/GUI; không thay cho nghiệm thu Gazebo/ROS/Docker thực và không chứng minh physics hoặc renderer đã chạy lại.
 
 Luồng dataset WM hiện tại vẫn được hướng dẫn tại [START_HERE_CURRENT](START_HERE_CURRENT.md).
+
+## Kiểm chứng native ngày 24/10/2026
+
+[Biên bản JSON và hash bằng chứng](verification/shared_nav2_native_2026-10-24.json) giữ cả kết quả không đạt và lần lỗi chuẩn bị môi trường. ROS2 Jazzy/Gazebo Harmonic 8.15.0, NVIDIA RTX 4060 Laptop, backend Docker ghim content ID; build riêng từ source của nhánh refactor, không source install của checkout chính đang có thay đổi.
+
+Bộ runtime tại `61667d8` đã chạy thực và audit 5 cấu hình:
+
+| Ca đo | Nav2 action | XY thật (m) | Yaw thật (rad) | Đạt đích thật |
+|---|---|---:|---:|---|
+| Không người | SUCCEEDED | 0,128 | 0,031 | Có |
+| SocNavGym 6 người riêng lẻ | SUCCEEDED | 0,144 | 0,019 | Có |
+| Nhóm đứng, seed 42 | SUCCEEDED | 0,236 | 0,213 | Không |
+| CrowdSimPlus ORCA+ | SUCCEEDED | 0,183 | 0,124 | Có |
+| ComplexityNav geometry mixed, sau preflight | SUCCEEDED | 0,181 | 0,201 | Có |
+
+Cả 5 ca đo vượt kiểm tra config, 42 AABB, physics timestep, pose/sensor/control streams, costmap payload, provenance và process cleanup; bốn ca có người khớp native-to-Gazebo interpolation và giữ start gate/native timestep 0,1 hoặc 0,25s. Các swept gap được lưu là số đo, không suy thành chứng nhận an toàn.
+
+Có 6 lần khởi chạy cho 5 cấu hình trên: lần ComplexityNav đầu tiên ERROR trước khi mở Gazebo do thiếu `generated/native_contract.py`. Đã dừng cohort, chạy preflight sẵn có để dựng dependency đúng hash rồi chạy ca mới với tên khác; ERROR cũ còn nguyên. Ca nhóm không đạt XY 0,20m vẫn giữ nguyên, không điều chỉnh Nav2 để thay kết quả.
+
+Hai phép fault injection dùng ROS/Gazebo/Nav2 thật: budget 1s tạo TIMEOUT, worker lỗi sau 5 native updates tạo terminal ERROR và yêu cầu pause. Cả hai có log Nav2 xác nhận cancel và dọn hết process/container. Budget chỉ đổi trong test harness; protocol production 45s giữ nguyên.
+
+Audit log phát hiện cách dừng cũ gửi SIGINT cho cả launch và node con, sau đó launch chuyển tiếp SIGINT lần nữa; nhiều node ghi exit -2/255 dù Gazebo thoát sạch và không sót process. Commit `6b8ae5e` sửa bằng SIGINT cho parent trước, có group fallback. **24 unit/in-memory integration tests PASS.** Đã chạy lại 4 ca native trên revision sửa shutdown: không người, nhóm đứng, timeout và worker fault; cả 4 ROS launch returncode 0, không có `process has died`, Gazebo clean và không còn owned process/container. Đây là các ca kiểm chứng revision mới, không thay các outcome trước.
+
+| Ca kiểm chứng sau sửa shutdown | Kết quả điều hướng | Đích thật | Shutdown |
+|---|---|---|---|
+| Không người | SUCCEEDED | Có, XY 0,136m | PASS |
+| Nhóm đứng, seed 42 | SUCCEEDED | Có, XY 0,188m | PASS |
+| Ép budget 1s | TIMEOUT | Không | PASS; Nav2 xác nhận cancel |
+| Worker fault sau 5 updates | ERROR được giữ | Không đánh giá | PASS; Nav2 xác nhận cancel |
+
+Kết quả nhóm khác giữa hai lượt không chứng minh sửa shutdown làm điều hướng tốt hơn: chưa đồng bộ random state AMCL/MPPI và chưa chạy A/B để quy kết nguyên nhân. Lần sai số 0,236m vẫn được lưu và báo cáo.
+
+Raw JSONL, launch/worker logs, GIF quay trực tiếp và scripts test được giữ trong `experiments/social_navigation/benchmark/generated/native_smoke_20261024/` tại worktree test. Chỉ biên bản gọn được commit, không đưa raw media/dataset mới vào Git. Vendor/venv là dependency ngoài Git; hai symlink tạm trong worktree đã được gỡ sau test, mapping và hash nằm trong raw evidence. Trạng thái/index của checkout chính được đối chiếu không đổi.
+
+Giới hạn: mỗi cấu hình có một ca đo chính; chưa chạy A/B native runner cũ/mới, chưa đo success rate hoặc xếp hạng backend, và chưa chạy GUI thật. Nhánh shutdown mới kiểm tra Docker qua worker-fault; hai ca Docker bình thường ở bảng là bằng chứng tại `61667d8`. Chưa thay fixture/capture/frozen manifests hoặc nhãn/dataset. Bước kế tiếp là chuyển pipeline capture/fixture sang API/config rõ ràng, dựng freeze mới cho lượt mới và giữ bằng chứng lịch sử.

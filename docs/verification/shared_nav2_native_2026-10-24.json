@@ -1,0 +1,1010 @@
+{
+  "date": "2026-10-24",
+  "timezone": "Asia/Bangkok",
+  "tested_runtime_commit": "61667d8b9f40c47f3bfdbd508e675117b8a5cb84",
+  "environment": {
+    "gpu": "name, driver_version, memory.total [MiB]\nNVIDIA GeForce RTX 4060 Laptop GPU, 610.47, 8188 MiB\n",
+    "uname": "Linux DESKTOP-NVIVQ2U 6.18.33.2-microsoft-standard-WSL2 #1 SMP PREEMPT_DYNAMIC Thu Jun 18 21:54:43 UTC 2026 x86_64 x86_64 x86_64 GNU/Linux\n",
+    "images": {
+      "dynamuhsim-crowdsimplus:round2": {
+        "pinned": "sha256:39929ee8e4fa6d738a381a0b695bf25eaf9fa972cd5b9d8a6854d72f80bd5f3c",
+        "resolved": "\"sha256:39929ee8e4fa6d738a381a0b695bf25eaf9fa972cd5b9d8a6854d72f80bd5f3c\"",
+        "returncode": 0
+      },
+      "dynamuhsim-complexitynav:round3": {
+        "pinned": "sha256:edfd591ea7551813419e511b341089ad956b6d3e4c1bd395a326035865ef1d5d",
+        "resolved": "\"sha256:edfd591ea7551813419e511b341089ad956b6d3e4c1bd395a326035865ef1d5d\"",
+        "returncode": 0
+      }
+    },
+    "native_packages": "custom_corridor and custom_corridor_plugins built from refactor worktree only; /opt/ros/jazzy underlay, no main checkout install sourced",
+    "head": "61667d8b9f40c47f3bfdbd508e675117b8a5cb84"
+  },
+  "unittest": {
+    "command": "python3 -m unittest discover -s tests -p 'test_nav2*.py' -v",
+    "passed": 21,
+    "failed": 0
+  },
+  "normal_attempt_count": 6,
+  "measured_configuration_count": 5,
+  "initial_infrastructure_error_count": 1,
+  "actual_goal_reached_count": 4,
+  "all_initial_attempts_pass": false,
+  "measured_case_checks_pass": true,
+  "cases": [
+    {
+      "name": "empty",
+      "status": "MEASURED",
+      "navigation_status": "SUCCEEDED",
+      "actual_goal_reached": true,
+      "goal_xy_error_world_m": 0.12801274110410732,
+      "goal_yaw_error_world_rad": 0.03081219222144331,
+      "active_sim_seconds": 15.8475,
+      "wall_seconds": 15.960604447999913,
+      "integration_pass": true,
+      "error": null,
+      "report": "experiments/social_navigation/benchmark/generated/native_smoke_20261024/native_empty_01",
+      "result_sha256": "d2c3ed217c7f09f877f62e770ba76f98c6bc821fc0c6e6119381e208d61a6e74",
+      "artifact_manifest_sha256": "7c9d294e65c49d78de107c387ded3f5e15db67c36fc2a5b4ef90910c75414da3",
+      "native_dt": 0.1,
+      "gazebo_clean_exit": true,
+      "owned_cleanup": "PASS",
+      "container_remaining": null,
+      "process_exit_errors": [
+        {
+          "process": "goal_pose_bridge.py-19",
+          "exit_code": -2
+        },
+        {
+          "process": "amcl-12",
+          "exit_code": -2
+        },
+        {
+          "process": "map_server-11",
+          "exit_code": -2
+        },
+        {
+          "process": "robot_state_publisher-9",
+          "exit_code": -2
+        },
+        {
+          "process": "static_transform_publisher-7",
+          "exit_code": -2
+        },
+        {
+          "process": "static_transform_publisher-6",
+          "exit_code": -2
+        },
+        {
+          "process": "static_transform_publisher-5",
+          "exit_code": -2
+        }
+      ],
+      "source_sha256": {
+        "tools/nav2_trial.py": "6601482905b8bcf8dd9816db9f776d674200158c3e884517a19e34f3159311d2",
+        "experiments/social_navigation/benchmark/socnavgym_nav2_pilot/worker.py": "948b36bf965f45bab20ba5c65a5ac144baa9147701947a66881262ffdb08d52e",
+        "experiments/social_navigation/benchmark/socnavgym_nav2_pilot/warehouse.launch.py": "0fb24811eccebab21ee3fc9cdac23d8867f5627d82ba5c0e788085b7a806256f",
+        "experiments/social_navigation/benchmark/socnavgym_nav2_pilot/protocol.json": "6a552b3024bb4255c057a4f027721715ce704b5a6e8c9fee44ebb0bbe6359d33",
+        "experiments/social_navigation/benchmark/socnavgym_response_fix/projection.py": "260d0775a10bc6b510c217a26e02a877a4394ef3f3f56475740ea14d52c841d9",
+        "experiments/social_navigation/benchmark/socnavgym_response_fix/responsive_motion.py": "7e94fb78bb1a6552c7c6b17654bf90ba2a937145837916b783ddeaa36b45a4c4",
+        "experiments/social_navigation/benchmark/socnavgym_response_fix/adapter.cc": "ffbcda748dc1dba4e06beb79c6e8fa93c77da25fbe2348b10f92062c36279abb",
+        "experiments/social_navigation/benchmark/socnavgym_response_fix/build/libresponse_adapter.so": "524fe8e945daad94319d7ac1a5f6377a5f36cbf6c505bb580e50e2e73102e984",
+        "experiments/social_navigation/benchmark/common_response/model_worker.py": "74f2ff2e08a105aa7a6d34e01d032bff81fafaac9c8652a25302a747ed39f3be",
+        "experiments/social_navigation/benchmark/common_response/inputs/crossing_near.json": "ff035a69a19420bdfb4e44825830313e1e1a60e401f21b94d5a39750f9cf0fbc",
+        "experiments/social_navigation/warehouse/nav2_warehouse.yaml": "ff73d68dcdc64c29427522c9b87fc9f3850b02326a3a9b1c467e6b9b3d5297a7",
+        "experiments/social_navigation/warehouse/warehouse.yaml": "389ed7597a08167e99e97a3ce1b83a4818deede6a57aac99f14660e6cf59cea0",
+        "experiments/social_navigation/warehouse/warehouse.pgm": "6538c7c14e4ece9f8e20a57619a49ea4e80bee6cc886499f5e1d21c3b550667b",
+        "experiments/social_navigation/warehouse/warehouse.sdf": "4563ff06990ff352dd96c0b33c63ccd01763c8f39debed31f5761d022dcdbc8d",
+        "src/custom_corridor/launch/nav2_corridor.launch.py": "0cc475f181f679d5b728d7d2a700d3c2b676987f697c9adbffff1762c8f799e0",
+        "src/custom_corridor/launch/publish_episode_initial_pose.py": "1b54e51430bfa21e410891c3e8b1b55cec604683abf3fd3b6e9eb968ebd89728",
+        "python/dynamuhsim/__init__.py": "7eb1d8f64ab30371b46729aab1f468ce3ec8d9f0454d3ab4f3b792cd7fd02d18",
+        "python/dynamuhsim/runtime/__init__.py": "271642e6401ed1f7a70256f1e167882717b21ababb498bc593a16e89597e2af1",
+        "python/dynamuhsim/runtime/nav2_trial.py": "ada6f8c13709854b90e517615f6d8df7b96448cc039709575b677505c290b321",
+        "python/dynamuhsim/runtime/navigation.py": "e41af78eee0f7c9a4c7544b0839705933f929a224360789506189c3145284548",
+        "python/dynamuhsim/runtime/profiles.py": "ba54f8bd6e21f850652a516f0d5485d11e8eeb1b6032abb66437de33aa615ecf",
+        "python/dynamuhsim/runtime/recording.py": "aa4845cd57562c67d64d0ec165101eee1b2a6105df3aa9b601d1ee26b65501d3",
+        "python/dynamuhsim/simulation/__init__.py": "ebe222be60735f57681920035750e8bf18543201a1fbc5410e472c83fe62743b",
+        "python/dynamuhsim/simulation/warehouse.py": "b8202cb4cc2112f8b01130f15fe125752fc4b4fa53fe4f72cac426cafc4f51a6",
+        "pyproject.toml": "9bac38083b922ba52b3b61dea09819dde5815642867b6a36c0bcb6dbeac8f16b",
+        "experiments/social_navigation/gazebo_adapter/run.py": "f4596403abace27667399a90d92252fc1355d3ef054947818ce632b21c43b8c9",
+        "experiments/social_navigation/benchmark/gpu_runtime/runtime_guard.py": "384e1e6ca012527524a92c37aab136588a36e5dc57a98ed6f9d58268648410e3",
+        "experiments/social_navigation/benchmark/shutdown_fix/ordered_stop.py": "003debbc1fc1c6b27184b875bec9864c4c3ede6b4144c197c32f60d0811dadd2",
+        "experiments/social_navigation/benchmark/amcl_observer.py": "0bc3517b4d1a6b22db56f6e7394f029c4f0ac279309ee7352ad01716b1a37117"
+      },
+      "detailed_audit": {
+        "name": "empty",
+        "status": "MEASURED",
+        "checks": {
+          "nav2_exact_config": true,
+          "runtime_hashes": true,
+          "world_42_boxes": true,
+          "physics_dt": true,
+          "active_world_samples": true,
+          "result_pose_has_recorded_sample": true,
+          "actual_goal_recomputed": true,
+          "nav2_control_streams": true,
+          "costmap_payloads": true,
+          "active_scan_odom_amcl": true,
+          "only_nav2_cmd_publishers": true,
+          "robot_frozen_warmup": true,
+          "live_preview": true,
+          "odom_matches_world": true
+        },
+        "metrics": {
+          "goal_pose_sample_sim": 28.285,
+          "post_measurement_tail_drift_m": 0.0,
+          "odom_world_error_max_m": 0.005903915005865763,
+          "active_pose_samples": 931,
+          "active_command_samples": 319,
+          "scan_samples": 140,
+          "amcl_samples": 78,
+          "costmap_samples": 58,
+          "preview_frames": 17
+        },
+        "pass": true
+      }
+    },
+    {
+      "name": "individual",
+      "status": "MEASURED",
+      "navigation_status": "SUCCEEDED",
+      "actual_goal_reached": true,
+      "goal_xy_error_world_m": 0.14421525638571928,
+      "goal_yaw_error_world_rad": 0.01941086841260056,
+      "active_sim_seconds": 22.287499999999998,
+      "wall_seconds": 54.311377469000035,
+      "integration_pass": true,
+      "error": null,
+      "report": "experiments/social_navigation/benchmark/generated/native_smoke_20261024/native_individual_01",
+      "result_sha256": "c1467fa6ec9208552135832cdbd3dee7fdbd0f06504902e14bc40315fb11196c",
+      "artifact_manifest_sha256": "a1bae756e10ecec920a121968d879e3bd77346a9fbb612c79634feb2f5b2704b",
+      "native_dt": 0.1,
+      "gazebo_clean_exit": true,
+      "owned_cleanup": "PASS",
+      "container_remaining": null,
+      "process_exit_errors": [
+        {
+          "process": "amcl-12",
+          "exit_code": -2
+        },
+        {
+          "process": "map_server-11",
+          "exit_code": -2
+        },
+        {
+          "process": "robot_state_publisher-9",
+          "exit_code": -2
+        },
+        {
+          "process": "static_transform_publisher-7",
+          "exit_code": -2
+        },
+        {
+          "process": "static_transform_publisher-6",
+          "exit_code": -2
+        },
+        {
+          "process": "static_transform_publisher-5",
+          "exit_code": -2
+        },
+        {
+          "process": "goal_pose_bridge.py-19",
+          "exit_code": -2
+        }
+      ],
+      "source_sha256": {
+        "tools/nav2_trial.py": "6601482905b8bcf8dd9816db9f776d674200158c3e884517a19e34f3159311d2",
+        "experiments/social_navigation/benchmark/socnavgym_nav2_pilot/worker.py": "948b36bf965f45bab20ba5c65a5ac144baa9147701947a66881262ffdb08d52e",
+        "experiments/social_navigation/benchmark/socnavgym_nav2_pilot/warehouse.launch.py": "0fb24811eccebab21ee3fc9cdac23d8867f5627d82ba5c0e788085b7a806256f",
+        "experiments/social_navigation/benchmark/socnavgym_nav2_pilot/protocol.json": "6a552b3024bb4255c057a4f027721715ce704b5a6e8c9fee44ebb0bbe6359d33",
+        "experiments/social_navigation/benchmark/socnavgym_response_fix/projection.py": "260d0775a10bc6b510c217a26e02a877a4394ef3f3f56475740ea14d52c841d9",
+        "experiments/social_navigation/benchmark/socnavgym_response_fix/responsive_motion.py": "7e94fb78bb1a6552c7c6b17654bf90ba2a937145837916b783ddeaa36b45a4c4",
+        "experiments/social_navigation/benchmark/socnavgym_response_fix/adapter.cc": "ffbcda748dc1dba4e06beb79c6e8fa93c77da25fbe2348b10f92062c36279abb",
+        "experiments/social_navigation/benchmark/socnavgym_response_fix/build/libresponse_adapter.so": "524fe8e945daad94319d7ac1a5f6377a5f36cbf6c505bb580e50e2e73102e984",
+        "experiments/social_navigation/benchmark/common_response/model_worker.py": "74f2ff2e08a105aa7a6d34e01d032bff81fafaac9c8652a25302a747ed39f3be",
+        "experiments/social_navigation/benchmark/common_response/inputs/crossing_near.json": "ff035a69a19420bdfb4e44825830313e1e1a60e401f21b94d5a39750f9cf0fbc",
+        "experiments/social_navigation/warehouse/nav2_warehouse.yaml": "ff73d68dcdc64c29427522c9b87fc9f3850b02326a3a9b1c467e6b9b3d5297a7",
+        "experiments/social_navigation/warehouse/warehouse.yaml": "389ed7597a08167e99e97a3ce1b83a4818deede6a57aac99f14660e6cf59cea0",
+        "experiments/social_navigation/warehouse/warehouse.pgm": "6538c7c14e4ece9f8e20a57619a49ea4e80bee6cc886499f5e1d21c3b550667b",
+        "experiments/social_navigation/warehouse/warehouse.sdf": "4563ff06990ff352dd96c0b33c63ccd01763c8f39debed31f5761d022dcdbc8d",
+        "src/custom_corridor/launch/nav2_corridor.launch.py": "0cc475f181f679d5b728d7d2a700d3c2b676987f697c9adbffff1762c8f799e0",
+        "src/custom_corridor/launch/publish_episode_initial_pose.py": "1b54e51430bfa21e410891c3e8b1b55cec604683abf3fd3b6e9eb968ebd89728",
+        "python/dynamuhsim/__init__.py": "7eb1d8f64ab30371b46729aab1f468ce3ec8d9f0454d3ab4f3b792cd7fd02d18",
+        "python/dynamuhsim/runtime/__init__.py": "271642e6401ed1f7a70256f1e167882717b21ababb498bc593a16e89597e2af1",
+        "python/dynamuhsim/runtime/nav2_trial.py": "ada6f8c13709854b90e517615f6d8df7b96448cc039709575b677505c290b321",
+        "python/dynamuhsim/runtime/navigation.py": "e41af78eee0f7c9a4c7544b0839705933f929a224360789506189c3145284548",
+        "python/dynamuhsim/runtime/profiles.py": "ba54f8bd6e21f850652a516f0d5485d11e8eeb1b6032abb66437de33aa615ecf",
+        "python/dynamuhsim/runtime/recording.py": "aa4845cd57562c67d64d0ec165101eee1b2a6105df3aa9b601d1ee26b65501d3",
+        "python/dynamuhsim/simulation/__init__.py": "ebe222be60735f57681920035750e8bf18543201a1fbc5410e472c83fe62743b",
+        "python/dynamuhsim/simulation/warehouse.py": "b8202cb4cc2112f8b01130f15fe125752fc4b4fa53fe4f72cac426cafc4f51a6",
+        "pyproject.toml": "9bac38083b922ba52b3b61dea09819dde5815642867b6a36c0bcb6dbeac8f16b",
+        "experiments/social_navigation/gazebo_adapter/run.py": "f4596403abace27667399a90d92252fc1355d3ef054947818ce632b21c43b8c9",
+        "experiments/social_navigation/benchmark/gpu_runtime/runtime_guard.py": "384e1e6ca012527524a92c37aab136588a36e5dc57a98ed6f9d58268648410e3",
+        "experiments/social_navigation/benchmark/shutdown_fix/ordered_stop.py": "003debbc1fc1c6b27184b875bec9864c4c3ede6b4144c197c32f60d0811dadd2",
+        "experiments/social_navigation/benchmark/amcl_observer.py": "0bc3517b4d1a6b22db56f6e7394f029c4f0ac279309ee7352ad01716b1a37117"
+      },
+      "detailed_audit": {
+        "name": "individual",
+        "status": "MEASURED",
+        "checks": {
+          "nav2_exact_config": true,
+          "runtime_hashes": true,
+          "world_42_boxes": true,
+          "physics_dt": true,
+          "active_world_samples": true,
+          "result_pose_has_recorded_sample": true,
+          "actual_goal_recomputed": true,
+          "nav2_control_streams": true,
+          "costmap_payloads": true,
+          "active_scan_odom_amcl": true,
+          "only_nav2_cmd_publishers": true,
+          "robot_frozen_warmup": true,
+          "live_preview": true,
+          "odom_matches_world": true,
+          "native_dt_and_population": true,
+          "worker_freeze_and_contiguous_steps": true,
+          "worker_clock_contiguous": true,
+          "native_to_gazebo_interpolation": true
+        },
+        "metrics": {
+          "goal_pose_sample_sim": 32.9725,
+          "post_measurement_tail_drift_m": 0.0,
+          "odom_world_error_max_m": 0.005768208956296673,
+          "active_pose_samples": 1374,
+          "active_command_samples": 1086,
+          "scan_samples": 165,
+          "amcl_samples": 100,
+          "costmap_samples": 97,
+          "preview_frames": 22,
+          "proxy_interpolation_error_max_m": 1.0667388882858398e-14,
+          "swept_geometry_gaps_m": {
+            "pair": 0.12511231349281493,
+            "robot": 0.03907124580240118,
+            "static": 0.5493216457940119
+          },
+          "native_dt": 0.1,
+          "active_native_steps": 225,
+          "inactive_transport_steps": 105
+        },
+        "pass": true
+      }
+    },
+    {
+      "name": "standing42",
+      "status": "MEASURED",
+      "navigation_status": "SUCCEEDED",
+      "actual_goal_reached": false,
+      "goal_xy_error_world_m": 0.2359273488906861,
+      "goal_yaw_error_world_rad": 0.2125444721483971,
+      "active_sim_seconds": 25.014999999999997,
+      "wall_seconds": 62.67266880500006,
+      "integration_pass": true,
+      "error": null,
+      "report": "experiments/social_navigation/benchmark/generated/native_smoke_20261024/native_standing42_01",
+      "result_sha256": "862520f8b5de5c6e517874b266f41a1ac05aeebcd7cddc918f525ff698f0492b",
+      "artifact_manifest_sha256": "55cd84631384e61d1284becbf7c3dbb0d118d80306d63b724f9297d5b0ac16a8",
+      "native_dt": 0.1,
+      "gazebo_clean_exit": true,
+      "owned_cleanup": "PASS",
+      "container_remaining": null,
+      "process_exit_errors": [
+        {
+          "process": "goal_pose_bridge.py-19",
+          "exit_code": -2
+        },
+        {
+          "process": "map_server-11",
+          "exit_code": -2
+        },
+        {
+          "process": "robot_state_publisher-9",
+          "exit_code": -2
+        },
+        {
+          "process": "static_transform_publisher-6",
+          "exit_code": 255
+        },
+        {
+          "process": "static_transform_publisher-7",
+          "exit_code": -2
+        }
+      ],
+      "source_sha256": {
+        "tools/nav2_trial.py": "6601482905b8bcf8dd9816db9f776d674200158c3e884517a19e34f3159311d2",
+        "experiments/social_navigation/benchmark/socnavgym_group_nav2/worker.py": "46d866e93f4a5b3e2dbaf33f5f99a71b95206fd65774613ccc562d2acfd14b6b",
+        "experiments/social_navigation/benchmark/socnavgym_group_nav2/warehouse.launch.py": "0fb24811eccebab21ee3fc9cdac23d8867f5627d82ba5c0e788085b7a806256f",
+        "experiments/social_navigation/benchmark/socnavgym_group_nav2/protocol.json": "79bbe5900ea2625057c54fadfe2340427ce56447fe333789c324366a22b9ca9f",
+        "experiments/social_navigation/benchmark/socnavgym_response_fix/projection.py": "260d0775a10bc6b510c217a26e02a877a4394ef3f3f56475740ea14d52c841d9",
+        "experiments/social_navigation/benchmark/socnavgym_response_fix/responsive_motion.py": "7e94fb78bb1a6552c7c6b17654bf90ba2a937145837916b783ddeaa36b45a4c4",
+        "experiments/social_navigation/benchmark/socnavgym_response_fix/adapter.cc": "ffbcda748dc1dba4e06beb79c6e8fa93c77da25fbe2348b10f92062c36279abb",
+        "experiments/social_navigation/benchmark/socnavgym_response_fix/build/libresponse_adapter.so": "524fe8e945daad94319d7ac1a5f6377a5f36cbf6c505bb580e50e2e73102e984",
+        "experiments/social_navigation/benchmark/common_response/model_worker.py": "74f2ff2e08a105aa7a6d34e01d032bff81fafaac9c8652a25302a747ed39f3be",
+        "experiments/social_navigation/benchmark/common_response/inputs/crossing_near.json": "ff035a69a19420bdfb4e44825830313e1e1a60e401f21b94d5a39750f9cf0fbc",
+        "experiments/social_navigation/warehouse/nav2_warehouse.yaml": "ff73d68dcdc64c29427522c9b87fc9f3850b02326a3a9b1c467e6b9b3d5297a7",
+        "experiments/social_navigation/warehouse/warehouse.yaml": "389ed7597a08167e99e97a3ce1b83a4818deede6a57aac99f14660e6cf59cea0",
+        "experiments/social_navigation/warehouse/warehouse.pgm": "6538c7c14e4ece9f8e20a57619a49ea4e80bee6cc886499f5e1d21c3b550667b",
+        "experiments/social_navigation/warehouse/warehouse.sdf": "4563ff06990ff352dd96c0b33c63ccd01763c8f39debed31f5761d022dcdbc8d",
+        "src/custom_corridor/launch/nav2_corridor.launch.py": "0cc475f181f679d5b728d7d2a700d3c2b676987f697c9adbffff1762c8f799e0",
+        "src/custom_corridor/launch/publish_episode_initial_pose.py": "1b54e51430bfa21e410891c3e8b1b55cec604683abf3fd3b6e9eb968ebd89728",
+        "experiments/social_navigation/benchmark/socnavgym_group_nav2/fixture.py": "2f217fc7d87bbb5950567b119d68baafba1b62515229c8b416247484c5b93a02",
+        "experiments/social_navigation/benchmark/socnavgym_group_nav2/reactive_motion.py": "821380fc1f1d95d647a8b0576a9ca6f8573c2af66feec20a08f3f361e3981085",
+        "experiments/social_navigation/benchmark/socnavgym_group_nav2/standing_projection.py": "be1d9f1546333aa57234c2d6b4cf622fc016ef4f1fd63251f28d8efbea194e40",
+        "experiments/social_navigation/benchmark/socnavgym_group_nav2/config.yaml": "8d12dd63d9ab64ea5467ab35e23712bc89d019740ab99fcd5d98e2e18b944c4d",
+        "experiments/social_navigation/benchmark/socnavgym_warehouse_lifecycle/kernel.py": "611a86973b6733473e7ff2a3abb2e8b7cc43173f3bc903d00c0a820d6b6d3aed",
+        "experiments/social_navigation/benchmark/socnavgym_warehouse_lifecycle/motion.py": "bef8b4a8a527f2f5725d306f6844bb128099fbcbac977fa684c2188715afbe04",
+        "experiments/social_navigation/benchmark/socnavgym_warehouse_lifecycle/geometry.py": "693a35314cce682f00c91f6dfeebd5225851663410920cac393a66a7936df5a3",
+        "experiments/social_navigation/benchmark/socnavgym_warehouse_lifecycle/config.yaml": "7ce199eafeb4adb6b5db4af969da4dba3370ffd8c05afe2eb262cfba8ceefd9e",
+        "experiments/social_navigation/benchmark/socnavgym_lifecycle_fix/continuous_groups.py": "b3fc3f1c7cfab0570620b823aea31d22047922d402447b5f9b1869cc4652ec60",
+        "experiments/social_navigation/vendor/SocNavGym/socnavgym/envs/socnavenv_v2.py": "9444d03f1d2c407c0a48578135faedd32a80431d5abb22cfe3582c473a826696",
+        "experiments/social_navigation/vendor/SocNavGym/socnavgym/envs/utils/human_human.py": "2648268352411745b8aaca5f9971cad6353fb8ee550be91a428277deafa54219",
+        "python/dynamuhsim/__init__.py": "7eb1d8f64ab30371b46729aab1f468ce3ec8d9f0454d3ab4f3b792cd7fd02d18",
+        "python/dynamuhsim/runtime/__init__.py": "271642e6401ed1f7a70256f1e167882717b21ababb498bc593a16e89597e2af1",
+        "python/dynamuhsim/runtime/nav2_trial.py": "ada6f8c13709854b90e517615f6d8df7b96448cc039709575b677505c290b321",
+        "python/dynamuhsim/runtime/navigation.py": "e41af78eee0f7c9a4c7544b0839705933f929a224360789506189c3145284548",
+        "python/dynamuhsim/runtime/profiles.py": "ba54f8bd6e21f850652a516f0d5485d11e8eeb1b6032abb66437de33aa615ecf",
+        "python/dynamuhsim/runtime/recording.py": "aa4845cd57562c67d64d0ec165101eee1b2a6105df3aa9b601d1ee26b65501d3",
+        "python/dynamuhsim/simulation/__init__.py": "ebe222be60735f57681920035750e8bf18543201a1fbc5410e472c83fe62743b",
+        "python/dynamuhsim/simulation/warehouse.py": "b8202cb4cc2112f8b01130f15fe125752fc4b4fa53fe4f72cac426cafc4f51a6",
+        "pyproject.toml": "9bac38083b922ba52b3b61dea09819dde5815642867b6a36c0bcb6dbeac8f16b",
+        "experiments/social_navigation/gazebo_adapter/run.py": "f4596403abace27667399a90d92252fc1355d3ef054947818ce632b21c43b8c9",
+        "experiments/social_navigation/benchmark/gpu_runtime/runtime_guard.py": "384e1e6ca012527524a92c37aab136588a36e5dc57a98ed6f9d58268648410e3",
+        "experiments/social_navigation/benchmark/shutdown_fix/ordered_stop.py": "003debbc1fc1c6b27184b875bec9864c4c3ede6b4144c197c32f60d0811dadd2",
+        "experiments/social_navigation/benchmark/amcl_observer.py": "0bc3517b4d1a6b22db56f6e7394f029c4f0ac279309ee7352ad01716b1a37117"
+      },
+      "detailed_audit": {
+        "name": "standing42",
+        "status": "MEASURED",
+        "checks": {
+          "nav2_exact_config": true,
+          "runtime_hashes": true,
+          "world_42_boxes": true,
+          "physics_dt": true,
+          "active_world_samples": true,
+          "result_pose_has_recorded_sample": true,
+          "actual_goal_recomputed": true,
+          "nav2_control_streams": true,
+          "costmap_payloads": true,
+          "active_scan_odom_amcl": true,
+          "only_nav2_cmd_publishers": true,
+          "robot_frozen_warmup": true,
+          "live_preview": true,
+          "odom_matches_world": true,
+          "native_dt_and_population": true,
+          "worker_freeze_and_contiguous_steps": true,
+          "worker_clock_contiguous": true,
+          "native_to_gazebo_interpolation": true
+        },
+        "metrics": {
+          "goal_pose_sample_sim": 37.145,
+          "post_measurement_tail_drift_m": 1.2172618002810097e-10,
+          "odom_world_error_max_m": 0.004227813232596173,
+          "active_pose_samples": 1665,
+          "active_command_samples": 1253,
+          "scan_samples": 186,
+          "amcl_samples": 108,
+          "costmap_samples": 108,
+          "preview_frames": 25,
+          "proxy_interpolation_error_max_m": 8.045862168512413e-15,
+          "swept_geometry_gaps_m": {
+            "pair": 0.04308937077716113,
+            "robot": 0.03756142188751077,
+            "static": 0.7753049546487089
+          },
+          "native_dt": 0.1,
+          "active_native_steps": 252,
+          "inactive_transport_steps": 121
+        },
+        "pass": true
+      }
+    },
+    {
+      "name": "crowd",
+      "status": "MEASURED",
+      "navigation_status": "SUCCEEDED",
+      "actual_goal_reached": true,
+      "goal_xy_error_world_m": 0.1827527825960871,
+      "goal_yaw_error_world_rad": 0.12447474768946366,
+      "active_sim_seconds": 22.045,
+      "wall_seconds": 65.72250699699998,
+      "integration_pass": true,
+      "error": null,
+      "report": "experiments/social_navigation/benchmark/generated/native_smoke_20261024/native_crowd_01",
+      "result_sha256": "a686b9f733edc46c67d4d47bf6d4715fd8b30757711dd0fe716a7a33ad1fbdd3",
+      "artifact_manifest_sha256": "c5638c0d55fd62312045f0796720df4c40f057f72dfe98bf01e05805f66737df",
+      "native_dt": 0.1,
+      "gazebo_clean_exit": true,
+      "owned_cleanup": "PASS",
+      "container_remaining": "",
+      "process_exit_errors": [
+        {
+          "process": "goal_pose_bridge.py-19",
+          "exit_code": -2
+        },
+        {
+          "process": "amcl-12",
+          "exit_code": -2
+        },
+        {
+          "process": "map_server-11",
+          "exit_code": -2
+        },
+        {
+          "process": "robot_state_publisher-9",
+          "exit_code": -2
+        },
+        {
+          "process": "static_transform_publisher-7",
+          "exit_code": -2
+        },
+        {
+          "process": "static_transform_publisher-6",
+          "exit_code": -2
+        },
+        {
+          "process": "static_transform_publisher-5",
+          "exit_code": -2
+        }
+      ],
+      "source_sha256": {
+        "tools/nav2_trial.py": "6601482905b8bcf8dd9816db9f776d674200158c3e884517a19e34f3159311d2",
+        "experiments/social_navigation/benchmark/shared_nav2_pilot/worker.py": "40b67ffbd6305e378e539842ec1e5ccf8f8cd403a8a7a7432e68d7dd403a9818",
+        "experiments/social_navigation/benchmark/shared_nav2_pilot/warehouse.launch.py": "0fb24811eccebab21ee3fc9cdac23d8867f5627d82ba5c0e788085b7a806256f",
+        "experiments/social_navigation/benchmark/shared_nav2_pilot/protocol.json": "c8927b8fc3ca3e2ef08e873dbfc889490eabec87c8c436ab221b8ff38a53855c",
+        "experiments/social_navigation/benchmark/socnavgym_response_fix/projection.py": "260d0775a10bc6b510c217a26e02a877a4394ef3f3f56475740ea14d52c841d9",
+        "experiments/social_navigation/benchmark/socnavgym_response_fix/responsive_motion.py": "7e94fb78bb1a6552c7c6b17654bf90ba2a937145837916b783ddeaa36b45a4c4",
+        "experiments/social_navigation/benchmark/socnavgym_response_fix/adapter.cc": "ffbcda748dc1dba4e06beb79c6e8fa93c77da25fbe2348b10f92062c36279abb",
+        "experiments/social_navigation/benchmark/socnavgym_response_fix/build/libresponse_adapter.so": "524fe8e945daad94319d7ac1a5f6377a5f36cbf6c505bb580e50e2e73102e984",
+        "experiments/social_navigation/benchmark/common_response/model_worker.py": "74f2ff2e08a105aa7a6d34e01d032bff81fafaac9c8652a25302a747ed39f3be",
+        "experiments/social_navigation/benchmark/common_response/inputs/crossing_near.json": "ff035a69a19420bdfb4e44825830313e1e1a60e401f21b94d5a39750f9cf0fbc",
+        "experiments/social_navigation/warehouse/nav2_warehouse.yaml": "ff73d68dcdc64c29427522c9b87fc9f3850b02326a3a9b1c467e6b9b3d5297a7",
+        "experiments/social_navigation/warehouse/warehouse.yaml": "389ed7597a08167e99e97a3ce1b83a4818deede6a57aac99f14660e6cf59cea0",
+        "experiments/social_navigation/warehouse/warehouse.pgm": "6538c7c14e4ece9f8e20a57619a49ea4e80bee6cc886499f5e1d21c3b550667b",
+        "experiments/social_navigation/warehouse/warehouse.sdf": "4563ff06990ff352dd96c0b33c63ccd01763c8f39debed31f5761d022dcdbc8d",
+        "src/custom_corridor/launch/nav2_corridor.launch.py": "0cc475f181f679d5b728d7d2a700d3c2b676987f697c9adbffff1762c8f799e0",
+        "src/custom_corridor/launch/publish_episode_initial_pose.py": "1b54e51430bfa21e410891c3e8b1b55cec604683abf3fd3b6e9eb968ebd89728",
+        "experiments/social_navigation/benchmark/shared_nav2_pilot/runtime.py": "af79480f7a730e66a3b08816b4f15086cbf71774b49a3b8500bdbd6bc71d017f",
+        "python/dynamuhsim/__init__.py": "7eb1d8f64ab30371b46729aab1f468ce3ec8d9f0454d3ab4f3b792cd7fd02d18",
+        "python/dynamuhsim/runtime/__init__.py": "271642e6401ed1f7a70256f1e167882717b21ababb498bc593a16e89597e2af1",
+        "python/dynamuhsim/runtime/nav2_trial.py": "ada6f8c13709854b90e517615f6d8df7b96448cc039709575b677505c290b321",
+        "python/dynamuhsim/runtime/navigation.py": "e41af78eee0f7c9a4c7544b0839705933f929a224360789506189c3145284548",
+        "python/dynamuhsim/runtime/profiles.py": "ba54f8bd6e21f850652a516f0d5485d11e8eeb1b6032abb66437de33aa615ecf",
+        "python/dynamuhsim/runtime/recording.py": "aa4845cd57562c67d64d0ec165101eee1b2a6105df3aa9b601d1ee26b65501d3",
+        "python/dynamuhsim/simulation/__init__.py": "ebe222be60735f57681920035750e8bf18543201a1fbc5410e472c83fe62743b",
+        "python/dynamuhsim/simulation/warehouse.py": "b8202cb4cc2112f8b01130f15fe125752fc4b4fa53fe4f72cac426cafc4f51a6",
+        "pyproject.toml": "9bac38083b922ba52b3b61dea09819dde5815642867b6a36c0bcb6dbeac8f16b",
+        "experiments/social_navigation/gazebo_adapter/run.py": "f4596403abace27667399a90d92252fc1355d3ef054947818ce632b21c43b8c9",
+        "experiments/social_navigation/benchmark/gpu_runtime/runtime_guard.py": "384e1e6ca012527524a92c37aab136588a36e5dc57a98ed6f9d58268648410e3",
+        "experiments/social_navigation/benchmark/shutdown_fix/ordered_stop.py": "003debbc1fc1c6b27184b875bec9864c4c3ede6b4144c197c32f60d0811dadd2",
+        "experiments/social_navigation/benchmark/amcl_observer.py": "0bc3517b4d1a6b22db56f6e7394f029c4f0ac279309ee7352ad01716b1a37117"
+      },
+      "detailed_audit": {
+        "name": "crowd",
+        "status": "MEASURED",
+        "checks": {
+          "nav2_exact_config": true,
+          "runtime_hashes": true,
+          "world_42_boxes": true,
+          "physics_dt": true,
+          "active_world_samples": true,
+          "result_pose_has_recorded_sample": true,
+          "actual_goal_recomputed": true,
+          "nav2_control_streams": true,
+          "costmap_payloads": true,
+          "active_scan_odom_amcl": true,
+          "only_nav2_cmd_publishers": true,
+          "robot_frozen_warmup": true,
+          "live_preview": true,
+          "odom_matches_world": true,
+          "native_dt_and_population": true,
+          "worker_freeze_and_contiguous_steps": true,
+          "worker_clock_contiguous": true,
+          "native_to_gazebo_interpolation": true
+        },
+        "metrics": {
+          "goal_pose_sample_sim": 31.5925,
+          "post_measurement_tail_drift_m": 7.233430226735429e-12,
+          "odom_world_error_max_m": 0.005192466088219202,
+          "active_pose_samples": 1400,
+          "active_command_samples": 1313,
+          "scan_samples": 159,
+          "amcl_samples": 99,
+          "costmap_samples": 94,
+          "preview_frames": 22,
+          "proxy_interpolation_error_max_m": 1.0805156823142815e-14,
+          "swept_geometry_gaps_m": {
+            "pair": 0.03999876329595975,
+            "robot": 0.038246043952366304,
+            "static": 0.020000702840042406
+          },
+          "native_dt": 0.1,
+          "active_native_steps": 223,
+          "inactive_transport_steps": 95
+        },
+        "pass": true
+      }
+    },
+    {
+      "name": "complex",
+      "status": "ERROR",
+      "navigation_status": null,
+      "actual_goal_reached": null,
+      "goal_xy_error_world_m": null,
+      "goal_yaw_error_world_rad": null,
+      "active_sim_seconds": null,
+      "wall_seconds": null,
+      "integration_pass": false,
+      "error": "Worker not ready",
+      "report": "experiments/social_navigation/benchmark/generated/native_smoke_20261024/native_complex_01",
+      "result_sha256": "5eadbb0bda3281f1a868eb0f18118835164efff2ab0963d517a326905ada6e8c",
+      "artifact_manifest_sha256": "34c58ffd6b9d13922975d33561a02661ac049aed1690897b2a4d630a47662a00",
+      "native_dt": 0.25,
+      "gazebo_clean_exit": false,
+      "owned_cleanup": "PASS",
+      "container_remaining": "",
+      "process_exit_errors": [],
+      "source_sha256": {
+        "tools/nav2_trial.py": "6601482905b8bcf8dd9816db9f776d674200158c3e884517a19e34f3159311d2",
+        "experiments/social_navigation/benchmark/shared_nav2_pilot/worker.py": "40b67ffbd6305e378e539842ec1e5ccf8f8cd403a8a7a7432e68d7dd403a9818",
+        "experiments/social_navigation/benchmark/shared_nav2_pilot/warehouse.launch.py": "0fb24811eccebab21ee3fc9cdac23d8867f5627d82ba5c0e788085b7a806256f",
+        "experiments/social_navigation/benchmark/shared_nav2_pilot/protocol.json": "c8927b8fc3ca3e2ef08e873dbfc889490eabec87c8c436ab221b8ff38a53855c",
+        "experiments/social_navigation/benchmark/socnavgym_response_fix/projection.py": "260d0775a10bc6b510c217a26e02a877a4394ef3f3f56475740ea14d52c841d9",
+        "experiments/social_navigation/benchmark/socnavgym_response_fix/responsive_motion.py": "7e94fb78bb1a6552c7c6b17654bf90ba2a937145837916b783ddeaa36b45a4c4",
+        "experiments/social_navigation/benchmark/socnavgym_response_fix/adapter.cc": "ffbcda748dc1dba4e06beb79c6e8fa93c77da25fbe2348b10f92062c36279abb",
+        "experiments/social_navigation/benchmark/socnavgym_response_fix/build/libresponse_adapter.so": "524fe8e945daad94319d7ac1a5f6377a5f36cbf6c505bb580e50e2e73102e984",
+        "experiments/social_navigation/benchmark/common_response/model_worker.py": "74f2ff2e08a105aa7a6d34e01d032bff81fafaac9c8652a25302a747ed39f3be",
+        "experiments/social_navigation/benchmark/common_response/inputs/crossing_near.json": "ff035a69a19420bdfb4e44825830313e1e1a60e401f21b94d5a39750f9cf0fbc",
+        "experiments/social_navigation/warehouse/nav2_warehouse.yaml": "ff73d68dcdc64c29427522c9b87fc9f3850b02326a3a9b1c467e6b9b3d5297a7",
+        "experiments/social_navigation/warehouse/warehouse.yaml": "389ed7597a08167e99e97a3ce1b83a4818deede6a57aac99f14660e6cf59cea0",
+        "experiments/social_navigation/warehouse/warehouse.pgm": "6538c7c14e4ece9f8e20a57619a49ea4e80bee6cc886499f5e1d21c3b550667b",
+        "experiments/social_navigation/warehouse/warehouse.sdf": "4563ff06990ff352dd96c0b33c63ccd01763c8f39debed31f5761d022dcdbc8d",
+        "src/custom_corridor/launch/nav2_corridor.launch.py": "0cc475f181f679d5b728d7d2a700d3c2b676987f697c9adbffff1762c8f799e0",
+        "src/custom_corridor/launch/publish_episode_initial_pose.py": "1b54e51430bfa21e410891c3e8b1b55cec604683abf3fd3b6e9eb968ebd89728",
+        "experiments/social_navigation/benchmark/shared_nav2_pilot/runtime.py": "af79480f7a730e66a3b08816b4f15086cbf71774b49a3b8500bdbd6bc71d017f",
+        "python/dynamuhsim/__init__.py": "7eb1d8f64ab30371b46729aab1f468ce3ec8d9f0454d3ab4f3b792cd7fd02d18",
+        "python/dynamuhsim/runtime/__init__.py": "271642e6401ed1f7a70256f1e167882717b21ababb498bc593a16e89597e2af1",
+        "python/dynamuhsim/runtime/nav2_trial.py": "ada6f8c13709854b90e517615f6d8df7b96448cc039709575b677505c290b321",
+        "python/dynamuhsim/runtime/navigation.py": "e41af78eee0f7c9a4c7544b0839705933f929a224360789506189c3145284548",
+        "python/dynamuhsim/runtime/profiles.py": "ba54f8bd6e21f850652a516f0d5485d11e8eeb1b6032abb66437de33aa615ecf",
+        "python/dynamuhsim/runtime/recording.py": "aa4845cd57562c67d64d0ec165101eee1b2a6105df3aa9b601d1ee26b65501d3",
+        "python/dynamuhsim/simulation/__init__.py": "ebe222be60735f57681920035750e8bf18543201a1fbc5410e472c83fe62743b",
+        "python/dynamuhsim/simulation/warehouse.py": "b8202cb4cc2112f8b01130f15fe125752fc4b4fa53fe4f72cac426cafc4f51a6",
+        "pyproject.toml": "9bac38083b922ba52b3b61dea09819dde5815642867b6a36c0bcb6dbeac8f16b",
+        "experiments/social_navigation/gazebo_adapter/run.py": "f4596403abace27667399a90d92252fc1355d3ef054947818ce632b21c43b8c9",
+        "experiments/social_navigation/benchmark/gpu_runtime/runtime_guard.py": "384e1e6ca012527524a92c37aab136588a36e5dc57a98ed6f9d58268648410e3",
+        "experiments/social_navigation/benchmark/shutdown_fix/ordered_stop.py": "003debbc1fc1c6b27184b875bec9864c4c3ede6b4144c197c32f60d0811dadd2",
+        "experiments/social_navigation/benchmark/amcl_observer.py": "0bc3517b4d1a6b22db56f6e7394f029c4f0ac279309ee7352ad01716b1a37117"
+      },
+      "detailed_audit": {
+        "name": "complex",
+        "status": "ERROR",
+        "checks": {
+          "audit_exception": false
+        },
+        "metrics": {
+          "audit_error": "FileNotFoundError(2, 'No such file or directory')"
+        },
+        "pass": false
+      }
+    },
+    {
+      "name": "complex_after_preflight",
+      "status": "MEASURED",
+      "navigation_status": "SUCCEEDED",
+      "actual_goal_reached": true,
+      "goal_xy_error_world_m": 0.18093135902842386,
+      "goal_yaw_error_world_rad": 0.20135839704183642,
+      "active_sim_seconds": 22.307500000000005,
+      "wall_seconds": 23.340216072999965,
+      "integration_pass": true,
+      "error": null,
+      "report": "experiments/social_navigation/benchmark/generated/native_smoke_20261024/native_complex_after_preflight_01",
+      "result_sha256": "ef69715d025c3caa6f8c437f839b5084c2e81c833f0bb96452c067a5f62b37ce",
+      "artifact_manifest_sha256": "236c7710cde1d75d93c37247655a2327a0f233725ddc78ef8d5d33ec82080d8a",
+      "native_dt": 0.25,
+      "gazebo_clean_exit": true,
+      "owned_cleanup": "PASS",
+      "container_remaining": "",
+      "process_exit_errors": [
+        {
+          "process": "goal_pose_bridge.py-19",
+          "exit_code": -2
+        },
+        {
+          "process": "amcl-12",
+          "exit_code": -2
+        },
+        {
+          "process": "map_server-11",
+          "exit_code": -2
+        },
+        {
+          "process": "robot_state_publisher-9",
+          "exit_code": -2
+        },
+        {
+          "process": "static_transform_publisher-7",
+          "exit_code": -2
+        },
+        {
+          "process": "static_transform_publisher-6",
+          "exit_code": -2
+        },
+        {
+          "process": "static_transform_publisher-5",
+          "exit_code": -2
+        }
+      ],
+      "source_sha256": {
+        "tools/nav2_trial.py": "6601482905b8bcf8dd9816db9f776d674200158c3e884517a19e34f3159311d2",
+        "experiments/social_navigation/benchmark/shared_nav2_pilot/worker.py": "40b67ffbd6305e378e539842ec1e5ccf8f8cd403a8a7a7432e68d7dd403a9818",
+        "experiments/social_navigation/benchmark/shared_nav2_pilot/warehouse.launch.py": "0fb24811eccebab21ee3fc9cdac23d8867f5627d82ba5c0e788085b7a806256f",
+        "experiments/social_navigation/benchmark/shared_nav2_pilot/protocol.json": "c8927b8fc3ca3e2ef08e873dbfc889490eabec87c8c436ab221b8ff38a53855c",
+        "experiments/social_navigation/benchmark/socnavgym_response_fix/projection.py": "260d0775a10bc6b510c217a26e02a877a4394ef3f3f56475740ea14d52c841d9",
+        "experiments/social_navigation/benchmark/socnavgym_response_fix/responsive_motion.py": "7e94fb78bb1a6552c7c6b17654bf90ba2a937145837916b783ddeaa36b45a4c4",
+        "experiments/social_navigation/benchmark/socnavgym_response_fix/adapter.cc": "ffbcda748dc1dba4e06beb79c6e8fa93c77da25fbe2348b10f92062c36279abb",
+        "experiments/social_navigation/benchmark/socnavgym_response_fix/build/libresponse_adapter.so": "524fe8e945daad94319d7ac1a5f6377a5f36cbf6c505bb580e50e2e73102e984",
+        "experiments/social_navigation/benchmark/common_response/model_worker.py": "74f2ff2e08a105aa7a6d34e01d032bff81fafaac9c8652a25302a747ed39f3be",
+        "experiments/social_navigation/benchmark/common_response/inputs/crossing_near.json": "ff035a69a19420bdfb4e44825830313e1e1a60e401f21b94d5a39750f9cf0fbc",
+        "experiments/social_navigation/warehouse/nav2_warehouse.yaml": "ff73d68dcdc64c29427522c9b87fc9f3850b02326a3a9b1c467e6b9b3d5297a7",
+        "experiments/social_navigation/warehouse/warehouse.yaml": "389ed7597a08167e99e97a3ce1b83a4818deede6a57aac99f14660e6cf59cea0",
+        "experiments/social_navigation/warehouse/warehouse.pgm": "6538c7c14e4ece9f8e20a57619a49ea4e80bee6cc886499f5e1d21c3b550667b",
+        "experiments/social_navigation/warehouse/warehouse.sdf": "4563ff06990ff352dd96c0b33c63ccd01763c8f39debed31f5761d022dcdbc8d",
+        "src/custom_corridor/launch/nav2_corridor.launch.py": "0cc475f181f679d5b728d7d2a700d3c2b676987f697c9adbffff1762c8f799e0",
+        "src/custom_corridor/launch/publish_episode_initial_pose.py": "1b54e51430bfa21e410891c3e8b1b55cec604683abf3fd3b6e9eb968ebd89728",
+        "experiments/social_navigation/benchmark/shared_nav2_pilot/runtime.py": "af79480f7a730e66a3b08816b4f15086cbf71774b49a3b8500bdbd6bc71d017f",
+        "python/dynamuhsim/__init__.py": "7eb1d8f64ab30371b46729aab1f468ce3ec8d9f0454d3ab4f3b792cd7fd02d18",
+        "python/dynamuhsim/runtime/__init__.py": "271642e6401ed1f7a70256f1e167882717b21ababb498bc593a16e89597e2af1",
+        "python/dynamuhsim/runtime/nav2_trial.py": "ada6f8c13709854b90e517615f6d8df7b96448cc039709575b677505c290b321",
+        "python/dynamuhsim/runtime/navigation.py": "e41af78eee0f7c9a4c7544b0839705933f929a224360789506189c3145284548",
+        "python/dynamuhsim/runtime/profiles.py": "ba54f8bd6e21f850652a516f0d5485d11e8eeb1b6032abb66437de33aa615ecf",
+        "python/dynamuhsim/runtime/recording.py": "aa4845cd57562c67d64d0ec165101eee1b2a6105df3aa9b601d1ee26b65501d3",
+        "python/dynamuhsim/simulation/__init__.py": "ebe222be60735f57681920035750e8bf18543201a1fbc5410e472c83fe62743b",
+        "python/dynamuhsim/simulation/warehouse.py": "b8202cb4cc2112f8b01130f15fe125752fc4b4fa53fe4f72cac426cafc4f51a6",
+        "pyproject.toml": "9bac38083b922ba52b3b61dea09819dde5815642867b6a36c0bcb6dbeac8f16b",
+        "experiments/social_navigation/gazebo_adapter/run.py": "f4596403abace27667399a90d92252fc1355d3ef054947818ce632b21c43b8c9",
+        "experiments/social_navigation/benchmark/gpu_runtime/runtime_guard.py": "384e1e6ca012527524a92c37aab136588a36e5dc57a98ed6f9d58268648410e3",
+        "experiments/social_navigation/benchmark/shutdown_fix/ordered_stop.py": "003debbc1fc1c6b27184b875bec9864c4c3ede6b4144c197c32f60d0811dadd2",
+        "experiments/social_navigation/benchmark/amcl_observer.py": "0bc3517b4d1a6b22db56f6e7394f029c4f0ac279309ee7352ad01716b1a37117"
+      },
+      "detailed_audit": {
+        "name": "complex_after_preflight",
+        "status": "MEASURED",
+        "checks": {
+          "nav2_exact_config": true,
+          "runtime_hashes": true,
+          "world_42_boxes": true,
+          "physics_dt": true,
+          "active_world_samples": true,
+          "result_pose_has_recorded_sample": true,
+          "actual_goal_recomputed": true,
+          "nav2_control_streams": true,
+          "costmap_payloads": true,
+          "active_scan_odom_amcl": true,
+          "only_nav2_cmd_publishers": true,
+          "robot_frozen_warmup": true,
+          "live_preview": true,
+          "odom_matches_world": true,
+          "native_dt_and_population": true,
+          "worker_freeze_and_contiguous_steps": true,
+          "worker_clock_contiguous": true,
+          "native_to_gazebo_interpolation": true
+        },
+        "metrics": {
+          "goal_pose_sample_sim": 33.77,
+          "post_measurement_tail_drift_m": 0.0,
+          "odom_world_error_max_m": 0.005707264704435276,
+          "active_pose_samples": 1324,
+          "active_command_samples": 466,
+          "scan_samples": 168,
+          "amcl_samples": 104,
+          "costmap_samples": 81,
+          "preview_frames": 23,
+          "proxy_interpolation_error_max_m": 1.0658141036401503e-14,
+          "swept_geometry_gaps_m": {
+            "pair": 0.060184264408977395,
+            "robot": 0.04447697764963565,
+            "static": 0.020000033735868672
+          },
+          "native_dt": 0.25,
+          "active_native_steps": 92,
+          "inactive_transport_steps": 44
+        },
+        "pass": true
+      }
+    }
+  ],
+  "fault_injections": [
+    {
+      "mode": "timeout",
+      "checks": {
+        "owned_cleanup": true,
+        "server_stopped": true,
+        "gazebo_clean_exit": true,
+        "hardware": true,
+        "no_container": true,
+        "timeout_retained": true,
+        "measured": true,
+        "budget_reached": true
+      },
+      "pass": true,
+      "head": "61667d8b9f40c47f3bfdbd508e675117b8a5cb84",
+      "navigation_status": "TIMEOUT",
+      "status": "MEASURED",
+      "error": null,
+      "faults": [],
+      "sim_seconds": 1.0300000000000011,
+      "scope": "Actual ROS/Gazebo/Nav2 endpoints. In-process test harness changes only simulation budget or appends existing worker fault-injection flags; production source is unchanged.",
+      "result_sha256": "a9f1a84dbfe12b1f2509c57776953caedb20ed69d761ed9f6558d4d03ce15144",
+      "report": "experiments/social_navigation/benchmark/generated/native_smoke_20261024/native_forced_timeout_01",
+      "nav2_goal_cancel_acknowledged": true,
+      "controller_cancel_acknowledged": true,
+      "adapter_frozen_log": false,
+      "process_exit_errors": [
+        {
+          "process": "goal_pose_bridge.py-19",
+          "exit_code": -2
+        },
+        {
+          "process": "amcl-12",
+          "exit_code": -2
+        },
+        {
+          "process": "map_server-11",
+          "exit_code": -2
+        },
+        {
+          "process": "robot_state_publisher-9",
+          "exit_code": -2
+        },
+        {
+          "process": "static_transform_publisher-7",
+          "exit_code": -2
+        },
+        {
+          "process": "static_transform_publisher-6",
+          "exit_code": -2
+        },
+        {
+          "process": "static_transform_publisher-5",
+          "exit_code": -2
+        }
+      ]
+    },
+    {
+      "mode": "worker_fault",
+      "checks": {
+        "owned_cleanup": true,
+        "server_stopped": true,
+        "gazebo_clean_exit": true,
+        "hardware": true,
+        "no_container": true,
+        "terminal_fault_retained": true,
+        "goal_previously_accepted": true,
+        "explicit_fault_command": true
+      },
+      "pass": true,
+      "head": "61667d8b9f40c47f3bfdbd508e675117b8a5cb84",
+      "navigation_status": null,
+      "status": "ERROR",
+      "error": "Terminal adapter fault: INJECTED worker failure for pause interlock",
+      "faults": [
+        {
+          "adapter_ok": false,
+          "error": "INJECTED worker failure for pause interlock",
+          "fatal": true,
+          "restart_required": true,
+          "time": 11.3025,
+          "world_pause_requested": true
+        }
+      ],
+      "sim_seconds": null,
+      "scope": "Actual ROS/Gazebo/Nav2 endpoints. In-process test harness changes only simulation budget or appends existing worker fault-injection flags; production source is unchanged.",
+      "result_sha256": "679f19eac3b0f7a1b1398c99045bf36966fcd7b4164497886bee6279ad218242",
+      "report": "experiments/social_navigation/benchmark/generated/native_smoke_20261024/native_worker_fault_01",
+      "nav2_goal_cancel_acknowledged": true,
+      "controller_cancel_acknowledged": true,
+      "adapter_frozen_log": true,
+      "process_exit_errors": [
+        {
+          "process": "goal_pose_bridge.py-19",
+          "exit_code": -2
+        },
+        {
+          "process": "amcl-12",
+          "exit_code": -2
+        },
+        {
+          "process": "map_server-11",
+          "exit_code": -2
+        },
+        {
+          "process": "robot_state_publisher-9",
+          "exit_code": -2
+        },
+        {
+          "process": "static_transform_publisher-7",
+          "exit_code": -2
+        },
+        {
+          "process": "static_transform_publisher-6",
+          "exit_code": -2
+        },
+        {
+          "process": "static_transform_publisher-5",
+          "exit_code": -2
+        }
+      ]
+    }
+  ],
+  "preflight_resolution": "Initial ComplexityNav attempt failed before Gazebo: generated/native_contract.py was missing. Existing common_response/preflight.py reconstructed dependencies and verified locked hashes; a separate new attempt passed. Initial ERROR retained. No navigation outcome was replaced.",
+  "raw_evidence_root": "experiments/social_navigation/benchmark/generated/native_smoke_20261024",
+  "native_source_manifest_sha256": "518a88879749691e32b83d3c9f2dbc2a2b2631da093c18f4b699acc6475897d9",
+  "backend_source_manifest_sha256": "8e613080c1d0df6ab06512fa12bb56a4893ad7bbafb1a99ec54fb3f7bf567fa6",
+  "limitations": [
+    "One case per configuration; no success-rate or performance ranking.",
+    "No native A/B rerun of the old runner; this verifies functional execution, not identical trajectories/physics.",
+    "All runs headless; separate GUI startup path remains covered by in-memory integration tests only.",
+    "The standing-group action succeeded but true XY error exceeded 0.20m; kept as an actual-goal failure.",
+    "Before the fix, native runs logged ROS node exit -2/255 during teardown even though Gazebo was clean and no owned process remained. Four native rechecks at6b8ae5e have no child-exit errors. Docker normal cases were validated at61667d8; Docker worker-fault teardown rechecked at6b8ae5e."
+  ],
+  "primary_checkout_preserved": true,
+  "shutdown_fix": {
+    "commit": "6b8ae5efd04ae4e4830b44f825c9fd8abc04a1de",
+    "problem": "Group SIGINT reaches launch and its children; launch forwards SIGINT again and interrupts node teardown. Before-fix exit errors are retained per case.",
+    "change": "SIGINT to ROS launch parent only, wait up to15s, retain owned group fallback and RuntimeGuard cleanup. Worker/GUI stopping unchanged.",
+    "native_rechecks": [
+      {
+        "head": "6b8ae5efd04ae4e4830b44f825c9fd8abc04a1de",
+        "status": "MEASURED",
+        "navigation_status": "SUCCEEDED",
+        "actual_goal_reached": true,
+        "goal_xy_error_world_m": 0.1356093668167336,
+        "goal_yaw_error_world_rad": 0.019885753685212573,
+        "active_sim_seconds": 15.912499999999998,
+        "wall_seconds": 16.922212975999855,
+        "error": null,
+        "ros_launch_shutdown": {
+          "status": "STOPPED",
+          "returncode": 0,
+          "signal_scope": "ROS launch parent; launch owns child shutdown"
+        },
+        "report": "experiments/social_navigation/benchmark/generated/native_smoke_20261024/post_shutdown_fix/postfix_empty_01",
+        "result_sha256": "46d98d64632a5ad00c2e91480ef7b267c90e12349bf74f50ad2025a28b5f1e00",
+        "no_child_exit_errors": true,
+        "no_owned_processes": true,
+        "gazebo_clean_exit": true,
+        "container_remaining": null,
+        "checks": {
+          "measured": true,
+          "hardware": true,
+          "server_stopped": true,
+          "clean_gazebo": true,
+          "owned_process_cleanup": true,
+          "no_adapter_fault": true,
+          "no_container_remaining": true,
+          "sensors": true,
+          "nvidia_render_log": true,
+          "source_hashes": true,
+          "graceful_ros_launch": true,
+          "no_child_exit_errors": true
+        },
+        "actual_goal_recomputed": true,
+        "artifact_manifest_sha256": "90a6505cdd239d8b64cae3dc299f09bdab3ff52f792ccc05ae90ce781373e933"
+      },
+      {
+        "head": "6b8ae5efd04ae4e4830b44f825c9fd8abc04a1de",
+        "status": "MEASURED",
+        "navigation_status": "SUCCEEDED",
+        "actual_goal_reached": true,
+        "goal_xy_error_world_m": 0.18817080678952025,
+        "goal_yaw_error_world_rad": 0.2038819401828527,
+        "active_sim_seconds": 23.59,
+        "wall_seconds": 57.96900742699995,
+        "error": null,
+        "ros_launch_shutdown": {
+          "status": "STOPPED",
+          "returncode": 0,
+          "signal_scope": "ROS launch parent; launch owns child shutdown"
+        },
+        "report": "experiments/social_navigation/benchmark/generated/native_smoke_20261024/post_shutdown_fix/postfix_standing42_01",
+        "result_sha256": "35fb5cdf4657e7ef15a8a7b636717e2d680b396747fbd3d4f7d1c7a48615e2b4",
+        "no_child_exit_errors": true,
+        "no_owned_processes": true,
+        "gazebo_clean_exit": true,
+        "container_remaining": null,
+        "checks": {
+          "measured": true,
+          "hardware": true,
+          "server_stopped": true,
+          "clean_gazebo": true,
+          "owned_process_cleanup": true,
+          "no_adapter_fault": true,
+          "no_container_remaining": true,
+          "sensors": true,
+          "nvidia_render_log": true,
+          "source_hashes": true,
+          "graceful_ros_launch": true,
+          "no_child_exit_errors": true
+        },
+        "actual_goal_recomputed": true,
+        "artifact_manifest_sha256": "8bdda77bafc72c5712f1b19012e886831c031a5ed866902a99e47fabf12c482c"
+      },
+      {
+        "head": "6b8ae5efd04ae4e4830b44f825c9fd8abc04a1de",
+        "status": "MEASURED",
+        "navigation_status": "TIMEOUT",
+        "actual_goal_reached": false,
+        "goal_xy_error_world_m": 7.776405977602022,
+        "goal_yaw_error_world_rad": 0.09111956689692804,
+        "active_sim_seconds": 1.0175,
+        "wall_seconds": 1.0150165099998958,
+        "error": null,
+        "ros_launch_shutdown": {
+          "status": "STOPPED",
+          "returncode": 0,
+          "signal_scope": "ROS launch parent; launch owns child shutdown"
+        },
+        "report": "experiments/social_navigation/benchmark/generated/native_smoke_20261024/post_shutdown_fix/postfix_forced_timeout_01",
+        "result_sha256": "b27675752e28bfd5138ee1528153dcf0a1f065db024af25e4aafeff5735c400f",
+        "no_child_exit_errors": true,
+        "no_owned_processes": true,
+        "gazebo_clean_exit": true,
+        "container_remaining": null,
+        "checks": {
+          "owned_cleanup": true,
+          "server_stopped": true,
+          "gazebo_clean_exit": true,
+          "hardware": true,
+          "no_container": true,
+          "graceful_ros_launch": true,
+          "no_child_exit_errors": true,
+          "timeout_retained": true,
+          "measured": true,
+          "budget_reached": true
+        },
+        "nav2_cancel_acknowledged": true,
+        "actual_goal_recomputed": true,
+        "artifact_manifest_sha256": "0566d3f5a41b63c4dd1e45334162e2d6b471c31b48c2cfffdd7172f9d2c4528e"
+      },
+      {
+        "head": "6b8ae5efd04ae4e4830b44f825c9fd8abc04a1de",
+        "status": "ERROR",
+        "navigation_status": null,
+        "actual_goal_reached": null,
+        "goal_xy_error_world_m": null,
+        "goal_yaw_error_world_rad": null,
+        "active_sim_seconds": null,
+        "wall_seconds": null,
+        "error": "Terminal adapter fault: INJECTED worker failure for pause interlock",
+        "ros_launch_shutdown": {
+          "status": "STOPPED",
+          "returncode": 0,
+          "signal_scope": "ROS launch parent; launch owns child shutdown"
+        },
+        "report": "experiments/social_navigation/benchmark/generated/native_smoke_20261024/post_shutdown_fix/postfix_worker_fault_01",
+        "result_sha256": "b8e903a2979e295dd569d0fee6b8d36a160be77db7af1fa9ef7792701cf60680",
+        "no_child_exit_errors": true,
+        "no_owned_processes": true,
+        "gazebo_clean_exit": true,
+        "container_remaining": "",
+        "checks": {
+          "owned_cleanup": true,
+          "server_stopped": true,
+          "gazebo_clean_exit": true,
+          "hardware": true,
+          "no_container": true,
+          "graceful_ros_launch": true,
+          "no_child_exit_errors": true,
+          "terminal_fault_retained": true,
+          "goal_previously_accepted": true,
+          "explicit_fault_command": true
+        },
+        "nav2_cancel_acknowledged": true,
+        "artifact_manifest_sha256": "e8a18628194ac7ebecdc14f3087e123fe817fcbb403e509e55c95277b1b005ef"
+      }
+    ],
+    "all_four_no_child_exit_errors": true,
+    "unittest_passed": 24,
+    "unittest_log_sha256": "9bd5b2f5376cfe771780283cc2152fe8987ebf9467c9388ffeabbd9a35bcdeaa"
+  }
+}
