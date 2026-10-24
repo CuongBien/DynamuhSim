@@ -95,3 +95,7 @@ Archive124.334.173 byte; tính cả manifest/proof, store124.802.104 byte. Sau v
 3.454 file lịch sử được bảo vệ giữ nguyên byte; checkout/index chính giữ nguyên. Dataset01 và mọi file tracked không bị gỡ. Báo cáo capture trước vẫn mô tả thời điểm raw còn tại chỗ; hiện muốn đọc raw thì restore object trên vào thư mục mới theo lệnh ở phần trước.
 
 Phần còn nặng trên Git chưa được giảm: dataset_v1.0 trong worlds có10.120 file/272.955.268 byte; toàn benchmark tracked có3.663 file/243.302.158 byte (bao gồm source và reports). Bước tiếp theo cần catalog artifact cho dữ liệu lịch sử và tách dependency build/runtime trước khi chuyển các payload tracked này. Không rewrite Git history trong đợt này.
+
+## World assets và catalog tiếp nối
+
+Build mặc định hiện bỏ dataset/generated payload khỏi package install; có option legacy để cài đủ. Catalog committed Git theo từng nhóm và SHA256 nằm trong [World assets](WORLD_ASSETS.md). Catalog chỉ là inventory, chưa thay payload backup và không cho phép xóa tracked files.

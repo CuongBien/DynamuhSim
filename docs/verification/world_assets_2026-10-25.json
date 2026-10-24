@@ -1,0 +1,258 @@
+{
+  "date": "2026-10-25",
+  "timezone": "Asia/Bangkok",
+  "build_policy_commit": "65f42b782e67503d443ffdaf726c88ee5f543c59",
+  "catalog_and_auditor_commit": "e96e3108bb9ac954403b747e03ac8c5346d6560a",
+  "unittest": {
+    "passed": 64,
+    "failed": 0,
+    "command": "python3 -m unittest discover -s tests -p 'test_*.py' -v",
+    "log_sha256": "b9f746450b5fe5c8476ecff884fd7e0b14252d002d4ca5851d415bfb51ce770d"
+  },
+  "build_matrix": [
+    {
+      "name": "runtime_copy",
+      "symlink": false,
+      "legacy": false,
+      "returncode": 0,
+      "wall_s": 4.616339162999793,
+      "install": "/home/cuongbien/DynamuhSim/experiments/social_navigation/benchmark/generated/refactor_workspace/experiments/social_navigation/benchmark/generated/world_assets_20261024/runtime_copy/install"
+    },
+    {
+      "name": "runtime_symlink",
+      "symlink": true,
+      "legacy": false,
+      "returncode": 0,
+      "wall_s": 6.714361326001381,
+      "install": "/home/cuongbien/DynamuhSim/experiments/social_navigation/benchmark/generated/refactor_workspace/experiments/social_navigation/benchmark/generated/world_assets_20261024/runtime_symlink/install"
+    },
+    {
+      "name": "legacy_copy",
+      "symlink": false,
+      "legacy": true,
+      "returncode": 0,
+      "wall_s": 10.460992760001318,
+      "install": "/home/cuongbien/DynamuhSim/experiments/social_navigation/benchmark/generated/refactor_workspace/experiments/social_navigation/benchmark/generated/world_assets_20261024/legacy_copy/install"
+    }
+  ],
+  "install_audits": {
+    "runtime_copy": {
+      "status": "PASS",
+      "revision": "e96e3108bb9ac954403b747e03ac8c5346d6560a",
+      "legacy": false,
+      "checks": {
+        "all_expected_assets_present": true,
+        "all_expected_assets_byte_equal": true,
+        "excluded_payloads_absent": true
+      },
+      "expected_assets": 218,
+      "expected_asset_bytes": 17463438,
+      "expected_world_files": 173,
+      "expected_world_bytes": 2266224,
+      "missing": [],
+      "different": [],
+      "installed_payload_directories": [],
+      "note": "Caches/untracked files outside excluded directories are not part of committed-asset comparison; old prefixes are not cleaned automatically."
+    },
+    "runtime_symlink": {
+      "status": "PASS",
+      "revision": "e96e3108bb9ac954403b747e03ac8c5346d6560a",
+      "legacy": false,
+      "checks": {
+        "all_expected_assets_present": true,
+        "all_expected_assets_byte_equal": true,
+        "excluded_payloads_absent": true
+      },
+      "expected_assets": 218,
+      "expected_asset_bytes": 17463438,
+      "expected_world_files": 173,
+      "expected_world_bytes": 2266224,
+      "missing": [],
+      "different": [],
+      "installed_payload_directories": [],
+      "note": "Caches/untracked files outside excluded directories are not part of committed-asset comparison; old prefixes are not cleaned automatically."
+    },
+    "legacy_copy": {
+      "status": "PASS",
+      "revision": "e96e3108bb9ac954403b747e03ac8c5346d6560a",
+      "legacy": true,
+      "checks": {
+        "all_expected_assets_present": true,
+        "all_expected_assets_byte_equal": true,
+        "excluded_payloads_absent": true
+      },
+      "expected_assets": 12042,
+      "expected_asset_bytes": 313218632,
+      "expected_world_files": 11997,
+      "expected_world_bytes": 298021418,
+      "missing": [],
+      "different": [],
+      "installed_payload_directories": [
+        "school_arena/demo_1/dataset_v1.0",
+        "school_arena/demo_1/scenario_generator/generated",
+        "school_arena/demo_1/scenario_generator/generated_v1"
+      ],
+      "note": "Caches/untracked files outside excluded directories are not part of committed-asset comparison; old prefixes are not cleaned automatically."
+    }
+  },
+  "launch_and_package_smokes": [
+    {
+      "mode": "runtime_copy",
+      "command": [
+        "python3",
+        "-c",
+        "from pathlib import Path;from ament_index_python.packages import get_package_share_directory;import xacro;import json;share=Path(get_package_share_directory(\"custom_corridor\"));assert share.resolve()==Path(\"/home/cuongbien/DynamuhSim/experiments/social_navigation/benchmark/generated/refactor_workspace/experiments/social_navigation/benchmark/generated/world_assets_20261024/runtime_copy/install/custom_corridor/share/custom_corridor\").resolve();xml=xacro.process_file(str(share/\"urdf/mecanum_robot.urdf\")).toxml();assert \"camera_link\" in xml;print(json.dumps({\"share\":str(share),\"xacro_bytes\":len(xml)}))"
+      ],
+      "returncode": 0
+    },
+    {
+      "mode": "runtime_copy",
+      "command": [
+        "ros2",
+        "launch",
+        "custom_corridor",
+        "corridor_tb3.launch.py"
+      ],
+      "returncode": 0
+    },
+    {
+      "mode": "runtime_copy",
+      "command": [
+        "ros2",
+        "launch",
+        "custom_corridor",
+        "nav2_corridor.launch.py"
+      ],
+      "returncode": 0
+    },
+    {
+      "mode": "runtime_symlink",
+      "command": [
+        "python3",
+        "-c",
+        "from pathlib import Path;from ament_index_python.packages import get_package_share_directory;import xacro;import json;share=Path(get_package_share_directory(\"custom_corridor\"));assert share.resolve()==Path(\"/home/cuongbien/DynamuhSim/experiments/social_navigation/benchmark/generated/refactor_workspace/experiments/social_navigation/benchmark/generated/world_assets_20261024/runtime_symlink/install/custom_corridor/share/custom_corridor\").resolve();xml=xacro.process_file(str(share/\"urdf/mecanum_robot.urdf\")).toxml();assert \"camera_link\" in xml;print(json.dumps({\"share\":str(share),\"xacro_bytes\":len(xml)}))"
+      ],
+      "returncode": 0
+    },
+    {
+      "mode": "runtime_symlink",
+      "command": [
+        "ros2",
+        "launch",
+        "custom_corridor",
+        "corridor_tb3.launch.py"
+      ],
+      "returncode": 0
+    },
+    {
+      "mode": "runtime_symlink",
+      "command": [
+        "ros2",
+        "launch",
+        "custom_corridor",
+        "nav2_corridor.launch.py"
+      ],
+      "returncode": 0
+    }
+  ],
+  "program_assets": [
+    {
+      "mode": "runtime_copy",
+      "program": "goal_pose_bridge.py",
+      "sha256": "f8fd9944984477c0260baf068cd58596cb72071440a0b1b36280ab0ac605d297",
+      "executable": true
+    },
+    {
+      "mode": "runtime_copy",
+      "program": "hospital_auto_route.py",
+      "sha256": "f3174e09764064c0ad1f041d6ea72a3c24a2788fbd298a15407d18b60f9b6a99",
+      "executable": true
+    },
+    {
+      "mode": "runtime_copy",
+      "program": "d435i_viewer.py",
+      "sha256": "7295a4dd1fae7d121f9030bc7fe8e0023edd19fce758e98e69e52b7531ac15aa",
+      "executable": true
+    },
+    {
+      "mode": "runtime_symlink",
+      "program": "goal_pose_bridge.py",
+      "sha256": "f8fd9944984477c0260baf068cd58596cb72071440a0b1b36280ab0ac605d297",
+      "executable": true
+    },
+    {
+      "mode": "runtime_symlink",
+      "program": "hospital_auto_route.py",
+      "sha256": "f3174e09764064c0ad1f041d6ea72a3c24a2788fbd298a15407d18b60f9b6a99",
+      "executable": true
+    },
+    {
+      "mode": "runtime_symlink",
+      "program": "d435i_viewer.py",
+      "sha256": "7295a4dd1fae7d121f9030bc7fe8e0023edd19fce758e98e69e52b7531ac15aa",
+      "executable": true
+    }
+  ],
+  "footprint": {
+    "runtime_world_files": 173,
+    "legacy_world_files": 11997,
+    "runtime_world_bytes": 2266224,
+    "legacy_world_bytes": 298021418,
+    "excluded_world_bytes": 295755194,
+    "runtime_asset_bytes": 17463438,
+    "legacy_asset_bytes": 313218632
+  },
+  "stale_prefix_detected": true,
+  "catalog": {
+    "path": "docs/artifacts/catalog_2026-10-25.json",
+    "sha256": "da7eba932d0f49b37c7eb327f7b8eff029013b9ea4d994e451c8348fc2419df4",
+    "index_bytes": 49657,
+    "verification": {
+      "status": "PASS",
+      "revision": "e96e3108bb9ac954403b747e03ac8c5346d6560a",
+      "groups": 50,
+      "files": 14912,
+      "logical_bytes": 535425398,
+      "payloads_moved": false
+    },
+    "unique_payload_blobs": 9291,
+    "inventory_objects_bytes": 777980,
+    "store": "/home/cuongbien/DynamuhSim/experiments/social_navigation/benchmark/generated/artifact_store",
+    "current_gate_files": [
+      "experiments/social_navigation/benchmark/common_response/reports/run01/protocol.json",
+      "experiments/social_navigation/benchmark/shared_nav2_pilot/reports/gate01/validation.json",
+      "experiments/social_navigation/benchmark/socnavgym_group_nav2/reports/reaction_gate.json",
+      "experiments/social_navigation/benchmark/socnavgym_group_nav2/reports/gate03/validation.json",
+      "experiments/social_navigation/benchmark/socnavgym_group_nav2/reports/offline05/validation.json",
+      "experiments/social_navigation/benchmark/socnavgym_nav2_pilot/reports/gate01/validation.json",
+      "experiments/social_navigation/benchmark/socnavgym_nav2_pilot/reports/empty01/validation.json"
+    ],
+    "all_inventory_only": true
+  },
+  "cleanup": {
+    "path": "/home/cuongbien/DynamuhSim/experiments/social_navigation/benchmark/generated/refactor_workspace/experiments/social_navigation/benchmark/generated/world_assets_20261024/legacy_copy/install",
+    "logical_bytes_removed": 313310919,
+    "reason": "Own temporary legacy-copy install removed after all committed assets passed byte audit; source/Git payloads retained",
+    "source_payloads_untouched": true
+  },
+  "preservation": {
+    "historical_files_byte_unchanged": 3454,
+    "protected_inventory_sha256": "ff5221b2bd2a371596dfe99d5092084d7b8acd97a5cdadfd37b96611572b1bd7",
+    "primary_checkout_and_index_preserved": true,
+    "tracked_world_payloads_moved": false,
+    "dataset01_unchanged": true,
+    "git_history_rewritten": false
+  },
+  "raw_receipts_root": "experiments/social_navigation/benchmark/generated/world_assets_20261024",
+  "limitations": [
+    "Fresh prefixes were built with ROS2 Jazzy; old install prefixes are not automatically cleaned.",
+    "Launch descriptions/package resolution/Xacro were checked; no new Gazebo/physical Nav2 episode was run.",
+    "Catalog covers committed Git blobs and known consumers/frozen source maps; it is not an exhaustive dynamic dependency graph or a payload backup.",
+    "Source datasets/reports remain tracked. Only package install footprint changes; Git clone/history size is unchanged.",
+    "Full legacy copy install created by this turn was removed after verification; its source remains unchanged and rebuild commands/logs are retained."
+  ],
+  "installed_world_file_symlinks": {
+    "runtime_copy": 0,
+    "runtime_symlink": 173
+  }
+}
