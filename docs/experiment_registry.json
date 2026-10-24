@@ -98,5 +98,13 @@
     "schema": "dynamuhsim_artifact/1",
     "guide": "docs/ANALYSIS_AND_ARTIFACTS.md",
     "eviction_scope": "Closed standalone captures; only ignored paired-depth .npy and MCAP after verified roundtrip. Tracked datasets/reports remain untouched."
+  },
+  "world_assets": {
+    "guide": "docs/WORLD_ASSETS.md",
+    "policy": "src/custom_corridor/config/world_payloads.txt",
+    "default_install": "runtime resources; historical world payloads excluded",
+    "legacy_cmake_option": "DYNAMUHSIM_INSTALL_LEGACY_WORLD_PAYLOADS=ON",
+    "catalog_entrypoint": "tools/catalog_assets.py {create,verify,verify-install}",
+    "payload_move_state": "inventory only; tracked payloads not moved or removed"
   }
 }

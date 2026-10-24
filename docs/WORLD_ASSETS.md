@@ -1,0 +1,66 @@
+# World runtime, dataset và catalog lịch sử
+
+Build mặc định không cài ba thư mục payload lịch sử vào package `custom_corridor`. Dữ liệu nguồn và lịch sử Git được giữ nguyên; thay đổi này giảm footprint của package install, không giảm dung lượng clone Git.
+
+Policy duy nhất nằm ở `src/custom_corridor/config/world_payloads.txt`, mỗi dòng là một đường dẫn tương đối dưới `worlds`:
+
+- `school_arena/demo_1/dataset_v1.0`
+- `school_arena/demo_1/scenario_generator/generated`
+- `school_arena/demo_1/scenario_generator/generated_v1`
+
+World runtime, model, launch, URDF, RViz, config và map vẫn ở vị trí cũ. `arena_dataset/arena_dataset.sdf` là world chạy mô phỏng, vẫn được cài; nó khác thư mục dữ liệu `dataset_v1.0`. Code/generator/config lịch sử ngoài ba payload trên vẫn được giữ.
+
+## Build và kiểm tra prefix mới
+
+Từ source checkout tương ứng, tạo build/install base mới:
+
+```bash
+source /opt/ros/jazzy/setup.bash
+colcon --log-base log/runtime build \
+  --base-paths src/custom_corridor src/custom_corridor_plugins \
+  --build-base build/runtime --install-base install/runtime --symlink-install
+source install/runtime/setup.bash
+python3 tools/catalog_assets.py verify-install \
+  --share-dir "$PWD/install/runtime/custom_corridor/share/custom_corridor" \
+  --output "$PWD/experiments/social_navigation/benchmark/generated/runtime_install_audit.json"
+```
+
+Copy install và symlink install cùng dùng policy. Công cụ so từng asset committed với Git blob/SHA256 và phát hiện payload còn sót trong prefix. Không chỉ kiểm tra vài tên file hoặc tin flag build.
+
+**CMake không xóa asset đã cài trước đây.** Chuyển option OFF rồi build lại cùng prefix cũ không dọn dataset cũ; dùng install base mới và audit. Đợt này không tự xóa hay sửa install/build của checkout chính.
+
+## Cách cài đầy đủ cho lịch sử
+
+Nếu một workflow cần cả payload trong installed share:
+
+```bash
+colcon --log-base log/legacy build --packages-select custom_corridor \
+  --build-base build/legacy --install-base install/legacy \
+  --cmake-args -DDYNAMUHSIM_INSTALL_LEGACY_WORLD_PAYLOADS=ON
+python3 tools/catalog_assets.py verify-install --legacy \
+  --share-dir "$PWD/install/legacy/custom_corridor/share/custom_corridor" \
+  --output "$PWD/experiments/social_navigation/benchmark/generated/legacy_install_audit.json"
+```
+
+Đây là tùy chọn tương thích, không bật mặc định. Generator và production loader cũ dùng đường dẫn tương đối với source/config: `configs/dataset_v1.yaml` trỏ `output_dir: ../dataset_v1.0`; `launch_episode.sh` nhận episode path từ người gọi. Chạy luồng lịch sử từ source checkout hoặc full legacy install tương ứng, không coi một runtime prefix thiếu payload là bản dataset hoàn chỉnh.
+
+## Catalog không phải payload backup
+
+```bash
+STORE="$PWD/experiments/social_navigation/benchmark/generated/artifact_store"
+python3 tools/catalog_assets.py create --store "$STORE" \
+  --output "$PWD/experiments/social_navigation/benchmark/generated/asset_catalog.json"
+python3 tools/catalog_assets.py verify --store "$STORE" \
+  --catalog "$PWD/experiments/social_navigation/benchmark/generated/asset_catalog.json" \
+  --output "$PWD/experiments/social_navigation/benchmark/generated/asset_catalog_verify.json"
+```
+
+`--ref` chọn revision cho create/install audit, mặc định HEAD và luôn được resolve thành full commit. Catalog đọc committed Git objects, không trộn working tree dirty hoặc file untracked. Mỗi payload có Git tree, Git blob ID/size/mode và SHA256 từng file; full inventory nén được lưu theo hash trong `catalogs/objects/` của store. Index gọn có thể giữ trong Git.
+
+Catalog bao phủ ba world payload và các nhóm `benchmark/**/reports`. Nó ghi những gate runtime đang dùng, consumer source-relative đã xác định và các source map JSON đã freeze trỏ vào nhóm. Đây là danh sách consumer đã biết, không phải phân tích dependency động đầy đủ.
+
+Mọi entry hiện là `inventory_only`, `payload_externalized=false`, `removal_allowed=false`. Verify từ chối index đã tự đổi cờ cho phép xóa, thiếu group/file, sai tree/consumer hoặc sai SHA256. Muốn chuyển payload ra Git cần archive + roundtrip riêng, giữ gate nhỏ và làm rõ đường hydrate cho consumer lịch sử. Không dùng công cụ `evict-raw` cho dữ liệu tracked; công cụ đó vẫn chặn tracked files.
+
+## Phạm vi kiểm chứng
+
+Build thực được kiểm tra ở prefix cô lập, so đủ asset bytes và kiểm tra package/launch resolve. Đây không phải lượt chạy vật lý/Nav2 mới. Các report/freeze, split, outcome và dataset01 giữ nguyên. Biên bản và catalog đã đối chiếu sẽ nằm trong `docs/verification/` và `docs/artifacts/`.
