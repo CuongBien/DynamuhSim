@@ -68,3 +68,30 @@ python3 -m unittest discover -s tests -p 'test_*.py' -v
 ```
 
 Tests đối chiếu camera byte hash và config với implementation cũ, giữ float32 endian/stride, kiểm freeze mutation/schema, và wiring capture qua chính runner dùng chung. Kiểm chứng native và giới hạn sẽ được ghi trong `docs/verification/`; unit tests không thay thế MCAP/renderer thực.
+
+## Kiểm chứng ngày 24/10/2026
+
+[Biên bản và hash bằng chứng](verification/capture_native_2026-10-24.json). Runtime kiểm chứng ở commit `29ea6b3`; **37 unit/in-memory integration tests PASS**.
+
+Một episode mới, headless, standing seed45, config moderate mặc định, chạy ROS2/Gazebo/NVIDIA thật:
+
+| Kiểm tra | Kết quả |
+|---|---|
+| Capture integrity audit | PASS, 25 kiểm tra |
+| Điều hướng | TIMEOUT sau90,0275s sim; không đạt đích thật; giữ nguyên outcome |
+| Sai số goal thật cuối lượt | XY1,602m; yaw1,543rad |
+| Recorder MCAP | Đóng returncode0; đủ16 topic có message |
+| Depth ON/OFF | 1.036 timestamp ghép cặp |
+| Depth từ MCAP đối chiếu `.npy` | 1.036 frame bằng từng bit float32 |
+| Future tail thực tế | 3,365s; có36 frame depth sau action_end |
+| Native camera/friction | SHA256 khớp camera đã nghiệm thu; SDFormat nhận4 frame bánh |
+| TF camera | camera_link chỉ có parent base_link; optical frame nối camera_link |
+| Đóng hệ thống | Pause xác nhận, sim time ổn định, filter teardown cân bằng; Gazebo clean; ROS launch0; không có child-exit error/owned process còn lại |
+| Ghi đè | Prepare và run đều từ chối thư mục đã có; freeze/plan/result giữ nguyên byte |
+| Lịch sử | 3.452 file reports/snapshot/freeze và source được tham chiếu giữ nguyên byte |
+
+TIMEOUT không được đổi thành một lượt điều hướng thành công khác. Đây là kiểm tra capture integrity, chưa phải chứng nhận episode đủ điều kiện học WM. Không export/append vào dataset01, không mở lại test để chọn mô hình và không đổi nhãn/split.
+
+Không có Python driver được tạo trong thư mục run. Raw bằng chứng ở `experiments/social_navigation/benchmark/generated/capture_migration_20261024/`, gồm MCAP khoảng76MB và toàn bộ ON/OFF/telemetry/media khoảng0,95GB logical. Dữ liệu này được ignore, không commit vào Git; manifest SHA256 cho phép đối chiếu từng file. Hai symlink dependency vendor/venv tạm của worktree đã được gỡ sau test; chuẩn bị lại dependency trước khi verify/rerun source tại commit tương ứng.
+
+Recorder có cảnh báo thiếu embedded message definition cho `GoalStatusArray`; đã deserialize được cả3 message CDR bằng ROS2 action_msgs đã cài. Chưa xác nhận khả năng đọc action-status schema trên môi trường không có ROS. Native smoke mới chỉ gồm standing seed45; walking, GUI, exporter và train WM chưa được chạy qua API này. Checkout/index chính giữ nguyên.

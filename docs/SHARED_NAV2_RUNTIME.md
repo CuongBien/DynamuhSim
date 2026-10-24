@@ -83,7 +83,7 @@ python3 tools/nav2_trial.py \
 
 Các `reports/**/source*`, driver đã đóng băng, result/protocol/frozen manifests và bản classifier portable giữ nguyên. Muốn tái lập chính xác một kết quả lịch sử, dùng source commit/manifest của kết quả đó; runner mới có provenance mới.
 
-`dataset_pilot`, `depth_proxy_lifecycle`, `early_avoidance_pilot` và `wm_episode_batch` vẫn dùng camera/recording pipeline đã freeze. Đặc biệt dataset launch và các fixture trong capture_frozen/corpus frozen không được đổi trong đợt này. Không đổi teacher labels, causal masks, native friction prefix hoặc dữ liệu train/test. Chỉ archive stage khi không còn consumer code, không suy từ tên cũ rằng có thể xóa.
+`dataset_pilot`, `depth_proxy_lifecycle`, `early_avoidance_pilot` và `wm_episode_batch` vẫn dùng camera/recording pipeline đã freeze. Các entrypoint này phục vụ lịch sử; lượt capture mới dùng [API capture có freeze riêng](CAPTURE_RUNTIME.md), chạy qua runtime Nav2 chung và không sinh/vá Python driver. Đặc biệt dataset launch và các fixture trong capture_frozen/corpus frozen không được đổi trong đợt này. Không đổi teacher labels, causal masks, native friction prefix hoặc dữ liệu train/test. Chỉ archive stage khi không còn consumer code, không suy từ tên cũ rằng có thể xóa.
 
 ## Kiểm tra refactor
 
