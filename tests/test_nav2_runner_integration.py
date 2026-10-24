@@ -64,6 +64,8 @@ class RunnerHarness:
         self.events.append("spawn:" + command[0])
         process = NS(command=command, returncode=None)
         process.poll = lambda: process.returncode
+        process.send_signal = lambda sig: self.stop(process)
+        process.wait = lambda timeout: process.returncode
         self.processes.append(process)
         if command[0] not in ["ros2", "gz"]:
             (self.runtime / "ready.json").write_text(json.dumps({"humans": self.humans, "requires_start_gate": True}))
@@ -187,6 +189,7 @@ class RunnerIntegrationTests(unittest.TestCase):
                 self.assertTrue(result["actual_goal_reached"])
                 self.assertEqual(harness.assert_goal, ("map", -20., 0., 1.))
                 self.assertEqual(result["cleanup"], {"status": "PASS", "remaining": []})
+                self.assertEqual(result["ros_launch_shutdown"]["status"], "STOPPED")
                 self.assertTrue(all(proc.returncode == 0 for proc in harness.processes))
                 self.assertLess(harness.events.index("server_stop"), harness.events.index("cleanup"))
                 self.assertEqual(len(result["source_sha256"]), 2)

@@ -3,6 +3,7 @@ import copy
 import importlib.util
 import json
 import math
+import signal
 from pathlib import Path
 import subprocess
 import sys
@@ -17,7 +18,7 @@ sys.path.insert(0, str(ROOT / "python"))
 from dynamuhsim.runtime.navigation import execute_goal, goal_metrics, wait_for
 from dynamuhsim.runtime.profiles import PROFILES
 from dynamuhsim.runtime.recording import TrialRecording
-from dynamuhsim.runtime.nav2_trial import source_files
+from dynamuhsim.runtime.nav2_trial import source_files, stop_ros_launch
 from dynamuhsim.simulation.warehouse import configure_world, generate_launch_description, runtime_nav2_config
 
 FIXTURES = ROOT / "tests/fixtures/nav2_runtime"
@@ -243,6 +244,41 @@ class NavigationTests(unittest.TestCase):
     def test_exited_owned_process_aborts_wait(self):
         with self.assertRaisesRegex(RuntimeError, "Owned launch or worker exited"):
             wait_for(lambda: True, 10, spin_once=lambda: None, processes=[NS(poll=lambda: 1)])
+
+
+class LaunchShutdownTests(unittest.TestCase):
+    def test_only_launch_parent_gets_sigint_during_graceful_shutdown(self):
+        events = []
+        process = NS(returncode=None, poll=lambda: None)
+        process.send_signal = lambda sig: events.append(("parent_signal", sig))
+        def wait(timeout):
+            events.append(("wait", timeout))
+            process.returncode = 0
+        process.wait = wait
+        result = stop_ros_launch(process, lambda proc: events.append(("group_stop", proc)))
+        self.assertEqual(events, [("parent_signal", signal.SIGINT), ("wait", 15)])
+        self.assertEqual((result["status"], result["returncode"]), ("STOPPED", 0))
+
+    def test_hung_launch_uses_group_fallback_after_grace_period(self):
+        events = []
+        process = NS(returncode=None, poll=lambda: None)
+        process.send_signal = lambda sig: events.append("parent_signal")
+        def wait(timeout):
+            events.append("wait_expired")
+            raise subprocess.TimeoutExpired("ros2 launch", timeout)
+        def fallback(proc):
+            self.assertIs(proc, process)
+            events.append("group_stop")
+            proc.returncode = -15
+        process.wait = wait
+        result = stop_ros_launch(process, fallback)
+        self.assertEqual(events, ["parent_signal", "wait_expired", "group_stop"])
+        self.assertEqual(result["status"], "ESCALATED")
+
+    def test_exited_launch_gets_no_second_signal(self):
+        process = NS(returncode=0, poll=lambda: 0)
+        result = stop_ros_launch(process, lambda proc: self.fail("already exited"))
+        self.assertEqual(result, {"status": "ALREADY_EXITED", "returncode": 0})
 
 
 class EntryPointTests(unittest.TestCase):

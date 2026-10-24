@@ -11,6 +11,7 @@ import importlib.util
 import json
 import math
 import os
+import signal
 import subprocess
 import tempfile
 import time
@@ -58,6 +59,28 @@ def load_dependencies(repo):
     shutdown = load_file_module("_dynamuhsim_ordered_shutdown", benchmark / "shutdown_fix/ordered_stop.py")
     observer = load_file_module("_dynamuhsim_amcl_observer", benchmark / "amcl_observer.py")
     return SimpleNamespace(**locals())
+
+
+def stop_ros_launch(process, fallback_stop, timeout=15):
+    """Let ROS launch signal its children once; retain group cleanup as fallback.
+
+    killpg(SIGINT) hits both launch and every node. Launch then forwards SIGINT
+    again, which can interrupt the nodes' own shutdown and report exit -2/255.
+    """
+    if process.poll() is not None:
+        return dict(status="ALREADY_EXITED", returncode=process.returncode)
+    try:
+        process.send_signal(signal.SIGINT)
+        process.wait(timeout=timeout)
+        return dict(status="STOPPED", returncode=process.returncode,
+                    signal_scope="ROS launch parent; launch owns child shutdown")
+    except ProcessLookupError:
+        process.wait(timeout=timeout)
+        return dict(status="ALREADY_EXITED", returncode=process.returncode)
+    except subprocess.TimeoutExpired:
+        fallback_stop(process)
+        return dict(status="ESCALATED", returncode=process.returncode,
+                    signal_scope="process group fallback after launch grace period")
 
 
 def source_files(repo, profile, entrypoint):
@@ -108,7 +131,7 @@ def run_trial(profile, args, repo, entrypoint, *, dependencies=None):
                   sim_budget_s=plan["sim_budget"], no_scripted_robot_velocity_publisher=True,
                   **profile.result_fields(args, dt))
     processes, files, accepted_handles = [], [], []
-    node = guard = gui_process = socket_dir = lock = None
+    node = guard = gui_process = socket_dir = lock = launch = None
     container_name = None
     sha = lambda path: hashlib.sha256(path.read_bytes()).hexdigest()
     try:
@@ -276,7 +299,10 @@ def run_trial(profile, args, repo, entrypoint, *, dependencies=None):
                 subprocess.run(["docker", "stop", "-t", "3", container_name], capture_output=True, timeout=12)
             result["container_remaining"] = subprocess.check_output(query, text=True).strip()
         for process in reversed(processes):
-            deps.adapter.stop(process)
+            if process is launch:
+                result["ros_launch_shutdown"] = stop_ros_launch(process, deps.adapter.stop)
+            else:
+                deps.adapter.stop(process)
         if node is not None:
             try:
                 node.destroy_node()
