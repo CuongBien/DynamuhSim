@@ -95,3 +95,7 @@ TIMEOUT không được đổi thành một lượt điều hướng thành côn
 Không có Python driver được tạo trong thư mục run. Raw bằng chứng ở `experiments/social_navigation/benchmark/generated/capture_migration_20261024/`, gồm MCAP khoảng76MB và toàn bộ ON/OFF/telemetry/media khoảng0,95GB logical. Dữ liệu này được ignore, không commit vào Git; manifest SHA256 cho phép đối chiếu từng file. Hai symlink dependency vendor/venv tạm của worktree đã được gỡ sau test; chuẩn bị lại dependency trước khi verify/rerun source tại commit tương ứng.
 
 Recorder có cảnh báo thiếu embedded message definition cho `GoalStatusArray`; đã deserialize được cả3 message CDR bằng ROS2 action_msgs đã cài. Chưa xác nhận khả năng đọc action-status schema trên môi trường không có ROS. Native smoke mới chỉ gồm standing seed45; walking, GUI, exporter và train WM chưa được chạy qua API này. Checkout/index chính giữ nguyên.
+
+## Trạng thái artifact sau bước dọn tiếp theo
+
+Raw ON/OFF/MCAP của capture diagnostic ở trên đã được chuyển sang artifact local sau roundtrip và audit bitwise. Metadata/freeze/result/log vẫn tại chỗ; xem `artifact_ref.json` và [hướng dẫn audit/artifact](ANALYSIS_AND_ARTIFACTS.md) để restore vào thư mục mới. Bộ dataset01 không thay đổi. Biên bản capture ở commit29ea6b3 giữ nguyên các kết quả ban đầu.

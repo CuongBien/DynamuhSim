@@ -69,3 +69,29 @@ python3 -m unittest discover -s tests -p 'test_*.py' -v
 ```
 
 Tests gồm timestamp nanosecond lớn, wrap yaw, overlap giữa hai mẫu, source Git pin, policy integrity/goal, depth corrupt/thiếu ON, artifact corruption, link/path/overwrite, concurrent writer, roundtrip và eviction bị chặn với tracked/changed/incomplete data. Báo cáo chạy trên capture thật được lưu trong `docs/verification/`.
+
+## Kiểm chứng và dọn local ngày24/10/2026
+
+[Biên bản](verification/audit_artifacts_2026-10-24.json). Code kiểm chứng: `7da3e0b`; capture gốc được tạo tại `29ea6b3`. **56 tests PASS**.
+
+Auditor mới đọc lại MCAP thật của standing45: cả25 checks cũ giữ nguyên kết quả, thêm3 kiểm tra freeze/payload/shape. Integrity28/28 PASS; policy navigation FAIL đúng ở `actual_goal_required`, giữ TIMEOUT và actual_goal_reached=false. Không chạy lại Gazebo hoặc thay episode để lấy success.
+
+Đã pack và restore độc lập2.202 file +1 symlink, gồm61 snapshot source đúng hash. Audit trên bản restore có toàn bộ checks/metrics bằng bản gốc;1.036 frame depth tiếp tục khớp bitwise. Source snapshot chỉ được đọc/hash, không chạy code trong đó.
+
+Object ID:
+
+```text
+4a5f703022ecc48f3731ba00e895b6ad71653e9b9637c7f277baaf74d7788a39
+```
+
+Kho local đã kiểm chứng:
+
+```text
+/home/cuongbien/DynamuhSim/experiments/social_navigation/benchmark/generated/artifact_store
+```
+
+Archive124.334.173 byte; tính cả manifest/proof, store124.802.104 byte. Sau verify/restore/audit, đã gỡ2.073 file `.npy`/`.mcap` raw của riêng capture kiểm thử. Plan/freeze/result/events/index/log/preview giữ nguyên; `artifact_ref.json` lưu ID và danh sách khôi phục. Thư mục restore tạm đã được dọn. Tổng dung lượng logical của run +store giảm794.879.955 byte (khoảng795MB), đã tính cả ref/manifest.
+
+3.454 file lịch sử được bảo vệ giữ nguyên byte; checkout/index chính giữ nguyên. Dataset01 và mọi file tracked không bị gỡ. Báo cáo capture trước vẫn mô tả thời điểm raw còn tại chỗ; hiện muốn đọc raw thì restore object trên vào thư mục mới theo lệnh ở phần trước.
+
+Phần còn nặng trên Git chưa được giảm: dataset_v1.0 trong worlds có10.120 file/272.955.268 byte; toàn benchmark tracked có3.663 file/243.302.158 byte (bao gồm source và reports). Bước tiếp theo cần catalog artifact cho dữ liệu lịch sử và tách dependency build/runtime trước khi chuyển các payload tracked này. Không rewrite Git history trong đợt này.

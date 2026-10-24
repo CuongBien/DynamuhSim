@@ -1,0 +1,97 @@
+{
+  "date": "2026-10-24",
+  "timezone": "Asia/Bangkok",
+  "tested_audit_artifact_commit": "7da3e0beeae6909037b87f83c78ffb79d597289c",
+  "recorded_capture_producer_commit": "29ea6b3777d6887ca8eadec7cd091114f03b8ed9",
+  "unittest": {
+    "passed": 56,
+    "failed": 0,
+    "command": "python3 -m unittest discover -s tests -p 'test_*.py' -v",
+    "log_sha256": "d3b2f6e3a286a3e85d1fd3682e4b81498ddd7436cd14da42d0ed720519584920"
+  },
+  "audit": {
+    "legacy_checks_unchanged": 25,
+    "integrity_checks": 28,
+    "original_status": "PASS",
+    "restored_status": "PASS",
+    "original_and_restored_checks_equal": true,
+    "original_and_restored_metrics_equal": true,
+    "navigation_status": "TIMEOUT",
+    "actual_goal_reached": false,
+    "navigation_goal_policy": "FAIL",
+    "failed_goal_checks": [
+      "actual_goal_required"
+    ],
+    "raw_depth_frames_bitwise_equal": 1036,
+    "label_tail_s": 3.365,
+    "descriptive_robot_human_gap_m": 0.46342117576176445,
+    "training_ready": false,
+    "integrity_policy_sha256": "0a88fd01128961391c49d6477d68bb5101ef2cd9e1356e625f3670f9cff9048c",
+    "navigation_policy_sha256": "d30b9416b4339362973a4002da30ce8379cb3976fd2e40e9ab89357d6ef18f15",
+    "original_report_sha256": "66526d1f493b298cf85928dffb0018ca90dfc66d2553e08f9a8be4cf21d2afe1",
+    "restored_report_sha256": "66526d1f493b298cf85928dffb0018ca90dfc66d2553e08f9a8be4cf21d2afe1"
+  },
+  "artifact": {
+    "object_id": "4a5f703022ecc48f3731ba00e895b6ad71653e9b9637c7f277baaf74d7788a39",
+    "archive_sha256": "4a5f703022ecc48f3731ba00e895b6ad71653e9b9637c7f277baaf74d7788a39",
+    "archive_bytes": 124334173,
+    "archive_path": "/home/cuongbien/DynamuhSim/experiments/social_navigation/benchmark/generated/artifact_store/objects/4a5f703022ecc48f3731ba00e895b6ad71653e9b9637c7f277baaf74d7788a39.tar.gz",
+    "manifest_path": "/home/cuongbien/DynamuhSim/experiments/social_navigation/benchmark/generated/artifact_store/manifests/4a5f703022ecc48f3731ba00e895b6ad71653e9b9637c7f277baaf74d7788a39.json",
+    "manifest_sha256": "59c44c9e0d4f8b07cf623d195fbed4041d4d505cd25e241146babbe4c2d66ad4",
+    "archived_files": 2202,
+    "archived_links": 1,
+    "source_snapshots": 61,
+    "verified_restore_receipt": {
+      "schema": "dynamuhsim_artifact_restore/1",
+      "object_id": "4a5f703022ecc48f3731ba00e895b6ad71653e9b9637c7f277baaf74d7788a39",
+      "output": "/home/cuongbien/DynamuhSim/experiments/social_navigation/benchmark/generated/refactor_workspace/experiments/social_navigation/benchmark/generated/audit_migration_20261024/restored_capture",
+      "verified_files": 2202,
+      "verified_links": 1
+    },
+    "temporary_restore_removed": true,
+    "store_logical_bytes": 124802104,
+    "local_only": true,
+    "remote_upload": false
+  },
+  "cleanup": {
+    "raw_files_evicted": 2073,
+    "raw_bytes_evicted": 919780771,
+    "retained_run_logical_bytes": 26901721,
+    "net_run_and_store_logical_bytes_saved": 794879955,
+    "retained_metadata_sha256": {
+      "capture_freeze.json": "030e794e73fe03b7390d9f0e4e9936dc1ee4a636852c077d9382aa5dac09fff7",
+      "plan.json": "b413c8f59ac0b8b8511811a51dfd7178b0f6918f74b2e38607ed221eb51c6c58",
+      "preflight.json": "ac281b2dff68d909a18c2b25ec18e1bbd2022f8b12b53cd4c2c0707e5a3186ea",
+      "episode/result.json": "5c26e74e145ef995999ad22f75d725c7f0f61bb8f6b812d690c47461bd7639ca",
+      "episode/events.jsonl": "af8d99a76bea348733e51ae50ef1b98a1a112e1306753201ff4e90a43e8e4f9f",
+      "episode/paired_depth/index.json": "0903e5fb8710a9cc598847a6d473c5c858d1d7f760c126a1741c700e840e3764"
+    },
+    "eviction_reference_sha256": "d1fd434e3f7b71b078cba4532943fcef6b50534f5c00670ecfef21b31b1f88fd",
+    "audit_requires_restore_after_eviction": true
+  },
+  "preservation": {
+    "historical_files_unchanged": 3454,
+    "protected_inventory_sha256": "ff5221b2bd2a371596dfe99d5092084d7b8acd97a5cdadfd37b96611572b1bd7",
+    "primary_checkout_and_index_preserved": true,
+    "dataset01_unchanged": true,
+    "git_history_rewritten": false
+  },
+  "remaining_tracked_heavy_roots": {
+    "src/custom_corridor/worlds/school_arena/demo_1/dataset_v1.0": {
+      "files": 10120,
+      "logical_bytes": 272955268
+    },
+    "experiments/social_navigation/benchmark": {
+      "files": 3663,
+      "logical_bytes": 243302158
+    }
+  },
+  "raw_receipts_root": "experiments/social_navigation/benchmark/generated/audit_migration_20261024",
+  "limitations": [
+    "No new Gazebo/ROS simulation run; validation re-read existing actual MCAP and restored bytes with ROS2 SDK.",
+    "Only this agent-created standalone diagnostic capture raw payload was evicted. Training datasets and tracked results remain unchanged.",
+    "Historical experiment auditors remain frozen; canonical helpers serve shared runtime and new capture auditor.",
+    "The local archive is not remote replication. Git tracked size/history have not been reduced by this local cleanup.",
+    "Signed disc gap is descriptive linear interpolation, not verified contact or a safety acceptance gate."
+  ]
+}
