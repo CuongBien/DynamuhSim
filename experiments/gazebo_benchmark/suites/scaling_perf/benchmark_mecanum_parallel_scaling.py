@@ -15,7 +15,6 @@ Features:
 import sys
 import os
 import time
-import signal
 import subprocess
 import json
 import multiprocessing
@@ -29,6 +28,7 @@ from sensor_msgs.msg import LaserScan, Image
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../..")))
 from experiments.gazebo_benchmark.core.sim_env import build_benchmark_env
+from experiments.gazebo_benchmark.core.mppi_trial import scoped_processes
 
 
 class DomainTelemetryListener(Node):
@@ -111,7 +111,8 @@ class FirstFrameWaiter(Node):
         return self.received_depth, self.received_scan
 
 
-def measure_cold_restart_time(root_dir: str):
+@scoped_processes
+def measure_cold_restart_time(root_dir: str, *, _processes=None):
     world_file = os.path.join(root_dir, "experiments/gazebo_benchmark/configs/generated/world_uncapped_n5.sdf")
     robot_file = os.path.join(root_dir, "install/custom_corridor/share/custom_corridor/models/mecanum_robot/model.sdf")
     bridge_config = os.path.join(root_dir, "install/custom_corridor/share/custom_corridor/config/mecanum_bridge.yaml")
@@ -119,23 +120,18 @@ def measure_cold_restart_time(root_dir: str):
     env["ROS_DOMAIN_ID"] = "88"
     env["GZ_PARTITION"] = "cold_restart_part"
 
-    all_procs = []
     t_start = time.time()
 
     try:
-        gz_p = subprocess.Popen(["gz", "sim", "-r", "-s", world_file], env=env, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, preexec_fn=os.setsid)
-        all_procs.append(gz_p)
+        gz_p = _processes.popen(["gz", "sim", "-r", "-s", world_file], env=env, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, preexec_fn=os.setsid)
         time.sleep(3.5)
 
         spawn_cmd = ["ros2", "run", "ros_gz_sim", "create", "-name", "mecanum_robot", "-file", robot_file, "-x", "0.0", "-y", "0.0", "-z", "0.04", "-Y", "0.0"]
-        sp = subprocess.Popen(spawn_cmd, env=env, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-        all_procs.append(sp)
+        sp = _processes.popen(spawn_cmd, env=env, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
-        bp = subprocess.Popen(["ros2", "run", "ros_gz_bridge", "parameter_bridge", "--ros-args", "-p", f"config_file:={bridge_config}"], env=env, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, preexec_fn=os.setsid)
-        all_procs.append(bp)
+        bp = _processes.popen(["ros2", "run", "ros_gz_bridge", "parameter_bridge", "--ros-args", "-p", f"config_file:={bridge_config}"], env=env, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, preexec_fn=os.setsid)
 
-        ip = subprocess.Popen(["ros2", "run", "ros_gz_image", "image_bridge", "/camera/depth_image"], env=env, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, preexec_fn=os.setsid)
-        all_procs.append(ip)
+        ip = _processes.popen(["ros2", "run", "ros_gz_image", "image_bridge", "/camera/depth_image"], env=env, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, preexec_fn=os.setsid)
 
         os.environ["ROS_DOMAIN_ID"] = "88"
         rclpy.init()
@@ -146,24 +142,20 @@ def measure_cold_restart_time(root_dir: str):
         rclpy.shutdown()
 
     finally:
-        for p in all_procs:
-            try:
-                os.killpg(os.getpgid(p.pid), signal.SIGKILL)
-            except Exception:
-                pass
+        _processes.stop()
         time.sleep(1.0)
 
     print(f"  Cold restart latency: {dt_first_frame:.2f} s (Depth: {has_depth}, Scan: {has_scan})", flush=True)
     return dt_first_frame
 
 
-def run_parallel_benchmark_trial(num_instances: int, root_dir: str, duration_measure_s=18.0, warmup_s=10.0):
+@scoped_processes
+def run_parallel_benchmark_trial(num_instances: int, root_dir: str, duration_measure_s=18.0, warmup_s=10.0, *, _processes=None):
     world_file = os.path.join(root_dir, "experiments/gazebo_benchmark/configs/generated/world_uncapped_n5.sdf")
     robot_file = os.path.join(root_dir, "install/custom_corridor/share/custom_corridor/models/mecanum_robot/model.sdf")
     bridge_config = os.path.join(root_dir, "install/custom_corridor/share/custom_corridor/config/mecanum_bridge.yaml")
     base_env = build_benchmark_env(root_dir)
 
-    all_procs = []
     worker_procs = []
     worker_files = []
 
@@ -175,8 +167,7 @@ def run_parallel_benchmark_trial(num_instances: int, root_dir: str, duration_mea
             env_i = base_env.copy()
             env_i["GZ_PARTITION"] = f"mecanum_par_{num_instances}_{i}"
             env_i["ROS_DOMAIN_ID"] = str(70 + i)
-            gz_p = subprocess.Popen(["gz", "sim", "-s", "-z", "5000", world_file], env=env_i, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, preexec_fn=os.setsid)
-            all_procs.append(gz_p)
+            gz_p = _processes.popen(["gz", "sim", "-s", "-z", "5000", world_file], env=env_i, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, preexec_fn=os.setsid)
             time.sleep(1.0)
 
         time.sleep(3.0)
@@ -188,10 +179,9 @@ def run_parallel_benchmark_trial(num_instances: int, root_dir: str, duration_mea
             env_i["ROS_DOMAIN_ID"] = str(70 + i)
 
             spawn_cmd = ["ros2", "run", "ros_gz_sim", "create", "-name", "mecanum_robot", "-file", robot_file, "-x", "3.0", "-y", "0.0", "-z", "0.04", "-Y", "0.0"]
-            subprocess.run(spawn_cmd, env=env_i, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, timeout=10)
+            _processes.run(spawn_cmd, env=env_i, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, timeout=10)
 
-            bp = subprocess.Popen(["ros2", "run", "ros_gz_bridge", "parameter_bridge", "--ros-args", "-p", f"config_file:={bridge_config}"], env=env_i, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, preexec_fn=os.setsid)
-            all_procs.append(bp)
+            bp = _processes.popen(["ros2", "run", "ros_gz_bridge", "parameter_bridge", "--ros-args", "-p", f"config_file:={bridge_config}"], env=env_i, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, preexec_fn=os.setsid)
             time.sleep(0.5)
 
         time.sleep(2.0)
@@ -204,7 +194,7 @@ def run_parallel_benchmark_trial(num_instances: int, root_dir: str, duration_mea
                 os.remove(out_f)
             worker_files.append(out_f)
             wp = multiprocessing.Process(target=telemetry_worker, args=(dom_id, total_duration_s, out_f))
-            wp.start()
+            _processes.start_worker(wp)
             worker_procs.append(wp)
 
         time.sleep(1.0)
@@ -239,11 +229,7 @@ def run_parallel_benchmark_trial(num_instances: int, root_dir: str, duration_mea
                 wp.terminate()
 
     finally:
-        for p in all_procs:
-            try:
-                os.killpg(os.getpgid(p.pid), signal.SIGKILL)
-            except Exception:
-                pass
+        _processes.stop()
         time.sleep(1.0)
 
     # Process samples

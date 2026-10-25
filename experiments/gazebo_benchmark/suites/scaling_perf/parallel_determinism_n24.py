@@ -7,7 +7,6 @@ causes any thread scheduling desync or breaks trajectory reproducibility.
 import sys
 import os
 import time
-import signal
 import subprocess
 import json
 import numpy as np
@@ -17,6 +16,7 @@ from benchmark_world_generator import BenchmarkWorldGenerator
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../..")))
 from experiments.gazebo_benchmark.core.sim_env import build_benchmark_env
+from experiments.gazebo_benchmark.core.mppi_trial import scoped_processes
 
 
 WORKER_CODE = """
@@ -107,7 +107,8 @@ with open(out_file, 'w') as f:
 """
 
 
-def run_parallel_determinism_test(root_dir="/home/cuongbien/DynamuhSim", num_instances=4):
+@scoped_processes
+def run_parallel_determinism_test(root_dir="/home/cuongbien/DynamuhSim", num_instances=4, *, _processes=None):
     print("=" * 75)
     print(f"PARALLEL DETERMINISM BENCHMARK: {num_instances} CONCURRENT INSTANCES (N=24 Humans, Seed=42)")
     print("=" * 75, flush=True)
@@ -119,7 +120,6 @@ def run_parallel_determinism_test(root_dir="/home/cuongbien/DynamuhSim", num_ins
     bridge_config = os.path.join(root_dir, "src/custom_corridor/config/turtlebot3_burger_bridge.yaml")
     base_env = build_benchmark_env(root_dir, turtlebot3=True)
 
-    all_procs = []
     worker_outputs = []
 
     try:
@@ -129,8 +129,7 @@ def run_parallel_determinism_test(root_dir="/home/cuongbien/DynamuhSim", num_ins
             env_i = base_env.copy()
             env_i["GZ_PARTITION"] = f"concurrent_part_{i}"
             env_i["ROS_DOMAIN_ID"] = str(120 + i)
-            p = subprocess.Popen(["gz", "sim", "-s", world_file], env=env_i, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, preexec_fn=os.setsid)
-            all_procs.append(p)
+            p = _processes.popen(["gz", "sim", "-s", world_file], env=env_i, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, preexec_fn=os.setsid)
 
         time.sleep(4.0)
 
@@ -146,13 +145,12 @@ def run_parallel_determinism_test(root_dir="/home/cuongbien/DynamuhSim", num_ins
                 "-name", "burger", "-file", robot_file,
                 "-x", "3.0", "-y", "0.0", "-z", "0.01", "-Y", "0.0"
             ]
-            subprocess.run(spawn_cmd, env=env_i, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, timeout=10)
+            _processes.run(spawn_cmd, env=env_i, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, timeout=10)
 
-            bridge_p = subprocess.Popen(
+            bridge_p = _processes.popen(
                 ["ros2", "run", "ros_gz_bridge", "parameter_bridge", "--ros-args", "-p", f"config_file:={bridge_config}"],
                 env=env_i, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, preexec_fn=os.setsid
             )
-            all_procs.append(bridge_p)
 
         time.sleep(2.0)
 
@@ -165,7 +163,7 @@ def run_parallel_determinism_test(root_dir="/home/cuongbien/DynamuhSim", num_ins
             env_i["ROS_DOMAIN_ID"] = str(120 + i)
             out_file = f"/tmp/concurrent_traj_{i}.json"
             worker_outputs.append(out_file)
-            wp = subprocess.Popen(
+            wp = _processes.popen(
                 ["python3", "-c", WORKER_CODE, out_file],
                 env=env_i, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL
             )
@@ -192,11 +190,7 @@ def run_parallel_determinism_test(root_dir="/home/cuongbien/DynamuhSim", num_ins
     finally:
         # Cleanup
         print("Cleaning up processes...", flush=True)
-        for p in all_procs:
-            try:
-                os.killpg(os.getpgid(p.pid), signal.SIGKILL)
-            except Exception:
-                pass
+        _processes.stop()
         time.sleep(1.0)
 
     # 5. Load trajectories and analyze pairwise errors

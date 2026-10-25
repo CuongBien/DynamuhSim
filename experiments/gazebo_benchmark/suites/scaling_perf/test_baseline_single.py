@@ -1,10 +1,13 @@
-import os, sys, time, subprocess, signal, json
+import os, sys, time, subprocess, json
 import rclpy
 from rclpy.node import Node
 from rosgraph_msgs.msg import Clock
 from geometry_msgs.msg import TwistStamped, PoseStamped
 from nav2_msgs.action import NavigateToPose
 from rclpy.action import ActionClient
+
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../..")))
+from experiments.gazebo_benchmark.core.mppi_trial import scoped_processes
 
 ROOT_DIR = "/home/cuongbien/DynamuhSim"
 
@@ -48,7 +51,8 @@ class CmdVelMonitor(Node):
             time.sleep(0.5)
         return False
 
-def run_test(rtf=1.0, duration=15.0):
+@scoped_processes
+def run_test(rtf=1.0, duration=15.0, *, _processes=None):
     domain_id = 42
     os.environ["ROS_DOMAIN_ID"] = str(domain_id)
     env = os.environ.copy()
@@ -67,7 +71,6 @@ def run_test(rtf=1.0, duration=15.0):
         
     nav2_params = os.path.join(ROOT_DIR, "install/custom_corridor/share/custom_corridor/config/nav2_mppi_pilot.yaml")
     
-    procs = []
     # 1. Sim
     sim_cmd = [
         "ros2", "launch", "custom_corridor", "corridor_tb3.launch.py",
@@ -75,8 +78,7 @@ def run_test(rtf=1.0, duration=15.0):
         "obstacle:=none", "gui:=false", "rviz:=false",
         "robot_model:=mecanum", "x:=-13.0", "y:=0.0", "yaw:=0.0"
     ]
-    p_sim = subprocess.Popen(sim_cmd, env=env, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, preexec_fn=os.setsid)
-    procs.append(p_sim)
+    p_sim = _processes.popen(sim_cmd, env=env, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, preexec_fn=os.setsid)
     time.sleep(4.0)
     
     # 2. Nav2
@@ -87,8 +89,7 @@ def run_test(rtf=1.0, duration=15.0):
         "controller:=mppi", f"params_file:={nav2_params}",
         "map:=corridor_090", "robot_model:=mecanum"
     ]
-    p_nav = subprocess.Popen(nav2_cmd, env=env, stdout=log_fp, stderr=subprocess.STDOUT, text=True, preexec_fn=os.setsid)
-    procs.append(p_nav)
+    p_nav = _processes.popen(nav2_cmd, env=env, stdout=log_fp, stderr=subprocess.STDOUT, text=True, preexec_fn=os.setsid)
     
     # Wait for Nav2 active
     t0 = time.time()
@@ -114,15 +115,8 @@ def run_test(rtf=1.0, duration=15.0):
     node.destroy_node()
     rclpy.shutdown()
     
-    for p in procs:
-        try:
-            os.killpg(os.getpgid(p.pid), signal.SIGTERM)
-        except: pass
+    _processes.stop()
     time.sleep(2.0)
-    for p in procs:
-        try:
-            os.killpg(os.getpgid(p.pid), signal.SIGKILL)
-        except: pass
     log_fp.close()
     
     # Analyze

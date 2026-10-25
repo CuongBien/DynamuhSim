@@ -17,7 +17,6 @@ import os
 import sys
 import time
 import json
-import signal
 import subprocess
 import numpy as np
 from typing import Dict, List, Any
@@ -34,6 +33,7 @@ from std_msgs.msg import String
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../..")))
 from experiments.gazebo_benchmark.core.sim_env import build_benchmark_env
+from experiments.gazebo_benchmark.core.mppi_trial import scoped_processes
 
 
 class PrecisionPilotReplayer(Node):
@@ -101,7 +101,8 @@ class PrecisionPilotReplayer(Node):
             self.cmd_pub.publish(tw)
 
 
-def run_replay_for_episode(ep_id: int, episodes_dir: str, domain_id: int = 91) -> Dict[str, Any]:
+@scoped_processes
+def run_replay_for_episode(ep_id: int, episodes_dir: str, domain_id: int = 91, *, _processes=None) -> Dict[str, Any]:
     ep_dir = os.path.join(episodes_dir, f"ep_{ep_id:04d}")
     with open(os.path.join(ep_dir, "manifest.json")) as f:
         m = json.load(f)
@@ -128,7 +129,6 @@ def run_replay_for_episode(ep_id: int, episodes_dir: str, domain_id: int = 91) -
     env["ROS_DOMAIN_ID"] = str(domain_id)
     env["GZ_PARTITION"] = f"gz_replay_{domain_id}_ep_{ep_id:04d}"
 
-    procs = []
     try:
         sim_cmd = [
             "ros2", "launch", "custom_corridor", "corridor_tb3.launch.py",
@@ -141,8 +141,7 @@ def run_replay_for_episode(ep_id: int, episodes_dir: str, domain_id: int = 91) -
             "x:=-13.0", "y:=0.0", "yaw:=0.0",
             "paused:=true"
         ]
-        p_sim = subprocess.Popen(sim_cmd, env=env, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, preexec_fn=os.setsid)
-        procs.append(p_sim)
+        p_sim = _processes.popen(sim_cmd, env=env, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, preexec_fn=os.setsid)
         time.sleep(2.5)
 
         rclpy.init()
@@ -219,13 +218,7 @@ def run_replay_for_episode(ep_id: int, episodes_dir: str, domain_id: int = 91) -
         return result
 
     finally:
-        for p in procs:
-            try:
-                os.killpg(os.getpgid(p.pid), signal.SIGTERM)
-                time.sleep(0.1)
-                os.killpg(os.getpgid(p.pid), signal.SIGKILL)
-            except Exception:
-                pass
+        _processes.stop()
 
 
 def main():

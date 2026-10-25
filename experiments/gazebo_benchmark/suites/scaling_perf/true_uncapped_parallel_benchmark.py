@@ -11,10 +11,8 @@ Addresses all user specifications:
 import sys
 import os
 import time
-import signal
 import subprocess
 import json
-import threading
 import multiprocessing
 import psutil
 import numpy as np
@@ -29,6 +27,7 @@ from benchmark_world_generator import BenchmarkWorldGenerator
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../..")))
 from experiments.gazebo_benchmark.core.sim_env import build_benchmark_env
+from experiments.gazebo_benchmark.core.mppi_trial import scoped_processes
 
 
 class DomainClockListener(Node):
@@ -91,7 +90,8 @@ def get_gpu_metrics():
         return 0.0, 0.0
 
 
-def benchmark_instance_count(num_instances: int, world_file: str, robot_file: str, root_dir: str):
+@scoped_processes
+def benchmark_instance_count(num_instances: int, world_file: str, robot_file: str, root_dir: str, *, _processes=None):
     print("\n" + "=" * 75)
     print(f"TESTING {num_instances} CONCURRENT INSTANCE(S) - TRUE UNCAPPED (RTF=0.0 in SDF)")
     print("=" * 75, flush=True)
@@ -99,10 +99,6 @@ def benchmark_instance_count(num_instances: int, world_file: str, robot_file: st
     bridge_config = os.path.join(root_dir, "src/custom_corridor/config/turtlebot3_burger_bridge.yaml")
     base_env = build_benchmark_env(root_dir, turtlebot3=True)
 
-    all_procs = []
-    worker_threads = []
-    stop_event = threading.Event()
-    worker_results = [{} for _ in range(num_instances)]
 
     try:
         # 1. Launch all Gazebo instances in paused mode
@@ -111,11 +107,10 @@ def benchmark_instance_count(num_instances: int, world_file: str, robot_file: st
             env_i = base_env.copy()
             env_i["GZ_PARTITION"] = f"bench_uncapped_part_{i}"
             env_i["ROS_DOMAIN_ID"] = str(30 + i)
-            gz_p = subprocess.Popen(
+            gz_p = _processes.popen(
                 ["gz", "sim", "-s", "-z", "5000", world_file],
                 env=env_i, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, preexec_fn=os.setsid
             )
-            all_procs.append(gz_p)
 
         time.sleep(3.5)
 
@@ -131,19 +126,17 @@ def benchmark_instance_count(num_instances: int, world_file: str, robot_file: st
                 "-name", "burger", "-file", robot_file,
                 "-x", "3.0", "-y", "0.0", "-z", "0.01", "-Y", "0.0"
             ]
-            subprocess.run(spawn_cmd, env=env_i, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, timeout=10)
+            _processes.run(spawn_cmd, env=env_i, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, timeout=10)
 
-            bp = subprocess.Popen(
+            bp = _processes.popen(
                 ["ros2", "run", "ros_gz_bridge", "parameter_bridge", "--ros-args", "-p", f"config_file:={bridge_config}"],
                 env=env_i, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, preexec_fn=os.setsid
             )
-            all_procs.append(bp)
 
-            ip = subprocess.Popen(
+            ip = _processes.popen(
                 ["ros2", "run", "ros_gz_image", "image_bridge", "/camera/image", "/camera/depth_image"],
                 env=env_i, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, preexec_fn=os.setsid
             )
-            all_procs.append(ip)
 
         time.sleep(2.0)
 
@@ -158,7 +151,7 @@ def benchmark_instance_count(num_instances: int, world_file: str, robot_file: st
                 os.remove(out_f)
             worker_files.append(out_f)
             wp = multiprocessing.Process(target=domain_worker_proc, args=(dom_id, 32.0, out_f))
-            wp.start()
+            _processes.start_worker(wp)
             worker_procs.append(wp)
 
         time.sleep(1.0)
@@ -198,11 +191,7 @@ def benchmark_instance_count(num_instances: int, world_file: str, robot_file: st
             wp.join(timeout=5.0)
 
     finally:
-        for p in all_procs:
-            try:
-                os.killpg(os.getpgid(p.pid), signal.SIGKILL)
-            except Exception:
-                pass
+        _processes.stop()
         time.sleep(1.5)
 
     # 7. Analyze data strictly inside [t_measure_start, t_measure_end]

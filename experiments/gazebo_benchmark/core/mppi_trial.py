@@ -130,6 +130,7 @@ class ProcessScope:
     def __init__(self, shutdown_timeout=15.):
         self.token = uuid.uuid4().hex
         self.processes = []
+        self.workers = []
         self.shutdown_timeout = shutdown_timeout
 
     def environment(self, env=None):
@@ -148,6 +149,32 @@ class ProcessScope:
         process = subprocess.Popen(command, **kwargs)
         self.processes.append(process)
         return process
+
+    def start_worker(self, worker):
+        # Register before start so a partial startup failure is still owned.
+        self.workers.append(worker)
+        worker.start()
+        return worker
+
+    def stop_workers(self):
+        workers, self.workers = self.workers, []
+        errors = []
+        for worker in reversed(workers):
+            try:
+                if worker.pid is None:
+                    continue
+                if worker.is_alive():
+                    worker.terminate()
+                worker.join(timeout=min(2., self.shutdown_timeout))
+                if worker.is_alive():
+                    worker.kill()
+                    worker.join(timeout=min(2., self.shutdown_timeout))
+                if worker.is_alive():
+                    raise RuntimeError("Owned telemetry worker survived shutdown")
+            except Exception as error:
+                errors.append(error)
+        if errors:
+            raise errors[0]
 
     def run(self, command, *, check=False, timeout=None, **kwargs):
         # A completed worker can leave detached children even after exit code 0.
@@ -180,7 +207,10 @@ class ProcessScope:
     def stop(self):
         processes, self.processes = self.processes, []
         try:
-            stop_owned(processes, timeout=self.shutdown_timeout)
+            try:
+                self.stop_workers()
+            finally:
+                stop_owned(processes, timeout=self.shutdown_timeout)
         finally:
             # Use per-PID signals here: a leftover may share a group with an
             # untagged process. Only the direct handles above own whole groups.

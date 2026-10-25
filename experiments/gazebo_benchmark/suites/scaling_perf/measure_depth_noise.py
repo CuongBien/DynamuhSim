@@ -7,7 +7,6 @@ Captures 20 consecutive frames and evaluates statistics on a 20x20 center patch.
 import os
 import sys
 import time
-import signal
 import subprocess
 import json
 import argparse
@@ -20,6 +19,7 @@ from sensor_msgs.msg import Image
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../..")))
 from experiments.gazebo_benchmark.core.sim_env import build_benchmark_env
+from experiments.gazebo_benchmark.core.mppi_trial import scoped_processes
 
 
 class DepthPatchCaptureNode(Node):
@@ -111,7 +111,8 @@ class DepthPatchCaptureNode(Node):
             self.finished = True
 
 
-def run_measurement(model_sdf_path: str, label: str = "measurement") -> dict:
+@scoped_processes
+def run_measurement(model_sdf_path: str, label: str = "measurement", *, _processes=None) -> dict:
     root_dir = "/home/cuongbien/DynamuhSim"
     world_sdf = os.path.join(root_dir, "experiments/gazebo_benchmark/configs/robot_models/flat_wall_test_world.sdf")
 
@@ -122,7 +123,6 @@ def run_measurement(model_sdf_path: str, label: str = "measurement") -> dict:
     partition = f"depth_test_{label}_{int(time.time())}"
     env["GZ_PARTITION"] = partition
 
-    all_procs = []
     try:
         sim_cmd = [
             "ros2", "launch", "custom_corridor", "corridor_tb3.launch.py",
@@ -135,8 +135,7 @@ def run_measurement(model_sdf_path: str, label: str = "measurement") -> dict:
             "x:=0.0", "y:=0.0", "yaw:=0.0"
         ]
         print(f"\n[{label.upper()}] Starting Gazebo simulation with custom_robot_model: {model_sdf_path}...")
-        gz_p = subprocess.Popen(sim_cmd, env=env, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, preexec_fn=os.setsid)
-        all_procs.append(gz_p)
+        gz_p = _processes.popen(sim_cmd, env=env, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, preexec_fn=os.setsid)
 
         # Wait for bridge and sensor to initialize
         time.sleep(5.0)
@@ -228,13 +227,7 @@ def run_measurement(model_sdf_path: str, label: str = "measurement") -> dict:
         return results
 
     finally:
-        for p in all_procs:
-            try:
-                os.killpg(os.getpgid(p.pid), signal.SIGTERM)
-                time.sleep(0.3)
-                os.killpg(os.getpgid(p.pid), signal.SIGKILL)
-            except Exception:
-                pass
+        _processes.stop()
         time.sleep(1.5)
 
 

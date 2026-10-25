@@ -25,7 +25,6 @@ import sys
 import time
 import math
 import json
-import signal
 import subprocess
 import argparse
 import multiprocessing as mp
@@ -42,6 +41,7 @@ sys.path.insert(0, os.path.join(ROOT_DIR, "src/custom_corridor/scripts"))
 
 from experiments.gazebo_benchmark.core.benchmark_world_generator import BenchmarkWorldGenerator
 from experiments.gazebo_benchmark.core.sim_env import build_benchmark_env
+from experiments.gazebo_benchmark.core.mppi_trial import scoped_processes
 from generate_randomized_mecanum_sdf import generate_randomized_mecanum_sdf
 
 import rclpy
@@ -491,7 +491,8 @@ class EpisodeRecorderNode(Node):
         return False
 
 
-def run_single_episode(plan: Dict, domain_id: int, out_dir: str) -> bool:
+@scoped_processes
+def run_single_episode(plan: Dict, domain_id: int, out_dir: str, *, _processes=None) -> bool:
     ep_id = plan['episode_id']
     seed = plan['seed']
     corr = plan['corridor']
@@ -551,7 +552,6 @@ def run_single_episode(plan: Dict, domain_id: int, out_dir: str) -> bool:
 
     params_file = os.path.join(ROOT_DIR, "install/custom_corridor/share/custom_corridor/config/nav2_mppi_pilot.yaml")
     half_w = 0.45 if corr == "corridor_090" else 0.60
-    procs = []
 
     try:
         # Launch Gazebo
@@ -565,8 +565,7 @@ def run_single_episode(plan: Dict, domain_id: int, out_dir: str) -> bool:
             "robot_model:=mecanum",
             "x:=-13.0", "y:=0.0", "yaw:=0.0"
         ]
-        p_sim = subprocess.Popen(sim_cmd, env=env, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, preexec_fn=os.setsid)
-        procs.append(p_sim)
+        p_sim = _processes.popen(sim_cmd, env=env, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, preexec_fn=os.setsid)
         time.sleep(3.8)
 
         # Launch Nav2 if requested
@@ -580,8 +579,7 @@ def run_single_episode(plan: Dict, domain_id: int, out_dir: str) -> bool:
                 f"map:={corr}",
                 "robot_model:=mecanum"
             ]
-            p_nav = subprocess.Popen(nav2_cmd, env=env, stdout=nav2_log_file, stderr=subprocess.STDOUT, text=True, preexec_fn=os.setsid)
-            procs.append(p_nav)
+            p_nav = _processes.popen(nav2_cmd, env=env, stdout=nav2_log_file, stderr=subprocess.STDOUT, text=True, preexec_fn=os.setsid)
 
             # Wait for Nav2 active state
             t0 = time.time()
@@ -698,13 +696,7 @@ def run_single_episode(plan: Dict, domain_id: int, out_dir: str) -> bool:
         print(f"[Worker domain {domain_id}] Error in ep_{ep_id:04d}: {e}")
         return False
     finally:
-        for p in procs:
-            try:
-                os.killpg(os.getpgid(p.pid), signal.SIGTERM)
-                time.sleep(0.05)
-                os.killpg(os.getpgid(p.pid), signal.SIGKILL)
-            except Exception:
-                pass
+        _processes.stop()
         try:
             recorder.destroy_node()
             if rclpy.ok():

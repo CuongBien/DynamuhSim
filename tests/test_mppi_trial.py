@@ -2,6 +2,7 @@
 import ast
 import hashlib
 import json
+import multiprocessing
 import os
 from pathlib import Path
 import shutil
@@ -258,6 +259,59 @@ class MppiTrialTests(unittest.TestCase):
 
 @unittest.skipUnless(sys.platform == "linux", "Linux process-token ownership")
 class ProcessScopeTests(unittest.TestCase):
+    def test_fork_worker_cleanup_keeps_foreign_worker_in_the_same_group(self):
+        context = multiprocessing.get_context('fork')
+        ready = context.Event()
+        def stubborn_worker():
+            signal.signal(signal.SIGTERM, signal.SIG_IGN)
+            ready.set()
+            time.sleep(120)
+        unrelated = context.Process(target=time.sleep, args=(120,))
+        owned = context.Process(target=stubborn_worker)
+        unrelated.start()
+        try:
+            with self.assertRaisesRegex(ValueError, 'measurement failed'):
+                with trial.ProcessScope(shutdown_timeout=.05) as scope:
+                    scope.start_worker(owned)
+                    self.assertTrue(ready.wait(timeout=5))
+                    self.assertEqual(os.getpgid(owned.pid), os.getpgrp())
+                    raise ValueError('measurement failed')
+            self.assertFalse(owned.is_alive())
+            self.assertEqual(owned.exitcode, -signal.SIGKILL)
+            self.assertTrue(unrelated.is_alive())
+        finally:
+            for worker in (owned, unrelated):
+                if worker.pid is not None:
+                    if worker.is_alive(): worker.kill()
+                    worker.join(timeout=5)
+
+    def test_worker_start_failure_is_cleaned_before_or_after_fork(self):
+        context = multiprocessing.get_context('fork')
+        for started in (False, True):
+            with self.subTest(started=started):
+                ready = context.Event()
+                def idle_worker():
+                    ready.set()
+                    time.sleep(120)
+                worker = context.Process(target=idle_worker)
+                real_start = worker.start
+                def broken_start():
+                    if started:
+                        real_start()
+                        self.assertTrue(ready.wait(timeout=5))
+                    raise RuntimeError('worker startup failed')
+                try:
+                    with patch.object(worker, 'start', side_effect=broken_start), self.assertRaisesRegex(RuntimeError, 'worker startup failed'):
+                        with trial.ProcessScope(shutdown_timeout=.05) as scope:
+                            scope.start_worker(worker)
+                    if started:
+                        self.assertFalse(worker.is_alive())
+                        self.assertIsNotNone(worker.exitcode)
+                finally:
+                    if worker.pid is not None:
+                        if worker.is_alive(): worker.kill()
+                        worker.join(timeout=5)
+
     def test_environment_is_copied_and_private_session_is_required(self):
         env = {trial.TOKEN_KEY: "ancestor", "ROS_DOMAIN_ID": "77"}
         scope = trial.ProcessScope(shutdown_timeout=.05)
