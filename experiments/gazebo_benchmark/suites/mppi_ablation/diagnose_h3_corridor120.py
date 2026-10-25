@@ -43,33 +43,17 @@ from nav2_msgs.action import NavigateToPose
 import tf2_ros
 import tf2_geometry_msgs
 
-ROOT_DIR = "/home/cuongbien/DynamuhSim"
+from pathlib import Path as FilePath
+
+ROOT_DIR = str(FilePath(__file__).resolve().parents[4])
+sys.path.insert(0, ROOT_DIR)
+from experiments.gazebo_benchmark.core.geometry import compute_rect_circle_distance
 OUTPUT_DIR = os.path.join(ROOT_DIR, "experiments/gazebo_benchmark/results/mppi_ablation")
 TELEMETRY_JSON = os.path.join(OUTPUT_DIR, "diagnose_h3_telemetry.json")
 TELEMETRY_CSV = os.path.join(OUTPUT_DIR, "diagnose_h3_telemetry.csv")
 SUMMARY_JSON = os.path.join(OUTPUT_DIR, "diagnose_h3_summary.json")
 IMG_4M = os.path.join(OUTPUT_DIR, "costmap_snapshot_4m.png")
 IMG_2M = os.path.join(OUTPUT_DIR, "costmap_snapshot_2m.png")
-
-
-def compute_rect_circle_distance(rx: float, ry: float, ryaw: float, hx: float, hy: float, rw=0.20, rl=0.24, hr=0.28) -> Tuple[float, float]:
-    dx = hx - rx
-    dy = hy - ry
-    d_center = math.hypot(dx, dy)
-
-    cos_y = math.cos(ryaw)
-    sin_y = math.sin(ryaw)
-    x_rel = dx * cos_y + dy * sin_y
-    y_rel = -dx * sin_y + dy * cos_y
-
-    half_l = rl / 2.0  # 0.12 m
-    half_w = rw / 2.0  # 0.10 m
-
-    x_cl = max(-half_l, min(half_l, x_rel))
-    y_cl = max(-half_w, min(half_w, y_rel))
-    d_rect = math.hypot(x_rel - x_cl, y_rel - y_cl)
-    d_clear = d_rect - hr
-    return d_center, d_clear
 
 
 class H3CorridorDiagnoser(Node):

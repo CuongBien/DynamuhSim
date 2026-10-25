@@ -1,5 +1,8 @@
 # DynamuhSim 🤖
 
+
+**MPPI code dùng chung:** `experiments/gazebo_benchmark/core/mppi_monitor.py` giữ một implementation callback/goal/measurement cho Step1/2/3; ba runner chọn profile tương ứng. `core/geometry.py` là nơi duy nhất tính rectangle–circle clearance cho sáu suite đã chuyển. Các runner này resolve root theo checkout đang chạy.
+
 **Luồng hiện tại:** [Dữ liệu và baseline WM](docs/START_HERE_CURRENT.md) · [Runtime Nav2 dùng chung](docs/SHARED_NAV2_RUNTIME.md) · [Registry experiment](docs/experiment_registry.json) · [Capture mới](docs/CAPTURE_RUNTIME.md) · [Audit và artifact](docs/ANALYSIS_AND_ARTIFACTS.md) · [World assets](docs/WORLD_ASSETS.md) · [Archive lịch sử](docs/HISTORICAL_ARTIFACTS.md) · [Report và dependency](docs/REPORT_STORAGE.md) · [Media và test state](docs/REPORT_MEDIA.md) · [Sensor API](docs/SENSOR_CONTROLS.md)
 
 > **Multi-Sensor Perception and Proactive Yielding for Patrol Robots in Narrow, Dynamic Indoor Environments**

@@ -33,12 +33,14 @@ from typing import Tuple, Dict, List
 import numpy as np
 import cv2
 
-ROOT_DIR = "/home/cuongbien/DynamuhSim"
-SCRIPT_DIR = os.path.join(ROOT_DIR, "experiments/gazebo_benchmark")
-sys.path.insert(0, SCRIPT_DIR)
+from pathlib import Path as FilePath
+
+ROOT_DIR = str(FilePath(__file__).resolve().parents[4])
+sys.path.insert(0, ROOT_DIR)
+from experiments.gazebo_benchmark.core.geometry import compute_rect_circle_distance
 sys.path.insert(0, os.path.join(ROOT_DIR, "src/custom_corridor/scripts"))
 
-from benchmark_world_generator import BenchmarkWorldGenerator
+from experiments.gazebo_benchmark.core.benchmark_world_generator import BenchmarkWorldGenerator
 from generate_randomized_mecanum_sdf import generate_randomized_mecanum_sdf
 
 import rclpy
@@ -70,24 +72,6 @@ def get_hardware_specs() -> Dict[str, str]:
     except Exception as e:
         gpu = str(e)
     return {"cpu": cpu, "gpu": gpu}
-
-
-def compute_rect_circle_distance(rx: float, ry: float, ryaw: float, hx: float, hy: float, rw=0.20, rl=0.24, hr=0.28) -> Tuple[float, float]:
-    dx = hx - rx
-    dy = hy - ry
-    d_center = math.hypot(dx, dy)
-    cos_y = math.cos(ryaw)
-    sin_y = math.sin(ryaw)
-    x_rel = dx * cos_y + dy * sin_y
-    y_rel = -dx * sin_y + dy * cos_y
-
-    half_l = rl / 2.0  # 0.12
-    half_w = rw / 2.0  # 0.10
-    x_cl = max(-half_l, min(half_l, x_rel))
-    y_cl = max(-half_w, min(half_w, y_rel))
-    d_rect = math.hypot(x_rel - x_cl, y_rel - y_cl)
-    d_clear = d_rect - hr
-    return d_center, d_clear
 
 
 def compute_cpa(r0: Tuple[float, float], vr: Tuple[float, float], h0: Tuple[float, float], vh: Tuple[float, float], max_t: float = 18.0) -> float:

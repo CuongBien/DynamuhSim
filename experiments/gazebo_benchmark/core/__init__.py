@@ -1,6 +1,7 @@
 """
 Shared Core Modules for DynamuhSim Gazebo Harmonic Benchmarks.
 - geometry: Footprint clearance and predictive wall safety filter.
+- mppi_monitor: One ROS interaction monitor for Step1/Step2/Step3 profiles (import explicitly when ROS is available).
 - policies: Robot policies P1, P2, P3 (a-d), and P4.
 - sim_env: Gazebo & Nav2 process cleanup, SDF world patching, and scenario helpers.
 """

@@ -43,31 +43,14 @@ from geometry_msgs.msg import TwistStamped, PoseStamped
 from std_msgs.msg import String
 from nav2_msgs.action import NavigateToPose
 
-ROOT_DIR = "/home/cuongbien/DynamuhSim"
+from pathlib import Path as FilePath
+
+ROOT_DIR = str(FilePath(__file__).resolve().parents[4])
+sys.path.insert(0, ROOT_DIR)
+from experiments.gazebo_benchmark.core.geometry import compute_rect_circle_distance
 ROBOT_MODEL_SDF = os.path.join(ROOT_DIR, "experiments/gazebo_benchmark/configs/robot_models/model_mecanum_step1.sdf")
 NAV2_YAML_3B = os.path.join(ROOT_DIR, "experiments/gazebo_benchmark/configs/nav2_mppi/nav2_mppi_step3b.yaml")
 PROFILER_LIB = os.path.join(ROOT_DIR, "experiments/gazebo_benchmark/core/profiler/libcontroller_profiler.so")
-
-
-def compute_rect_circle_distance(rx: float, ry: float, ryaw: float, hx: float, hy: float, rw=0.20, rl=0.24, hr=0.28) -> Tuple[float, float]:
-    dx = hx - rx
-    dy = hy - ry
-    d_center = math.hypot(dx, dy)
-
-    cos_y = math.cos(ryaw)
-    sin_y = math.sin(ryaw)
-    x_rel = dx * cos_y + dy * sin_y
-    y_rel = -dx * sin_y + dy * cos_y
-
-    half_l = rl / 2.0  # 0.12 m
-    half_w = rw / 2.0  # 0.10 m
-
-    x_cl = max(-half_l, min(half_l, x_rel))
-    y_cl = max(-half_w, min(half_w, y_rel))
-    d_rect = math.hypot(x_rel - x_cl, y_rel - y_cl)
-    d_clear = d_rect - hr
-
-    return d_center, d_clear
 
 
 class WallClearanceInteractionMonitor(Node):
