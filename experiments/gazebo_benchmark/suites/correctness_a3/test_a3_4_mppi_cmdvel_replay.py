@@ -20,6 +20,7 @@ Protocol:
 """
 
 import os
+from pathlib import Path
 import sys
 import time
 import signal
@@ -36,6 +37,9 @@ from rosgraph_msgs.msg import Clock
 from geometry_msgs.msg import TwistStamped
 from std_msgs.msg import String
 from nav2_msgs.action import NavigateToPose
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[4]))
+from experiments.gazebo_benchmark.core.sim_env import build_benchmark_env
 
 
 class InteractionRecorder(Node):
@@ -299,15 +303,7 @@ def record_fresh_episode(root_dir: str, seed: int = 101) -> dict:
     with open(trial_sdf, "w") as f:
         f.write(sdf)
 
-    corridor_models = os.path.join(root_dir, "install/custom_corridor/share/custom_corridor/models")
-    plugin_share = os.path.join(root_dir, "install/custom_corridor_plugins/share/custom_corridor_plugins")
-    plugin_lib = os.path.join(os.path.dirname(os.path.dirname(plugin_share)), 'lib')
-
-    env = os.environ.copy()
-    env["GALLIUM_DRIVER"] = "d3d12"
-    env["MESA_D3D12_DEFAULT_ADAPTER_NAME"] = "NVIDIA"
-    env["GZ_SIM_RESOURCE_PATH"] = f"{corridor_models}:{os.environ.get('GZ_SIM_RESOURCE_PATH', '')}"
-    env["GZ_SIM_SYSTEM_PLUGIN_PATH"] = f"{plugin_lib}:{os.environ.get('GZ_SIM_SYSTEM_PLUGIN_PATH', '')}"
+    env = build_benchmark_env(root_dir)
 
     domain_id = "77"
     env["ROS_DOMAIN_ID"] = domain_id
@@ -425,15 +421,7 @@ def run_single_replay_trial(root_dir: str, rec_data: dict, trial_idx: int) -> di
         with open(trial_sdf, "w") as f:
             f.write(base_sdf)
 
-    corridor_models = os.path.join(root_dir, "install/custom_corridor/share/custom_corridor/models")
-    plugin_share = os.path.join(root_dir, "install/custom_corridor_plugins/share/custom_corridor_plugins")
-    plugin_lib = os.path.join(os.path.dirname(os.path.dirname(plugin_share)), 'lib')
-
-    env = os.environ.copy()
-    env["GALLIUM_DRIVER"] = "d3d12"
-    env["MESA_D3D12_DEFAULT_ADAPTER_NAME"] = "NVIDIA"
-    env["GZ_SIM_RESOURCE_PATH"] = f"{corridor_models}:{os.environ.get('GZ_SIM_RESOURCE_PATH', '')}"
-    env["GZ_SIM_SYSTEM_PLUGIN_PATH"] = f"{plugin_lib}:{os.environ.get('GZ_SIM_SYSTEM_PLUGIN_PATH', '')}"
+    env = build_benchmark_env(root_dir)
 
     domain_id = str(71 + trial_idx)
     env["ROS_DOMAIN_ID"] = domain_id

@@ -7,6 +7,7 @@ Verifies that:
 4. Robot receives goal (x=5.0, y=0.0) and MPPI generates cmd_vel.
 """
 
+from pathlib import Path
 import sys
 import os
 import time
@@ -22,6 +23,9 @@ from action_msgs.msg import GoalStatusArray
 
 import gz.transport13 as gzt
 import gz.msgs.stringmsg_pb2 as stringmsg_pb2
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[4]))
+from experiments.gazebo_benchmark.core.sim_env import build_benchmark_env, spawn_benchmark_robot, start_parameter_bridge
 
 
 class PilotMonitor(Node):
@@ -58,14 +62,7 @@ def main():
     urdf_file = "/tmp/tb3_burger_processed.urdf"
     params_file = os.path.join(root_dir, "experiments/gazebo_benchmark/configs/nav2_mppi/mppi_params_deterministic.yaml")
 
-    env = os.environ.copy()
-
-    corridor_models = os.path.join(root_dir, "install/custom_corridor/share/custom_corridor/models")
-    tb3_models = os.path.join(root_dir, "install/turtlebot3_gazebo/share/turtlebot3_gazebo/models")
-    plugin_share = os.path.join(root_dir, "install/custom_corridor_plugins/share/custom_corridor_plugins")
-    plugin_lib = os.path.join(os.path.dirname(os.path.dirname(plugin_share)), 'lib')
-    env["GZ_SIM_RESOURCE_PATH"] = f"{corridor_models}:{tb3_models}:{os.environ.get('GZ_SIM_RESOURCE_PATH', '')}"
-    env["GZ_SIM_SYSTEM_PLUGIN_PATH"] = f"{plugin_lib}:{os.environ.get('GZ_SIM_SYSTEM_PLUGIN_PATH', '')}"
+    env = build_benchmark_env(root_dir, turtlebot3=True, d3d12=False)
 
     all_procs = []
     print("1. Launching Gazebo Harmonic...")
@@ -74,11 +71,10 @@ def main():
     time.sleep(3.5)
 
     print("2. Spawning Burger at (0.0, 0.0)...")
-    spawn_cmd = ["ros2", "run", "ros_gz_sim", "create", "-name", "burger", "-file", robot_file, "-x", "0.0", "-y", "0.0", "-z", "0.01", "-Y", "0.0"]
-    subprocess.run(spawn_cmd, env=env, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, timeout=10)
+    spawn_benchmark_robot(robot_file, env, x="0.0")
 
     print("3. Starting Bridges & Robot State Publisher...")
-    bp = subprocess.Popen(["ros2", "run", "ros_gz_bridge", "parameter_bridge", "--ros-args", "-p", f"config_file:={bridge_config}"], env=env, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, preexec_fn=os.setsid)
+    bp = start_parameter_bridge(bridge_config, env)
     all_procs.append(bp)
 
     rsp = subprocess.Popen(["ros2", "run", "robot_state_publisher", "robot_state_publisher", urdf_file, "--ros-args", "-p", "use_sim_time:=true"], env=env, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, preexec_fn=os.setsid)

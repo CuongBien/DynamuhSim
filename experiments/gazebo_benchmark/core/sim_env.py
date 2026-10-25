@@ -106,17 +106,42 @@ def patch_corridor_world_sdf(
     return out_sdf_path
 
 
-def build_sim_env(root_dir: str, domain_id: int, partition: str) -> Dict[str, str]:
-    """Builds the environment dictionary for launching Gazebo and Nav2."""
+def build_benchmark_env(root_dir: str, *, turtlebot3: bool = False, d3d12: bool = True) -> Dict[str, str]:
+    """Preserve the caller's domain/partition while setting benchmark resources."""
     corridor_models = os.path.join(root_dir, "install/custom_corridor/share/custom_corridor/models")
     plugin_share = os.path.join(root_dir, "install/custom_corridor_plugins/share/custom_corridor_plugins")
     plugin_lib = os.path.dirname(os.path.dirname(plugin_share)) + "/lib"
 
+    if turtlebot3:
+        corridor_models += ":" + os.path.join(root_dir, "install/turtlebot3_gazebo/share/turtlebot3_gazebo/models")
+
     env = os.environ.copy()
-    env["GALLIUM_DRIVER"] = "d3d12"
-    env["MESA_D3D12_DEFAULT_ADAPTER_NAME"] = "NVIDIA"
+    if d3d12:
+        env["GALLIUM_DRIVER"] = "d3d12"
+        env["MESA_D3D12_DEFAULT_ADAPTER_NAME"] = "NVIDIA"
     env["GZ_SIM_RESOURCE_PATH"] = f"{corridor_models}:{os.environ.get('GZ_SIM_RESOURCE_PATH', '')}"
     env["GZ_SIM_SYSTEM_PLUGIN_PATH"] = f"{plugin_lib}:{os.environ.get('GZ_SIM_SYSTEM_PLUGIN_PATH', '')}"
+    return env
+
+
+def build_sim_env(root_dir: str, domain_id: int, partition: str) -> Dict[str, str]:
+    """Build an isolated Gazebo/Nav2 environment for a configured trial."""
+    env = build_benchmark_env(root_dir)
     env["ROS_DOMAIN_ID"] = str(domain_id)
     env["GZ_PARTITION"] = partition
     return env
+
+
+def spawn_benchmark_robot(robot_file, env, *, x="3.0"):
+    return subprocess.run(
+        ["ros2", "run", "ros_gz_sim", "create", "-name", "burger", "-file", robot_file,
+         "-x", x, "-y", "0.0", "-z", "0.01", "-Y", "0.0"],
+        env=env, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, timeout=10,
+    )
+
+
+def start_parameter_bridge(bridge_config, env):
+    return subprocess.Popen(
+        ["ros2", "run", "ros_gz_bridge", "parameter_bridge", "--ros-args", "-p", f"config_file:={bridge_config}"],
+        env=env, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, preexec_fn=os.setsid,
+    )

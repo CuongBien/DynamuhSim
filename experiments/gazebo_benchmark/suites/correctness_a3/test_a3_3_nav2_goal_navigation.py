@@ -12,6 +12,7 @@ Protocol:
 """
 
 import os
+from pathlib import Path
 import sys
 import time
 import signal
@@ -30,6 +31,9 @@ from nav2_msgs.action import NavigateToPose
 
 import gz.transport13 as gzt
 import gz.msgs.stringmsg_pb2 as stringmsg_pb2
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[4]))
+from experiments.gazebo_benchmark.core.sim_env import build_benchmark_env
 
 
 class Nav2GoalTester(Node):
@@ -229,15 +233,7 @@ def run_single_trial(run_idx: int, root_dir: str):
 
     world_file = os.path.join(root_dir, "experiments/gazebo_benchmark/configs/generated/world_n5_actor_and_cylinder.sdf")
     params_file = os.path.join(root_dir, "install/custom_corridor/share/custom_corridor/config/nav2_mppi_mecanum.yaml")
-    corridor_models = os.path.join(root_dir, "install/custom_corridor/share/custom_corridor/models")
-    plugin_share = os.path.join(root_dir, "install/custom_corridor_plugins/share/custom_corridor_plugins")
-    plugin_lib = os.path.join(os.path.dirname(os.path.dirname(plugin_share)), 'lib')
-
-    env = os.environ.copy()
-    env["GALLIUM_DRIVER"] = "d3d12"
-    env["MESA_D3D12_DEFAULT_ADAPTER_NAME"] = "NVIDIA"
-    env["GZ_SIM_RESOURCE_PATH"] = f"{corridor_models}:{os.environ.get('GZ_SIM_RESOURCE_PATH', '')}"
-    env["GZ_SIM_SYSTEM_PLUGIN_PATH"] = f"{plugin_lib}:{os.environ.get('GZ_SIM_SYSTEM_PLUGIN_PATH', '')}"
+    env = build_benchmark_env(root_dir)
 
     domain_id = str(60 + run_idx)
     env["ROS_DOMAIN_ID"] = domain_id

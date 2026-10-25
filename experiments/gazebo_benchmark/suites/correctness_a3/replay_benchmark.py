@@ -11,6 +11,7 @@ Tests the decoupled architecture (quỹ đạo từ sim nhẹ 2D, depth render t
 """
 
 import os
+from pathlib import Path
 import sys
 import time
 import math
@@ -27,6 +28,9 @@ from gz.transport13 import Node as GzNode
 from gz.msgs10.world_control_pb2 import WorldControl
 from gz.msgs10.pose_pb2 import Pose
 from gz.msgs10.boolean_pb2 import Boolean
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[4]))
+from experiments.gazebo_benchmark.core.sim_env import build_benchmark_env, spawn_benchmark_robot
 
 
 class DepthImageCollector(RosNode):
@@ -86,14 +90,7 @@ def run_replay_trial(traj, root_dir="/home/cuongbien/DynamuhSim", trial_idx=1):
     world_file = os.path.join(root_dir, "experiments/gazebo_benchmark/configs/generated/world_n5_actor_and_cylinder.sdf")
     robot_file = os.path.join(root_dir, "experiments/gazebo_benchmark/configs/generated/burger_lidar1_depth1_640x480_30fps.sdf")
     bridge_config = os.path.join(root_dir, "src/custom_corridor/config/turtlebot3_burger_bridge.yaml")
-    corridor_models = os.path.join(root_dir, "install/custom_corridor/share/custom_corridor/models")
-    tb3_models = os.path.join(root_dir, "install/turtlebot3_gazebo/share/turtlebot3_gazebo/models")
-    plugin_share = os.path.join(root_dir, "install/custom_corridor_plugins/share/custom_corridor_plugins")
-    plugin_lib = os.path.join(os.path.dirname(os.path.dirname(plugin_share)), 'lib')
-
-    env = os.environ.copy()
-    env["GZ_SIM_RESOURCE_PATH"] = f"{corridor_models}:{tb3_models}:{os.environ.get('GZ_SIM_RESOURCE_PATH', '')}"
-    env["GZ_SIM_SYSTEM_PLUGIN_PATH"] = f"{plugin_lib}:{os.environ.get('GZ_SIM_SYSTEM_PLUGIN_PATH', '')}"
+    env = build_benchmark_env(root_dir, turtlebot3=True, d3d12=False)
 
     # 1. Start Gazebo server
     gz_proc = subprocess.Popen(
@@ -107,12 +104,7 @@ def run_replay_trial(traj, root_dir="/home/cuongbien/DynamuhSim", trial_idx=1):
     time.sleep(3.0)
 
     # 2. Spawn robot
-    subprocess.run([
-        "ros2", "run", "ros_gz_sim", "create",
-        "-name", "burger",
-        "-file", robot_file,
-        "-x", "3.0", "-y", "0.0", "-z", "0.01", "-Y", "0.0"
-    ], env=env, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, timeout=10)
+    spawn_benchmark_robot(robot_file, env)
 
     # 3. Start image bridge for depth
     img_bridge_proc = subprocess.Popen(

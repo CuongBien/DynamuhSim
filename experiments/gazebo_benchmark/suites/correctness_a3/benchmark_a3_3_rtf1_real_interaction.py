@@ -25,6 +25,7 @@ Key configurations:
 """
 
 import os
+from pathlib import Path
 import sys
 import time
 import math
@@ -44,6 +45,9 @@ from nav_msgs.msg import Odometry
 from geometry_msgs.msg import TwistStamped, PoseStamped
 from std_msgs.msg import String
 from nav2_msgs.action import NavigateToPose
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[4]))
+from experiments.gazebo_benchmark.core.sim_env import build_benchmark_env
 
 ROOT_DIR = "/home/cuongbien/DynamuhSim"
 OUTPUT_JSON = os.path.join(ROOT_DIR, "experiments/gazebo_benchmark/results/correctness_a3/a3_3_rtf1_real_interaction_results.json")
@@ -377,16 +381,8 @@ def run_single_trial_worker(corridor_type: str, persona: str, seed: int, v_human
         f.write(sdf)
 
     # Environment
-    corridor_models = os.path.join(ROOT_DIR, "install/custom_corridor/share/custom_corridor/models")
-    plugin_share = os.path.join(ROOT_DIR, "install/custom_corridor_plugins/share/custom_corridor_plugins")
-    plugin_lib = os.path.join(os.path.dirname(os.path.dirname(plugin_share)), 'lib')
-
-    env = os.environ.copy()
-    env["GALLIUM_DRIVER"] = "d3d12"
-    env["MESA_D3D12_DEFAULT_ADAPTER_NAME"] = "NVIDIA"
-    env["GZ_SIM_RESOURCE_PATH"] = f"{corridor_models}:{os.environ.get('GZ_SIM_RESOURCE_PATH', '')}"
-    env["GZ_SIM_SYSTEM_PLUGIN_PATH"] = f"{plugin_lib}:{os.environ.get('GZ_SIM_SYSTEM_PLUGIN_PATH', '')}"
-    env["ROS_DOMAIN_ID"] = str(domain_id)
+    env = build_benchmark_env(ROOT_DIR)
+    env['ROS_DOMAIN_ID'] = str(domain_id)
     partition = f"a3_3_rtf1_{corridor_type}_{persona}_{seed}_{domain_id}"
     env["GZ_PARTITION"] = partition
 

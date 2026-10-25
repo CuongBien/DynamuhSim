@@ -6,6 +6,7 @@ Rigorous Episode Reset & State Leakage Benchmark for Gazebo Harmonic (User Speci
    - Checks if trajectories across consecutive episodes diverge (RVO2/seed/actor state leakage).
 """
 
+from pathlib import Path
 import sys
 import os
 import time
@@ -25,6 +26,9 @@ import gz.transport13 as gzt
 import gz.msgs10.boolean_pb2 as boolean_pb2
 import gz.msgs10.world_control_pb2 as world_control_pb2
 import gz.msgs10.pose_pb2 as pose_pb2
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[4]))
+from experiments.gazebo_benchmark.core.sim_env import spawn_benchmark_robot, start_parameter_bridge
 
 
 class FirstFrameWaiter(Node):
@@ -83,15 +87,10 @@ def measure_cold_restart_to_first_frame(world_file, robot_file, root_dir="/home/
         time.sleep(3.5)
 
         # 2. Spawn robot
-        spawn_cmd = [
-            "ros2", "run", "ros_gz_sim", "create",
-            "-name", "burger", "-file", robot_file,
-            "-x", "3.0", "-y", "0.0", "-z", "0.01", "-Y", "0.0"
-        ]
-        subprocess.run(spawn_cmd, env=env, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, timeout=10)
+        spawn_benchmark_robot(robot_file, env)
 
         # 3. Parameter bridge and image bridge
-        bridge_proc = subprocess.Popen(["ros2", "run", "ros_gz_bridge", "parameter_bridge", "--ros-args", "-p", f"config_file:={bridge_config}"], env=env, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, preexec_fn=os.setsid)
+        bridge_proc = start_parameter_bridge(bridge_config, env)
         image_proc = subprocess.Popen(["ros2", "run", "ros_gz_image", "image_bridge", "/camera/image", "/camera/depth_image"], env=env, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, preexec_fn=os.setsid)
 
         # 4. Wait for first valid depth frame
@@ -136,14 +135,9 @@ def measure_consecutive_episode_leakage(world_file, robot_file, root_dir="/home/
     gz_proc = subprocess.Popen(["gz", "sim", "-r", "-s", world_file], env=env, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, preexec_fn=os.setsid)
     time.sleep(4.0)
 
-    spawn_cmd = [
-        "ros2", "run", "ros_gz_sim", "create",
-        "-name", "burger", "-file", robot_file,
-        "-x", "3.0", "-y", "0.0", "-z", "0.01", "-Y", "0.0"
-    ]
-    subprocess.run(spawn_cmd, env=env, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, timeout=10)
+    spawn_benchmark_robot(robot_file, env)
 
-    bridge_proc = subprocess.Popen(["ros2", "run", "ros_gz_bridge", "parameter_bridge", "--ros-args", "-p", f"config_file:={bridge_config}"], env=env, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, preexec_fn=os.setsid)
+    bridge_proc = start_parameter_bridge(bridge_config, env)
     time.sleep(1.5)
 
     node = gzt.Node()

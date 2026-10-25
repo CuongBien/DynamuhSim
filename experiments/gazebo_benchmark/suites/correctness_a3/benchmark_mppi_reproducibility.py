@@ -11,6 +11,7 @@ Runs 3 trials of:
 Measures full pairwise error matrices and reports empirical truth.
 """
 
+from pathlib import Path
 import sys
 import os
 import time
@@ -26,6 +27,9 @@ from geometry_msgs.msg import PoseStamped, TwistStamped
 
 import gz.transport13 as gzt
 import gz.msgs.stringmsg_pb2 as stringmsg_pb2
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[4]))
+from experiments.gazebo_benchmark.core.sim_env import build_benchmark_env, spawn_benchmark_robot, start_parameter_bridge
 
 
 class MPPITrajectoryRecorder(Node):
@@ -90,18 +94,9 @@ def run_single_mppi_run(trial_idx: int, mode_name: str, params_file: str, root_d
     domain_id = str(50 + trial_idx)
     partition = f"mppi_eval_{mode_name}_{trial_idx}"
 
-    env = os.environ.copy()
-    env["ROS_DOMAIN_ID"] = domain_id
-    env["GZ_PARTITION"] = partition
-    env["GALLIUM_DRIVER"] = "d3d12"
-    env["MESA_D3D12_DEFAULT_ADAPTER_NAME"] = "NVIDIA"
-
-    corridor_models = os.path.join(root_dir, "install/custom_corridor/share/custom_corridor/models")
-    tb3_models = os.path.join(root_dir, "install/turtlebot3_gazebo/share/turtlebot3_gazebo/models")
-    plugin_share = os.path.join(root_dir, "install/custom_corridor_plugins/share/custom_corridor_plugins")
-    plugin_lib = os.path.join(os.path.dirname(os.path.dirname(plugin_share)), 'lib')
-    env["GZ_SIM_RESOURCE_PATH"] = f"{corridor_models}:{tb3_models}:{os.environ.get('GZ_SIM_RESOURCE_PATH', '')}"
-    env["GZ_SIM_SYSTEM_PLUGIN_PATH"] = f"{plugin_lib}:{os.environ.get('GZ_SIM_SYSTEM_PLUGIN_PATH', '')}"
+    env = build_benchmark_env(root_dir, turtlebot3=True)
+    env['ROS_DOMAIN_ID'] = domain_id
+    env['GZ_PARTITION'] = partition
 
     all_procs = []
 
@@ -112,11 +107,10 @@ def run_single_mppi_run(trial_idx: int, mode_name: str, params_file: str, root_d
         time.sleep(3.5)
 
         # 2. Spawn robot Burger at (0.0, 0.0)
-        spawn_cmd = ["ros2", "run", "ros_gz_sim", "create", "-name", "burger", "-file", robot_file, "-x", "0.0", "-y", "0.0", "-z", "0.01", "-Y", "0.0"]
-        subprocess.run(spawn_cmd, env=env, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, timeout=10)
+        spawn_benchmark_robot(robot_file, env, x="0.0")
 
         # 3. Bridges & Robot State Publisher
-        bp = subprocess.Popen(["ros2", "run", "ros_gz_bridge", "parameter_bridge", "--ros-args", "-p", f"config_file:={bridge_config}"], env=env, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, preexec_fn=os.setsid)
+        bp = start_parameter_bridge(bridge_config, env)
         all_procs.append(bp)
 
         rsp = subprocess.Popen(["ros2", "run", "robot_state_publisher", "robot_state_publisher", urdf_file, "--ros-args", "-p", "use_sim_time:=true"], env=env, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, preexec_fn=os.setsid)

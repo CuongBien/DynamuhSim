@@ -6,6 +6,7 @@ Measures empirical wall-clock time required to reset an episode:
 3. Method C: In-process Teleportation (teleporting robot & humans to initial spawn poses).
 """
 
+from pathlib import Path
 import sys
 import os
 import time
@@ -19,19 +20,13 @@ import gz.msgs10.boolean_pb2 as boolean_pb2
 import gz.msgs10.world_control_pb2 as world_control_pb2
 import gz.msgs10.pose_pb2 as pose_pb2
 
+sys.path.insert(0, str(Path(__file__).resolve().parents[4]))
+from experiments.gazebo_benchmark.core.sim_env import build_benchmark_env
+
 
 def benchmark_process_restart(world_file, root_dir="/home/cuongbien/DynamuhSim", n_trials=3):
     print("\n--- Measuring Method A: Process Restart (Cold Restart) ---")
-    corridor_models = os.path.join(root_dir, "install/custom_corridor/share/custom_corridor/models")
-    tb3_models = os.path.join(root_dir, "install/turtlebot3_gazebo/share/turtlebot3_gazebo/models")
-    plugin_share = os.path.join(root_dir, "install/custom_corridor_plugins/share/custom_corridor_plugins")
-    plugin_lib = os.path.join(os.path.dirname(os.path.dirname(plugin_share)), 'lib')
-
-    env = os.environ.copy()
-    env["GALLIUM_DRIVER"] = "d3d12"
-    env["MESA_D3D12_DEFAULT_ADAPTER_NAME"] = "NVIDIA"
-    env["GZ_SIM_RESOURCE_PATH"] = f"{corridor_models}:{tb3_models}:{os.environ.get('GZ_SIM_RESOURCE_PATH', '')}"
-    env["GZ_SIM_SYSTEM_PLUGIN_PATH"] = f"{plugin_lib}:{os.environ.get('GZ_SIM_SYSTEM_PLUGIN_PATH', '')}"
+    env = build_benchmark_env(root_dir, turtlebot3=True)
 
     restart_times = []
     for i in range(n_trials):
@@ -63,16 +58,7 @@ def benchmark_process_restart(world_file, root_dir="/home/cuongbien/DynamuhSim",
 
 def benchmark_service_and_teleport(world_file, root_dir="/home/cuongbien/DynamuhSim", n_trials=10):
     print("\n--- Measuring Method B & C: In-Process Reset / Teleport ---")
-    corridor_models = os.path.join(root_dir, "install/custom_corridor/share/custom_corridor/models")
-    tb3_models = os.path.join(root_dir, "install/turtlebot3_gazebo/share/turtlebot3_gazebo/models")
-    plugin_share = os.path.join(root_dir, "install/custom_corridor_plugins/share/custom_corridor_plugins")
-    plugin_lib = os.path.join(os.path.dirname(os.path.dirname(plugin_share)), 'lib')
-
-    env = os.environ.copy()
-    env["GALLIUM_DRIVER"] = "d3d12"
-    env["MESA_D3D12_DEFAULT_ADAPTER_NAME"] = "NVIDIA"
-    env["GZ_SIM_RESOURCE_PATH"] = f"{corridor_models}:{tb3_models}:{os.environ.get('GZ_SIM_RESOURCE_PATH', '')}"
-    env["GZ_SIM_SYSTEM_PLUGIN_PATH"] = f"{plugin_lib}:{os.environ.get('GZ_SIM_SYSTEM_PLUGIN_PATH', '')}"
+    env = build_benchmark_env(root_dir, turtlebot3=True)
 
     p = subprocess.Popen(["gz", "sim", "-r", "-s", world_file], env=env, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, preexec_fn=os.setsid)
     time.sleep(4.0)

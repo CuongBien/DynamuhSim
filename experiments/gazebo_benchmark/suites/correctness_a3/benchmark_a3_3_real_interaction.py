@@ -29,6 +29,7 @@ Specification:
 """
 
 import os
+from pathlib import Path
 import sys
 import time
 import signal
@@ -45,6 +46,9 @@ from rosgraph_msgs.msg import Clock
 from nav_msgs.msg import Odometry
 from std_msgs.msg import String
 from nav2_msgs.action import NavigateToPose
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[4]))
+from experiments.gazebo_benchmark.core.sim_env import build_benchmark_env
 
 
 class A33InteractionMonitor(Node):
@@ -302,15 +306,7 @@ def run_single_benchmark_trial(root_dir: str, corridor_type: str, persona: str, 
         f.write(sdf)
 
     # Environment
-    corridor_models = os.path.join(root_dir, "install/custom_corridor/share/custom_corridor/models")
-    plugin_share = os.path.join(root_dir, "install/custom_corridor_plugins/share/custom_corridor_plugins")
-    plugin_lib = os.path.join(os.path.dirname(os.path.dirname(plugin_share)), 'lib')
-
-    env = os.environ.copy()
-    env["GALLIUM_DRIVER"] = "d3d12"
-    env["MESA_D3D12_DEFAULT_ADAPTER_NAME"] = "NVIDIA"
-    env["GZ_SIM_RESOURCE_PATH"] = f"{corridor_models}:{os.environ.get('GZ_SIM_RESOURCE_PATH', '')}"
-    env["GZ_SIM_SYSTEM_PLUGIN_PATH"] = f"{plugin_lib}:{os.environ.get('GZ_SIM_SYSTEM_PLUGIN_PATH', '')}"
+    env = build_benchmark_env(root_dir)
 
     domain_id = str(70 + (seed % 100))
     env["ROS_DOMAIN_ID"] = domain_id

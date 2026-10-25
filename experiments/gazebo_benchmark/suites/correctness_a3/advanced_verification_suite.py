@@ -5,6 +5,7 @@ Advanced Empirical Verification Suite for Gazebo Harmonic:
 3. Full Pairwise Matrix & Error Growth Analysis over Time e(t).
 """
 
+from pathlib import Path
 import sys
 import os
 import time
@@ -14,78 +15,14 @@ import json
 import re
 import numpy as np
 
-import rclpy
-from rclpy.node import Node
-from rosgraph_msgs.msg import Clock
-from geometry_msgs.msg import TwistStamped
 
 import gz.transport13 as gzt
-import gz.msgs.world_control_pb2 as world_control_pb2
-import gz.msgs.boolean_pb2 as boolean_pb2
 import gz.msgs.stringmsg_pb2 as stringmsg_pb2
 
-sys.path.insert(0, '/home/cuongbien/DynamuhSim/experiments/gazebo_benchmark/core')
-from benchmark_world_generator import BenchmarkWorldGenerator
+sys.path.insert(0, str(Path(__file__).resolve().parents[4]))
+from experiments.gazebo_benchmark.core.sim_env import build_benchmark_env, spawn_benchmark_robot, start_parameter_bridge
+from experiments.gazebo_benchmark.core.benchmark_world_generator import BenchmarkWorldGenerator
 
-
-class SimTimeTrajectoryCollector(Node):
-    def __init__(self, target_duration=20.0):
-        super().__init__('sim_time_traj_collector')
-        self.target_duration = target_duration
-        self.clock_sub = self.create_subscription(Clock, '/clock', self._clock_cb, 100)
-        self.cmd_pub = self.create_publisher(TwistStamped, '/cmd_vel', 50)
-        
-        self.gz_node = gzt.Node()
-        self.gz_node.subscribe(stringmsg_pb2.StringMsg, '/rvo2_human/ground_truth', self._gt_cb)
-
-        self.sim_time = 0.0
-        self.latest_pos = None
-        self.trajectory = []  # (t_rel, x, y)
-        self.t_start = None
-        self.last_cmd_sim_time = -1.0
-        self.last_sample_sim_time = -1.0
-
-    def _gt_cb(self, msg):
-        try:
-            data = json.loads(msg.data)
-            if 'robot' in data and data['robot']['x'] is not None:
-                self.latest_pos = (data['robot']['x'], data['robot']['y'])
-        except Exception:
-            pass
-
-    def _clock_cb(self, msg: Clock):
-        self.sim_time = msg.clock.sec + msg.clock.nanosec * 1e-9
-        if self.t_start is None:
-            self.t_start = self.sim_time
-            self.last_cmd_sim_time = self.sim_time
-            self.last_sample_sim_time = self.sim_time
-            return
-
-        t_rel = self.sim_time - self.t_start
-        # Publish fixed cmd_vel every 0.02s of sim-time
-        if self.sim_time - self.last_cmd_sim_time >= 0.02:
-            self.last_cmd_sim_time = self.sim_time
-            twist = TwistStamped()
-            twist.header.stamp = msg.clock
-            twist.twist.linear.x = 0.15
-            twist.twist.angular.z = 0.05 * np.sin(0.1 * t_rel)
-            self.cmd_pub.publish(twist)
-
-        # Sample trajectory point every 0.1s of sim-time
-        if self.sim_time - self.last_sample_sim_time >= 0.1:
-            self.last_sample_sim_time = self.sim_time
-            pos = self.latest_pos if self.latest_pos is not None else (3.0, 0.0)
-            self.trajectory.append((t_rel, pos[0], pos[1]))
-
-    def run_until_duration(self):
-        t_wall_start = time.time()
-        while rclpy.ok():
-            rclpy.spin_once(self, timeout_sec=0.01)
-            if self.t_start is not None and (self.sim_time - self.t_start) >= self.target_duration:
-                break
-            if time.time() - t_wall_start > (self.target_duration * 3.0 + 10.0):
-                break
-        return self.trajectory
 
 
 def control_sim(action="unpause", partition=None, world_name="corridor_0.90"):
@@ -113,16 +50,7 @@ def measure_true_uncapped_rtf(root_dir):
     robot_file = gen.generate_robot_model(True, True, 640, 480, 10, initial_x=3.0, initial_y=0.0)
 
     bridge_config = os.path.join(root_dir, "src/custom_corridor/config/turtlebot3_burger_bridge.yaml")
-    corridor_models = os.path.join(root_dir, "install/custom_corridor/share/custom_corridor/models")
-    tb3_models = os.path.join(root_dir, "install/turtlebot3_gazebo/share/turtlebot3_gazebo/models")
-    plugin_share = os.path.join(root_dir, "install/custom_corridor_plugins/share/custom_corridor_plugins")
-    plugin_lib = os.path.join(os.path.dirname(os.path.dirname(plugin_share)), 'lib')
-
-    env = os.environ.copy()
-    env["GALLIUM_DRIVER"] = "d3d12"
-    env["MESA_D3D12_DEFAULT_ADAPTER_NAME"] = "NVIDIA"
-    env["GZ_SIM_RESOURCE_PATH"] = f"{corridor_models}:{tb3_models}:{os.environ.get('GZ_SIM_RESOURCE_PATH', '')}"
-    env["GZ_SIM_SYSTEM_PLUGIN_PATH"] = f"{plugin_lib}:{os.environ.get('GZ_SIM_SYSTEM_PLUGIN_PATH', '')}"
+    env = build_benchmark_env(root_dir, turtlebot3=True)
 
     gz_proc = subprocess.Popen(["gz", "sim", "-s", "-r", "-z", "5000", uncapped_world], env=env, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, preexec_fn=os.setsid)
     time.sleep(3.5)
@@ -166,16 +94,7 @@ def test_concurrent_4instances_determinism_n24(root_dir):
     robot_file = gen.generate_robot_model(True, True, 640, 480, 10, initial_x=3.0, initial_y=0.0)
 
     bridge_config = os.path.join(root_dir, "src/custom_corridor/config/turtlebot3_burger_bridge.yaml")
-    corridor_models = os.path.join(root_dir, "install/custom_corridor/share/custom_corridor/models")
-    tb3_models = os.path.join(root_dir, "install/turtlebot3_gazebo/share/turtlebot3_gazebo/models")
-    plugin_share = os.path.join(root_dir, "install/custom_corridor_plugins/share/custom_corridor_plugins")
-    plugin_lib = os.path.join(os.path.dirname(os.path.dirname(plugin_share)), 'lib')
-
-    base_env = os.environ.copy()
-    base_env["GALLIUM_DRIVER"] = "d3d12"
-    base_env["MESA_D3D12_DEFAULT_ADAPTER_NAME"] = "NVIDIA"
-    base_env["GZ_SIM_RESOURCE_PATH"] = f"{corridor_models}:{tb3_models}:{os.environ.get('GZ_SIM_RESOURCE_PATH', '')}"
-    base_env["GZ_SIM_SYSTEM_PLUGIN_PATH"] = f"{plugin_lib}:{os.environ.get('GZ_SIM_SYSTEM_PLUGIN_PATH', '')}"
+    base_env = build_benchmark_env(root_dir, turtlebot3=True)
 
     instances_procs = []
     num_instances = 4
@@ -197,17 +116,9 @@ def test_concurrent_4instances_determinism_n24(root_dir):
         env_i["GZ_PARTITION"] = f"bench_part_{i}"
         env_i["ROS_DOMAIN_ID"] = str(100 + i)
 
-        spawn_cmd = [
-            "ros2", "run", "ros_gz_sim", "create",
-            "-name", "burger", "-file", robot_file,
-            "-x", "3.0", "-y", "0.0", "-z", "0.01", "-Y", "0.0"
-        ]
-        subprocess.run(spawn_cmd, env=env_i, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, timeout=10)
+        spawn_benchmark_robot(robot_file, env_i)
 
-        bridge_p = subprocess.Popen(
-            ["ros2", "run", "ros_gz_bridge", "parameter_bridge", "--ros-args", "-p", f"config_file:={bridge_config}"],
-            env=env_i, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, preexec_fn=os.setsid
-        )
+        bridge_p = start_parameter_bridge(bridge_config, env_i)
         instances_procs.append(bridge_p)
 
     time.sleep(2.0)

@@ -4,6 +4,7 @@ Verifies strict trajectory reproducibility across 5 independent launches of Gaze
 Computes pairwise max position discrepancy, mean position discrepancy, and standard deviation.
 """
 
+from pathlib import Path
 import sys
 import os
 import time
@@ -17,6 +18,9 @@ from rclpy.node import Node
 from nav_msgs.msg import Odometry
 from rosgraph_msgs.msg import Clock
 from geometry_msgs.msg import TwistStamped
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[4]))
+from experiments.gazebo_benchmark.core.sim_env import build_benchmark_env, spawn_benchmark_robot, start_parameter_bridge
 
 
 class TrajectoryCollector(Node):
@@ -66,32 +70,14 @@ class TrajectoryCollector(Node):
 def run_single_trial(run_idx, world_file, robot_file, root_dir="/home/cuongbien/DynamuhSim"):
     print(f"\n--- Launching Run {run_idx + 1} of 5 ---")
     bridge_config = os.path.join(root_dir, "src/custom_corridor/config/turtlebot3_burger_bridge.yaml")
-    corridor_models = os.path.join(root_dir, "install/custom_corridor/share/custom_corridor/models")
-    tb3_models = os.path.join(root_dir, "install/turtlebot3_gazebo/share/turtlebot3_gazebo/models")
-    plugin_share = os.path.join(root_dir, "install/custom_corridor_plugins/share/custom_corridor_plugins")
-    plugin_lib = os.path.join(os.path.dirname(os.path.dirname(plugin_share)), 'lib')
-
-    env = os.environ.copy()
-    env["GALLIUM_DRIVER"] = "d3d12"
-    env["MESA_D3D12_DEFAULT_ADAPTER_NAME"] = "NVIDIA"
-    env["GZ_SIM_RESOURCE_PATH"] = f"{corridor_models}:{tb3_models}:{os.environ.get('GZ_SIM_RESOURCE_PATH', '')}"
-    env["GZ_SIM_SYSTEM_PLUGIN_PATH"] = f"{plugin_lib}:{os.environ.get('GZ_SIM_SYSTEM_PLUGIN_PATH', '')}"
+    env = build_benchmark_env(root_dir, turtlebot3=True)
 
     gz_proc = subprocess.Popen(["gz", "sim", "-r", "-s", world_file], env=env, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, preexec_fn=os.setsid)
     time.sleep(4.0)
 
-    spawn_cmd = [
-        "ros2", "run", "ros_gz_sim", "create",
-        "-name", "burger",
-        "-file", robot_file,
-        "-x", "3.0", "-y", "0.0", "-z", "0.01", "-Y", "0.0"
-    ]
-    subprocess.run(spawn_cmd, env=env, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, timeout=10)
+    spawn_benchmark_robot(robot_file, env)
 
-    bridge_proc = subprocess.Popen(
-        ["ros2", "run", "ros_gz_bridge", "parameter_bridge", "--ros-args", "-p", f"config_file:={bridge_config}"],
-        env=env, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, preexec_fn=os.setsid
-    )
+    bridge_proc = start_parameter_bridge(bridge_config, env)
     time.sleep(1.5)
 
     rclpy.init()
