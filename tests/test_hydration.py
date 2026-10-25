@@ -122,6 +122,23 @@ class HydrationTests(unittest.TestCase):
             bad["bundles"][0]["object_id"]=bundle["object_id"]
             with self.assertRaises(ValueError): hydrate_history(checkout,bad,bad["bundles"][0]["id"],store=store)
 
+    def test_legacy_install_requires_and_verifies_externalized_inventory(self):
+        from dynamuhsim.artifacts.catalog import verify_install, PACKAGE
+        with tempfile.TemporaryDirectory() as directory:
+            repo, store, index, bundle, checkout = self.fixture(directory)
+            share=Path(directory)/"share"
+            shutil.copytree(repo/PACKAGE,share)
+            subprocess.run(['git','-C',str(repo),'rm','-qr','--',bundle['root']],check=True)
+            subprocess.run(['git','-C',str(repo),'-c','user.name=Hydration Test','-c','user.email=hydrate@example.invalid','commit','-qm','externalized'],check=True)
+            missing=verify_install(repo,share,legacy=True)
+            self.assertEqual(missing['status'],'FAIL')
+            self.assertFalse(missing['checks']['historical_payload_inventory_available'])
+            self.assertEqual(verify_install(repo,share,legacy=True,history_index=index)['status'],'PASS')
+            (share/'worlds/payload/episode.bin').write_text('corrupt')
+            report=verify_install(repo,share,legacy=True,history_index=index)
+            self.assertEqual(report['status'],'FAIL')
+            self.assertIn('worlds/payload/episode.bin',report['different'])
+
     def test_cli_help_and_check_missing_exit_code(self):
         help=subprocess.run([sys.executable,str(ROOT/'tools/hydrate_history.py'),'--help'],capture_output=True,text=True)
         self.assertEqual(help.returncode,0,help.stderr)

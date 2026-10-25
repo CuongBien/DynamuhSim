@@ -33,10 +33,11 @@ if(DYNAMUHSIM_INSTALL_LEGACY_WORLD_PAYLOADS)
   foreach(_payload IN LISTS _world_payload_dirs)
     string(STRIP "${_payload}" _payload)
     if(NOT IS_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/worlds/${_payload}")
+      string(REPLACE "/" "_" _payload_report "${_payload}")
       message(FATAL_ERROR
         "Legacy world payload missing: ${_payload}. From the repository root run "
         "python3 tools/hydrate_history.py --source git --group world:${_payload} "
-        "--report /tmp/hydrate-report.json, then configure again. "
+        "--report /tmp/hydrate-${_payload_report}.json, then configure again. "
         "See docs/HISTORICAL_ARTIFACTS.md for archive hydration.")
     endif()
   endforeach()
