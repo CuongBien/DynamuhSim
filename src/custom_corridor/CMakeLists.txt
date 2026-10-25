@@ -27,11 +27,21 @@ install(
 option(DYNAMUHSIM_INSTALL_LEGACY_WORLD_PAYLOADS
   "Install historical dataset and generated episode payloads under worlds" OFF)
 
+file(STRINGS "${CMAKE_CURRENT_SOURCE_DIR}/config/world_payloads.txt"
+  _world_payload_dirs REGEX "^[^#].+")
 if(DYNAMUHSIM_INSTALL_LEGACY_WORLD_PAYLOADS)
+  foreach(_payload IN LISTS _world_payload_dirs)
+    string(STRIP "${_payload}" _payload)
+    if(NOT IS_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/worlds/${_payload}")
+      message(FATAL_ERROR
+        "Legacy world payload missing: ${_payload}. From the repository root run "
+        "python3 tools/hydrate_history.py --source git --group world:${_payload} "
+        "--report /tmp/hydrate-report.json, then configure again. "
+        "See docs/HISTORICAL_ARTIFACTS.md for archive hydration.")
+    endif()
+  endforeach()
   install(DIRECTORY worlds DESTINATION share/${PROJECT_NAME})
 else()
-  file(STRINGS "${CMAKE_CURRENT_SOURCE_DIR}/config/world_payloads.txt"
-    _world_payload_dirs REGEX "^[^#].+")
   set(_world_payload_excludes)
   foreach(_payload IN LISTS _world_payload_dirs)
     string(STRIP "${_payload}" _payload)

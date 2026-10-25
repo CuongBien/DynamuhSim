@@ -67,3 +67,27 @@ Archive bytes chưa gồm manifest riêng và index; chi tiết footprint có tr
 CLI pack được chạy lần hai: index/object giống byte và không tăng số archive. CLI verify toàn bộ index và restore nhóm `generated_v1` được chạy với PATH rỗng trên bản store di động không có `catalogs/`, xác nhận không dựa vào Git hoặc inventory cache. Bản store di động thử dùng hardlink cùng đĩa, không được tính là backup độc lập.
 
 Đã kiểm lại các bản giải nén thử rồi dọn riêng chúng; giữ 50 archive và manifest canonical. 14.912 tệp nguồn giữ nguyên byte; trạng thái/index checkout chính không đổi. Index 67.526 byte được giữ trong Git, còn archive/manifest nằm local và chưa upload lên remote. Vì nguồn vẫn còn trong Git, bước này tạo backup kiểm chứng và **chưa giảm dung lượng checkout/clone**. Chuyển dữ liệu ra checkout phải đi cùng hydrate consumer và chính sách lưu artifact lâu dài.
+
+## Hydrate vào đường dẫn consumer
+
+`tools/hydrate_history.py` đưa **một nhóm** vào đúng `root` trong checkout. Khác với restore ra thư mục riêng, hydrate bảo toàn đường dẫn mà config/loader/script lịch sử đã dùng.
+
+```bash
+python3 tools/hydrate_history.py --source git \
+  --group world:school_arena/demo_1/dataset_v1.0 \
+  --report experiments/social_navigation/benchmark/generated/hydrate_dataset.json
+# Hoặc dùng archive đã có, không cần Git objects của payload:
+python3 tools/hydrate_history.py --source archive --store /PATH/TO/STORE \
+  --group world:school_arena/demo_1/scenario_generator/generated_v1 \
+  --report experiments/social_navigation/benchmark/generated/hydrate_scenarios.json
+# Kiểm tra chỉ đọc; exit 1 khi absent, exit 0 khi toàn bộ payload đúng:
+python3 tools/hydrate_history.py --source git --check \
+  --group world:school_arena/demo_1/dataset_v1.0 \
+  --report experiments/social_navigation/benchmark/generated/hydrate_check.json
+```
+
+Mặc định checkout và index là repository chứa tool; `--checkout` và `--index` cho phép chọn rõ. Git source đọc revision đầy đủ đã pin, không đọc HEAD/working tree và không tự truy cập mạng. Clone nông thiếu commit cần fetch revision đó trước; clone đầy đủ vẫn có dữ liệu cũ dù payload đã bỏ ở HEAD. Archive source cần object + manifest đúng hash, không cần Git hoặc inventory cache.
+
+Payload được ghi vào staging trên cùng filesystem, kiểm lại từng SHA256/mode rồi publish thư mục bằng thao tác atomic không ghi đè (`renameat2` trên Linux, `rename` trên Windows). Nếu đích xuất hiện giữa chừng, hydrate dừng và giữ dữ liệu đó. Nền tảng không có thao tác publish hỗ trợ sẽ báo lỗi. Thư mục đích có sẵn chỉ được chấp nhận khi toàn bộ inventory đúng, không có file dư; file khác, thiếu, rỗng hoặc symlink bị chặn. Tool không merge, xóa hoặc thay nội dung người dùng.
+
+Ba world payload được ignore riêng sau migration; report/gate không thay đổi. `DYNAMUHSIM_INSTALL_LEGACY_WORLD_PAYLOADS=ON` yêu cầu ba thư mục tồn tại và báo lệnh hydrate nếu thiếu. Sau hydrate vẫn nên chạy `--check` cho từng nhóm trước khi dùng; CMake guard chỉ kiểm thư mục tồn tại, không thay kiểm integrity. Default build không cần hydrate.

@@ -3,6 +3,7 @@
 Bundles restore without Git/ROS, preserving repository-relative payload paths.
 They do not provide a complete executable environment for historical replay.
 """
+from contextlib import contextmanager
 import gzip
 import hashlib
 import io
@@ -113,17 +114,22 @@ class _HashReader:
 
 
 class _GitPayloads(GitBlobHashes):
-    def add(self, archive, member, row):
+    @contextmanager
+    def blob(self, row):
         self.process.stdin.write((row["git_blob"] + "\n").encode())
         self.process.stdin.flush()
         header = self.process.stdout.readline().split()
         if header != [row["git_blob"].encode(), b"blob", str(row["bytes"]).encode()]:
             raise ValueError("Git payload identity mismatch")
         reader = _HashReader(self.process.stdout, row["bytes"])
-        archive.addfile(member, reader)
+        yield reader
         if (reader.left or reader.sha256.hexdigest() != row["sha256"] or reader.git.hexdigest() != row["git_blob"]
                 or self.process.stdout.read(1) != b"\n"):
             raise ValueError("Git payload hash mismatch")
+
+    def add(self, archive, member, row):
+        with self.blob(row) as reader:
+            archive.addfile(member, reader)
 
 
 def _tar_info(name, row):
@@ -227,7 +233,8 @@ def verify_history(store, object_id):
     return _check_archive(archive, manifest)
 
 
-def verify_history_index(store, index):
+def history_groups(index):
+    """Validate index coverage and metadata without reading any payload objects."""
     if index.get("schema") != "dynamuhsim_history_index/1" or index["removal_allowed"] is not False:
         raise ValueError("Unsupported/removal-authorizing history index")
     catalog = index["catalog"]
@@ -240,6 +247,18 @@ def verify_history_index(store, index):
         raise ValueError("Duplicate/overlapping history groups")
     if len(index["bundles"]) != len(groups) or {row["id"] for row in index["bundles"]} != set(groups):
         raise ValueError("History index group coverage mismatch")
+    for bundle in index["bundles"]:
+        group = groups[bundle["id"]]
+        _digest(bundle["object_id"])
+        relative_name(group["root"])
+        if any(bundle[key] != group[key] for key in ["id", "root", "files", "logical_bytes"]):
+            raise ValueError("History index bundle binding mismatch")
+    return groups
+
+
+def verify_history_index(store, index):
+    groups = history_groups(index)
+    catalog = index["catalog"]
     total = count = packed = 0
     for bundle in index["bundles"]:
         manifest = verify_history(store, bundle["object_id"])

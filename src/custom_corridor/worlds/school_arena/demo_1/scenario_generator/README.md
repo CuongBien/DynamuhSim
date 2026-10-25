@@ -272,3 +272,20 @@ PY
 
 Các ID ví dụ phải khớp với family trên máy bạn. Parser PASS chỉ xác nhận
 schema YAML; chuyển động và va chạm cần kiểm tra ở runtime mục 5–6.
+
+## Historical payload hydration
+
+Historical dataset/generated outputs are no longer tracked in current checkouts. Before reading or resuming them, run the appropriate command **from the repository root**:
+
+```bash
+python3 tools/hydrate_history.py --source git \
+  --group world:school_arena/demo_1/dataset_v1.0 --report /tmp/hydrate-dataset.json
+python3 tools/hydrate_history.py --source git \
+  --group world:school_arena/demo_1/scenario_generator/generated --report /tmp/hydrate-generated.json
+python3 tools/hydrate_history.py --source git \
+  --group world:school_arena/demo_1/scenario_generator/generated_v1 --report /tmp/hydrate-generated-v1.json
+```
+
+Each report path must be new. Choose only the payloads needed. Git mode uses the exact historical revision pinned in `docs/artifacts/history_2026-10-25.json`; it does not need a local archive store. Full Git history must be available; shallow clones may need the pinned commit fetched first. Archive mode and verification are documented in `docs/HISTORICAL_ARTIFACTS.md` at the repository root.
+
+Existing matching payloads are verified and retained; different, partial or locally changed data are never overwritten. Hydrated payloads are ignored by Git. Resume and audit preserve their original outcome/incomplete state; hydration does not certify a complete dataset or a new simulation run.
