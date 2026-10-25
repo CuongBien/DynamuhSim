@@ -146,5 +146,20 @@
     "retained_nonmedia_files": 1814,
     "externalized_media_files": 214,
     "control_policy": "Keep all non-media control/model/snapshot/test state; only approved missing media may be filled"
+  },
+  "sensor_controls": {
+    "guide": "docs/SENSOR_CONTROLS.md",
+    "registry": "configs/control_registry.json",
+    "bundle_root": "control_bundles/sensor_pilot_v1",
+    "manifest_sha256": "f5f9785275c204cf445ea8ffde83974f268ce005fe2b18399e08a31b7d1233c1",
+    "classifier_api": "dynamuhsim.perception.depth_classifier.FrozenDepthClassifier",
+    "feature_api": "dynamuhsim.perception.depth_classifier.depth_features",
+    "engine_verifier": "dynamuhsim.controls.bundle.ControlBundle.verify_engine",
+    "probe_default": "bundle; three legacy model/engine report prefixes blocked",
+    "probe_legacy": "tools/probe_report_controls.py --consumer legacy",
+    "verification": "docs/verification/control_bundle_2026-10-25.json",
+    "model_state": "Frozen depth_linear, hidden0, depth-only, threshold0.5; no train/test operations",
+    "evaluation_state": "Bundle receipt is historical provenance; legacy live test seal remains at original reports path",
+    "scope": "New read-only API and default probe migrated; historical capture/train/evaluate scripts remain unchanged"
   }
 }

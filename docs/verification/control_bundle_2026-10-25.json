@@ -1,0 +1,215 @@
+{
+  "api_source_sha256": {
+    "python/dynamuhsim/controls/bundle.py": "6660f41fb2e49df067956a7fcee97db9c7b3f9b2e90342372ca265c438081847",
+    "python/dynamuhsim/perception/depth_classifier.py": "e6046980a3391fe5f65f1d5a615693530f99d1bf2884e230a587279078d33f6b",
+    "tools/export_control_bundle.py": "c7e6d010e1e4185427827a0e0cb5129c2a208d1762cb71bef961f1f8d3a7f73e",
+    "tools/probe_report_controls.py": "3878920212dda5d1457901ac34de06f889f4d2eaa317f2458d401efa16963be6",
+    "tools/verify_control_bundle.py": "e6f5ac0a8ae1521385e4eed38ad787f2a455ae25a65f67405ccce7e6fa6217d8"
+  },
+  "bundle_root": "control_bundles/sensor_pilot_v1",
+  "code_revision": "06fb557960f988735bb098f0ae74380ea93c9816",
+  "date": "2026-10-25",
+  "functional_output_sha256": "53f5773c9f9b633ff04083cdf792bcabbaf6264911f545eb835b5b85a3063b24",
+  "functional_result": {
+    "classifier": {
+      "candidate": "depth_linear",
+      "held_out_data_opened": false,
+      "logits_sha256": "1b9a62e42afdd0eba16815fdd14c72c8deba7dd5d03ff85167d5348418830465",
+      "model_sha256": "41f990bd581afd87d93bb93bd57ea758b51a914f31fd6bdb6f027ddd6e27f292",
+      "status": "PASS",
+      "synthetic_rows": 3,
+      "test_evaluation_run": false,
+      "test_seal_sha256": "a67c582257dcdc56f2b88f5e46a7e7a1ce24c7012ffb247dbab828c560a17546",
+      "threshold": 0.5,
+      "training_run": false
+    },
+    "dynamic_identity_tracker": {
+      "output_sha256": "1e90f1ce2a9881c67809b7c2db2bb1a04cd583e3559a2e825612a7d6f98f1e4e",
+      "status": "PASS",
+      "synthetic_frames": 4
+    },
+    "engine_bindings": {
+      "depth_identity_guard": {
+        "engine_files": 10,
+        "freeze_sha256": "88df2b6ea4f4663ea715c1d203043ede0e14abe82e94c8d3d4907303afb82401",
+        "status": "PASS"
+      },
+      "depth_track_refinement": {
+        "engine_files": 6,
+        "freeze_sha256": "eb698c7954851fe9606ce32c7861ab749767c9877658f1716a762b23e70820b9",
+        "status": "PASS"
+      }
+    },
+    "runtime_gates": {
+      "profiles": [
+        "shared_nav2_pilot",
+        "socnavgym_group_nav2",
+        "socnavgym_nav2_pilot"
+      ],
+      "status": "PASS"
+    }
+  },
+  "legacy_report_prefixes_blocked": [
+    "experiments/social_navigation/benchmark/depth_person_classifier/reports/",
+    "experiments/social_navigation/benchmark/depth_identity_guard/reports/",
+    "experiments/social_navigation/benchmark/depth_track_refinement/reports/"
+  ],
+  "limits": [
+    "New default consumers: two engine-binding verifiers and the frozen classifier inference API. Historical capture/train/evaluate scripts are not rewritten or migrated.",
+    "The copied evaluation_receipt is historical provenance, not a mutable counter. Original reports/test_opened.json remains in place and unchanged.",
+    "Parity uses fabricated points/features; no train, held-out evaluation, threshold search, corpus/raw data read, Gazebo/ROS or new accuracy measurement.",
+    "Classifier consumes existing geometry proposals or N x30 features; no new full-image detector or real-world validation claim.",
+    "Engine source verification still requires the pinned source tree; standalone classifier needs only package, NumPy and the6-file data bundle.",
+    "Historical control files, dataset01, split/labels/outcomes and main checkout/index unchanged. No additional payload removed or Git history rewrite."
+  ],
+  "manifest_bytes": 2898,
+  "manifest_sha256": "f5f9785275c204cf445ea8ffde83974f268ce005fe2b18399e08a31b7d1233c1",
+  "native_parity": {
+    "bundle_manifest_sha256": "f5f9785275c204cf445ea8ffde83974f268ce005fe2b18399e08a31b7d1233c1",
+    "bundle_reexport_byte_equal": true,
+    "functional_outputs_equal": true,
+    "legacy_explicit_mode_equal": true,
+    "new_consumer_targeted_report_reads": [],
+    "status": "PASS"
+  },
+  "new_probe_sha256": "3e35c8ac78f52c729154ab77bbbf323f10a6c44812fb24a23932a8f8a7fc65c9",
+  "new_read_trace": {
+    "blocked_events": [
+      "subprocess.Popen:lscpu"
+    ],
+    "reads": [
+      "configs/control_registry.json",
+      "control_bundles/sensor_pilot_v1/classifier/evaluation_receipt.json",
+      "control_bundles/sensor_pilot_v1/classifier/metadata.json",
+      "control_bundles/sensor_pilot_v1/classifier/model.npz",
+      "control_bundles/sensor_pilot_v1/classifier/source_freeze.json",
+      "control_bundles/sensor_pilot_v1/engines/identity.json",
+      "control_bundles/sensor_pilot_v1/engines/refinement.json",
+      "control_bundles/sensor_pilot_v1/manifest.json",
+      "experiments/social_navigation/benchmark/depth_identity_guard/__pycache__/guard_tracker.cpython-312.pyc",
+      "experiments/social_navigation/benchmark/depth_identity_guard/config.json",
+      "experiments/social_navigation/benchmark/depth_identity_guard/evaluate.py",
+      "experiments/social_navigation/benchmark/depth_identity_guard/freeze.py",
+      "experiments/social_navigation/benchmark/depth_identity_guard/guard_tracker.py",
+      "experiments/social_navigation/benchmark/depth_identity_guard/parent/__pycache__/refinement.cpython-312.pyc",
+      "experiments/social_navigation/benchmark/depth_identity_guard/parent/config.json",
+      "experiments/social_navigation/benchmark/depth_identity_guard/parent/evaluate.py",
+      "experiments/social_navigation/benchmark/depth_identity_guard/parent/refinement.py",
+      "experiments/social_navigation/benchmark/depth_identity_guard/parent/snapshots/__pycache__/sensor.cpython-312.pyc",
+      "experiments/social_navigation/benchmark/depth_identity_guard/parent/snapshots/association.py",
+      "experiments/social_navigation/benchmark/depth_identity_guard/parent/snapshots/sensor.py",
+      "experiments/social_navigation/benchmark/depth_identity_guard/replay.py",
+      "experiments/social_navigation/benchmark/depth_track_refinement/config.json",
+      "experiments/social_navigation/benchmark/depth_track_refinement/evaluate.py",
+      "experiments/social_navigation/benchmark/depth_track_refinement/refinement.py",
+      "experiments/social_navigation/benchmark/depth_track_refinement/replay.py",
+      "experiments/social_navigation/benchmark/depth_track_refinement/snapshots/association.py",
+      "experiments/social_navigation/benchmark/depth_track_refinement/snapshots/sensor.py",
+      "experiments/social_navigation/benchmark/shared_nav2_pilot/reports/gate01/validation.json",
+      "experiments/social_navigation/benchmark/socnavgym_group_nav2/reports/gate03/validation.json",
+      "experiments/social_navigation/benchmark/socnavgym_group_nav2/reports/offline05/validation.json",
+      "experiments/social_navigation/benchmark/socnavgym_group_nav2/reports/reaction_gate.json",
+      "experiments/social_navigation/benchmark/socnavgym_nav2_pilot/reports/empty01/validation.json",
+      "experiments/social_navigation/benchmark/socnavgym_nav2_pilot/reports/gate01/validation.json",
+      "python/dynamuhsim/analysis/__pycache__/__init__.cpython-312.pyc",
+      "python/dynamuhsim/analysis/__pycache__/evidence.cpython-312.pyc",
+      "python/dynamuhsim/controls/__pycache__/__init__.cpython-312.pyc",
+      "python/dynamuhsim/controls/__pycache__/bundle.cpython-312.pyc",
+      "python/dynamuhsim/perception/__init__.py",
+      "python/dynamuhsim/perception/__pycache__/__init__.cpython-312.pyc",
+      "python/dynamuhsim/perception/__pycache__/depth_classifier.cpython-312.pyc",
+      "python/dynamuhsim/perception/depth_classifier.py"
+    ],
+    "report_snapshots_executed": false,
+    "status": "PASS"
+  },
+  "old_probe_sha256": "55324227921488bb7c8806fd09e62d75f270b2cbc721c508491a28ebb8a828b2",
+  "payload_bytes": 26068,
+  "payload_files": 6,
+  "portable": {
+    "model_sha256": "41f990bd581afd87d93bb93bd57ea758b51a914f31fd6bdb6f027ddd6e27f292",
+    "original_repo_access": false,
+    "predictions": [
+      true,
+      true
+    ],
+    "raw_or_test_data_opened": false,
+    "reads": [
+      "bundle/classifier/evaluation_receipt.json",
+      "bundle/classifier/metadata.json",
+      "bundle/classifier/model.npz",
+      "bundle/classifier/source_freeze.json",
+      "bundle/engines/identity.json",
+      "bundle/engines/refinement.json",
+      "bundle/manifest.json",
+      "python/dynamuhsim/__init__.py",
+      "python/dynamuhsim/__pycache__/__init__.cpython-312.pyc",
+      "python/dynamuhsim/analysis/__init__.py",
+      "python/dynamuhsim/analysis/__pycache__/__init__.cpython-312.pyc",
+      "python/dynamuhsim/analysis/__pycache__/evidence.cpython-312.pyc",
+      "python/dynamuhsim/analysis/evidence.py",
+      "python/dynamuhsim/controls/__init__.py",
+      "python/dynamuhsim/controls/__pycache__/__init__.cpython-312.pyc",
+      "python/dynamuhsim/controls/__pycache__/bundle.cpython-312.pyc",
+      "python/dynamuhsim/controls/bundle.py",
+      "python/dynamuhsim/perception/__init__.py",
+      "python/dynamuhsim/perception/__pycache__/__init__.cpython-312.pyc",
+      "python/dynamuhsim/perception/__pycache__/depth_classifier.cpython-312.pyc",
+      "python/dynamuhsim/perception/depth_classifier.py"
+    ],
+    "reports_or_git_present": false,
+    "scores": [
+      1.0,
+      0.9964264035224915
+    ],
+    "source_code_from": "/home/cuongbien/DynamuhSim/experiments/social_navigation/benchmark/generated/refactor_workspace/experiments/social_navigation/benchmark/generated/control_bundle_20261025/portable_workspace/python/dynamuhsim/controls/bundle.py",
+    "status": "PASS",
+    "threshold": 0.5,
+    "torch_loaded": false
+  },
+  "preservation": {
+    "historical_control_bytes_unchanged": true,
+    "historical_control_files": 1814,
+    "legacy_test_seal_unchanged": true,
+    "main_index_byte_equal": true,
+    "main_status_equal": true,
+    "new_packages_discoverable": true,
+    "packaging_metadata_valid": true,
+    "status": "PASS"
+  },
+  "registry": "configs/control_registry.json",
+  "registry_sha256": "81a0b38112864241acfa0d349078f7d766447b812d978bbb3283daac4f3ab2ff",
+  "schema": "dynamuhsim_sensor_control_verification/1",
+  "source_revision": "a6fd939e877759703431f66a67cc50ac9e85c3c4",
+  "temporary_cleanup": {
+    "canonical_bundle_retained": true,
+    "portable_result_retained": true,
+    "removed_only_our_verified_copies": [
+      {
+        "files": 7,
+        "logical_bytes": 28966,
+        "path": "/home/cuongbien/DynamuhSim/experiments/social_navigation/benchmark/generated/refactor_workspace/experiments/social_navigation/benchmark/generated/control_bundle_20261025/reexport"
+      },
+      {
+        "files": 37,
+        "logical_bytes": 199858,
+        "path": "/home/cuongbien/DynamuhSim/experiments/social_navigation/benchmark/generated/refactor_workspace/experiments/social_navigation/benchmark/generated/control_bundle_20261025/portable_workspace"
+      }
+    ],
+    "status": "PASS"
+  },
+  "unit_tests": {
+    "log_sha256": "f150de739b21e06c79a07c035c95cc718cc2a29cea907082ccca0e6facfbca63",
+    "status": "PASS",
+    "tests": 118
+  },
+  "verify_bundle": {
+    "engine_files": {
+      "identity": 10,
+      "refinement": 6
+    },
+    "files": 6,
+    "manifest_sha256": "f5f9785275c204cf445ea8ffde83974f268ce005fe2b18399e08a31b7d1233c1",
+    "status": "PASS"
+  }
+}

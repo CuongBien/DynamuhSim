@@ -4,6 +4,9 @@
 
 [Media policy](artifacts/report_media_plan_2026-10-25.json) · [Manifest và coverage của 23 nhóm](artifacts/report_media_migration_2026-10-25.json) · [Biên bản](verification/report_media_2026-10-25.json).
 
+
+**Consumer hiện tại:** probe mặc định đã chuyển sang [Sensor control bundle](SENSOR_CONTROLS.md), không đọc report model/engine cũ. Kết quả 38 đường đọc bên dưới ghi lại giai đoạn media trước migration consumer; legacy mode vẫn có để đối chiếu.
+
 ## Vì sao giữ tệp điều khiển
 
 `depth_person_classifier/evaluate.py` tạo `reports/test_opened.json` theo chế độ độc quyền trước khi đọc test split. Di chuyển nguyên report sẽ làm marker biến mất khỏi đường dẫn consumer. Đó là lý do giữ model, `selected_frozen.json`, `test_opened.json` và các kết quả đã đo tại chỗ, thay vì coi toàn bộ report là output có thể xóa.
