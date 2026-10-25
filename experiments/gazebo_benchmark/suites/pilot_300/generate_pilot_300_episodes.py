@@ -41,6 +41,7 @@ from experiments.gazebo_benchmark.core.geometry import compute_rect_circle_dista
 sys.path.insert(0, os.path.join(ROOT_DIR, "src/custom_corridor/scripts"))
 
 from experiments.gazebo_benchmark.core.benchmark_world_generator import BenchmarkWorldGenerator
+from experiments.gazebo_benchmark.core.sim_env import build_benchmark_env
 from generate_randomized_mecanum_sdf import generate_randomized_mecanum_sdf
 
 import rclpy
@@ -544,16 +545,9 @@ def run_single_episode(plan: Dict, domain_id: int, out_dir: str) -> bool:
 
     # Setup Environment
     os.environ["ROS_DOMAIN_ID"] = str(domain_id)
-    env = os.environ.copy()
+    env = build_benchmark_env(ROOT_DIR)
     env["ROS_DOMAIN_ID"] = str(domain_id)
     env["GZ_PARTITION"] = f"gz_pilot_d{domain_id}_ep_{ep_id:04d}"
-    env["GALLIUM_DRIVER"] = "d3d12"
-    env["MESA_D3D12_DEFAULT_ADAPTER_NAME"] = "NVIDIA"
-    corridor_models = os.path.join(ROOT_DIR, "install/custom_corridor/share/custom_corridor/models")
-    plugin_share = os.path.join(ROOT_DIR, "install/custom_corridor_plugins/share/custom_corridor_plugins")
-    plugin_lib = os.path.join(os.path.dirname(os.path.dirname(plugin_share)), 'lib')
-    env["GZ_SIM_RESOURCE_PATH"] = f"{corridor_models}:{os.environ.get('GZ_SIM_RESOURCE_PATH', '')}"
-    env["GZ_SIM_SYSTEM_PLUGIN_PATH"] = f"{plugin_lib}:{os.environ.get('GZ_SIM_SYSTEM_PLUGIN_PATH', '')}"
 
     params_file = os.path.join(ROOT_DIR, "install/custom_corridor/share/custom_corridor/config/nav2_mppi_pilot.yaml")
     half_w = 0.45 if corr == "corridor_090" else 0.60

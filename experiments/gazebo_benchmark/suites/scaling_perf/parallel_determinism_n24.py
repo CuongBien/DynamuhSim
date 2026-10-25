@@ -15,6 +15,9 @@ import numpy as np
 sys.path.insert(0, '/home/cuongbien/DynamuhSim/experiments/gazebo_benchmark/core')
 from benchmark_world_generator import BenchmarkWorldGenerator
 
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../..")))
+from experiments.gazebo_benchmark.core.sim_env import build_benchmark_env
+
 
 WORKER_CODE = """
 import sys, os, time, json
@@ -114,16 +117,7 @@ def run_parallel_determinism_test(root_dir="/home/cuongbien/DynamuhSim", num_ins
     robot_file = gen.generate_robot_model(True, True, 640, 480, 10, initial_x=3.0, initial_y=0.0)
 
     bridge_config = os.path.join(root_dir, "src/custom_corridor/config/turtlebot3_burger_bridge.yaml")
-    corridor_models = os.path.join(root_dir, "install/custom_corridor/share/custom_corridor/models")
-    tb3_models = os.path.join(root_dir, "install/turtlebot3_gazebo/share/turtlebot3_gazebo/models")
-    plugin_share = os.path.join(root_dir, "install/custom_corridor_plugins/share/custom_corridor_plugins")
-    plugin_lib = os.path.join(os.path.dirname(os.path.dirname(plugin_share)), 'lib')
-
-    base_env = os.environ.copy()
-    base_env["GALLIUM_DRIVER"] = "d3d12"
-    base_env["MESA_D3D12_DEFAULT_ADAPTER_NAME"] = "NVIDIA"
-    base_env["GZ_SIM_RESOURCE_PATH"] = f"{corridor_models}:{tb3_models}:{os.environ.get('GZ_SIM_RESOURCE_PATH', '')}"
-    base_env["GZ_SIM_SYSTEM_PLUGIN_PATH"] = f"{plugin_lib}:{os.environ.get('GZ_SIM_SYSTEM_PLUGIN_PATH', '')}"
+    base_env = build_benchmark_env(root_dir, turtlebot3=True)
 
     all_procs = []
     worker_outputs = []

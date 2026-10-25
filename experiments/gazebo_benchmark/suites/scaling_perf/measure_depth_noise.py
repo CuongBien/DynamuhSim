@@ -18,6 +18,9 @@ from rclpy.node import Node
 from rosgraph_msgs.msg import Clock
 from sensor_msgs.msg import Image
 
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../..")))
+from experiments.gazebo_benchmark.core.sim_env import build_benchmark_env
+
 
 class DepthPatchCaptureNode(Node):
     def __init__(self, target_frames=20, patch_size=20, warmup_frames=5):
@@ -112,15 +115,7 @@ def run_measurement(model_sdf_path: str, label: str = "measurement") -> dict:
     root_dir = "/home/cuongbien/DynamuhSim"
     world_sdf = os.path.join(root_dir, "experiments/gazebo_benchmark/configs/robot_models/flat_wall_test_world.sdf")
 
-    corridor_models = os.path.join(root_dir, "install/custom_corridor/share/custom_corridor/models")
-    plugin_share = os.path.join(root_dir, "install/custom_corridor_plugins/share/custom_corridor_plugins")
-    plugin_lib = os.path.join(os.path.dirname(os.path.dirname(plugin_share)), 'lib')
-
-    env = os.environ.copy()
-    env["GALLIUM_DRIVER"] = "d3d12"
-    env["MESA_D3D12_DEFAULT_ADAPTER_NAME"] = "NVIDIA"
-    env["GZ_SIM_RESOURCE_PATH"] = f"{corridor_models}:{os.environ.get('GZ_SIM_RESOURCE_PATH', '')}"
-    env["GZ_SIM_SYSTEM_PLUGIN_PATH"] = f"{plugin_lib}:{os.environ.get('GZ_SIM_SYSTEM_PLUGIN_PATH', '')}"
+    env = build_benchmark_env(root_dir)
 
     domain_id = "88"
     env["ROS_DOMAIN_ID"] = domain_id

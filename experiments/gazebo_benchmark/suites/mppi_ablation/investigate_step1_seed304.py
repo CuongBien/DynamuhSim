@@ -17,6 +17,7 @@ from rclpy.action import ActionClient
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../..")))
 from experiments.gazebo_benchmark.core.mppi_trial import scoped_processes
+from experiments.gazebo_benchmark.core.sim_env import build_benchmark_env
 
 ROOT_DIR = "/home/cuongbien/DynamuhSim"
 ROBOT_MODEL_SDF = os.path.join(ROOT_DIR, "experiments/gazebo_benchmark/configs/robot_models/model_mecanum_step1.sdf")
@@ -164,15 +165,7 @@ class Seed304Logger(Node):
 @scoped_processes
 def main(*, _processes=None):
     domain_id = 89
-    corridor_models = os.path.join(ROOT_DIR, "install/custom_corridor/share/custom_corridor/models")
-    plugin_share = os.path.join(ROOT_DIR, "install/custom_corridor_plugins/share/custom_corridor_plugins")
-    plugin_lib = os.path.dirname(os.path.dirname(plugin_share)) + "/lib"
-
-    env = os.environ.copy()
-    env["GALLIUM_DRIVER"] = "d3d12"
-    env["MESA_D3D12_DEFAULT_ADAPTER_NAME"] = "NVIDIA"
-    env["GZ_SIM_RESOURCE_PATH"] = f"{corridor_models}:{os.environ.get('GZ_SIM_RESOURCE_PATH', '')}"
-    env["GZ_SIM_SYSTEM_PLUGIN_PATH"] = f"{plugin_lib}:{os.environ.get('GZ_SIM_SYSTEM_PLUGIN_PATH', '')}"
+    env = build_benchmark_env(ROOT_DIR)
     env["ROS_DOMAIN_ID"] = str(domain_id)
     env["GZ_PARTITION"] = "test_304"
     

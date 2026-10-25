@@ -39,6 +39,7 @@ from nav_msgs.msg import Odometry
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../../..")))
 from experiments.gazebo_benchmark.core.mppi_trial import scoped_processes
+from experiments.gazebo_benchmark.core.sim_env import build_benchmark_env
 
 PERSONA_CONFIGS = {
     "H1": {"name": "Cooperative", "trait": "Reciprocal ORCA (alpha=0.50), yields laterally", "color": "\033[92m"},
@@ -217,16 +218,8 @@ def main(*, _processes=None):
     print("Press Ctrl+C at any time to exit.\n")
 
     os.environ["ROS_DOMAIN_ID"] = str(args.domain_id)
-    env = os.environ.copy()
+    env = build_benchmark_env(ROOT_DIR)
     env["ROS_DOMAIN_ID"] = str(args.domain_id)
-    env["GALLIUM_DRIVER"] = "d3d12"
-    env["MESA_D3D12_DEFAULT_ADAPTER_NAME"] = "NVIDIA"
-
-    corridor_models = os.path.join(ROOT_DIR, "install/custom_corridor/share/custom_corridor/models")
-    plugin_share = os.path.join(ROOT_DIR, "install/custom_corridor_plugins/share/custom_corridor_plugins")
-    plugin_lib = os.path.join(os.path.dirname(os.path.dirname(plugin_share)), 'lib')
-    env["GZ_SIM_RESOURCE_PATH"] = f"{corridor_models}:{os.environ.get('GZ_SIM_RESOURCE_PATH', '')}"
-    env["GZ_SIM_SYSTEM_PLUGIN_PATH"] = f"{plugin_lib}:{os.environ.get('GZ_SIM_SYSTEM_PLUGIN_PATH', '')}"
 
     nav2_log_fp = None
     try:

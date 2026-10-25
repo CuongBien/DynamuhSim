@@ -47,7 +47,7 @@ ROOT_DIR = str(FilePath(__file__).resolve().parents[4])
 sys.path.insert(0, ROOT_DIR)
 from experiments.gazebo_benchmark.core.geometry import compute_rect_circle_distance
 from experiments.gazebo_benchmark.core.mppi_trial import scoped_processes
-from experiments.gazebo_benchmark.core.sim_env import create_corridor_scenario_json, patch_corridor_world_sdf
+from experiments.gazebo_benchmark.core.sim_env import build_benchmark_env, create_corridor_scenario_json, patch_corridor_world_sdf
 OUTPUT_DIR = os.path.join(ROOT_DIR, "experiments/gazebo_benchmark/results/mppi_ablation")
 TELEMETRY_JSON = os.path.join(OUTPUT_DIR, "diagnose_h3_telemetry.json")
 TELEMETRY_CSV = os.path.join(OUTPUT_DIR, "diagnose_h3_telemetry.csv")
@@ -507,15 +507,7 @@ def run_diagnose_pipeline(*, _processes=None):
     trial_sdf = os.path.join(gen_dir, f"world_diagnose_{corridor_type}_{persona}_{seed}.sdf")
     patch_corridor_world_sdf(base_sdf_path, trial_sdf, seed, scen_file, rtf=1.0, proxy_z=proxy_z)
 
-    corridor_models = os.path.join(ROOT_DIR, "install/custom_corridor/share/custom_corridor/models")
-    plugin_share = os.path.join(ROOT_DIR, "install/custom_corridor_plugins/share/custom_corridor_plugins")
-    plugin_lib = os.path.join(os.path.dirname(os.path.dirname(plugin_share)), 'lib')
-
-    env = os.environ.copy()
-    env["GALLIUM_DRIVER"] = "d3d12"
-    env["MESA_D3D12_DEFAULT_ADAPTER_NAME"] = "NVIDIA"
-    env["GZ_SIM_RESOURCE_PATH"] = f"{corridor_models}:{os.environ.get('GZ_SIM_RESOURCE_PATH', '')}"
-    env["GZ_SIM_SYSTEM_PLUGIN_PATH"] = f"{plugin_lib}:{os.environ.get('GZ_SIM_SYSTEM_PLUGIN_PATH', '')}"
+    env = build_benchmark_env(ROOT_DIR)
     env["ROS_DOMAIN_ID"] = str(domain_id)
     partition = f"diagnose_{corridor_type}_{persona}_{seed}_{domain_id}"
     env["GZ_PARTITION"] = partition

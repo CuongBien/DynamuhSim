@@ -27,6 +27,9 @@ from rclpy.node import Node
 from rosgraph_msgs.msg import Clock
 from sensor_msgs.msg import LaserScan, Image
 
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../..")))
+from experiments.gazebo_benchmark.core.sim_env import build_benchmark_env
+
 
 class DomainTelemetryListener(Node):
     def __init__(self, domain_id: int):
@@ -112,17 +115,9 @@ def measure_cold_restart_time(root_dir: str):
     world_file = os.path.join(root_dir, "experiments/gazebo_benchmark/configs/generated/world_uncapped_n5.sdf")
     robot_file = os.path.join(root_dir, "install/custom_corridor/share/custom_corridor/models/mecanum_robot/model.sdf")
     bridge_config = os.path.join(root_dir, "install/custom_corridor/share/custom_corridor/config/mecanum_bridge.yaml")
-    corridor_models = os.path.join(root_dir, "install/custom_corridor/share/custom_corridor/models")
-    plugin_share = os.path.join(root_dir, "install/custom_corridor_plugins/share/custom_corridor_plugins")
-    plugin_lib = os.path.join(os.path.dirname(os.path.dirname(plugin_share)), 'lib')
-
-    env = os.environ.copy()
+    env = build_benchmark_env(root_dir)
     env["ROS_DOMAIN_ID"] = "88"
     env["GZ_PARTITION"] = "cold_restart_part"
-    env["GALLIUM_DRIVER"] = "d3d12"
-    env["MESA_D3D12_DEFAULT_ADAPTER_NAME"] = "NVIDIA"
-    env["GZ_SIM_RESOURCE_PATH"] = f"{corridor_models}:{os.environ.get('GZ_SIM_RESOURCE_PATH', '')}"
-    env["GZ_SIM_SYSTEM_PLUGIN_PATH"] = f"{plugin_lib}:{os.environ.get('GZ_SIM_SYSTEM_PLUGIN_PATH', '')}"
 
     all_procs = []
     t_start = time.time()
@@ -166,15 +161,7 @@ def run_parallel_benchmark_trial(num_instances: int, root_dir: str, duration_mea
     world_file = os.path.join(root_dir, "experiments/gazebo_benchmark/configs/generated/world_uncapped_n5.sdf")
     robot_file = os.path.join(root_dir, "install/custom_corridor/share/custom_corridor/models/mecanum_robot/model.sdf")
     bridge_config = os.path.join(root_dir, "install/custom_corridor/share/custom_corridor/config/mecanum_bridge.yaml")
-    corridor_models = os.path.join(root_dir, "install/custom_corridor/share/custom_corridor/models")
-    plugin_share = os.path.join(root_dir, "install/custom_corridor_plugins/share/custom_corridor_plugins")
-    plugin_lib = os.path.join(os.path.dirname(os.path.dirname(plugin_share)), 'lib')
-
-    base_env = os.environ.copy()
-    base_env["GALLIUM_DRIVER"] = "d3d12"
-    base_env["MESA_D3D12_DEFAULT_ADAPTER_NAME"] = "NVIDIA"
-    base_env["GZ_SIM_RESOURCE_PATH"] = f"{corridor_models}:{os.environ.get('GZ_SIM_RESOURCE_PATH', '')}"
-    base_env["GZ_SIM_SYSTEM_PLUGIN_PATH"] = f"{plugin_lib}:{os.environ.get('GZ_SIM_SYSTEM_PLUGIN_PATH', '')}"
+    base_env = build_benchmark_env(root_dir)
 
     all_procs = []
     worker_procs = []

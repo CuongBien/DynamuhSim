@@ -26,6 +26,7 @@ from sensor_msgs.msg import Image
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../..")))
 from experiments.gazebo_benchmark.core.mppi_trial import scoped_processes
+from experiments.gazebo_benchmark.core.sim_env import build_benchmark_env
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 ROOT_DIR = os.path.dirname(os.path.dirname(SCRIPT_DIR))
@@ -50,19 +51,11 @@ class DepthListener(Node):
 
 @scoped_processes
 def measure_single_instance_trial(domain_id: int, partition_name: str, trial_idx: int, *, _processes=None) -> dict:
-    env = os.environ.copy()
+    env = build_benchmark_env(ROOT_DIR)
     env["ROS_DOMAIN_ID"] = str(domain_id)
     env["GZ_PARTITION"] = partition_name
-    env["GALLIUM_DRIVER"] = "d3d12"
-    env["MESA_D3D12_DEFAULT_ADAPTER_NAME"] = "NVIDIA"
-
     world_file = os.path.join(ROOT_DIR, "experiments/gazebo_benchmark/configs/generated/world_n5_actor_and_cylinder.sdf")
     params_file = os.path.join(ROOT_DIR, "install/custom_corridor/share/custom_corridor/config/nav2_mppi_mecanum.yaml")
-    corridor_models = os.path.join(ROOT_DIR, "install/custom_corridor/share/custom_corridor/models")
-    plugin_share = os.path.join(ROOT_DIR, "install/custom_corridor_plugins/share/custom_corridor_plugins")
-    plugin_lib = os.path.join(os.path.dirname(os.path.dirname(plugin_share)), 'lib')
-    env["GZ_SIM_RESOURCE_PATH"] = f"{corridor_models}:{os.environ.get('GZ_SIM_RESOURCE_PATH', '')}"
-    env["GZ_SIM_SYSTEM_PLUGIN_PATH"] = f"{plugin_lib}:{os.environ.get('GZ_SIM_SYSTEM_PLUGIN_PATH', '')}"
 
     nav2_log_path = f"/tmp/nav2_cold_restart_{domain_id}_{trial_idx}.log"
     if os.path.exists(nav2_log_path):

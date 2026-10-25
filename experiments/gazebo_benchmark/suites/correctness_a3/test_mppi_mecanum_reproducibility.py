@@ -24,6 +24,7 @@ from nav2_msgs.action import NavigateToPose
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../..")))
 from experiments.gazebo_benchmark.core.mppi_trial import scoped_processes
+from experiments.gazebo_benchmark.core.sim_env import build_benchmark_env
 
 
 class MecanumMPPIRecorder(Node):
@@ -121,16 +122,11 @@ def run_single_trial(trial_idx: int, root_dir: str, duration_s=12.0, *, _process
     domain_id = str(60 + trial_idx)
     partition = f"mecanum_mppi_{trial_idx}"
 
-    env = os.environ.copy()
+    env = build_benchmark_env(root_dir)
     env["ROS_DOMAIN_ID"] = domain_id
     env["GZ_PARTITION"] = partition
-    env["GALLIUM_DRIVER"] = "d3d12"
-    env["MESA_D3D12_DEFAULT_ADAPTER_NAME"] = "NVIDIA"
-
-    corridor_models = os.path.join(root_dir, "install/custom_corridor/share/custom_corridor/models")
     plugin_share = get_package_share_directory("custom_corridor_plugins") if "get_package_share_directory" in globals() else ""
     plugin_lib = "/home/cuongbien/DynamuhSim/install/custom_corridor_plugins/lib"
-    env["GZ_SIM_RESOURCE_PATH"] = f"{corridor_models}:{os.environ.get('GZ_SIM_RESOURCE_PATH', '')}"
     env["GZ_SIM_SYSTEM_PLUGIN_PATH"] = f"{plugin_lib}:{os.environ.get('GZ_SIM_SYSTEM_PLUGIN_PATH', '')}"
 
 

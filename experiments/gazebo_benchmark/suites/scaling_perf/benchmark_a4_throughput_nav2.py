@@ -33,6 +33,7 @@ from geometry_msgs.msg import TwistStamped
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../..")))
 from experiments.gazebo_benchmark.core.mppi_trial import scoped_processes
+from experiments.gazebo_benchmark.core.sim_env import build_benchmark_env
 
 
 class TelemetryCollector(Node):
@@ -129,15 +130,7 @@ def get_process_cpu_breakdown():
 def run_benchmark_trial(num_instances: int, num_humans: int, with_nav2: bool, root_dir: str, measure_duration_s=12.0, warmup_s=5.0, *, _processes=None):
     world_file = os.path.join(root_dir, f"experiments/gazebo_benchmark/configs/generated/world_n{num_humans}_actor_and_cylinder.sdf")
     params_file = os.path.join(root_dir, "install/custom_corridor/share/custom_corridor/config/nav2_mppi_mecanum.yaml")
-    corridor_models = os.path.join(root_dir, "install/custom_corridor/share/custom_corridor/models")
-    plugin_share = os.path.join(root_dir, "install/custom_corridor_plugins/share/custom_corridor_plugins")
-    plugin_lib = os.path.join(os.path.dirname(os.path.dirname(plugin_share)), 'lib')
-
-    base_env = os.environ.copy()
-    base_env["GALLIUM_DRIVER"] = "d3d12"
-    base_env["MESA_D3D12_DEFAULT_ADAPTER_NAME"] = "NVIDIA"
-    base_env["GZ_SIM_RESOURCE_PATH"] = f"{corridor_models}:{os.environ.get('GZ_SIM_RESOURCE_PATH', '')}"
-    base_env["GZ_SIM_SYSTEM_PLUGIN_PATH"] = f"{plugin_lib}:{os.environ.get('GZ_SIM_SYSTEM_PLUGIN_PATH', '')}"
+    base_env = build_benchmark_env(root_dir)
 
     worker_procs = []
     worker_files = []
