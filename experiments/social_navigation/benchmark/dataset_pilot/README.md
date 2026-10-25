@@ -4,6 +4,8 @@
 
 Giữ human worker SocNavGym đứng v3 từ mốc nhóm đã commit. Robot Mecanum vẫn do Nav2 MPPI điều khiển; không thêm publisher lệnh robot. Chạy headless, depth/camera dùng NVIDIA D3D12 RTX4060, giới hạn một luồng BLAS. GPU xử lý rendering; ROS, Nav2 và human policy vẫn có phần chạy CPU.
 
+Build/audit và các hàm toán dữ liệu dùng chung implementation đã đóng băng ở `../wm_episode_batch/tools/legacy/`. Các tệp Python ở đây giữ đường gọi CLI/import cũ; `builder_sha256` tiếp tục ghi hash của engine thực thi. Không chỉnh bản đóng băng để thay thuật toán export.
+
 ## Cách chạy trên Ubuntu24.04/WSL
 
 Đứng tại repository, đã build ROS Jazzy/install và các dependency thí nghiệm trước:
