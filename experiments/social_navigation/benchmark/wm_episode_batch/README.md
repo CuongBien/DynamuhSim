@@ -32,6 +32,8 @@ print(y['future_bev']['occupancy'].shape) # [3,64,64]
 
 Chỉ fit trên train. Respect split dù task mask true; test API mặc định bị chặn. Depth NaN/Inf phải có finite/range mask trước preprocessing. Future occupancy −1 là unknown, chỉ tính loss trên cell_loss_valid. M1 track-aligned, H1–H5 và RL reward chưa có supervision hợp lệ; reward NaN không phải 0.
 
+Ba script backup cố định `backup.py`, `split_backup.py`, `verify_restore.py` đã gỡ khỏi entrypoint hiện hành; source còn ở commit `9686d88256011d4a8ec3d0c7429d94e7f31be8bd`. Các ZIP, manifest và biên bản khôi phục giữ nguyên; cách lấy dữ liệu ở [hướng dẫn hiện hành](../../../../docs/START_HERE_CURRENT.md#5-khôi-phục-dữ-liệu-từ-drive). Script capture/export/continuation và audit còn bị freeze ràng buộc vẫn giữ nguyên.
+
 ## Tái kiểm
 
 ```bash
