@@ -108,6 +108,21 @@ class ReportMediaTests(unittest.TestCase):
             again=hydrate_reports(checkout,index,plan,['reports:old_stage'],source='archive',store=store,media_plan=media)
             self.assertEqual(again['changed_groups'],0)
 
+    def test_custom_cli_index_does_not_load_bundled_media_policy(self):
+        with tempfile.TemporaryDirectory() as directory:
+            repo,store,index,plan,media,checkout=self.fixture(directory)
+            root=Path(directory)
+            for name,data in [('index',index),('plan',plan),('media',media)]:
+                (root/(name+'.json')).write_text(json.dumps(data))
+            command=[sys.executable,str(ROOT/'tools/hydrate_reports.py'),'--checkout',str(checkout),'--index',str(root/'index.json'),'--plan',str(root/'plan.json'),
+                     '--group','reports:old_stage','--source','archive','--store',str(store)]
+            result=subprocess.run(command+['--report',str(root/'first.json')],capture_output=True,text=True)
+            self.assertEqual(result.returncode,0,result.stderr)
+            self.remove_media(checkout,media)
+            result=subprocess.run(command+['--media-plan',str(root/'media.json'),'--report',str(root/'second.json')],capture_output=True,text=True)
+            self.assertEqual(result.returncode,0,result.stderr)
+            self.assertEqual(json.loads((root/'second.json').read_text())['changed_files'],2)
+
     def test_cli_help_without_ros(self):
         result=subprocess.run([sys.executable,str(ROOT/'tools/report_media.py'),'--help'],capture_output=True,text=True)
         self.assertEqual(result.returncode,0,result.stderr)
