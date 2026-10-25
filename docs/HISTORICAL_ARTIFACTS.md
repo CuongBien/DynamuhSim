@@ -120,3 +120,7 @@ Nếu một payload trong policy không còn tracked và không cung cấp index
 Đã đối chiếu lại rồi dọn **chỉ các payload hydrate và full legacy install tạo để kiểm thử**; giữ archive canonical, log và hai runtime prefix. Checkout nhánh dọn dẹp hiện không có ba payload; hydrate theo nhu cầu sẽ làm chúng xuất hiện dưới dạng ignored data. Checkout/index chính của người dùng không đổi.
 
 Phần còn lại là phân loại consumer của 47 nhóm report trước khi chuyển chúng: gate đang dùng, source snapshot cần replay và media/số liệu lịch sử. Hydrate dữ liệu không tự chứng minh mọi workflow ROS/Docker lịch sử hoạt động.
+
+## Migration report tiếp theo
+
+Đã chuyển 24 nhóm report lịch sử khỏi HEAD và giữ 23 nhóm cùng bảy gate. Xem [Report và dependency](REPORT_STORAGE.md) để xem đúng revision trên GitHub, hydrate kèm dependency và đọc kết quả parity; các số “47 nhóm reports còn giữ” phía trên ghi lại giai đoạn world trước khi chuyển report.

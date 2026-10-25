@@ -66,7 +66,7 @@
       "reason": "Historical frozen pipeline for reproducing accepted/quarantined results. Use the versioned capture API for fresh episodes; no historical manifest or driver is rewritten."
     }
   ],
-  "historical_evidence": "Existing reports, source snapshots and freeze manifests remain unchanged; use their recorded source commit to reproduce them.",
+  "historical_evidence": "Pinned Git history and verified local archives preserve historical bytes. Current gates and capture/perception/WM report trees are retained; 24 other report trees hydrate on demand.",
   "new_capture_pipeline": {
     "entrypoint": "tools/capture_episode.py {prepare,verify,run}",
     "launch": "tools/capture_warehouse.launch.py",
@@ -105,7 +105,7 @@
     "default_install": "runtime resources; historical world payloads excluded",
     "legacy_cmake_option": "DYNAMUHSIM_INSTALL_LEGACY_WORLD_PAYLOADS=ON",
     "catalog_entrypoint": "tools/catalog_assets.py {create,verify,verify-install}",
-    "payload_move_state": "Three historical world payloads externalized from HEAD; hydrate pinned data on demand; reports and seven current gates retained",
+    "payload_move_state": "Three world payloads and 24 historical report groups externalized from HEAD; hydrate pinned data on demand; 23 report groups and seven current gates retained",
     "published_catalog": "docs/artifacts/catalog_2026-10-25.json",
     "verification": "docs/verification/world_assets_2026-10-25.json",
     "payload_migration": "docs/artifacts/world_payload_migration_2026-10-25.json",
@@ -118,12 +118,24 @@
     "source": "Committed blobs from the full revision pinned in the catalog; dirty/untracked data excluded",
     "restore": "Fresh directory containing payload/<repository-relative-root>; verify/restore do not require Git or ROS",
     "removal_allowed": false,
-    "migration_state": "Three world payloads removed from current tree after hydrate/consumer verification; archived reports retained",
+    "migration_state": "World payloads and 24 historical report trees hydrate on demand; gates and capture/perception/WM evidence retained",
     "published_index": "docs/artifacts/history_2026-10-25.json",
     "verification": "docs/verification/historical_archive_2026-10-25.json",
     "hydration_entrypoint": "tools/hydrate_history.py --group GROUP --source {git,archive}",
     "hydration_publication": "Absent paths only; exact inventory verification and atomic no-replace directory publish",
     "legacy_install_audit": "tools/catalog_assets.py verify-install --legacy --history-index docs/artifacts/history_2026-10-25.json",
     "hydration_verification": "docs/verification/hydration_2026-10-25.json"
+  },
+  "report_storage": {
+    "guide": "docs/REPORT_STORAGE.md",
+    "planner": "tools/report_dependencies.py",
+    "hydrate": "tools/hydrate_reports.py --group REPORT_GROUP --source {git,archive}",
+    "dependency_plan": "docs/artifacts/report_dependency_plan_2026-10-25.json",
+    "migration": "docs/artifacts/report_migration_2026-10-25.json",
+    "verification": "docs/verification/report_migration_2026-10-25.json",
+    "externalized_groups": 24,
+    "retained_groups": 23,
+    "current_gates_preserved": 7,
+    "scope": "Static Python Path + JSON source hash references; dynamic capture/perception/WM consumers retained conservatively"
   }
 }

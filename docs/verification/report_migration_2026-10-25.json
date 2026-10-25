@@ -1,0 +1,278 @@
+{
+  "absolute_source_pin_crosscheck": {
+    "absolute_references": [],
+    "status": "PASS"
+  },
+  "code_revision": "e6ca5a8dea51d01520274c0d95ae7e34a624dc8c",
+  "cold_checkout": {
+    "capture_and_runtime_removed_report_source_dependencies": [],
+    "cli_smokes": [
+      {
+        "returncode": 0,
+        "tool": "nav2_trial.py"
+      },
+      {
+        "returncode": 0,
+        "tool": "capture_episode.py"
+      },
+      {
+        "returncode": 0,
+        "tool": "audit_episode.py"
+      }
+    ],
+    "dry_run_no_mutation": true,
+    "externalized_groups_absent": 24,
+    "shared_runtime_profiles": 3,
+    "status": "PASS"
+  },
+  "date": "2026-10-25",
+  "limits": [
+    "Graph covers lexical Python Path expressions and JSON source_sha256; not arbitrary dynamic imports, shell/config paths or full historical replay",
+    "Capture/perception/WM trees retained conservatively",
+    "No new Gazebo/Docker/navigation episode; no original historical snapshot imported/executed",
+    "No rewrite of Git history or reduction of full clone history",
+    "Canonical artifact store is local; pinned Git blobs remain reachable",
+    "Main checkout/index and WM dataset01 unchanged"
+  ],
+  "native_hydration": {
+    "results": [
+      {
+        "changed_bytes": 169294406,
+        "changed_files": 1060,
+        "changed_groups": 24,
+        "probe_byte_equal": true,
+        "source": "archive"
+      },
+      {
+        "changed_bytes": 169294406,
+        "changed_files": 1060,
+        "changed_groups": 24,
+        "probe_byte_equal": true,
+        "source": "git"
+      }
+    ],
+    "status": "PASS"
+  },
+  "plan_regeneration": {
+    "byte_equal": true,
+    "report_roots_absent": true,
+    "revision": "ba9e0debea3ec1993e96a50a0cadeffd52a86353",
+    "status": "PASS"
+  },
+  "pre_removal": {
+    "all_archives_and_original_files_verified": true,
+    "files": 1060,
+    "groups": 24,
+    "logical_bytes": 169294406,
+    "status": "PASS"
+  },
+  "preservation_cleanup": {
+    "all_selected_roots_absent": true,
+    "canonical_archives_retained": true,
+    "current_gates_preserved": 7,
+    "main_index_byte_equal": true,
+    "main_status_equal": true,
+    "retained_report_bytes": 70375798,
+    "retained_report_files": 2028,
+    "status": "PASS",
+    "temporary_hydrated_copies_removed": [
+      {
+        "files": 38,
+        "logical_bytes": 4687070,
+        "path": "/home/cuongbien/DynamuhSim/experiments/social_navigation/benchmark/generated/refactor_workspace/experiments/social_navigation/benchmark/avoidance_comparison/reports"
+      },
+      {
+        "files": 43,
+        "logical_bytes": 2641013,
+        "path": "/home/cuongbien/DynamuhSim/experiments/social_navigation/benchmark/generated/refactor_workspace/experiments/social_navigation/benchmark/bottleneck/reports"
+      },
+      {
+        "files": 27,
+        "logical_bytes": 550385,
+        "path": "/home/cuongbien/DynamuhSim/experiments/social_navigation/benchmark/generated/refactor_workspace/experiments/social_navigation/benchmark/complexitynav_contract/reports"
+      },
+      {
+        "files": 58,
+        "logical_bytes": 2248729,
+        "path": "/home/cuongbien/DynamuhSim/experiments/social_navigation/benchmark/generated/refactor_workspace/experiments/social_navigation/benchmark/complexitynav_gazebo/reports"
+      },
+      {
+        "files": 32,
+        "logical_bytes": 2417134,
+        "path": "/home/cuongbien/DynamuhSim/experiments/social_navigation/benchmark/generated/refactor_workspace/experiments/social_navigation/benchmark/complexitynav_geometry/reports"
+      },
+      {
+        "files": 36,
+        "logical_bytes": 3622257,
+        "path": "/home/cuongbien/DynamuhSim/experiments/social_navigation/benchmark/generated/refactor_workspace/experiments/social_navigation/benchmark/crossing/reports"
+      },
+      {
+        "files": 41,
+        "logical_bytes": 5873764,
+        "path": "/home/cuongbien/DynamuhSim/experiments/social_navigation/benchmark/generated/refactor_workspace/experiments/social_navigation/benchmark/crowdsim_comparison/reports"
+      },
+      {
+        "files": 14,
+        "logical_bytes": 1648315,
+        "path": "/home/cuongbien/DynamuhSim/experiments/social_navigation/benchmark/generated/refactor_workspace/experiments/social_navigation/benchmark/diagnostic/reports"
+      },
+      {
+        "files": 46,
+        "logical_bytes": 5564317,
+        "path": "/home/cuongbien/DynamuhSim/experiments/social_navigation/benchmark/generated/refactor_workspace/experiments/social_navigation/benchmark/geometry_comparison/reports"
+      },
+      {
+        "files": 12,
+        "logical_bytes": 126591,
+        "path": "/home/cuongbien/DynamuhSim/experiments/social_navigation/benchmark/generated/refactor_workspace/experiments/social_navigation/benchmark/gpu_runtime/reports"
+      },
+      {
+        "files": 31,
+        "logical_bytes": 2597443,
+        "path": "/home/cuongbien/DynamuhSim/experiments/social_navigation/benchmark/generated/refactor_workspace/experiments/social_navigation/benchmark/group_gazebo_demo/reports"
+      },
+      {
+        "files": 138,
+        "logical_bytes": 12711222,
+        "path": "/home/cuongbien/DynamuhSim/experiments/social_navigation/benchmark/generated/refactor_workspace/experiments/social_navigation/benchmark/human_response_replay/reports"
+      },
+      {
+        "files": 33,
+        "logical_bytes": 2975948,
+        "path": "/home/cuongbien/DynamuhSim/experiments/social_navigation/benchmark/generated/refactor_workspace/experiments/social_navigation/benchmark/individual_goals/reports"
+      },
+      {
+        "files": 18,
+        "logical_bytes": 2929614,
+        "path": "/home/cuongbien/DynamuhSim/experiments/social_navigation/benchmark/generated/refactor_workspace/experiments/social_navigation/benchmark/localization_diagnosis/reports"
+      },
+      {
+        "files": 58,
+        "logical_bytes": 19234425,
+        "path": "/home/cuongbien/DynamuhSim/experiments/social_navigation/benchmark/generated/refactor_workspace/experiments/social_navigation/benchmark/localization_trials/reports"
+      },
+      {
+        "files": 112,
+        "logical_bytes": 40635367,
+        "path": "/home/cuongbien/DynamuhSim/experiments/social_navigation/benchmark/generated/refactor_workspace/experiments/social_navigation/benchmark/localization_validation/reports"
+      },
+      {
+        "files": 21,
+        "logical_bytes": 5634516,
+        "path": "/home/cuongbien/DynamuhSim/experiments/social_navigation/benchmark/generated/refactor_workspace/experiments/social_navigation/benchmark/navigation_diagnostics/reports"
+      },
+      {
+        "files": 48,
+        "logical_bytes": 5428163,
+        "path": "/home/cuongbien/DynamuhSim/experiments/social_navigation/benchmark/generated/refactor_workspace/experiments/social_navigation/benchmark/reports"
+      },
+      {
+        "files": 29,
+        "logical_bytes": 3454324,
+        "path": "/home/cuongbien/DynamuhSim/experiments/social_navigation/benchmark/generated/refactor_workspace/experiments/social_navigation/benchmark/sfm_comparison/reports"
+      },
+      {
+        "files": 24,
+        "logical_bytes": 407424,
+        "path": "/home/cuongbien/DynamuhSim/experiments/social_navigation/benchmark/generated/refactor_workspace/experiments/social_navigation/benchmark/shutdown_fix/reports"
+      },
+      {
+        "files": 31,
+        "logical_bytes": 9128266,
+        "path": "/home/cuongbien/DynamuhSim/experiments/social_navigation/benchmark/generated/refactor_workspace/experiments/social_navigation/benchmark/socnavgym_lifecycle/reports"
+      },
+      {
+        "files": 45,
+        "logical_bytes": 11155428,
+        "path": "/home/cuongbien/DynamuhSim/experiments/social_navigation/benchmark/generated/refactor_workspace/experiments/social_navigation/benchmark/socnavgym_lifecycle_fix/reports"
+      },
+      {
+        "files": 61,
+        "logical_bytes": 5945037,
+        "path": "/home/cuongbien/DynamuhSim/experiments/social_navigation/benchmark/generated/refactor_workspace/experiments/social_navigation/benchmark/socnavgym_warehouse_lifecycle/reports"
+      },
+      {
+        "files": 64,
+        "logical_bytes": 17677654,
+        "path": "/home/cuongbien/DynamuhSim/experiments/social_navigation/benchmark/generated/refactor_workspace/experiments/social_navigation/benchmark/stability/reports"
+      }
+    ]
+  },
+  "probe": {
+    "amcl_aggregates": [
+      {
+        "actual_success": 2,
+        "amcl_error_max_m": 2.1750231442245855,
+        "false_success": 0,
+        "human_pair_overlap_beyond_1cm_s": 0.3159999999999954,
+        "min_human_pair_m": -0.02369113490942054,
+        "min_robot_human_m": 0.11265647788158029,
+        "policy": "sfm",
+        "profile": "baseline",
+        "reported_success": 2,
+        "trials": 3
+      },
+      {
+        "actual_success": 3,
+        "amcl_error_max_m": 0.5466575827632238,
+        "false_success": 0,
+        "human_pair_overlap_beyond_1cm_s": 0,
+        "min_human_pair_m": 0.03996496608359279,
+        "min_robot_human_m": 0.11902043495358644,
+        "policy": "orca_plus",
+        "profile": "baseline",
+        "reported_success": 3,
+        "trials": 3
+      },
+      {
+        "actual_success": 3,
+        "amcl_error_max_m": 0.24704260006104464,
+        "false_success": 0,
+        "human_pair_overlap_beyond_1cm_s": 0,
+        "min_human_pair_m": -0.008700253841581018,
+        "min_robot_human_m": 0.17569689000827404,
+        "policy": "sfm",
+        "profile": "lf_prob_beamskip",
+        "reported_success": 3,
+        "trials": 3
+      },
+      {
+        "actual_success": 2,
+        "amcl_error_max_m": 1.2381896849212908,
+        "false_success": 0,
+        "human_pair_overlap_beyond_1cm_s": 0,
+        "min_human_pair_m": 0.03726045339225015,
+        "min_robot_human_m": 0.08823409019569473,
+        "policy": "orca_plus",
+        "profile": "lf_prob_beamskip",
+        "reported_success": 2,
+        "trials": 3
+      }
+    ],
+    "archive_sha256": "2bf191e3732ab69fe26295a579e86469536e5b8c772aca8730c13649da0bb9a8",
+    "before_sha256": "2bf191e3732ab69fe26295a579e86469536e5b8c772aca8730c13649da0bb9a8",
+    "byte_equal": true,
+    "compiled_snapshots": 17,
+    "git_sha256": "2bf191e3732ab69fe26295a579e86469536e5b8c772aca8730c13649da0bb9a8",
+    "original_warehouse_consumer": {
+      "returncode": 0,
+      "stdout": "PASS: offline preflight and current source match\n"
+    },
+    "reader_counts": {
+      "byte_hash_only": 88,
+      "gzip": 18,
+      "json": 574,
+      "jsonl": 47,
+      "pillow": 312,
+      "python_syntax_only": 17,
+      "xml": 4
+    },
+    "video_decode": "One MP4 verified by byte hash only; ffmpeg unavailable. PNG/GIF first+last frame decoding performed; no video decoding claim."
+  },
+  "schema": "dynamuhsim_report_migration_verification/1",
+  "unit_tests": {
+    "log_sha256": "e3127c9eef693e3675052bceb3b5ea1b52f90d47739d9672261b971647d1afca",
+    "status": "PASS",
+    "tests": 95
+  }
+}
