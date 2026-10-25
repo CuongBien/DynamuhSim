@@ -17,6 +17,17 @@ The long running local batch is managed by the persistent user unit `systemd/pbl
 
 A `PASS` episode stores `execution.yaml`, `raw_bag/`, `structured/samples.csv`, `structured/rgb/`, and `qa.yaml`. Raw bags are zstd compressed; readers use a temporary decompressed copy. `manifest.csv` lists accepted episodes. `dataset_audit.yaml`, `dataset_audit.csv`, `dataset_summary.yaml`, and `scenario_coverage.csv` report current state, including `INCOMPLETE` while production is running. After acceptance, `splits/` and `dataset_fingerprint.yaml` are written once and verified on repeat freeze calls.
 
+## Runtime preflight and smoke entrypoint
+
+The service and smoke runners use `dataset_runner.hunav_manager.HuNavPreflight`. The old manual `dataset_runner/scripts/smoke_runtime_integration.py` driver is retired; its preflight implementation is retained unchanged in the manager module. From `demo_1`, use the existing full EpisodeRunner smoke with a bounded simulation-time monitor:
+
+```bash
+python3 scenario_generator/runtime_smoke_v1.py /absolute/path/to/episode \
+  --observe-sec 2 --results /tmp/school-smoke-new.csv
+```
+
+Component-only `smoke_hunav.py` and `smoke_nav2.py` remain available for diagnosing individual managers. The generator, production service, audit/freeze criteria and episode data are unchanged.
+
 ## Historical payload hydration
 
 Historical dataset/generated outputs are no longer tracked in current checkouts. Before reading or resuming them, run the appropriate command **from the repository root**:

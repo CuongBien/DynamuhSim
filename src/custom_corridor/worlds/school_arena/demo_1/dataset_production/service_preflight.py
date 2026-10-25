@@ -3,8 +3,7 @@ from __future__ import annotations
 
 import logging
 
-from dataset_runner.hunav_manager import DockerHuNavRuntime, HuNavConfig
-from dataset_runner.scripts.smoke_runtime_integration import HuNavPreflight
+from dataset_runner.hunav_manager import DockerHuNavRuntime, HuNavConfig, HuNavPreflight
 
 
 def main() -> int:

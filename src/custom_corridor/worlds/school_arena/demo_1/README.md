@@ -6,6 +6,8 @@ hẹp; cộng các vùng chức năng là gần 20 không gian trường học. 
 hình học gốc; generator chỉ ép sáu đạo cụ rời sát tường để giữ clearance cho
 footprint và luôn sinh lại world, map, zone, graph từ cùng hệ tọa độ.
 
+Luồng thu dataset hiện có: `produce_dataset_v1.py` → `dataset_production` (plan/resume/record/build/QA) → `dataset_runner` (chạy từng episode và quản lý simulator/HuNav/Nav2). Hai package là hai tầng nối tiếp. Xem [hướng dẫn production](dataset_production/README.md).
+
 ## Đầu ra bắt buộc
 
 ```text

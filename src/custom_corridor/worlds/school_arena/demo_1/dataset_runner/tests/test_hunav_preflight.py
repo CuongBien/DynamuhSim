@@ -6,8 +6,7 @@ from types import SimpleNamespace
 DEMO = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(DEMO))
 
-from dataset_runner.hunav_manager import HuNavConfig, HuNavError
-from dataset_runner.scripts.smoke_runtime_integration import HuNavPreflight
+from dataset_runner.hunav_manager import HuNavConfig, HuNavError, HuNavPreflight
 
 
 class FakeRuntime:

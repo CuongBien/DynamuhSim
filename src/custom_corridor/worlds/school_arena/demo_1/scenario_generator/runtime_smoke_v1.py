@@ -17,9 +17,8 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from dataset_runner import (EpisodeMonitor, EpisodeRunner, HuNavManager,
                             ReadinessChecker, SimulatorManager, EpisodeStatus)
 from dataset_runner.episode_monitor import MonitorConfig
-from dataset_runner.hunav_manager import DockerHuNavRuntime, HuNavConfig, HuNavError
+from dataset_runner.hunav_manager import DockerHuNavRuntime, HuNavConfig, HuNavError, HuNavPreflight
 from dataset_runner.nav2_manager import Nav2Manager
-from dataset_runner.scripts.smoke_runtime_integration import HuNavPreflight
 
 
 def main(argv=None) -> int:
