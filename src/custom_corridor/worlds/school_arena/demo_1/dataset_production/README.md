@@ -26,6 +26,8 @@ python3 scenario_generator/runtime_smoke_v1.py /absolute/path/to/episode \
   --observe-sec 2 --results /tmp/school-smoke-new.csv
 ```
 
+Omit `--results` for console-only EPISODE/CLEANUP output and the timeout from `runner.yaml` (currently120s). With CSV, the default remains6s. `--observe-sec` overrides either mode; `--append` requires `--results`. The former `dataset_runner/scripts/smoke_episode_monitor.py` entrypoint has been retired in favor of these two modes in the existing coverage CLI.
+
 Component-only `smoke_hunav.py` and `smoke_nav2.py` remain available for diagnosing individual managers. The generator, production service, audit/freeze criteria and episode data are unchanged.
 
 ## Historical payload hydration
