@@ -13,7 +13,7 @@ if ! docker ps --format '{{.Names}}' | grep -q "^${CONTAINER}$"; then
 fi
 
 # 2. Sync files into container
-"${HERE}/setup_demo_hunav_container.sh" "${CONTAINER}" >/dev/null 2>&1
+"${HERE}/scenario_generator/install_episode.sh" --demo "${CONTAINER}" >/dev/null 2>&1
 
 # 3. Determine scenario path inside container
 if [[ "${SCENARIO_ARG}" == "demo_1" || "${SCENARIO_ARG}" == "demo_1_hunav" ]]; then

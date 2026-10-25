@@ -33,7 +33,7 @@ Các file hỗ trợ:
 - `LIVE_TEST_REPORT.md`: kết quả acceptance Gazebo/Nav2/HuNav đã chạy.
 - `hunav_one_human.yaml`: một người Room01 → corridor → Room10.
 - `hunav_social_test.yaml`: thêm người đi ngang để quan sát human-human force.
-- `setup_demo_hunav_container.sh`: cài scenario/BT/bridge vào Docker.
+- `scenario_generator/install_episode.sh --demo`: cài scenario/BT/bridge demo vào Docker.
 - `start_hunav_agents.sh`: khởi chạy toàn bộ ngăn xếp HuNav tự động qua Docker với 1 lệnh.
 - `JOB_DONE_REPORT.md`: tài liệu tổng kết tối ưu CPU/RAM, sửa lỗi DDS/Entity Tree và vận hành chuẩn.
 
@@ -191,7 +191,7 @@ Khởi động container theo README thư mục cha, sau đó:
 ```bash
 docker start hunavsim_gz_fortress
 cd ~/nav_ws/src/custom_corridor/worlds/school_arena/demo_1
-./setup_demo_hunav_container.sh hunavsim_gz_fortress
+./scenario_generator/install_episode.sh --demo hunavsim_gz_fortress
 ```
 
 Dừng launch baseline nếu đang chạy. Khởi động world có proxy HuNav bằng `ros2 launch ./school_hunav_demo.launch.py gui:=true rviz:=true`, rồi giữ terminal đó mở. Mở ba terminal Docker sau.

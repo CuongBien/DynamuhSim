@@ -93,7 +93,7 @@ colcon build --symlink-install
 source install/setup.bash
 
 cd ~/nav_ws/src/custom_corridor/worlds/school_arena
-chmod +x run_*.sh spawn_*.sh setup_*.sh stop_*.sh
+chmod +x run_*.sh spawn_*.sh stop_*.sh demo_1/scenario_generator/install_episode.sh
 ```
 
 Nếu repository đã có sẵn, chỉ cần build lại workspace.
@@ -167,7 +167,7 @@ Container phải ở trạng thái `Up`:
 ```bash
 cd ~/nav_ws/src/custom_corridor/worlds/school_arena
 ./stop_school_hunav_container.sh hunavsim_gz_fortress
-./setup_school_hunav_container.sh hunavsim_gz_fortress
+./demo_1/scenario_generator/install_episode.sh --school hunavsim_gz_fortress
 ```
 
 Kết quả:
@@ -392,7 +392,7 @@ Lần chạy sau:
 docker start hunavsim_gz_fortress
 cd ~/nav_ws/src/custom_corridor/worlds/school_arena
 ./stop_school_hunav_container.sh hunavsim_gz_fortress
-./setup_school_hunav_container.sh hunavsim_gz_fortress
+./demo_1/scenario_generator/install_episode.sh --school hunavsim_gz_fortress
 ```
 
 Sau đó chạy lại Terminal 1–7.
@@ -427,7 +427,7 @@ colcon build --symlink-install
 
 ```bash
 cd ~/nav_ws/src/custom_corridor/worlds/school_arena
-./setup_school_hunav_container.sh hunavsim_gz_fortress
+./demo_1/scenario_generator/install_episode.sh --school hunavsim_gz_fortress
 ```
 
 ### Adapter lặp `Waiting live Gazebo poses`

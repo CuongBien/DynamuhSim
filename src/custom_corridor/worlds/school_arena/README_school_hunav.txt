@@ -42,7 +42,7 @@ processes first (this also releases the Groot ZMQ port 5555):
 Install/update the container files once:
 
   cd ~/nav_ws/src/custom_corridor/worlds/school_arena
-  ./setup_school_hunav_container.sh hunavsim_gz_fortress
+  ./demo_1/scenario_generator/install_episode.sh --school hunavsim_gz_fortress
 
 For every host ROS terminal use:
 

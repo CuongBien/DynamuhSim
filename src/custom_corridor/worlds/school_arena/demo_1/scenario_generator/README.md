@@ -147,6 +147,8 @@ ID trong metadata phụ thuộc thư mục output; nội dung scenario và HuNav
 
 ## 4. Cài episode vào Docker
 
+Installer này dùng chung cho ba luồng: đường dẫn episode cho production, `--demo` cho fixture Demo1, `--school` cho School Arena gốc. Hai script `setup_*_hunav_container.sh` cũ đã gỡ; các lệnh cài bên dưới và `HuNavManager` dùng installer này.
+
 Trên host, tại thư mục scenario_generator. Ví dụ dùng ep_000002 (head_on);
 thay bằng ID human episode vừa sinh:
 
