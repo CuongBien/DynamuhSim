@@ -47,3 +47,23 @@ Catalog gốc tiếp tục là `inventory_only`; index backup và receipt vẫn 
 - Bỏ file trong commit mới chỉ giảm checkout hiện tại. Giảm clone/history là việc riêng; đợt này không rewrite lịch sử Git.
 
 Muốn chạy consumer cũ, chuẩn bị **checkout replay riêng** ở revision đã ghi, đối chiếu payload khôi phục rồi hydrate vào đúng root. Công cụ hiện chỉ xuất thư mục restore mới; chưa tự chép đè vào checkout. Bước tiếp theo là thêm kế hoạch hydrate/kiểm tra consumer, giữ gate nhỏ, rồi chuyển từng nhóm đã xác nhận.
+
+## Kết quả kiểm chứng ngày 25/10/2026
+
+[Index archive](artifacts/history_2026-10-25.json) · [Biên bản](verification/historical_archive_2026-10-25.json).
+
+**75 tests PASS**. Toàn bộ 50 nhóm đã pack, verify và restore: 14.912 tệp, 535.425.398 byte payload. Mỗi bản restore được đọc lại để so SHA256, mode và coverage; 100 tệp metadata kèm theo cũng được kiểm. Không gọi Git/process khi verify và restore trong lượt kiểm này.
+
+| Nhóm | Số tệp | Payload bytes | Archive bytes |
+|---|---:|---:|---:|
+| School `dataset_v1.0` |10.120|272.955.268|188.427.447|
+| Scenario `generated` |917|14.207.921|905.906|
+| Scenario `generated_v1` |787|8.592.005|579.084|
+| 47 nhóm benchmark reports |3.088|239.670.204|118.907.647|
+| Tổng |14.912|535.425.398|308.820.084|
+
+Archive bytes chưa gồm manifest riêng và index; chi tiết footprint có trong biên bản. Store canonical nằm tại `experiments/social_navigation/benchmark/generated/artifact_store` của checkout chính; không dùng một store mới cùng đường dẫn tương đối bên trong worktree nếu muốn đọc các object này.
+
+CLI pack được chạy lần hai: index/object giống byte và không tăng số archive. CLI verify toàn bộ index và restore nhóm `generated_v1` được chạy với PATH rỗng trên bản store di động không có `catalogs/`, xác nhận không dựa vào Git hoặc inventory cache. Bản store di động thử dùng hardlink cùng đĩa, không được tính là backup độc lập.
+
+Đã kiểm lại các bản giải nén thử rồi dọn riêng chúng; giữ 50 archive và manifest canonical. 14.912 tệp nguồn giữ nguyên byte; trạng thái/index checkout chính không đổi. Index 67.526 byte được giữ trong Git, còn archive/manifest nằm local và chưa upload lên remote. Vì nguồn vẫn còn trong Git, bước này tạo backup kiểm chứng và **chưa giảm dung lượng checkout/clone**. Chuyển dữ liệu ra checkout phải đi cùng hydrate consumer và chính sách lưu artifact lâu dài.
