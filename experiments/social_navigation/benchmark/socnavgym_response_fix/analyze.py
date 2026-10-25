@@ -7,25 +7,19 @@ os.sched_setaffinity(0,sorted(os.sched_getaffinity(0))[:2])
 import numpy as np,shapely
 from PIL import Image
 HERE=Path(__file__).resolve().parent;SOCIAL=HERE.parent.parent;REPO=SOCIAL.parent.parent
+import sys
+from functools import partial
+sys.path.insert(0,str(REPO/'python'))
+from dynamuhsim.analysis.warehouse import (
+    measured_gaps as swept_gaps, trajectory_errors, pose_intervals, human_motion, lidar_measurements,
+)
+PROXIES={i:f'common_{i}_proxy' for i in range(1,7)}
 p=argparse.ArgumentParser();p.add_argument('--live',type=Path,required=True);a=p.parse_args();out=a.live.resolve()
 load=lambda p:json.loads(p.read_text());lines=lambda p:[json.loads(l) for l in p.open()];sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
+analysis_sources={str(p.relative_to(REPO)):sha(p) for p in [Path(__file__),REPO/'python/dynamuhsim/analysis/warehouse.py']}
 boxes=load(SOCIAL/'warehouse/layout.json')['obstacles'];assert len(boxes)==42
 polygons=np.array([shapely.box(b['x']-b['sx']/2,b['y']-b['sy']/2,b['x']+b['sx']/2,b['y']+b['sy']/2) for b in boxes],dtype=object)
-def measured_gaps(before,after,robot_before,robot_after):
-    # Arrays are time x human x XY. Independent closest-approach vector algebra
-    # and GEOS segment-to-polygon distance; no guard geometry imports.
-    a=np.asarray(before);b=np.asarray(after);ra=np.asarray(robot_before);rb=np.asarray(robot_after)
-    delta=b-a;pair=1e9
-    for i in range(a.shape[1]):
-        for j in range(i):
-            rel=a[:,i]-a[:,j];vel=delta[:,i]-delta[:,j];den=np.sum(vel*vel,axis=1)
-            t=np.clip(np.divide(-np.sum(rel*vel,axis=1),den,out=np.zeros_like(den),where=den>1e-25),0,1)
-            pair=min(pair,float(np.min(np.linalg.norm(rel+t[:,None]*vel,axis=1)-.72)))
-    rel=a-ra[:,None,:];vel=delta-(rb-ra)[:,None,:];den=np.sum(vel*vel,axis=2)
-    t=np.clip(np.divide(-np.sum(rel*vel,axis=2),den,out=np.zeros_like(den),where=den>1e-25),0,1)
-    robot=float(np.min(np.linalg.norm(rel+t[:,:,None]*vel,axis=2)-.61))
-    segments=shapely.linestrings(np.stack((a,b),axis=2).reshape(-1,2,2));static=float(np.min(shapely.distance(segments[:,None],polygons[None,:]))-.36)
-    return dict(pair=pair,robot=robot,static=static)
+measured_gaps=partial(swept_gaps,polygons=polygons)
 result=load(out/'result.json');assert result['status'] in ['RECORDED','ERROR','EXPECTED_FAULT_RECORDED'],result.get('error')
 expected_fault=result['status']=='EXPECTED_FAULT_RECORDED';error_prefix=result['status']!='RECORDED';assert not error_prefix or result['faults'],'Infrastructure errors are not behavior prefixes'
 fault_mode=False;dt=result['native_dt']
@@ -51,24 +45,11 @@ for box in boxes:
 required=['mecanum_robot']+[f'common_{i}_proxy' for i in range(1,7)]
 complete=[s for s in poses if all(k in s['poses'] for k in required)];assert len(complete)>100
 assert all(b['time']>=a['time'] for a,b in zip(complete,complete[1:]))
-worker_times=[s['time'] for s in worker];pose_times=[s['time'] for s in complete]
-errors=[];robot_prediction=[];feedback=[]
-for row in complete:
-    index=bisect.bisect_right(worker_times,row['time'])-1
-    if index<0:continue
-    w=worker[index];alpha=(row['time']-w['time'])/dt
-    if not -.00001<=alpha<=1.00001:continue
-    for old,new in zip(w['before'],w['humans']):
-        actual=row['poses'][f'common_{old["id"]}_proxy'];expected=[old[k]+alpha*(new[k]-old[k]) for k in ['x','y']]
-        errors.append(math.hypot(actual['x']-expected[0],actual['y']-expected[1]))
-for w in worker:
-    i=min(range(max(0,bisect.bisect_left(pose_times,w['time']+dt)-1),min(len(complete),bisect.bisect_left(pose_times,w['time']+dt)+2)),key=lambda i:abs(pose_times[i]-w['time']-dt))
-    if abs(pose_times[i]-w['time']-dt)<.015:
-        r=w['robot_input'];actual=complete[i]['poses']['mecanum_robot'];robot_prediction.append(math.hypot(actual['x']-r['x']-dt*r['vx'],actual['y']-r['y']-dt*r['vy']))
+pose_times=[s['time'] for s in complete]
+errors,robot_prediction=trajectory_errors(complete,worker,dt,PROXIES,pose_times)
+feedback=[]
 assert len(errors)>100 and max(errors)<.025
-before=[[[s['poses'][f'common_{i}_proxy'][k] for k in ['x','y']] for i in range(1,7)] for s in complete[:-1]]
-after=[[[s['poses'][f'common_{i}_proxy'][k] for k in ['x','y']] for i in range(1,7)] for s in complete[1:]]
-rb=[[s['poses']['mecanum_robot'][k] for k in ['x','y']] for s in complete[:-1]];re=[[s['poses']['mecanum_robot'][k] for k in ['x','y']] for s in complete[1:]]
+before,after,rb,re=pose_intervals(complete,PROXIES)
 full_recording_gaps=measured_gaps(before,after,rb,re)
 assessment_end=min(worker[0]['time']+10.,result['faults'][0]['time'] if error_prefix else worker[0]['time']+10.)
 mask=np.array([row['time']<=assessment_end+1e-8 for row in complete[1:]])
@@ -82,13 +63,7 @@ for hid in range(1,7):
     assert abs(float(model.find('.//visual/geometry/cylinder/radius').text)-.36)<1e-12
 assert len(world.findall('actor'))==6
 for a,b in zip(worker,worker[1:]):assert a['humans']==b['before']
-max_speed=max_yaw_rate=0.;human_path=0.
-for before,after in zip(complete,complete[1:]):
-    sample_dt=after['time']-before['time']
-    if sample_dt<=1e-10:continue
-    for hid in range(1,7):
-        a=before['poses'][f'common_{hid}_proxy'];b=after['poses'][f'common_{hid}_proxy'];dist=math.hypot(b['x']-a['x'],b['y']-a['y']);human_path+=dist
-        max_speed=max(max_speed,dist/sample_dt);max_yaw_rate=max(max_yaw_rate,abs(math.atan2(math.sin(b['yaw']-a['yaw']),math.cos(b['yaw']-a['yaw'])))/sample_dt)
+max_speed,max_yaw_rate,human_path=human_motion(complete,PROXIES)
 assert max_speed<=1.00001 and max_yaw_rate<=1.57001
 xy=np.array([[s['poses']['mecanum_robot'][k] for k in ['x','y']] for s in complete]);displacement=xy[-1]-xy[0]
 assert error_prefix or result['sim_seconds_observed']>=10.
@@ -108,26 +83,7 @@ for row in complete:
         reference=trace[min(round(elapsed/.05),len(trace)-1)];r=row['poses']['mecanum_robot'];trace_error.append(math.hypot(r['x']-reference['x'],r['y']-reference['y']))
 # Exact ray intersections from measured Gazebo proxies, all factory boxes, and
 # actual robot pose; only beams whose nearest predicted target is a human count.
-lidar_errors=[];lidar_ids=set()
-for scan in scans:
-    i=bisect.bisect_left(pose_times,scan['time']);indices=range(max(0,i-1),min(len(complete),i+2));i=min(indices,key=lambda i:abs(pose_times[i]-scan['time']))
-    if abs(pose_times[i]-scan['time'])>.025:continue
-    s=complete[i];r=s['poses']['mecanum_robot'];angles=scan['angle_min']+np.arange(len(scan['ranges']))*scan['angle_increment']+r['yaw'];dx=np.cos(angles);dy=np.sin(angles);static=np.full(len(angles),np.inf)
-    for b in boxes:
-        near=np.full(len(angles),-np.inf);far=np.full(len(angles),np.inf)
-        for origin,direction,center,size in [(r['x'],dx,b['x'],b['sx']),(r['y'],dy,b['y'],b['sy'])]:
-            parallel=np.abs(direction)<1e-12;low=center-size/2;high=center+size/2
-            t1=np.divide(low-origin,direction,out=np.zeros_like(direction),where=~parallel);t2=np.divide(high-origin,direction,out=np.zeros_like(direction),where=~parallel)
-            near=np.maximum(near,np.where(parallel,-np.inf if low<=origin<=high else np.inf,np.minimum(t1,t2)))
-            far=np.minimum(far,np.where(parallel,np.inf if low<=origin<=high else -np.inf,np.maximum(t1,t2)))
-        static=np.minimum(static,np.where((far>=np.maximum(near,0))&(near>=0),near,np.inf))
-    dynamic=np.full(len(angles),np.inf);labels=np.zeros(len(angles),dtype=int)
-    for hid in range(1,7):
-        h=s['poses'][f'common_{hid}_proxy'];ox,oy=r['x']-h['x'],r['y']-h['y'];dot=ox*dx+oy*dy;disc=dot*dot-(ox*ox+oy*oy-.36**2);hit=-dot-np.sqrt(np.maximum(disc,0));hit=np.where((disc>=0)&(hit>0),hit,np.inf)
-        closer=hit<dynamic;labels=np.where(closer,hid,labels);dynamic=np.minimum(dynamic,hit)
-    selected=(dynamic>max(.14,scan['range_min']))&(dynamic<min(3.4,scan['range_max']))&(static>dynamic+.03)
-    measured=np.array([np.nan if v is None else v for v in scan['ranges']]);error=np.abs(measured-dynamic);error=np.where(np.isfinite(error),error,10.)
-    lidar_errors.extend(error[selected].tolist());lidar_ids.update(int(v) for v in labels[selected&(error<.15)])
+lidar_errors,lidar_ids=lidar_measurements(scans,complete,pose_times,boxes,PROXIES)
 assert len(lidar_errors)>50 and sum(e<.15 for e in lidar_errors)/len(lidar_errors)>.7 and len(lidar_ids)>=2
 interlock=None
 if expected_fault:
@@ -166,6 +122,7 @@ validation=dict(status='PASS_TERMINAL_PAUSE_INTERLOCK' if expected_fault else 'A
     gui_user_confirmation=load(out/'gui_confirmation.json') if (out/'gui_confirmation.json').exists() else None,
     preserved_old_source_evidence_files=len(preserved)-len(allowed),intentional_status_documents=sorted(allowed),original_user_index_outside_preserved=True,
     model=result['model'],case=result['case'],robot_script_position_error_max_m=max(trace_error),geometry_outcome='OVERLAP_GT_5MM' if min(gaps.values())<-.005 else 'NO_OVERLAP_GT_5MM',scope='SocNavGym response projection v2;6 individuals, bounded actual robot command, optional terminal simulation-pause test; no Nav2/group/general safety claim')
+validation['analysis_source_sha256']=analysis_sources
 import gzip
 for path in [runtime/'worker_trajectory.jsonl',runtime/'warehouse.sdf',runtime/'worker.log',runtime/'ogre2_session.log',out/'launch.log',*out.glob('*.jsonl')]:
     if path.exists():

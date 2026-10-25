@@ -9,10 +9,13 @@ Hai entrypoint hiện hành: `tools/audit_episode.py` và `tools/artifact_store.
 | `analysis/evidence.py` | JSON/JSONL/gzip, streamed SHA256, source theo hash/commit. Dùng trong capture runtime, auditor và artifact store. |
 | `analysis/timeline.py` | Nearest timestamp có tolerance, tie chọn mẫu trước; SE2 không ngoại suy, giới hạn gap và yaw đi theo cung ngắn. |
 | `analysis/geometry.py` | Sai số pose và signed linear swept-disc gap; runtime goal và auditor dùng cùng measurement, policy giữ quyền quyết định PASS/FAIL. |
+| `analysis/warehouse.py` | Swept gaps qua GEOS, worker–Gazebo trajectory, chuyển động và LiDAR cho common_gazebo, response_fix và warehouse_lifecycle; không import geometry của motion guard. |
 | `analysis/capture.py` | Audit capture mới, đọc MCAP qua dependency ROS lazy; không chạy lại mô phỏng hoặc thực thi source snapshot. |
 | `artifacts/store.py` | Pack/verify/restore có SHA256 và dọn raw theo phạm vi hạn chế, sau round trip. |
 
 Auditor có thể đọc source đúng hash từ root chỉ định hoặc Git commit đã ghi; không tự dùng HEAD thay thế. Snapshot trong artifact chỉ được hash/đọc, không import/exec. Producer freeze cũ vẫn thuộc revision đã ghi; auditor mới không đổi manifest đó thành source hiện tại.
+
+Các analyzer warehouse giữ nguyên CLI, các field số đo cũ, source/checkpoint gate và ngưỡng nghiệm thu. Kết quả mới bổ sung `analysis_source_sha256` cho entrypoint và module đo dùng chung; không viết lại report lịch sử.
 
 ## Hai policy có ý nghĩa khác nhau
 
