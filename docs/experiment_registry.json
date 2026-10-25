@@ -108,5 +108,14 @@
     "payload_move_state": "inventory only; tracked payloads not moved or removed",
     "published_catalog": "docs/artifacts/catalog_2026-10-25.json",
     "verification": "docs/verification/world_assets_2026-10-25.json"
+  },
+  "historical_artifact_storage": {
+    "entrypoint": "tools/archive_history.py {pack,verify,restore}",
+    "schema": "dynamuhsim_history_index/1",
+    "guide": "docs/HISTORICAL_ARTIFACTS.md",
+    "source": "Committed blobs from the full revision pinned in the catalog; dirty/untracked data excluded",
+    "restore": "Fresh directory containing payload/<repository-relative-root>; verify/restore do not require Git or ROS",
+    "removal_allowed": false,
+    "migration_state": "Local backups and byte-verified roundtrip; gates and historical consumers still at original paths"
   }
 }

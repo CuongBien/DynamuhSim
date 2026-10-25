@@ -94,3 +94,7 @@ python3 tools/catalog_assets.py verify --store "$STORE" \
 ```
 
 3.454 file lịch sử được bảo vệ giữ nguyên byte; checkout/index chính không đổi. Không di chuyển payload tracked, không thay dataset01 hoặc rewrite Git history. Bước tiếp theo là archive + restore từng payload đã catalog và xử lý consumer source-relative/gate trước khi cân nhắc bỏ payload khỏi checkout Git.
+
+## Archive payload lịch sử
+
+Công cụ archive/verify/restore riêng đã bổ sung tại [Archive lịch sử](HISTORICAL_ARTIFACTS.md). Catalog gốc vẫn giữ nguyên trạng thái inventory; index backup lưu riêng và không cho phép tự xóa tracked payload.
