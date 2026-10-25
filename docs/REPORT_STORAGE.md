@@ -4,6 +4,9 @@
 
 [Dependency plan](artifacts/report_dependency_plan_2026-10-25.json) · [Manifest migration](artifacts/report_migration_2026-10-25.json) · [Biên bản](verification/report_migration_2026-10-25.json).
 
+
+**Cập nhật media:** 23 nhóm trên hiện giữ 1.814 control/model/snapshot files; 214 media đã chuyển riêng và hydrate theo nhu cầu. Các số liệu 2.028 tệp phía trên ghi lại thời điểm trước đợt media. Xem [Media và trạng thái test](REPORT_MEDIA.md) trước khi chạy viewer/audit cần ảnh.
+
 ## Xem và phục hồi report
 
 Mỗi liên kết nhóm trong bảng dưới trỏ vào revision còn đủ report, nên có thể xem ảnh/số liệu trên GitHub mà không hydrate checkout. Để chạy consumer cũ ở đúng đường dẫn:

@@ -28,7 +28,10 @@ def main():
         report=hydrate_report_media(a.checkout,index,plan,selected,source=a.source,store=a.store,check=a.command=='check')
     a.output.parent.mkdir(parents=True,exist_ok=True)
     with a.output.open('x') as f:f.write(json.dumps(report,sort_keys=True,indent=2)+'\n')
-    print(report.get('status','PLAN_CREATED'),report.get('changed_files',report.get('files')),'files')
+    if a.command=='check':
+        print(report['status'],sum(len(g['missing_files']) for g in report['groups']),'missing files')
+    elif a.command=='plan':print('PLAN_CREATED',report['files'],'selected files')
+    else:print(report['status'],report['changed_files'],'restored files')
     return 1 if report.get('status')=='MEDIA_MISSING' else 0
 
 

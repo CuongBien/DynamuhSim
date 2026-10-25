@@ -66,7 +66,7 @@
       "reason": "Historical frozen pipeline for reproducing accepted/quarantined results. Use the versioned capture API for fresh episodes; no historical manifest or driver is rewritten."
     }
   ],
-  "historical_evidence": "Pinned Git history and verified local archives preserve historical bytes. Current gates and capture/perception/WM report trees are retained; 24 other report trees hydrate on demand.",
+  "historical_evidence": "Pinned Git history and verified local archives preserve historical bytes. Gates, models, frozen/test state and non-media report controls remain tracked; historical report groups and media hydrate on demand.",
   "new_capture_pipeline": {
     "entrypoint": "tools/capture_episode.py {prepare,verify,run}",
     "launch": "tools/capture_warehouse.launch.py",
@@ -118,7 +118,7 @@
     "source": "Committed blobs from the full revision pinned in the catalog; dirty/untracked data excluded",
     "restore": "Fresh directory containing payload/<repository-relative-root>; verify/restore do not require Git or ROS",
     "removal_allowed": false,
-    "migration_state": "World payloads and 24 historical report trees hydrate on demand; gates and capture/perception/WM evidence retained",
+    "migration_state": "Three world payloads and 24 report trees externalized; 23 remaining report trees keep controls, with approved media hydration",
     "published_index": "docs/artifacts/history_2026-10-25.json",
     "verification": "docs/verification/historical_archive_2026-10-25.json",
     "hydration_entrypoint": "tools/hydrate_history.py --group GROUP --source {git,archive}",
@@ -136,6 +136,15 @@
     "externalized_groups": 24,
     "retained_groups": 23,
     "current_gates_preserved": 7,
-    "scope": "Static Python Path + JSON source hash references; dynamic capture/perception/WM consumers retained conservatively"
+    "scope": "Static Python Path + JSON source hash references; dynamic capture/perception/WM consumers retained conservatively",
+    "media_guide": "docs/REPORT_MEDIA.md",
+    "media_policy": "docs/artifacts/report_media_plan_2026-10-25.json",
+    "media_migration": "docs/artifacts/report_media_migration_2026-10-25.json",
+    "media_verification": "docs/verification/report_media_2026-10-25.json",
+    "media_entrypoint": "tools/report_media.py {plan,check,hydrate}",
+    "control_probe": "tools/probe_report_controls.py",
+    "retained_nonmedia_files": 1814,
+    "externalized_media_files": 214,
+    "control_policy": "Keep all non-media control/model/snapshot/test state; only approved missing media may be filled"
   }
 }

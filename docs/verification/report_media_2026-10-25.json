@@ -1,0 +1,165 @@
+{
+  "code_revision": "dfe49fd6948effbbe0f538af558635385e3b244a",
+  "cold_checkout": {
+    "control_files_present": 1814,
+    "control_probe_byte_equal": true,
+    "media_absent": 214,
+    "media_check_exitcode": 1,
+    "model_test_seal_preserved": true,
+    "status": "PASS"
+  },
+  "control_probe": {
+    "archive_sha256": "55324227921488bb7c8806fd09e62d75f270b2cbc721c508491a28ebb8a828b2",
+    "before_sha256": "55324227921488bb7c8806fd09e62d75f270b2cbc721c508491a28ebb8a828b2",
+    "byte_equal": true,
+    "cold_sha256": "55324227921488bb7c8806fd09e62d75f270b2cbc721c508491a28ebb8a828b2",
+    "final_cold_sha256": "55324227921488bb7c8806fd09e62d75f270b2cbc721c508491a28ebb8a828b2",
+    "git_sha256": "55324227921488bb7c8806fd09e62d75f270b2cbc721c508491a28ebb8a828b2",
+    "probe_source": "tools/probe_report_controls.py",
+    "probe_source_sha256": "30e3085e7c16c8ea263ee2031672d363ffb9297579d041cbb282ad235988cf48",
+    "result": {
+      "classifier": {
+        "candidate": "depth_linear",
+        "held_out_data_opened": false,
+        "logits_sha256": "1b9a62e42afdd0eba16815fdd14c72c8deba7dd5d03ff85167d5348418830465",
+        "model_sha256": "41f990bd581afd87d93bb93bd57ea758b51a914f31fd6bdb6f027ddd6e27f292",
+        "status": "PASS",
+        "synthetic_rows": 3,
+        "test_evaluation_run": false,
+        "test_seal_sha256": "a67c582257dcdc56f2b88f5e46a7e7a1ce24c7012ffb247dbab828c560a17546",
+        "threshold": 0.5,
+        "training_run": false
+      },
+      "dynamic_identity_tracker": {
+        "output_sha256": "1e90f1ce2a9881c67809b7c2db2bb1a04cd583e3559a2e825612a7d6f98f1e4e",
+        "status": "PASS",
+        "synthetic_frames": 4
+      },
+      "engine_bindings": {
+        "depth_identity_guard": {
+          "engine_files": 10,
+          "freeze_sha256": "88df2b6ea4f4663ea715c1d203043ede0e14abe82e94c8d3d4907303afb82401",
+          "status": "PASS"
+        },
+        "depth_track_refinement": {
+          "engine_files": 6,
+          "freeze_sha256": "eb698c7954851fe9606ce32c7861ab749767c9877658f1716a762b23e70820b9",
+          "status": "PASS"
+        }
+      },
+      "runtime_gates": {
+        "profiles": [
+          "shared_nav2_pilot",
+          "socnavgym_group_nav2",
+          "socnavgym_nav2_pilot"
+        ],
+        "status": "PASS"
+      },
+      "trace": {
+        "blocked_events": [
+          "subprocess.Popen:lscpu"
+        ],
+        "reads": [
+          "experiments/social_navigation/benchmark/depth_identity_guard/__pycache__/freeze.cpython-312.pyc",
+          "experiments/social_navigation/benchmark/depth_identity_guard/__pycache__/guard_tracker.cpython-312.pyc",
+          "experiments/social_navigation/benchmark/depth_identity_guard/config.json",
+          "experiments/social_navigation/benchmark/depth_identity_guard/evaluate.py",
+          "experiments/social_navigation/benchmark/depth_identity_guard/freeze.py",
+          "experiments/social_navigation/benchmark/depth_identity_guard/guard_tracker.py",
+          "experiments/social_navigation/benchmark/depth_identity_guard/parent/__pycache__/refinement.cpython-312.pyc",
+          "experiments/social_navigation/benchmark/depth_identity_guard/parent/config.json",
+          "experiments/social_navigation/benchmark/depth_identity_guard/parent/evaluate.py",
+          "experiments/social_navigation/benchmark/depth_identity_guard/parent/refinement.py",
+          "experiments/social_navigation/benchmark/depth_identity_guard/parent/snapshots/__pycache__/sensor.cpython-312.pyc",
+          "experiments/social_navigation/benchmark/depth_identity_guard/parent/snapshots/association.py",
+          "experiments/social_navigation/benchmark/depth_identity_guard/parent/snapshots/sensor.py",
+          "experiments/social_navigation/benchmark/depth_identity_guard/replay.py",
+          "experiments/social_navigation/benchmark/depth_identity_guard/reports/final_engine/frozen.json",
+          "experiments/social_navigation/benchmark/depth_person_classifier/__pycache__/inference.cpython-312.pyc",
+          "experiments/social_navigation/benchmark/depth_person_classifier/frozen.json",
+          "experiments/social_navigation/benchmark/depth_person_classifier/inference.py",
+          "experiments/social_navigation/benchmark/depth_person_classifier/reports/selected_frozen.json",
+          "experiments/social_navigation/benchmark/depth_person_classifier/reports/selected_model.npz",
+          "experiments/social_navigation/benchmark/depth_person_classifier/reports/selected_model.pt",
+          "experiments/social_navigation/benchmark/depth_person_classifier/reports/test_opened.json",
+          "experiments/social_navigation/benchmark/depth_person_classifier/reports/training.json",
+          "experiments/social_navigation/benchmark/depth_track_refinement/__pycache__/freeze.cpython-312.pyc",
+          "experiments/social_navigation/benchmark/depth_track_refinement/config.json",
+          "experiments/social_navigation/benchmark/depth_track_refinement/evaluate.py",
+          "experiments/social_navigation/benchmark/depth_track_refinement/freeze.py",
+          "experiments/social_navigation/benchmark/depth_track_refinement/refinement.py",
+          "experiments/social_navigation/benchmark/depth_track_refinement/replay.py",
+          "experiments/social_navigation/benchmark/depth_track_refinement/reports/frozen02.json",
+          "experiments/social_navigation/benchmark/depth_track_refinement/snapshots/association.py",
+          "experiments/social_navigation/benchmark/depth_track_refinement/snapshots/sensor.py",
+          "experiments/social_navigation/benchmark/shared_nav2_pilot/reports/gate01/validation.json",
+          "experiments/social_navigation/benchmark/socnavgym_group_nav2/reports/gate03/validation.json",
+          "experiments/social_navigation/benchmark/socnavgym_group_nav2/reports/offline05/validation.json",
+          "experiments/social_navigation/benchmark/socnavgym_group_nav2/reports/reaction_gate.json",
+          "experiments/social_navigation/benchmark/socnavgym_nav2_pilot/reports/empty01/validation.json",
+          "experiments/social_navigation/benchmark/socnavgym_nav2_pilot/reports/gate01/validation.json"
+        ],
+        "report_snapshots_executed": false,
+        "status": "PASS"
+      }
+    }
+  },
+  "date": "2026-10-25",
+  "limits": [
+    "Dynamic probes exercise two engine verifiers, fixed synthetic classifier inference, synthetic identity tracker and current profile gates; not every historical consumer of all23groups",
+    "No model fitting, held-out evaluation, threshold search or raw/corpus reads by the audited control probe",
+    "A dependency subprocess attempt was blocked by the audit hook; no child process launched during audited probe",
+    "All non-media files retained byte-for-byte, including label review arrays which are hashed for preservation but never evaluated by model",
+    "No Gazebo/Docker/Nav2 run or full historical replay; media roundtrip checks content hashes, not new renderer output",
+    "Archives local, pinned Git history remains; clone history size unchanged; main checkout/index and dataset01 untouched"
+  ],
+  "native_hydration": {
+    "final_media_absent": true,
+    "results": [
+      {
+        "control_probe_byte_equal": true,
+        "files": 214,
+        "logical_bytes": 17053392,
+        "source": "archive"
+      },
+      {
+        "control_probe_byte_equal": true,
+        "files": 214,
+        "logical_bytes": 17053392,
+        "source": "git"
+      }
+    ],
+    "status": "PASS",
+    "wrapper_fills_only_approved_gaps": true
+  },
+  "plan_regeneration": {
+    "byte_equal": true,
+    "media_absent": true,
+    "revision": "03142a6efc849e347d84c10f5758d27eb60c2a2b",
+    "status": "PASS"
+  },
+  "preservation": {
+    "canonical_archives_retained": true,
+    "control_bytes": 53322406,
+    "controls_preserved": 1814,
+    "current_gates_preserved": 7,
+    "main_index_byte_equal": true,
+    "main_status_equal": true,
+    "media_bytes_externalized": 17053392,
+    "media_files_absent": 214,
+    "model_test_seal_preserved": true,
+    "status": "PASS",
+    "temporary_media_removed": true
+  },
+  "schema": "dynamuhsim_report_media_verification/1",
+  "unit_tests": {
+    "log_sha256": "3795844a9e272c9a29e94dda63844b31a4c88f4c163ba31bf787dd9aa2d275fe",
+    "status": "PASS",
+    "tests": 104
+  },
+  "wrapper_classifier_final": {
+    "changed_files": 3,
+    "changed_groups": 1,
+    "report_sha256": "3ebcfb44082ca6f18242c4a579d6850acc06b8a940211d6f985694c48801bec7"
+  }
+}
