@@ -9,6 +9,15 @@ import math
 import numpy as np
 
 
+def robot_human_gaps(before, after, robot_before, robot_after):
+    """Minimum signed robot–human gap for each measured linear interval."""
+    a = np.asarray(before); b = np.asarray(after)
+    ra = np.asarray(robot_before); rb = np.asarray(robot_after)
+    rel = a-ra[:,None,:]; vel = (b-a)-(rb-ra)[:,None,:]; den = np.sum(vel*vel,axis=2)
+    t = np.clip(np.divide(-np.sum(rel*vel,axis=2), den, out=np.zeros_like(den), where=den>1e-25), 0, 1)
+    return np.min(np.linalg.norm(rel+t[:,:,None]*vel,axis=2)-.61,axis=1)
+
+
 def measured_gaps(before, after, robot_before, robot_after, *, polygons):
     """Signed swept gaps for 0.36m human and 0.25m robot discs."""
     import shapely
@@ -20,9 +29,7 @@ def measured_gaps(before, after, robot_before, robot_after, *, polygons):
             rel = a[:,i]-a[:,j]; vel = delta[:,i]-delta[:,j]; den = np.sum(vel*vel, axis=1)
             t = np.clip(np.divide(-np.sum(rel*vel,axis=1), den, out=np.zeros_like(den), where=den>1e-25), 0, 1)
             pair = min(pair, float(np.min(np.linalg.norm(rel+t[:,None]*vel,axis=1)-.72)))
-    rel = a-ra[:,None,:]; vel = delta-(rb-ra)[:,None,:]; den = np.sum(vel*vel,axis=2)
-    t = np.clip(np.divide(-np.sum(rel*vel,axis=2), den, out=np.zeros_like(den), where=den>1e-25), 0, 1)
-    robot = float(np.min(np.linalg.norm(rel+t[:,:,None]*vel,axis=2)-.61))
+    robot = float(np.min(robot_human_gaps(a,b,ra,rb)))
     segments = shapely.linestrings(np.stack((a,b),axis=2).reshape(-1,2,2))
     static = float(np.min(shapely.distance(segments[:,None],polygons[None,:]))-.36)
     return dict(pair=pair, robot=robot, static=static)
