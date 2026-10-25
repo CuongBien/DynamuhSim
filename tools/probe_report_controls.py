@@ -64,6 +64,7 @@ def main():
     assert sha(benchmark/'depth_person_classifier/frozen.json')==frozen['source_freeze_sha256']
     seal=folder/'test_opened.json';assert seal.is_file()
     seal_sha=sha(seal)
+    assert json.loads(seal.read_text())['selected_frozen_sha256']==sha(folder/'selected_frozen.json')
     arrays=dict(np.load(folder/'selected_model.npz',allow_pickle=False))
     inference=load('_control_classifier_inference',benchmark/'depth_person_classifier/inference.py')
     synthetic=dict(depth=np.linspace(-1,1,90,dtype=np.float32).reshape(3,30),lidar=np.zeros((3,8),dtype=np.float32),lidar_mask=np.array([True,False,True]))
