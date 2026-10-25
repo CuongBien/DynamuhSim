@@ -1,0 +1,65 @@
+{
+  "classifier": {
+    "evaluation_receipt": "classifier/evaluation_receipt.json",
+    "metadata": "classifier/metadata.json",
+    "model": "classifier/model.npz",
+    "source_freeze": "classifier/source_freeze.json"
+  },
+  "engines": {
+    "identity": {
+      "metadata": "engines/identity.json",
+      "schema": "identity_guard_frozen/1",
+      "source_root": "experiments/social_navigation/benchmark/depth_identity_guard"
+    },
+    "refinement": {
+      "metadata": "engines/refinement.json",
+      "schema": "frozen_refinement/1",
+      "source_root": "experiments/social_navigation/benchmark/depth_track_refinement"
+    }
+  },
+  "evaluation_state": "Historical receipt only; no train/test operations. Legacy live test seal stays at its original path.",
+  "files": {
+    "classifier/evaluation_receipt.json": {
+      "bytes": 183,
+      "original_path": "experiments/social_navigation/benchmark/depth_person_classifier/reports/test_opened.json",
+      "sha256": "a67c582257dcdc56f2b88f5e46a7e7a1ce24c7012ffb247dbab828c560a17546"
+    },
+    "classifier/metadata.json": {
+      "bytes": 1636,
+      "original_path": "experiments/social_navigation/benchmark/depth_person_classifier/reports/selected_frozen.json",
+      "sha256": "f7446aa4710c6928a7f11024055e907da0b12337f4b07fb1ace7c445806ccb69"
+    },
+    "classifier/model.npz": {
+      "bytes": 1635,
+      "original_path": "experiments/social_navigation/benchmark/depth_person_classifier/reports/selected_model.npz",
+      "sha256": "41f990bd581afd87d93bb93bd57ea758b51a914f31fd6bdb6f027ddd6e27f292"
+    },
+    "classifier/source_freeze.json": {
+      "bytes": 9923,
+      "original_path": "experiments/social_navigation/benchmark/depth_person_classifier/frozen.json",
+      "sha256": "e0ba48beaf2de36e5f55ce7a65bc9cb844c1bdfa813acf18304b17c0e1d2a88c"
+    },
+    "engines/identity.json": {
+      "bytes": 7420,
+      "original_path": "experiments/social_navigation/benchmark/depth_identity_guard/reports/final_engine/frozen.json",
+      "sha256": "88df2b6ea4f4663ea715c1d203043ede0e14abe82e94c8d3d4907303afb82401"
+    },
+    "engines/refinement.json": {
+      "bytes": 5271,
+      "original_path": "experiments/social_navigation/benchmark/depth_track_refinement/reports/frozen02.json",
+      "sha256": "eb698c7954851fe9606ce32c7861ab749767c9877658f1716a762b23e70820b9"
+    }
+  },
+  "provenance_only": {
+    "experiments/social_navigation/benchmark/depth_person_classifier/reports/selected_model.pt": {
+      "bytes": 2061,
+      "sha256": "8e9fb441858228878cb8280319a4e091888d06eada29b33ab332130d17c16eeb"
+    },
+    "experiments/social_navigation/benchmark/depth_person_classifier/reports/training.json": {
+      "bytes": 100771,
+      "sha256": "ebad3415f52c54f2763818c6e0720e184dec4704912cd29f66a96530e4d08e27"
+    }
+  },
+  "schema": "dynamuhsim_sensor_control_bundle/1",
+  "source_revision": "a6fd939e877759703431f66a67cc50ac9e85c3c4"
+}

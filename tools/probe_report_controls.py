@@ -19,6 +19,7 @@ def sha(path): return hashlib.sha256(Path(path).read_bytes()).hexdigest()
 def main():
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--output',type=Path,required=True)
+    parser.add_argument('--consumer',choices=['bundle','legacy'],default='bundle')
     args=parser.parse_args()
     if args.output.exists() or args.output.is_symlink():raise FileExistsError('Preserve existing probe')
     benchmark=ROOT/'experiments/social_navigation/benchmark'
@@ -35,6 +36,8 @@ def main():
                     name=path.relative_to(ROOT).as_posix()
                     if '/generated/' in name or '/episodes/' in name or 'LABEL_REVIEW_ONLY' in name:
                         denied.append(name);raise PermissionError('No raw/corpus or held-out predictions in control probe')
+                    if args.consumer=='bundle' and any(name.startswith('experiments/social_navigation/benchmark/'+stage+'/reports/') for stage in ['depth_person_classifier','depth_identity_guard','depth_track_refinement']):
+                        denied.append(name);raise PermissionError('Bundle consumer cannot read legacy model/engine reports')
                     reads.add(name)
         if event in ['os.remove','os.rename','os.mkdir','os.rmdir','os.link','os.symlink','subprocess.Popen','os.system','socket.connect','socket.bind']:
             denied.append(event+(':'+str(values[0]) if event=='subprocess.Popen' else ''));raise PermissionError('Control probe forbids side effects')
@@ -47,28 +50,38 @@ def main():
     result={}
     for name,profile in PROFILES.items():profile.validate_gates(benchmark)
     result['runtime_gates']=dict(status='PASS',profiles=sorted(PROFILES))
-    # Verify only the engine/source binding. Do not open recorded datasets.
-    engines={}
-    for stage,relative in [('depth_identity_guard','reports/final_engine/frozen.json'),('depth_track_refinement','reports/frozen02.json')]:
-        module=load('_control_'+stage,benchmark/stage/'freeze.py')
-        try:
+    if args.consumer=='bundle':
+        from dynamuhsim.controls.bundle import registered_bundle
+        from dynamuhsim.perception.depth_classifier import FrozenDepthClassifier
+        bundle=registered_bundle(ROOT)
+        engines={}
+        for name,stage in [('identity','depth_identity_guard'),('refinement','depth_track_refinement')]:
+            value=bundle.verify_engine(name,ROOT)
+            metadata=bundle.manifest['engines'][name]['metadata']
+            engines[stage]=dict(status='PASS',engine_files=len(value['engine_sha256']),freeze_sha256=bundle.manifest['files'][metadata]['sha256'])
+        classifier=FrozenDepthClassifier(bundle);frozen=classifier.metadata
+        seal_sha=classifier.evaluation_receipt_sha256
+        logits=classifier.logits(np.linspace(-1,1,90,dtype=np.float32).reshape(3,30))
+    else:
+        engines={}
+        for stage,relative in [('depth_identity_guard','reports/final_engine/frozen.json'),('depth_track_refinement','reports/frozen02.json')]:
+            module=load('_control_'+stage,benchmark/stage/'freeze.py')
             value=module.verify(benchmark/stage/relative)
             engines[stage]=dict(status='PASS',engine_files=len(value['engine_sha256']),freeze_sha256=sha(benchmark/stage/relative))
-        except AssertionError as exc:
-            engines[stage]=dict(status='PREEXISTING_BINDING_FAILURE',reason=str(exc),freeze_sha256=sha(benchmark/stage/relative))
+        folder=benchmark/'depth_person_classifier/reports'
+        frozen=json.loads((folder/'selected_frozen.json').read_text())
+        for name,key in [('selected_model.npz','model_sha256'),('selected_model.pt','torch_weights_sha256'),('training.json','training_sha256')]:
+            assert sha(folder/name)==frozen[key]
+        assert sha(benchmark/'depth_person_classifier/frozen.json')==frozen['source_freeze_sha256']
+        seal=folder/'test_opened.json';assert seal.is_file()
+        seal_sha=sha(seal)
+        assert json.loads(seal.read_text())['selected_frozen_sha256']==sha(folder/'selected_frozen.json')
+        arrays=dict(np.load(folder/'selected_model.npz',allow_pickle=False))
+        inference=load('_control_classifier_inference',benchmark/'depth_person_classifier/inference.py')
+        synthetic=dict(depth=np.linspace(-1,1,90,dtype=np.float32).reshape(3,30),lidar=np.zeros((3,8),dtype=np.float32),lidar_mask=np.array([True,False,True]))
+        logits=inference.numpy_logits(synthetic,arrays,frozen['hidden'],frozen['modality'])
+        assert sha(seal)==seal_sha
     result['engine_bindings']=engines
-    folder=benchmark/'depth_person_classifier/reports'
-    frozen=json.loads((folder/'selected_frozen.json').read_text())
-    for name,key in [('selected_model.npz','model_sha256'),('selected_model.pt','torch_weights_sha256'),('training.json','training_sha256')]:
-        assert sha(folder/name)==frozen[key]
-    assert sha(benchmark/'depth_person_classifier/frozen.json')==frozen['source_freeze_sha256']
-    seal=folder/'test_opened.json';assert seal.is_file()
-    seal_sha=sha(seal)
-    assert json.loads(seal.read_text())['selected_frozen_sha256']==sha(folder/'selected_frozen.json')
-    arrays=dict(np.load(folder/'selected_model.npz',allow_pickle=False))
-    inference=load('_control_classifier_inference',benchmark/'depth_person_classifier/inference.py')
-    synthetic=dict(depth=np.linspace(-1,1,90,dtype=np.float32).reshape(3,30),lidar=np.zeros((3,8),dtype=np.float32),lidar_mask=np.array([True,False,True]))
-    logits=inference.numpy_logits(synthetic,arrays,frozen['hidden'],frozen['modality'])
     assert logits.shape==(3,) and np.isfinite(logits).all()
     result['classifier']=dict(status='PASS',candidate=frozen['candidate'],threshold=frozen['threshold'],model_sha256=frozen['model_sha256'],test_seal_sha256=seal_sha,
                               synthetic_rows=3,logits_sha256=hashlib.sha256(logits.tobytes()).hexdigest(),training_run=False,held_out_data_opened=False,test_evaluation_run=False)
@@ -80,7 +93,6 @@ def main():
         rows.append(tracker.update((i+1)*100_000_000,[detection],[0.,0.,0.]))
     assert all(len(row)==1 for row in rows) and rows[-1][0]['confirmed']
     result['dynamic_identity_tracker']=dict(status='PASS',synthetic_frames=4,output_sha256=hashlib.sha256(json.dumps(rows,sort_keys=True).encode()).hexdigest())
-    assert sha(seal)==seal_sha
     result['trace']=dict(status='PASS',reads=sorted(reads),blocked_events=denied,report_snapshots_executed=False)
     active=False
     args.output.parent.mkdir(parents=True,exist_ok=True)
