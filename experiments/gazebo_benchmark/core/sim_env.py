@@ -38,10 +38,12 @@ def cleanup_all(sleep_sec: float = 2.0):
 
 def create_corridor_scenario_json(
     scen_file: str, seed: int, persona: str,
-    start_x: float = -7.0, start_y: float = 0.0, end_x: float = -15.0
+    start_x: float = -7.0, start_y: float = 0.0, end_x: float = -15.0,
+    v_human: float = None
 ) -> str:
     """Writes a single-human corridor scenario JSON file and returns its path."""
-    v_human = 1.05 if persona == "H1" else 1.15
+    if v_human is None:
+        v_human = 1.05 if persona == "H1" else 1.15
     scen_data = {
         "episode_id": seed,
         "corridor_mode": True,
@@ -68,7 +70,7 @@ def create_corridor_scenario_json(
 
 def patch_corridor_world_sdf(
     base_sdf_path: str, out_sdf_path: str,
-    seed: int, scen_file: str, rtf: float = 1.0
+    seed: int, scen_file: str, rtf: float = 1.0, proxy_z: str = "0.875"
 ) -> str:
     """Patches corridor SDF world with RTF, seed, scenario path, and human starting pose."""
     with open(base_sdf_path, "r") as f:
@@ -87,7 +89,6 @@ def patch_corridor_world_sdf(
     if f"<seed>{seed}</seed>" not in sdf:
         sdf = re.sub(r'<seed>\d+</seed>', f'<seed>{seed}</seed>', sdf)
 
-    proxy_z = "0.875"
     sdf = re.sub(
         r'<actor name=\"human_01_visual\">\s*<pose>.*?</pose>',
         '<actor name=\"human_01_visual\">\n      <pose>-7.0 0.0 0.0 0 0 3.14159</pose>',

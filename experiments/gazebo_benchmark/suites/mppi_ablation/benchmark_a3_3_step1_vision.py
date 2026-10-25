@@ -21,177 +21,25 @@ Changes applied (Step 1):
 import os
 import sys
 import time
-import signal
 import subprocess
 import json
-import re
 import argparse
 import numpy as np
 
-import rclpy
 
 from pathlib import Path as FilePath
 
 ROOT_DIR = str(FilePath(__file__).resolve().parents[4])
 sys.path.insert(0, ROOT_DIR)
 from experiments.gazebo_benchmark.core.mppi_monitor import Step1InteractionMonitor
+from experiments.gazebo_benchmark.core.mppi_trial import run_trial
 OUTPUT_JSON = os.path.join(ROOT_DIR, "experiments/gazebo_benchmark/results/mppi_ablation/a3_3_step1_vision_results.json")
 BASELINE_JSON = os.path.join(ROOT_DIR, "experiments/gazebo_benchmark/results/correctness_a3/a3_3_rtf1_real_interaction_results.json")
-ROBOT_MODEL_SDF = os.path.join(ROOT_DIR, "experiments/gazebo_benchmark/configs/robot_models/model_mecanum_step1.sdf")
-NAV2_PARAMS_YAML = os.path.join(ROOT_DIR, "experiments/gazebo_benchmark/configs/nav2_mppi/nav2_mppi_step1.yaml")
 
 
 def run_single_trial(corridor_type: str, persona: str, seed: int, v_human: float, domain_id: int, out_json: str):
-    gen_dir = os.path.join(ROOT_DIR, "experiments/gazebo_benchmark/configs/generated")
-    os.makedirs(gen_dir, exist_ok=True)
-
-    # 1. Generate scenario JSON
-    scen_file = os.path.join(gen_dir, f"scenario_a3_3_step1_{corridor_type}_{persona}_{seed}.json")
-    scen_data = {
-        "episode_id": seed,
-        "corridor_mode": True,
-        "humans": [
-            {
-                "id": 1,
-                "name": "human_01",
-                "mode": "autonomous",
-                "speed": v_human,
-                "max_speed": v_human,
-                "persona": persona,
-                "loop": False,
-                "wait_for_robot": True,
-                "start": {"x": -7.0, "y": 0.0, "yaw": 3.14159265},
-                "waypoints": [[-7.0, 0.0], [-15.0, 0.0]]
-            }
-        ]
-    }
-    with open(scen_file, "w") as f:
-        json.dump(scen_data, f, indent=2)
-
-    # 2. Patch SDF world: real_time_factor = 1.0!
-    base_sdf_path = os.path.join(ROOT_DIR, f"src/custom_corridor/worlds/corridor_{corridor_type}.sdf")
-    with open(base_sdf_path, "r") as f:
-        sdf = f.read()
-
-    sdf = re.sub(r'<real_time_factor>.*?</real_time_factor>', '<real_time_factor>1.0</real_time_factor>', sdf)
-    sdf = re.sub(
-        r'<randomize_politeness>.*?</randomize_politeness>',
-        f'<randomize_politeness>false</randomize_politeness>\n      <seed>{seed}</seed>\n      <default_scenario_file>{scen_file}</default_scenario_file>',
-        sdf
-    )
-    if f"<seed>{seed}</seed>" not in sdf:
-        sdf = re.sub(r'<seed>\d+</seed>', f'<seed>{seed}</seed>', sdf)
-
-    proxy_z = "0.80" if corridor_type == "090" else "0.875"
-    sdf = re.sub(r'<actor name=\"human_01_visual\">\s*<pose>.*?</pose>', '<actor name=\"human_01_visual\">\n      <pose>-7.0 0.0 0.0 0 0 3.14159</pose>', sdf)
-    sdf = re.sub(r'<model name=\"human_01_proxy\">\s*<pose>.*?</pose>', f'<model name=\"human_01_proxy\">\n      <pose>-7.0 0.0 {proxy_z} 0 0 3.14159</pose>', sdf)
-
-    trial_sdf = os.path.join(gen_dir, f"world_a3_3_step1_{corridor_type}_{persona}_{seed}.sdf")
-    with open(trial_sdf, "w") as f:
-        f.write(sdf)
-
-    corridor_models = os.path.join(ROOT_DIR, "install/custom_corridor/share/custom_corridor/models")
-    plugin_share = os.path.join(ROOT_DIR, "install/custom_corridor_plugins/share/custom_corridor_plugins")
-    plugin_lib = os.path.dirname(os.path.dirname(plugin_share)) + "/lib"
-
-    env = os.environ.copy()
-    env["GALLIUM_DRIVER"] = "d3d12"
-    env["MESA_D3D12_DEFAULT_ADAPTER_NAME"] = "NVIDIA"
-    env["GZ_SIM_RESOURCE_PATH"] = f"{corridor_models}:{os.environ.get('GZ_SIM_RESOURCE_PATH', '')}"
-    env["GZ_SIM_SYSTEM_PLUGIN_PATH"] = f"{plugin_lib}:{os.environ.get('GZ_SIM_SYSTEM_PLUGIN_PATH', '')}"
-    env["ROS_DOMAIN_ID"] = str(domain_id)
-    partition = f"a3_3_step1_{corridor_type}_{persona}_{seed}_{domain_id}"
-    env["GZ_PARTITION"] = partition
-
-    all_procs = []
-    nav2_log_path = f"/tmp/nav2_a3_3_step1_{corridor_type}_{persona}_{seed}_{domain_id}.log"
-    log_fp = open(nav2_log_path, "w")
-
-    width_arg = "0.90" if corridor_type == "090" else "1.20"
-    map_arg = f"corridor_{corridor_type}"
-    corridor_half_w = 0.45 if corridor_type == "090" else 0.60
-
-    result = {}
-    try:
-        # Launch Sim with Step 1 Robot Model (8m Lidar)
-        sim_cmd = [
-            "ros2", "launch", "custom_corridor", "corridor_tb3.launch.py",
-            f"width:={width_arg}",
-            f"custom_world:={trial_sdf}",
-            f"custom_robot_model:={ROBOT_MODEL_SDF}",
-            "obstacle:=human",
-            "gui:=false", "rviz:=false",
-            "robot_model:=mecanum",
-            "x:=-13.0", "y:=0.0", "yaw:=0.0"
-        ]
-        gz_p = subprocess.Popen(sim_cmd, env=env, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, preexec_fn=os.setsid)
-        all_procs.append(gz_p)
-        time.sleep(4.5)
-
-        # Launch Nav2 with Step 1 Config (10x10m costmap, 7m obstacle_max_range)
-        nav2_cmd = [
-            "ros2", "launch", "custom_corridor", "nav2_corridor.launch.py",
-            "controller:=mppi",
-            f"params_file:={NAV2_PARAMS_YAML}",
-            f"map:={map_arg}",
-            "robot_model:=mecanum"
-        ]
-        nav2_p = subprocess.Popen(nav2_cmd, env=env, stdout=log_fp, stderr=subprocess.STDOUT, text=True, preexec_fn=os.setsid)
-        all_procs.append(nav2_p)
-
-        t0 = time.time()
-        nav2_ready = False
-        while time.time() - t0 < 60.0:
-            if os.path.exists(nav2_log_path):
-                with open(nav2_log_path) as fp:
-                    content = fp.read()
-                    if content.count("Managed nodes are active") >= 2:
-                        nav2_ready = True
-                        break
-            time.sleep(0.4)
-
-        if not nav2_ready:
-            result = {"error": "nav2_activation_timeout", "goal_reached": False}
-        else:
-            time.sleep(1.0)
-            os.environ["ROS_DOMAIN_ID"] = str(domain_id)
-            os.environ["GZ_PARTITION"] = partition
-            rclpy.init()
-            monitor = Step1InteractionMonitor(target_gx=-7.0, target_gy=0.0, max_duration_s=25.0, corridor_half_width=corridor_half_w)
-            result = monitor.run_navigation()
-            monitor.destroy_node()
-            rclpy.shutdown()
-
-    finally:
-        for p in all_procs:
-            try: os.killpg(os.getpgid(p.pid), signal.SIGTERM)
-            except Exception: pass
-        time.sleep(1.0)
-        for p in all_procs:
-            try: os.killpg(os.getpgid(p.pid), signal.SIGKILL)
-            except Exception: pass
-        log_fp.close()
-        subprocess.run(["pkill", "-9", "-f", f"domain_id={domain_id}|gz sim|corridor_tb3|nav2_corridor"], stderr=subprocess.DEVNULL)
-        time.sleep(1.0)
-
-    result["seed"] = seed
-    result["corridor"] = f"corridor_{corridor_type}"
-    result["corridor_width_m"] = 0.90 if corridor_type == "090" else 1.20
-    result["persona"] = persona
-    result["v_human"] = v_human
-    result["rtf_setting"] = 1.0
-    result["step"] = "Step 1: Sensing Horizon (8m Lidar, 7m Obstacle Range, 10x10m Costmap)"
-
-    with open(out_json, "w") as f:
-        json.dump(result, f, indent=2)
-
-
-def cleanup_all():
-    subprocess.run(
-        ["pkill", "-9", "-f", "ros2|custom_corridor|corridor_tb3|nav2_corridor|goal_pose_bridge|static_transform_publisher|robot_state_publisher|controller_server|planner_server|bt_navigator|behavior_server|waypoint_follower|lifecycle_manager|map_server|amcl|parameter_bridge|gz sim"],
-        stderr=subprocess.DEVNULL
-    )
-    time.sleep(1.5)
+    return run_trial(ROOT_DIR, "1", corridor_type, persona, seed, v_human, domain_id, out_json,
+                     monitor_factory=Step1InteractionMonitor)
 
 
 def aggregate_and_report(trials: list):
@@ -323,7 +171,6 @@ def main():
     print("=" * 80, flush=True)
 
     if not args.aggregate_only:
-        cleanup_all()
         runs_to_do = []
         for c in cells:
             c_type = c["corridor"]
@@ -349,7 +196,6 @@ def main():
                     pass
 
             print(f"\n[{idx}/{len(runs_to_do)}] Running Corridor {c_type}, Persona {persona}, Seed {seed} (v_human={v_h:.3f} m/s)...", flush=True)
-            cleanup_all()
             cmd = [
                 sys.executable, __file__,
                 "--run_single",
@@ -357,7 +203,7 @@ def main():
                 "--persona", str(persona),
                 "--seed", str(seed),
                 "--v_human", str(v_h),
-                "--domain_id", "85",
+                "--domain_id", str(args.domain_id),
                 "--out_json", str(out_f)
             ]
             t_s = time.time()
@@ -365,7 +211,6 @@ def main():
                 subprocess.run(cmd, check=True)
             except Exception as e:
                 print(f"[ERROR] Trial failed for seed {seed}: {e}", flush=True)
-            cleanup_all()
             t_dur = time.time() - t_s
             if os.path.exists(out_f):
                 with open(out_f) as fp:
