@@ -11,7 +11,6 @@ from pathlib import Path
 import sys
 import os
 import time
-import signal
 import subprocess
 import json
 import numpy as np
@@ -25,19 +24,21 @@ import gz.msgs.boolean_pb2 as boolean_pb2
 sys.path.insert(0, str(Path(__file__).resolve().parents[4]))
 from experiments.gazebo_benchmark.core.sim_env import build_benchmark_env, spawn_benchmark_robot, start_parameter_bridge
 from experiments.gazebo_benchmark.core.trajectory import PreciseTrajectoryRecorder
+from experiments.gazebo_benchmark.core.mppi_trial import scoped_processes
 
 
-def run_single_trial(run_idx, world_file, robot_file, root_dir, duration_s=20.0):
+@scoped_processes
+def run_single_trial(run_idx, world_file, robot_file, root_dir, duration_s=20.0, *, _processes=None):
     print(f"\n[RUN {run_idx + 1}/5] Launching Gazebo Harmonic (Paused mode)...", flush=True)
     bridge_config = os.path.join(root_dir, "src/custom_corridor/config/turtlebot3_burger_bridge.yaml")
     env = build_benchmark_env(root_dir, turtlebot3=True)
 
-    gz_proc = subprocess.Popen(["gz", "sim", "-s", world_file], env=env, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, preexec_fn=os.setsid)
+    gz_proc = _processes.popen(["gz", "sim", "-s", world_file], env=env, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, preexec_fn=os.setsid)
     time.sleep(3.5)
 
-    spawn_benchmark_robot(robot_file, env)
+    spawn_benchmark_robot(robot_file, env, processes=_processes)
 
-    bridge_proc = start_parameter_bridge(bridge_config, env)
+    bridge_proc = start_parameter_bridge(bridge_config, env, processes=_processes)
     time.sleep(1.5)
 
     rclpy.init()
@@ -53,11 +54,7 @@ def run_single_trial(run_idx, world_file, robot_file, root_dir, duration_s=20.0)
     recorder.destroy_node()
     rclpy.shutdown()
 
-    for p in [bridge_proc, gz_proc]:
-        try:
-            os.killpg(os.getpgid(p.pid), signal.SIGKILL)
-        except Exception:
-            pass
+    _processes.stop()
 
     time.sleep(1.0)
     print(f"  Run {run_idx + 1} finished: {len(traj)} points recorded.", flush=True)

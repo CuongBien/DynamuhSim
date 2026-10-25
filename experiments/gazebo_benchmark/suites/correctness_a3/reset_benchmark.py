@@ -10,7 +10,6 @@ from pathlib import Path
 import sys
 import os
 import time
-import signal
 import subprocess
 import json
 import numpy as np
@@ -22,16 +21,18 @@ import gz.msgs10.pose_pb2 as pose_pb2
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[4]))
 from experiments.gazebo_benchmark.core.sim_env import build_benchmark_env
+from experiments.gazebo_benchmark.core.mppi_trial import scoped_processes
 
 
-def benchmark_process_restart(world_file, root_dir="/home/cuongbien/DynamuhSim", n_trials=3):
+@scoped_processes
+def benchmark_process_restart(world_file, root_dir="/home/cuongbien/DynamuhSim", n_trials=3, *, _processes=None):
     print("\n--- Measuring Method A: Process Restart (Cold Restart) ---")
     env = build_benchmark_env(root_dir, turtlebot3=True)
 
     restart_times = []
     for i in range(n_trials):
         t0 = time.time()
-        p = subprocess.Popen(["gz", "sim", "-r", "-s", world_file], env=env, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, preexec_fn=os.setsid)
+        p = _processes.popen(["gz", "sim", "-r", "-s", world_file], env=env, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, preexec_fn=os.setsid)
         # Wait until /stats topic is alive
         alive = False
         while time.time() - t0 < 10.0:
@@ -45,22 +46,18 @@ def benchmark_process_restart(world_file, root_dir="/home/cuongbien/DynamuhSim",
         restart_times.append(t_restart)
         print(f"  Trial {i+1}: {t_restart:.2f}s (Clock Ready)")
 
-        try:
-            os.killpg(os.getpgid(p.pid), signal.SIGTERM)
-            time.sleep(0.2)
-            os.killpg(os.getpgid(p.pid), signal.SIGKILL)
-        except Exception:
-            pass
+        _processes.stop()
         time.sleep(1.0)
 
     return restart_times
 
 
-def benchmark_service_and_teleport(world_file, root_dir="/home/cuongbien/DynamuhSim", n_trials=10):
+@scoped_processes
+def benchmark_service_and_teleport(world_file, root_dir="/home/cuongbien/DynamuhSim", n_trials=10, *, _processes=None):
     print("\n--- Measuring Method B & C: In-Process Reset / Teleport ---")
     env = build_benchmark_env(root_dir, turtlebot3=True)
 
-    p = subprocess.Popen(["gz", "sim", "-r", "-s", world_file], env=env, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, preexec_fn=os.setsid)
+    p = _processes.popen(["gz", "sim", "-r", "-s", world_file], env=env, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, preexec_fn=os.setsid)
     time.sleep(4.0)
 
     node = gzt.Node()
@@ -95,12 +92,7 @@ def benchmark_service_and_teleport(world_file, root_dir="/home/cuongbien/Dynamuh
             teleport_times.append(dt)
         time.sleep(0.02)
 
-    try:
-        os.killpg(os.getpgid(p.pid), signal.SIGTERM)
-        time.sleep(0.2)
-        os.killpg(os.getpgid(p.pid), signal.SIGKILL)
-    except Exception:
-        pass
+    _processes.stop()
 
     return service_times, teleport_times
 

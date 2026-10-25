@@ -14,7 +14,6 @@ from pathlib import Path
 import sys
 import os
 import time
-import signal
 import subprocess
 import json
 import numpy as np
@@ -28,6 +27,7 @@ import gz.msgs.boolean_pb2 as boolean_pb2
 sys.path.insert(0, str(Path(__file__).resolve().parents[4]))
 from experiments.gazebo_benchmark.core.sim_env import build_benchmark_env, spawn_benchmark_robot, start_parameter_bridge
 from experiments.gazebo_benchmark.core.trajectory import SynchronizedTrajectoryCollector
+from experiments.gazebo_benchmark.core.mppi_trial import scoped_processes
 
 
 def control_sim(action="unpause", world_name="corridor_0.90"):
@@ -44,20 +44,21 @@ def control_sim(action="unpause", world_name="corridor_0.90"):
     node.request(service, req, world_control_pb2.WorldControl, boolean_pb2.Boolean, 3000)
 
 
-def run_single_launch(run_idx, world_file, robot_file, root_dir="/home/cuongbien/DynamuhSim", duration_s=20.0):
+@scoped_processes
+def run_single_launch(run_idx, world_file, robot_file, root_dir="/home/cuongbien/DynamuhSim", duration_s=20.0, *, _processes=None):
     print(f"\n[LAUNCH {run_idx + 1}/5] Starting Gazebo Harmonic (Paused mode)...")
     bridge_config = os.path.join(root_dir, "src/custom_corridor/config/turtlebot3_burger_bridge.yaml")
     env = build_benchmark_env(root_dir, turtlebot3=True)
 
     # 1. Start Gazebo in paused mode (without -r)
-    gz_proc = subprocess.Popen(["gz", "sim", "-s", world_file], env=env, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, preexec_fn=os.setsid)
+    gz_proc = _processes.popen(["gz", "sim", "-s", world_file], env=env, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, preexec_fn=os.setsid)
     time.sleep(3.5)
 
     # 2. Spawn robot while paused
-    spawn_benchmark_robot(robot_file, env)
+    spawn_benchmark_robot(robot_file, env, processes=_processes)
 
     # 3. Start ROS 2 parameter bridge
-    bridge_proc = start_parameter_bridge(bridge_config, env)
+    bridge_proc = start_parameter_bridge(bridge_config, env, processes=_processes)
     time.sleep(1.5)
 
     # 4. Prepare recorder node
@@ -73,13 +74,7 @@ def run_single_launch(run_idx, world_file, robot_file, root_dir="/home/cuongbien
     rclpy.shutdown()
 
     # 7. Teardown
-    for p in [bridge_proc, gz_proc]:
-        try:
-            os.killpg(os.getpgid(p.pid), signal.SIGTERM)
-            time.sleep(0.2)
-            os.killpg(os.getpgid(p.pid), signal.SIGKILL)
-        except Exception:
-            pass
+    _processes.stop()
     time.sleep(1.0)
     print(f"  Launch {run_idx + 1} completed: {len(traj)} trajectory points recorded.")
     return traj
@@ -122,19 +117,20 @@ def test_seed_determinism_5runs(world_file, robot_file, root_dir):
     }
 
 
-def test_in_process_reset_leakage(world_file, robot_file, root_dir, n_episodes=3, duration_s=20.0):
+@scoped_processes
+def test_in_process_reset_leakage(world_file, robot_file, root_dir, n_episodes=3, duration_s=20.0, *, _processes=None):
     print("\n" + "=" * 75)
     print("TEST 2: IN-PROCESS RESET LEAKAGE (3 Consecutive Episodes, Single Gazebo Process)")
     print("=" * 75)
     bridge_config = os.path.join(root_dir, "src/custom_corridor/config/turtlebot3_burger_bridge.yaml")
     env = build_benchmark_env(root_dir, turtlebot3=True)
 
-    gz_proc = subprocess.Popen(["gz", "sim", "-s", world_file], env=env, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, preexec_fn=os.setsid)
+    gz_proc = _processes.popen(["gz", "sim", "-s", world_file], env=env, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, preexec_fn=os.setsid)
     time.sleep(3.5)
 
-    spawn_benchmark_robot(robot_file, env)
+    spawn_benchmark_robot(robot_file, env, processes=_processes)
 
-    bridge_proc = start_parameter_bridge(bridge_config, env)
+    bridge_proc = start_parameter_bridge(bridge_config, env, processes=_processes)
     time.sleep(1.5)
 
     ep_trajectories = []
@@ -158,13 +154,7 @@ def test_in_process_reset_leakage(world_file, robot_file, root_dir, n_episodes=3
 
     finally:
         rclpy.shutdown()
-        for p in [bridge_proc, gz_proc]:
-            try:
-                os.killpg(os.getpgid(p.pid), signal.SIGTERM)
-                time.sleep(0.2)
-                os.killpg(os.getpgid(p.pid), signal.SIGKILL)
-            except Exception:
-                pass
+        _processes.stop()
 
     min_len = min(len(t) for t in ep_trajectories)
     ref = ep_trajectories[0][:min_len]

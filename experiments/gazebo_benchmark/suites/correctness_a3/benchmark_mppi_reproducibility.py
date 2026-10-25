@@ -15,7 +15,6 @@ from pathlib import Path
 import sys
 import os
 import time
-import signal
 import subprocess
 import json
 import numpy as np
@@ -30,6 +29,7 @@ import gz.msgs.stringmsg_pb2 as stringmsg_pb2
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[4]))
 from experiments.gazebo_benchmark.core.sim_env import build_benchmark_env, spawn_benchmark_robot, start_parameter_bridge
+from experiments.gazebo_benchmark.core.mppi_trial import scoped_processes
 
 
 class MPPITrajectoryRecorder(Node):
@@ -83,7 +83,8 @@ class MPPITrajectoryRecorder(Node):
         return self.trajectory, self.cmd_history
 
 
-def run_single_mppi_run(trial_idx: int, mode_name: str, params_file: str, root_dir: str, duration_s=15.0):
+@scoped_processes
+def run_single_mppi_run(trial_idx: int, mode_name: str, params_file: str, root_dir: str, duration_s=15.0, *, _processes=None):
     print(f"\n  [{mode_name.upper()} - RUN {trial_idx + 1}/3] Cold starting Gazebo & Nav2 MPPI...", flush=True)
 
     world_file = os.path.join(root_dir, "experiments/gazebo_benchmark/configs/generated/world_n5_actor_and_cylinder.sdf")
@@ -98,23 +99,19 @@ def run_single_mppi_run(trial_idx: int, mode_name: str, params_file: str, root_d
     env['ROS_DOMAIN_ID'] = domain_id
     env['GZ_PARTITION'] = partition
 
-    all_procs = []
 
     try:
         # 1. Start Gazebo Sim
-        gz_p = subprocess.Popen(["gz", "sim", "-r", "-s", world_file], env=env, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, preexec_fn=os.setsid)
-        all_procs.append(gz_p)
+        gz_p = _processes.popen(["gz", "sim", "-r", "-s", world_file], env=env, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, preexec_fn=os.setsid)
         time.sleep(3.5)
 
         # 2. Spawn robot Burger at (0.0, 0.0)
-        spawn_benchmark_robot(robot_file, env, x="0.0")
+        spawn_benchmark_robot(robot_file, env, x="0.0", processes=_processes)
 
         # 3. Bridges & Robot State Publisher
-        bp = start_parameter_bridge(bridge_config, env)
-        all_procs.append(bp)
+        bp = start_parameter_bridge(bridge_config, env, processes=_processes)
 
-        rsp = subprocess.Popen(["ros2", "run", "robot_state_publisher", "robot_state_publisher", urdf_file, "--ros-args", "-p", "use_sim_time:=true"], env=env, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, preexec_fn=os.setsid)
-        all_procs.append(rsp)
+        rsp = _processes.popen(["ros2", "run", "robot_state_publisher", "robot_state_publisher", urdf_file, "--ros-args", "-p", "use_sim_time:=true"], env=env, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, preexec_fn=os.setsid)
         time.sleep(2.0)
 
         # 4. Nav2 stack with MPPI
@@ -126,8 +123,7 @@ def run_single_mppi_run(trial_idx: int, mode_name: str, params_file: str, root_d
             f"params_file:={params_file}",
             "map:=corridor_090"
         ]
-        nav2_p = subprocess.Popen(nav2_cmd, env=env, stdout=nav2_log, stderr=subprocess.STDOUT, text=True, preexec_fn=os.setsid)
-        all_procs.append(nav2_p)
+        nav2_p = _processes.popen(nav2_cmd, env=env, stdout=nav2_log, stderr=subprocess.STDOUT, text=True, preexec_fn=os.setsid)
 
         # 5. Wait for lifecycle_manager_navigation
         t0 = time.time()
@@ -164,11 +160,7 @@ def run_single_mppi_run(trial_idx: int, mode_name: str, params_file: str, root_d
         rclpy.shutdown()
 
     finally:
-        for p in all_procs:
-            try:
-                os.killpg(os.getpgid(p.pid), signal.SIGKILL)
-            except Exception:
-                pass
+        _processes.stop()
         time.sleep(1.0)
 
     print(f"    Finished: {len(traj)} trajectory points recorded, {len(cmds)} cmd_vel commands issued. Final pose: ({traj[-1][1]:.3f}, {traj[-1][2]:.3f})", flush=True)

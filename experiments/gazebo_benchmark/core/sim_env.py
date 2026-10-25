@@ -110,16 +110,18 @@ def build_sim_env(root_dir: str, domain_id: int, partition: str) -> Dict[str, st
     return env
 
 
-def spawn_benchmark_robot(robot_file, env, *, x="3.0"):
-    return subprocess.run(
+def spawn_benchmark_robot(robot_file, env, *, x="3.0", processes=None):
+    run = subprocess.run if processes is None else processes.run
+    return run(
         ["ros2", "run", "ros_gz_sim", "create", "-name", "burger", "-file", robot_file,
          "-x", x, "-y", "0.0", "-z", "0.01", "-Y", "0.0"],
         env=env, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, timeout=10,
     )
 
 
-def start_parameter_bridge(bridge_config, env):
-    return subprocess.Popen(
+def start_parameter_bridge(bridge_config, env, *, processes=None):
+    popen = subprocess.Popen if processes is None else processes.popen
+    return popen(
         ["ros2", "run", "ros_gz_bridge", "parameter_bridge", "--ros-args", "-p", f"config_file:={bridge_config}"],
         env=env, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, preexec_fn=os.setsid,
     )

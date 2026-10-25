@@ -9,7 +9,6 @@ from pathlib import Path
 import sys
 import os
 import time
-import signal
 import subprocess
 import json
 import re
@@ -22,7 +21,7 @@ import gz.msgs.stringmsg_pb2 as stringmsg_pb2
 sys.path.insert(0, str(Path(__file__).resolve().parents[4]))
 from experiments.gazebo_benchmark.core.sim_env import build_benchmark_env, spawn_benchmark_robot, start_parameter_bridge
 from experiments.gazebo_benchmark.core.benchmark_world_generator import BenchmarkWorldGenerator
-
+from experiments.gazebo_benchmark.core.mppi_trial import scoped_processes
 
 
 def control_sim(action="unpause", partition=None, world_name="corridor_0.90"):
@@ -37,7 +36,8 @@ def control_sim(action="unpause", partition=None, world_name="corridor_0.90"):
     subprocess.run(cmd, env=env, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
 
-def measure_true_uncapped_rtf(root_dir):
+@scoped_processes
+def measure_true_uncapped_rtf(root_dir, *, _processes=None):
     print("\n" + "=" * 75)
     print("EXPERIMENT 1: MEASURING TRUE UNCAPPED RTF (<real_time_factor>0.0 in SDF)")
     print("=" * 75, flush=True)
@@ -52,7 +52,7 @@ def measure_true_uncapped_rtf(root_dir):
     bridge_config = os.path.join(root_dir, "src/custom_corridor/config/turtlebot3_burger_bridge.yaml")
     env = build_benchmark_env(root_dir, turtlebot3=True)
 
-    gz_proc = subprocess.Popen(["gz", "sim", "-s", "-r", "-z", "5000", uncapped_world], env=env, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, preexec_fn=os.setsid)
+    gz_proc = _processes.popen(["gz", "sim", "-s", "-r", "-z", "5000", uncapped_world], env=env, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, preexec_fn=os.setsid)
     time.sleep(3.5)
 
     # Measure clock over 10s of wall-clock time
@@ -73,7 +73,7 @@ def measure_true_uncapped_rtf(root_dir):
     t1_sim = get_clock()
     t1_wall = time.time()
 
-    os.killpg(os.getpgid(gz_proc.pid), signal.SIGKILL)
+    _processes.stop()
     time.sleep(1.0)
 
     true_uncapped_rtf = (t1_sim - t0_sim) / (t1_wall - t0_wall)
@@ -82,7 +82,8 @@ def measure_true_uncapped_rtf(root_dir):
     return float(true_uncapped_rtf)
 
 
-def test_concurrent_4instances_determinism_n24(root_dir):
+@scoped_processes
+def test_concurrent_4instances_determinism_n24(root_dir, *, _processes=None):
     print("\n" + "=" * 75)
     print("EXPERIMENT 2: 4 CONCURRENT INSTANCES AT HEAVY CROWD N=24 HUMANS (Seed=42)")
     print("Testing whether concurrent process execution under heavy CPU/GPU load breaks determinism")
@@ -96,7 +97,6 @@ def test_concurrent_4instances_determinism_n24(root_dir):
     bridge_config = os.path.join(root_dir, "src/custom_corridor/config/turtlebot3_burger_bridge.yaml")
     base_env = build_benchmark_env(root_dir, turtlebot3=True)
 
-    instances_procs = []
     num_instances = 4
 
     print(f"Launching {num_instances} Gazebo instances simultaneously in Paused mode...")
@@ -105,8 +105,7 @@ def test_concurrent_4instances_determinism_n24(root_dir):
         env_i["GZ_PARTITION"] = f"bench_part_{i}"
         env_i["ROS_DOMAIN_ID"] = str(100 + i)
 
-        p = subprocess.Popen(["gz", "sim", "-s", world_n24], env=env_i, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, preexec_fn=os.setsid)
-        instances_procs.append(p)
+        p = _processes.popen(["gz", "sim", "-s", world_n24], env=env_i, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, preexec_fn=os.setsid)
 
     time.sleep(4.0)
 
@@ -116,10 +115,9 @@ def test_concurrent_4instances_determinism_n24(root_dir):
         env_i["GZ_PARTITION"] = f"bench_part_{i}"
         env_i["ROS_DOMAIN_ID"] = str(100 + i)
 
-        spawn_benchmark_robot(robot_file, env_i)
+        spawn_benchmark_robot(robot_file, env_i, processes=_processes)
 
-        bridge_p = start_parameter_bridge(bridge_config, env_i)
-        instances_procs.append(bridge_p)
+        bridge_p = start_parameter_bridge(bridge_config, env_i, processes=_processes)
 
     time.sleep(2.0)
 
@@ -167,11 +165,7 @@ def test_concurrent_4instances_determinism_n24(root_dir):
 
     # Teardown
     print("Terminating 4 concurrent instances...")
-    for p in instances_procs:
-        try:
-            os.killpg(os.getpgid(p.pid), signal.SIGKILL)
-        except Exception:
-            pass
+    _processes.stop()
 
     print("Analyzing concurrency determinism across 4 instances at N=24...")
     # Compute pairwise error among concurrent instances

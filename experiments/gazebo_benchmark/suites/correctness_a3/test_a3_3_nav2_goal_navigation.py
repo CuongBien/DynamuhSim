@@ -15,7 +15,6 @@ import os
 from pathlib import Path
 import sys
 import time
-import signal
 import subprocess
 import json
 import argparse
@@ -34,6 +33,7 @@ import gz.msgs.stringmsg_pb2 as stringmsg_pb2
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[4]))
 from experiments.gazebo_benchmark.core.sim_env import build_benchmark_env
+from experiments.gazebo_benchmark.core.mppi_trial import scoped_processes
 
 
 class Nav2GoalTester(Node):
@@ -226,7 +226,8 @@ class Nav2GoalTester(Node):
         }
 
 
-def run_single_trial(run_idx: int, root_dir: str):
+@scoped_processes
+def run_single_trial(run_idx: int, root_dir: str, *, _processes=None):
     print(f"\n========================================================")
     print(f">>> [RUN {run_idx + 1}/10] Testing Nav2 MPPI Goal Navigation...")
     print(f"========================================================")
@@ -240,7 +241,6 @@ def run_single_trial(run_idx: int, root_dir: str):
     partition = f"nav2_a3_3_{run_idx}"
     env["GZ_PARTITION"] = partition
 
-    all_procs = []
     nav2_log_path = f"/tmp/nav2_a3_3_run_{run_idx}.log"
     if os.path.exists(nav2_log_path):
         os.remove(nav2_log_path)
@@ -256,8 +256,7 @@ def run_single_trial(run_idx: int, root_dir: str):
             "robot_model:=mecanum",
             "x:=-13.0", "y:=0.0", "yaw:=0.0"
         ]
-        gz_p = subprocess.Popen(sim_cmd, env=env, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, preexec_fn=os.setsid)
-        all_procs.append(gz_p)
+        gz_p = _processes.popen(sim_cmd, env=env, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, preexec_fn=os.setsid)
         time.sleep(5.0)
 
         # 2. Launch Nav2 stack
@@ -269,8 +268,7 @@ def run_single_trial(run_idx: int, root_dir: str):
             "map:=corridor_090",
             "robot_model:=mecanum"
         ]
-        nav2_p = subprocess.Popen(nav2_cmd, env=env, stdout=nav2_log_file, stderr=subprocess.STDOUT, text=True, preexec_fn=os.setsid)
-        all_procs.append(nav2_p)
+        nav2_p = _processes.popen(nav2_cmd, env=env, stdout=nav2_log_file, stderr=subprocess.STDOUT, text=True, preexec_fn=os.setsid)
 
         # 3. Wait for Nav2 lifecycle manager to become active
         t0 = time.time()
@@ -302,13 +300,7 @@ def run_single_trial(run_idx: int, root_dir: str):
         rclpy.shutdown()
 
     finally:
-        for p in all_procs:
-            try:
-                os.killpg(os.getpgid(p.pid), signal.SIGTERM)
-                time.sleep(0.3)
-                os.killpg(os.getpgid(p.pid), signal.SIGKILL)
-            except Exception:
-                pass
+        _processes.stop()
         time.sleep(1.5)
 
     trial_out = f"/tmp/nav2_a3_3_run_{run_idx}_result.json"

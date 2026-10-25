@@ -32,7 +32,6 @@ import os
 from pathlib import Path
 import sys
 import time
-import signal
 import subprocess
 import json
 import re
@@ -49,6 +48,7 @@ from nav2_msgs.action import NavigateToPose
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[4]))
 from experiments.gazebo_benchmark.core.sim_env import build_benchmark_env
+from experiments.gazebo_benchmark.core.mppi_trial import scoped_processes
 
 
 class A33InteractionMonitor(Node):
@@ -256,7 +256,8 @@ class A33InteractionMonitor(Node):
         }
 
 
-def run_single_benchmark_trial(root_dir: str, corridor_type: str, persona: str, seed: int, v_human: float) -> dict:
+@scoped_processes
+def run_single_benchmark_trial(root_dir: str, corridor_type: str, persona: str, seed: int, v_human: float, *, _processes=None) -> dict:
     gen_dir = os.path.join(root_dir, "experiments/gazebo_benchmark/configs/generated")
     os.makedirs(gen_dir, exist_ok=True)
 
@@ -313,7 +314,6 @@ def run_single_benchmark_trial(root_dir: str, corridor_type: str, persona: str, 
     partition = f"a3_3_{corridor_type}_{persona}_{seed}"
     env["GZ_PARTITION"] = partition
 
-    all_procs = []
     nav2_log_path = f"/tmp/nav2_a3_3_{corridor_type}_{persona}_{seed}.log"
     if os.path.exists(nav2_log_path):
         os.remove(nav2_log_path)
@@ -335,8 +335,7 @@ def run_single_benchmark_trial(root_dir: str, corridor_type: str, persona: str, 
             "robot_model:=mecanum",
             "x:=-13.0", "y:=0.0", "yaw:=0.0"
         ]
-        gz_p = subprocess.Popen(sim_cmd, env=env, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, preexec_fn=os.setsid)
-        all_procs.append(gz_p)
+        gz_p = _processes.popen(sim_cmd, env=env, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, preexec_fn=os.setsid)
         time.sleep(4.5)
 
         # Launch Nav2
@@ -348,8 +347,7 @@ def run_single_benchmark_trial(root_dir: str, corridor_type: str, persona: str, 
             f"map:={map_arg}",
             "robot_model:=mecanum"
         ]
-        nav2_p = subprocess.Popen(nav2_cmd, env=env, stdout=nav2_log_file, stderr=subprocess.STDOUT, text=True, preexec_fn=os.setsid)
-        all_procs.append(nav2_p)
+        nav2_p = _processes.popen(nav2_cmd, env=env, stdout=nav2_log_file, stderr=subprocess.STDOUT, text=True, preexec_fn=os.setsid)
 
         t0 = time.time()
         nav2_ready = False
@@ -379,13 +377,7 @@ def run_single_benchmark_trial(root_dir: str, corridor_type: str, persona: str, 
         rclpy.shutdown()
 
     finally:
-        for p in all_procs:
-            try:
-                os.killpg(os.getpgid(p.pid), signal.SIGTERM)
-                time.sleep(0.3)
-                os.killpg(os.getpgid(p.pid), signal.SIGKILL)
-            except Exception:
-                pass
+        _processes.stop()
         time.sleep(1.5)
 
     result["seed"] = seed

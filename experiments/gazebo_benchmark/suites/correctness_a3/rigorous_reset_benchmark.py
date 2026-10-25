@@ -10,7 +10,6 @@ from pathlib import Path
 import sys
 import os
 import time
-import signal
 import subprocess
 import json
 import numpy as np
@@ -29,6 +28,7 @@ import gz.msgs10.pose_pb2 as pose_pb2
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[4]))
 from experiments.gazebo_benchmark.core.sim_env import spawn_benchmark_robot, start_parameter_bridge
+from experiments.gazebo_benchmark.core.mppi_trial import scoped_processes
 
 
 class FirstFrameWaiter(Node):
@@ -61,7 +61,8 @@ class FirstFrameWaiter(Node):
         return self.received_depth, self.received_scan
 
 
-def measure_cold_restart_to_first_frame(world_file, robot_file, root_dir="/home/cuongbien/DynamuhSim", n_trials=3):
+@scoped_processes
+def measure_cold_restart_to_first_frame(world_file, robot_file, root_dir="/home/cuongbien/DynamuhSim", n_trials=3, *, _processes=None):
     print("\n" + "=" * 70)
     print("MEASURING COLD RESTART DURATION TO FIRST VALID SENSOR FRAME")
     print("=" * 70)
@@ -83,15 +84,15 @@ def measure_cold_restart_to_first_frame(world_file, robot_file, root_dir="/home/
         t_start = time.time()
 
         # 1. Start Gazebo Sim
-        gz_proc = subprocess.Popen(["gz", "sim", "-r", "-s", world_file], env=env, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, preexec_fn=os.setsid)
+        gz_proc = _processes.popen(["gz", "sim", "-r", "-s", world_file], env=env, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, preexec_fn=os.setsid)
         time.sleep(3.5)
 
         # 2. Spawn robot
-        spawn_benchmark_robot(robot_file, env)
+        spawn_benchmark_robot(robot_file, env, processes=_processes)
 
         # 3. Parameter bridge and image bridge
-        bridge_proc = start_parameter_bridge(bridge_config, env)
-        image_proc = subprocess.Popen(["ros2", "run", "ros_gz_image", "image_bridge", "/camera/image", "/camera/depth_image"], env=env, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, preexec_fn=os.setsid)
+        bridge_proc = start_parameter_bridge(bridge_config, env, processes=_processes)
+        image_proc = _processes.popen(["ros2", "run", "ros_gz_image", "image_bridge", "/camera/image", "/camera/depth_image"], env=env, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, preexec_fn=os.setsid)
 
         # 4. Wait for first valid depth frame
         rclpy.init()
@@ -104,19 +105,14 @@ def measure_cold_restart_to_first_frame(world_file, robot_file, root_dir="/home/
         print(f"  Trial {t+1}: {dt_first_frame:.2f}s to first valid depth frame (Depth: {has_depth}, Scan: {has_scan})")
         cold_restart_times.append(dt_first_frame)
 
-        for p in [image_proc, bridge_proc, gz_proc]:
-            try:
-                os.killpg(os.getpgid(p.pid), signal.SIGTERM)
-                time.sleep(0.2)
-                os.killpg(os.getpgid(p.pid), signal.SIGKILL)
-            except Exception:
-                pass
+        _processes.stop()
         time.sleep(1.0)
 
     return cold_restart_times
 
 
-def measure_consecutive_episode_leakage(world_file, robot_file, root_dir="/home/cuongbien/DynamuhSim", n_episodes=3):
+@scoped_processes
+def measure_consecutive_episode_leakage(world_file, robot_file, root_dir="/home/cuongbien/DynamuhSim", n_episodes=3, *, _processes=None):
     print("\n" + "=" * 70)
     print("EVALUATING IN-PROCESS STATE LEAKAGE ACROSS 3 CONSECUTIVE EPISODES")
     print("=" * 70)
@@ -132,12 +128,12 @@ def measure_consecutive_episode_leakage(world_file, robot_file, root_dir="/home/
     env["GZ_SIM_RESOURCE_PATH"] = f"{corridor_models}:{tb3_models}:{os.environ.get('GZ_SIM_RESOURCE_PATH', '')}"
     env["GZ_SIM_SYSTEM_PLUGIN_PATH"] = f"{plugin_lib}:{os.environ.get('GZ_SIM_SYSTEM_PLUGIN_PATH', '')}"
 
-    gz_proc = subprocess.Popen(["gz", "sim", "-r", "-s", world_file], env=env, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, preexec_fn=os.setsid)
+    gz_proc = _processes.popen(["gz", "sim", "-r", "-s", world_file], env=env, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, preexec_fn=os.setsid)
     time.sleep(4.0)
 
-    spawn_benchmark_robot(robot_file, env)
+    spawn_benchmark_robot(robot_file, env, processes=_processes)
 
-    bridge_proc = start_parameter_bridge(bridge_config, env)
+    bridge_proc = start_parameter_bridge(bridge_config, env, processes=_processes)
     time.sleep(1.5)
 
     node = gzt.Node()
@@ -197,13 +193,7 @@ def measure_consecutive_episode_leakage(world_file, robot_file, root_dir="/home/
     finally:
         runner.destroy_node()
         rclpy.shutdown()
-        for p in [bridge_proc, gz_proc]:
-            try:
-                os.killpg(os.getpgid(p.pid), signal.SIGTERM)
-                time.sleep(0.2)
-                os.killpg(os.getpgid(p.pid), signal.SIGKILL)
-            except Exception:
-                pass
+        _processes.stop()
 
     # Compare trajectories between consecutive episodes
     min_len = min(len(t) for t in ep_trajectories)

@@ -8,7 +8,6 @@ from pathlib import Path
 import sys
 import os
 import time
-import signal
 import subprocess
 import json
 import numpy as np
@@ -22,6 +21,7 @@ from std_msgs.msg import String
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[4]))
 from experiments.gazebo_benchmark.core.sim_env import build_benchmark_env, spawn_benchmark_robot, start_parameter_bridge
+from experiments.gazebo_benchmark.core.mppi_trial import scoped_processes
 
 
 class TrajectoryRecorder(Node):
@@ -68,15 +68,16 @@ class TrajectoryRecorder(Node):
         return self.robot_trajectory
 
 
-def run_recording(world_file, robot_file, root_dir="/home/cuongbien/DynamuhSim"):
+@scoped_processes
+def run_recording(world_file, robot_file, root_dir="/home/cuongbien/DynamuhSim", *, _processes=None):
     bridge_config = os.path.join(root_dir, "src/custom_corridor/config/turtlebot3_burger_bridge.yaml")
     env = build_benchmark_env(root_dir, turtlebot3=True)
 
-    gz_proc = subprocess.Popen(["gz", "sim", "-r", "-s", world_file], env=env, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, preexec_fn=os.setsid)
+    gz_proc = _processes.popen(["gz", "sim", "-r", "-s", world_file], env=env, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, preexec_fn=os.setsid)
     time.sleep(4.0)
 
-    spawn_benchmark_robot(robot_file, env)
-    bridge_proc = start_parameter_bridge(bridge_config, env)
+    spawn_benchmark_robot(robot_file, env, processes=_processes)
+    bridge_proc = start_parameter_bridge(bridge_config, env, processes=_processes)
     time.sleep(1.5)
 
     # Record trajectory
@@ -87,13 +88,7 @@ def run_recording(world_file, robot_file, root_dir="/home/cuongbien/DynamuhSim")
     rclpy.shutdown()
 
     # Kill
-    for p in [bridge_proc, gz_proc]:
-        try:
-            os.killpg(os.getpgid(p.pid), signal.SIGTERM)
-            time.sleep(0.2)
-            os.killpg(os.getpgid(p.pid), signal.SIGKILL)
-        except Exception:
-            pass
+    _processes.stop()
 
     return traj
 

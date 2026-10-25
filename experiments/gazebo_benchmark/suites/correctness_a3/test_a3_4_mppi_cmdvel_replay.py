@@ -23,7 +23,6 @@ import os
 from pathlib import Path
 import sys
 import time
-import signal
 import subprocess
 import json
 import re
@@ -40,6 +39,7 @@ from nav2_msgs.action import NavigateToPose
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[4]))
 from experiments.gazebo_benchmark.core.sim_env import build_benchmark_env
+from experiments.gazebo_benchmark.core.mppi_trial import scoped_processes
 
 
 class InteractionRecorder(Node):
@@ -255,7 +255,8 @@ class PrecisionReplayer(Node):
         return self.replayed_gt, self.dispatched_cmds_log
 
 
-def record_fresh_episode(root_dir: str, seed: int = 101) -> dict:
+@scoped_processes
+def record_fresh_episode(root_dir: str, seed: int = 101, *, _processes=None) -> dict:
     print(f"\n>>> Recording fresh MPPI interaction episode (corridor_090, H1, Seed {seed})...")
     gen_dir = os.path.join(root_dir, "experiments/gazebo_benchmark/configs/generated")
     os.makedirs(gen_dir, exist_ok=True)
@@ -310,7 +311,6 @@ def record_fresh_episode(root_dir: str, seed: int = 101) -> dict:
     partition = f"a3_4_record_{seed}"
     env["GZ_PARTITION"] = partition
 
-    all_procs = []
     nav2_log_path = f"/tmp/nav2_a3_4_record_{seed}.log"
     if os.path.exists(nav2_log_path):
         os.remove(nav2_log_path)
@@ -327,8 +327,7 @@ def record_fresh_episode(root_dir: str, seed: int = 101) -> dict:
             "robot_model:=mecanum",
             "x:=-13.0", "y:=0.0", "yaw:=0.0"
         ]
-        gz_p = subprocess.Popen(sim_cmd, env=env, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, preexec_fn=os.setsid)
-        all_procs.append(gz_p)
+        gz_p = _processes.popen(sim_cmd, env=env, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, preexec_fn=os.setsid)
         time.sleep(4.5)
 
         nav2_log_file = open(nav2_log_path, "w")
@@ -339,8 +338,7 @@ def record_fresh_episode(root_dir: str, seed: int = 101) -> dict:
             "map:=corridor_090",
             "robot_model:=mecanum"
         ]
-        nav2_p = subprocess.Popen(nav2_cmd, env=env, stdout=nav2_log_file, stderr=subprocess.STDOUT, text=True, preexec_fn=os.setsid)
-        all_procs.append(nav2_p)
+        nav2_p = _processes.popen(nav2_cmd, env=env, stdout=nav2_log_file, stderr=subprocess.STDOUT, text=True, preexec_fn=os.setsid)
 
         t0 = time.time()
         nav2_ready = False
@@ -390,17 +388,12 @@ def record_fresh_episode(root_dir: str, seed: int = 101) -> dict:
         return data
 
     finally:
-        for p in all_procs:
-            try:
-                os.killpg(os.getpgid(p.pid), signal.SIGTERM)
-                time.sleep(0.3)
-                os.killpg(os.getpgid(p.pid), signal.SIGKILL)
-            except Exception:
-                pass
+        _processes.stop()
         time.sleep(1.5)
 
 
-def run_single_replay_trial(root_dir: str, rec_data: dict, trial_idx: int) -> dict:
+@scoped_processes
+def run_single_replay_trial(root_dir: str, rec_data: dict, trial_idx: int, *, _processes=None) -> dict:
     seed = 101
     recorded_cmds = rec_data['recorded_cmds']
     t0 = rec_data['t_first_cmd']
@@ -428,7 +421,6 @@ def run_single_replay_trial(root_dir: str, rec_data: dict, trial_idx: int) -> di
     partition = f"a3_4_replay_{trial_idx}_{seed}"
     env["GZ_PARTITION"] = partition
 
-    all_procs = []
     try:
         sim_cmd = [
             "ros2", "launch", "custom_corridor", "corridor_tb3.launch.py",
@@ -439,8 +431,7 @@ def run_single_replay_trial(root_dir: str, rec_data: dict, trial_idx: int) -> di
             "robot_model:=mecanum",
             "x:=-13.0", "y:=0.0", "yaw:=0.0"
         ]
-        gz_p = subprocess.Popen(sim_cmd, env=env, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, preexec_fn=os.setsid)
-        all_procs.append(gz_p)
+        gz_p = _processes.popen(sim_cmd, env=env, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, preexec_fn=os.setsid)
         time.sleep(4.5)
 
         os.environ["ROS_DOMAIN_ID"] = domain_id
@@ -452,13 +443,7 @@ def run_single_replay_trial(root_dir: str, rec_data: dict, trial_idx: int) -> di
         rclpy.shutdown()
 
     finally:
-        for p in all_procs:
-            try:
-                os.killpg(os.getpgid(p.pid), signal.SIGTERM)
-                time.sleep(0.3)
-                os.killpg(os.getpgid(p.pid), signal.SIGKILL)
-            except Exception:
-                pass
+        _processes.stop()
         time.sleep(1.5)
 
     # Evaluate trajectory deviation against orig_gt

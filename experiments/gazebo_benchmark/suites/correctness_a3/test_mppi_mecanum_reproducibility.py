@@ -10,7 +10,6 @@ Tests:
 import sys
 import os
 import time
-import signal
 import subprocess
 import json
 import numpy as np
@@ -22,6 +21,9 @@ from rosgraph_msgs.msg import Clock
 from geometry_msgs.msg import PoseStamped, TwistStamped
 from nav_msgs.msg import Odometry
 from nav2_msgs.action import NavigateToPose
+
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../..")))
+from experiments.gazebo_benchmark.core.mppi_trial import scoped_processes
 
 
 class MecanumMPPIRecorder(Node):
@@ -108,7 +110,8 @@ class MecanumMPPIRecorder(Node):
         return self.trajectory, self.cmd_history
 
 
-def run_single_trial(trial_idx: int, root_dir: str, duration_s=12.0):
+@scoped_processes
+def run_single_trial(trial_idx: int, root_dir: str, duration_s=12.0, *, _processes=None):
     print(f"\n  [TRIAL {trial_idx + 1}/3] Cold starting Gazebo & Nav2 MPPI for Mecanum Robot...", flush=True)
 
     bridge_config = os.path.join(root_dir, "install/custom_corridor/share/custom_corridor/config/mecanum_bridge.yaml")
@@ -130,7 +133,6 @@ def run_single_trial(trial_idx: int, root_dir: str, duration_s=12.0):
     env["GZ_SIM_RESOURCE_PATH"] = f"{corridor_models}:{os.environ.get('GZ_SIM_RESOURCE_PATH', '')}"
     env["GZ_SIM_SYSTEM_PLUGIN_PATH"] = f"{plugin_lib}:{os.environ.get('GZ_SIM_SYSTEM_PLUGIN_PATH', '')}"
 
-    all_procs = []
 
     try:
         # 1. Start Gazebo Sim + Mecanum Robot + Bridges + RSP via standard launch file
@@ -139,8 +141,7 @@ def run_single_trial(trial_idx: int, root_dir: str, duration_s=12.0):
             "width:=0.90", "obstacle:=clean", "gui:=false", "rviz:=false",
             "robot_model:=mecanum", "x:=-13.0", "y:=0.0", "yaw:=0.0"
         ]
-        gz_p = subprocess.Popen(sim_cmd, env=env, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, preexec_fn=os.setsid)
-        all_procs.append(gz_p)
+        gz_p = _processes.popen(sim_cmd, env=env, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, preexec_fn=os.setsid)
         time.sleep(5.0)
 
         # 2. Nav2 stack with MPPI for mecanum robot
@@ -155,8 +156,7 @@ def run_single_trial(trial_idx: int, root_dir: str, duration_s=12.0):
             "map:=corridor_090",
             "robot_model:=mecanum"
         ]
-        nav2_p = subprocess.Popen(nav2_cmd, env=env, stdout=nav2_log, stderr=subprocess.STDOUT, text=True, preexec_fn=os.setsid)
-        all_procs.append(nav2_p)
+        nav2_p = _processes.popen(nav2_cmd, env=env, stdout=nav2_log, stderr=subprocess.STDOUT, text=True, preexec_fn=os.setsid)
 
         # 3. Wait for lifecycle_manager_navigation to report active in the FRESH log
         t0 = time.time()
@@ -187,11 +187,7 @@ def run_single_trial(trial_idx: int, root_dir: str, duration_s=12.0):
         rclpy.shutdown()
 
     finally:
-        for p in all_procs:
-            try:
-                os.killpg(os.getpgid(p.pid), signal.SIGKILL)
-            except Exception:
-                pass
+        _processes.stop()
         time.sleep(1.0)
 
     final_pose = (traj[-1][1], traj[-1][2]) if len(traj) > 0 else (0.0, 0.0)

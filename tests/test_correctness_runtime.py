@@ -5,7 +5,7 @@ from pathlib import Path
 import sys
 from types import SimpleNamespace as NS
 import unittest
-from unittest.mock import patch
+from unittest.mock import patch, Mock
 
 from experiments.gazebo_benchmark.core import sim_env
 from test_mppi_monitor import FakeNode as MonitorNode
@@ -64,6 +64,26 @@ class CorrectnessRuntimeTests(unittest.TestCase):
             run.side_effect = OSError('missing executable')
             with self.assertRaises(OSError):
                 sim_env.spawn_benchmark_robot('robot.sdf', {})
+
+    def test_spawn_and_bridge_dispatch_to_the_provided_owner(self):
+        owner = Mock()
+        env = {'ROS_DOMAIN_ID': '77'}
+        with patch.object(sim_env.subprocess, 'run', side_effect=AssertionError('unowned spawn')), patch.object(sim_env.subprocess, 'Popen', side_effect=AssertionError('unowned bridge')):
+            self.assertIs(sim_env.spawn_benchmark_robot('robot.sdf', env, processes=owner), owner.run.return_value)
+            self.assertIs(sim_env.start_parameter_bridge('bridge.yaml', env, processes=owner), owner.popen.return_value)
+        self.assertEqual(owner.run.call_args.kwargs['env'], env)
+        self.assertEqual(owner.run.call_args.kwargs['timeout'], 10)
+        self.assertEqual(owner.popen.call_args.kwargs['env'], env)
+        self.assertEqual(owner.popen.call_args.args[0][-1], 'config_file:=bridge.yaml')
+
+    def test_owner_dispatch_propagates_spawn_and_bridge_errors(self):
+        owner = Mock()
+        owner.run.side_effect = TimeoutError('spawn timeout')
+        owner.popen.side_effect = FileNotFoundError('bridge unavailable')
+        with self.assertRaisesRegex(TimeoutError, 'spawn timeout'):
+            sim_env.spawn_benchmark_robot('robot.sdf', {}, processes=owner)
+        with self.assertRaisesRegex(FileNotFoundError, 'bridge unavailable'):
+            sim_env.start_parameter_bridge('bridge.yaml', {}, processes=owner)
 
     def test_sim_time_boundaries_and_ground_truth_fallback(self):
         module = load_collector()

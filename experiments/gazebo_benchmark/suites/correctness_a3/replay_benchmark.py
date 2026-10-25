@@ -16,7 +16,6 @@ import sys
 import time
 import math
 import subprocess
-import signal
 import numpy as np
 
 import rclpy
@@ -31,6 +30,7 @@ from gz.msgs10.boolean_pb2 import Boolean
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[4]))
 from experiments.gazebo_benchmark.core.sim_env import build_benchmark_env, spawn_benchmark_robot
+from experiments.gazebo_benchmark.core.mppi_trial import scoped_processes
 
 
 class DepthImageCollector(RosNode):
@@ -84,7 +84,8 @@ def generate_sample_trajectory(num_steps=200, dt=0.1):
     return traj
 
 
-def run_replay_trial(traj, root_dir="/home/cuongbien/DynamuhSim", trial_idx=1):
+@scoped_processes
+def run_replay_trial(traj, root_dir="/home/cuongbien/DynamuhSim", trial_idx=1, *, _processes=None):
     print(f"\n[REPLAY TRIAL {trial_idx}] Starting Gazebo in synchronous step mode...")
 
     world_file = os.path.join(root_dir, "experiments/gazebo_benchmark/configs/generated/world_n5_actor_and_cylinder.sdf")
@@ -93,7 +94,7 @@ def run_replay_trial(traj, root_dir="/home/cuongbien/DynamuhSim", trial_idx=1):
     env = build_benchmark_env(root_dir, turtlebot3=True, d3d12=False)
 
     # 1. Start Gazebo server
-    gz_proc = subprocess.Popen(
+    gz_proc = _processes.popen(
         ["gz", "sim", "-s", "-r", world_file],
         env=env,
         stdout=subprocess.DEVNULL,
@@ -104,10 +105,10 @@ def run_replay_trial(traj, root_dir="/home/cuongbien/DynamuhSim", trial_idx=1):
     time.sleep(3.0)
 
     # 2. Spawn robot
-    spawn_benchmark_robot(robot_file, env)
+    spawn_benchmark_robot(robot_file, env, processes=_processes)
 
     # 3. Start image bridge for depth
-    img_bridge_proc = subprocess.Popen(
+    img_bridge_proc = _processes.popen(
         ["ros2", "run", "ros_gz_image", "image_bridge", "/camera/depth_image"],
         env=env, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, preexec_fn=os.setsid
     )
@@ -170,11 +171,7 @@ def run_replay_trial(traj, root_dir="/home/cuongbien/DynamuhSim", trial_idx=1):
 
     finally:
         collector.destroy_node()
-        for p in [img_bridge_proc, gz_proc]:
-            try:
-                os.killpg(os.getpgid(p.pid), signal.SIGKILL)
-            except Exception:
-                pass
+        _processes.stop()
 
     return {
         'elapsed_s': elapsed,
