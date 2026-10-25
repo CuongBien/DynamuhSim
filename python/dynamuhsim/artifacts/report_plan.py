@@ -182,13 +182,25 @@ def validate_report_plan(index, plan):
     return plan["groups"]
 
 
-def hydrate_reports(checkout, index, plan, selected, *, source="git", store=None):
+def hydrate_reports(checkout, index, plan, selected, *, source="git", store=None, media_plan=None):
     from .hydrate import hydrate_history
     groups = validate_report_plan(index, plan)
     closure = dependency_closure(groups, selected)
-    receipts = [hydrate_history(checkout, index, name, source=source, store=store) for name in closure]
+    receipts, media_receipts = [], []
+    if media_plan is not None:
+        from .report_media import hydrate_report_media, validate_media_plan
+        validate_media_plan(index, media_plan)
+        if media_plan["report_dependency_plan_sha256"] != _sha(plan):
+            raise ValueError("Media policy/dependency plan mismatch")
+    for name in closure:
+        target = Path(checkout) / groups[name]["root"]
+        if media_plan is not None and name in media_plan["groups"] and target.exists():
+            media = hydrate_report_media(checkout, index, media_plan, [name], source=source, store=store)
+            media_receipts.extend(media["groups"])
+        receipts.append(hydrate_history(checkout, index, name, source=source, store=store))
+    changed = {r["group"] for r in receipts if r["changed"]} | {r["group"] for r in media_receipts if r["restored_files"]}
     return dict(schema="dynamuhsim_report_hydration/1", status="PASS", requested=sorted(set(selected)),
-                dependency_closure=closure, source=source, groups=receipts,
-                changed_groups=sum(row["changed"] for row in receipts),
-                changed_files=sum(row["files"] for row in receipts if row["changed"]),
-                changed_bytes=sum(row["logical_bytes"] for row in receipts if row["changed"]))
+                dependency_closure=closure, source=source, groups=receipts, media_groups=media_receipts,
+                changed_groups=len(changed),
+                changed_files=sum(row["files"] for row in receipts if row["changed"]) + sum(len(r["restored_files"]) for r in media_receipts),
+                changed_bytes=sum(row["logical_bytes"] for row in receipts if row["changed"]) + sum(r["restored_bytes"] for r in media_receipts))
