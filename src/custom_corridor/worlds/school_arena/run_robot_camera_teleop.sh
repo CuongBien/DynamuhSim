@@ -1,13 +1,8 @@
 #!/usr/bin/env bash
 set -eo pipefail
 
-source /opt/ros/jazzy/setup.bash
-source "${HOME}/nav_ws/install/setup.bash"
-set -u
-
-export RMW_IMPLEMENTATION=rmw_fastrtps_cpp
-export FASTDDS_BUILTIN_TRANSPORTS=UDPv4
-export ROS_DOMAIN_ID=0
+source "$(dirname "${BASH_SOURCE[0]}")/school_runtime.sh"
+school_ros "${HOME}/nav_ws/install/setup.bash"
 export GZ_PARTITION=school_hunav
 
 # Gazebo uses Space as a global pause shortcut. Recover a world that was

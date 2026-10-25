@@ -1,8 +1,6 @@
 #!/usr/bin/env bash
 set -euo pipefail
-TASK_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-TASK_MODE="${1:-help}"
-if (($#)); then shift; fi
+source "$(dirname "${BASH_SOURCE[0]}")/../task_runtime.sh"
 export OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 MKL_NUM_THREADS=1
 case "$TASK_MODE" in
  track) exec python3 "$TASK_DIR/track_episode.py" "$@" ;;

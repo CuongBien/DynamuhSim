@@ -34,11 +34,6 @@ Stop the previous Gazebo, loader, manager, ros_gz_bridge and Python bridge
 with Ctrl+C first. A restart is required after changing the SDF because Gazebo
 only reads kinematic/gravity settings while loading the world.
 
-If a previous Docker terminal was closed without Ctrl+C, clean its orphaned
-processes first (this also releases the Groot ZMQ port 5555):
-
-  ./stop_school_hunav_container.sh hunavsim_gz_fortress
-
 Install/update the container files once:
 
   cd ~/nav_ws/src/custom_corridor/worlds/school_arena

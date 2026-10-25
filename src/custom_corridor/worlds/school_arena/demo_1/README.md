@@ -35,6 +35,8 @@ Các file hỗ trợ:
 - `hunav_social_test.yaml`: thêm người đi ngang để quan sát human-human force.
 - `scenario_generator/install_episode.sh --demo`: cài scenario/BT/bridge demo vào Docker.
 - `start_hunav_agents.sh`: khởi chạy toàn bộ ngăn xếp HuNav tự động qua Docker với 1 lệnh.
+  Phiên trùng bị từ chối; `Ctrl+C` chỉ dọn tiến trình của phiên hiện tại.
+  Lỗi loader/manager/bridge trả mã lỗi và log nằm trong `/tmp/school_hunav.*`.
 - `JOB_DONE_REPORT.md`: tài liệu tổng kết tối ưu CPU/RAM, sửa lỗi DDS/Entity Tree và vận hành chuẩn.
 
 ## 1. Sinh lại world, map, zones và graph

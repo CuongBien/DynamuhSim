@@ -93,7 +93,7 @@ colcon build --symlink-install
 source install/setup.bash
 
 cd ~/nav_ws/src/custom_corridor/worlds/school_arena
-chmod +x run_*.sh spawn_*.sh stop_*.sh demo_1/scenario_generator/install_episode.sh
+chmod +x run_*.sh spawn_*.sh demo_1/scenario_generator/install_episode.sh
 ```
 
 Nếu repository đã có sẵn, chỉ cần build lại workspace.
@@ -166,7 +166,6 @@ Container phải ở trạng thái `Up`:
 
 ```bash
 cd ~/nav_ws/src/custom_corridor/worlds/school_arena
-./stop_school_hunav_container.sh hunavsim_gz_fortress
 ./demo_1/scenario_generator/install_episode.sh --school hunavsim_gz_fortress
 ```
 
@@ -379,10 +378,12 @@ Trong container, `ros2 service list | grep compute_agents` phải thấy
 ## 9. Dừng và chạy lại
 
 Dừng bằng `Ctrl+C` theo thứ tự: Terminal 7 → 6 → 4 → 3 → 2 → 1.
+Launcher tự dọn nhóm tiến trình do chính phiên đó tạo. Với HuNav chạy trực tiếp
+trong Docker, dừng tại terminal đã khởi chạy loader/manager/adapter; không dùng
+lệnh kill theo tên để tránh dừng nhầm phiên khác.
 
 ```bash
 cd ~/nav_ws/src/custom_corridor/worlds/school_arena
-./stop_school_hunav_container.sh hunavsim_gz_fortress
 docker stop hunavsim_gz_fortress
 ```
 
@@ -391,7 +392,6 @@ Lần chạy sau:
 ```bash
 docker start hunavsim_gz_fortress
 cd ~/nav_ws/src/custom_corridor/worlds/school_arena
-./stop_school_hunav_container.sh hunavsim_gz_fortress
 ./demo_1/scenario_generator/install_episode.sh --school hunavsim_gz_fortress
 ```
 
@@ -445,12 +445,8 @@ GZ_PARTITION=school_hunav gz topic -l | grep school_arena
 
 ### Không có `/compute_agents`
 
-Loader phải chạy trước manager. Dọn process cũ rồi chạy lại Terminal 2 và 3:
-
-```bash
-cd ~/nav_ws/src/custom_corridor/worlds/school_arena
-./stop_school_hunav_container.sh hunavsim_gz_fortress
-```
+Loader phải chạy trước manager. Dừng phiên cũ bằng `Ctrl+C` tại terminal
+đã khởi chạy, rồi chạy lại Terminal 2 và 3.
 
 ### Robot không spawn
 

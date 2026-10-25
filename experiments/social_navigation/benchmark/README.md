@@ -8,6 +8,9 @@ Harness này so sánh runtime RVO2 đang cài trong workspace với kernel nhóm
 
 ## Chạy
 
+Các `run.sh` dùng chung `task_runtime.sh` để nạp môi trường và build;
+bảng lệnh, interpreter và tham số riêng vẫn ở từng thí nghiệm.
+
 ```bash
 cd /home/cuongbien/DynamuhSim
 bash experiments/social_navigation/benchmark/run.sh trial --backend rvo2 --condition standing --seed 42 --gui
