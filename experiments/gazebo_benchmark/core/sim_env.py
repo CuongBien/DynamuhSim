@@ -9,9 +9,7 @@ import os
 import re
 import json
 import subprocess
-from typing import Dict
-
-
+from typing import Dict, Optional
 
 
 def create_corridor_scenario_json(
@@ -48,9 +46,14 @@ def create_corridor_scenario_json(
 
 def patch_corridor_world_sdf(
     base_sdf_path: str, out_sdf_path: str,
-    seed: int, scen_file: str, rtf: float = 1.0, proxy_z: str = "0.875"
+    seed: int, scen_file: Optional[str], rtf: float = 1.0, proxy_z: str = "0.875",
+    *, replace_existing_seed: bool = True
 ) -> str:
-    """Patches corridor SDF world with RTF, seed, scenario path, and human starting pose."""
+    """Patch the world while preserving the historical replacement rules.
+
+    A None scenario leaves existing scenario references unchanged. Replay can
+    also retain the old seed if the randomization tag is absent.
+    """
     with open(base_sdf_path, "r") as f:
         sdf = f.read()
 
@@ -59,12 +62,13 @@ def patch_corridor_world_sdf(
         f'<real_time_factor>{rtf}</real_time_factor>',
         sdf
     )
+    scenario_tag = "" if scen_file is None else f"\n      <default_scenario_file>{scen_file}</default_scenario_file>"
     sdf = re.sub(
         r'<randomize_politeness>.*?</randomize_politeness>',
-        f'<randomize_politeness>false</randomize_politeness>\n      <seed>{seed}</seed>\n      <default_scenario_file>{scen_file}</default_scenario_file>',
+        f'<randomize_politeness>false</randomize_politeness>\n      <seed>{seed}</seed>{scenario_tag}',
         sdf
     )
-    if f"<seed>{seed}</seed>" not in sdf:
+    if replace_existing_seed and f"<seed>{seed}</seed>" not in sdf:
         sdf = re.sub(r'<seed>\d+</seed>', f'<seed>{seed}</seed>', sdf)
 
     sdf = re.sub(

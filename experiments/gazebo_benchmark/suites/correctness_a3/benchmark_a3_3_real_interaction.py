@@ -34,7 +34,6 @@ import sys
 import time
 import subprocess
 import json
-import re
 import argparse
 import numpy as np
 
@@ -47,7 +46,7 @@ from std_msgs.msg import String
 from nav2_msgs.action import NavigateToPose
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[4]))
-from experiments.gazebo_benchmark.core.sim_env import build_benchmark_env
+from experiments.gazebo_benchmark.core.sim_env import create_corridor_scenario_json, patch_corridor_world_sdf, build_benchmark_env
 from experiments.gazebo_benchmark.core.mppi_trial import scoped_processes
 
 
@@ -263,48 +262,13 @@ def run_single_benchmark_trial(root_dir: str, corridor_type: str, persona: str, 
 
     # 1. Generate Scenario JSON
     scen_file = os.path.join(gen_dir, f"scenario_a3_3_{corridor_type}_{persona}_{seed}.json")
-    scen_data = {
-        "episode_id": seed,
-        "corridor_mode": True,
-        "humans": [
-            {
-                "id": 1,
-                "name": "human_01",
-                "mode": "autonomous",
-                "speed": v_human,
-                "max_speed": v_human,
-                "persona": persona,
-                "loop": False,
-                "wait_for_robot": True,
-                "start": {"x": -7.0, "y": 0.0, "yaw": 3.14159265},
-                "waypoints": [[-7.0, 0.0], [-15.0, 0.0]]
-            }
-        ]
-    }
-    with open(scen_file, "w") as f:
-        json.dump(scen_data, f, indent=2)
+    create_corridor_scenario_json(scen_file, seed, persona, v_human=v_human)
 
     # 2. Patch SDF world
     base_sdf_path = os.path.join(root_dir, f"src/custom_corridor/worlds/corridor_{corridor_type}.sdf")
-    with open(base_sdf_path, "r") as f:
-        sdf = f.read()
-
-    sdf = re.sub(r'<real_time_factor>.*?</real_time_factor>', '<real_time_factor>0.0</real_time_factor>', sdf)
-    sdf = re.sub(
-        r'<randomize_politeness>.*?</randomize_politeness>',
-        f'<randomize_politeness>false</randomize_politeness>\n      <seed>{seed}</seed>\n      <default_scenario_file>{scen_file}</default_scenario_file>',
-        sdf
-    )
-    if f"<seed>{seed}</seed>" not in sdf:
-        sdf = re.sub(r'<seed>\d+</seed>', f'<seed>{seed}</seed>', sdf)
-
     proxy_z = "0.80" if corridor_type == "090" else "0.875"
-    sdf = re.sub(r'<actor name=\"human_01_visual\">\s*<pose>.*?</pose>', '<actor name=\"human_01_visual\">\n      <pose>-7.0 0.0 0.0 0 0 3.14159</pose>', sdf)
-    sdf = re.sub(r'<model name=\"human_01_proxy\">\s*<pose>.*?</pose>', f'<model name=\"human_01_proxy\">\n      <pose>-7.0 0.0 {proxy_z} 0 0 3.14159</pose>', sdf)
-
     trial_sdf = os.path.join(gen_dir, f"world_a3_3_{corridor_type}_{persona}_{seed}.sdf")
-    with open(trial_sdf, "w") as f:
-        f.write(sdf)
+    patch_corridor_world_sdf(base_sdf_path, trial_sdf, seed, scen_file, rtf=0.0, proxy_z=proxy_z)
 
     # Environment
     env = build_benchmark_env(root_dir)

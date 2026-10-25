@@ -3,6 +3,7 @@ import importlib.util
 import os
 from pathlib import Path
 import sys
+import tempfile
 from types import SimpleNamespace as NS
 import unittest
 from unittest.mock import patch, Mock
@@ -84,6 +85,26 @@ class CorrectnessRuntimeTests(unittest.TestCase):
             sim_env.spawn_benchmark_robot('robot.sdf', {}, processes=owner)
         with self.assertRaisesRegex(FileNotFoundError, 'bridge unavailable'):
             sim_env.start_parameter_bridge('bridge.yaml', {}, processes=owner)
+
+    def test_replay_world_preserves_scenario_and_absent_tag_seed_behavior(self):
+        with tempfile.TemporaryDirectory() as directory:
+            source, target = Path(directory) / 'base.sdf', Path(directory) / 'replay.sdf'
+            for tag in ['', '<randomize_politeness>true</randomize_politeness>']:
+                with self.subTest(randomization_tag=bool(tag)):
+                    source.write_text('<sdf><world><seed>7</seed><plugin>' + tag +
+                                      '<default_scenario_file>original.json</default_scenario_file></plugin>'
+                                      '<physics><real_time_factor>1.0</real_time_factor></physics>'
+                                      '<actor name="human_01_visual"><pose>1 2 3 0 0 0</pose></actor>'
+                                      '<model name="human_01_proxy"><pose>1 2 3 0 0 0</pose></model></world></sdf>')
+                    sim_env.patch_corridor_world_sdf(str(source), str(target), 101, None,
+                                                    rtf=0.0, proxy_z='0.80', replace_existing_seed=False)
+                    result = target.read_text()
+                    self.assertIn('<default_scenario_file>original.json</default_scenario_file>', result)
+                    self.assertEqual(result.count('<default_scenario_file>'), 1)
+                    self.assertIn('<seed>7</seed>', result)
+                    self.assertEqual('<seed>101</seed>' in result, bool(tag))
+                    self.assertIn('<real_time_factor>0.0</real_time_factor>', result)
+                    self.assertIn('<pose>-7.0 0.0 0.80 0 0 3.14159</pose>', result)
 
     def test_sim_time_boundaries_and_ground_truth_fallback(self):
         module = load_collector()

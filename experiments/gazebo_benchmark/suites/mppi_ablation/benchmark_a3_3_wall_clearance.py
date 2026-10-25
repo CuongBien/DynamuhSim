@@ -29,7 +29,6 @@ import time
 import math
 import subprocess
 import json
-import re
 import argparse
 from typing import Tuple, Dict, List, Optional
 import numpy as np
@@ -49,6 +48,7 @@ ROOT_DIR = str(FilePath(__file__).resolve().parents[4])
 sys.path.insert(0, ROOT_DIR)
 from experiments.gazebo_benchmark.core.geometry import compute_rect_circle_distance
 from experiments.gazebo_benchmark.core.mppi_trial import scoped_processes
+from experiments.gazebo_benchmark.core.sim_env import create_corridor_scenario_json, patch_corridor_world_sdf
 ROBOT_MODEL_SDF = os.path.join(ROOT_DIR, "experiments/gazebo_benchmark/configs/robot_models/model_mecanum_step1.sdf")
 NAV2_YAML_3B = os.path.join(ROOT_DIR, "experiments/gazebo_benchmark/configs/nav2_mppi/nav2_mppi_step3b.yaml")
 PROFILER_LIB = os.path.join(ROOT_DIR, "experiments/gazebo_benchmark/core/profiler/libcontroller_profiler.so")
@@ -352,48 +352,13 @@ def run_single_trial(corridor_type: str, persona: str, seed: int, v_human: float
 
     # 1. Generate scenario JSON
     scen_file = os.path.join(gen_dir, f"scenario_a3_3_wallfix_{corridor_type}_{persona}_{seed}.json")
-    scen_data = {
-        "episode_id": seed,
-        "corridor_mode": True,
-        "humans": [
-            {
-                "id": 1,
-                "name": "human_01",
-                "mode": "autonomous",
-                "speed": v_human,
-                "max_speed": v_human,
-                "persona": persona,
-                "loop": False,
-                "wait_for_robot": True,
-                "start": {"x": -7.0, "y": 0.0, "yaw": 3.14159265},
-                "waypoints": [[-7.0, 0.0], [-15.0, 0.0]]
-            }
-        ]
-    }
-    with open(scen_file, "w") as f:
-        json.dump(scen_data, f, indent=2)
+    create_corridor_scenario_json(scen_file, seed, persona, v_human=v_human)
 
     # 2. Patch SDF world: real_time_factor = 1.0
     base_sdf_path = os.path.join(ROOT_DIR, f"src/custom_corridor/worlds/corridor_{corridor_type}.sdf")
-    with open(base_sdf_path, "r") as f:
-        sdf = f.read()
-
-    sdf = re.sub(r'<real_time_factor>.*?</real_time_factor>', '<real_time_factor>1.0</real_time_factor>', sdf)
-    sdf = re.sub(
-        r'<randomize_politeness>.*?</randomize_politeness>',
-        f'<randomize_politeness>false</randomize_politeness>\n      <seed>{seed}</seed>\n      <default_scenario_file>{scen_file}</default_scenario_file>',
-        sdf
-    )
-    if f"<seed>{seed}</seed>" not in sdf:
-        sdf = re.sub(r'<seed>\d+</seed>', f'<seed>{seed}</seed>', sdf)
-
     proxy_z = "0.80" if corridor_type == "090" else "0.875"
-    sdf = re.sub(r'<actor name=\"human_01_visual\">\s*<pose>.*?</pose>', '<actor name=\"human_01_visual\">\n      <pose>-7.0 0.0 0.0 0 0 3.14159</pose>', sdf)
-    sdf = re.sub(r'<model name=\"human_01_proxy\">\s*<pose>.*?</pose>', f'<model name=\"human_01_proxy\">\n      <pose>-7.0 0.0 {proxy_z} 0 0 3.14159</pose>', sdf)
-
     trial_sdf = os.path.join(gen_dir, f"world_a3_3_wallfix_{corridor_type}_{persona}_{seed}.sdf")
-    with open(trial_sdf, "w") as f:
-        f.write(sdf)
+    patch_corridor_world_sdf(base_sdf_path, trial_sdf, seed, scen_file, rtf=1.0, proxy_z=proxy_z)
 
     corridor_models = os.path.join(ROOT_DIR, "install/custom_corridor/share/custom_corridor/models")
     plugin_share = os.path.join(ROOT_DIR, "install/custom_corridor_plugins/share/custom_corridor_plugins")
