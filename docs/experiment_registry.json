@@ -105,9 +105,11 @@
     "default_install": "runtime resources; historical world payloads excluded",
     "legacy_cmake_option": "DYNAMUHSIM_INSTALL_LEGACY_WORLD_PAYLOADS=ON",
     "catalog_entrypoint": "tools/catalog_assets.py {create,verify,verify-install}",
-    "payload_move_state": "inventory only; tracked payloads not moved or removed",
+    "payload_move_state": "Three historical world payloads externalized from HEAD; hydrate pinned data on demand; reports and seven current gates retained",
     "published_catalog": "docs/artifacts/catalog_2026-10-25.json",
-    "verification": "docs/verification/world_assets_2026-10-25.json"
+    "verification": "docs/verification/world_assets_2026-10-25.json",
+    "payload_migration": "docs/artifacts/world_payload_migration_2026-10-25.json",
+    "hydration_verification": "docs/verification/hydration_2026-10-25.json"
   },
   "historical_artifact_storage": {
     "entrypoint": "tools/archive_history.py {pack,verify,restore}",
@@ -116,8 +118,12 @@
     "source": "Committed blobs from the full revision pinned in the catalog; dirty/untracked data excluded",
     "restore": "Fresh directory containing payload/<repository-relative-root>; verify/restore do not require Git or ROS",
     "removal_allowed": false,
-    "migration_state": "Local backups and byte-verified roundtrip; gates and historical consumers still at original paths",
+    "migration_state": "Three world payloads removed from current tree after hydrate/consumer verification; archived reports retained",
     "published_index": "docs/artifacts/history_2026-10-25.json",
-    "verification": "docs/verification/historical_archive_2026-10-25.json"
+    "verification": "docs/verification/historical_archive_2026-10-25.json",
+    "hydration_entrypoint": "tools/hydrate_history.py --group GROUP --source {git,archive}",
+    "hydration_publication": "Absent paths only; exact inventory verification and atomic no-replace directory publish",
+    "legacy_install_audit": "tools/catalog_assets.py verify-install --legacy --history-index docs/artifacts/history_2026-10-25.json",
+    "hydration_verification": "docs/verification/hydration_2026-10-25.json"
   }
 }

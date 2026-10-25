@@ -1,6 +1,6 @@
 # World runtime, dataset và catalog lịch sử
 
-Build mặc định không cài ba thư mục payload lịch sử vào package `custom_corridor`. Dữ liệu nguồn và lịch sử Git được giữ nguyên; thay đổi này giảm footprint của package install, không giảm dung lượng clone Git.
+Build mặc định không cài ba thư mục payload lịch sử vào package `custom_corridor`. Ba payload hiện được hydrate theo nhu cầu thay vì nằm sẵn ở HEAD; dữ liệu vẫn có trong revision Git đã pin và archive local. Chuyển này giảm số file/byte của checkout hiện tại, không giảm lịch sử clone Git. Xem [hydrate và kiểm chứng](HISTORICAL_ARTIFACTS.md#hydrate-vào-đường-dẫn-consumer).
 
 Policy duy nhất nằm ở `src/custom_corridor/config/world_payloads.txt`, mỗi dòng là một đường dẫn tương đối dưới `worlds`:
 
@@ -8,7 +8,7 @@ Policy duy nhất nằm ở `src/custom_corridor/config/world_payloads.txt`, m�
 - `school_arena/demo_1/scenario_generator/generated`
 - `school_arena/demo_1/scenario_generator/generated_v1`
 
-World runtime, model, launch, URDF, RViz, config và map vẫn ở vị trí cũ. `arena_dataset/arena_dataset.sdf` là world chạy mô phỏng, vẫn được cài; nó khác thư mục dữ liệu `dataset_v1.0`. Code/generator/config lịch sử ngoài ba payload trên vẫn được giữ.
+World runtime, model, launch, URDF, RViz, config và map vẫn ở vị trí cũ. `arena_dataset/arena_dataset.sdf` là world chạy mô phỏng, vẫn được cài; nó khác thư mục dữ liệu `dataset_v1.0`. Code/generator/config lịch sử ngoài ba payload trên vẫn được giữ. Trước build legacy, hydrate đủ ba nhóm theo hướng dẫn; CMake sẽ báo lỗi khi thiếu thư mục payload.
 
 ## Build và kiểm tra prefix mới
 
@@ -38,6 +38,7 @@ colcon --log-base log/legacy build --packages-select custom_corridor \
   --build-base build/legacy --install-base install/legacy \
   --cmake-args -DDYNAMUHSIM_INSTALL_LEGACY_WORLD_PAYLOADS=ON
 python3 tools/catalog_assets.py verify-install --legacy \
+  --history-index docs/artifacts/history_2026-10-25.json \
   --share-dir "$PWD/install/legacy/custom_corridor/share/custom_corridor" \
   --output "$PWD/experiments/social_navigation/benchmark/generated/legacy_install_audit.json"
 ```
@@ -49,13 +50,14 @@ python3 tools/catalog_assets.py verify-install --legacy \
 ```bash
 STORE="$PWD/experiments/social_navigation/benchmark/generated/artifact_store"
 python3 tools/catalog_assets.py create --store "$STORE" \
+  --ref e96e3108bb9ac954403b747e03ac8c5346d6560a \
   --output "$PWD/experiments/social_navigation/benchmark/generated/asset_catalog.json"
 python3 tools/catalog_assets.py verify --store "$STORE" \
   --catalog "$PWD/experiments/social_navigation/benchmark/generated/asset_catalog.json" \
   --output "$PWD/experiments/social_navigation/benchmark/generated/asset_catalog_verify.json"
 ```
 
-`--ref` chọn revision cho create/install audit, mặc định HEAD và luôn được resolve thành full commit. Catalog đọc committed Git objects, không trộn working tree dirty hoặc file untracked. Mỗi payload có Git tree, Git blob ID/size/mode và SHA256 từng file; full inventory nén được lưu theo hash trong `catalogs/objects/` của store. Index gọn có thể giữ trong Git.
+`--ref` chọn revision cho create/install audit, mặc định HEAD và luôn được resolve thành full commit. Catalog đọc committed Git objects, không trộn working tree dirty hoặc file untracked. Mỗi payload có Git tree, Git blob ID/size/mode và SHA256 từng file; full inventory nén được lưu theo hash trong `catalogs/objects/` của store. Index gọn có thể giữ trong Git. Ví dụ trên pin mốc còn đầy đủ payload; catalog mới ở HEAD chỉ mô tả dữ liệu còn committed tại HEAD, không tự nối lại dữ liệu đã externalize. Dùng catalog/index lịch sử đã pin cho backup và hydrate.
 
 Catalog bao phủ ba world payload và các nhóm `benchmark/**/reports`. Nó ghi những gate runtime đang dùng, consumer source-relative đã xác định và các source map JSON đã freeze trỏ vào nhóm. Đây là danh sách consumer đã biết, không phải phân tích dependency động đầy đủ.
 
@@ -65,7 +67,7 @@ Mọi entry hiện là `inventory_only`, `payload_externalized=false`, `removal_
 
 Build thực được kiểm tra ở prefix cô lập, so đủ asset bytes và kiểm tra package/launch resolve. Đây không phải lượt chạy vật lý/Nav2 mới. Các report/freeze, split, outcome và dataset01 giữ nguyên. Biên bản và catalog đã đối chiếu sẽ nằm trong `docs/verification/` và `docs/artifacts/`.
 
-## Kết quả kiểm chứng ngày25/10/2026
+## Kết quả kiểm chứng build runtime trước khi externalize (25/10/2026)
 
 [Biên bản](verification/world_assets_2026-10-25.json) · [Catalog đã pin revision](artifacts/catalog_2026-10-25.json).
 

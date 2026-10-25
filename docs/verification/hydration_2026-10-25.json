@@ -1,0 +1,347 @@
+{
+  "build_full_legacy": {
+    "build_returncode": 0,
+    "status": "PASS",
+    "with_history_index": {
+      "checks": {
+        "all_expected_assets_byte_equal": true,
+        "all_expected_assets_present": true,
+        "excluded_payloads_absent": true,
+        "historical_payload_inventory_available": true
+      },
+      "different": [],
+      "expected_asset_bytes": 313221332,
+      "expected_assets": 12042,
+      "expected_world_bytes": 298024118,
+      "expected_world_files": 11997,
+      "installed_payload_directories": [
+        "school_arena/demo_1/dataset_v1.0",
+        "school_arena/demo_1/scenario_generator/generated",
+        "school_arena/demo_1/scenario_generator/generated_v1"
+      ],
+      "legacy": true,
+      "missing": [],
+      "note": "Caches/untracked files outside excluded directories are not part of committed-asset comparison; old prefixes are not cleaned automatically.",
+      "revision": "4e8c222dbf2e988a345fa4ffd5b266b4df8687b2",
+      "status": "PASS"
+    },
+    "without_history_index": {
+      "checks": {
+        "all_expected_assets_byte_equal": true,
+        "all_expected_assets_present": true,
+        "excluded_payloads_absent": true,
+        "historical_payload_inventory_available": false
+      },
+      "different": [],
+      "expected_asset_bytes": 17466138,
+      "expected_assets": 218,
+      "expected_world_bytes": 2268924,
+      "expected_world_files": 173,
+      "installed_payload_directories": [
+        "school_arena/demo_1/dataset_v1.0",
+        "school_arena/demo_1/scenario_generator/generated",
+        "school_arena/demo_1/scenario_generator/generated_v1"
+      ],
+      "legacy": true,
+      "missing": [],
+      "note": "Caches/untracked files outside excluded directories are not part of committed-asset comparison; old prefixes are not cleaned automatically.",
+      "revision": "4e8c222dbf2e988a345fa4ffd5b266b4df8687b2",
+      "status": "FAIL"
+    }
+  },
+  "builds_before_hydrate": {
+    "results": [
+      {
+        "audit": {
+          "reason": "missing historical payload; actionable hydrate command emitted",
+          "status": "EXPECTED_FAIL"
+        },
+        "name": "legacy_missing",
+        "returncode": 1
+      },
+      {
+        "audit": {
+          "checks": {
+            "all_expected_assets_byte_equal": true,
+            "all_expected_assets_present": true,
+            "excluded_payloads_absent": true
+          },
+          "different": [],
+          "expected_asset_bytes": 17466138,
+          "expected_assets": 218,
+          "expected_world_bytes": 2268924,
+          "expected_world_files": 173,
+          "installed_payload_directories": [],
+          "legacy": false,
+          "missing": [],
+          "note": "Caches/untracked files outside excluded directories are not part of committed-asset comparison; old prefixes are not cleaned automatically.",
+          "revision": "2e911184e731501eb23c8ac7bf22c8a118418ed5",
+          "status": "PASS"
+        },
+        "name": "runtime_copy",
+        "returncode": 0
+      },
+      {
+        "audit": {
+          "checks": {
+            "all_expected_assets_byte_equal": true,
+            "all_expected_assets_present": true,
+            "excluded_payloads_absent": true
+          },
+          "different": [],
+          "expected_asset_bytes": 17466138,
+          "expected_assets": 218,
+          "expected_world_bytes": 2268924,
+          "expected_world_files": 173,
+          "installed_payload_directories": [],
+          "legacy": false,
+          "missing": [],
+          "note": "Caches/untracked files outside excluded directories are not part of committed-asset comparison; old prefixes are not cleaned automatically.",
+          "revision": "2e911184e731501eb23c8ac7bf22c8a118418ed5",
+          "status": "PASS"
+        },
+        "name": "runtime_symlink",
+        "returncode": 0
+      }
+    ],
+    "status": "PASS"
+  },
+  "code_revision": "4e8c222dbf2e988a345fa4ffd5b266b4df8687b2",
+  "consumers": {
+    "all_byte_equal": true,
+    "archive_sha256": "7eafef8245d6e6725efd154294d4ec46532186f7a4555f0e0f1502937c0d098d",
+    "before_sha256": "7eafef8245d6e6725efd154294d4ec46532186f7a4555f0e0f1502937c0d098d",
+    "dataset": {
+      "audit_limitation": "Read-only parity audit in Python without ROS setup; rosbag2_py unavailable. INCOMPLETE retained, no claim of accepted bag readability or new navigation execution",
+      "audit_state": "INCOMPLETE",
+      "integrity_issues": [
+        "ep_000001: rosbag2_py unavailable for bag readability check",
+        "ep_000002: rosbag2_py unavailable for bag readability check",
+        "ep_000003: rosbag2_py unavailable for bag readability check",
+        "ep_000005: rosbag2_py unavailable for bag readability check",
+        "ep_000006: rosbag2_py unavailable for bag readability check",
+        "ep_000007: rosbag2_py unavailable for bag readability check",
+        "ep_000008: rosbag2_py unavailable for bag readability check",
+        "ep_000009: rosbag2_py unavailable for bag readability check",
+        "ep_000010: rosbag2_py unavailable for bag readability check",
+        "ep_000011: rosbag2_py unavailable for bag readability check",
+        "ep_000012: rosbag2_py unavailable for bag readability check",
+        "ep_000021: rosbag2_py unavailable for bag readability check"
+      ],
+      "loaded_inputs": 605,
+      "loader_failures": [],
+      "plan_rows": 605,
+      "registry_status_counts": {
+        "FAIL_INFRASTRUCTURE": 1,
+        "PASS": 12,
+        "PLANNED": 591,
+        "RUNNING": 1
+      }
+    },
+    "git_sha256": "7eafef8245d6e6725efd154294d4ec46532186f7a4555f0e0f1502937c0d098d",
+    "scenario_coverage": {
+      "generated": {
+        "artifact_fail": 0,
+        "artifact_pass": 134,
+        "episodes": 134,
+        "unclassified_failures": 0
+      },
+      "generated_v1": {
+        "artifact_fail": 0,
+        "artifact_pass": 72,
+        "episodes": 72,
+        "unclassified_failures": 0
+      }
+    }
+  },
+  "date": "2026-10-25",
+  "final_native_checks": {
+    "default_installs": {
+      "runtime_copy": {
+        "checks": {
+          "all_expected_assets_byte_equal": true,
+          "all_expected_assets_present": true,
+          "excluded_payloads_absent": true,
+          "historical_payload_inventory_available": true
+        },
+        "different": [],
+        "expected_asset_bytes": 17466138,
+        "expected_assets": 218,
+        "expected_world_bytes": 2268924,
+        "expected_world_files": 173,
+        "installed_payload_directories": [],
+        "legacy": false,
+        "missing": [],
+        "note": "Caches/untracked files outside excluded directories are not part of committed-asset comparison; old prefixes are not cleaned automatically.",
+        "revision": "4e8c222dbf2e988a345fa4ffd5b266b4df8687b2",
+        "status": "PASS"
+      },
+      "runtime_symlink": {
+        "checks": {
+          "all_expected_assets_byte_equal": true,
+          "all_expected_assets_present": true,
+          "excluded_payloads_absent": true,
+          "historical_payload_inventory_available": true
+        },
+        "different": [],
+        "expected_asset_bytes": 17466138,
+        "expected_assets": 218,
+        "expected_world_bytes": 2268924,
+        "expected_world_files": 173,
+        "installed_payload_directories": [],
+        "legacy": false,
+        "missing": [],
+        "note": "Caches/untracked files outside excluded directories are not part of committed-asset comparison; old prefixes are not cleaned automatically.",
+        "revision": "4e8c222dbf2e988a345fa4ffd5b266b4df8687b2",
+        "status": "PASS"
+      }
+    },
+    "missing_legacy_guard": {
+      "actionable_group_specific_report": true,
+      "returncode": 1
+    },
+    "payloads_absent": true,
+    "status": "PASS"
+  },
+  "hydration": {
+    "consumer_results_byte_equal": true,
+    "groups_per_source": 3,
+    "hydrations": [
+      {
+        "changed": true,
+        "files": 10120,
+        "group": "world:school_arena/demo_1/dataset_v1.0",
+        "inventory_sha256": "593479c053609a56d5b675981b1ff3f05a125d4664015e693219c1f4975dff3f",
+        "logical_bytes": 272955268,
+        "object_id": "8ad8df8882fdfd5caf67dac774c6083065ec82c64de68958f0c2f01c935efeff",
+        "revision": "e96e3108bb9ac954403b747e03ac8c5346d6560a",
+        "root": "src/custom_corridor/worlds/school_arena/demo_1/dataset_v1.0",
+        "schema": "dynamuhsim_history_hydration/1",
+        "source": "archive",
+        "state": "present_verified"
+      },
+      {
+        "changed": true,
+        "files": 917,
+        "group": "world:school_arena/demo_1/scenario_generator/generated",
+        "inventory_sha256": "ed7e08f939893d47fe0cf559013a30fe7aeff2a218a3681d12ca9a28d144cc35",
+        "logical_bytes": 14207921,
+        "object_id": "3bf301b4cbbe4e7949514dec7d2b257042d119f2f0e978433912853d7a580dae",
+        "revision": "e96e3108bb9ac954403b747e03ac8c5346d6560a",
+        "root": "src/custom_corridor/worlds/school_arena/demo_1/scenario_generator/generated",
+        "schema": "dynamuhsim_history_hydration/1",
+        "source": "archive",
+        "state": "present_verified"
+      },
+      {
+        "changed": true,
+        "files": 787,
+        "group": "world:school_arena/demo_1/scenario_generator/generated_v1",
+        "inventory_sha256": "94befed76cce87b7539b8bd22a42d4bccf987445b6b023296f0cd06682de6408",
+        "logical_bytes": 8592005,
+        "object_id": "e273d06cec8f4aa5614f7c8b73e1c6781f663285b415381e023e89cffe01d178",
+        "revision": "e96e3108bb9ac954403b747e03ac8c5346d6560a",
+        "root": "src/custom_corridor/worlds/school_arena/demo_1/scenario_generator/generated_v1",
+        "schema": "dynamuhsim_history_hydration/1",
+        "source": "archive",
+        "state": "present_verified"
+      },
+      {
+        "changed": true,
+        "files": 10120,
+        "group": "world:school_arena/demo_1/dataset_v1.0",
+        "inventory_sha256": "593479c053609a56d5b675981b1ff3f05a125d4664015e693219c1f4975dff3f",
+        "logical_bytes": 272955268,
+        "object_id": "8ad8df8882fdfd5caf67dac774c6083065ec82c64de68958f0c2f01c935efeff",
+        "revision": "e96e3108bb9ac954403b747e03ac8c5346d6560a",
+        "root": "src/custom_corridor/worlds/school_arena/demo_1/dataset_v1.0",
+        "schema": "dynamuhsim_history_hydration/1",
+        "source": "git",
+        "state": "present_verified"
+      },
+      {
+        "changed": true,
+        "files": 917,
+        "group": "world:school_arena/demo_1/scenario_generator/generated",
+        "inventory_sha256": "ed7e08f939893d47fe0cf559013a30fe7aeff2a218a3681d12ca9a28d144cc35",
+        "logical_bytes": 14207921,
+        "object_id": "3bf301b4cbbe4e7949514dec7d2b257042d119f2f0e978433912853d7a580dae",
+        "revision": "e96e3108bb9ac954403b747e03ac8c5346d6560a",
+        "root": "src/custom_corridor/worlds/school_arena/demo_1/scenario_generator/generated",
+        "schema": "dynamuhsim_history_hydration/1",
+        "source": "git",
+        "state": "present_verified"
+      },
+      {
+        "changed": true,
+        "files": 787,
+        "group": "world:school_arena/demo_1/scenario_generator/generated_v1",
+        "inventory_sha256": "94befed76cce87b7539b8bd22a42d4bccf987445b6b023296f0cd06682de6408",
+        "logical_bytes": 8592005,
+        "object_id": "e273d06cec8f4aa5614f7c8b73e1c6781f663285b415381e023e89cffe01d178",
+        "revision": "e96e3108bb9ac954403b747e03ac8c5346d6560a",
+        "root": "src/custom_corridor/worlds/school_arena/demo_1/scenario_generator/generated_v1",
+        "schema": "dynamuhsim_history_hydration/1",
+        "source": "git",
+        "state": "present_verified"
+      }
+    ],
+    "removed_tracked_bytes": 295755194,
+    "removed_tracked_files": 11824,
+    "sources": [
+      "archive",
+      "git"
+    ],
+    "status": "PASS"
+  },
+  "initial_migration_revision": "2e911184e731501eb23c8ac7bf22c8a118418ed5",
+  "preservation_cleanup": {
+    "canonical_archives_retained": true,
+    "current_gates_preserved": 7,
+    "main_index_byte_equal": true,
+    "main_status_equal": true,
+    "payload_roots_absent": true,
+    "protected_report_files": 3088,
+    "removed_only_our_temporary_payloads": [
+      {
+        "files": 10120,
+        "kind": "our_verified_hydration",
+        "logical_bytes": 272955268,
+        "path": "/home/cuongbien/DynamuhSim/experiments/social_navigation/benchmark/generated/refactor_workspace/src/custom_corridor/worlds/school_arena/demo_1/dataset_v1.0"
+      },
+      {
+        "files": 917,
+        "kind": "our_verified_hydration",
+        "logical_bytes": 14207921,
+        "path": "/home/cuongbien/DynamuhSim/experiments/social_navigation/benchmark/generated/refactor_workspace/src/custom_corridor/worlds/school_arena/demo_1/scenario_generator/generated"
+      },
+      {
+        "files": 787,
+        "kind": "our_verified_hydration",
+        "logical_bytes": 8592005,
+        "path": "/home/cuongbien/DynamuhSim/experiments/social_navigation/benchmark/generated/refactor_workspace/src/custom_corridor/worlds/school_arena/demo_1/scenario_generator/generated_v1"
+      },
+      {
+        "files": 12080,
+        "kind": "our_verified_legacy_install",
+        "logical_bytes": 313313623,
+        "path": "/home/cuongbien/DynamuhSim/experiments/social_navigation/benchmark/generated/refactor_workspace/experiments/social_navigation/benchmark/generated/hydration_20261025/legacy_hydrated/install"
+      }
+    ],
+    "report_bytes": 239670204,
+    "status": "PASS"
+  },
+  "schema": "dynamuhsim_hydration_verification/1",
+  "scope": [
+    "Only three historical world payloads externalized; all benchmark reports retained",
+    "Main checkout/index unchanged; isolated refactor worktree is clean of hydrated payloads",
+    "No Git history rewrite and no clone history reduction",
+    "No new Gazebo, Docker, navigation or full historical replay run",
+    "WM dataset01 and frozen splits, labels and outcomes unchanged"
+  ],
+  "unit_tests": {
+    "log_sha256": "4624e474626a545c6c5e8c846ef3bcde94963a6efe14a27c973828adddfc45e4",
+    "status": "PASS",
+    "tests": 85
+  }
+}

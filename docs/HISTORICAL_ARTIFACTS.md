@@ -1,6 +1,6 @@
 # Archive và khôi phục payload lịch sử
 
-`tools/archive_history.py` đóng gói **toàn bộ nhóm trong catalog đã pin**, đọc committed Git blobs thay vì working tree. Công cụ không xóa, di chuyển hoặc ghi đè dataset/report nguồn. Capture ON/OFF/MCAP riêng vẫn dùng `tools/artifact_store.py`.
+`tools/archive_history.py` đóng gói **toàn bộ nhóm trong catalog đã pin**, đọc committed Git blobs thay vì working tree. Công cụ archive không xóa, di chuyển hoặc ghi đè dataset/report nguồn. Ba world payload đã được chuyển khỏi HEAD ở bước hydrate tiếp theo, mô tả phía dưới. Capture ON/OFF/MCAP riêng vẫn dùng `tools/artifact_store.py`.
 
 ## Ba thao tác
 
@@ -91,3 +91,32 @@ Mặc định checkout và index là repository chứa tool; `--checkout` và `-
 Payload được ghi vào staging trên cùng filesystem, kiểm lại từng SHA256/mode rồi publish thư mục bằng thao tác atomic không ghi đè (`renameat2` trên Linux, `rename` trên Windows). Nếu đích xuất hiện giữa chừng, hydrate dừng và giữ dữ liệu đó. Nền tảng không có thao tác publish hỗ trợ sẽ báo lỗi. Thư mục đích có sẵn chỉ được chấp nhận khi toàn bộ inventory đúng, không có file dư; file khác, thiếu, rỗng hoặc symlink bị chặn. Tool không merge, xóa hoặc thay nội dung người dùng.
 
 Ba world payload được ignore riêng sau migration; report/gate không thay đổi. `DYNAMUHSIM_INSTALL_LEGACY_WORLD_PAYLOADS=ON` yêu cầu ba thư mục tồn tại và báo lệnh hydrate nếu thiếu. Sau hydrate vẫn nên chạy `--check` cho từng nhóm trước khi dùng; CMake guard chỉ kiểm thư mục tồn tại, không thay kiểm integrity. Default build không cần hydrate.
+
+Audit **full legacy install** sau hydrate phải có index lịch sử, vì HEAD không còn chứa các blob payload trong cây hiện tại:
+
+```bash
+python3 tools/catalog_assets.py verify-install --legacy \
+  --history-index docs/artifacts/history_2026-10-25.json \
+  --share-dir /PATH/TO/install/custom_corridor/share/custom_corridor \
+  --output /PATH/TO/NEW_legacy_audit.json
+```
+
+Nếu một payload trong policy không còn tracked và không cung cấp index, audit trả FAIL với `historical_payload_inventory_available=false`. Có index, audit dựng inventory từ revision đã pin và kiểm từng byte của đủ payload đã cài; không chỉ kiểm phần resource còn tracked ở HEAD.
+
+## Kết quả chuyển ba world payload khỏi HEAD (25/10/2026)
+
+[Manifest migration](artifacts/world_payload_migration_2026-10-25.json) · [Biên bản hydrate/consumer/build](verification/hydration_2026-10-25.json).
+
+Đã bỏ **11.824 tệp / 295.755.194 byte** của ba payload school khỏi cây Git hiện tại. Dữ liệu vẫn được phục hồi từ commit đã pin hoặc archive local. Không rewrite lịch sử, nên clone đầy đủ vẫn tải lịch sử cũ; giảm ở đây là số file/byte của checkout HEAD. Cả 47 nhóm reports (3.088 tệp / 239.670.204 byte), bảy gate và source freeze được giữ nguyên byte.
+
+**85 tests PASS.** Hydrate thật bằng CLI được chạy cho cả ba nhóm từ archive và từ Git khi HEAD không còn track payload. Mỗi nguồn khôi phục đúng đường dẫn, hash/mode/coverage; kết quả JSON consumer trước migration, sau hydrate archive và sau hydrate Git giống byte hoàn toàn.
+
+- Production config vẫn resolve đúng `dataset_v1.0`; `read_plan` và `EpisodeLoader` đọc được 605/605 episode inputs, so identity/seed/hash với plan, không có loader failure.
+- Consumer `scenario_coverage.py` kiểm 134/134 episode trong `generated` và 72/72 trong `generated_v1`: artifact PASS, không có artifact FAIL hoặc lỗi không phân loại.
+- Production audit chỉ đọc vẫn là **INCOMPLETE**. Registry cũ có 12 PASS, 1 FAIL_INFRASTRUCTURE, 591 PLANNED, 1 RUNNING. Lượt parity chạy không source ROS nên còn báo `rosbag2_py unavailable`; đây không phải kiểm chứng bag readability hoặc chứng nhận dataset hoàn chỉnh. Không đổi outcome/nhãn/split.
+- Payload vắng mặt: build runtime-copy và runtime-symlink thành công; audit đủ 173 world files. Build legacy báo thiếu payload cùng lệnh hydrate và report theo từng nhóm.
+- Sau hydrate: full legacy copy build thành công và audit với history index kiểm đủ 11.997 world files / 12.042 resource files. Bỏ history index khiến audit FAIL đúng, tránh PASS trên tập file còn tracked ở HEAD.
+
+Đã đối chiếu lại rồi dọn **chỉ các payload hydrate và full legacy install tạo để kiểm thử**; giữ archive canonical, log và hai runtime prefix. Checkout nhánh dọn dẹp hiện không có ba payload; hydrate theo nhu cầu sẽ làm chúng xuất hiện dưới dạng ignored data. Checkout/index chính của người dùng không đổi.
+
+Phần còn lại là phân loại consumer của 47 nhóm report trước khi chuyển chúng: gate đang dùng, source snapshot cần replay và media/số liệu lịch sử. Hydrate dữ liệu không tự chứng minh mọi workflow ROS/Docker lịch sử hoạt động.
