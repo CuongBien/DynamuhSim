@@ -15,7 +15,6 @@ import os
 import sys
 import time
 import math
-import signal
 import argparse
 import subprocess
 
@@ -30,6 +29,9 @@ from nav2_msgs.action import NavigateToPose
 from action_msgs.msg import GoalStatus
 from rosgraph_msgs.msg import Clock
 from nav_msgs.msg import Odometry
+
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../../..")))
+from experiments.gazebo_benchmark.core.mppi_trial import scoped_processes
 
 # Waypoint route in Hospital Arena:
 # Robot spawns at (-18.0, 0.0)
@@ -67,7 +69,8 @@ class HospitalNavigatorNode(Node):
         self.robot_speed = (vx * vx + vy * vy) ** 0.5
 
 
-def main():
+@scoped_processes
+def main(*, _processes=None):
     parser = argparse.ArgumentParser(description="Hospital Arena Live Interactive Navigation Demo")
     parser.add_argument("--difficulty", type=str, default="easy", choices=["easy", "medium", "hard"], help="Hospital difficulty level (default: easy)")
     parser.add_argument("--robot-model", type=str, default="mecanum", choices=["mecanum", "burger"], help="Robot drive model: mecanum or burger (default: mecanum)")
@@ -110,7 +113,6 @@ def main():
     env["GZ_SIM_RESOURCE_PATH"] = f"{package_share}/models:{os.environ.get('GZ_SIM_RESOURCE_PATH', '')}"
     env["GZ_SIM_SYSTEM_PLUGIN_PATH"] = f"{plugin_lib}:{os.environ.get('GZ_SIM_SYSTEM_PLUGIN_PATH', '')}"
 
-    procs = []
     nav2_log_fp = None
     try:
         # Step 1: Launch Hospital Arena Simulation (rviz:=false to let Gazebo initialize OpenGL first)
@@ -121,8 +123,7 @@ def main():
             "gui:=true",
             "rviz:=false"
         ]
-        p_sim = subprocess.Popen(sim_cmd, env=env, preexec_fn=os.setsid)
-        procs.append(p_sim)
+        p_sim = _processes.popen(sim_cmd, env=env, preexec_fn=os.setsid)
 
         print(f"⏳ Step 1/3: Launching Gazebo 3D simulation ({args.difficulty} level, 6 seconds)...")
         time.sleep(6.0)
@@ -137,8 +138,7 @@ def main():
             f"map:=hospital/hospital_{args.difficulty}",
             "auto_route:=false"
         ]
-        p_nav = subprocess.Popen(nav_cmd, env=env, stdout=nav2_log_fp, stderr=subprocess.STDOUT, text=True, preexec_fn=os.setsid)
-        procs.append(p_nav)
+        p_nav = _processes.popen(nav_cmd, env=env, stdout=nav2_log_fp, stderr=subprocess.STDOUT, text=True, preexec_fn=os.setsid)
 
         print("⏳ Step 2/3: Launching Nav2 stack...")
         print("    Waiting for Nav2 lifecycle managers to activate all nodes...")
@@ -165,8 +165,7 @@ def main():
             if not os.path.exists(rviz_cfg):
                 rviz_cfg = os.path.join(package_share, "rviz", "corridor.rviz")
             rviz_cmd = ["rviz2", "-d", rviz_cfg]
-            p_rviz = subprocess.Popen(rviz_cmd, env=env, preexec_fn=os.setsid)
-            procs.append(p_rviz)
+            p_rviz = _processes.popen(rviz_cmd, env=env, preexec_fn=os.setsid)
             time.sleep(2.0)
 
         rclpy.init(domain_id=args.domain_id)
@@ -256,15 +255,7 @@ def main():
         print("Cleaning up processes...")
         if nav2_log_fp and not nav2_log_fp.closed:
             nav2_log_fp.close()
-        for p in procs:
-            try:
-                os.killpg(os.getpgid(p.pid), signal.SIGTERM)
-                time.sleep(0.3)
-                os.killpg(os.getpgid(p.pid), signal.SIGKILL)
-            except Exception:
-                pass
-        for pattern in ["gz sim", "gz-sim-server", "rviz2", "ros_gz_bridge"]:
-            subprocess.run(["pkill", "-9", "-f", pattern], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        _processes.stop()
         print("Done. All processes cleaned up.")
 
 

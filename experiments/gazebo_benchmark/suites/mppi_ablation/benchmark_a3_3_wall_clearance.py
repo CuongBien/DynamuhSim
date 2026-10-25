@@ -48,6 +48,7 @@ from pathlib import Path as FilePath
 ROOT_DIR = str(FilePath(__file__).resolve().parents[4])
 sys.path.insert(0, ROOT_DIR)
 from experiments.gazebo_benchmark.core.geometry import compute_rect_circle_distance
+from experiments.gazebo_benchmark.core.mppi_trial import scoped_processes
 ROBOT_MODEL_SDF = os.path.join(ROOT_DIR, "experiments/gazebo_benchmark/configs/robot_models/model_mecanum_step1.sdf")
 NAV2_YAML_3B = os.path.join(ROOT_DIR, "experiments/gazebo_benchmark/configs/nav2_mppi/nav2_mppi_step3b.yaml")
 PROFILER_LIB = os.path.join(ROOT_DIR, "experiments/gazebo_benchmark/core/profiler/libcontroller_profiler.so")
@@ -342,7 +343,8 @@ class WallClearanceInteractionMonitor(Node):
         }
 
 
-def run_single_trial(corridor_type: str, persona: str, seed: int, v_human: float, domain_id: int, out_json: str):
+@scoped_processes
+def run_single_trial(corridor_type: str, persona: str, seed: int, v_human: float, domain_id: int, out_json: str, *, _processes=None):
     gen_dir = os.path.join(ROOT_DIR, "experiments/gazebo_benchmark/configs/generated")
     os.makedirs(gen_dir, exist_ok=True)
 
@@ -408,7 +410,6 @@ def run_single_trial(corridor_type: str, persona: str, seed: int, v_human: float
 
     nav2_env = env.copy()
 
-    all_procs = []
     nav2_log_path = f"/tmp/nav2_a3_3_wallfix_{corridor_type}_{persona}_{seed}_{domain_id}.log"
     log_fp = open(nav2_log_path, "w")
 
@@ -429,8 +430,7 @@ def run_single_trial(corridor_type: str, persona: str, seed: int, v_human: float
             "robot_model:=mecanum",
             "x:=-13.0", "y:=0.0", "yaw:=0.0"
         ]
-        gz_p = subprocess.Popen(sim_cmd, env=env, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, preexec_fn=os.setsid)
-        all_procs.append(gz_p)
+        gz_p = _processes.popen(sim_cmd, env=env, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, preexec_fn=os.setsid)
         time.sleep(4.5)
 
         # Launch Nav2 with Step 3b Config
@@ -441,8 +441,7 @@ def run_single_trial(corridor_type: str, persona: str, seed: int, v_human: float
             f"map:={map_arg}",
             "robot_model:=mecanum"
         ]
-        nav2_p = subprocess.Popen(nav2_cmd, env=nav2_env, stdout=log_fp, stderr=subprocess.STDOUT, text=True, preexec_fn=os.setsid)
-        all_procs.append(nav2_p)
+        nav2_p = _processes.popen(nav2_cmd, env=nav2_env, stdout=log_fp, stderr=subprocess.STDOUT, text=True, preexec_fn=os.setsid)
 
         t0 = time.time()
         nav2_ready = False
@@ -475,13 +474,7 @@ def run_single_trial(corridor_type: str, persona: str, seed: int, v_human: float
         result = {"error": str(e)}
     finally:
         log_fp.close()
-        for p in all_procs:
-            try:
-                os.killpg(os.getpgid(p.pid), signal.SIGTERM)
-                p.wait(timeout=3.0)
-            except Exception:
-                try: os.killpg(os.getpgid(p.pid), signal.SIGKILL)
-                except Exception: pass
+        _processes.stop()
 
     result["seed"] = seed
     result["corridor"] = corridor_type
@@ -494,20 +487,6 @@ def run_single_trial(corridor_type: str, persona: str, seed: int, v_human: float
 
     with open(out_json, "w") as fp:
         json.dump(result, fp, indent=2)
-
-
-def cleanup_all():
-    subprocess.run(["pkill", "-9", "-f", "gz sim"], stderr=subprocess.DEVNULL)
-    subprocess.run(["killall", "-9", "map_server", "amcl", "planner_server", "controller_server",
-                    "bt_navigator", "behavior_server", "waypoint_follower", "lifecycle_manager",
-                    "parameter_bridge", "static_transform_publisher", "robot_state_publisher"], stderr=subprocess.DEVNULL)
-    subprocess.run(["pkill", "-9", "-f", "nav2_"], stderr=subprocess.DEVNULL)
-    subprocess.run(["pkill", "-9", "-f", "robot_state_publisher"], stderr=subprocess.DEVNULL)
-    subprocess.run(["pkill", "-9", "-f", "corridor_tb3"], stderr=subprocess.DEVNULL)
-    subprocess.run(["pkill", "-9", "-f", "parameter_bridge"], stderr=subprocess.DEVNULL)
-    subprocess.run(["pkill", "-9", "-f", "ros2"], stderr=subprocess.DEVNULL)
-    subprocess.run(["ros2", "daemon", "stop"], stderr=subprocess.DEVNULL)
-    time.sleep(2.0)
 
 
 def aggregate_and_report(trials: List[dict], out_file: str):
@@ -635,7 +614,8 @@ def aggregate_and_report(trials: List[dict], out_file: str):
     print("=" * 135, flush=True)
 
 
-def main():
+@scoped_processes
+def main(*, _processes=None):
     parser = argparse.ArgumentParser(description="Wall Clearance Benchmark Runner")
     parser.add_argument("--run_single", action="store_true")
     parser.add_argument("--corridor", type=str, default="090")
@@ -667,7 +647,7 @@ def main():
     print("=" * 105, flush=True)
 
     if not args.aggregate_only:
-        cleanup_all()
+        time.sleep(2.0)
         runs_to_do = []
         for c in cells:
             c_type = c["corridor"]
@@ -693,7 +673,7 @@ def main():
                     pass
 
             print(f"\n[{idx}/{len(runs_to_do)}] Running Wall Fix: Corridor {c_type}, Persona {persona}, Seed {seed} (v_human={v_h:.3f} m/s)...", flush=True)
-            cleanup_all()
+            time.sleep(2.0)
             cmd = [
                 sys.executable, __file__,
                 "--run_single",
@@ -706,10 +686,10 @@ def main():
             ]
             t_s = time.time()
             try:
-                subprocess.run(cmd, check=True)
+                _processes.run(cmd, check=True)
             except Exception as e:
                 print(f"[ERROR] Trial failed for seed {seed}: {e}", flush=True)
-            cleanup_all()
+            time.sleep(2.0)
             t_dur = time.time() - t_s
             if os.path.exists(out_f):
                 with open(out_f) as fp:

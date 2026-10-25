@@ -31,6 +31,9 @@ from rosgraph_msgs.msg import Clock
 from sensor_msgs.msg import Image, LaserScan
 from geometry_msgs.msg import TwistStamped
 
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../..")))
+from experiments.gazebo_benchmark.core.mppi_trial import scoped_processes
+
 
 class TelemetryCollector(Node):
     def __init__(self, domain_id: int):
@@ -122,7 +125,8 @@ def get_process_cpu_breakdown():
     return gz_cpu, bridge_cpu, nav2_cpu, ros_nodes_cpu
 
 
-def run_benchmark_trial(num_instances: int, num_humans: int, with_nav2: bool, root_dir: str, measure_duration_s=12.0, warmup_s=5.0):
+@scoped_processes
+def run_benchmark_trial(num_instances: int, num_humans: int, with_nav2: bool, root_dir: str, measure_duration_s=12.0, warmup_s=5.0, *, _processes=None):
     world_file = os.path.join(root_dir, f"experiments/gazebo_benchmark/configs/generated/world_n{num_humans}_actor_and_cylinder.sdf")
     params_file = os.path.join(root_dir, "install/custom_corridor/share/custom_corridor/config/nav2_mppi_mecanum.yaml")
     corridor_models = os.path.join(root_dir, "install/custom_corridor/share/custom_corridor/models")
@@ -135,7 +139,6 @@ def run_benchmark_trial(num_instances: int, num_humans: int, with_nav2: bool, ro
     base_env["GZ_SIM_RESOURCE_PATH"] = f"{corridor_models}:{os.environ.get('GZ_SIM_RESOURCE_PATH', '')}"
     base_env["GZ_SIM_SYSTEM_PLUGIN_PATH"] = f"{plugin_lib}:{os.environ.get('GZ_SIM_SYSTEM_PLUGIN_PATH', '')}"
 
-    all_procs = []
     worker_procs = []
     worker_files = []
 
@@ -160,8 +163,7 @@ def run_benchmark_trial(num_instances: int, num_humans: int, with_nav2: bool, ro
                 "robot_model:=mecanum",
                 "x:=-13.0", "y:=0.0", "yaw:=0.0"
             ]
-            sim_p = subprocess.Popen(sim_cmd, env=env_i, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, preexec_fn=os.setsid)
-            all_procs.append(sim_p)
+            sim_p = _processes.popen(sim_cmd, env=env_i, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, preexec_fn=os.setsid)
 
             # 2. If with Nav2, launch Nav2 MPPI stack
             if with_nav2:
@@ -172,8 +174,7 @@ def run_benchmark_trial(num_instances: int, num_humans: int, with_nav2: bool, ro
                     "map:=corridor_090",
                     "robot_model:=mecanum"
                 ]
-                nav2_p = subprocess.Popen(nav2_cmd, env=env_i, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, preexec_fn=os.setsid)
-                all_procs.append(nav2_p)
+                nav2_p = _processes.popen(nav2_cmd, env=env_i, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, preexec_fn=os.setsid)
 
             # Stagger launch slightly to avoid d3d12 mutex collisions
             time.sleep(1.0)
@@ -186,7 +187,7 @@ def run_benchmark_trial(num_instances: int, num_humans: int, with_nav2: bool, ro
                 os.remove(out_f)
             worker_files.append(out_f)
             w_cmd = [sys.executable, os.path.abspath(__file__), "--worker", str(dom_id), str(total_duration_s), out_f]
-            wp = subprocess.Popen(w_cmd, preexec_fn=os.setsid)
+            wp = _processes.popen(w_cmd, preexec_fn=os.setsid)
             worker_procs.append(wp)
 
         # Cold restart measurement: wait for warm-up period
@@ -223,20 +224,8 @@ def run_benchmark_trial(num_instances: int, num_humans: int, with_nav2: bool, ro
                 pass
 
     finally:
-        for p in all_procs:
-            try:
-                os.killpg(os.getpgid(p.pid), signal.SIGTERM)
-                time.sleep(0.1)
-                os.killpg(os.getpgid(p.pid), signal.SIGKILL)
-            except Exception:
-                pass
+        _processes.stop()
         time.sleep(1.5)
-        for proc_name in [
-            "gz sim", "gz-sim", "ros_gz_bridge", "parameter_bridge", "image_bridge",
-            "controller_server", "planner_server", "bt_navigator", "behavior_server",
-            "waypoint_follower", "lifecycle_manager", "amcl", "map_server", "robot_state_publisher"
-        ]:
-            subprocess.run(["pkill", "-9", "-f", proc_name], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
 
     # Process metrics

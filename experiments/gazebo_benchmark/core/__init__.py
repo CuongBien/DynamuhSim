@@ -3,6 +3,7 @@ Shared Core Modules for DynamuhSim Gazebo Harmonic Benchmarks.
 - geometry: Footprint clearance and predictive wall safety filter.
 - mppi_monitor: One ROS interaction monitor for Step1/Step2/Step3 profiles (import explicitly when ROS is available).
 - policies: Robot policies P1, P2, P3 (a-d), and P4.
+- mppi_trial: Owned subprocess scopes and Step1/2/3 launch lifecycle.
 - sim_env: Gazebo environments, spawn/bridge commands, SDF patching and scenario helpers.
 - trajectory: A3 sim-time trajectory collectors (import explicitly when ROS is available).
 """
@@ -24,8 +25,9 @@ from .policies import (
     create_policy_instance,
 )
 from .sim_env import (
-    cleanup_all,
     create_corridor_scenario_json,
     patch_corridor_world_sdf,
     build_sim_env,
 )
+
+from .mppi_trial import scoped_processes

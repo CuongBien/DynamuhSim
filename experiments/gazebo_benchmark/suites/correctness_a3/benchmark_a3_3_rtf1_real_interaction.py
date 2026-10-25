@@ -29,7 +29,6 @@ from pathlib import Path
 import sys
 import time
 import math
-import signal
 import subprocess
 import json
 import re
@@ -48,6 +47,7 @@ from nav2_msgs.action import NavigateToPose
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[4]))
 from experiments.gazebo_benchmark.core.sim_env import build_benchmark_env
+from experiments.gazebo_benchmark.core.mppi_trial import scoped_processes
 
 ROOT_DIR = "/home/cuongbien/DynamuhSim"
 OUTPUT_JSON = os.path.join(ROOT_DIR, "experiments/gazebo_benchmark/results/correctness_a3/a3_3_rtf1_real_interaction_results.json")
@@ -331,7 +331,8 @@ class A33RTF1InteractionMonitor(Node):
         }
 
 
-def run_single_trial_worker(corridor_type: str, persona: str, seed: int, v_human: float, domain_id: int, out_json: str):
+@scoped_processes
+def run_single_trial_worker(corridor_type: str, persona: str, seed: int, v_human: float, domain_id: int, out_json: str, *, _processes=None):
     gen_dir = os.path.join(ROOT_DIR, "experiments/gazebo_benchmark/configs/generated")
     os.makedirs(gen_dir, exist_ok=True)
 
@@ -386,7 +387,6 @@ def run_single_trial_worker(corridor_type: str, persona: str, seed: int, v_human
     partition = f"a3_3_rtf1_{corridor_type}_{persona}_{seed}_{domain_id}"
     env["GZ_PARTITION"] = partition
 
-    all_procs = []
     nav2_log_path = f"/tmp/nav2_a3_3_rtf1_{corridor_type}_{persona}_{seed}_{domain_id}.log"
     log_fp = open(nav2_log_path, "w")
 
@@ -408,8 +408,7 @@ def run_single_trial_worker(corridor_type: str, persona: str, seed: int, v_human
             "robot_model:=mecanum",
             "x:=-13.0", "y:=0.0", "yaw:=0.0"
         ]
-        gz_p = subprocess.Popen(sim_cmd, env=env, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, preexec_fn=os.setsid)
-        all_procs.append(gz_p)
+        gz_p = _processes.popen(sim_cmd, env=env, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, preexec_fn=os.setsid)
         time.sleep(4.5)
 
         # Launch Nav2
@@ -420,8 +419,7 @@ def run_single_trial_worker(corridor_type: str, persona: str, seed: int, v_human
             f"map:={map_arg}",
             "robot_model:=mecanum"
         ]
-        nav2_p = subprocess.Popen(nav2_cmd, env=env, stdout=log_fp, stderr=subprocess.STDOUT, text=True, preexec_fn=os.setsid)
-        all_procs.append(nav2_p)
+        nav2_p = _processes.popen(nav2_cmd, env=env, stdout=log_fp, stderr=subprocess.STDOUT, text=True, preexec_fn=os.setsid)
 
         t0 = time.time()
         nav2_ready = False
@@ -447,13 +445,8 @@ def run_single_trial_worker(corridor_type: str, persona: str, seed: int, v_human
             rclpy.shutdown()
 
     finally:
-        for p in all_procs:
-            try: os.killpg(os.getpgid(p.pid), signal.SIGTERM)
-            except Exception: pass
+        _processes.stop()
         time.sleep(1.0)
-        for p in all_procs:
-            try: os.killpg(os.getpgid(p.pid), signal.SIGKILL)
-            except Exception: pass
         log_fp.close()
 
     result["seed"] = seed
@@ -467,7 +460,8 @@ def run_single_trial_worker(corridor_type: str, persona: str, seed: int, v_human
         json.dump(result, f, indent=2)
 
 
-def run_cell_sequential(cell: dict, domain_id: int):
+@scoped_processes
+def run_cell_sequential(cell: dict, domain_id: int, *, _processes=None):
     c_type = cell["corridor"]
     persona = cell["persona"]
     s_base = cell["seed_base"]
@@ -493,7 +487,7 @@ def run_cell_sequential(cell: dict, domain_id: int):
         ]
         t_t0 = time.time()
         print(f"  [{cell_name}] Running seed {seed} (v_human={v_human:.3f} m/s)...", flush=True)
-        subprocess.run(cmd, check=True)
+        _processes.run(cmd, check=True)
         t_dur = time.time() - t_t0
 
         if os.path.exists(out_json):
@@ -505,15 +499,8 @@ def run_cell_sequential(cell: dict, domain_id: int):
                   f"Frozen={res.get('frozen_at_start')}", flush=True)
 
 
-def cleanup_lingering():
-    subprocess.run(
-        ["pkill", "-9", "-f", "ros2|custom_corridor|corridor_tb3|nav2_corridor|goal_pose_bridge|static_transform_publisher|robot_state_publisher|controller_server|planner_server|bt_navigator|behavior_server|waypoint_follower|lifecycle_manager|map_server|amcl|parameter_bridge|gz sim"],
-        stderr=subprocess.DEVNULL
-    )
-    time.sleep(1.5)
-
-
-def main():
+@scoped_processes
+def main(*, _processes=None):
     parser = argparse.ArgumentParser(description="A3.3 RTF=1.0 Benchmark")
     parser.add_argument("--run_single", action="store_true")
     parser.add_argument("--corridor", type=str, default="090")
@@ -550,7 +537,7 @@ def main():
     print("=" * 80, flush=True)
 
     if args.run_missing:
-        cleanup_lingering()
+        time.sleep(1.5)
         print("\n>>> Checking all 40 trials to find missing/error runs...", flush=True)
         missing_runs = []
         for c in cells:
@@ -579,7 +566,7 @@ def main():
         print(f">>> Found {len(missing_runs)} runs to execute sequentially.", flush=True)
         for idx, (c_type, persona, seed, v_h, out_f) in enumerate(missing_runs, 1):
             print(f"\n[{idx}/{len(missing_runs)}] Running Corridor {c_type}, Persona {persona}, Seed {seed} (v_human={v_h:.3f} m/s)...", flush=True)
-            cleanup_lingering()
+            time.sleep(1.5)
             cmd = [
                 sys.executable, __file__,
                 "--run_single",
@@ -592,10 +579,10 @@ def main():
             ]
             t_start = time.time()
             try:
-                subprocess.run(cmd, check=True)
+                _processes.run(cmd, check=True)
             except Exception as e:
                 print(f"[ERROR] Execution failed for seed {seed}: {e}", flush=True)
-            cleanup_lingering()
+            time.sleep(1.5)
             t_dur = time.time() - t_start
             if os.path.exists(out_f):
                 with open(out_f) as fp:
@@ -604,12 +591,12 @@ def main():
             time.sleep(1.0)
 
     elif not args.aggregate_only:
-        cleanup_lingering()
+        time.sleep(1.5)
         print("\n>>> Launching 4 Cell Workers concurrently across domains 71, 72, 73, 74...", flush=True)
         workers = []
         for c in cells:
             cmd = [sys.executable, __file__, "--cell_worker", c["name"]]
-            p = subprocess.Popen(cmd)
+            p = _processes.popen(cmd)
             workers.append((c["name"], p))
             time.sleep(3.5)
 

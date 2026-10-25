@@ -7,13 +7,15 @@ Uses ros2 launch corridor_tb3.launch.py with small mecanum robot.
 import sys
 import os
 import time
-import signal
 import subprocess
 import json
 
 import rclpy
 from rclpy.node import Node
 from sensor_msgs.msg import Image, LaserScan
+
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../..")))
+from experiments.gazebo_benchmark.core.mppi_trial import scoped_processes
 
 
 class DepthFrameWaiter(Node):
@@ -38,7 +40,8 @@ class DepthFrameWaiter(Node):
             self.t_first_scan = time.time()
 
 
-def run_measurement(trial_idx: int):
+@scoped_processes
+def run_measurement(trial_idx: int, *, _processes=None):
     domain_id = str(80 + trial_idx)
     os.environ["ROS_DOMAIN_ID"] = domain_id
     os.environ["GALLIUM_DRIVER"] = "d3d12"
@@ -51,7 +54,7 @@ def run_measurement(trial_idx: int):
     ]
 
     t_start = time.time()
-    proc = subprocess.Popen(cmd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, preexec_fn=os.setsid)
+    proc = _processes.popen(cmd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, preexec_fn=os.setsid)
 
     rclpy.init()
     waiter = DepthFrameWaiter()
@@ -66,13 +69,7 @@ def run_measurement(trial_idx: int):
     finally:
         waiter.destroy_node()
         rclpy.shutdown()
-        try:
-            os.killpg(os.getpgid(proc.pid), signal.SIGKILL)
-        except Exception:
-            pass
-        subprocess.run(["pkill", "-9", "-f", "gz sim"], stderr=subprocess.DEVNULL)
-        subprocess.run(["pkill", "-9", "-f", "parameter_bridge"], stderr=subprocess.DEVNULL)
-        subprocess.run(["pkill", "-9", "-f", "image_bridge"], stderr=subprocess.DEVNULL)
+        _processes.stop()
         time.sleep(1.0)
 
     print(f"  Trial {trial_idx + 1}: {dt:.2f} s (Depth: {waiter.received_depth}, Scan: {waiter.received_scan})")

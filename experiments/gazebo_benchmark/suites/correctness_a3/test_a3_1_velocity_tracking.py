@@ -14,7 +14,6 @@ Verifies:
 import os
 import sys
 import time
-import signal
 import subprocess
 import json
 import math
@@ -25,6 +24,9 @@ from rclpy.node import Node
 from rosgraph_msgs.msg import Clock
 from geometry_msgs.msg import TwistStamped
 from nav_msgs.msg import Odometry
+
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../..")))
+from experiments.gazebo_benchmark.core.mppi_trial import scoped_processes
 
 
 class VelocityTrackingTester(Node):
@@ -86,7 +88,8 @@ class VelocityTrackingTester(Node):
         return samples
 
 
-def main():
+@scoped_processes
+def main(*, _processes=None):
     print("=" * 80)
     print("A3.1: MECANUM VELOCITY TRACKING & ACCELERATION LIMIT VERIFICATION")
     print("=" * 80)
@@ -103,7 +106,7 @@ def main():
     ]
     
     print("Launching Gazebo with Mecanum robot...")
-    proc = subprocess.Popen(launch_cmd, env=env, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    proc = _processes.popen(launch_cmd, env=env, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
     
     try:
         time.sleep(8.0) # Wait for Gazebo and bridge to initialize
@@ -188,11 +191,7 @@ def main():
         
     finally:
         rclpy.shutdown()
-        proc.send_signal(signal.SIGINT)
-        time.sleep(2.0)
-        proc.kill()
-        subprocess.run(["pkill", "-9", "-f", "gz sim"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-        subprocess.run(["pkill", "-9", "-f", "ros_gz_bridge"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        _processes.stop()
 
 
 if __name__ == "__main__":

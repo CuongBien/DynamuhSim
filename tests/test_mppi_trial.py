@@ -256,5 +256,124 @@ class MppiTrialTests(unittest.TestCase):
                         process.wait(timeout=5)
 
 
+@unittest.skipUnless(sys.platform == "linux", "Linux process-token ownership")
+class ProcessScopeTests(unittest.TestCase):
+    def test_environment_is_copied_and_private_session_is_required(self):
+        env = {trial.TOKEN_KEY: "ancestor", "ROS_DOMAIN_ID": "77"}
+        scope = trial.ProcessScope(shutdown_timeout=.05)
+        tagged = scope.environment(env)
+        self.assertEqual(env, {trial.TOKEN_KEY: "ancestor", "ROS_DOMAIN_ID": "77"})
+        self.assertEqual(tagged[trial.TOKEN_KEY].split(), ["ancestor", scope.token])
+        with self.assertRaises(ValueError):
+            scope.popen(["unused"], start_new_session=False)
+
+    def test_body_error_survives_cleanup_error(self):
+        with patch.object(trial, "stop_owned", side_effect=OSError("cleanup failed")):
+            with self.assertRaisesRegex(ValueError, "body failed"):
+                with trial.ProcessScope():
+                    raise ValueError("body failed")
+            with self.assertRaisesRegex(OSError, "cleanup failed"):
+                with trial.ProcessScope():
+                    pass
+
+    def exercise_worker(self, mode):
+        with tempfile.TemporaryDirectory() as directory:
+            pidfile = Path(directory) / "detached.pid"
+            child_code = ("import signal,time,pathlib,os,sys; "
+                          "signal.signal(signal.SIGTERM,signal.SIG_IGN); "
+                          "signal.signal(signal.SIGINT,signal.SIG_IGN); "
+                          "pathlib.Path(sys.argv[1]).write_text(str(os.getpid())); time.sleep(120)")
+            worker_code = ("import subprocess,sys,time,pathlib,signal; "
+                           "subprocess.Popen([sys.executable,'-c',sys.argv[2],sys.argv[1]],start_new_session=True); "
+                           "path=pathlib.Path(sys.argv[1]); "
+                           "exec('while not path.exists(): time.sleep(.01)'); "
+                           + ("time.sleep(120)" if mode == "timeout" else "sys.exit(" + ("7" if mode == "failure" else "0") + ")"))
+            unrelated = subprocess.Popen([sys.executable, "-c", "import time;time.sleep(120)"], start_new_session=True)
+            scope = trial.ProcessScope(shutdown_timeout=.05)
+            try:
+                with scope:
+                    command = [sys.executable, "-c", worker_code, str(pidfile), child_code]
+                    if mode == "failure":
+                        with self.assertRaises(subprocess.CalledProcessError) as error:
+                            scope.run(command, check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+                        self.assertEqual(error.exception.returncode, 7)
+                    elif mode == "timeout":
+                        with self.assertRaises(subprocess.TimeoutExpired):
+                            scope.run(command, timeout=1., stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+                    else:
+                        self.assertEqual(scope.run(command, check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL).returncode, 0)
+                    self.assertFalse(scope.members(), "Completed worker left a tagged descendant")
+                    self.assertIsNone(unrelated.poll())
+                if pidfile.exists():
+                    stat = Path('/proc') / pidfile.read_text() / 'stat'
+                    self.assertTrue(not stat.exists() or stat.read_text().rsplit(')', 1)[1].split()[0] in ('Z', 'X'))
+            finally:
+                # Test-owned PIDs only if the assertion or implementation failed.
+                scope.stop()
+                if pidfile.exists():
+                    try: os.kill(int(pidfile.read_text()), signal.SIGKILL)
+                    except ProcessLookupError: pass
+                unrelated.kill()
+                unrelated.wait(timeout=5)
+
+    def test_successful_worker_reaps_detached_descendant(self):
+        self.exercise_worker("success")
+
+    def test_failed_worker_keeps_return_code_and_reaps_descendant(self):
+        self.exercise_worker("failure")
+
+    def test_worker_timeout_reaps_detached_descendant(self):
+        self.exercise_worker("timeout")
+
+    def test_sigterm_unwinds_scope_and_restores_parent_handler(self):
+        previous = signal.getsignal(signal.SIGTERM)
+        with trial.ProcessScope():
+            pass
+        self.assertEqual(signal.getsignal(signal.SIGTERM), previous)
+        with tempfile.TemporaryDirectory() as directory:
+            pidfile = Path(directory) / "child.pid"
+            owner_code = chr(10).join([
+                "import sys,time,pathlib",
+                "sys.path.insert(0,sys.argv[1])",
+                "from experiments.gazebo_benchmark.core.mppi_trial import ProcessScope",
+                "with ProcessScope(shutdown_timeout=.05) as scope:",
+                "    p=scope.popen([sys.executable,'-c','import time;time.sleep(120)'])",
+                "    pathlib.Path(sys.argv[2]).write_text(str(p.pid))",
+                "    time.sleep(120)",
+            ])
+            owner = subprocess.Popen([sys.executable, '-c', owner_code, str(ROOT), str(pidfile)],
+                                     start_new_session=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+            try:
+                deadline = time.monotonic() + 5
+                while not pidfile.exists() and owner.poll() is None and time.monotonic() < deadline:
+                    time.sleep(.02)
+                self.assertTrue(pidfile.exists())
+                owner.terminate()
+                self.assertEqual(owner.wait(timeout=5), 143)
+                stat = Path('/proc') / pidfile.read_text() / 'stat'
+                self.assertTrue(not stat.exists() or stat.read_text().rsplit(')', 1)[1].split()[0] in ('Z', 'X'))
+            finally:
+                if owner.poll() is None: owner.kill()
+                owner.wait(timeout=5)
+                if pidfile.exists():
+                    try: os.killpg(int(pidfile.read_text()), signal.SIGKILL)
+                    except ProcessLookupError: pass
+
+    def test_decorator_cleans_first_launch_when_second_launch_fails(self):
+        handles = []
+        @trial.scoped_processes
+        def broken(*, _processes=None):
+            handles.append(_processes.popen([sys.executable, "-c", "import time;time.sleep(120)"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL))
+            _processes.popen(['/definitely/missing/benchmark-command'])
+        try:
+            with self.assertRaises(FileNotFoundError):
+                broken()
+            self.assertIsNotNone(handles[0].poll())
+        finally:
+            for process in handles:
+                if process.poll() is None: process.kill()
+                process.wait(timeout=5)
+
+
 if __name__ == "__main__":
     unittest.main()

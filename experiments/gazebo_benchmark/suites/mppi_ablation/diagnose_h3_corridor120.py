@@ -20,7 +20,6 @@ import os
 import sys
 import time
 import math
-import signal
 import subprocess
 import json
 import re
@@ -48,6 +47,7 @@ from pathlib import Path as FilePath
 ROOT_DIR = str(FilePath(__file__).resolve().parents[4])
 sys.path.insert(0, ROOT_DIR)
 from experiments.gazebo_benchmark.core.geometry import compute_rect_circle_distance
+from experiments.gazebo_benchmark.core.mppi_trial import scoped_processes
 OUTPUT_DIR = os.path.join(ROOT_DIR, "experiments/gazebo_benchmark/results/mppi_ablation")
 TELEMETRY_JSON = os.path.join(OUTPUT_DIR, "diagnose_h3_telemetry.json")
 TELEMETRY_CSV = os.path.join(OUTPUT_DIR, "diagnose_h3_telemetry.csv")
@@ -488,7 +488,8 @@ class H3CorridorDiagnoser(Node):
         }
 
 
-def run_diagnose_pipeline():
+@scoped_processes
+def run_diagnose_pipeline(*, _processes=None):
     domain_id = 77
     corridor_type = "120"
     persona = "H3"
@@ -547,25 +548,13 @@ def run_diagnose_pipeline():
     partition = f"diagnose_{corridor_type}_{persona}_{seed}_{domain_id}"
     env["GZ_PARTITION"] = partition
 
-    all_procs = []
     nav2_log_path = f"/tmp/nav2_diagnose_{domain_id}.log"
     log_fp = open(nav2_log_path, "w")
 
     params_file = os.path.join(ROOT_DIR, "install/custom_corridor/share/custom_corridor/config/nav2_mppi_pilot.yaml")
 
-    def cleanup():
-        for p in all_procs:
-            try: os.killpg(os.getpgid(p.pid), signal.SIGTERM)
-            except Exception: pass
-        time.sleep(1.0)
-        for p in all_procs:
-            try: os.killpg(os.getpgid(p.pid), signal.SIGKILL)
-            except Exception: pass
-        subprocess.run(["pkill", "-9", "-f", f"domain_id={domain_id}|gz sim|corridor_tb3|nav2_corridor"], stderr=subprocess.DEVNULL)
-        time.sleep(1.0)
 
     try:
-        subprocess.run(["pkill", "-9", "-f", "gz sim|ros2|nav2"], stderr=subprocess.DEVNULL)
         time.sleep(1.5)
 
         print(">>> 1. Launching Gazebo Corridor 1.20m (RTF = 1.0)...", flush=True)
@@ -578,8 +567,7 @@ def run_diagnose_pipeline():
             "robot_model:=mecanum",
             "x:=-13.0", "y:=0.0", "yaw:=0.0"
         ]
-        gz_p = subprocess.Popen(sim_cmd, env=env, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, preexec_fn=os.setsid)
-        all_procs.append(gz_p)
+        gz_p = _processes.popen(sim_cmd, env=env, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, preexec_fn=os.setsid)
         time.sleep(4.5)
 
         print(">>> 2. Launching Nav2 MPPI (Baseline pilot configs)...", flush=True)
@@ -590,8 +578,7 @@ def run_diagnose_pipeline():
             "map:=corridor_120",
             "robot_model:=mecanum"
         ]
-        nav2_p = subprocess.Popen(nav2_cmd, env=env, stdout=log_fp, stderr=subprocess.STDOUT, text=True, preexec_fn=os.setsid)
-        all_procs.append(nav2_p)
+        nav2_p = _processes.popen(nav2_cmd, env=env, stdout=log_fp, stderr=subprocess.STDOUT, text=True, preexec_fn=os.setsid)
 
         t0 = time.time()
         nav2_ready = False
@@ -620,7 +607,8 @@ def run_diagnose_pipeline():
         rclpy.shutdown()
 
     finally:
-        cleanup()
+        _processes.stop()
+        time.sleep(2.0)
         log_fp.close()
 
     # Save telemetry files

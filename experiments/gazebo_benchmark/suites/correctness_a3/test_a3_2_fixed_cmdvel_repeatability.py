@@ -15,7 +15,6 @@ import os
 from pathlib import Path
 import sys
 import time
-import signal
 import subprocess
 import json
 import numpy as np
@@ -33,6 +32,7 @@ import gz.msgs.stringmsg_pb2 as stringmsg_pb2
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[4]))
 from experiments.gazebo_benchmark.core.sim_env import build_benchmark_env
+from experiments.gazebo_benchmark.core.mppi_trial import scoped_processes
 
 
 class SynchronizedMecanumCollector(Node):
@@ -156,7 +156,8 @@ def control_sim(action="unpause", world_name="corridor_0.90"):
     node.request(service, req, world_control_pb2.WorldControl, boolean_pb2.Boolean, 3000)
 
 
-def run_single_trial(run_idx, world_file, robot_file, root_dir="/home/cuongbien/DynamuhSim", duration_s=20.0):
+@scoped_processes
+def run_single_trial(run_idx, world_file, robot_file, root_dir="/home/cuongbien/DynamuhSim", duration_s=20.0, *, _processes=None):
     print(f"\n>>> [TRIAL {run_idx + 1}/5] Starting Cold-Restart Simulation...")
     bridge_config = os.path.join(root_dir, "src/custom_corridor/config/mecanum_bridge.yaml")
     env = build_benchmark_env(root_dir)
@@ -164,12 +165,10 @@ def run_single_trial(run_idx, world_file, robot_file, root_dir="/home/cuongbien/
     domain_id = str(20 + run_idx)
     env["ROS_DOMAIN_ID"] = domain_id
 
-    all_procs = []
     try:
         # 1. Start Gazebo in paused mode (-s, without -r)
         gz_cmd = ["gz", "sim", "-s", world_file]
-        gz_proc = subprocess.Popen(gz_cmd, env=env, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, preexec_fn=os.setsid)
-        all_procs.append(gz_proc)
+        gz_proc = _processes.popen(gz_cmd, env=env, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, preexec_fn=os.setsid)
         time.sleep(4.0)
 
         # 2. Spawn mecanum robot while paused at x=-5.0, y=0.0, z=0.04
@@ -186,8 +185,7 @@ def run_single_trial(run_idx, world_file, robot_file, root_dir="/home/cuongbien/
             "ros2", "run", "ros_gz_bridge", "parameter_bridge",
             "--ros-args", "-p", f"config_file:={bridge_config}"
         ]
-        bridge_proc = subprocess.Popen(bridge_cmd, env=env, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, preexec_fn=os.setsid)
-        all_procs.append(bridge_proc)
+        bridge_proc = _processes.popen(bridge_cmd, env=env, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, preexec_fn=os.setsid)
         time.sleep(2.0)
 
         # 4. Initialize ROS 2 collector node
@@ -204,16 +202,8 @@ def run_single_trial(run_idx, world_file, robot_file, root_dir="/home/cuongbien/
         rclpy.shutdown()
 
     finally:
-        for p in all_procs:
-            try:
-                os.killpg(os.getpgid(p.pid), signal.SIGTERM)
-                time.sleep(0.2)
-                os.killpg(os.getpgid(p.pid), signal.SIGKILL)
-            except Exception:
-                pass
+        _processes.stop()
         time.sleep(1.5)
-        subprocess.run(["pkill", "-9", "-f", "gz sim"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-        subprocess.run(["pkill", "-9", "-f", "ros_gz_bridge"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
     print(f"  Trial {run_idx + 1} completed: {len(traj)} trajectory points recorded.")
     return traj

@@ -5,7 +5,11 @@ import time
 import subprocess
 import json
 
-def run_test():
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../..")))
+from experiments.gazebo_benchmark.core.mppi_trial import scoped_processes
+
+@scoped_processes
+def run_test(*, _processes=None):
     print("=" * 70)
     print("SMOKE TEST: SMALL MECANUM ROBOT IN GAZEBO HARMONIC")
     print("=" * 70)
@@ -21,7 +25,7 @@ def run_test():
     ]
 
     print("Starting Gazebo with small mecanum robot...")
-    proc = subprocess.Popen(cmd, env=env, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True)
+    proc = _processes.popen(cmd, env=env, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True)
 
     t0 = time.time()
     depth_received = False
@@ -141,13 +145,7 @@ def run_test():
 
     finally:
         print("Shutting down Gazebo...")
-        proc.terminate()
-        try:
-            proc.wait(timeout=5)
-        except subprocess.TimeoutExpired:
-            proc.kill()
-        subprocess.run(["pkill", "-9", "-f", "gz sim"], stderr=subprocess.DEVNULL)
-        subprocess.run(["pkill", "-9", "-f", "parameter_bridge"], stderr=subprocess.DEVNULL)
+        _processes.stop()
         print("Cleaned up processes.")
 
 if __name__ == "__main__":

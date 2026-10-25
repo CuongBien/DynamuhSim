@@ -8,7 +8,6 @@ Subprocess-isolated architecture for 100% reliable ROS 2 / DDS execution.
 import os
 import sys
 import time
-import signal
 import subprocess
 import json
 import re
@@ -17,19 +16,13 @@ import yaml
 import psutil
 import numpy as np
 
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../..")))
+from experiments.gazebo_benchmark.core.mppi_trial import scoped_processes
+
 ROOT_DIR = "/home/cuongbien/DynamuhSim"
 OUTPUT_JSON = os.path.join(ROOT_DIR, "experiments/gazebo_benchmark/results/scaling_perf/nav2_controller_frequency_benchmark_results.json")
 CONFIGS_DIR = os.path.join(ROOT_DIR, "experiments/gazebo_benchmark/configs/nav2_mppi")
 os.makedirs(CONFIGS_DIR, exist_ok=True)
-
-
-def cleanup_all():
-    subprocess.run(["killall", "-9", "amcl", "planner_server", "controller_server",
-                    "bt_navigator", "behavior_server", "waypoint_follower",
-                    "lifecycle_manager", "map_server", "goal_pose_bridge.py",
-                    "parameter_bridge", "image_bridge", "gz"],
-                   stderr=subprocess.DEVNULL)
-    time.sleep(1.0)
 
 
 def create_modified_params_yaml(base_yaml_path: str, out_yaml_path: str, modifications: dict) -> str:
@@ -80,13 +73,15 @@ def create_modified_params_yaml(base_yaml_path: str, out_yaml_path: str, modific
     return out_yaml_path
 
 
+@scoped_processes
 def run_instance_trial_in_worker(
     trial_name: str,
     domain_id: int,
     rtf: float,
     params_yaml: str,
     duration_s: float = 12.0,
-    corridor_type: str = "090"
+    corridor_type: str = "090",
+    *, _processes=None
 ) -> dict:
     import rclpy
     from rclpy.node import Node
@@ -151,7 +146,6 @@ def run_instance_trial_in_worker(
     with open(test_world, "w") as f:
         f.write(w_content)
 
-    procs = []
     nav2_log_path = f"/tmp/nav2_{trial_name}_{domain_id}.log"
     log_fp = open(nav2_log_path, "w")
 
@@ -164,8 +158,7 @@ def run_instance_trial_in_worker(
             "obstacle:=none", "gui:=false", "rviz:=false",
             "robot_model:=mecanum", "x:=-13.0", "y:=0.0", "yaw:=0.0"
         ]
-        p_sim = subprocess.Popen(sim_cmd, env=env, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, preexec_fn=os.setsid)
-        procs.append(p_sim)
+        p_sim = _processes.popen(sim_cmd, env=env, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, preexec_fn=os.setsid)
         time.sleep(3.8)
 
         # Launch Nav2
@@ -174,8 +167,7 @@ def run_instance_trial_in_worker(
             "controller:=mppi", f"params_file:={params_yaml}",
             f"map:=corridor_{corridor_type}", "robot_model:=mecanum"
         ]
-        p_nav = subprocess.Popen(nav2_cmd, env=env, stdout=log_fp, stderr=subprocess.STDOUT, text=True, preexec_fn=os.setsid)
-        procs.append(p_nav)
+        p_nav = _processes.popen(nav2_cmd, env=env, stdout=log_fp, stderr=subprocess.STDOUT, text=True, preexec_fn=os.setsid)
 
         t0 = time.time()
         active = False
@@ -231,13 +223,8 @@ def run_instance_trial_in_worker(
         rclpy.shutdown()
 
     finally:
-        for p in procs:
-            try: os.killpg(os.getpgid(p.pid), signal.SIGTERM)
-            except: pass
+        _processes.stop()
         time.sleep(1.0)
-        for p in procs:
-            try: os.killpg(os.getpgid(p.pid), signal.SIGKILL)
-            except: pass
         log_fp.close()
 
     loop_warnings = []
@@ -289,7 +276,8 @@ def run_instance_trial_in_worker(
     }
 
 
-def run_single_trial_subprocess(trial_name: str, domain_id: int, rtf: float, params_yaml: str, duration_s: float = 12.0) -> dict:
+@scoped_processes
+def run_single_trial_subprocess(trial_name: str, domain_id: int, rtf: float, params_yaml: str, duration_s: float = 12.0, *, _processes=None) -> dict:
     out_json = f"/tmp/res_{trial_name}_{domain_id}.json"
     if os.path.exists(out_json):
         os.remove(out_json)
@@ -303,12 +291,13 @@ def run_single_trial_subprocess(trial_name: str, domain_id: int, rtf: float, par
         "--duration_s", str(duration_s),
         "--out_json", str(out_json)
     ]
-    subprocess.run(cmd, check=True)
+    _processes.run(cmd, check=True)
     with open(out_json) as f:
         return json.load(f)
 
 
-def run_parallel_4instances_subprocesses(trial_name: str, rtf: float, params_yaml: str, duration_s: float = 12.0) -> dict:
+@scoped_processes
+def run_parallel_4instances_subprocesses(trial_name: str, rtf: float, params_yaml: str, duration_s: float = 12.0, *, _processes=None) -> dict:
     print(f"\n>>> Running 4 Parallel Subprocesses: {trial_name} (RTF={rtf})...", flush=True)
     domain_ids = [50, 51, 52, 53]
     workers = []
@@ -330,7 +319,7 @@ def run_parallel_4instances_subprocesses(trial_name: str, rtf: float, params_yam
             "--duration_s", str(duration_s),
             "--out_json", str(out_json)
         ]
-        p = subprocess.Popen(cmd)
+        p = _processes.popen(cmd)
         workers.append((d, p))
         time.sleep(1.2)  # Staggered launch
 
@@ -385,7 +374,7 @@ def main():
     print("NAV2 MPPI CONTROLLER FREQUENCY BENCHMARK & DIAGNOSTIC SUITE", flush=True)
     print("=" * 80, flush=True)
 
-    cleanup_all()
+    time.sleep(1.0)
 
     base_params = os.path.join(ROOT_DIR, "install/custom_corridor/share/custom_corridor/config/nav2_mppi_pilot.yaml")
 

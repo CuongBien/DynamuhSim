@@ -1,6 +1,5 @@
 """
 Simulation Environment Helpers:
-- Process cleanup for Gazebo Harmonic & Nav2
 - Corridor scenario JSON generation
 - SDF world file patching
 - Environment variable configuration for GPU/D3D12 & ROS domain isolation
@@ -9,31 +8,10 @@ Simulation Environment Helpers:
 import os
 import re
 import json
-import time
 import subprocess
 from typing import Dict
 
 
-def cleanup_all(sleep_sec: float = 2.0):
-    """Terminates all lingering Gazebo, Nav2, and ROS 2 bridge processes."""
-    subprocess.run(["pkill", "-9", "-f", "gz sim"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-    subprocess.run(
-        [
-            "killall", "-9", "map_server", "amcl", "planner_server", "controller_server",
-            "bt_navigator", "behavior_server", "waypoint_follower", "lifecycle_manager",
-            "parameter_bridge", "static_transform_publisher", "robot_state_publisher"
-        ],
-        stdout=subprocess.DEVNULL,
-        stderr=subprocess.DEVNULL
-    )
-    subprocess.run(["pkill", "-9", "-f", "nav2_"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-    subprocess.run(["pkill", "-9", "-f", "robot_state_publisher"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-    subprocess.run(["pkill", "-9", "-f", "corridor_tb3"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-    subprocess.run(["pkill", "-9", "-f", "parameter_bridge"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-    subprocess.run(["pkill", "-9", "-f", "ros2"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-    subprocess.run(["ros2", "daemon", "stop"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-    if sleep_sec > 0:
-        time.sleep(sleep_sec)
 
 
 def create_corridor_scenario_json(

@@ -16,7 +16,6 @@ import os
 import sys
 import time
 import json
-import signal
 import subprocess
 import argparse
 import numpy as np
@@ -25,9 +24,11 @@ import rclpy
 from rclpy.node import Node
 from sensor_msgs.msg import Image
 
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../..")))
+from experiments.gazebo_benchmark.core.mppi_trial import scoped_processes
+
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 ROOT_DIR = os.path.dirname(os.path.dirname(SCRIPT_DIR))
-
 
 
 class DepthListener(Node):
@@ -47,26 +48,8 @@ class DepthListener(Node):
             self.first_depth_wall_time = time.time()
 
 
-def cleanup_processes(pids=None):
-    if pids:
-        for p in pids:
-            try:
-                os.killpg(os.getpgid(p.pid), signal.SIGTERM)
-                time.sleep(0.1)
-                os.killpg(os.getpgid(p.pid), signal.SIGKILL)
-            except Exception:
-                pass
-    time.sleep(1.0)
-    for name in [
-        "gz sim", "gz-sim", "ros_gz_bridge", "parameter_bridge", "image_bridge",
-        "controller_server", "planner_server", "bt_navigator", "behavior_server",
-        "waypoint_follower", "lifecycle_manager", "amcl", "map_server", "robot_state_publisher"
-    ]:
-        subprocess.run(["pkill", "-9", "-f", name], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-    time.sleep(1.0)
-
-
-def measure_single_instance_trial(domain_id: int, partition_name: str, trial_idx: int) -> dict:
+@scoped_processes
+def measure_single_instance_trial(domain_id: int, partition_name: str, trial_idx: int, *, _processes=None) -> dict:
     env = os.environ.copy()
     env["ROS_DOMAIN_ID"] = str(domain_id)
     env["GZ_PARTITION"] = partition_name
@@ -86,7 +69,6 @@ def measure_single_instance_trial(domain_id: int, partition_name: str, trial_idx
         os.remove(nav2_log_path)
     nav2_log_file = open(nav2_log_path, "w")
 
-    procs = []
 
     # Initialize ROS node listener on this domain
     os.environ["ROS_DOMAIN_ID"] = str(domain_id)
@@ -107,8 +89,7 @@ def measure_single_instance_trial(domain_id: int, partition_name: str, trial_idx
             "robot_model:=mecanum",
             "x:=-13.0", "y:=0.0", "yaw:=0.0"
         ]
-        p_gz = subprocess.Popen(gz_cmd, env=env, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, preexec_fn=os.setsid)
-        procs.append(p_gz)
+        p_gz = _processes.popen(gz_cmd, env=env, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, preexec_fn=os.setsid)
 
         # Launch Nav2 MPPI stack concurrently (zero artificial delay)
         nav2_cmd = [
@@ -118,8 +99,7 @@ def measure_single_instance_trial(domain_id: int, partition_name: str, trial_idx
             "map:=corridor_090",
             "robot_model:=mecanum"
         ]
-        p_nav = subprocess.Popen(nav2_cmd, env=env, stdout=nav2_log_file, stderr=subprocess.STDOUT, text=True, preexec_fn=os.setsid)
-        procs.append(p_nav)
+        p_nav = _processes.popen(nav2_cmd, env=env, stdout=nav2_log_file, stderr=subprocess.STDOUT, text=True, preexec_fn=os.setsid)
 
         t_nav2_active = None
         t_first_depth = None
@@ -157,7 +137,8 @@ def measure_single_instance_trial(domain_id: int, partition_name: str, trial_idx
         }
 
     finally:
-        cleanup_processes(procs)
+        _processes.stop()
+        time.sleep(2.0)
         try:
             listener.destroy_node()
             if rclpy.ok():
@@ -174,7 +155,8 @@ def worker_measure_cycle(domain_id: int, partition_name: str, cycle_idx: int, ou
         json.dump(res, fp)
 
 
-def run_benchmark():
+@scoped_processes
+def run_benchmark(*, _processes=None):
     parser = argparse.ArgumentParser(description="Cold Restart Latency Benchmark")
     parser.add_argument("--trials", type=int, default=5, help="Number of trials per configuration (default: 5)")
     parser.add_argument("--worker-domain", type=int, default=None)
@@ -201,7 +183,8 @@ def run_benchmark():
     # -------------------------------------------------------------
     print(f"\n>>> 1. ĐO CẤU HÌNH 1 INSTANCE (N=5, có Nav2 MPPI) - {args.trials} LẦN CHẠY...")
     inst1_trials = []
-    cleanup_processes()
+    _processes.stop()
+    time.sleep(2.0)
 
     for trial_idx in range(args.trials):
         print(f"  [1 Instance] Lần chạy {trial_idx + 1}/{args.trials}...")
@@ -246,7 +229,8 @@ def run_benchmark():
     # -------------------------------------------------------------
     print(f"\n>>> 2. ĐO CẤU HÌNH 4 INSTANCES DƯỚI TẢI THẬT (Chạy song song, liên tục restart qua {args.trials} chu kỳ)...")
     inst4_trials = []
-    cleanup_processes()
+    _processes.stop()
+    time.sleep(2.0)
 
     for cycle_idx in range(args.trials):
         print(f"  [4 Instances - Tải Song Song] Chu kỳ {cycle_idx + 1}/{args.trials} (4 instances đồng thời khởi động)...")
@@ -268,7 +252,7 @@ def run_benchmark():
                 "--worker-cycle", str(cycle_idx),
                 "--worker-out", out_f
             ]
-            p = subprocess.Popen(cmd, preexec_fn=os.setsid)
+            p = _processes.popen(cmd, preexec_fn=os.setsid)
             cycle_procs.append(p)
 
         # Wait for all 4 concurrent instances in this cycle to complete
@@ -284,7 +268,8 @@ def run_benchmark():
                 print(f"    Instance {i}: Cold restart = {r['cold_restart_latency_s']:.2f} s "
                       f"(Nav2: {r['nav2_active_latency_s']:.2f} s, Depth: {r['first_depth_latency_s']:.2f} s)")
 
-        cleanup_processes()
+        _processes.stop()
+        time.sleep(2.0)
 
     lats_4 = [r["cold_restart_latency_s"] for r in inst4_trials if r["success"]]
     mean_lat_4 = float(np.mean(lats_4))

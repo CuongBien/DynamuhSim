@@ -31,7 +31,6 @@ import sys
 import time
 import math
 import subprocess
-import signal
 import json
 import re
 import argparse
@@ -66,10 +65,10 @@ from core import (
     P3dPolicy,
     P4Policy,
     create_policy_instance,
-    cleanup_all,
     create_corridor_scenario_json,
     patch_corridor_world_sdf,
     build_sim_env,
+    scoped_processes,
 )
 
 ROBOT_MODEL_SDF = os.path.join(BENCH_DIR, "configs/robot_models/model_mecanum_step1.sdf")
@@ -478,7 +477,8 @@ class DatagenInteractionMonitor(Node):
 # Single Trial Execution with Retry
 # ==============================================================================
 
-def run_single_trial(policy_code: str, sub_behavior: str, persona: str, seed: int, domain_id: int) -> dict:
+@scoped_processes
+def run_single_trial(policy_code: str, sub_behavior: str, persona: str, seed: int, domain_id: int, *, _processes=None) -> dict:
     os.makedirs(GEN_CONFIGS_DIR, exist_ok=True)
     os.makedirs(TRIALS_DIR, exist_ok=True)
     out_json = os.path.join(TRIALS_DIR, f"trial_{policy_code}_{sub_behavior}_{persona}_{seed}.json")
@@ -499,7 +499,7 @@ def run_single_trial(policy_code: str, sub_behavior: str, persona: str, seed: in
     final_result = None
 
     for attempt in range(max_retries + 1):
-        cleanup_all()
+        time.sleep(2.0)
 
         pol_seed = seed * 1000 + hash(sub_behavior) % 999
         policy = create_policy_instance(policy_code, sub_behavior, pol_seed)
@@ -516,7 +516,6 @@ def run_single_trial(policy_code: str, sub_behavior: str, persona: str, seed: in
         partition = f"datagen_{policy_code}_{sub_behavior}_{persona}_{seed}_{domain_id}"
         env = build_sim_env(ROOT_DIR, domain_id=domain_id, partition=partition)
 
-        all_procs = []
         nav2_log_path = f"/tmp/nav2_datagen_{policy_code}_{sub_behavior}_{persona}_{seed}_{domain_id}.log"
         log_fp = open(nav2_log_path, "w")
 
@@ -532,8 +531,7 @@ def run_single_trial(policy_code: str, sub_behavior: str, persona: str, seed: in
                 "robot_model:=mecanum",
                 "x:=-13.0", "y:=0.0", "yaw:=0.0"
             ]
-            gz_p = subprocess.Popen(sim_cmd, env=env, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, preexec_fn=os.setsid)
-            all_procs.append(gz_p)
+            gz_p = _processes.popen(sim_cmd, env=env, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, preexec_fn=os.setsid)
             time.sleep(3.5)
 
             # Launch Nav2 for P1, P2, P3
@@ -546,8 +544,7 @@ def run_single_trial(policy_code: str, sub_behavior: str, persona: str, seed: in
                     "robot_model:=mecanum",
                     "cmd_vel_topic:=/cmd_vel_nav"
                 ]
-                nav2_p = subprocess.Popen(nav2_cmd, env=env, stdout=log_fp, stderr=subprocess.STDOUT, text=True, preexec_fn=os.setsid)
-                all_procs.append(nav2_p)
+                nav2_p = _processes.popen(nav2_cmd, env=env, stdout=log_fp, stderr=subprocess.STDOUT, text=True, preexec_fn=os.setsid)
 
                 t0 = time.time()
                 nav2_ready = False
@@ -589,13 +586,7 @@ def run_single_trial(policy_code: str, sub_behavior: str, persona: str, seed: in
             retry_count += 1
         finally:
             log_fp.close()
-            for p in all_procs:
-                try:
-                    os.killpg(os.getpgid(p.pid), signal.SIGTERM)
-                    p.wait(timeout=2.0)
-                except Exception:
-                    try: os.killpg(os.getpgid(p.pid), signal.SIGKILL)
-                    except Exception: pass
+            _processes.stop()
 
     if final_result is None:
         final_result = {"error": "nav2_activation_timeout_exhausted_retries", "goal_reached": False}

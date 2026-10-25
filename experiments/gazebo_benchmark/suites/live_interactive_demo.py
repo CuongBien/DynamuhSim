@@ -18,7 +18,6 @@ import time
 import json
 import math
 import random
-import signal
 import argparse
 import subprocess
 import tempfile
@@ -37,6 +36,9 @@ from nav2_msgs.action import NavigateToPose
 from std_msgs.msg import String
 from rosgraph_msgs.msg import Clock
 from nav_msgs.msg import Odometry
+
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../../..")))
+from experiments.gazebo_benchmark.core.mppi_trial import scoped_processes
 
 PERSONA_CONFIGS = {
     "H1": {"name": "Cooperative", "trait": "Reciprocal ORCA (alpha=0.50), yields laterally", "color": "\033[92m"},
@@ -160,7 +162,8 @@ def generate_random_scenario(num_humans: int = 5, seed: int = None):
     return {"seed": seed, "humans": humans}
 
 
-def main():
+@scoped_processes
+def main(*, _processes=None):
     parser = argparse.ArgumentParser(description="Full-Corridor Live Interactive Nav2 MPPI Demo")
     parser.add_argument("--width", type=str, default="1.20", choices=["0.90", "1.20"], help="Corridor width (default: 1.20)")
     parser.add_argument("--humans", type=int, default=5, choices=[2, 5, 8, 10], help="Number of dynamic humans (default: 5)")
@@ -225,7 +228,6 @@ def main():
     env["GZ_SIM_RESOURCE_PATH"] = f"{corridor_models}:{os.environ.get('GZ_SIM_RESOURCE_PATH', '')}"
     env["GZ_SIM_SYSTEM_PLUGIN_PATH"] = f"{plugin_lib}:{os.environ.get('GZ_SIM_SYSTEM_PLUGIN_PATH', '')}"
 
-    procs = []
     nav2_log_fp = None
     try:
         # Step 1: Launch Gazebo Simulation (rviz:=false to let Gazebo initialize OpenGL first)
@@ -240,8 +242,7 @@ def main():
             "x:=-13.0", "y:=0.0", "yaw:=0.0",
             "paused:=false"
         ]
-        p_sim = subprocess.Popen(sim_cmd, env=env, preexec_fn=os.setsid)
-        procs.append(p_sim)
+        p_sim = _processes.popen(sim_cmd, env=env, preexec_fn=os.setsid)
 
         print(f"⏳ Step 1/3: Launching Gazebo 3D simulation ({args.humans} pedestrians, 6 seconds)...")
         time.sleep(6.0)
@@ -256,8 +257,7 @@ def main():
         ]
         nav2_log_path = "/tmp/nav2_live_demo.log"
         nav2_log_fp = open(nav2_log_path, "w")
-        p_nav = subprocess.Popen(nav_cmd, env=env, stdout=nav2_log_fp, stderr=subprocess.STDOUT, text=True, preexec_fn=os.setsid)
-        procs.append(p_nav)
+        p_nav = _processes.popen(nav_cmd, env=env, stdout=nav2_log_fp, stderr=subprocess.STDOUT, text=True, preexec_fn=os.setsid)
 
         print("⏳ Step 2/3: Launching Nav2 stack with MPPI controller...")
         print("    Waiting for Nav2 lifecycle manager to activate all nodes...")
@@ -282,8 +282,7 @@ def main():
             print("⏳ Step 3/3: Opening RViz2 Visualization Window...")
             rviz_cfg = os.path.join(ROOT_DIR, "install/custom_corridor/share/custom_corridor/rviz/corridor.rviz")
             rviz_cmd = ["rviz2", "-d", rviz_cfg]
-            p_rviz = subprocess.Popen(rviz_cmd, env=env, preexec_fn=os.setsid)
-            procs.append(p_rviz)
+            p_rviz = _processes.popen(rviz_cmd, env=env, preexec_fn=os.setsid)
             time.sleep(2.0)
 
         rclpy.init(domain_id=args.domain_id)
@@ -367,16 +366,8 @@ def main():
         print("Cleaning up processes...")
         if nav2_log_fp and not nav2_log_fp.closed:
             nav2_log_fp.close()
-        for p in procs:
-            try:
-                os.killpg(os.getpgid(p.pid), signal.SIGTERM)
-                time.sleep(0.3)
-                os.killpg(os.getpgid(p.pid), signal.SIGKILL)
-            except Exception:
-                pass
+        _processes.stop()
         # Ensure orphaned background Gazebo instances in WSL are cleaned up
-        for pattern in ["gz sim", "gz-sim-server", "rviz2", "ros_gz_bridge"]:
-            subprocess.run(["pkill", "-9", "-f", pattern], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
         if 'scen_file' in locals() and os.path.exists(scen_file):
             try: os.remove(scen_file)
             except Exception: pass

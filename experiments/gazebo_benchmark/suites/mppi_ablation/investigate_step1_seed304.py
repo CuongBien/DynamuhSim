@@ -15,6 +15,9 @@ from std_msgs.msg import String
 from nav2_msgs.action import NavigateToPose
 from rclpy.action import ActionClient
 
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../..")))
+from experiments.gazebo_benchmark.core.mppi_trial import scoped_processes
+
 ROOT_DIR = "/home/cuongbien/DynamuhSim"
 ROBOT_MODEL_SDF = os.path.join(ROOT_DIR, "experiments/gazebo_benchmark/configs/robot_models/model_mecanum_step1.sdf")
 NAV2_PARAMS_YAML = os.path.join(ROOT_DIR, "experiments/gazebo_benchmark/configs/nav2_mppi/nav2_mppi_step1.yaml")
@@ -158,7 +161,8 @@ class Seed304Logger(Node):
                 print("Max duration 25s reached")
                 break
 
-def main():
+@scoped_processes
+def main(*, _processes=None):
     domain_id = 89
     corridor_models = os.path.join(ROOT_DIR, "install/custom_corridor/share/custom_corridor/models")
     plugin_share = os.path.join(ROOT_DIR, "install/custom_corridor_plugins/share/custom_corridor_plugins")
@@ -172,7 +176,6 @@ def main():
     env["ROS_DOMAIN_ID"] = str(domain_id)
     env["GZ_PARTITION"] = "test_304"
     
-    subprocess.run(["pkill", "-9", "-f", "gz sim|ros2|nav2"], stderr=subprocess.DEVNULL)
     time.sleep(1.5)
     
     sim_cmd = [
@@ -182,7 +185,7 @@ def main():
         "obstacle:=human", "gui:=false", "rviz:=false",
         "robot_model:=mecanum", "x:=-13.0", "y:=0.0", "yaw:=0.0"
     ]
-    gz_p = subprocess.Popen(sim_cmd, env=env, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, preexec_fn=os.setsid)
+    gz_p = _processes.popen(sim_cmd, env=env, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, preexec_fn=os.setsid)
     time.sleep(4.5)
     
     nav_cmd = [
@@ -191,7 +194,7 @@ def main():
         "map:=corridor_120", "robot_model:=mecanum"
     ]
     nav_log = open("/tmp/nav2_test_304.log", "w")
-    nav_p = subprocess.Popen(nav_cmd, env=env, stdout=nav_log, stderr=subprocess.STDOUT, text=True, preexec_fn=os.setsid)
+    nav_p = _processes.popen(nav_cmd, env=env, stdout=nav_log, stderr=subprocess.STDOUT, text=True, preexec_fn=os.setsid)
     
     t0 = time.time()
     while time.time() - t0 < 60.0:
@@ -211,10 +214,8 @@ def main():
     node.destroy_node()
     rclpy.shutdown()
     
-    os.killpg(os.getpgid(gz_p.pid), signal.SIGKILL)
-    os.killpg(os.getpgid(nav_p.pid), signal.SIGKILL)
+    _processes.stop()
     nav_log.close()
-    subprocess.run(["pkill", "-9", "-f", "gz sim|ros2|nav2"], stderr=subprocess.DEVNULL)
     
     out_path = os.path.join(ROOT_DIR, "experiments/gazebo_benchmark/results/mppi_ablation/step1_seed304_telemetry.json")
     with open(out_path, "w") as f:

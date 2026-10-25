@@ -14,7 +14,6 @@ import sys
 import time
 import json
 import re
-import signal
 import argparse
 import subprocess
 import tempfile
@@ -28,6 +27,9 @@ from rclpy.node import Node
 from rosgraph_msgs.msg import Clock
 from geometry_msgs.msg import TwistStamped
 from std_msgs.msg import String
+
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../..")))
+from experiments.gazebo_benchmark.core.mppi_trial import scoped_processes
 
 
 class VisualPilotReplayer(Node):
@@ -99,7 +101,8 @@ class VisualPilotReplayer(Node):
             self.cmd_pub.publish(tw)
 
 
-def main():
+@scoped_processes
+def main(*, _processes=None):
     parser = argparse.ArgumentParser(description="Replay recorded Pilot Episode with 3D Gazebo GUI and RViz2")
     parser.add_argument("--episode", type=int, default=24, help="Episode ID to replay (1..300, default: 24 [10 humans, 6m transit])")
     parser.add_argument("--gui", action="store_true", default=True, help="Enable Gazebo Harmonic 3D GUI window (default: True)")
@@ -203,7 +206,6 @@ def main():
     env["GZ_SIM_RESOURCE_PATH"] = f"{corridor_models}:{os.environ.get('GZ_SIM_RESOURCE_PATH', '')}"
     env["GZ_SIM_SYSTEM_PLUGIN_PATH"] = f"{plugin_lib}:{os.environ.get('GZ_SIM_SYSTEM_PLUGIN_PATH', '')}"
 
-    procs = []
     try:
         sim_cmd = [
             "ros2", "launch", "custom_corridor", "corridor_tb3.launch.py",
@@ -218,8 +220,7 @@ def main():
             "paused:=false"
         ]
 
-        p_sim = subprocess.Popen(sim_cmd, env=env, preexec_fn=os.setsid)
-        procs.append(p_sim)
+        p_sim = _processes.popen(sim_cmd, env=env, preexec_fn=os.setsid)
 
         if args.rviz:
             # Publish map -> odom static transform to satisfy RViz2 corridor config without Nav2
@@ -229,8 +230,7 @@ def main():
                 "--yaw", "0", "--pitch", "0", "--roll", "0",
                 "--frame-id", "map", "--child-frame-id", "odom"
             ]
-            p_tf = subprocess.Popen(tf_cmd, env=env, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, preexec_fn=os.setsid)
-            procs.append(p_tf)
+            p_tf = _processes.popen(tf_cmd, env=env, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, preexec_fn=os.setsid)
 
         # Allow Gazebo and RViz2 GUI to initialize and load 3D meshes
         print("⏳ Waiting for Gazebo and RViz2 to initialize (3 seconds)...")
@@ -267,15 +267,7 @@ def main():
         print("\n\n⏹️ Replay interrupted by user.")
     finally:
         print("Cleaning up processes...")
-        for p in procs:
-            try:
-                os.killpg(os.getpgid(p.pid), signal.SIGTERM)
-                time.sleep(0.3)
-                os.killpg(os.getpgid(p.pid), signal.SIGKILL)
-            except Exception:
-                pass
-        for pattern in ["gz sim", "gz-sim-server", "rviz2", "ros_gz_bridge"]:
-            subprocess.run(["pkill", "-9", "-f", pattern], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        _processes.stop()
         if os.path.exists(active_world_file):
             try:
                 os.remove(active_world_file)

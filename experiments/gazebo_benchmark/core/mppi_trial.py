@@ -1,8 +1,11 @@
-"""Shared Step1/2/3 trial lifecycle; only this trial's launch groups are stopped.
+"""Shared process ownership and Step1/2/3 trial lifecycle.
 
 Experiment configuration and result schemas stay in the suite entrypoints and
 monitor profiles. This module owns scenario preparation, startup and teardown.
 """
+from functools import wraps
+import uuid
+import threading
 import json
 import os
 from pathlib import Path
@@ -96,13 +99,16 @@ def _terminate_group(process):
     process.wait(timeout=3.)
 
 
-def stop_owned(processes):
+def stop_owned(processes, *, timeout=None):
     """Stop Nav2 before Gazebo, attempting every owned group even after a fault."""
     errors = []
     for process in reversed(processes):
         try:
             try:
-                stop_ros_launch(process, _terminate_group)
+                if timeout is None:
+                    stop_ros_launch(process, _terminate_group)
+                else:
+                    stop_ros_launch(process, _terminate_group, timeout=timeout)
             finally:
                 # ROS launch may have exited before all of its children did.
                 _terminate_group(process)
@@ -110,6 +116,117 @@ def stop_owned(processes):
             errors.append(error)
     if errors:
         raise errors[0]
+
+
+TOKEN_KEY = "DYNAMUHSIM_PROCESS_SCOPES"
+
+
+def _scope_terminated(signum, frame):
+    raise SystemExit(128 + signum)
+
+
+class ProcessScope:
+    """Own launches and tagged descendants, including detached worker sessions."""
+    def __init__(self, shutdown_timeout=15.):
+        self.token = uuid.uuid4().hex
+        self.processes = []
+        self.shutdown_timeout = shutdown_timeout
+
+    def environment(self, env=None):
+        env = dict(os.environ if env is None else env)
+        inherited = env.get(TOKEN_KEY, os.environ.get(TOKEN_KEY, ""))
+        env[TOKEN_KEY] = (inherited + " " + self.token).strip()
+        return env
+
+    def popen(self, command, **kwargs):
+        kwargs["env"] = self.environment(kwargs.get("env"))
+        if kwargs.get("preexec_fn") is os.setsid:
+            del kwargs["preexec_fn"]
+        if "preexec_fn" in kwargs or kwargs.get("start_new_session") is False:
+            raise ValueError("Owned processes require a private session")
+        kwargs["start_new_session"] = True
+        process = subprocess.Popen(command, **kwargs)
+        self.processes.append(process)
+        return process
+
+    def run(self, command, *, check=False, timeout=None, **kwargs):
+        # A completed worker can leave detached children even after exit code 0.
+        with ProcessScope(self.shutdown_timeout) as worker:
+            kwargs["env"] = self.environment(kwargs.get("env"))
+            process = worker.popen(command, **kwargs)
+            code = process.wait(timeout=timeout)
+            if check and code:
+                raise subprocess.CalledProcessError(code, command)
+            return subprocess.CompletedProcess(command, code)
+
+    def members(self):
+        members = []
+        for entry in Path("/proc").iterdir():
+            if not entry.name.isdigit():
+                continue
+            try:
+                state = (entry / "stat").read_text().rsplit(")", 1)[1].split()[0]
+                if state in ("Z", "X"):
+                    continue
+                for value in (entry / "environ").read_bytes().split(b"\0"):
+                    if value.startswith((TOKEN_KEY + "=").encode()):
+                        if self.token.encode() in value.split(b"=", 1)[1].split():
+                            members.append(int(entry.name))
+                        break
+            except (OSError, IndexError):
+                continue
+        return members
+
+    def stop(self):
+        processes, self.processes = self.processes, []
+        try:
+            stop_owned(processes, timeout=self.shutdown_timeout)
+        finally:
+            # Use per-PID signals here: a leftover may share a group with an
+            # untagged process. Only the direct handles above own whole groups.
+            for sig in (signal.SIGTERM, signal.SIGKILL):
+                for pid in self.members():
+                    try:
+                        os.kill(pid, sig)
+                    except ProcessLookupError:
+                        pass
+                deadline = time.monotonic() + 1.
+                while self.members() and time.monotonic() < deadline:
+                    time.sleep(.02)
+            if self.members():
+                raise RuntimeError("Owned benchmark descendants survived shutdown")
+            for process in processes:
+                process.wait(timeout=3.)
+
+    def __enter__(self):
+        if threading.current_thread() is threading.main_thread():
+            previous = signal.getsignal(signal.SIGTERM)
+            if previous in (signal.SIG_DFL, _scope_terminated):
+                self._sigterm = previous
+                signal.signal(signal.SIGTERM, _scope_terminated)
+        return self
+
+    def __exit__(self, kind, error, traceback):
+        try:
+            try:
+                self.stop()
+            except Exception as cleanup_error:
+                if error is None:
+                    raise
+                if hasattr(error, "add_note"):
+                    error.add_note(f"Process cleanup also failed: {cleanup_error}")
+        finally:
+            if hasattr(self, "_sigterm"):
+                signal.signal(signal.SIGTERM, self._sigterm)
+        return False
+
+
+def scoped_processes(function):
+    @wraps(function)
+    def run(*args, **kwargs):
+        with ProcessScope() as processes:
+            return function(*args, **kwargs, _processes=processes)
+    return run
 
 
 def run_trial(root, mode, corridor, persona, seed, speed, domain, output, *, monitor_factory, ros=None):
