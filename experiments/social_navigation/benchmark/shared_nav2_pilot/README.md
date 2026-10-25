@@ -20,7 +20,7 @@ bash experiments/social_navigation/benchmark/shared_nav2_pilot/run.sh analyze \
   --live experiments/social_navigation/benchmark/shared_nav2_pilot/reports/demo_complex_new
 ```
 
-Chạy từng lệnh live/analyze xong mới mở phiên kế. GUI tự đóng khi action xong/budget hết; không reset world. ROS domain91/partition riêng/lock chung, không chạy đồng thời experiment khác. Gate hai container đã PASS trong reports/gate01. run.sh gate/cohort.py/continue_cohort.py có output cố định để lưu lần chạy này, từ chối ghi đè; muốn cohort/gate mới phải quy hoạch output/checkpoint mới. continue_cohort.py ghi tiếp đúng2 lượt CN sau khi kiểm tra xong lỗi analyzer crowd02, không chạy lại Crowd.
+Chạy từng lệnh live/analyze xong mới mở phiên kế. GUI tự đóng khi action xong/budget hết; không reset world. ROS domain91/partition riêng/lock chung, không chạy đồng thời experiment khác. Gate hai container đã PASS trong reports/gate01. `run.sh gate` giữ output cố định của gate cũ. Hai script cohort/continuation đã gỡ khỏi entrypoint hiện hành; bản gốc còn ở `reports/final_source_snapshot/`, gồm continuation đúng2 lượt CN sau lỗi analyzer crowd02. Lượt mới dùng live/analyze ở trên hoặc [runtime Nav2 chung](../../../../docs/SHARED_NAV2_RUNTIME.md), với output/checkpoint mới.
 
 Dependencies đã có: Ubuntu24.04,ROS2 Jazzy/workspace install,Docker và2 image content-ID trong common_response/inputs/images.json, plugin socnavgym_response_fix/build/libresponse_adapter.so. Runtime native Python3.8.13 cô lập, hostROS Python3.12.3;không đổi Python hệ thống. GPU NVIDIA được kiểm qua runtime_guard/Ogre; container2CPU/4GB/one BLAS thread, CPU vẫn xử lý ORCA/Nav2/physics. Nếu plugin thiếu chỉ build plugin experiment bằng run.sh build của response_fix; không build/sửa workspace robot.
 

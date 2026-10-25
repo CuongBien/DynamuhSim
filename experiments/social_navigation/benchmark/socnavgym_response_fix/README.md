@@ -40,6 +40,6 @@ IPC vào output mới:
 bash experiments/social_navigation/benchmark/socnavgym_response_fix/run.sh transport --report-name my_transport
 ```
 
-IPC01 đã so exact20 bước với output offline v2 và xác nhận đóng terminal khi clock sai. `diagnose.py`, `offline.py`, `test_projection.py` giữ tên output của lần đo và từ chối ghi đè; cần quy hoạch output mới trước khi chạy lại. `cohort.py` tái dùng output đã có, chỉ chạy khi thiếu, rồi audit; không phải lệnh tạo một cohort độc lập mới. `summarize.py` chỉ vẽ dữ liệu đo.5 tests hình học kiểm bằng closest-approach/GEOS độc lập, gồm trường hợp bất khả thi phải từ chối.
+IPC01 đã so exact20 bước với output offline v2 và xác nhận đóng terminal khi clock sai. `diagnose.py`, `offline.py`, `test_projection.py` giữ tên output của lần đo và từ chối ghi đè; cần quy hoạch output mới trước khi chạy lại. Script cohort cố định đã gỡ khỏi entrypoint hiện hành; bản gốc còn trong `reports/source_snapshot/cohort.py`. Dùng `run.sh live/analyze` ở trên cho output mới. `summarize.py` chỉ vẽ dữ liệu đo.5 tests hình học kiểm bằng closest-approach/GEOS độc lập, gồm trường hợp bất khả thi phải từ chối.
 
 Mọi raw pose/scan/odom/worker request, SDF và log có gzip byte-identical; camera1fps640×480,4×, không phải AI. Target4cm và6/6 one-seed không phải bảo đảm an toàn/tự nhiên tổng quát. Bằng chứng group/conversation vẫn thuộc adapter lifecycle trước; không gán kết quả individual v2 cho group. Việc kế tiếp: pilot Nav2 nhỏ có robot chủ động tránh/nhường, sau đó mới benchmark navigation. Không World Model/Isaac Sim hoặc đổi kiến trúc robot.

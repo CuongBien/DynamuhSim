@@ -79,6 +79,16 @@ python3 tools/nav2_trial.py \
 - Teardown giữ thứ tự GUI (nếu có), server, container thuộc phiên, owned processes, ROS và RuntimeGuard cleanup. ROS launch nhận SIGINT tại parent và có 15s để tự dừng node con; chỉ fallback sang process group khi hết grace period. Không kill theo tên process chung.
 - source_sha256 của lượt mới ghi cả entry point và các module dùng chung; kết quả cũ không được sửa hash để mang tên implementation mới.
 
+## Điều phối cohort cũ đã gỡ
+
+Các script chỉ chạy/tiếp tục vào output cố định đã được gỡ khỏi cấp entrypoint:
+
+- `common_gazebo/cohort.py`, `socnavgym_response_fix/cohort.py`
+- `socnavgym_group_nav2/cohort.py`, `socnavgym_group_nav2/headless_cohort.py`
+- `shared_nav2_pilot/cohort.py`, `shared_nav2_pilot/continue_cohort.py`
+
+Đường dẫn trên tính từ `experiments/social_navigation/benchmark/`. Mỗi bản còn snapshot nguyên byte trong report tương ứng và Git trước commit gỡ; dùng source revision đã ghi khi tái lập lịch sử. Receipt, failure, protocol và snapshot giữ nguyên. Các lệnh live/analyze từng lượt vẫn giữ; common/response là robot chạy velocity script, các profile Nav2 chạy controller như phần trên.
+
 ## Phần lịch sử và pipeline chưa chuyển
 
 Các `reports/**/source*`, driver đã đóng băng, result/protocol/frozen manifests và bản classifier portable giữ nguyên. Muốn tái lập chính xác một kết quả lịch sử, dùng source commit/manifest của kết quả đó; runner mới có provenance mới.
