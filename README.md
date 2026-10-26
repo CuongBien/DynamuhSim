@@ -3,6 +3,14 @@
 
 **MPPI code dùng chung:** `experiments/gazebo_benchmark/core/mppi_monitor.py` giữ một implementation callback/goal/measurement cho Step1/2/3; ba runner chọn profile tương ứng. `core/mppi_trial.py` dùng chung việc tạo scenario/world, launch, chờ Nav2 và thu kết quả; tái sử dụng helper `core/sim_env.py`. Teardown chỉ dừng các nhóm tiến trình do trial tạo, có thời gian cho ROS launch đóng các node; batch dùng đúng `--domain_id` đã truyền. `core/geometry.py` là nơi duy nhất tính rectangle–circle clearance cho sáu suite đã chuyển. Các runner này resolve root theo checkout đang chạy.
 
+**Điểm chạy A3/MPPI:** từ root repo, dùng các runner trong `experiments/gazebo_benchmark/suites/`:
+
+- Điều hướng Nav2: `correctness_a3/test_a3_3_nav2_goal_navigation.py`; replay: `correctness_a3/test_a3_4_mppi_cmdvel_replay.py`.
+- Seed 5 lượt: `correctness_a3/seed_determinism_5runs.py`; MPPI: `correctness_a3/benchmark_mppi_reproducibility.py` và `correctness_a3/test_mppi_mecanum_reproducibility.py`.
+- Ablation: `mppi_ablation/benchmark_a3_3_step1_vision.py`, `benchmark_a3_3_step2.py`, `benchmark_a3_3_step3.py`; batch Step2/3 vẫn dùng `run_step2_full.py`, `run_step3_full.py`.
+
+Pilot sơ bộ, test seed 2 lượt và các logger cố định H3/401, Step1/304 đã nghỉ dùng. Telemetry, costmap snapshot và báo cáo cũ vẫn ở `experiments/gazebo_benchmark/results/` và `experiments/gazebo_benchmark/reports/`; source lịch sử có tại commit `435722e`.
+
 **Luồng hiện tại:** [Dữ liệu và baseline WM](docs/START_HERE_CURRENT.md) · [Runtime Nav2 dùng chung](docs/SHARED_NAV2_RUNTIME.md) · [Registry experiment](docs/experiment_registry.json) · [Capture mới](docs/CAPTURE_RUNTIME.md) · [Audit và artifact](docs/ANALYSIS_AND_ARTIFACTS.md) · [World assets](docs/WORLD_ASSETS.md) · [Archive lịch sử](docs/HISTORICAL_ARTIFACTS.md) · [Report và dependency](docs/REPORT_STORAGE.md) · [Media và test state](docs/REPORT_MEDIA.md) · [Sensor API](docs/SENSOR_CONTROLS.md)
 
 > **Multi-Sensor Perception and Proactive Yielding for Patrol Robots in Narrow, Dynamic Indoor Environments**
