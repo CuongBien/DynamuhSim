@@ -1907,11 +1907,13 @@ def read_csv_rows(path):
         return list(reader), reader.fieldnames
 
 
-def atomic_replace_episode(path, new_rows, episode_id):
+def atomic_replace_episode(path, new_rows, episode_id, *, schema_error=None):
     old_rows, old_fields = read_csv_rows(path)
     new_fields = list(new_rows[0].keys())
 
     if old_fields is not None and old_fields != new_fields:
+        if schema_error is not None:
+            raise RuntimeError(schema_error.format(path=path))
         raise RuntimeError(
             f"Existing CSV schema differs from v2 schema: {path}\n"
             "Move/delete the old test CSV once, then rerun.\n"

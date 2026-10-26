@@ -26,29 +26,13 @@ Outputs:
 import sys
 import os
 
-def _early_domain():
-    domain = "42"
-    for i, arg in enumerate(sys.argv):
-        if arg == "--domain" and i + 1 < len(sys.argv):
-            domain = sys.argv[i + 1]
-        elif arg.startswith("--domain="):
-            domain = arg.split("=", 1)[1]
-    os.environ["ROS_DOMAIN_ID"] = str(domain)
-
-_early_domain()
-
 import argparse
-import csv
 import importlib.util
 import math
 from pathlib import Path
 import random
-import tempfile
 import threading
 import time
-
-import numpy as np
-import rclpy
 
 SCRIPT_DIR = Path(__file__).resolve().parent
 BASE_SCRIPT = SCRIPT_DIR / "collect_episode_v2.py"
@@ -67,6 +51,10 @@ _spec = importlib.util.spec_from_file_location(
 base = importlib.util.module_from_spec(_spec)
 sys.modules["collect_episode_v2"] = base
 _spec.loader.exec_module(base)
+_early_domain = base._early_domain
+
+import numpy as np
+import rclpy
 
 BASE_DIR = Path.home() / "nav_ws/experiments/trajectory_risk_v0"
 DATA_DIR = BASE_DIR / "data"
@@ -172,48 +160,14 @@ def make_scenario(episode_id, seed):
         "seed": int(seed),
     }
 
-def read_csv_rows(path):
-    if not path.exists() or path.stat().st_size == 0:
-        return [], None
-    with path.open("r", newline="") as f:
-        reader = csv.DictReader(f)
-        return list(reader), reader.fieldnames
+read_csv_rows = base.read_csv_rows
 
 def atomic_replace_episode(path, new_rows, episode_id):
-    old_rows, old_fields = read_csv_rows(path)
-    new_fields = list(new_rows[0].keys())
-
-    if old_fields is not None and old_fields != new_fields:
-        raise RuntimeError(
-            f"CSV schema mismatch in {path}\n"
-            "Move/delete this scenario CSV once, then rerun."
-        )
-
-    kept = [
-        row for row in old_rows
-        if str(row.get("episode_id", "")) != str(episode_id)
-    ]
-    merged = kept + new_rows
-
-    path.parent.mkdir(parents=True, exist_ok=True)
-
-    fd, tmp_name = tempfile.mkstemp(
-        prefix=path.name + ".",
-        suffix=".tmp",
-        dir=str(path.parent),
-        text=True,
+    return base.atomic_replace_episode(
+        path, new_rows, episode_id,
+        schema_error="CSV schema mismatch in {path}\n"
+                     "Move/delete this scenario CSV once, then rerun.",
     )
-    os.close(fd)
-    tmp_path = Path(tmp_name)
-
-    try:
-        with tmp_path.open("w", newline="") as f:
-            writer = csv.DictWriter(f, fieldnames=new_fields)
-            writer.writeheader()
-            writer.writerows(merged)
-        os.replace(tmp_path, path)
-    finally:
-        tmp_path.unlink(missing_ok=True)
 
 def set_entity_pose(world, entity, x, y, z, yaw, quiet=False):
     qz = math.sin(yaw / 2.0)
