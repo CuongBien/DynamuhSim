@@ -159,3 +159,17 @@ Các file xoá không có hash pin trong JSON control/freeze đã rà và không
 273 hash nguồn (70 file riêng biệt) của năm lượt E2E trước, locked inputs, 1.814 control/model/snapshot và checkout/index chính giữ nguyên. Không chạy thêm ROS/Gazebo hoặc sinh dataset. Bằng chứng local tại `benchmark/generated/retired_perception_tools_cleanup_20261027/`.
 
 Bước tiếp theo: chốt bản đồ entrypoint còn lại của chuỗi perception/WM, rà các helper ở dataset/early-avoidance để phân biệt consumer thật với provenance đã freeze; chỉ tiếp tục xoá khi không phá API hoặc quy trình bảo toàn. Ca nhóm đứng lệch đích vẫn là công việc hành vi riêng, chưa đổi controller/ngưỡng.
+
+## 27/10/2026 — gỡ factory capture/early-avoidance cũ
+
+Đã **xoá 14 file, 348 dòng code**: factory sinh/vá driver early-avoidance slow/fixed/moderate/oracle, helper oracle odometry/localization, diagnostic motion/static/signal-trace và bản test friction đứng riêng bị lặp. Gỡ ba mode live/motion/static cũ; bảy mode checker build/test/analyze/audit còn dùng giữ nguyên command/environment. Registry và hướng dẫn chỉ rõ các factory nghỉ ở HEAD, không thêm wrapper mới.
+
+Toàn bộ `dataset_pilot` giữ nguyên byte: exporter shims vẫn gọi engine WM đã freeze; recorder, camera preparation, launch và storage/QoS còn là dependency. Các helper namespace/config/moderate, motion_prepare/pair_recording/quiesce, checker C++, frozen driver và hai auditor giữ nguyên. Native friction regression bị xoá là bản AST-identical với case còn trong bốn test `test_replay.py`; không giảm nội dung regression đó.
+
+**Kiểm chứng:** 278 test chính, bốn early replay/friction tests và một captured-failure regression đạt; 28 CLI và bảy route shell mỗi phiên bản đạt, ba mode cũ bị từ chối. API capture mới prepare/verify thật trên standing45 và walking45 đạt: mỗi freeze có 79 input/source pins, camera đúng byte đã nghiệm thu và native checker nhận bốn friction frames. Gate seed từ chối42 và không tạo output, đúng allowed list45–49; không đổi config để làm probe qua. Đây là kiểm tra chuẩn bị, chưa phải capture vật lý end-to-end mới.
+
+Rà freeze WM capture lịch sử ghi nhận **từ trước đợt sửa này**: 51 khai báo, một generated driver thiếu, bốn hash khác HEAD (dataset shell, WM shell, checker binary và robot URDF). Trạng thái/hash/presence đó được chụp trước và đối chiếu giữ nguyên sau; không vá manifest hoặc gọi freeze cũ là PASS. Đọc/export dữ liệu đã thu và prepare/verify của API mới có phạm vi riêng. Tái lập cohort lịch sử cần đúng source revision và artifact đã pin.
+
+273 hash nguồn của năm lượt E2E trước, 1.814 control/model/snapshot, locked inputs và checkout/index chính giữ nguyên. Không chạy thêm Gazebo, publish odometry oracle, train model hoặc sinh dataset. Bằng chứng local tại `benchmark/generated/retired_capture_factories_cleanup_20261027/`.
+
+Bước tiếp theo: nghiệm thu một episode capture end-to-end qua API mới, output/domain/partition riêng, kiểm raw recorder, tail, source freeze và cleanup; giữ mọi failure thay vì retry để thay outcome. Các lệch freeze lịch sử được giữ như giới hạn tái lập, không chỉnh controller/ngưỡng.

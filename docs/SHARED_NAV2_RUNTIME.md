@@ -96,7 +96,9 @@ Các script chỉ chạy/tiếp tục vào output cố định đã được g�
 
 Các `reports/**/source*`, driver đã đóng băng, result/protocol/frozen manifests và bản classifier portable giữ nguyên. Muốn tái lập chính xác một kết quả lịch sử, dùng source commit/manifest của kết quả đó; runner mới có provenance mới.
 
-`dataset_pilot`, `depth_proxy_lifecycle`, `early_avoidance_pilot` và `wm_episode_batch` vẫn dùng camera/recording pipeline đã freeze. Các entrypoint này phục vụ lịch sử; lượt capture mới dùng [API capture có freeze riêng](CAPTURE_RUNTIME.md), chạy qua runtime Nav2 chung và không sinh/vá Python driver. Đặc biệt dataset launch và các fixture trong capture_frozen/corpus frozen không được đổi trong đợt này. Không đổi teacher labels, causal masks, native friction prefix hoặc dữ liệu train/test. Chỉ archive stage khi không còn consumer code, không suy từ tên cũ rằng có thể xóa.
+`dataset_pilot` và `wm_episode_batch` giữ exporter/capture code lịch sử; `depth_proxy_lifecycle` và `early_avoidance_pilot` giữ helper và driver snapshots đã freeze, đã gỡ các factory tạo/vá driver cũ khỏi HEAD. Tái lập lịch sử cần đúng source revision/manifest; lượt capture mới dùng [API capture có freeze riêng](CAPTURE_RUNTIME.md), chạy qua runtime Nav2 chung và không sinh/vá Python driver. Đặc biệt dataset launch và các fixture trong capture_frozen/corpus frozen không được đổi trong đợt này. Không đổi teacher labels, causal masks, native friction prefix hoặc dữ liệu train/test. Chỉ archive stage khi không còn consumer code, không suy từ tên cũ rằng có thể xóa.
+
+Freeze WM capture lịch sử có các yêu cầu đã lệch/thiếu từ trước trên HEAD (một driver generated thiếu, bốn hash khác). Không cập nhật hash để nhận đó là một capture được nghiệm thu. Bộ đọc dataset đã thu, exporter và API capture mới có phạm vi kiểm chứng riêng.
 
 ## Kiểm tra refactor
 

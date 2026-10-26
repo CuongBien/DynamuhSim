@@ -53,12 +53,12 @@
     {
       "name": "depth_proxy_lifecycle",
       "runtime": "existing_frozen_pipeline",
-      "reason": "Historical frozen pipeline for reproducing accepted/quarantined results. Use the versioned capture API for fresh episodes; no historical manifest or driver is rewritten."
+      "reason": "Historical frozen driver snapshots and required helpers retained; obsolete driver factories retired from HEAD. Reproduction requires the recorded source revision/manifest; fresh episodes use the versioned capture API."
     },
     {
       "name": "early_avoidance_pilot",
       "runtime": "existing_frozen_pipeline",
-      "reason": "Historical frozen pipeline for reproducing accepted/quarantined results. Use the versioned capture API for fresh episodes; no historical manifest or driver is rewritten."
+      "reason": "Historical frozen driver snapshots and required helpers retained; obsolete driver factories retired from HEAD. Reproduction requires the recorded source revision/manifest; fresh episodes use the versioned capture API."
     },
     {
       "name": "wm_episode_batch",
@@ -82,7 +82,7 @@
       "early_avoidance_pilot/run_validated.py",
       "wm_episode_batch/capture.py"
     ],
-    "historical_cohort_export_status": "Existing frozen cohort capture/resume/export commands retained for dataset01 reproduction; new API captures fresh standalone episodes and does not append to dataset01."
+    "historical_cohort_export_status": "Frozen cohort capture/resume/export code retained for recorded dataset01 provenance; historical capture freeze has pre-existing missing/generated and changed-source requirements on HEAD. Use the recorded source revision for historical reproduction; new API captures standalone episodes and does not append to dataset01."
   },
   "shared_analysis": {
     "helpers": "python/dynamuhsim/analysis/",

@@ -16,21 +16,9 @@ bash "$TASK/run.sh" analyze --capture "$TASK/generated/runs/motion01" --output "
 
 Ubuntu24.04 + ROS2 Jazzy, Python3.12.3, headless D3D12 NVIDIA RTX4060Laptop. ROS/Gazebo host runtime is sourced by run.sh. Heavy raw MCAP and NPY files are ignored locally. Representative arrays, images/GIF, failure fixtures, reports, raw hashes, implementation snapshots and provenance are in Git. An audit requires the local raw evidence; a fresh clone only contains representative evidence.
 
-## How these runs were made
+## Historical acquisition
 
-The commands below describe the existing measured fixtures. Their outputs are immutable; running them again in this workspace must refuse existing directories. Choose a separate copy/explicit new output path when making another experiment rather than deleting prior evidence.
-
-```bash
-source /opt/ros/jazzy/setup.bash
-source install/setup.bash
-TASK=experiments/social_navigation/benchmark/depth_proxy_lifecycle
-# Original control with /proc diagnostics, no helper preload:
-python3 "$TASK/diagnose.py" --name control01
-# Complete third scene: baseline / masked / null; exclusive domain91 lock:
-bash "$TASK/run.sh" static
-# Exactly one native standingv3 seed42 Nav2 pilot with paired depth:
-bash "$TASK/run.sh" motion
-```
+Các lệnh diagnose/static/motion của cohort đã hoàn tất được gỡ khỏi HEAD, cùng signal-trace C++ helper. Raw evidence, implementation snapshots và outcomes cũ giữ nguyên; phân tích/audit và test infeasible state vẫn còn. Lượt mới dùng [capture API](../../../../docs/CAPTURE_RUNTIME.md), không sinh/vá Python driver.
 
 The first diagnostic01 used a local signal-stack helper preload, exited cleanly and yielded no hung stack; it is not counted as production acceptance. control01 without that helper also exited cleanly. No gdb/strace package, system driver, ptrace policy or global environment was changed.
 
@@ -41,3 +29,5 @@ The motion driver is a generated copy of dataset_pilot/trial.py with runtime cam
 ## Current next step
 
 Replay the saved failed worker request and evaluate an isolated planner-side early slowdown/group-avoidance treatment before collecting a new complete episode. Preserve the0.2m/s standing cap and2mm guard; do not force humans aside or relabel the failed episode as success. Diagnose/monitor the intermittent shutdown separately, without claiming it resolved. No World Model, Isaac Sim, new framework matrix or large dataset batch in this stage.
+
+Cập nhật dọn 27/10/2026: `motion_prepare.py`, `pair_recording.py`, `quiesce.py` vẫn được capture/freeze sử dụng và giữ nguyên byte. [Code trước khi gỡ](https://github.com/CuongBien/DynamuhSim/tree/fc3f2d1dd8b41de0538679309d29f43e20da4e3c/experiments/social_navigation/benchmark/depth_proxy_lifecycle) giữ nguồn acquisition/diagnostic lịch sử.

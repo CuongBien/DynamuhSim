@@ -13,7 +13,9 @@ source /opt/ros/jazzy/setup.bash
 TASK=experiments/social_navigation/benchmark/early_avoidance_pilot
 mkdir -p "$TASK/generated"
 g++ -std=c++17 "$TASK/check_friction.cc" -o "$TASK/generated/check_friction" $(pkg-config --cflags --libs sdformat14)
-python3 "$TASK/test_friction.py"
+python3 "$TASK/test_replay.py"
 ```
 
 The regression constructs a bad-prefix copy from the original tracked robot, proves rejection with the installed native parser, then verifies the repaired copy. No GPU or ROS processes are started. Use the new copier explicitly for experiment runtime files; previous reports/raw files remain unchanged, with corrections recorded in the next experiment report.
+
+The standalone duplicate friction test was removed on 27/10/2026; its identical native-parser case remains in the four-test replay suite.

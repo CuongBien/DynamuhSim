@@ -10,10 +10,8 @@ First read [the correction](reports/ERRATA.md): the parent dynamic camera copier
 TASK=experiments/social_navigation/benchmark/early_avoidance_pilot
 bash "$TASK/run.sh" build
 bash "$TASK/run.sh" test
-# New output name required; run one simulator at a time:
-bash "$TASK/run.sh" live --name my_early_avoidance01 --profile moderate
-# Separate fresh output required; existing evidence is never overwritten:
-bash "$TASK/run.sh" analyze --capture "$TASK/generated/runs/my_early_avoidance01" --output "$TASK/generated/my_analysis01"
+# Re-analyze retained raw data into a new output:
+bash "$TASK/run.sh" analyze --capture "$TASK/generated/runs/avoidance_moderate01" --output "$TASK/generated/my_analysis01"
 # Audit the locally retained accepted pilot:
 bash "$TASK/run.sh" audit --name avoidance_moderate01
 ```
@@ -31,3 +29,5 @@ Large raw NPY/MCAP files live locally under generated/runs/. Git contains repres
 Native groups may disperse while the long episode runs; fixed members later become native individuals.0.2m/s applies to near standing-group responders, not all free walkers, whose original cap remains0.8m/s. The report evaluates actual standing groups and records membership; it does not claim all six people kept conversing for87s. Inflation is geometric, not a semantic group-aware planner. One seed does not certify robust social comfort or dense-crowd behavior.
 
 This pilot is a complete sensor/trajectory record for the next dataset-format check, not train-ready: personas remain unknown, association and future-BEV target still need validation. Keep HuNavSim held out. Next standardize this accepted episode and its configuration/physics provenance into portable sample windows, then a small independent confirmation; no World Model/Isaac or full training batch in this stage.
+
+Cập nhật dọn 27/10/2026: đã gỡ các factory sinh/vá driver slow/fixed/moderate/oracle, helper oracle odometry/localization và test friction đứng riêng bị lặp. Bốn regression trong `test_replay.py` vẫn giữ nguyên, gồm native friction parser. Checker C++, config/namespace helpers và driver moderate đã freeze trong reports còn nguyên. Lượt capture mới dùng [API capture](../../../../docs/CAPTURE_RUNTIME.md); `run.sh live` không còn hỗ trợ. [Code trước khi gỡ](https://github.com/CuongBien/DynamuhSim/tree/fc3f2d1dd8b41de0538679309d29f43e20da4e3c/experiments/social_navigation/benchmark/early_avoidance_pilot) giữ cách tái lập lịch sử.
