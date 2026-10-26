@@ -87,3 +87,23 @@ Gỡ cả chuỗi runner/worker/launch/analyzer đã đóng; không chuyển san
 273 hash nguồn từ năm lượt E2E ở trên, gồm 70 file riêng biệt, vẫn khớp; không chạy lại physics trong đợt chỉ xoá harness này. 1.814 control/model/snapshot và checkout/index chính giữ nguyên. Bằng chứng local tại `benchmark/generated/retired_lifecycle_cleanup_20261026/`.
 
 Bước dọn tiếp theo: rà chuỗi cohort localization/stability đã hoàn tất, phân biệt runner/analyzer chỉ còn dùng với report lịch sử và các helper `profiles`/geometry/capture vẫn được benchmark hiện hành gọi. Điều tra ca nhóm đứng ở mục trước vẫn còn là công việc hành vi riêng; chưa chỉnh controller hoặc nới ngưỡng.
+
+## Gỡ chuỗi cohort localization/stability đã hoàn tất
+
+Đối chiếu cùng nhánh benchmark đã push tại `9833565`, đã **xoá 21 file, 1.553 dòng code** của chuỗi nghiên cứu cũ; không thêm wrapper hoặc chuyển code sang thư mục legacy:
+
+| Stage / commit gốc | File bị xoá | Phần giữ lại ở HEAD |
+|---|---:|---|
+| `localization_diagnosis` / `1186e1d` | 7 | README chỉ tới source và report lịch sử |
+| `navigation_diagnostics` / `e8bf1c0` | 3 | `capture.py` còn được benchmark trial gọi |
+| `stability` / `25e4157` | 5 | README chỉ tới source và report lịch sử |
+| `localization_trials` / `d0a7bbb` | 3 | `profiles.py` còn được trial gọi; reference pin cũ |
+| `localization_validation` / `a2ef6af` | 3 | Fixture receipt và README lịch sử |
+
+Gỡ trọn chuỗi runner/analyzer/plot/validator cùng native-score, raycast và clustering helper không còn consumer. Hai helper runtime capture/profiles, `benchmark/trial.py`, footprint geometry và baseline YAML giữ nguyên byte. Các README dẫn tới code trước khi gỡ tại `e150d6b`; HEAD vẫn ghi diagnostics nhưng không còn analyzer chuyên biệt của các cohort cũ. Tái lập phân tích lịch sử cần revision/manifest/raw input của chính cohort đó. Không sửa kết quả 2/4, 5/6 hoặc thay ABORTED/TIMEOUT bằng lượt mới.
+
+**Kiểm chứng:** 278 test đạt (179 root, 13 scenario, 75 runner, 11 production); 28 CLI đạt, gồm benchmark trial, với ROS init/subprocess bị chặn. Đối chiếu helper capture trước/sau bằng 16 callback message ROS thật và hai graph snapshots mỗi phiên bản trên tám topic: payload khớp, grid nén không mất dữ liệu, GID thiếu vẫn null. AMCL có 12 ca configure và 45 ca service readback mỗi phiên bản, gồm 36 ca lỗi; output/exception khớp và client luôn được dọn. Các probe dùng node/client giả, không khởi tạo ROS hoặc chạy physics.
+
+273 hash nguồn của năm lượt E2E trước, gồm 70 file riêng biệt, vẫn khớp; 1.814 control/model/snapshot và checkout/index chính giữ nguyên. Bằng chứng local tại `benchmark/generated/retired_localization_cleanup_20261026/`. Chưa chạy thêm physics hoặc chỉnh controller/ngưỡng trong đợt này.
+
+Bước dọn tiếp theo: kiểm tra runner/probe contract và geometry ComplexityNav cùng các offline replay đã đóng; giữ kernel/roadmap/input mà worker hiện tại còn dùng. Điều tra hành vi ca nhóm đứng vẫn là việc riêng sau phần dọn.
