@@ -127,3 +127,23 @@ Gỡ cả preflight/harness Gazebo pilot cũ vì preflight đó kiểm hash prob
 273 hash nguồn của năm lượt E2E trước, gồm 70 file riêng biệt, vẫn khớp. Các kernel/roadmap/model-worker/preflight và locked inputs giữ nguyên byte; 1.814 control/model/snapshot và checkout/index chính không đổi. Không mở ROS/Gazebo, train model hoặc sinh dataset trong các probe mới. Bằng chứng local tại `benchmark/generated/retired_contract_replay_cleanup_20261026/`.
 
 Bước dọn tiếp theo: rà nhóm runner matrix/analyzer của các vòng đánh giá ban đầu `round2`/`round3` và các script đánh giá gốc; giữ recipe/entrypoint build image và adapter còn dùng. Điều tra hành vi ca nhóm đứng vẫn là việc riêng chưa chỉnh controller/ngưỡng.
+
+## Gỡ các vòng khảo sát ban đầu và cấu hình matrix phát sinh
+
+Đối chiếu nhánh benchmark đã push tại `9833565`, đã **xoá 15 file code (1.151 dòng)** và **54 config lịch sử phát sinh (1.652 dòng)**; hai loại được tính riêng, không gọi config/dataset là code đã giảm:
+
+| Nguồn / commit gốc | File code xoá | Config phát sinh xoá |
+|---|---:|---:|
+| Khảo sát SocNavGym/warehouse ban đầu / `91f3620` | 4 | 0 |
+| CrowdSimPlus round2 / `1dbf832` | 5 | 24 |
+| ComplexityNav round3 / `a9397f2` | 6 | 30 |
+
+Các config này chỉ thuộc matrix cũ, không có consumer hiện hành, không nằm trong 1.814 control được bảo vệ và không được Docker COPY. Model, locked inputs, source freeze, train/validation/test split, seal và các kết quả/report lịch sử giữ nguyên. Source/config đã gỡ vẫn có trong Git tại `ed208d2` và commit của phép đo; tái lập lịch sử cần đúng revision/manifest.
+
+Giữ Dockerfile/requirements/.dockerignore của hai image, dependency setup và warehouse asset generator. Shell round2/round3 chỉ còn explicit `build`; không mode hoặc các mode `demo/scene/matrix` đã nghỉ đều trả usage/exit2. Parent shell giữ default `warehouse` và launch arguments/environment; bỏ `verify/socnavgym` thuộc harness cũ. Setup chỉ đổi dòng hint cuối. Ba README được rút về đường chạy hiện tại và liên kết lịch sử; không thêm wrapper.
+
+**Kiểm chứng:** 278 test và 28 CLI đạt; 10 probe worker thật (sáu Docker đã pin, 65 replies) và current preflight đạt. Bảy route build/warehouse mỗi phiên bản được đối chiếu bằng mock, gồm round3 có/thiếu base image, default/explicit warehouse, custom domain/partition và argument có khoảng trắng; output khớp. Mười một mode không còn hỗ trợ bị từ chối trước external command. Sáu file tạo Docker build context giữ nguyên hash; không build lại image hoặc tự đổi runtime content pin.
+
+Hai lỗi harness escape/PATH ban đầu được giữ trong bằng chứng local và sửa ở fixture; không sửa runtime để làm test qua. Nguồn 70 file (273 hash) của năm ca E2E trước, 1.814 control và checkout/index chính giữ nguyên. Không chạy physics, train model hay sinh dataset mới. Bằng chứng local tại `benchmark/generated/retired_initial_rounds_cleanup_20261026/`.
+
+Bước tiếp theo: rà các công cụ report/probe dùng một lần ở chuỗi depth/perception; chỉ gỡ phần không còn consumer hoặc pin hiện hành, giữ engine/model và source mà WM/classifier freeze còn yêu cầu. Điều tra ca nhóm đứng vẫn chưa đổi controller/ngưỡng.

@@ -33,4 +33,4 @@ fi
 "$TASK_PY" -m pip install --no-build-isolation --no-deps -e "$TASK_VENDOR/SocNavGym"
 "$TASK_PY" -m pip check
 "$TASK_PY" -m pip freeze > "$TASK_DIR/reports/environment_freeze.txt"
-echo 'Ready. Run: bash experiments/social_navigation/run.sh socnavgym --scenario original --show'
+echo 'Ready. See docs/SHARED_NAV2_RUNTIME.md for the current worker/Nav2 entrypoints.'
