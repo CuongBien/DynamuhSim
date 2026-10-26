@@ -16,7 +16,7 @@ HELPER = ROOT / "src/custom_corridor/worlds/school_arena/school_runtime.sh"
 def live(pid):
     try:
         return Path(f"/proc/{pid}/stat").read_text().rsplit(")", 1)[1].split()[0] not in ("Z", "X")
-    except FileNotFoundError:
+    except (FileNotFoundError, ProcessLookupError):
         return False
 
 

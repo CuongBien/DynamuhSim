@@ -52,6 +52,8 @@ source /opt/ros/jazzy/setup.bash
 source install/setup.bash
 export ROS_DOMAIN_ID=42
 export RMW_IMPLEMENTATION=rmw_fastrtps_cpp
+source "$WS/tools/process_runtime.sh"
+process_init
 
 mkdir -p "$DATA_DIR"
 
@@ -117,8 +119,6 @@ reset_robot() {
   sleep 1.5
 }
 # ── Hàm chạy 1 kịch bản ─────────────────────────────────────────────────────
-
-# ── Hàm chạy 1 kịch bản ─────────────────────────────────────────────────────
 run_episode() {
   local idx="$1"          # 01..13
   local scenario_file="$2"
@@ -151,43 +151,15 @@ run_episode() {
 
   # [2] Ghi rosbag
   echo "[2/5] Start rosbag2"
-  ros2 bag record -o "$OUT/rosbag" \
+  process_record 20 ros2 bag record -o "$OUT/rosbag" \
     /scan /odom /cmd_vel /tf /tf_static /clock \
-    > "$OUT/rosbag.log" 2>&1 &
-  BAG_PID=$!
+    > "$OUT/rosbag.log" 2>&1
 
   # [3] Ghi CSV frame
   echo "[3/5] Start CSV logger"
-  python3 scripts/log_frame_csv.py \
+  process_record 15 python3 scripts/log_frame_csv.py \
     --output "$OUT/frames.csv" \
-    > "$OUT/csv_logger.log" 2>&1 &
-  CSV_PID=$!
-
-    # Cleanup nội bộ — có timeout để không bị kẹt chờ rosbag flush
-  cleanup_ep() {
-    # Gửi SIGINT để rosbag2/logger flush gracefully
-    kill -INT "$CSV_PID" 2>/dev/null || true
-    kill -INT "$BAG_PID" 2>/dev/null || true
-
-    # Chờ tối đa 15s cho CSV logger
-    local deadline=$(( $(date +%s) + 15 ))
-    while kill -0 "$CSV_PID" 2>/dev/null && [ "$(date +%s)" -lt "$deadline" ]; do
-      sleep 0.5
-    done
-    kill -9 "$CSV_PID" 2>/dev/null || true
-
-    # Chờ tối đa 20s cho rosbag2 (cần thêm thời gian để flush MCAP)
-    deadline=$(( $(date +%s) + 20 ))
-    while kill -0 "$BAG_PID" 2>/dev/null && [ "$(date +%s)" -lt "$deadline" ]; do
-      sleep 0.5
-    done
-    kill -9 "$BAG_PID" 2>/dev/null || true
-
-    # Đảm bảo không còn zombie
-    wait "$CSV_PID" 2>/dev/null || true
-    wait "$BAG_PID" 2>/dev/null || true
-  }
-  # Không dùng trap ở đây vì vòng lặp; gọi trực tiếp ở cuối
+    > "$OUT/csv_logger.log" 2>&1
 
   # Lưu scenario
   cp "$scenario_path" "$OUT/scenario.json"
@@ -196,11 +168,11 @@ run_episode() {
   # [4] Gửi NavigateToPose
   echo "[4/5] Navigate to goal (x=$GOAL_X, y=$GOAL_Y) — timeout=${TIMEOUT_SEC}s"
   set +e
-  timeout "${TIMEOUT_SEC}s" \
+  process_logged "$OUT/navigation.log" timeout --foreground "${TIMEOUT_SEC}s" \
     ros2 action send_goal /navigate_to_pose nav2_msgs/action/NavigateToPose \
     "{pose: {header: {frame_id: map}, pose: {position: {x: $GOAL_X, y: $GOAL_Y, z: 0.0}, orientation: {x: 0.0, y: 0.0, z: 0.0, w: 1.0}}}}" \
-    --feedback | tee "$OUT/navigation.log"
-  NAV_RC=${PIPESTATUS[0]}
+    --feedback
+  NAV_RC=$?
   set -e
 
   echo "$NAV_RC" > "$OUT/navigation_return_code.txt"
@@ -226,7 +198,7 @@ run_episode() {
   gz topic -t /multi_human/command -m gz.msgs.StringMsg -p 'data: "stop"' || true
 
   # Dừng logger + bag
-  cleanup_ep
+  process_stop
 
   echo ""
   echo "  Episode done → $OUT"
