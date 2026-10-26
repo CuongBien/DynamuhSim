@@ -173,3 +173,11 @@ Rà freeze WM capture lịch sử ghi nhận **từ trước đợt sửa này**
 273 hash nguồn của năm lượt E2E trước, 1.814 control/model/snapshot, locked inputs và checkout/index chính giữ nguyên. Không chạy thêm Gazebo, publish odometry oracle, train model hoặc sinh dataset. Bằng chứng local tại `benchmark/generated/retired_capture_factories_cleanup_20261027/`.
 
 Bước tiếp theo: nghiệm thu một episode capture end-to-end qua API mới, output/domain/partition riêng, kiểm raw recorder, tail, source freeze và cleanup; giữ mọi failure thay vì retry để thay outcome. Các lệch freeze lịch sử được giữ như giới hạn tái lập, không chỉnh controller/ngưỡng.
+
+## 27/10/2026 — nghiệm thu capture thật sau khi gỡ factory
+
+[Biên bản capture](verification/capture_native_2026-10-27.json) và [chi tiết](CAPTURE_RUNTIME.md). Đúng một lượt standing45 tại `36184b8`, không thay source/config/tolerance hoặc retry. Capture integrity **28/28 PASS**; navigation audit **FAIL** vì TIMEOUT90,005s, XY thật0,199m và yaw1,000rad. Hai kết quả được giữ riêng.
+
+Recorder đóng0, MCAP có16 topic/1.019 depth frames. 1.012 cặp ON/OFF được đối chiếu bitwise; bảy raw frame thiếu auxiliary đều ở warmup, active/tail không thiếu. Tail3,34s,33frame trong tail; thêm hai frame sau observation_end. Native camera/friction/TF và teardown đạt; Gazebo clean, ROS launch0, không còn owned session. Ba action-status CDR được giải mã bằng ROS đang cài dù MCAP có cảnh báo embedded schema.
+
+Chỉ thêm tài liệu/receipt nghiệm thu; runtime giữ nguyên. Raw ~0,926GB local ignored, inventory/hash và mọi failure/outcome cũ được giữ. Chưa có capture WM training eligibility hoặc success-rate claim. Bước tiếp theo: phân tích đoạn cuối TIMEOUT từ bản ghi (AMCL, goal orientation, MPPI commands/path), không nới ngưỡng hoặc thay kết quả này.

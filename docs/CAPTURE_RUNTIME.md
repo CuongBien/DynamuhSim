@@ -99,3 +99,26 @@ Recorder có cảnh báo thiếu embedded message definition cho `GoalStatusArra
 ## Trạng thái artifact sau bước dọn tiếp theo
 
 Raw ON/OFF/MCAP của capture diagnostic ở trên đã được chuyển sang artifact local sau roundtrip và audit bitwise. Metadata/freeze/result/log vẫn tại chỗ; xem `artifact_ref.json` và [hướng dẫn audit/artifact](ANALYSIS_AND_ARTIFACTS.md) để restore vào thư mục mới. Bộ dataset01 không thay đổi. Biên bản capture ở commit29ea6b3 giữ nguyên các kết quả ban đầu.
+
+## Nghiệm thu lại ngày 27/10/2026 sau cleanup
+
+[Biên bản và hash bằng chứng](verification/capture_native_2026-10-27.json). Một lượt headless standing45 tại `36184b8`, config moderate mặc định, native ROS2/Gazebo/NVIDIA, prefix build riêng đã nghiệm thu. Không đổi budget90s, tail3,2s, controller, threshold hoặc dữ liệu cũ; không retry.
+
+| Hạng mục | Kết quả |
+|---|---|
+| Capture integrity | **PASS 28/28 checks** |
+| Navigation goal audit | **FAIL** đúng ở `actual_goal_required`; action TIMEOUT sau90,005s sim |
+| Goal thật tại action_end | XY0,199m; yaw1,000rad, chưa đạt điều kiện action/yaw |
+| MCAP | Recorder0; 16 topic có message; 1.019 raw depth frames |
+| Auxiliary ON/OFF | 1.012 timestamp ghép cặp; toàn bộ1.012 OFF khớp MCAP từng bit float32 |
+| Frame chỉ có trong raw | 7 frame ở warmup2,8–3,4s; không có thiếu auxiliary ở active/tail |
+| Label tail | 3,34s; 35 depth frames sau action_end, gồm33 trong tail và2 khi shutdown |
+| Camera/TF/friction | Camera đúng hash; camera_link có một parent; native checker nhận4 friction frames |
+| Teardown | Filter pre/post1.021/1.021; recorder0, Gazebo clean, ROS launch0, không còn phiên sở hữu |
+| Media | Ba PNG và GIF90 frame ghi thật,640×480,22,5s phát4×; đã decode/kiểm duration |
+
+Cảnh báo thiếu embedded schema của GoalStatusArray vẫn có; cả ba message CDR đọc được bằng ROS đang cài (EXECUTING→CANCELING→CANCELED). Chưa xác nhận đọc topic đó trên môi trường không có ROS schema tương ứng. MCAP là nguồn raw; không dùng auxiliary để thay toàn bộ raw khi có bảy frame warmup không được lưu cặp.
+
+AMCL gần action_end cũng có yaw error0,933rad; pose Gazebo căn cùng timestamp khoảng1,011rad (lệch thời gian2,5ms). Đây là gợi ý phân tích đoạn cuối, chưa quy nguyên nhân cho controller/localization hoặc cleanup. Giữ TIMEOUT; chưa điều chỉnh goal checker hoặc chạy lại để lấy success.
+
+Raw/telemetry/media và inventory2.090 file (~0,926GB logical) giữ local tại `benchmark/generated/capture_acceptance_20261027/`; không đưa raw vào Git hoặc append dataset01. Đây là nghiệm thu capture, chưa đánh giá đủ điều kiện học WM, walking, GUI hoặc xếp hạng navigation. Source/control cũ và checkout/index chính giữ nguyên.
