@@ -29,3 +29,11 @@ Run one:
 
 Run all:
   ./run_all_scenarios.sh
+
+Collector hiện tại
+-----------------
+Các launcher dùng scripts/collect_episode_v2.py; batch tự tạo kịch bản dùng
+scripts/collect_dataset_scenarios.py. Dùng run_all_scenarios.sh ở thư mục này
+để chạy đủ 13 tệp scenarios_v1/scenario_001.json đến scenario_013.json.
+Collector đời đầu collect_episode.py / collect_candidate.py đã được loại bỏ;
+có thể xem lại trong lịch sử Git. Dữ liệu và scenario cũ được giữ nguyên.

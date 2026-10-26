@@ -16,5 +16,5 @@ for n in $(seq 1 13); do
     --episode "$n" \
     --world arena_dataset \
     --model burger \
-    --scenario "scenarios_v1/scenarios/scenario_${sid}.json"
+    --scenario "scenarios_v1/scenario_${sid}.json"
 done
