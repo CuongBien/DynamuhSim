@@ -9,9 +9,9 @@ Run one or more lifecycle-managed trials from the workspace root:
 Defaults preserve the corridor setup and use trials starting at `trial_03`:
 
 - `WIDTH=0.90`
-- `GOAL_X=11.74`, `GOAL_Y=0.0`
+- `GOAL_X=20.0`, `GOAL_Y=0.0`
 - `TRIAL_TIMEOUT_S=180`
-- `READY_TIMEOUT_S=240`
+- `READY_TIMEOUT_S=60`
 
 Override the start number or goal without editing the script:
 
@@ -26,7 +26,7 @@ Each valid trial writes:
 - `baseline_01/trial_N/analysis/` v1 analyzer output
 - `baseline_01/trial_N/trial_result.json`
 
-Lifecycle outcomes are `SUCCESS`, `FAILURE`, `TIMEOUT`, or `INVALID`. A trial is not completed by elapsed wall time alone: action result is checked, with timeout only as a fallback. Readiness requires `/clock` and `/bt_navigator` lifecycle state `active`.
+Lifecycle outcomes are `SUCCESS`, `FAILURE`, `TIMEOUT`, or `INVALID`. A trial is not completed by elapsed wall time alone: action result is checked, with timeout only as a fallback. Readiness checks `/clock`, `/scan`, `/tf`, the Nav2 lifecycle stack, `/navigate_to_pose`, AMCL pose and obstacle ground truth.
 
 Summarize directly from the baseline directory:
 
@@ -36,3 +36,5 @@ python3 evaluate_framework.py batch \
 ```
 
 `collision_contact` is currently a clearance-based proxy (`estimated_clearance <= 0`), not an authoritative contact sensor measurement. `INVALID` trials remain in the trial table but are excluded from aggregates.
+
+The runner owns private process sessions and stops only those sessions after each trial or interruption. It no longer kills processes by name; stop a conflicting manual Gazebo/Nav2 session from its owning terminal before starting the baseline. ROS detection and discovery settings are shared with `setup_env.sh`; baseline launch arguments, topics, thresholds and result schemas are unchanged.

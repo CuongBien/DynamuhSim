@@ -32,6 +32,7 @@ case "$MODE" in
     docker cp "$DEMO/hunav_social_test.yaml" "$CONTAINER:$SCENARIOS/demo_1_social.yaml"
     docker cp "$DEMO/school_floor.world" "$CONTAINER:$RUNTIME/demo_1_school_floor.world"
     docker cp "$PARENT/school_runtime.sh" "$CONTAINER:$RUNTIME/"
+    docker cp "$PARENT/../../../../tools/process_runtime.sh" "$CONTAINER:$RUNTIME/"
     docker cp "$DEMO/run_hunav_inside.sh" "$CONTAINER:$RUNTIME/"
     docker exec "$CONTAINER" chmod +x "$RUNTIME/run_hunav_inside.sh"
     BT_FILES=("$DEMO"/demo_1_{hunav__agent_1,social__agent_1,social__agent_2}_bt.xml

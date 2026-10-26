@@ -6,22 +6,8 @@
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
-# Auto-detect ROS 2 distribution if not already set or sourced
-if [[ -z "${ROS_DISTRO:-}" ]]; then
-    for distro in jazzy humble iron rolling; do
-        if [[ -f "/opt/ros/$distro/setup.bash" ]]; then
-            ROS_DISTRO="$distro"
-            break
-        fi
-    done
-fi
-
-if [[ -n "${ROS_DISTRO:-}" && -f "/opt/ros/$ROS_DISTRO/setup.bash" ]]; then
-    source "/opt/ros/$ROS_DISTRO/setup.bash"
-elif ! command -v ros2 &>/dev/null; then
-    echo "[ERROR] No ROS 2 installation found in /opt/ros or PATH."
-    exit 1
-fi
+source "$ROOT/tools/ros_environment.sh"
+dynamuhsim_source_ros || exit $?
 
 if [[ ! -f "$ROOT/install/setup.bash" ]]; then
     echo "[ERROR] Workspace has not been built:"
@@ -35,10 +21,7 @@ fi
 
 source "$ROOT/install/setup.bash"
 
-export RMW_IMPLEMENTATION=rmw_fastrtps_cpp
-export FASTDDS_BUILTIN_TRANSPORTS=UDPv4
-export ROS_DOMAIN_ID="${ROS_DOMAIN_ID:-0}"
-export ROS_AUTOMATIC_DISCOVERY_RANGE="${DYNAMUHSIM_DISCOVERY_RANGE:-LOCALHOST}"
+dynamuhsim_discovery
 
 set -Eeuo pipefail
 
@@ -149,77 +132,9 @@ ANALYZER="${ANALYZER:-$ROOT/analyze_baseline.py}"
     exit 2
 }
 
-cleanup_processes() {
-    local pid
-
-    for pid in "${PIDS[@]:-}"; do
-        if kill -0 "$pid" 2>/dev/null; then
-            kill -TERM -- "-$pid" 2>/dev/null ||
-            kill -TERM "$pid" 2>/dev/null ||
-            true
-        fi
-    done
-
-    sleep 1
-
-    for pid in "${PIDS[@]:-}"; do
-        if kill -0 "$pid" 2>/dev/null; then
-            kill -KILL -- "-$pid" 2>/dev/null ||
-            kill -KILL "$pid" 2>/dev/null ||
-            true
-        fi
-    done
-
-    PIDS=()
-}
-
-
-kill_stale_ros_processes() {
-    echo "[CLEANUP] Removing stale processes..."
-
-    pkill -TERM -f 'nav2_lifecycle_manager' 2>/dev/null || true
-    pkill -TERM -f 'controller_server' 2>/dev/null || true
-    pkill -TERM -f 'waypoint_follower' 2>/dev/null || true
-    pkill -TERM -f 'goal_pose_bridge.py' 2>/dev/null || true
-    pkill -TERM -f 'parameter_bridge' 2>/dev/null || true
-    pkill -TERM -f 'robot_state_publisher' 2>/dev/null || true
-    pkill -TERM -f 'planner_server' 2>/dev/null || true
-    pkill -TERM -f 'bt_navigator' 2>/dev/null || true
-    pkill -TERM -f 'behavior_server' 2>/dev/null || true
-    pkill -TERM -f 'map_server' 2>/dev/null || true
-    pkill -TERM -f 'amcl' 2>/dev/null || true
-    pkill -TERM -f 'rviz2' 2>/dev/null || true
-    pkill -TERM -f 'ros2 bag record' 2>/dev/null || true
-    pkill -TERM -f 'record_obstacle.py' 2>/dev/null || true
-    pkill -TERM -f 'gz sim' 2>/dev/null || true
-    pkill -TERM -f 'nav2_corridor.launch.py' 2>/dev/null || true
-    pkill -TERM -f 'corridor_tb3.launch.py' 2>/dev/null || true
-
-    sleep 2
-
-    pkill -KILL -f 'nav2_lifecycle_manager' 2>/dev/null || true
-    pkill -KILL -f 'controller_server' 2>/dev/null || true
-    pkill -KILL -f 'waypoint_follower' 2>/dev/null || true
-    pkill -KILL -f 'goal_pose_bridge.py' 2>/dev/null || true
-    pkill -KILL -f 'parameter_bridge' 2>/dev/null || true
-    pkill -KILL -f 'robot_state_publisher' 2>/dev/null || true
-    pkill -KILL -f 'planner_server' 2>/dev/null || true
-    pkill -KILL -f 'bt_navigator' 2>/dev/null || true
-    pkill -KILL -f 'behavior_server' 2>/dev/null || true
-    pkill -KILL -f 'map_server' 2>/dev/null || true
-    pkill -KILL -f 'amcl' 2>/dev/null || true
-    pkill -KILL -f 'rviz2' 2>/dev/null || true
-    pkill -KILL -f 'ros2 bag record' 2>/dev/null || true
-    pkill -KILL -f 'record_obstacle.py' 2>/dev/null || true
-    pkill -KILL -f 'gz sim' 2>/dev/null || true
-    pkill -KILL -f 'nav2_corridor.launch.py' 2>/dev/null || true
-    pkill -KILL -f 'corridor_tb3.launch.py' 2>/dev/null || true
-
-    sleep 1
-}
-
-
-trap cleanup_processes EXIT INT TERM
+source "$ROOT/tools/process_runtime.sh"
+process_init TERM KILL
+PROCESS_GRACE_STEPS=10
 
 
 # ------------------------------------------------------
@@ -247,53 +162,6 @@ wait_for_gazebo_ready() {
     done
 
     echo "[ERROR] Gazebo/robot not ready"
-    return 1
-}
-
-
-wait_for_nav2_nodes() {
-    echo "[WAIT] Waiting for Nav2 nodes..."
-
-    local deadline=$((SECONDS + READY_TIMEOUT_S))
-
-    while (( SECONDS < deadline )); do
-        local nodes
-        nodes="$(timeout 2s ros2 node list 2>/dev/null || true)"
-
-        if grep -qx "/map_server" <<< "$nodes" \
-            && grep -qx "/amcl" <<< "$nodes" \
-            && grep -qx "/controller_server" <<< "$nodes" \
-            && grep -qx "/bt_navigator" <<< "$nodes"; then
-            echo "[READY] Nav2 nodes created"
-            return 0
-        fi
-
-        sleep 1
-    done
-
-    echo "[ERROR] Nav2 nodes did not start"
-    return 1
-}
-
-
-wait_for_lifecycle_state() {
-    local node="$1"
-    local wanted="$2"
-
-    local deadline=$((SECONDS + READY_TIMEOUT_S))
-
-    while (( SECONDS < deadline )); do
-        local state=""
-        state="$(timeout 2s ros2 lifecycle get "$node" 2>/dev/null || true)"
-
-        if echo "$state" | grep -Eq "^${wanted}[[:space:]]*\[[0-9]+\]"; then
-            return 0
-        fi
-
-        sleep 1
-    done
-
-    echo "[ERROR] $node did not reach $wanted"
     return 1
 }
 
@@ -340,7 +208,7 @@ publish_initial_pose() {
     qw="$(python3 -c \
         "import math; print(math.cos(float('$MAP_INITIAL_YAW') / 2.0))")"
 
-    ros2 topic pub \
+    process_start ros2 topic pub \
         --use-sim-time \
         --rate 2 \
         /initialpose \
@@ -372,9 +240,9 @@ publish_initial_pose() {
                     0, 0, 0, 0, 0, 0
                 ]
             }
-        }" >/dev/null 2>&1 &
+        }" >/dev/null 2>&1
 
-    local pub_pid=$!
+    local pub_pid=$PROCESS_PID
 
     sleep 3
 
@@ -504,7 +372,6 @@ run_trial() {
     : > "$nav_log"
     : > "$goal_log"
 
-    kill_stale_ros_processes
 
 
     # --------------------------------------------------
@@ -513,17 +380,15 @@ run_trial() {
 
     echo "[1/8] Starting Gazebo..."
 
-    setsid ros2 launch \
+    process_start ros2 launch \
         custom_corridor \
         corridor_tb3.launch.py \
         width:="$WIDTH" \
         obstacle:="$OBSTACLE_TYPE" \
         gui:="$GUI" \
         rviz:="$RVIZ" \
-        >"$launch_log" 2>&1 &
+        >"$launch_log" 2>&1
 
-    local launch_pid="$!"
-    PIDS+=("$launch_pid")
 
     if ! wait_for_gazebo_ready; then
         echo "[ERROR] Gazebo/robot not ready"
@@ -538,10 +403,6 @@ run_trial() {
         return 1
     fi
 
-
-    # --------------------------------------------------
-    # 2. Nav2
-    # --------------------------------------------------
 
     # --------------------------------------------------
     # 2. Nav2
@@ -564,16 +425,14 @@ run_trial() {
     echo "[NAV2] Params : $NAV2_PARAMS"
     echo "[NAV2] Map    : $NAV2_MAP"
     
-    setsid ros2 launch \
+    process_start ros2 launch \
         custom_corridor \
         nav2_corridor.launch.py \
         controller:="$CONTROLLER" \
         params_file:="$NAV2_PARAMS" \
         map:="$NAV2_MAP" \
-        >"$nav_log" 2>&1 &
+        >"$nav_log" 2>&1
 
-    local nav_pid="$!"
-    PIDS+=("$nav_pid")
 
     # --------------------------------------------------
     # 3. Nav2 lifecycle readiness
@@ -721,13 +580,12 @@ run_trial() {
 
     echo "[5/8] Starting obstacle recorder..."
 
-    python3 \
+    process_start python3 \
         "$ROOT/record_obstacle.py" \
         --output "$gt" \
-        >"$recorder_log" 2>&1 &
+        >"$recorder_log" 2>&1
 
-    recorder_pid="$!"
-    PIDS+=("$recorder_pid")
+    recorder_pid="$PROCESS_PID"
 
     if ! wait_for_ground_truth "$gt"; then
         status="INVALID"
@@ -749,7 +607,7 @@ run_trial() {
 
     echo "[6/8] Starting rosbag..."
 
-    ros2 bag record \
+    process_start ros2 bag record \
         -o "$trial_dir" \
         /clock \
         /cmd_vel \
@@ -760,10 +618,9 @@ run_trial() {
         /map \
         /plan \
         /local_plan \
-        >"$bag_log" 2>&1 &
+        >"$bag_log" 2>&1
 
-    bag_pid="$!"
-    PIDS+=("$bag_pid")
+    bag_pid="$PROCESS_PID"
 
     sleep 2
 
@@ -797,17 +654,16 @@ run_trial() {
         }
     }"
 
-    timeout \
+    process_start timeout \
         "${TRIAL_TIMEOUT_S}s" \
         ros2 action send_goal \
         /navigate_to_pose \
         nav2_msgs/action/NavigateToPose \
         "$goal_yaml" \
         --feedback \
-        >"$goal_log" 2>&1 &
+        >"$goal_log" 2>&1
 
-    goal_pid="$!"
-    PIDS+=("$goal_pid")
+    goal_pid="$PROCESS_PID"
 
     if wait "$goal_pid"; then
 
@@ -982,8 +838,7 @@ for ((offset=0; offset<TRIAL_COUNT; offset++)); do
     echo
     echo "[BATCH] Cleaning up after trial $trial_id..."
 
-    cleanup_processes
-    kill_stale_ros_processes
+    process_stop
 
     echo "[BATCH] Trial $trial_id finished."
     echo

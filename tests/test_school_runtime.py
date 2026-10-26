@@ -48,8 +48,8 @@ time.sleep(60)
 
     def launch(self, action, *, monitor=False):
         script = self.folder / "launch.sh"
-        script.write_text('set -euo pipefail\nsource "$1"\nschool_processes\n'
-                          'school_start "$2" "$3" "$4" "$5"\nsleep 0.2\nschool_wait\n')
+        script.write_text('set -euo pipefail\nsource "$1"\nprocess_init\n'
+                          'process_start "$2" "$3" "$4" "$5"\nsleep 0.2\nprocess_wait\n')
         process = subprocess.Popen(["bash", *(["-m"] if monitor else []), str(script), str(HELPER), sys.executable,
                                     str(self.worker), str(self.ready), action],
                                    stdout=subprocess.DEVNULL, stderr=subprocess.PIPE,
@@ -90,9 +90,9 @@ time.sleep(60)
         delayed.chmod(0o755)
         child_pid = self.folder / "child_pid"
         script = self.folder / "early_exit.sh"
-        script.write_text('set -euo pipefail\nsource "$1"\nschool_processes\n'
-                          'school_start "$2" -c "import time;time.sleep(60)"\n'
-                          'printf "%s" "${SCHOOL_PIDS[0]}" > "$3"\nexit 29\n')
+        script.write_text('set -euo pipefail\nsource "$1"\nprocess_init\n'
+                          'process_start "$2" -c "import time;time.sleep(60)"\n'
+                          'printf "%s" "${PROCESS_PIDS[0]}" > "$3"\nexit 29\n')
         process = subprocess.Popen(["bash", str(script), str(HELPER), sys.executable, str(child_pid)],
                                    env=dict(os.environ, PATH=str(self.folder) + ":" + os.environ["PATH"]),
                                    stdout=subprocess.DEVNULL, stderr=subprocess.PIPE, start_new_session=True)

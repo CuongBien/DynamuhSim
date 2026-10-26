@@ -18,14 +18,14 @@ if pgrep -f '[r]os2 run hunav_agent_manager (hunav_loader|hunav_agent_manager)|[
 fi
 LOG_DIR="$(mktemp -d /tmp/school_hunav.XXXXXX)"
 echo "HuNav logs: $LOG_DIR"
-school_processes
-school_start ros2 run hunav_agent_manager hunav_loader --ros-args --params-file "$SCENARIO" > "$LOG_DIR/loader.log" 2>&1
+process_init
+process_start ros2 run hunav_agent_manager hunav_loader --ros-args --params-file "$SCENARIO" > "$LOG_DIR/loader.log" 2>&1
 sleep 2
-school_start ros2 run hunav_agent_manager hunav_agent_manager --ros-args -p use_sim_time:=false -p publish_tf:=false -p publish_sfm_forces:=false > "$LOG_DIR/manager.log" 2>&1
+process_start ros2 run hunav_agent_manager hunav_agent_manager --ros-args -p use_sim_time:=false -p publish_tf:=false -p publish_sfm_forces:=false > "$LOG_DIR/manager.log" 2>&1
 
 READY=0
 for _ in {1..20}; do
-  for pid in "${SCHOOL_PIDS[@]}"; do
+  for pid in "${PROCESS_PIDS[@]}"; do
     kill -0 "$pid" 2>/dev/null || { wait "$pid" || exit $?; exit 1; }
   done
   if ros2 service list | grep -qx /compute_agents; then READY=1; break; fi
@@ -37,7 +37,7 @@ if [[ "$READY" != 1 ]]; then
   exit 1
 fi
 echo "HuNav /compute_agents is READY!"
-school_start python3 /tmp/school_arena/hunav_gz8_school_bridge.py \
+process_start python3 /tmp/school_arena/hunav_gz8_school_bridge.py \
   --scenario "${SCENARIO}" \
   --sdf "${SDF_WORLD}" \
   --ros-args \
@@ -46,4 +46,4 @@ school_start python3 /tmp/school_arena/hunav_gz8_school_bridge.py \
   -p update_hz:=10.0 \
   -p human_z:=0.0 \
   -p route_half_width:=0.45 > >(sed -u '/sequence size exceeds remaining buffer/d') 2>&1
-school_wait
+process_wait
