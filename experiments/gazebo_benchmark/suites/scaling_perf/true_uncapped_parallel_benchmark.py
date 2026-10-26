@@ -17,64 +17,17 @@ import multiprocessing
 import psutil
 import numpy as np
 
-import rclpy
-from rclpy.node import Node
-from rosgraph_msgs.msg import Clock
-from sensor_msgs.msg import LaserScan, Image
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../..")))
 from experiments.gazebo_benchmark.core.benchmark_world_generator import BenchmarkWorldGenerator
 from experiments.gazebo_benchmark.core.sim_env import build_benchmark_env
 from experiments.gazebo_benchmark.core.mppi_trial import scoped_processes
+from experiments.gazebo_benchmark.core.profiler.benchmark_profiler import DomainClockListener, collect_telemetry
 from experiments.gazebo_benchmark.core.profiler import query_gpu as get_gpu_metrics, sample_resources
 
 
-class DomainClockListener(Node):
-    def __init__(self, domain_id: int):
-        super().__init__(f'clock_listener_dom{domain_id}')
-        self.domain_id = domain_id
-        self.latest_sim_time = None
-        self.latest_wall_time = None
-        self.has_scan = False
-        self.has_depth = False
-        self.samples = []  # list of (wall_time, sim_time)
-
-        self.clock_sub = self.create_subscription(Clock, '/clock', self._clock_cb, 50)
-        self.scan_sub = self.create_subscription(LaserScan, '/scan', self._scan_cb, 10)
-        self.depth_sub = self.create_subscription(Image, '/camera/depth_image', self._depth_cb, 10)
-
-    def _clock_cb(self, msg: Clock):
-        w_t = time.time()
-        s_t = msg.clock.sec + msg.clock.nanosec * 1e-9
-        self.latest_wall_time = w_t
-        self.latest_sim_time = s_t
-        self.samples.append((w_t, s_t))
-
-    def _scan_cb(self, msg: LaserScan):
-        self.has_scan = True
-
-    def _depth_cb(self, msg: Image):
-        self.has_depth = True
-
-
 def domain_worker_proc(domain_id: int, duration_s: float, out_file: str):
-    os.environ["ROS_DOMAIN_ID"] = str(domain_id)
-    rclpy.init()
-    node = DomainClockListener(domain_id)
-    t0 = time.time()
-    while rclpy.ok() and (time.time() - t0) < duration_s:
-        rclpy.spin_once(node, timeout_sec=0.01)
-
-    data = {
-        "samples": node.samples,
-        "has_scan": node.has_scan,
-        "has_depth": node.has_depth
-    }
-    with open(out_file, "w") as f:
-        json.dump(data, f)
-
-    node.destroy_node()
-    rclpy.shutdown()
+    return collect_telemetry(domain_id, duration_s, out_file, DomainClockListener)
 
 
 @scoped_processes

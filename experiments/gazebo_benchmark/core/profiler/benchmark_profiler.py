@@ -8,6 +8,7 @@ Samples every 1.0 second:
 - RAM: System RAM usage (MB)
 """
 
+import json
 import sys
 import os
 import time
@@ -22,6 +23,83 @@ from geometry_msgs.msg import TwistStamped
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../..")))
 from experiments.gazebo_benchmark.core.profiler import query_gpu_int
+
+
+class DomainTelemetryListener(Node):
+    """Wall/sim clock samples and sensor readiness for the scaling suites."""
+    node_prefix = 'telemetry_listener_dom'
+    clock_qos = 50
+    depth_topic = '/camera/depth_image'
+    use_sim_time = None
+    depth_first = False
+    track_latest = False
+
+    def __init__(self, domain_id: int):
+        super().__init__(f'{self.node_prefix}{domain_id}')
+        if self.use_sim_time is not None:
+            self.set_parameters([rclpy.parameter.Parameter('use_sim_time', rclpy.Parameter.Type.BOOL, self.use_sim_time)])
+        self.domain_id = domain_id
+        if self.track_latest:
+            self.latest_sim_time = None
+            self.latest_wall_time = None
+        self.samples = []
+        self.has_scan = False
+        self.has_depth = False
+        self.clock_sub = self.create_subscription(Clock, '/clock', self._clock_cb, self.clock_qos)
+        sensors = [('scan', LaserScan, '/scan', self._scan_cb),
+                   ('depth', Image, self.depth_topic, self._depth_cb)]
+        if self.depth_first:
+            sensors.reverse()
+        for name, kind, topic, callback in sensors:
+            setattr(self, name + '_sub', self.create_subscription(kind, topic, callback, 10))
+
+    def _clock_cb(self, msg: Clock):
+        w_t = time.time()
+        s_t = msg.clock.sec + msg.clock.nanosec * 1e-9
+        if self.track_latest:
+            self.latest_wall_time = w_t
+            self.latest_sim_time = s_t
+        self.samples.append((w_t, s_t))
+
+    def _scan_cb(self, msg: LaserScan):
+        self.has_scan = True
+
+    def _depth_cb(self, msg: Image):
+        self.has_depth = True
+
+
+class DomainClockListener(DomainTelemetryListener):
+    node_prefix = 'clock_listener_dom'
+    track_latest = True
+
+
+class TelemetryCollector(DomainTelemetryListener):
+    node_prefix = 'telemetry_collector_'
+    clock_qos = 100
+    depth_topic = '/camera/depth/image_rect_raw'
+    use_sim_time = True
+    depth_first = True
+
+
+def collect_telemetry(domain_id, duration_s, out_file, collector):
+    """Run the duration-limited scaling worker and preserve its JSON schema."""
+    os.environ["ROS_DOMAIN_ID"] = str(domain_id)
+    rclpy.init()
+    node = collector(domain_id)
+    t0 = time.time()
+    while rclpy.ok() and (time.time() - t0) < duration_s:
+        rclpy.spin_once(node, timeout_sec=0.01)
+
+    data = {
+        "samples": node.samples,
+        "has_scan": node.has_scan,
+        "has_depth": node.has_depth
+    }
+    with open(out_file, "w") as f:
+        json.dump(data, f)
+
+    node.destroy_node()
+    rclpy.shutdown()
 
 
 class BenchmarkProfiler(Node):

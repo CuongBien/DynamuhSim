@@ -26,40 +26,12 @@ import numpy as np
 
 
 import rclpy
-from rclpy.node import Node
-from rosgraph_msgs.msg import Clock
-from sensor_msgs.msg import Image, LaserScan
-from geometry_msgs.msg import TwistStamped
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../..")))
 from experiments.gazebo_benchmark.core.mppi_trial import scoped_processes
+from experiments.gazebo_benchmark.core.profiler.benchmark_profiler import TelemetryCollector
 from experiments.gazebo_benchmark.core.profiler import query_gpu as get_gpu_metrics, sample_resources
 from experiments.gazebo_benchmark.core.sim_env import build_benchmark_env
-
-
-class TelemetryCollector(Node):
-    def __init__(self, domain_id: int):
-        super().__init__(f'telemetry_collector_{domain_id}')
-        self.set_parameters([rclpy.parameter.Parameter('use_sim_time', rclpy.Parameter.Type.BOOL, True)])
-        self.domain_id = domain_id
-        self.samples = []  # (wall_time, sim_time)
-        self.has_depth = False
-        self.has_scan = False
-
-        self.clock_sub = self.create_subscription(Clock, '/clock', self._clock_cb, 100)
-        self.depth_sub = self.create_subscription(Image, '/camera/depth/image_rect_raw', self._depth_cb, 10)
-        self.scan_sub = self.create_subscription(LaserScan, '/scan', self._scan_cb, 10)
-
-    def _clock_cb(self, msg: Clock):
-        w_t = time.time()
-        s_t = msg.clock.sec + msg.clock.nanosec * 1e-9
-        self.samples.append((w_t, s_t))
-
-    def _depth_cb(self, msg: Image):
-        self.has_depth = True
-
-    def _scan_cb(self, msg: LaserScan):
-        self.has_scan = True
 
 
 def run_worker_cli(domain_id: int, duration_s: float, out_file: str):
