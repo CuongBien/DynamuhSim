@@ -1,20 +1,9 @@
-# SocNavGym formation/dispersal contract check
+# Native lifecycle — historical experiment
 
-[Measured report](reports/run01/LIFECYCLE_REPORT.md): three full native120s episodes (seeds42/43/44),4100 total updates including a500-step same-seed reset prefix. Human IDs are preserved within each epoch; group formation, shrinkage, moving/static groups and dissolution were observed.
+The standalone `run.py`, `worker.py` and `analyze.py` have been retired from HEAD. This completed native square-room experiment is historical evidence, not a current runtime entrypoint.
 
-**Formation is not promoted to Gazebo:** native circle-proxy penetrations reach56–70cm, and native final arrangement can instantaneously move a human by32.6cm. This is a measured limitation, not a harness startup failure. The existing fixed-group Gazebo adapter is unchanged.
+[Original experiment](https://github.com/CuongBien/DynamuhSim/commit/248015807a4cd4c9fccc9d7a0f6febaf446c2caa) · [Code before retirement](https://github.com/CuongBien/DynamuhSim/tree/270330e2c66dbaf2cac3d793c45b07b4b0f18776/experiments/social_navigation/benchmark/socnavgym_lifecycle) · [Report hydration](../../../../docs/REPORT_STORAGE.md).
 
-From the repository root, run sequentially into a new output directory:
+The three-seed study retained 56–70cm native disc penetrations and a 32.6cm formation jump; removing the harness does not change those outcomes. Use the source revision and manifest recorded with a historical result when reproducing it.
 
-```bash
-python3 experiments/social_navigation/benchmark/socnavgym_lifecycle/run.py \
-  --report-dir experiments/social_navigation/benchmark/socnavgym_lifecycle/reports/my_run
-python3 experiments/social_navigation/benchmark/socnavgym_lifecycle/analyze.py \
-  --report-dir experiments/social_navigation/benchmark/socnavgym_lifecycle/reports/my_run
-```
-
-Uses the existing Python3.12 SocNavGym venv, existing formation config, two-core affinity and one BLAS thread. No ROS/Gazebo or system installs. The main process only coordinates sequential workers. Native code/config remains unchanged; instance wrappers record method calls without introducing group events, RNG draws, clipping or smoothing.
-
-The analyzer uses a local audit checkpoint to preserve the user's original index/outside-worktree and11259 source/adapter/map files. A fresh checkout needs an equivalent local audit checkpoint before verification; do not rewrite historical source hashes or claims. Native2D GIF is labelled NOT GAZEBO and plays at4×. Its30s duration and event PNGs are decoded and hashed. It is not an AI image.
-
-Reset reuses numeric human IDs, so a future lifecycle adapter needs a reset epoch. Observer group IDs here label group object identity, not native persistent IDs. Full historical seed42 trajectory reproduction is not established: first difference appears at completed step667; this experiment only validates exact repeat of a500-step reset prefix. Observation-space warnings are retained and RL observation validity remains unresolved.
+For new runs use the [shared Nav2 runtime](../../../../docs/SHARED_NAV2_RUNTIME.md). The continuous adapter implementation still used by current code is in `../socnavgym_lifecycle_fix/continuous_groups.py`.

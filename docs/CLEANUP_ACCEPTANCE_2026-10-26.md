@@ -69,3 +69,21 @@ Môi trường phân tích dùng venv có Shapely; wrapper audit giữ nguyên c
 Với nhóm đứng, AMCL gần thời điểm chốt có sai số tới goal 0,190m; pose Gazebo cùng timestamp là 0,228m, chênh AMCL–Gazebo khoảng 0,048m. Đây là gợi ý điều tra localization/goal-checker, chưa khẳng định nguyên nhân duy nhất. Goal checker vẫn giữ XY=0,20m và yaw=0,25rad.
 
 Phần dọn và smoke E2E được chốt với kết quả hỗn hợp trên. Công việc hành vi tiếp theo là phân tích ca nhóm đứng từ bản ghi hiện có, tách lệch localization, stateful goal-checker và chuyển động sau action; mọi thay đổi controller cần một kế hoạch thử nghiệm mới.
+## Gỡ workflow lifecycle/demo đã hoàn tất
+
+Đối chiếu nhánh đã push `test/gazebo-harmonic-benchmark` tại `9833565` và consumer hiện hành, đã **xoá 23 file, 1.358 dòng code/build** khỏi HEAD:
+
+| Workflow lịch sử | File bị xoá | Phần giữ lại |
+|---|---:|---|
+| `socnavgym_lifecycle` (`2480158`) | 3 | README chỉ tới mã và báo cáo lịch sử |
+| `socnavgym_lifecycle_fix` (`779c338`) | 5 | `continuous_groups.py`, regression swept geometry |
+| `socnavgym_warehouse_lifecycle` (`b3f0022`) | 11 | kernel/motion/geometry/config và regression geometry |
+| `group_gazebo_demo` (`e749fb5`) | 4 | README chỉ tới mã/báo cáo cũ và lệnh Nav2/replay hiện tại |
+
+Gỡ cả chuỗi runner/worker/launch/analyzer đã đóng; không chuyển sang một thư mục legacy hoặc thêm wrapper. Preflight `offline02` bị gỡ cùng harness velocity-script của nó; preflight response/Nav2 hiện hành giữ nguyên. Các README từng stage dẫn tới code trước khi gỡ tại `270330e` và commit thí nghiệm gốc. Tái lập lịch sử cần source revision/manifest của kết quả đó.
+
+**Kiểm chứng:** 278 test đạt (179 root, 13 scenario, 75 runner, 11 production), thêm lần chạy lại sáu test measurement sau khi thu hẹp wiring test về hai analyzer còn tồn tại; 27 CLI đạt với ROS init/subprocess bị chặn; swept geometry, warehouse geometry, current preflight và control/classifier probe đạt. Các fixture số đo lifecycle vẫn được kiểm tra; chỉ bỏ wiring tới analyzer đã xoá. Log thiếu dependency/import path ở lần chọn môi trường đầu được giữ; lần chạy phù hợp không cần cài thêm thư viện.
+
+273 hash nguồn từ năm lượt E2E ở trên, gồm 70 file riêng biệt, vẫn khớp; không chạy lại physics trong đợt chỉ xoá harness này. 1.814 control/model/snapshot và checkout/index chính giữ nguyên. Bằng chứng local tại `benchmark/generated/retired_lifecycle_cleanup_20261026/`.
+
+Bước dọn tiếp theo: rà chuỗi cohort localization/stability đã hoàn tất, phân biệt runner/analyzer chỉ còn dùng với report lịch sử và các helper `profiles`/geometry/capture vẫn được benchmark hiện hành gọi. Điều tra ca nhóm đứng ở mục trước vẫn còn là công việc hành vi riêng; chưa chỉnh controller hoặc nới ngưỡng.

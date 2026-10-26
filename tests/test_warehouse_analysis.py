@@ -14,7 +14,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "python"))
 from dynamuhsim.analysis import warehouse as measurements
 HAS_SHAPELY = importlib.util.find_spec("shapely") is not None
-NAMES = ("common_gazebo", "socnavgym_response_fix", "socnavgym_warehouse_lifecycle")
+NAMES = ("common_gazebo", "socnavgym_response_fix")
 FIXTURE = ROOT / "tests/fixtures/warehouse_analysis.json"
 
 
@@ -124,11 +124,10 @@ class WarehouseAnalysisTests(unittest.TestCase):
             tree = ast.parse((ROOT / "experiments/social_navigation/benchmark" / name / "analyze.py").read_text())
             proxies = next(n for n in tree.body if isinstance(n,ast.Assign) and any(isinstance(t,ast.Name) and t.id=="PROXIES" for t in n.targets))
             ns = {}; exec(compile(ast.Module(body=[proxies],type_ignores=[]),name,"exec"),ns)
-            prefix = "lifecycle" if name==NAMES[-1] else "common"
-            self.assertEqual(ns["PROXIES"],{i:f"{prefix}_{i}_proxy" for i in range(1,7)})
+            self.assertEqual(ns["PROXIES"],{i:f"common_{i}_proxy" for i in range(1,7)})
             call = next(n for n in ast.walk(tree) if isinstance(n,ast.Call) and isinstance(n.func,ast.Name) and n.func.id=="trajectory_errors")
             dt = eval(compile(ast.Expression(call.args[2]),name,"eval"),dict(dt=.2))
-            self.assertEqual(dt,.1 if prefix=="lifecycle" else .2)
+            self.assertEqual(dt,.2)
             self.assertFalse(any(isinstance(n,ast.FunctionDef) and n.name=="measured_gaps" for n in tree.body))
 
 
