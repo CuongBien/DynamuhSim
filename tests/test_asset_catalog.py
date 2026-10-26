@@ -114,6 +114,35 @@ class AssetCatalogTests(unittest.TestCase):
             result = verify_install(repo, lean)
             self.assertEqual(result["different"], ["worlds/base.sdf"])
 
+    def test_installed_shared_helper_is_required_hashed_and_cache_free(self):
+        with tempfile.TemporaryDirectory() as directory:
+            repo, store, head = self.fixture(directory)
+            source = repo / "tools/process_runtime.sh"
+            source.parent.mkdir()
+            source.write_text("# shared process helper\n")
+            subprocess.run(["git", "-C", str(repo), "add", "tools"], check=True)
+            subprocess.run(["git", "-C", str(repo), "-c", "user.name=Catalog Test", "-c", "user.email=catalog@example.invalid", "commit", "-qm", "runtime helper"], check=True)
+            share = Path(directory) / "share"
+            shutil.copytree(repo / PACKAGE, share)
+            shutil.rmtree(share / "worlds/payload")
+            name = "worlds/school_arena/process_runtime.sh"
+            self.assertEqual(verify_install(repo, share)["missing"], [name])
+            target = share / name
+            target.parent.mkdir()
+            shutil.copyfile(source, target)
+            self.assertEqual(verify_install(repo, share)["status"], "PASS")
+            target.write_text("wrong helper")
+            self.assertEqual(verify_install(repo, share)["different"], [name])
+            shutil.copyfile(source, target)
+            cache = share / "worlds/__pycache__/stale.pyc"
+            cache.parent.mkdir()
+            cache.write_bytes(b"stale cache")
+            self.assertEqual(verify_install(repo, share)["status"], "PASS")
+            result = verify_install(repo, share, fresh=True)
+            self.assertEqual(result["status"], "FAIL")
+            self.assertFalse(result["checks"]["python_cache_absent"])
+            self.assertIn("worlds/__pycache__/stale.pyc", result["python_cache_paths"])
+
     def test_symlink_install_has_same_committed_runtime_assets(self):
         with tempfile.TemporaryDirectory() as directory:
             repo, store, head = self.fixture(directory)

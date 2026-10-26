@@ -9,6 +9,11 @@ endif()
 find_package(ament_cmake REQUIRED)
 
 # Runtime resources always retain their original install locations.
+set(_runtime_cache_excludes
+  PATTERN "__pycache__" EXCLUDE
+  PATTERN "__pycache__/*" EXCLUDE
+  PATTERN "*.pyc" EXCLUDE
+  PATTERN "*.pyo" EXCLUDE)
 install(
   DIRECTORY
     launch
@@ -18,6 +23,7 @@ install(
     config
     maps
   DESTINATION share/${PROJECT_NAME}
+  ${_runtime_cache_excludes}
 )
 
 
@@ -41,7 +47,8 @@ if(DYNAMUHSIM_INSTALL_LEGACY_WORLD_PAYLOADS)
         "See docs/HISTORICAL_ARTIFACTS.md for archive hydration.")
     endif()
   endforeach()
-  install(DIRECTORY worlds DESTINATION share/${PROJECT_NAME})
+  install(DIRECTORY worlds DESTINATION share/${PROJECT_NAME}
+    ${_runtime_cache_excludes})
 else()
   set(_world_payload_excludes)
   foreach(_payload IN LISTS _world_payload_dirs)
@@ -53,8 +60,12 @@ else()
       PATTERN "${_payload}/*" EXCLUDE)
   endforeach()
   install(DIRECTORY worlds DESTINATION share/${PROJECT_NAME}
-    ${_world_payload_excludes})
+    ${_world_payload_excludes} ${_runtime_cache_excludes})
 endif()
+
+# School launchers also run from the installed share and in a flat container bundle.
+install(FILES "${CMAKE_CURRENT_SOURCE_DIR}/../../tools/process_runtime.sh"
+  DESTINATION share/${PROJECT_NAME}/worlds/school_arena)
 
 install(
   PROGRAMS

@@ -20,10 +20,12 @@ colcon --log-base log/runtime build \
   --base-paths src/custom_corridor src/custom_corridor_plugins \
   --build-base build/runtime --install-base install/runtime --symlink-install
 source install/runtime/setup.bash
-python3 tools/catalog_assets.py verify-install \
+python3 tools/catalog_assets.py verify-install --fresh \
   --share-dir "$PWD/install/runtime/custom_corridor/share/custom_corridor" \
   --output "$PWD/experiments/social_navigation/benchmark/generated/runtime_install_audit.json"
 ```
+
+Helper `tools/process_runtime.sh` được cài cạnh `school_runtime.sh` để launcher School hoạt động từ installed share và khi chép vào container. Install audit đối chiếu helper này với Git blob nguồn. Cache Python không được chép từ source vào package; `--fresh` kiểm tra thêm prefix mới không có cache. Bỏ `--fresh` khi kiểm tra prefix đã chạy Python, vì runtime có thể tự tạo bytecode.
 
 Copy install và symlink install cùng dùng policy. Công cụ so từng asset committed với Git blob/SHA256 và phát hiện payload còn sót trong prefix. Không chỉ kiểm tra vài tên file hoặc tin flag build.
 

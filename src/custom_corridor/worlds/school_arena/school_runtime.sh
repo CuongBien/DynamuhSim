@@ -8,8 +8,8 @@ school_ros() {
 }
 
 # The installer places both helpers side by side inside the HuNav container.
-if [[ -f "$(dirname "${BASH_SOURCE[0]}")/process_runtime.sh" ]]; then
-  source "$(dirname "${BASH_SOURCE[0]}")/process_runtime.sh"
-else
-  source "$(dirname "${BASH_SOURCE[0]}")/../../../../tools/process_runtime.sh"
+SCHOOL_PROCESS_RUNTIME="$(dirname "${BASH_SOURCE[0]}")/process_runtime.sh"
+if [[ ! -f "$SCHOOL_PROCESS_RUNTIME" ]]; then
+  SCHOOL_PROCESS_RUNTIME="$(dirname "${BASH_SOURCE[0]}")/../../../../tools/process_runtime.sh"
 fi
+source "$SCHOOL_PROCESS_RUNTIME"

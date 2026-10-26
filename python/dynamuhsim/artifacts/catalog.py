@@ -16,6 +16,7 @@ WORLDS = PACKAGE + "/worlds"
 POLICY = PACKAGE + "/config/world_payloads.txt"
 BENCHMARK = "experiments/social_navigation/benchmark"
 ASSET_DIRS = ["worlds", "launch", "models", "urdf", "rviz", "config", "maps"]
+RUNTIME_INSTALL_FILES = {"tools/process_runtime.sh": "worlds/school_arena/process_runtime.sh"}
 GATE_FILES = [
     "socnavgym_nav2_pilot/reports/gate01/validation.json",
     "socnavgym_nav2_pilot/reports/empty01/validation.json",
@@ -237,7 +238,7 @@ def verify_catalog(repo, store, catalog):
     return dict(status="PASS", revision=commit, groups=len(expected_groups), files=count, logical_bytes=total, payloads_moved=False)
 
 
-def verify_install(repo, share, *, legacy=False, ref="HEAD", history_index=None):
+def verify_install(repo, share, *, legacy=False, ref="HEAD", history_index=None, fresh=False):
     """Verify committed package assets in a fresh copy or symlink install prefix."""
     repo, share = Path(repo).resolve(), Path(share).resolve()
     commit = revision(repo, ref)
@@ -251,6 +252,9 @@ def verify_install(repo, share, *, legacy=False, ref="HEAD", history_index=None)
         if not legacy and any(relative == "worlds/" + payload or relative.startswith("worlds/" + payload + "/") for payload in payloads):
             continue
         expected[relative] = row
+    for source, installed in RUNTIME_INSTALL_FILES.items():
+        row = tree_files(repo, commit, source).get(source)
+        if row is not None: expected[installed] = row
     inventory_available = True
     if legacy:
         missing_roots = [payload for payload in payloads if not any(name.startswith(WORLDS + "/" + payload + "/") for name in files)]
@@ -272,9 +276,12 @@ def verify_install(repo, share, *, legacy=False, ref="HEAD", history_index=None)
             elif path.stat().st_size != row["bytes"] or sha256_file(path) != (row.get("sha256") or hashes.sha(row)): different.append(name)
     world_files = {name: row for name, row in expected.items() if name.startswith("worlds/")}
     present_payloads = [payload for payload in payloads if (share / "worlds" / payload).exists()]
+    caches = sorted(str(path.relative_to(share)) for directory in ASSET_DIRS for path in (share / directory).rglob("*")
+                    if path.name == "__pycache__" or path.suffix in (".pyc", ".pyo"))
     checks = dict(historical_payload_inventory_available=inventory_available, all_expected_assets_present=not missing, all_expected_assets_byte_equal=not different,
                   excluded_payloads_absent=legacy or not present_payloads)
-    return dict(status="PASS" if all(checks.values()) else "FAIL", revision=commit, legacy=legacy, checks=checks,
+    if fresh: checks["python_cache_absent"] = not caches
+    return dict(status="PASS" if all(checks.values()) else "FAIL", revision=commit, legacy=legacy, fresh=fresh, checks=checks,
                 expected_assets=len(expected), expected_asset_bytes=sum(row["bytes"] for row in expected.values()), expected_world_files=len(world_files), expected_world_bytes=sum(row["bytes"] for row in world_files.values()),
-                missing=missing, different=different, installed_payload_directories=present_payloads,
-                note="Caches/untracked files outside excluded directories are not part of committed-asset comparison; old prefixes are not cleaned automatically.")
+                missing=missing, different=different, installed_payload_directories=present_payloads, python_cache_paths=caches,
+                note="Fresh-prefix audit rejects Python caches. Otherwise caches/untracked files outside excluded directories are not part of committed-asset comparison; old prefixes are not cleaned automatically.")
