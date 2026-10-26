@@ -42,8 +42,30 @@ Lệnh build/audit để lặp lại nằm ở [WORLD_ASSETS](WORLD_ASSETS.md). 
 
 Report, snapshot, source đã freeze, mô hình/heldout/seal và thư viện upstream phục vụ tái lập lịch sử. Các evaluator hoặc suite khác phương pháp vẫn giữ protocol riêng. World `arena_dataset_bu.sdf` dùng MultiHuman khác world RVO2 hiện tại nên vẫn là đầu vào hợp lệ; xem hướng dẫn plugin. Các dữ liệu, split, nhãn, threshold và kết quả cũ giữ nguyên.
 
-## Giới hạn và công việc tiếp theo
+## Giới hạn tại thời điểm nghiệm thu build/install/CLI
 
 **Chưa chạy lại E2E vật lý Gazebo/Nav2 tại revision nghiệm thu này.** Build/CLI, prefix model CPU và kết quả native ngày 24/10 ở revision cũ có phạm vi riêng; không dùng chúng để đánh dấu lại success rate, an toàn vật lý hay hiển thị WSLg hiện tại.
 
 Đợt dọn và nghiệm thu build/install/CLI được chốt tại đây. Bước kiểm chứng hành vi tiếp theo là smoke test Gazebo/Nav2 trong domain/partition và output riêng, giữ nguyên kết quả cũ.
+
+## E2E bổ sung trên revision 838a76a
+
+[Biên bản và hash bằng chứng E2E](verification/cleanup_e2e_2026-10-26.json). Năm lượt headless thực trên ROS2 Jazzy/Gazebo, NVIDIA D3D12, prefix đã nghiệm thu, output/HOME/cache riêng. Giữ native dt, physics 0,0025s và budget 45s; không thay controller, threshold, model hoặc dữ liệu cũ.
+
+| Ca cố định | Nav2 action | XY thật (m) | Yaw thật (rad) | Đạt đích vật lý |
+|---|---|---:|---:|---|
+| Không người | SUCCEEDED | 0,118 | 0,032 | Có |
+| SocNavGym riêng lẻ | SUCCEEDED | 0,150 | 0,239 | Có |
+| CrowdSimPlus ORCA+ | SUCCEEDED | 0,160 | 0,079 | Có |
+| ComplexityNav geometry | SUCCEEDED | 0,145 | 0,198 | Có |
+| Nhóm đứng seed42 | SUCCEEDED | 0,221 | 0,218 | **Không** |
+
+Cả năm vượt audit độc lập về source/config, 42 AABB, pose/sensor/control streams, costmap, geometry và cleanup; các ca có người giữ start gate/native timestep; không ghi nhận overlap lớn hơn 5mm theo proxy/disc của phép đo. Các khoảng cách này không phải chứng nhận an toàn. Bốn ca đạt ngưỡng đích thật; ca nhóm đứng giữ nguyên thất bại XY>0,20m, không chạy lại để thay kết quả.
+
+Audit phát hiện analyzer cá nhân dùng pose cuối stream sau teardown thay vì mẫu đã chốt trong result. Đã sửa theo cách hai analyzer shared/group đang dùng: tìm đúng pose được ghi trong phase active, giữ toàn bộ assertion cũ và ngưỡng, thêm hồi quy cho pose đạt/không đạt và thiếu mẫu. **278 test đạt.** Dữ liệu physics không chạy lại sau sửa analyzer.
+
+Môi trường phân tích dùng venv có Shapely; wrapper audit giữ nguyên các assertion, chỉ thay checkpoint sang snapshot mới và khôi phục import path của stage. Hai thay đổi offline (analyzer/test) được ghi hash riêng; snapshot đầu, lỗi chuẩn bị và audit thất bại đầu tiên vẫn được giữ tại máy.
+
+Với nhóm đứng, AMCL gần thời điểm chốt có sai số tới goal 0,190m; pose Gazebo cùng timestamp là 0,228m, chênh AMCL–Gazebo khoảng 0,048m. Đây là gợi ý điều tra localization/goal-checker, chưa khẳng định nguyên nhân duy nhất. Goal checker vẫn giữ XY=0,20m và yaw=0,25rad.
+
+Phần dọn và smoke E2E được chốt với kết quả hỗn hợp trên. Công việc hành vi tiếp theo là phân tích ca nhóm đứng từ bản ghi hiện có, tách lệch localization, stateful goal-checker và chuyển động sau action; mọi thay đổi controller cần một kế hoạch thử nghiệm mới.

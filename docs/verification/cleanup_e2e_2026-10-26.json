@@ -1,0 +1,105 @@
+{
+  "schema": "dynamuhsim_cleanup_e2e/1",
+  "date": "2026-10-26",
+  "measurement_source_revision": "838a76a1d2ec6b7d6a0158e760637458eb34f455",
+  "renderer": "D3D12 (NVIDIA GeForce RTX 4060 Laptop GPU)",
+  "gui": false,
+  "ROS_domain": 91,
+  "physics_step_s": 0.0025,
+  "sim_budget_per_trial_s": 45,
+  "actual_goal_rule": "action SUCCEEDED plus world XY<=0.20m and yaw<=0.25rad",
+  "attempts": 5,
+  "independent_audits_passed": 5,
+  "physical_goal_passed": 4,
+  "all_server_and_process_cleanup_passed": true,
+  "trials": [
+    {
+      "id": "01_empty",
+      "experiment": "socnavgym_nav2_pilot",
+      "navigation_status": "SUCCEEDED",
+      "actual_goal_reached": true,
+      "goal_xy_world_m": 0.11791965957133992,
+      "goal_yaw_world_rad": 0.03206772599730928,
+      "geometry_outcome": "NO_OVERLAP_GT_5MM",
+      "proxy_interpolation_error_max_m": null,
+      "result_sha256": "bbe5e25467cc063486dd66d99c6b931984edeaaedd7f0cd5f6a06454a5ccbc64",
+      "validation_sha256": "699a831733c58b85ae4e66497c2607d54d23a0d78e7f3f2cfb33394c84c22976",
+      "report_local": "experiments/social_navigation/benchmark/generated/e2e_smoke_20261026/reports/smoke_838a76a_20261026_01_empty"
+    },
+    {
+      "id": "02_socnavgym",
+      "experiment": "socnavgym_nav2_pilot",
+      "navigation_status": "SUCCEEDED",
+      "actual_goal_reached": true,
+      "goal_xy_world_m": 0.14992265248338907,
+      "goal_yaw_world_rad": 0.23914629284368485,
+      "geometry_outcome": "NO_OVERLAP_GT_5MM",
+      "proxy_interpolation_error_max_m": 8.207394576532066e-15,
+      "result_sha256": "ebd0df039ab79230728636e44ce849d3a4c6a786394092f4c85db9c63c6afd9c",
+      "validation_sha256": "461efd054fe518f9e8d95606316e41fde8ae62b33db2b05b732406f69d38a868",
+      "report_local": "experiments/social_navigation/benchmark/generated/e2e_smoke_20261026/reports/smoke_838a76a_20261026_02_socnavgym"
+    },
+    {
+      "id": "03_crowd",
+      "experiment": "shared_nav2_pilot",
+      "navigation_status": "SUCCEEDED",
+      "actual_goal_reached": true,
+      "goal_xy_world_m": 0.15973280995848563,
+      "goal_yaw_world_rad": 0.0785451493905387,
+      "geometry_outcome": "NO_OVERLAP_GT_5MM",
+      "proxy_interpolation_error_max_m": 1.0695084443661336e-14,
+      "result_sha256": "d2602051dfee59be8fefe13701268594a2e8846a326a6e38e203449c76a89c4a",
+      "validation_sha256": "0a4599a4e5ad47b7f43640f5ed50760d72030ce5d72f5a5b44dcc283ecdc199f",
+      "report_local": "experiments/social_navigation/benchmark/generated/e2e_smoke_20261026/reports/smoke_838a76a_20261026_03_crowd"
+    },
+    {
+      "id": "04_complex",
+      "experiment": "shared_nav2_pilot",
+      "navigation_status": "SUCCEEDED",
+      "actual_goal_reached": true,
+      "goal_xy_world_m": 0.14521487184548912,
+      "goal_yaw_world_rad": 0.1984110140134308,
+      "geometry_outcome": "NO_OVERLAP_GT_5MM",
+      "proxy_interpolation_error_max_m": 7.944109290391274e-15,
+      "result_sha256": "4a9a3b457b0c333b3466e0d00a427894a44a538d2c994813607c9f96aab0b481",
+      "validation_sha256": "71457506fe11caf36f4abf1220a9318648bc682b3250509d64312df7c83eb639",
+      "report_local": "experiments/social_navigation/benchmark/generated/e2e_smoke_20261026/reports/smoke_838a76a_20261026_04_complex"
+    },
+    {
+      "id": "05_standing42",
+      "experiment": "socnavgym_group_nav2",
+      "navigation_status": "SUCCEEDED",
+      "actual_goal_reached": false,
+      "goal_xy_world_m": 0.22087837580969782,
+      "goal_yaw_world_rad": 0.21826137911188082,
+      "geometry_outcome": "NO_OVERLAP_GT_5MM",
+      "proxy_interpolation_error_max_m": 1.1790433464717789e-06,
+      "result_sha256": "38b15abbfebcfca7fc7a82d18fc11ef8725024e330386fde4eecff09e94d6ee7",
+      "validation_sha256": "eaf6b075f8e0c64f6ac626b6967cfb2a01309087de7f0bd5d678571f847baebd",
+      "report_local": "experiments/social_navigation/benchmark/generated/e2e_smoke_20261026/reports/smoke_838a76a_20261026_05_standing42"
+    }
+  ],
+  "audit_correction": {
+    "file": "experiments/social_navigation/benchmark/socnavgym_nav2_pilot/analyze.py",
+    "reason": "Use the recorded active sample that produced final_world_pose, not the later teardown tail",
+    "all_original_assertions_retained": true,
+    "no_tolerance_or_trial_data_changes": true,
+    "regression_test_total": 278
+  },
+  "audit_execution_context": "Current preservation checkpoint and standard stage import path; initial snapshot, import/checkpoint failures and reviewed offline source changes retained locally",
+  "standing_diagnostic": {
+    "AMCL_goal_xy_error_m": 0.19038024417101185,
+    "aligned_world_goal_xy_error_m": 0.22844134210298309,
+    "aligned_AMCL_world_xy_difference_m": 0.04840961365068956,
+    "aligned_time_delta_s": 0.0
+  },
+  "scope": "One fixed small smoke per configuration; no rerun or replacement of outcomes, no general success-rate/safety/WSLg claim",
+  "local_evidence_root": "experiments/social_navigation/benchmark/generated/e2e_smoke_20261026",
+  "evidence_sha256": {
+    "plan.json": "319c7be71c1071d4dbca78d841b38257504ab8c6fc2ec0d9d2534bfebd0daa80",
+    "progress.json": "46f9df9d505b5abaa8fbaa058e3edc5b7704f430b9e789ba36ac8a537d55b1b5",
+    "audit_results.json": "dae89630d43d2ea3efa02d1d3ffb3af99455070c87fcc382525283fe0437adbe",
+    "reviewed_offline_audit_changes.json": "a291c89bbdbfd45ca6dfa8a56eb7af8d2aeed715ac915c7a173fd94e327051a5",
+    "test_results.json": "0d59b25c427bee2a8a157aa47cbed946e1d610f5c3e5b1ad949080e498c40c06"
+  }
+}

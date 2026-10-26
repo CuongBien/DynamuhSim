@@ -1,4 +1,5 @@
 """Regression contracts from the pushed pilots; no simulator or ROS process is started."""
+import ast
 import copy
 import importlib.util
 import json
@@ -138,6 +139,28 @@ class ConfigurationTests(unittest.TestCase):
 
 
 class TelemetryTests(unittest.TestCase):
+    def test_goal_audit_uses_recorded_sample_before_teardown_tail(self):
+        source = BENCH / "socnavgym_nav2_pilot/analyze.py"
+        body = ast.parse(source.read_text()).body
+        def assigns(node, name):
+            return isinstance(node, ast.Assign) and any(isinstance(t, ast.Name) and t.id == name for t in node.targets)
+        first = next(i for i, node in enumerate(body) if assigns(node, "matches"))
+        last = next(i for i, node in enumerate(body) if assigns(node, "commands"))
+        code = compile(ast.Module(body=body[first:last], type_ignores=[]), str(source), "exec")
+        for distance in (.12, .21):
+            point = dict(x=-20.-distance, y=0., yaw=.1)
+            result = dict(final_world_pose=point, action_status=4, goal_xy_error_world_m=abs(point["x"]+20.),
+                          goal_yaw_error_world_rad=.1, actual_goal_reached=distance <= .20)
+            complete = [dict(time=1., phase="active", poses={"mecanum_robot": point}),
+                        dict(time=2., phase="finished", poses={"mecanum_robot": dict(x=-19.4, y=0., yaw=.4)})]
+            ns = dict(complete=complete, result=result, plan=dict(goal=[-20., 0., 0.]), math=math, path=2.)
+            exec(code, ns)
+            self.assertEqual(ns["final_sample"]["time"], 1.)
+            self.assertEqual(ns["actual_reached"], distance <= .20)
+            ns["complete"] = complete[1:]
+            with self.assertRaisesRegex(AssertionError, "Recorded goal pose not found"):
+                exec(code, ns)
+
     def test_sensor_rows_and_jsonl_match_legacy_callbacks(self):
         fixture = json.loads((FIXTURES / "telemetry.json").read_text())
         recording = TrialRecording()
