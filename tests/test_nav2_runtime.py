@@ -84,6 +84,7 @@ class ProfileTests(unittest.TestCase):
             self.assertIn(ROOT / "python/dynamuhsim/runtime/navigation.py", sources)
             self.assertIn(ROOT / "python/dynamuhsim/runtime/nav2_trial.py", sources)
             self.assertIn(ROOT / "python/dynamuhsim/simulation/warehouse.py", sources)
+            self.assertIn(BENCH / "common_gazebo/worker.py", sources)
             self.assertIn(entry, sources)
             self.assertIn(entry.parent / "warehouse.launch.py", sources)
 

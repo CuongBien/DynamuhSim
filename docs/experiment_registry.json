@@ -161,5 +161,17 @@
     "model_state": "Frozen depth_linear, hidden0, depth-only, threshold0.5; no train/test operations",
     "evaluation_state": "Bundle receipt is historical provenance; legacy live test seal remains at original reports path",
     "scope": "New read-only API and default probe migrated; historical capture/train/evaluate scripts remain unchanged"
+  },
+  "shared_worker": {
+    "implementation": "experiments/social_navigation/benchmark/common_gazebo/worker.py",
+    "compatible_entrypoints": [
+      "common_gazebo/worker.py",
+      "socnavgym_response_fix/worker.py",
+      "socnavgym_nav2_pilot/worker.py",
+      "shared_nav2_pilot/worker.py"
+    ],
+    "scope": "Shared IPC with distinct response/start-gate/metadata/fault behavior; group worker unchanged",
+    "container_mount": "/common_gazebo:ro",
+    "provenance": "Canonical source included for new shared Nav2 and response live runs"
   }
 }

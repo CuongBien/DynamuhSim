@@ -89,7 +89,7 @@ def source_files(repo, profile, entrypoint):
     stage = benchmark / profile.name
     fix = benchmark / "socnavgym_response_fix"
     common = benchmark / "common_response"
-    files = [entrypoint, stage / "worker.py", stage / "warehouse.launch.py", stage / "protocol.json",
+    files = [entrypoint, benchmark / "common_gazebo/worker.py", stage / "worker.py", stage / "warehouse.launch.py", stage / "protocol.json",
              fix / "projection.py", fix / "responsive_motion.py", fix / "adapter.cc", fix / "build/libresponse_adapter.so",
              common / "model_worker.py", common / "inputs/crossing_near.json",
              social / "warehouse/nav2_warehouse.yaml", social / "warehouse/warehouse.yaml",

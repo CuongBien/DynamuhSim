@@ -11,10 +11,13 @@ Ba experiment `socnavgym_nav2_pilot`, `socnavgym_group_nav2` và `shared_nav2_pi
 | Chờ action, budget, cancel và metric đích thật | `python/dynamuhsim/runtime/navigation.py` |
 | Nhận sensor/scene, xuất JSONL và camera preview | `python/dynamuhsim/runtime/recording.py` |
 | Cấu hình adapter/world, bản sao YAML và launch description | `python/dynamuhsim/simulation/warehouse.py` |
+| IPC cho common, response và hai pilot Nav2 cá nhân/backend cô lập | `experiments/social_navigation/benchmark/common_gazebo/worker.py` |
 | Một lệnh gọi các profile | `tools/nav2_trial.py` |
 | Danh sách entry point và ranh giới migration | `docs/experiment_registry.json` |
 
 Đây là ba profile của nhiệm vụ nhà xưởng hiện có: robot bắt đầu (−28,0), goal (−20,0), Mecanum, AMCL và Nav2 MPPI. Native dt CrowdSimPlus0,1s và ComplexityNav0,25s vẫn khác nhau theo protocol. Nhóm đứng/đi giữ worker và chính sách hiện có. Chưa thêm cấu hình route tùy ý hoặc thay đổi thuật toán người.
+
+Bốn worker common/response/nav2/shared dùng chung vòng IPC; ba `worker.py` ở stage là entrypoint tương thích. Start gate, metadata, fault injection và phản ứng giữ riêng theo chế độ. Worker nhóm giữ implementation riêng. Backend Python3.8 mount thêm thư mục worker chung ở chế độ chỉ đọc; source này được đưa vào provenance của lượt chạy mới.
 
 ## Đọc CLI không cần ROS
 
