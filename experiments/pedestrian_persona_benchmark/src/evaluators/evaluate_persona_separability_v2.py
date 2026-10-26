@@ -14,14 +14,17 @@ Key Improvements:
 """
 
 import os
-import sys
 import json
 import time
 import math
-import csv
 from collections import defaultdict
-from typing import Dict, List, Tuple
+from typing import List
 import numpy as np
+
+if __package__:
+    from .evaluate_persona_separability import compute_ece, save_confusion_matrix_csv
+else:
+    from evaluate_persona_separability import compute_ece, save_confusion_matrix_csv
 
 import torch
 import torch.nn as nn
@@ -307,39 +310,6 @@ def predict_pytorch_gru(model: PersonaGRU, X_te: np.ndarray, batch_size: int = 2
 # 3. Metric & Evaluation Helpers
 # ----------------------------------------------------------------------
 
-def compute_ece(probs: np.ndarray, labels: np.ndarray, n_bins: int = 10) -> Tuple[float, List[dict]]:
-    confidences = np.max(probs, axis=1)
-    predictions = np.argmax(probs, axis=1)
-    accuracies = (predictions == labels).astype(float)
-    bin_boundaries = np.linspace(0.0, 1.0, n_bins + 1)
-    ece = 0.0
-    bin_details = []
-    for i in range(n_bins):
-        bin_lower = bin_boundaries[i]
-        bin_upper = bin_boundaries[i + 1]
-        in_bin = (confidences > bin_lower) & (confidences <= bin_upper)
-        prop_in_bin = np.mean(in_bin)
-        if prop_in_bin > 0:
-            acc_in_bin = np.mean(accuracies[in_bin])
-            conf_in_bin = np.mean(confidences[in_bin])
-            ece += np.abs(conf_in_bin - acc_in_bin) * prop_in_bin
-            bin_details.append({
-                "bin": i,
-                "range": [float(bin_lower), float(bin_upper)],
-                "accuracy": float(acc_in_bin),
-                "confidence": float(conf_in_bin),
-                "count": int(np.sum(in_bin))
-            })
-        else:
-            bin_details.append({
-                "bin": i,
-                "range": [float(bin_lower), float(bin_upper)],
-                "accuracy": 0.0,
-                "confidence": float((bin_lower + bin_upper) / 2.0),
-                "count": 0
-            })
-    return float(ece), bin_details
-
 
 def compute_brier_score(probs: np.ndarray, labels: np.ndarray, sample_weight: np.ndarray = None) -> float:
     N, K = probs.shape
@@ -351,13 +321,6 @@ def compute_brier_score(probs: np.ndarray, labels: np.ndarray, sample_weight: np
         return float(np.average(sq_err, weights=sample_weight))
     return float(np.mean(sq_err))
 
-
-def save_confusion_matrix_csv(cm: np.ndarray, labels: List[str], filepath: str):
-    with open(filepath, "w", newline="") as fp:
-        writer = csv.writer(fp)
-        writer.writerow(["Actual \\ Predicted"] + [f"Pred_{l}" for l in labels])
-        for i, l in enumerate(labels):
-            writer.writerow([l] + list(cm[i]))
 
 
 # ----------------------------------------------------------------------

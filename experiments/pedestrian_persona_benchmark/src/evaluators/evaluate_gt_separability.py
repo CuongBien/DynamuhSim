@@ -5,10 +5,8 @@ import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 from sklearn.model_selection import StratifiedShuffleSplit
-from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier
+from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import classification_report, confusion_matrix, accuracy_score, f1_score
-from sklearn.preprocessing import StandardScaler
-from sklearn.pipeline import make_pipeline
 
 def main():
     print("=" * 70)

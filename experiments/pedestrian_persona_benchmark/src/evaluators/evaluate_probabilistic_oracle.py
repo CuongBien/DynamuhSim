@@ -4,9 +4,9 @@ import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 from sklearn.model_selection import StratifiedShuffleSplit
-from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier
+from sklearn.ensemble import RandomForestClassifier
 from sklearn.calibration import CalibratedClassifierCV
-from sklearn.metrics import log_loss, brier_score_loss, confusion_matrix, classification_report, accuracy_score, f1_score
+from sklearn.metrics import log_loss, confusion_matrix, accuracy_score, f1_score
 
 def compute_nominal_cpa(ep):
     traj = ep["trajectory"]
