@@ -1,5 +1,7 @@
 # DynamuhSim 🤖
 
+**Nghiệm thu dọn repo 26/10/2026:** [kết quả, entrypoint và giới hạn kiểm chứng](docs/CLEANUP_ACCEPTANCE_2026-10-26.md).
+
 
 **MPPI code dùng chung:** `experiments/gazebo_benchmark/core/mppi_monitor.py` giữ một implementation callback/goal/measurement cho Step1/2/3; ba runner chọn profile tương ứng. `core/mppi_trial.py` dùng chung việc tạo scenario/world, launch, chờ Nav2 và thu kết quả; tái sử dụng helper `core/sim_env.py`. Teardown chỉ dừng các nhóm tiến trình do trial tạo, có thời gian cho ROS launch đóng các node; batch dùng đúng `--domain_id` đã truyền. `core/geometry.py` là nơi duy nhất tính rectangle–circle clearance cho sáu suite đã chuyển. Các runner này resolve root theo checkout đang chạy.
 
