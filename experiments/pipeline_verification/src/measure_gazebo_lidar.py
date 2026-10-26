@@ -7,10 +7,7 @@ Analyzes:
   2. Foot-skate & animation cadence: Compares stride frequency and speed with linear velocity.
 """
 
-import sys
 import time
-import math
-import subprocess
 import numpy as np
 import rclpy
 from rclpy.node import Node
@@ -103,7 +100,6 @@ def analyze_scans(scans):
         # Sort points by Y coordinate
         sorted_idx = np.argsort(pts_y)
         sorted_y = pts_y[sorted_idx]
-        sorted_x = pts_x[sorted_idx]
 
         # Calculate width
         width = np.max(sorted_y) - np.min(sorted_y)
