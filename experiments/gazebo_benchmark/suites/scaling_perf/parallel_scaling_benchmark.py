@@ -20,6 +20,7 @@ import numpy as np
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../..")))
 from experiments.gazebo_benchmark.core.benchmark_world_generator import BenchmarkWorldGenerator
 from experiments.gazebo_benchmark.core.mppi_trial import ProcessScope
+from experiments.gazebo_benchmark.core.profiler import query_gpu_int as query_gpu
 from experiments.gazebo_benchmark.core.sim_env import (
     build_benchmark_env, spawn_benchmark_robot, start_parameter_bridge,
 )
@@ -127,17 +128,6 @@ class ParallelInstance:
 
     def stop(self):
         self._processes.stop()
-
-
-def query_gpu():
-    try:
-        res = subprocess.check_output(
-            ["nvidia-smi", "--query-gpu=utilization.gpu,memory.used", "--format=csv,noheader,nounits"],
-            text=True, timeout=1.0
-        ).strip().split(',')
-        return int(res[0]), int(res[1])
-    except Exception:
-        return 0, 0
 
 
 def run_parallel_benchmark(root_dir="/home/cuongbien/DynamuhSim", test_instances=[1, 2, 3, 4], duration_s=20.0, num_humans=5, depth_fps=10):

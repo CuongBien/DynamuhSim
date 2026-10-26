@@ -33,6 +33,7 @@ from geometry_msgs.msg import TwistStamped
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../..")))
 from experiments.gazebo_benchmark.core.mppi_trial import scoped_processes
+from experiments.gazebo_benchmark.core.profiler import query_gpu as get_gpu_metrics, sample_resources
 from experiments.gazebo_benchmark.core.sim_env import build_benchmark_env
 
 
@@ -90,18 +91,6 @@ def run_worker_cli(domain_id: int, duration_s: float, out_file: str):
         rclpy.spin_once(node, timeout_sec=0.01)
 
     handle_exit()
-
-
-def get_gpu_metrics():
-    try:
-        out = subprocess.check_output(
-            ["nvidia-smi", "--query-gpu=utilization.gpu,memory.used", "--format=csv,noheader,nounits"],
-            text=True
-        )
-        gpu_util, mem_used = out.strip().split(",")
-        return float(gpu_util), float(mem_used)
-    except Exception:
-        return 0.0, 0.0
 
 
 def get_process_cpu_breakdown():
@@ -189,19 +178,9 @@ def run_benchmark_trial(num_instances: int, num_humans: int, with_nav2: bool, ro
 
         # Measurement Window (discarding warm-up)
         t_start_meas = time.time()
-        cpu_readings = []
-        gpu_readings = []
-        vram_readings = []
-        breakdown_readings = []
-
-        while time.time() - t_start_meas < measure_duration_s:
-            cpu_readings.append(psutil.cpu_percent(interval=None))
-            g_u, m_u = get_gpu_metrics()
-            gpu_readings.append(g_u)
-            vram_readings.append(m_u)
-            gz_c, br_c, n2_c, ros_c = get_process_cpu_breakdown()
-            breakdown_readings.append((gz_c, br_c, n2_c, ros_c))
-            time.sleep(0.5)
+        cpu_readings, gpu_readings, vram_readings, breakdown_readings = sample_resources(
+            t_start_meas, measure_duration_s, psutil.cpu_percent, get_gpu_metrics, get_process_cpu_breakdown
+        )
 
         t_end_meas = time.time()
 

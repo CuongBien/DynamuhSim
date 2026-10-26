@@ -11,8 +11,6 @@ Samples every 1.0 second:
 import sys
 import os
 import time
-import subprocess
-import threading
 import numpy as np
 import psutil
 
@@ -21,6 +19,9 @@ from rclpy.node import Node
 from rosgraph_msgs.msg import Clock
 from sensor_msgs.msg import LaserScan, Image
 from geometry_msgs.msg import TwistStamped
+
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../..")))
+from experiments.gazebo_benchmark.core.profiler import query_gpu_int
 
 
 class BenchmarkProfiler(Node):
@@ -154,15 +155,7 @@ class BenchmarkProfiler(Node):
         return self._compute_summary()
 
     def _query_gpu(self) -> tuple[int, int]:
-        try:
-            res = subprocess.check_output(
-                ["nvidia-smi", "--query-gpu=utilization.gpu,memory.used", "--format=csv,noheader,nounits"],
-                text=True,
-                timeout=1.0
-            ).strip().split(',')
-            return int(res[0]), int(res[1])
-        except Exception:
-            return 0, 0
+        return query_gpu_int()
 
     def _query_cpu(self) -> tuple[float, float]:
         cpu_total = psutil.cpu_percent(interval=None)

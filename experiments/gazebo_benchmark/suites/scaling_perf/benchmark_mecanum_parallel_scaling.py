@@ -29,6 +29,7 @@ from sensor_msgs.msg import LaserScan, Image
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../..")))
 from experiments.gazebo_benchmark.core.sim_env import build_benchmark_env
 from experiments.gazebo_benchmark.core.mppi_trial import scoped_processes
+from experiments.gazebo_benchmark.core.profiler import query_gpu as get_gpu_metrics, sample_resources
 
 
 class DomainTelemetryListener(Node):
@@ -73,18 +74,6 @@ def telemetry_worker(domain_id: int, duration_s: float, out_file: str):
 
     node.destroy_node()
     rclpy.shutdown()
-
-
-def get_gpu_metrics():
-    try:
-        out = subprocess.check_output(
-            ["nvidia-smi", "--query-gpu=utilization.gpu,memory.used", "--format=csv,noheader,nounits"],
-            text=True
-        )
-        gpu_util, mem_used = out.strip().split(",")
-        return float(gpu_util), float(mem_used)
-    except Exception:
-        return 0.0, 0.0
 
 
 class FirstFrameWaiter(Node):
@@ -210,16 +199,9 @@ def run_parallel_benchmark_trial(num_instances: int, root_dir: str, duration_mea
 
         # Measurement Window
         t_start_meas = time.time()
-        cpu_readings = []
-        gpu_readings = []
-        vram_readings = []
-
-        while time.time() - t_start_meas < duration_measure_s:
-            cpu_readings.append(psutil.cpu_percent(interval=None))
-            g_u, m_u = get_gpu_metrics()
-            gpu_readings.append(g_u)
-            vram_readings.append(m_u)
-            time.sleep(0.5)
+        cpu_readings, gpu_readings, vram_readings, _ = sample_resources(
+            t_start_meas, duration_measure_s, psutil.cpu_percent, get_gpu_metrics
+        )
 
         t_end_meas = time.time()
 
