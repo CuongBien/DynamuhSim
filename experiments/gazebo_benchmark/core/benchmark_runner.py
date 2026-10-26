@@ -276,7 +276,7 @@ class GazeboBenchmarkRunner:
 def main():
     parser = argparse.ArgumentParser(description="Gazebo Harmonic Benchmark Runner")
     parser.add_argument("--condition", type=str, default="baseline", 
-                        help="Condition or group name: baseline, sensors, humans, representation, depth_rates, uncapped, all, quick_test, or specific name")
+                        help="Condition or group name: baseline, canary, sensors, humans, representation, depth_rates, uncapped, all, quick_test, or specific name")
     parser.add_argument("--warmup", type=float, default=5.0, help="Warmup duration in seconds")
     parser.add_argument("--duration", type=float, default=25.0, help="Test duration in seconds")
     parser.add_argument("--runs", type=int, default=2, help="Number of repetitions per condition")
@@ -285,7 +285,34 @@ def main():
     runner = GazeboBenchmarkRunner()
 
     cond = args.condition
-    if cond == "quick_test":
+    if cond == "canary":
+        results = {}
+        for name, humans, representation in [
+            ("canary_baseline_n5_10hz", 5, "actor_and_cylinder"),
+            ("canary_crowd_n10_10hz", 10, "actor_and_cylinder"),
+            ("canary_crowd_n24_10hz_mesh", 24, "actor_and_cylinder"),
+            ("canary_crowd_n24_10hz_cylinder_only", 24, "cylinder_only"),
+        ]:
+            results[name] = runner.run_condition(
+                name=name, num_humans=humans, representation=representation,
+                enable_lidar=True, enable_depth=True, depth_width=640, depth_height=480,
+                depth_fps=10, enable_gui=False, warmup_s=5.0, duration_s=15.0,
+                num_runs=3, update_rate=5000,
+            )
+        out_file = os.path.join(runner.root_dir, "experiments/gazebo_benchmark/results/scaling_perf/canary_uncapped_results.json")
+        with open(out_file, "w") as stream:
+            json.dump(results, stream, indent=2)
+        for name, res in results.items():
+            print(f"Condition: {name}")
+            print(f"  RTF Mean +/- Std: {res['rtf_mean_mean']:.3f} +/- {res['rtf_mean_std']:.3f}")
+            print(f"  RTF Median:       {res['rtf_median_mean']:.3f} +/- {res['rtf_median_std']:.3f}")
+            print(f"  RTF p5 (worst):   {res['rtf_p5_mean']:.3f} +/- {res['rtf_p5_std']:.3f}")
+            print(f"  LiDAR Sim Hz:     {res['scan_hz_sim_mean']:.1f} Hz (Wall: {res['scan_hz_wall_mean']:.1f} Hz)")
+            print(f"  Depth Sim Hz:     {res['depth_hz_sim_mean']:.1f} Hz (Wall: {res['depth_hz_wall_mean']:.1f} Hz)")
+            print(f"  GPU % / VRAM:     {res['gpu_util_mean']:.1f}% / {res['vram_mb_mean']:.1f} MB")
+            print(f"  CPU Total / gz:   {res['cpu_total_mean']:.1f}% / {res['cpu_gz_mean']:.1f}%")
+            print("-" * 75)
+    elif cond == "quick_test":
         runner.run_condition("quick_test_baseline", num_humans=5, warmup_s=5.0, duration_s=15.0, num_runs=1)
     elif cond == "baseline":
         runner.run_condition("baseline", num_humans=5, warmup_s=args.warmup, duration_s=args.duration, num_runs=args.runs)

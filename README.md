@@ -11,6 +11,8 @@
 
 Pilot sơ bộ, test seed 2 lượt và các logger cố định H3/401, Step1/304 đã nghỉ dùng. Telemetry, costmap snapshot và báo cáo cũ vẫn ở `experiments/gazebo_benchmark/results/` và `experiments/gazebo_benchmark/reports/`; source lịch sử có tại commit `435722e`.
 
+**Canary scaling:** chạy từ root bằng `python3 experiments/gazebo_benchmark/core/benchmark_runner.py --condition canary` (4 cấu hình uncapped, 3 lượt mỗi cấu hình) hoặc `python3 experiments/gazebo_benchmark/suites/scaling_perf/parallel_scaling_benchmark.py --canary` (1–4 instance, N=10). Hai profile giữ nguyên cấu hình và tệp JSON đầu ra của wrapper canary cũ; không dùng cờ canary thì hành vi mặc định của runner giữ nguyên.
+
 **Luồng hiện tại:** [Dữ liệu và baseline WM](docs/START_HERE_CURRENT.md) · [Runtime Nav2 dùng chung](docs/SHARED_NAV2_RUNTIME.md) · [Registry experiment](docs/experiment_registry.json) · [Capture mới](docs/CAPTURE_RUNTIME.md) · [Audit và artifact](docs/ANALYSIS_AND_ARTIFACTS.md) · [World assets](docs/WORLD_ASSETS.md) · [Archive lịch sử](docs/HISTORICAL_ARTIFACTS.md) · [Report và dependency](docs/REPORT_STORAGE.md) · [Media và test state](docs/REPORT_MEDIA.md) · [Sensor API](docs/SENSOR_CONTROLS.md)
 
 > **Multi-Sensor Perception and Proactive Yielding for Patrol Robots in Narrow, Dynamic Indoor Environments**

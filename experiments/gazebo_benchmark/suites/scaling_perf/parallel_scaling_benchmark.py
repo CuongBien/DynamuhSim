@@ -229,4 +229,18 @@ def run_parallel_benchmark(root_dir="/home/cuongbien/DynamuhSim", test_instances
 
 
 if __name__ == '__main__':
-    run_parallel_benchmark()
+    import argparse
+    parser = argparse.ArgumentParser(description="Parallel scaling benchmark")
+    parser.add_argument("--canary", action="store_true", help="Run the N=10, 1-4 instance canary profile")
+    args = parser.parse_args()
+    if args.canary:
+        root_dir = "/home/cuongbien/DynamuhSim"
+        results = run_parallel_benchmark(
+            root_dir=root_dir, test_instances=[1, 2, 3, 4], duration_s=20.0,
+            num_humans=10, depth_fps=10,
+        )
+        out_file = os.path.join(root_dir, "experiments/gazebo_benchmark/results/scaling_perf/canary_parallel_results.json")
+        with open(out_file, "w") as stream:
+            json.dump(results, stream, indent=2)
+    else:
+        run_parallel_benchmark()
