@@ -9,7 +9,7 @@ from rosidl_runtime_py.utilities import get_message
 BAG = "trial_01"
 
 
-def load_bag():
+def load_bag(*, seconds=True, include_local_plan=True):
     reader = rosbag2_py.SequentialReader()
 
     reader.open(
@@ -30,8 +30,10 @@ def load_bag():
         "/scan": [],
         "/cmd_vel": [],
         "/plan": [],
-        "/local_plan": [],
     }
+
+    if include_local_plan:
+        wanted["/local_plan"] = []
 
     while reader.has_next():
         topic, raw, timestamp = reader.read_next()
@@ -42,7 +44,7 @@ def load_bag():
         msg_cls = get_message(topic_types[topic])
         msg = deserialize_message(raw, msg_cls)
 
-        wanted[topic].append((timestamp / 1e9, msg))
+        wanted[topic].append((timestamp / 1e9 if seconds else timestamp, msg))
 
     return wanted
 
@@ -169,8 +171,95 @@ def analyze_plans(plans):
     return lengths[-1], len(lengths)
 
 
-def main():
-    data = load_bag()
+def min_clearance(scan):
+    if not scan:
+        return float("inf")
+    minimum = float("inf")
+    for _, msg in scan:
+        for r in msg.ranges:
+            if math.isfinite(r) and msg.range_min <= r <= msg.range_max:
+                minimum = min(minimum, r)
+    return minimum
+
+def analyze_cmd_vel(cmd_vel):
+    if not cmd_vel:
+        return 0.0, 0.0, 0.0
+
+    linear = []
+    stopped = 0.0
+
+    for i, (timestamp, msg) in enumerate(cmd_vel):
+        v = abs(msg.linear.x)
+        linear.append(v)
+
+        if i > 0:
+            dt = (timestamp - cmd_vel[i - 1][0]) / 1e9
+
+            if v < 0.01:
+                stopped += max(0.0, dt)
+
+    avg_v = sum(linear) / len(linear)
+    max_v = max(linear)
+
+    return avg_v, max_v, stopped
+
+def print_trial_summary(data):
+
+    odom = data["/odom"]
+    scan = data["/scan"]
+    cmd_vel = data["/cmd_vel"]
+    plans = data["/plan"]
+
+    print()
+    print("=" * 45)
+    print("        CORRIDOR 0.90 m - TRIAL 01")
+    print("=" * 45)
+
+    if odom:
+        duration = (odom[-1][0] - odom[0][0]) / 1e9
+        print(f"Odom duration       : {duration:.2f} s")
+    else:
+        duration = 0.0
+        print("Odom duration       : N/A")
+
+    distance = path_length([msg.pose for _, msg in odom])
+    print(f"Travel distance     : {distance:.3f} m")
+
+    avg_v, max_v, stopped = analyze_cmd_vel(cmd_vel)
+
+    print(f"Average cmd velocity: {avg_v:.3f} m/s")
+    print(f"Maximum cmd velocity: {max_v:.3f} m/s")
+    print(f"Stopped time        : {stopped:.2f} s")
+
+    clearance = min_clearance(scan)
+
+    if math.isfinite(clearance):
+        print(f"Minimum scan range  : {clearance:.3f} m")
+    else:
+        print("Minimum scan range  : N/A")
+
+    final_path, updates = analyze_plans(plans)
+
+    if updates:
+        print(f"Final global path   : {final_path:.3f} m")
+        print(f"Global plan updates : {updates}")
+    else:
+        print("Global path         : N/A")
+
+    print()
+    print("Recorded messages:")
+    print(f"  /odom             : {len(odom)}")
+    print(f"  /scan             : {len(scan)}")
+    print(f"  /cmd_vel          : {len(cmd_vel)}")
+    print(f"  /plan             : {len(plans)}")
+
+    print("=" * 45)
+
+def main(summary=False):
+    data = load_bag(seconds=not summary, include_local_plan=not summary)
+    if summary:
+        print_trial_summary(data)
+        return
 
     odom = data["/odom"]
     scan = data["/scan"]
@@ -243,4 +332,8 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    import argparse
+    parser = argparse.ArgumentParser(description="Corridor trial analysis")
+    parser.add_argument("--summary", action="store_true", help="Show the original short trial report")
+    args = parser.parse_args()
+    main(summary=args.summary)
