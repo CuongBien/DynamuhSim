@@ -7,12 +7,10 @@ Reports: RTF Mean +/- Std, RTF Median, RTF p5, Sim/Wall Hz, GPU%, VRAM, CPU%.
 
 import sys
 import os
-import time
 import json
-import numpy as np
 
-sys.path.insert(0, '/home/cuongbien/DynamuhSim/experiments/gazebo_benchmark/core')
-from benchmark_runner import GazeboBenchmarkRunner
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../..")))
+from experiments.gazebo_benchmark.core.benchmark_runner import GazeboBenchmarkRunner
 
 
 def main():

@@ -12,15 +12,18 @@ Executes the standardized Section 5 measurement protocol:
 import sys
 import os
 import time
-import signal
 import subprocess
 import argparse
 import json
 import numpy as np
 
 # Add tools to path
-sys.path.insert(0, '/home/cuongbien/DynamuhSim/experiments/gazebo_benchmark/core')
-from benchmark_world_generator import BenchmarkWorldGenerator
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../../..")))
+from experiments.gazebo_benchmark.core.benchmark_world_generator import BenchmarkWorldGenerator
+from experiments.gazebo_benchmark.core.mppi_trial import scoped_processes
+from experiments.gazebo_benchmark.core.sim_env import (
+    build_benchmark_env, spawn_benchmark_robot, start_parameter_bridge,
+)
 
 
 class GazeboBenchmarkRunner:
@@ -43,6 +46,7 @@ class GazeboBenchmarkRunner:
         with open(self.results_file, "w") as f:
             json.dump(self.results, f, indent=2)
 
+    @scoped_processes
     def run_trial(
         self,
         world_file: str,
@@ -53,6 +57,7 @@ class GazeboBenchmarkRunner:
         enable_lidar: bool = True,
         enable_depth: bool = True,
         update_rate: int = None,
+        *, _processes=None,
     ) -> dict:
         """
         Runs a single trial of the benchmark.
@@ -62,13 +67,6 @@ class GazeboBenchmarkRunner:
         print(f"  Robot: {os.path.basename(robot_file)}")
 
         bridge_config = os.path.join(self.root_dir, "src/custom_corridor/config/turtlebot3_burger_bridge.yaml")
-        plugin_share = os.path.join(self.root_dir, "install/custom_corridor_plugins/share/custom_corridor_plugins")
-        plugin_lib = os.path.join(os.path.dirname(os.path.dirname(plugin_share)), 'lib')
-        corridor_models = os.path.join(self.root_dir, "install/custom_corridor/share/custom_corridor/models")
-        tb3_models = os.path.join(self.root_dir, "install/turtlebot3_gazebo/share/turtlebot3_gazebo/models")
-
-        gz_resource_path = f"{corridor_models}:{tb3_models}:{os.environ.get('GZ_SIM_RESOURCE_PATH', '')}"
-        gz_plugin_path = f"{plugin_lib}:{os.environ.get('GZ_SIM_SYSTEM_PLUGIN_PATH', '')}"
 
         # 1. Start Gazebo
         gz_cmd = ["gz", "sim", "-r"]
@@ -78,14 +76,10 @@ class GazeboBenchmarkRunner:
             gz_cmd.extend(["-z", str(update_rate)])
         gz_cmd.append(world_file)
 
-        env = os.environ.copy()
-        env["GALLIUM_DRIVER"] = "d3d12"
-        env["MESA_D3D12_DEFAULT_ADAPTER_NAME"] = "NVIDIA"
-        env["GZ_SIM_RESOURCE_PATH"] = gz_resource_path
-        env["GZ_SIM_SYSTEM_PLUGIN_PATH"] = gz_plugin_path
+        env = build_benchmark_env(self.root_dir, turtlebot3=True)
 
         print("  -> Starting Gazebo Sim...")
-        gz_proc = subprocess.Popen(
+        _processes.popen(
             gz_cmd,
             env=env,
             stdout=subprocess.PIPE,
@@ -98,28 +92,15 @@ class GazeboBenchmarkRunner:
 
         # 2. Spawn Robot
         print("  -> Spawning Robot...")
-        spawn_cmd = [
-            "ros2", "run", "ros_gz_sim", "create",
-            "-name", "burger",
-            "-file", robot_file,
-            "-x", "3.0", "-y", "0.0", "-z", "0.01", "-Y", "0.0"
-        ]
-        subprocess.run(spawn_cmd, env=env, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, timeout=10)
+        spawn_benchmark_robot(robot_file, env, processes=_processes)
 
         # 3. Start ROS parameter bridge
         print("  -> Starting ROS Parameter Bridge...")
-        bridge_proc = subprocess.Popen(
-            ["ros2", "run", "ros_gz_bridge", "parameter_bridge", "--ros-args", "-p", f"config_file:={bridge_config}"],
-            env=env,
-            stdout=subprocess.DEVNULL,
-            stderr=subprocess.DEVNULL,
-            preexec_fn=os.setsid
-        )
+        start_parameter_bridge(bridge_config, env, processes=_processes)
 
-        image_bridge_proc = None
         if enable_depth:
             print("  -> Starting ROS Image Bridge for Depth...")
-            image_bridge_proc = subprocess.Popen(
+            _processes.popen(
                 ["ros2", "run", "ros_gz_image", "image_bridge", "/camera/image", "/camera/depth_image"],
                 env=env,
                 stdout=subprocess.DEVNULL,
@@ -146,16 +127,16 @@ class GazeboBenchmarkRunner:
         summary = {}
         try:
             print(f"  -> Profiling started for {warmup_s + duration_s}s total...")
-            prof_proc = subprocess.run(
+            prof_proc = _processes.popen(
                 ["bash", "-c", profiler_cmd],
                 stdout=subprocess.PIPE,
                 stderr=subprocess.STDOUT,
                 text=True,
                 cwd=os.path.join(self.root_dir, "experiments/gazebo_benchmark"),
-                timeout=warmup_s + duration_s + 30.0
             )
+            output, _ = prof_proc.communicate(timeout=warmup_s + duration_s + 30.0)
             # Extract summary JSON from output
-            for line in prof_proc.stdout.splitlines():
+            for line in output.splitlines():
                 if "__SUMMARY_JSON__:" in line:
                     json_str = line.split("__SUMMARY_JSON__:")[1]
                     summary = json.loads(json_str)
@@ -164,14 +145,6 @@ class GazeboBenchmarkRunner:
             print(f"  [ERROR] Profiling failed: {e}")
         finally:
             print("  -> Cleaning up processes...")
-            for proc in [image_bridge_proc, bridge_proc, gz_proc]:
-                if proc:
-                    try:
-                        os.killpg(os.getpgid(proc.pid), signal.SIGTERM)
-                        time.sleep(0.5)
-                        os.killpg(os.getpgid(proc.pid), signal.SIGKILL)
-                    except Exception:
-                        pass
 
         return summary
 

@@ -226,7 +226,13 @@ class ProcessScope:
             if self.members():
                 raise RuntimeError("Owned benchmark descendants survived shutdown")
             for process in processes:
-                process.wait(timeout=3.)
+                try:
+                    process.wait(timeout=3.)
+                finally:
+                    for name in ("stdin", "stdout", "stderr"):
+                        stream = getattr(process, name, None)
+                        if stream is not None:
+                            stream.close()
 
     def __enter__(self):
         if threading.current_thread() is threading.main_thread():

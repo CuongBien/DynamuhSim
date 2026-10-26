@@ -11,15 +11,18 @@ Features:
 import sys
 import os
 import time
-import signal
 import subprocess
 import json
 import psutil
 import re
 import numpy as np
 
-sys.path.insert(0, '/home/cuongbien/DynamuhSim/experiments/gazebo_benchmark/core')
-from benchmark_world_generator import BenchmarkWorldGenerator
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../..")))
+from experiments.gazebo_benchmark.core.benchmark_world_generator import BenchmarkWorldGenerator
+from experiments.gazebo_benchmark.core.mppi_trial import ProcessScope
+from experiments.gazebo_benchmark.core.sim_env import (
+    build_benchmark_env, spawn_benchmark_robot, start_parameter_bridge,
+)
 
 
 class ParallelInstance:
@@ -30,60 +33,43 @@ class ParallelInstance:
         self.robot_file = robot_file
         self.gz_partition = f"gz_bench_p{instance_id}"
         self.ros_domain_id = str(20 + instance_id)
-        self.procs = []
+        self._processes = ProcessScope()
 
     def start(self):
         bridge_config = os.path.join(self.root_dir, "src/custom_corridor/config/turtlebot3_burger_bridge.yaml")
-        plugin_share = os.path.join(self.root_dir, "install/custom_corridor_plugins/share/custom_corridor_plugins")
-        plugin_lib = os.path.join(os.path.dirname(os.path.dirname(plugin_share)), 'lib')
-        corridor_models = os.path.join(self.root_dir, "install/custom_corridor/share/custom_corridor/models")
-        tb3_models = os.path.join(self.root_dir, "install/turtlebot3_gazebo/share/turtlebot3_gazebo/models")
 
-        gz_resource_path = f"{corridor_models}:{tb3_models}:{os.environ.get('GZ_SIM_RESOURCE_PATH', '')}"
-        gz_plugin_path = f"{plugin_lib}:{os.environ.get('GZ_SIM_SYSTEM_PLUGIN_PATH', '')}"
+        env = build_benchmark_env(self.root_dir, turtlebot3=True)
+        env.update(GZ_PARTITION=self.gz_partition, ROS_DOMAIN_ID=self.ros_domain_id)
+        try:
+            # 1. Start Gazebo Sim headless
+            self._processes.popen(
+                ["gz", "sim", "-r", "-s", self.world_file],
+                env=env,
+                stdout=subprocess.DEVNULL,
+                stderr=subprocess.DEVNULL,
+                preexec_fn=os.setsid
+            )
+            time.sleep(3.5)
 
-        env = os.environ.copy()
-        env["GALLIUM_DRIVER"] = "d3d12"
-        env["MESA_D3D12_DEFAULT_ADAPTER_NAME"] = "NVIDIA"
-        env["GZ_PARTITION"] = self.gz_partition
-        env["ROS_DOMAIN_ID"] = self.ros_domain_id
-        env["GZ_SIM_RESOURCE_PATH"] = gz_resource_path
-        env["GZ_SIM_SYSTEM_PLUGIN_PATH"] = gz_plugin_path
+            # 2. Spawn robot
+            spawn_benchmark_robot(self.robot_file, env, processes=self._processes)
 
-        # 1. Start Gazebo Sim headless
-        gz_proc = subprocess.Popen(
-            ["gz", "sim", "-r", "-s", self.world_file],
-            env=env,
-            stdout=subprocess.DEVNULL,
-            stderr=subprocess.DEVNULL,
-            preexec_fn=os.setsid
-        )
-        self.procs.append(gz_proc)
-        time.sleep(3.5)
+            # 3. Start Parameter Bridge
+            start_parameter_bridge(bridge_config, env, processes=self._processes)
 
-        # 2. Spawn robot
-        spawn_cmd = [
-            "ros2", "run", "ros_gz_sim", "create",
-            "-name", "burger",
-            "-file", self.robot_file,
-            "-x", "3.0", "-y", "0.0", "-z", "0.01", "-Y", "0.0"
-        ]
-        subprocess.run(spawn_cmd, env=env, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, timeout=10)
-
-        # 3. Start Parameter Bridge
-        bridge_proc = subprocess.Popen(
-            ["ros2", "run", "ros_gz_bridge", "parameter_bridge", "--ros-args", "-p", f"config_file:={bridge_config}"],
-            env=env, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, preexec_fn=os.setsid
-        )
-        self.procs.append(bridge_proc)
-
-        # 4. Start Image Bridge
-        image_proc = subprocess.Popen(
-            ["ros2", "run", "ros_gz_image", "image_bridge", "/camera/image", "/camera/depth_image"],
-            env=env, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, preexec_fn=os.setsid
-        )
-        self.procs.append(image_proc)
-        time.sleep(1.5)
+            # 4. Start Image Bridge
+            self._processes.popen(
+                ["ros2", "run", "ros_gz_image", "image_bridge", "/camera/image", "/camera/depth_image"],
+                env=env, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, preexec_fn=os.setsid
+            )
+            time.sleep(1.5)
+        except BaseException as error:
+            try:
+                self.stop()
+            except Exception as cleanup_error:
+                if hasattr(error, "add_note"):
+                    error.add_note(f"Process cleanup also failed: {cleanup_error}")
+            raise
 
     def get_sim_time(self) -> float:
         """Queries true simulation time directly from native Gazebo /clock topic with -e."""
@@ -140,14 +126,7 @@ class ParallelInstance:
             return 0.0, 0.0
 
     def stop(self):
-        for p in self.procs:
-            try:
-                os.killpg(os.getpgid(p.pid), signal.SIGTERM)
-                time.sleep(0.2)
-                os.killpg(os.getpgid(p.pid), signal.SIGKILL)
-            except Exception:
-                pass
-        self.procs = []
+        self._processes.stop()
 
 
 def query_gpu():

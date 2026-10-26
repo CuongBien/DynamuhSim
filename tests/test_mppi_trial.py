@@ -429,5 +429,119 @@ class ProcessScopeTests(unittest.TestCase):
                 process.wait(timeout=5)
 
 
+@unittest.skipUnless(sys.platform == "linux", "Linux benchmark process ownership")
+class BenchmarkRunnerTests(unittest.TestCase):
+    def parallel_module(self):
+        # Exercise the real class without importing optional hardware telemetry.
+        path = ROOT / "experiments/gazebo_benchmark/suites/scaling_perf/parallel_scaling_benchmark.py"
+        tree = ast.parse(path.read_text())
+        klass = next(n for n in tree.body if isinstance(n, ast.ClassDef) and n.name == "ParallelInstance")
+        module = NS(os=os, time=time, subprocess=subprocess, ProcessScope=trial.ProcessScope,
+                    build_benchmark_env=sim_env.build_benchmark_env,
+                    spawn_benchmark_robot=sim_env.spawn_benchmark_robot,
+                    start_parameter_bridge=sim_env.start_parameter_bridge)
+        exec(compile(ast.Module(body=[klass], type_ignores=[]), str(path), "exec"), module.__dict__)
+        return module
+
+    def launches(self, fault=None, profiler="valid"):
+        """Replace simulator executables with disposable CPU processes only."""
+        handles = []
+        real_popen = subprocess.Popen
+        def popen(command, **kwargs):
+            if fault == len(handles):
+                raise OSError("startup failed")
+            is_profiler = command[0] == "bash"
+            code = ("print('x' * 131072); print('__SUMMARY_JSON__:{\"rtf_median\": 0.75}')"
+                    if is_profiler and profiler == "valid" else
+                    "print('__SUMMARY_JSON__:invalid')" if is_profiler and profiler == "invalid" else
+                    "pass" if "create" in command else "import time;time.sleep(120)")
+            process = real_popen([sys.executable, "-c", code], **kwargs)
+            if is_profiler and profiler == "timeout":
+                def timed_out(timeout):
+                    raise subprocess.TimeoutExpired(command, timeout)
+                process.communicate = timed_out
+            handles.append(process)
+            return process
+        return handles, popen
+
+    def test_parallel_instance_remains_live_until_stop_and_can_restart(self):
+        parallel = self.parallel_module()
+        real_scope = trial.ProcessScope
+        unrelated = subprocess.Popen([sys.executable, "-c", "import time;time.sleep(120)"])
+        handles, popen = self.launches()
+        instance = None
+        try:
+            with patch.object(parallel, "ProcessScope", side_effect=lambda: real_scope(.05)), patch.object(subprocess, "Popen", side_effect=popen), patch.object(parallel.time, "sleep"):
+                instance = parallel.ParallelInstance(2, str(ROOT), "world.sdf", "robot.sdf")
+                for _ in range(2):
+                    instance.start()
+                    self.assertEqual(len(instance._processes.processes), 3)
+                    self.assertTrue(all(p.poll() is None for p in instance._processes.processes))
+                    instance.stop()
+                    instance.stop()
+                    self.assertTrue(all(p.poll() is not None for p in handles))
+                    self.assertTrue(all(stream.closed for p in handles for stream in (p.stdin, p.stdout, p.stderr) if stream is not None))
+                    self.assertIsNone(unrelated.poll())
+        finally:
+            if instance is not None: instance.stop()
+            for p in [*handles, unrelated]:
+                if p.poll() is None: p.kill()
+                p.wait(timeout=5)
+
+    def test_parallel_partial_startup_failure_releases_every_started_process(self):
+        parallel = self.parallel_module()
+        real_scope = trial.ProcessScope
+        for fault in range(4):
+            handles, popen = self.launches(fault=fault)
+            with self.subTest(fault=fault), patch.object(parallel, "ProcessScope", side_effect=lambda: real_scope(.05)), patch.object(subprocess, "Popen", side_effect=popen), patch.object(parallel.time, "sleep"):
+                instance = parallel.ParallelInstance(0, str(ROOT), "world.sdf", "robot.sdf")
+                try:
+                    with self.assertRaisesRegex(OSError, "startup failed"):
+                        instance.start()
+                    self.assertFalse(instance._processes.processes)
+                    self.assertTrue(all(p.poll() is not None for p in handles))
+                    self.assertTrue(all(stream.closed for p in handles for stream in (p.stdin, p.stdout, p.stderr) if stream is not None))
+                finally:
+                    instance.stop()
+                    for p in handles:
+                        if p.poll() is None: p.kill()
+                        p.wait(timeout=5)
+
+    def test_profiler_large_output_invalid_json_and_timeout_release_all_launches(self):
+        from experiments.gazebo_benchmark.core import benchmark_runner as benchmark
+        for mode in ("valid", "invalid", "timeout"):
+            handles, popen = self.launches(profiler=mode)
+            runner = object.__new__(benchmark.GazeboBenchmarkRunner)
+            runner.root_dir = str(ROOT)
+            with self.subTest(mode=mode), patch.object(subprocess, "Popen", side_effect=popen), patch.object(benchmark.time, "sleep"):
+                try:
+                    with trial.ProcessScope(.05) as scope:
+                        result = runner.run_trial.__wrapped__(runner, "world.sdf", "robot.sdf", _processes=scope)
+                    self.assertEqual(result, {"rtf_median": .75} if mode == "valid" else {})
+                    self.assertTrue(all(p.poll() is not None for p in handles))
+                    self.assertTrue(all(stream.closed for p in handles for stream in (p.stdin, p.stdout, p.stderr) if stream is not None))
+                finally:
+                    for p in handles:
+                        if p.poll() is None: p.kill()
+                        p.wait(timeout=5)
+
+    def test_trial_decorator_releases_partial_startup(self):
+        from experiments.gazebo_benchmark.core import benchmark_runner as benchmark
+        for fault in range(4):
+            handles, popen = self.launches(fault=fault)
+            runner = object.__new__(benchmark.GazeboBenchmarkRunner)
+            runner.root_dir = str(ROOT)
+            with self.subTest(fault=fault), patch.object(subprocess, "Popen", side_effect=popen), patch.object(benchmark.time, "sleep"):
+                try:
+                    with self.assertRaisesRegex(OSError, "startup failed"):
+                        runner.run_trial("world.sdf", "robot.sdf")
+                    self.assertTrue(all(p.poll() is not None for p in handles))
+                    self.assertTrue(all(stream.closed for p in handles for stream in (p.stdin, p.stdout, p.stderr) if stream is not None))
+                finally:
+                    for p in handles:
+                        if p.poll() is None: p.kill()
+                        p.wait(timeout=5)
+
+
 if __name__ == "__main__":
     unittest.main()
