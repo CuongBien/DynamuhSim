@@ -33,17 +33,10 @@ EPISODE="$TASK/generated/runs/depth_seed43_01"
 python3 experiments/social_navigation/benchmark/portable_episode/generated/episode01/tools/legacy/build.py --episode "$EPISODE" --output "$EPISODE/my_normalized"
 ```
 
-Bộ artifact đã đo dùng `normalized/`, `generated/frozen_seed43.json`, `generated/sensor01/`, `generated/evaluation01/`. Các lệnh so sánh nhận output mới; source extension mặc định tham chiếu `normalized/` đã audit:
-
-```bash
-bash "$TASK/run.sh" compare prepare --output "$TASK/generated/my_frozen.json"
-bash "$TASK/run.sh" compare replay --frozen "$TASK/generated/my_frozen.json" --output "$TASK/generated/my_sensor"
-bash "$TASK/run.sh" compare evaluate --frozen "$TASK/generated/my_frozen.json" --sensor "$TASK/generated/my_sensor" --output "$TASK/generated/my_evaluation"
-bash "$TASK/run.sh" compare report --evaluation "$TASK/generated/my_evaluation" --output "$TASK/generated/my_summary.json"
-```
-
-Replay/evaluation chỉ cần NumPy/SciPy, không ROS/Gazebo. `capture_audit.py`, `audit.py`, `diagnose_identity.py`, `preview.py` tái kiểm các path của bộ artifact cụ thể này; output mới cho audit/diagnose. Preview cần Matplotlib. Raw MCAP/depth/paired NPY và JSONL lớn ở generated, bị Gitignore; code, snapshots driver, reports, QA/hash, ảnh/GIF nhỏ được commit.
+Bộ artifact đã đo vẫn giữ `normalized/`, frozen engine, sensor replay và evaluation. `capture_audit.py` và `audit.py` còn tái kiểm bộ artifact cố định; runner so sánh/source extension, diagnostic, preview và công cụ chốt report của cohort đã hoàn tất được gỡ khỏi HEAD. Tái lập chuỗi cũ dùng source revision và inputs đã ghi, không ghi lại outcome cũ. Raw MCAP/NPY/JSONL lớn vẫn ở generated/ và không thay đổi.
 
 Dữ liệu mới kiểm được việc đổi seed trong cùng layout/simulator, chưa chứng minh qua layout/backend. GT chỉ ở nhánh label/diagnostic; không đưa vào tracker hoặc suy H1–H5. HuNavSim chưa dùng. Nếu dùng case seed 43 để tune tracker ở bước sau, nó trở thành regression/development cho bản mới; cần seed chưa xem khác cho validation tiếp theo.
 
 Bước kế: xử lý active matching khi quan sát thiếu/ghép mơ hồ bằng sensor-only, dùng case đổi pairing GT5→GT6 làm regression. Chưa thu batch hoặc train; baseline cũ vẫn giữ. Navigation timeout là kết quả riêng chưa được sửa trong lượt perception này.
+
+Cập nhật dọn 27/10/2026: đã gỡ các công cụ chỉ phục vụ cohort/report cũ: `diagnose_identity.py`, `finalize_reports.py`, `preview.py`, `compare.py`. [Code trước khi gỡ](https://github.com/CuongBien/DynamuhSim/tree/87b0c6eea9b54794db7b4cb794fae57c78f11c70/experiments/social_navigation/benchmark/depth_seed43_validation) giữ cách tái lập; report, engine, source freeze và outcome cũ không đổi.

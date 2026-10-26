@@ -58,3 +58,5 @@ Build/audit source ROS2Jazzy để đọc MCAP; loader/smoke không dùng ROS. B
 - Tất cả training_eligible=false.823cửa sổ chỉ là QA định dạng từ1episode, không phải bộ train hoàn chỉnh hay dữ liệu phản thực cho mọi robot action.
 
 Bước kế ưu tiên xác thực track/association từ cảm biến và chốt target BEV tương lai; sau đó kiểm độc lập nhỏ trước thu đa nguồn. Giữ provenance cấu hình Nav2 vừa chọn, depth proxy OFF/LiDAR proxy ON và bản sửa literal friction frame. Không mở simulator khác, đổi kiến trúc robot, train World Model hoặc chuyển Isaac ở bước này.
+
+Cập nhật dọn 27/10/2026: đã gỡ các công cụ chỉ phục vụ cohort/report cũ: `preview.py`. [Code trước khi gỡ](https://github.com/CuongBien/DynamuhSim/tree/87b0c6eea9b54794db7b4cb794fae57c78f11c70/experiments/social_navigation/benchmark/portable_episode) giữ cách tái lập; report, engine, source freeze và outcome cũ không đổi.

@@ -28,29 +28,14 @@ bash "$TASK/run.sh" evaluate --frozen "$TASK/generated/my_frozen.json" --dataset
 
 `frozen01.json` lưu hash engine/config/input trước replay hai lượt đầu; `frozen02.json` thêm nguồn mesh-repeat, **engine và config y hệt**. Các bản receipt được lưu Git tại reports/. Mã snapshot baseline byte-identical với stage trước.
 
-Để chuẩn hóa lại lượt mesh bổ sung, chỉ bước đọc MCAP cần ROS Jazzy:
+Lượt mesh-repeat và các outcome TIMEOUT/FAIL vẫn giữ nguyên. Công cụ copy recording cố định, wrapper extra-repeat, profile diagnostic và preview của cohort đó đã được gỡ khỏi HEAD. `extend_freeze.py`, engine/config/replay/evaluator và auditor còn được giữ; các pin WM/classifier không đổi. Chuỗi lịch sử dùng source revision/manifest và raw inputs đã ghi.
 
-```bash
-TASK=experiments/social_navigation/benchmark/depth_track_refinement
-COPY="$TASK/generated/my_fixed_source"
-bash "$TASK/run.sh" prepare-repeat --output "$COPY"
-source /opt/ros/jazzy/setup.bash
-source install/setup.bash
-export OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 MKL_NUM_THREADS=1
-python3 experiments/social_navigation/benchmark/portable_episode/generated/episode01/tools/legacy/build.py --episode "$COPY" --output "$COPY/normalized"
-python3 "$TASK/extend_freeze.py" --source "$TASK/generated/my_frozen.json" --normalized "$COPY/normalized" --output "$TASK/generated/my_extended.json"
-python3 "$TASK/extra_repeat.py" replay --frozen "$TASK/generated/my_extended.json" --output "$TASK/generated/my_mesh_repeat"
-python3 "$TASK/extra_repeat.py" evaluate --frozen "$TASK/generated/my_extended.json" --sensor "$TASK/generated/my_mesh_repeat" --output "$TASK/generated/my_mesh_evaluation"
-```
-
-Normalizer PASS chỉ là integrity/format, không biến TIMEOUT thành navigation success. Lượt thật dùng `generated/fixed_source/normalized`: 1037 ảnh raw, 802 cửa sổ; giữ toàn bộ lỗi/trạng thái nguồn. Dataset lớn và JSONL từng frame ở generated/, bị Gitignore; summaries/hashes/code/hình được commit.
-
-Audit và preview tái kiểm chứng bộ artifact cụ thể đã lưu:
+Audit còn dùng:
 
 ```bash
 bash "$TASK/run.sh" audit --output "$TASK/generated/my_audit"
-python3 "$TASK/diagnose_profiles.py" --output "$TASK/generated/my_profile_evidence"
-python3 "$TASK/preview.py" --output "$TASK/generated/my_previews"
 ```
 
 Quyết định: refinement là thử nghiệm riêng, không tự áp dụng trên profile depth khác/không rõ. Các mask semantic, association, H1–H5 và training vẫn false. Bước kế là episode mới với depth mesh và seed/layout khác, có tiêu chí visibility/semantic, trước khi xác nhận person detector hoặc thu batch train.
+
+Cập nhật dọn 27/10/2026: đã gỡ các công cụ chỉ phục vụ cohort/report cũ: `diagnose_profiles.py`, `extra_repeat.py`, `prepare_repeat.py`, `preview.py`. [Code trước khi gỡ](https://github.com/CuongBien/DynamuhSim/tree/87b0c6eea9b54794db7b4cb794fae57c78f11c70/experiments/social_navigation/benchmark/depth_track_refinement) giữ cách tái lập; report, engine, source freeze và outcome cũ không đổi.

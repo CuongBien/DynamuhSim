@@ -7,6 +7,6 @@ case "$TASK_MODE" in
   task_ros workspace
   exec python3 "$TASK_DIR/$TASK_MODE.py" "$@" ;;
  capture-audit) exec python3 "$TASK_DIR/capture_audit.py" "$@" ;;
- compare|audit|preview) exec python3 "$TASK_DIR/$TASK_MODE.py" "$@" ;;
- *) echo 'Usage: bash run.sh {preflight|capture|capture-audit|compare|audit|preview} [arguments]' ;;
+ audit) exec python3 "$TASK_DIR/$TASK_MODE.py" "$@" ;;
+ *) echo 'Usage: bash run.sh {preflight|capture|capture-audit|audit} [arguments]' >&2; exit 2;;
 esac

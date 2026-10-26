@@ -147,3 +147,15 @@ Giữ Dockerfile/requirements/.dockerignore của hai image, dependency setup v�
 Hai lỗi harness escape/PATH ban đầu được giữ trong bằng chứng local và sửa ở fixture; không sửa runtime để làm test qua. Nguồn 70 file (273 hash) của năm ca E2E trước, 1.814 control và checkout/index chính giữ nguyên. Không chạy physics, train model hay sinh dataset mới. Bằng chứng local tại `benchmark/generated/retired_initial_rounds_cleanup_20261026/`.
 
 Bước tiếp theo: rà các công cụ report/probe dùng một lần ở chuỗi depth/perception; chỉ gỡ phần không còn consumer hoặc pin hiện hành, giữ engine/model và source mà WM/classifier freeze còn yêu cầu. Điều tra ca nhóm đứng vẫn chưa đổi controller/ngưỡng.
+
+## 27/10/2026 — gỡ công cụ report/diagnostic perception không còn dùng
+
+Đối chiếu consumer và source pins của chuỗi depth/perception, đã **xoá 16 file Python, 524 dòng code**: các finalizer report của identity/seed43, label-side case/profile diagnostics, preview cố định, wrapper compare/repeat và helper lắp ghép scene cũ. Sáu mode shell tương ứng bị gỡ; 24 mode còn dùng giữ nguyên command/environment. Không thêm wrapper thay thế.
+
+Các file xoá không có hash pin trong JSON control/freeze đã rà và không còn import/consumer sau khi gỡ dispatch. Giữ nguyên engine/config/replay/evaluate/auditor/seal, corpus/classifier/WM source freeze và portable exporter. Đặc biệt `portable_episode/finalize.py` được giữ vì prepare/build/audit còn cần bước tạo bundle hợp lệ; không suy từ tên finalize rằng có thể xoá. Các README liên kết source trước khi gỡ tại `87b0c6e`; biểu đồ/report/FAIL/TIMEOUT cũ không bị ghi lại.
+
+**Kiểm chứng:** 278 test chính và 39 test sensor-only tổng hợp đạt (identity 14, refinement 13, perception contract 12); 28 CLI đạt. Hai probe API mới/legacy cho classifier, tracker, 16 engine bindings và runtime gates có functional output giống nhau; bundle verifier đạt, không mở held-out/corpus, không fit/evaluate lại model hoặc đổi threshold. Hai mươi bốn route shell mỗi phiên bản được đối chiếu bằng mock, sáu mode đã bỏ bị từ chối không gọi script target.
+
+273 hash nguồn (70 file riêng biệt) của năm lượt E2E trước, locked inputs, 1.814 control/model/snapshot và checkout/index chính giữ nguyên. Không chạy thêm ROS/Gazebo hoặc sinh dataset. Bằng chứng local tại `benchmark/generated/retired_perception_tools_cleanup_20261027/`.
+
+Bước tiếp theo: chốt bản đồ entrypoint còn lại của chuỗi perception/WM, rà các helper ở dataset/early-avoidance để phân biệt consumer thật với provenance đã freeze; chỉ tiếp tục xoá khi không phá API hoặc quy trình bảo toàn. Ca nhóm đứng lệch đích vẫn là công việc hành vi riêng, chưa đổi controller/ngưỡng.

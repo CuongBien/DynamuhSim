@@ -6,7 +6,7 @@ Bản cuối là candidate05; candidate01–04 chưa đạt được giữ đủ
 
 ## Cách chạy
 
-Offline cần Python 3.12 + NumPy/SciPy; preview cần Matplotlib. Wrapper giới hạn BLAS/OMP/MKL một luồng. Dùng output mới; không ghi đè dữ liệu cũ.
+Offline cần Python 3.12 + NumPy/SciPy. Wrapper giới hạn BLAS/OMP/MKL một luồng. Dùng output mới; không ghi đè dữ liệu cũ.
 
 ```bash
 TASK=experiments/social_navigation/benchmark/depth_identity_guard
@@ -44,7 +44,7 @@ bash "$TASK/run.sh" evaluate --frozen "$TASK/reports/final_with_seed44.json" --d
 bash "$TASK/run.sh" audit --output "$TASK/generated/my_audit"
 ```
 
-Audit/preview/diagnose dùng các path artifact đã đo của stage này. Báo cáo nhỏ, code và media được commit; raw MCAP, NPY, JSONL lớn ở generated bị Gitignore và vẫn chỉ nằm local.
+Audit dùng các path artifact đã đo của stage này. Báo cáo nhỏ, code và media được commit; raw MCAP, NPY, JSONL lớn ở generated bị Gitignore và vẫn chỉ nằm local.
 
 ## Schema quan sát chưa rõ ID
 
@@ -53,3 +53,5 @@ Mỗi cụm depth có một proposal_index. Nếu ghép mơ hồ: track_id=−1,
 Không nhầm identity_observed/confirmed với semantic person hoặc association GT dùng train. Các mask semantic/association/H1–H5/training vẫn false. GT chỉ ở evaluator/plot. Mốc nghiệm thu identity-safety của stage này yêu cầu giữ ≥95% paired rows so với parent, zero short-gap GT-pair changes, không tăng fragmentation và không có known-wrong dormant re-ID. **Gate đầy đủ cũ yêu cầu giảm fragmentation vẫn báo riêng**, không đổi FAIL thành PASS.
 
 Trên seed44, cả parent và guard đều không đổi pairing và có cùng fragmentation 7, paired rows 2587: kiểm không suy giảm, chưa chứng minh guard cải thiện trên seed này. Navigation nguồn vẫn TIMEOUT, goal còn 4.012 m. Bước kế cần kiểm nhãn visibility/person instance và semantic association trước batch/train; giữ HuNavSim test cuối. Lỗi điều hướng là việc riêng chưa sửa trong lượt này.
+
+Cập nhật dọn 27/10/2026: đã gỡ các công cụ chỉ phục vụ cohort/report cũ: `diagnose_case.py`, `finalize_reports.py`, `preview.py`. [Code trước khi gỡ](https://github.com/CuongBien/DynamuhSim/tree/87b0c6eea9b54794db7b4cb794fae57c78f11c70/experiments/social_navigation/benchmark/depth_identity_guard) giữ cách tái lập; report, engine, source freeze và outcome cũ không đổi.

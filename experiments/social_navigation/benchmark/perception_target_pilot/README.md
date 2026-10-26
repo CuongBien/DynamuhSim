@@ -34,3 +34,5 @@ Vùng unknown=-1 phải mask loss; slot/timestep thiếu quan sát được zero
 BEV tương lai của pilot dùng **+0.5/+1/+3 giây**, trong khung robot cố định tại anchor, chỉ chiếm dụng thực quan sát từ depth. GT ego pose chỉ dùng để dựng LABEL. BEV input dùng odom nhân quả và vẫn có sai số ước lượng; không dùng GT để chỉnh input. Không tạo bản đồ toàn cảnh, vùng khuất, social cost hoặc nhãn H1–H5.
 
 Bước kế: kiểm chứng detector chỉ từ depth phân biệt người/vật thể, đánh giá occlusion và đứt ID trên episode độc lập. Chỉ mở association sau khi có bằng chứng đủ; giữ HuNavSim cho test cuối, chưa train hoặc thu batch.
+
+Cập nhật dọn 27/10/2026: đã gỡ các công cụ chỉ phục vụ cohort/report cũ: `preview.py`. [Code trước khi gỡ](https://github.com/CuongBien/DynamuhSim/tree/87b0c6eea9b54794db7b4cb794fae57c78f11c70/experiments/social_navigation/benchmark/perception_target_pilot) giữ cách tái lập; report, engine, source freeze và outcome cũ không đổi.

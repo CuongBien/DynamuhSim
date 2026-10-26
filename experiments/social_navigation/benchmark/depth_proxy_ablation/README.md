@@ -35,17 +35,14 @@ bash "$TASK/run.sh" audit --capture "$TASK/generated/accepted_static02" --report
 bash "$TASK/run.sh" analyze --capture "$TASK/generated/accepted_static02" --output "$TASK/generated/reanalysis01"
 ```
 
-To recreate the explicit local evidence assembly (new destination required):
+The historical scene assembly is complete; its recreation helper has been retired from HEAD. Use the pinned source version below to reproduce that exact assembly.
 
-```bash
-bash "$TASK/run.sh" assemble --output "$TASK/generated/accepted_copy01" \
-  --scene 1="$TASK/generated/runs/run06" --scene 2="$TASK/generated/runs/run07"
-```
-
-Assembly validates core physical/acceptance protocol, source/plugin hashes, poses, all three conditions, clean exits and cleanup, then byte-copies and records provenance. Raw run06 and run07 were incomplete runs; only the named complete scenes are accepted. The Git report includes exact representative float32 depth arrays, metrics, attempts, provenance and hashes; large full arrays remain ignored locally.
+The recorded assembly validated core physical/acceptance protocol, source/plugin hashes, poses, all three conditions, clean exits and cleanup, then byte-copies and records provenance. Raw run06 and run07 were incomplete runs; only the named complete scenes are accepted. The Git report includes exact representative float32 depth arrays, metrics, attempts, provenance and hashes; large full arrays remain ignored locally.
 
 ## Interpretation
 
 Camera heights12/40cm above the floor are comparison variants, not selected defaults. Actors are frozen at recorded standing-group coordinates with the original walk mesh animation at frame0. This tests geometry, not conversation animation or behavior. More visible BEV free area does not establish safe navigation. LiDAR/collision still use a conservative cylinder, while depth sees mesh gaps: this mismatch must remain explicit in data metadata.
 
 Before integration: diagnose the repeatable third-scene shutdown failure and pass the empty-front-view control; then run one isolated moving robot/human sensor pilot and verify per-frame restoration, synchronization and cleanup. Do not launch a new simulator matrix or a training batch from these two static scenes.
+
+Cập nhật dọn 27/10/2026: đã gỡ các công cụ chỉ phục vụ cohort/report cũ: `assemble.py`. [Code trước khi gỡ](https://github.com/CuongBien/DynamuhSim/tree/87b0c6eea9b54794db7b4cb794fae57c78f11c70/experiments/social_navigation/benchmark/depth_proxy_ablation) giữ cách tái lập; report, engine, source freeze và outcome cũ không đổi.

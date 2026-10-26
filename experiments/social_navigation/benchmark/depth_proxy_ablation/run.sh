@@ -9,7 +9,6 @@ case "$TASK_MODE" in
  live) exec python3 "$TASK_DIR/capture.py" "$@" ;;
  analyze) exec python3 "$TASK_DIR/analyze.py" "$@" ;;
  audit) exec python3 "$TASK_DIR/audit.py" "$@" ;;
- assemble) exec python3 "$TASK_DIR/assemble.py" "$@" ;;
  test) exec python3 "$TASK_DIR/test_fixture.py" "$@" ;;
- *) echo 'Usage: bash run.sh {build|live|assemble|analyze|audit|test} [arguments]' ;;
+ *) echo 'Usage: bash run.sh {build|live|analyze|audit|test} [arguments]' >&2; exit 2;;
 esac
