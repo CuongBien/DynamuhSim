@@ -107,3 +107,23 @@ Gỡ trọn chuỗi runner/analyzer/plot/validator cùng native-score, raycast v
 273 hash nguồn của năm lượt E2E trước, gồm 70 file riêng biệt, vẫn khớp; 1.814 control/model/snapshot và checkout/index chính giữ nguyên. Bằng chứng local tại `benchmark/generated/retired_localization_cleanup_20261026/`. Chưa chạy thêm physics hoặc chỉnh controller/ngưỡng trong đợt này.
 
 Bước dọn tiếp theo: kiểm tra runner/probe contract và geometry ComplexityNav cùng các offline replay đã đóng; giữ kernel/roadmap/input mà worker hiện tại còn dùng. Điều tra hành vi ca nhóm đứng vẫn là việc riêng sau phần dọn.
+
+## Gỡ contract/geometry/replay và pilot ComplexityNav cũ
+
+Đối chiếu lịch sử nhánh benchmark đã push tại `9833565` và consumer/gate hiện hành, đã **xoá 24 file, 1.554 dòng code/build**:
+
+| Stage / commit gốc | File bị xoá | Phần giữ lại |
+|---|---:|---|
+| `complexitynav_contract` / `b0b3c33` | 3 | Contract kernel còn được preflight dựng dependency |
+| `complexitynav_geometry` / `be816c3` | 3 | Geometry kernel và roadmap còn được worker dùng |
+| `complexitynav_gazebo` / `c9dffe2` | 9 | Fixture lịch sử và README; runtime mới dùng worker/adapter chung |
+| `human_response_replay` / `b3f59e2` | 5 | README chỉ tới source/report gốc |
+| `common_response` / `ff79dbf` | 4 | Model worker, preflight, toàn bộ locked inputs/image pins |
+
+Gỡ cả preflight/harness Gazebo pilot cũ vì preflight đó kiểm hash probe geometry đã hết consumer; không bỏ hoặc nới gate của shared Nav2 hiện tại. Các README dẫn tới code trước khi gỡ tại `f3e5481` và commit gốc. Các generator input/cohort analyzer bị gỡ khỏi HEAD; tái lập lịch sử dùng source revision/manifest của cohort. Không thay input, native dt, thuật toán, mô hình hay outcome cũ.
+
+**Kiểm chứng:** 278 test đạt (179 root, 13 scenario, 75 runner, 11 production); 28 CLI đạt với ROS init/subprocess bị chặn; current preflight đạt. Mười probe worker thật gồm SocNavGym venv và sáu probe trong image CrowdSimPlus/ComplexityNav đã pin: 65 IPC replies, valid pose/ID/time, start-gate giữ nguyên trạng thái và injected fault terminal đều đạt; mọi worker thoát 0 và container thuộc probe được dọn. Đây là smoke prefix CPU, không phải phép đo success rate hoặc physics Gazebo.
+
+273 hash nguồn của năm lượt E2E trước, gồm 70 file riêng biệt, vẫn khớp. Các kernel/roadmap/model-worker/preflight và locked inputs giữ nguyên byte; 1.814 control/model/snapshot và checkout/index chính không đổi. Không mở ROS/Gazebo, train model hoặc sinh dataset trong các probe mới. Bằng chứng local tại `benchmark/generated/retired_contract_replay_cleanup_20261026/`.
+
+Bước dọn tiếp theo: rà nhóm runner matrix/analyzer của các vòng đánh giá ban đầu `round2`/`round3` và các script đánh giá gốc; giữ recipe/entrypoint build image và adapter còn dùng. Điều tra hành vi ca nhóm đứng vẫn là việc riêng chưa chỉnh controller/ngưỡng.
