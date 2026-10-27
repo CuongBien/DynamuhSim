@@ -55,6 +55,32 @@ class ArtifactTests(unittest.TestCase):
             self.assertEqual(receipt["verified_links"], 1)
             with self.assertRaises(FileExistsError): restore(store, first["object_id"], output)
 
+    def test_restore_preserves_empty_directories_and_internal_directory_links(self):
+        with tempfile.TemporaryDirectory() as directory:
+            repo, run, store = self.fixture(directory)
+            (run / "runtime/empty").mkdir(mode=0o750)
+            (run / "runtime/empty_link").symlink_to("empty", target_is_directory=True)
+            (run / "episode/unused/nested").mkdir(parents=True)
+            manifest = pack_capture(run, repo, store)
+            output = Path(directory) / "restored"
+            restore(store, manifest["object_id"], output)
+            self.assertTrue((output / "run/runtime/empty_link").is_dir())
+            self.assertEqual((output / "run/runtime/empty").stat().st_mode & 0o777, 0o750)
+            self.assertTrue((output / "run/episode/unused/nested").is_dir())
+            self.assertEqual(evict_raw(store, manifest["object_id"], run, repo)["state"], "evicted")
+
+    def test_legacy_file_only_bundle_still_restores_and_evicts(self):
+        with tempfile.TemporaryDirectory() as directory:
+            repo, run, store = self.fixture(directory)
+            original_scan = storage._inventory
+            def legacy_scan(path, **kwargs):
+                entries, paths = original_scan(path)
+                return {name: row for name, row in entries.items() if row["type"] != "directory"}, paths
+            with patch.object(storage, "_inventory", side_effect=legacy_scan):
+                manifest = pack_capture(run, repo, store)
+            restore(store, manifest["object_id"], Path(directory) / "restored")
+            self.assertEqual(evict_raw(store, manifest["object_id"], run, repo)["state"], "evicted")
+
     def test_corrupt_archive_is_rejected_before_restore_creates_output(self):
         with tempfile.TemporaryDirectory() as directory:
             repo, run, store = self.fixture(directory)
@@ -127,11 +153,11 @@ class ArtifactTests(unittest.TestCase):
             repo, run, store = self.fixture(directory)
             original_scan = storage._inventory
             calls = []
-            def scan(path):
+            def scan(path, **kwargs):
                 calls.append(True)
                 if len(calls) == 2:
                     (run / "episode/paired_depth/off/1.npy").write_bytes(b"writer changed file")
-                return original_scan(path)
+                return original_scan(path, **kwargs)
             with patch.object(storage, "_inventory", side_effect=scan):
                 with self.assertRaisesRegex(RuntimeError, "changed during packing"):
                     pack_capture(run, repo, store)

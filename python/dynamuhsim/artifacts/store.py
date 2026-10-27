@@ -37,7 +37,7 @@ def _link_target(name, target):
     return combined
 
 
-def _inventory(run):
+def _inventory(run, *, include_directories=False):
     entries, paths = {}, {}
     for base, directories, files in os.walk(run, followlinks=False):
         for item in sorted(directories + files):
@@ -53,7 +53,10 @@ def _inventory(run):
             elif path.is_file():
                 entries[name] = dict(type="file", bytes=path.stat().st_size, sha256=sha256_file(path), mode=path.stat().st_mode & 0o777)
                 paths[name] = path
-            elif not path.is_dir():
+            elif path.is_dir():
+                if include_directories:
+                    entries[name] = dict(type="directory", mode=path.stat().st_mode & 0o777)
+            else:
                 raise ValueError("Unsupported capture member: " + name)
     return entries, paths
 
@@ -84,7 +87,7 @@ def pack_capture(run, repo, store, *, source_roots=()):
     sources, missing = resolve_sources(result["source_sha256"], [repo, *source_roots], git_repo=repo, commit=result["head"])
     if missing:
         raise FileNotFoundError("Cannot archive incomplete provenance: " + ", ".join(missing))
-    entries, paths = _inventory(run)
+    entries, paths = _inventory(run, include_directories=True)
     blobs = {}
     for name, value in sources.items():
         member = "source/" + name
@@ -110,7 +113,10 @@ def pack_capture(run, repo, store, *, source_roots=()):
                     member = tarfile.TarInfo(name)
                     member.mtime = member.uid = member.gid = 0
                     member.uname = member.gname = ""
-                    if record["type"] == "symlink":
+                    if record["type"] == "directory":
+                        member.type, member.mode = tarfile.DIRTYPE, record["mode"]
+                        archive.addfile(member)
+                    elif record["type"] == "symlink":
                         member.type, member.linkname, member.mode = tarfile.SYMTYPE, record["target"], 0o777
                         archive.addfile(member)
                     else:
@@ -120,7 +126,7 @@ def pack_capture(run, repo, store, *, source_roots=()):
                         else:
                             with paths[name].open("rb") as stream:
                                 archive.addfile(member, stream)
-        after, _ = _inventory(run)
+        after, _ = _inventory(run, include_directories=True)
         if after != {name: row for name, row in entries.items() if name.startswith("run/")}:
             raise RuntimeError("Capture changed during packing; original retained")
         object_id = sha256_file(temporary)
@@ -170,6 +176,10 @@ def _verify_archive(path, manifest, object_id):
                 if not member.issym() or member.linkname != record["target"]:
                     raise ValueError("Symlink manifest mismatch")
                 continue
+            if record["type"] == "directory":
+                if not name.startswith("run/") or not member.isdir() or member.mode != record["mode"] or member.mode & ~0o777:
+                    raise ValueError("Directory manifest mismatch")
+                continue
             if record["type"] != "file" or not member.isfile() or member.size != record["bytes"] or member.mode != record["mode"] or member.mode & ~0o777:
                 raise ValueError("Artifact member type/size/mode failed")
             digest = hashlib.sha256()
@@ -202,12 +212,16 @@ def restore(store, object_id, output):
     if output == store or output.is_relative_to(store) or store.is_relative_to(output):
         raise ValueError("Restore destination must be separate from store")
     output.mkdir(parents=True, exist_ok=False)
-    links = []
+    links, directories = [], []
     with tarfile.open(store / "objects" / (object_id + ".tar.gz"), "r|gz") as archive:
         for member in archive:
             target = output / member.name
             target.resolve().relative_to(output)
             target.parent.mkdir(parents=True, exist_ok=True)
+            if member.isdir():
+                target.mkdir(exist_ok=True)
+                directories.append((target, member.mode))
+                continue
             if member.issym():
                 links.append((target, member.linkname))
                 continue
@@ -225,6 +239,8 @@ def restore(store, object_id, output):
         target.symlink_to(link)
         if not target.exists():
             raise ValueError("Restored internal symlink target missing")
+    for target, mode in sorted(directories, key=lambda item: len(item[0].parts), reverse=True):
+        target.chmod(mode)
     receipt = dict(schema="dynamuhsim_artifact_restore/1", object_id=object_id, output=str(output),
                    verified_files=sum(row["type"] == "file" for row in manifest["entries"].values()),
                    verified_links=sum(row["type"] == "symlink" for row in manifest["entries"].values()))
@@ -277,7 +293,8 @@ def evict_raw(store, object_id, run, repo):
             raise ValueError("Eviction source missing or symlinked")
         if path.exists() and (sha256_file(path) != record["sha256"] or subprocess.run(["git", "-C", str(repo), "check-ignore", "--quiet", str(path)]).returncode != 0):
             raise ValueError("Raw payload changed or is not ignored: " + name)
-    current, _ = _inventory(run)
+    # Older bundles omitted directories; compare using their original inventory format.
+    current, _ = _inventory(run, include_directories=any(row["type"] == "directory" for row in manifest["entries"].values()))
     current.pop("run/artifact_ref.json", None)
     expected_run = {name: row for name, row in manifest["entries"].items() if name.startswith("run/")}
     allowed_missing = {"run/" + name for name in selected} if prior is not None else set()

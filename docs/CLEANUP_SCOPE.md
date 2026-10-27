@@ -21,7 +21,7 @@ import script bị xoá. Source lịch sử vẫn ở
 [revision đã ghim](https://github.com/CuongBien/DynamuhSim/tree/82870eea0e351427c25f6764b4c1bc2f145e676e/experiments). Báo cáo, figures, labels, split,
 model, test seal và các outcome đã ghi giữ nguyên byte.
 
-Toàn nhánh so với `test/gazebo-harmonic-benchmark` tại `9833565`: source project
+Tại commit `f856a36`, toàn nhánh so với `test/gazebo-harmonic-benchmark` ở `9833565`: source project
 **+9.619 / −30.223, giảm ròng 20.604 dòng**. Phạm vi này loại data/config/media,
 source copy đã freeze trong report/result/control bundles, vendor và gitlinks.
 

@@ -303,3 +303,19 @@ started in this batch. Source reduction over `9833565` is 20,604 lines net,
 excluding data/media/config, frozen copies, vendor and gitlinks. This closes
 the obsolete-code cleanup scope; remaining intentional code is listed above.
 Evidence: `benchmark/generated/global_cleanup_audit_20261027/`.
+
+
+## 2026-10-27 — integration review and artifact directory regression
+
+[Review report](CLEANUP_BRANCH_REVIEW_2026-10-27.md). A reproduced pack-success /
+restore-failure for internal links to empty directories is fixed by preserving
+explicit directory entries and restoring permissions after children. Old bundles
+without directory entries retain their original eviction comparison format.
+Two new regressions cover directory/link/permission round trip and old bundles.
+280 current tests pass (181 + 13 + 75 + 11); the new regression failed before
+repair. All 1,814 protected hashes and the primary status/index/patch remain
+unchanged. Committed benchmark is an ancestor; merge-tree has no conflicts.
+The dirty primary checkout is not integrated: 16 overlapping tracked paths have
+different content; 942 overlap paths already match. No simulator/build rerun,
+training or historical outcome rewrite. Local evidence:
+`benchmark/generated/final_branch_review_20261027/`.
