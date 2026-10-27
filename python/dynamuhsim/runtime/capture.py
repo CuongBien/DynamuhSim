@@ -11,7 +11,7 @@ from dynamuhsim.analysis.evidence import sha256_file
 from .nav2_trial import source_files
 from .profiles import PROFILES
 from .shutdown import stop_paused
-from dynamuhsim.simulation.capture import prepare_camera, apply_nav2_treatment, config_changes
+from dynamuhsim.simulation.capture import prepare_camera, apply_nav2_treatment, config_changes, nav2_parameter_contract
 
 CAMERA_SHA256 = "14c15412664eb37dd2f0fb2d61a79b09f98722f204f97d97212f0ec814ad3d9f"
 
@@ -27,9 +27,9 @@ def dump(path, value):
 def validate_config(config):
     expected = {"schema", "allowed_seeds", "sim_budget_s", "label_tail_s", "tail_wall_budget_s", "camera_sha256", "nav2"}
     version = config.get("schema")
-    if version == "dynamuhsim_capture_config/2":
+    if version in ["dynamuhsim_capture_config/2", "dynamuhsim_capture_config/3"]:
         expected.add("navigation")
-    if set(config) != expected or version not in ["dynamuhsim_capture_config/1", "dynamuhsim_capture_config/2"]:
+    if set(config) != expected or version not in ["dynamuhsim_capture_config/1", "dynamuhsim_capture_config/2", "dynamuhsim_capture_config/3"]:
         raise ValueError("Unsupported capture config schema or keys")
     if config["camera_sha256"] != CAMERA_SHA256:
         raise ValueError("Native camera/friction contract cannot change in config version1")
@@ -47,9 +47,13 @@ def validate_config(config):
     if nav != dict(robot_radius=.25, footprint_padding=.01, inflation_radius=.8, cost_scaling_factor=3.,
                    speed=dict(vx_max=.30, vx_min=-.15, vy_max=.20)):
         raise ValueError("Capture version1 retains the accepted moderate Nav2 treatment")
-    if version == "dynamuhsim_capture_config/2":
+    if version in ["dynamuhsim_capture_config/2", "dynamuhsim_capture_config/3"]:
         navigation = dict(goal_checker=dict(stateful=False, xy_goal_tolerance=.05, yaw_goal_tolerance=.15),
                           goal_critic_distance_m=.45)
+        if version == "dynamuhsim_capture_config/3":
+            navigation["scan"] = dict(inf_is_valid=True, obstacle_max_range=3.0, raytrace_max_range=3.5)
+            if type(config["navigation"].get("scan", {}).get("inf_is_valid")) is not bool:
+                raise ValueError("Capture version3 requires declared no-return scan clearing")
         if config["navigation"] != navigation or type(config["navigation"]["goal_checker"]["stateful"]) is not bool:
             raise ValueError("Capture version2 retains the declared precise-goal navigation treatment")
     return copy.deepcopy(config)
@@ -202,16 +206,7 @@ class CaptureContext:
 
 def capture_live_parameters(node, wait, treatment, navigation=None):
     from rclpy.parameter_client import AsyncParameterClient
-    expected = {"/controller_server": {"FollowPath." + key: value for key, value in treatment["speed"].items()}}
-    expected["/controller_server"]["FollowPath.CostCritic.consider_footprint"] = False
-    if navigation is not None:
-        expected["/controller_server"].update({"goal_checker." + key: value for key, value in navigation["goal_checker"].items()})
-        for critic in ["GoalCritic", "PathFollowCritic"]:
-            expected["/controller_server"]["FollowPath." + critic + ".threshold_to_consider"] = navigation["goal_critic_distance_m"]
-    for name in ["local_costmap", "global_costmap"]:
-        expected[f"/{name}/{name}"] = {"robot_radius": treatment["robot_radius"], "footprint_padding": treatment["footprint_padding"],
-                                      "inflation_layer.inflation_radius": treatment["inflation_radius"],
-                                      "inflation_layer.cost_scaling_factor": treatment["cost_scaling_factor"]}
+    expected = nav2_parameter_contract(treatment, navigation)
     observed = {}
     for remote, parameters in expected.items():
         client = AsyncParameterClient(node, remote)

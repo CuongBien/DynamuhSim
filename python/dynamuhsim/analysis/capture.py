@@ -58,14 +58,15 @@ def audit_capture(run, policy, *, source_roots=(), git_repo=None, read_bag=bag_m
     checks["label_tail_at_least3s"] = metrics["label_tail_s"] >= policy["minimum_tail_s"]
     expected_controller = {"FollowPath.vx_max": .3, "FollowPath.vx_min": -.15, "FollowPath.vy_max": .2, "FollowPath.CostCritic.consider_footprint": False}
     recipe_schema = r.get("capture_recipe_schema", "dynamuhsim_capture_config/1")
-    if recipe_schema == "dynamuhsim_capture_config/2":
+    if recipe_schema in ["dynamuhsim_capture_config/2", "dynamuhsim_capture_config/3"]:
         from dynamuhsim.runtime.capture import validate_config
         config = validate_config(load_json(run / "plan.json")["config"])
         checks["declared_navigation_recipe"] = config["schema"] == recipe_schema
-        navigation = config["navigation"]
-        expected_controller.update({"goal_checker." + name: value for name, value in navigation["goal_checker"].items()})
-        for critic in ["GoalCritic", "PathFollowCritic"]:
-            expected_controller["FollowPath." + critic + ".threshold_to_consider"] = navigation["goal_critic_distance_m"]
+        from dynamuhsim.simulation.capture import nav2_parameter_contract
+        expected_live = nav2_parameter_contract(config["nav2"], config["navigation"])
+        expected_controller = expected_live["/controller_server"]
+        if recipe_schema == "dynamuhsim_capture_config/3":
+            checks["live_navigation_parameters"] = r["live_parameters"] == expected_live
     elif recipe_schema != "dynamuhsim_capture_config/1":
         raise ValueError("Unsupported capture navigation recipe")
     checks["live_moderate_parameters"] = r["live_parameters"]["/controller_server"] == expected_controller

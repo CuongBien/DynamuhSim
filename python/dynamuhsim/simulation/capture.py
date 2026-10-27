@@ -55,6 +55,8 @@ def apply_nav2_treatment(config, treatment, *, navigation=None):
         params = result[name][name]["ros__parameters"]
         params.pop("footprint", None)
         params.update(robot_radius=treatment["robot_radius"], footprint_padding=treatment["footprint_padding"])
+        if navigation is not None and "scan" in navigation:
+            params["obstacle_layer"]["scan"].update(navigation["scan"])
         params["inflation_layer"].update(inflation_radius=treatment["inflation_radius"],
                                           cost_scaling_factor=treatment["cost_scaling_factor"])
     follow = result["controller_server"]["ros__parameters"]["FollowPath"]
@@ -77,3 +79,20 @@ def config_changes(before, after, prefix=""):
         elif a != b:
             changes.append(dict(path=path, before=a, after=b))
     return changes
+
+
+def nav2_parameter_contract(treatment, navigation=None):
+    """Expected live values for the declared capture treatment and scan policy."""
+    expected = {"/controller_server": {"FollowPath." + key: value for key, value in treatment["speed"].items()}}
+    expected["/controller_server"]["FollowPath.CostCritic.consider_footprint"] = False
+    if navigation is not None:
+        expected["/controller_server"].update({"goal_checker." + key: value for key, value in navigation["goal_checker"].items()})
+        for critic in ["GoalCritic", "PathFollowCritic"]:
+            expected["/controller_server"]["FollowPath." + critic + ".threshold_to_consider"] = navigation["goal_critic_distance_m"]
+    for name in ["local_costmap", "global_costmap"]:
+        expected[f"/{name}/{name}"] = {"robot_radius": treatment["robot_radius"], "footprint_padding": treatment["footprint_padding"],
+                                      "inflation_layer.inflation_radius": treatment["inflation_radius"],
+                                      "inflation_layer.cost_scaling_factor": treatment["cost_scaling_factor"]}
+        if navigation is not None and "scan" in navigation:
+            expected[f"/{name}/{name}"].update({"obstacle_layer.scan." + key: value for key, value in navigation["scan"].items()})
+    return expected

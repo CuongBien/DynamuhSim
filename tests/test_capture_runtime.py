@@ -110,6 +110,30 @@ class FixtureTests(unittest.TestCase):
             changed = copy.deepcopy(config); mutate(changed["navigation"])
             with self.assertRaises(ValueError): capture.validate_config(changed)
 
+    def test_v3_clears_departed_obstacles_without_marking_no_return_endpoints(self):
+        import yaml
+        config = json.loads((ROOT / "configs/capture/moderate_v3.json").read_text())
+        self.assertEqual(capture.validate_config(config), config)
+        base = yaml.safe_load((ROOT / "experiments/social_navigation/warehouse/nav2_warehouse.yaml").read_text())
+        v2 = json.loads((ROOT / "configs/capture/moderate_v2.json").read_text())
+        old = apply_nav2_treatment(base, v2["nav2"], navigation=v2["navigation"])
+        new = apply_nav2_treatment(base, config["nav2"], navigation=config["navigation"])
+        expected = {"/" + name + "/" + name + "/ros__parameters/obstacle_layer/scan/" + key
+                    for name in ["local_costmap", "global_costmap"] for key in ["inf_is_valid", "obstacle_max_range"]}
+        self.assertEqual({c["path"] for c in config_changes(old, new)}, expected)
+        contract = capture.nav2_parameter_contract(config["nav2"], config["navigation"])
+        for name in ["local_costmap", "global_costmap"]:
+            scan = new[name][name]["ros__parameters"]["obstacle_layer"]["scan"]
+            self.assertTrue(scan["clearing"] and scan["marking"] and scan["inf_is_valid"])
+            self.assertLess(scan["obstacle_max_range"], scan["raytrace_max_range"] - .0001)
+            for key, value in config["navigation"]["scan"].items():
+                self.assertEqual(contract[f"/{name}/{name}"]["obstacle_layer.scan." + key], value)
+        for mutate in [lambda n: n["scan"].update(inf_is_valid=False),
+                       lambda n: n["scan"].update(inf_is_valid=1),
+                       lambda n: n["scan"].update(obstacle_max_range=3.5)]:
+            changed = copy.deepcopy(config); mutate(changed["navigation"])
+            with self.assertRaises(ValueError): capture.validate_config(changed)
+
     def test_config_rejects_oracle_or_silent_camera_or_controller_changes(self):
         config = json.loads((ROOT / "configs/capture/moderate.json").read_text())
         self.assertEqual(capture.validate_config(config), config)

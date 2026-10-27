@@ -1,12 +1,13 @@
 # Capture cho lượt chạy mới
 
-**Recipe mặc định v2:** `configs/capture/moderate_v2.json` giữ camera, footprint,
+**Recipe mặc định v3:** `configs/capture/moderate_v3.json` giữ camera, footprint,
 speed, budget 90s và tail 3,2s của v1. Goal checker kiểm XY/yaw đồng thời với
-tolerance nội bộ 0,05m/0,15rad; GoalCritic và PathFollowCritic chuyển chế độ ở
-0,45m, bằng horizon 30×0,05s×0,30m/s. Ngưỡng nghiệm thu tọa độ thật vẫn
-0,20m/0,25rad. Không đưa GT vào controller. V1 giữ nguyên ở
-`configs/capture/moderate.json`, chọn rõ bằng `--config` khi cần tái lập.
-
+tolerance nội bộ 0,05m/0,15rad; GoalCritic và PathFollowCritic chuyển ở 0,45m.
+Cả hai costmap nhận tia LiDAR +Inf để xoá vật cản đã đi; ghi vật cản trong 3,0m,
+xoá tới 3,5m để đầu tia không bị ghi thành vòng vật cản giả. Mọi tham số được
+đối chiếu live. Ngưỡng nghiệm thu tọa độ thật vẫn 0,20m/0,25rad; GT không đi vào
+controller. V1 và v2 giữ nguyên để tái lập; v2 là candidate chưa đạt seed45,
+không phải recipe được nghiệm thu. Chọn rõ bằng `--config` khi cần tái lập.
 
 Entry point chuẩn: `tools/capture_episode.py`. Camera/world/config/recorder là API trong package `python/dynamuhsim/`, cùng runner Nav2 đã dùng cho ba pilot. Không sinh Python driver, không thực thi code trong reports và không sửa source bằng thay chuỗi khi chạy.
 

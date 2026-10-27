@@ -16,7 +16,7 @@ def main(argv=None):
     commands = parser.add_subparsers(dest="mode", required=True)
     prepare = commands.add_parser("prepare", help="Create a NEW run/config/source freeze; never overwrite")
     prepare.add_argument("--run-dir", type=Path, required=True)
-    prepare.add_argument("--config", type=Path, default=ROOT / "configs/capture/moderate_v2.json")
+    prepare.add_argument("--config", type=Path, default=ROOT / "configs/capture/moderate_v3.json")
     prepare.add_argument("--scenario", choices=["standing", "walking"], required=True)
     prepare.add_argument("--seed", type=int, required=True)
     prepare.add_argument("--gui", action="store_true")

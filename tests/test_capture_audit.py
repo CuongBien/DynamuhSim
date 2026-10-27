@@ -85,6 +85,23 @@ class CaptureAuditTests(unittest.TestCase):
             controller["goal_checker.stateful"] = True; dump_json(run / "episode/result.json", result)
             self.assertFalse(audit_capture(run, policy, source_roots=[root], read_bag=messages)["checks"]["live_moderate_parameters"])
 
+    def test_v3_audit_rejects_disabled_or_incomplete_live_scan_clearing(self):
+        from dynamuhsim.simulation.capture import nav2_parameter_contract
+        with tempfile.TemporaryDirectory() as directory:
+            root, run, policy, messages = self.fixture(directory)
+            config = json.loads((ROOT / "configs/capture/moderate_v3.json").read_text())
+            dump_json(run / "plan.json", dict(config=config))
+            result = json.loads((run / "episode/result.json").read_text())
+            result["capture_recipe_schema"] = config["schema"]
+            result["live_parameters"] = nav2_parameter_contract(config["nav2"], config["navigation"])
+            dump_json(run / "episode/result.json", result)
+            self.assertTrue(audit_capture(run, policy, source_roots=[root], read_bag=messages)["checks"]["live_navigation_parameters"])
+            for remote in ["/local_costmap/local_costmap", "/global_costmap/global_costmap"]:
+                result["live_parameters"][remote]["obstacle_layer.scan.inf_is_valid"] = False
+                dump_json(run / "episode/result.json", result)
+                self.assertFalse(audit_capture(run, policy, source_roots=[root], read_bag=messages)["checks"]["live_navigation_parameters"])
+                result["live_parameters"][remote]["obstacle_layer.scan.inf_is_valid"] = True
+
     def test_integrity_pass_does_not_turn_timeout_into_success(self):
         with tempfile.TemporaryDirectory() as directory:
             root, run, policy, messages = self.fixture(directory)
