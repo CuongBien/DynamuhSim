@@ -9,6 +9,12 @@ xoá tới 3,5m để đầu tia không bị ghi thành vòng vật cản giả.
 controller. V1 và v2 giữ nguyên để tái lập; v2 là candidate chưa đạt seed45,
 không phải recipe được nghiệm thu. Chọn rõ bằng `--config` khi cần tái lập.
 
+Bản v3 đã kiểm chứng Gazebo cho standing/walking seed45 và46: 4/4 đạt
+ngưỡng tọa độ thật; 8/8 audit dữ liệu/đích đạt. Chi tiết các lượt candidate
+thất bại, số đo cuối và giới hạn độ phủ ảnh nằm trong
+[`navigation_goal_fix_2026-10-28.json`](verification/navigation_goal_fix_2026-10-28.json).
+Các seed47–49 chưa được chạy lại trong đợt này.
+
 Entry point chuẩn: `tools/capture_episode.py`. Camera/world/config/recorder là API trong package `python/dynamuhsim/`, cùng runner Nav2 đã dùng cho ba pilot. Không sinh Python driver, không thực thi code trong reports và không sửa source bằng thay chuỗi khi chạy.
 
 ## Ranh giới
