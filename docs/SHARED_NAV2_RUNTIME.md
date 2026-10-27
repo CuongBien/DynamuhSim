@@ -144,3 +144,12 @@ Kết quả nhóm khác giữa hai lượt không chứng minh sửa shutdown l�
 Raw JSONL, launch/worker logs, GIF quay trực tiếp và scripts test được giữ trong `experiments/social_navigation/benchmark/generated/native_smoke_20261024/` tại worktree test. Chỉ biên bản gọn được commit, không đưa raw media/dataset mới vào Git. Vendor/venv là dependency ngoài Git; hai symlink tạm trong worktree đã được gỡ sau test, mapping và hash nằm trong raw evidence. Trạng thái/index của checkout chính được đối chiếu không đổi.
 
 Giới hạn: mỗi cấu hình có một ca đo chính; chưa chạy A/B native runner cũ/mới, chưa đo success rate hoặc xếp hạng backend, và chưa chạy GUI thật. Nhánh shutdown mới kiểm tra Docker qua worker-fault; hai ca Docker bình thường ở bảng là bằng chứng tại `61667d8`. Chưa thay fixture/capture/frozen manifests hoặc nhãn/dataset. Bước kế tiếp là chuyển pipeline capture/fixture sang API/config rõ ràng, dựng freeze mới cho lượt mới và giữ bằng chứng lịch sử.
+
+
+## Pilot ghi vận tốc trước Nav2
+
+`common_gazebo/verify_live.py` và `socnavgym_response_fix/verify_live.py` dùng
+chung `python/dynamuhsim/runtime/velocity_trial.py`, giữ CLI/runtime/plugin riêng.
+Đây là robot nhận velocity script, không chạy Nav2 action. Common giữ lỗi
+baseline; Response giữ zero command/Pause, fault injection và một lần thử Play.
+Provenance mới ghim cả entrypoint, runner chung và loader; report cũ giữ nguyên.

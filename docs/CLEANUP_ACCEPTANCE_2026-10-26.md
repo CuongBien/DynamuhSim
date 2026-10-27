@@ -247,3 +247,21 @@ comparison to the stored validations differs only in the isolated checkpoint's
 a clean 30-module wheel and standing45/walking45 prepare/verify pass.
 No new simulator run or policy/tolerance change. Local evidence:
 `benchmark/generated/shared_nav2_analysis_cleanup_20261027/`.
+
+
+## 2026-10-27 — share bounded velocity-pilot recording
+
+Two `verify_live.py` implementations now use `runtime/velocity_trial.py`:
+281 lines become 174 shared + 16 wrapper lines (net -91 implementation).
+Common's fault outcome and Response's zero/Pause/injected-fault behavior stay
+separate. Publisher/socket availability is explicit local state; failed
+interlock checks retain their partial diagnostic receipt before raising.
+46 before/after callback/watchdog/cleanup/CLI cases and all 12 original
+assertions match. Four final source-bound Gazebo probes pass: Common/CSP and
+Response/Soc normal 3s recording, plus worker error/disconnect at 2.5025s.
+Both faults hold clock, permit one 0.0025s tick on Play, then re-pause; all
+four servers, processes and containers cleanly exit. Earlier development
+captures/source snapshots remain separate ignored evidence, not a benchmark.
+278 suite tests, focused final receipt tests, five replay/friction/failure
+regressions, 33 CLI, a fresh 31-module wheel and prepare/verify pass. No robot
+controller/native policy change. Evidence: `benchmark/generated/shared_velocity_runtime_cleanup_20261027/`.
