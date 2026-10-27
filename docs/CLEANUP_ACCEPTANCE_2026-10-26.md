@@ -228,3 +228,22 @@ regressions; 28 CLI probes; ten native worker probes including six Docker,
 imports pass. New standing45/walking45 capture prepare/verify both pass;
 no simulator, training, dataset regeneration or historical receipt rewrite.
 Local evidence: `benchmark/generated/retired_nav2_reporting_cleanup_20261027/`.
+
+
+## 2026-10-27 — share the three Nav2 analyzers
+
+The individual/container/group analyzers now delegate to `analysis/nav2.py`:
+410 implementation lines become 191 shared + 30 wrapper lines (net -189).
+Profile-specific fields, container cleanup, dt, path acceptance and group
+reaction/coverage remain separate. All 111 assertions and their loop/branch
+contexts match the originals after selecting each profile.
+Five existing E2E recordings were audited offline in isolated replay roots,
+using their original source hashes (missing historical reporting source came
+from the recorded Git revision). Original result/raw/validation stayed intact.
+All five new validation JSONs and gzip artifacts match before/after by SHA256;
+comparison to the stored validations differs only in the isolated checkpoint's
+`preserved_old_files` count. The failed physical group goal remains failed.
+276 current tests + five native replay/failure/friction tests, 31 CLI probes,
+a clean 30-module wheel and standing45/walking45 prepare/verify pass.
+No new simulator run or policy/tolerance change. Local evidence:
+`benchmark/generated/shared_nav2_analysis_cleanup_20261027/`.

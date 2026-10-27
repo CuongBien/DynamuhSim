@@ -1,5 +1,4 @@
 """Regression contracts from the pushed pilots; no simulator or ROS process is started."""
-import ast
 import copy
 import importlib.util
 import json
@@ -84,6 +83,7 @@ class ProfileTests(unittest.TestCase):
             sources = source_files(ROOT, profile, entry)
             self.assertIn(ROOT / "python/dynamuhsim/runtime/navigation.py", sources)
             self.assertIn(ROOT / "python/dynamuhsim/runtime/nav2_trial.py", sources)
+            self.assertIn(ROOT / "python/dynamuhsim/analysis/nav2.py", sources)
             self.assertIn(ROOT / "python/dynamuhsim/simulation/warehouse.py", sources)
             self.assertIn(BENCH / "common_gazebo/worker.py", sources)
             self.assertIn(entry, sources)
@@ -140,26 +140,44 @@ class ConfigurationTests(unittest.TestCase):
 
 class TelemetryTests(unittest.TestCase):
     def test_goal_audit_uses_recorded_sample_before_teardown_tail(self):
-        source = BENCH / "socnavgym_nav2_pilot/analyze.py"
-        body = ast.parse(source.read_text()).body
-        def assigns(node, name):
-            return isinstance(node, ast.Assign) and any(isinstance(t, ast.Name) and t.id == name for t in node.targets)
-        first = next(i for i, node in enumerate(body) if assigns(node, "matches"))
-        last = next(i for i, node in enumerate(body) if assigns(node, "commands"))
-        code = compile(ast.Module(body=body[first:last], type_ignores=[]), str(source), "exec")
+        from dynamuhsim.analysis.nav2 import goal_sample
         for distance in (.12, .21):
             point = dict(x=-20.-distance, y=0., yaw=.1)
             result = dict(final_world_pose=point, action_status=4, goal_xy_error_world_m=abs(point["x"]+20.),
                           goal_yaw_error_world_rad=.1, actual_goal_reached=distance <= .20)
             complete = [dict(time=1., phase="active", poses={"mecanum_robot": point}),
                         dict(time=2., phase="finished", poses={"mecanum_robot": dict(x=-19.4, y=0., yaw=.4)})]
-            ns = dict(complete=complete, result=result, plan=dict(goal=[-20., 0., 0.]), math=math, path=2.)
-            exec(code, ns)
-            self.assertEqual(ns["final_sample"]["time"], 1.)
-            self.assertEqual(ns["actual_reached"], distance <= .20)
-            ns["complete"] = complete[1:]
+            final, _, _, reached = goal_sample(complete, result, [-20., 0., 0.])
+            self.assertEqual(final['time'], 1.)
+            self.assertEqual(reached, distance <= .20)
             with self.assertRaisesRegex(AssertionError, "Recorded goal pose not found"):
-                exec(code, ns)
+                goal_sample(complete[1:], result, [-20., 0., 0.])
+
+    def test_goal_audit_keeps_action_distance_and_heading_as_separate_requirements(self):
+        from dynamuhsim.analysis.nav2 import goal_sample
+        for status, x, yaw, expected in [(4,.20,.25,True),(4,.200001,0.,False),
+                                        (4,0.,.250001,False),(6,.1,0.,False),(5,.1,0.,False)]:
+            with self.subTest(status=status,x=x,yaw=yaw):
+                pose=dict(x=x,y=0.,yaw=yaw)
+                result=dict(final_world_pose=pose,action_status=status,goal_xy_error_world_m=x,
+                            goal_yaw_error_world_rad=yaw,actual_goal_reached=expected)
+                rows=[dict(time=1.,phase='active',poses={'mecanum_robot':pose})]
+                self.assertEqual(goal_sample(rows,result,[0.,0.,0.])[-1],expected)
+                result['actual_goal_reached']=not expected
+                with self.assertRaises(AssertionError):goal_sample(rows,result,[0.,0.,0.])
+
+    def test_worker_statistics_preserve_backend_specific_fields(self):
+        from dynamuhsim.analysis.nav2 import worker_statistics
+        moving=[dict(time=1.1,motion_guard=dict(projection=dict(margin_m=.02,velocity_change_norm=.2))),
+                dict(time=1.2,motion_guard=dict(projection=dict(margin_m=.002,velocity_change_norm=0.)))]
+        common=dict(inactive_transport_steps=1,active_native_steps=2,first_active_sim=1.1)
+        for profile, dt in [('individual',.1),('container',.25),('groups',.1)]:
+            with self.subTest(profile=profile):
+                stats=worker_statistics(moving,[{}],dict(goal_start_sim=1.),profile,dt)
+                self.assertAlmostEqual(stats.pop('start_gate_delay_s'),.1)
+                expected=dict(common,**(dict(margins_used_m=[.002,.02],changed_proposals=1)
+                    if profile=='individual' else dict(native_dt=dt,guard_present_steps=2)))
+                self.assertEqual(stats,expected)
 
     def test_sensor_rows_and_jsonl_match_legacy_callbacks(self):
         fixture = json.loads((FIXTURES / "telemetry.json").read_text())

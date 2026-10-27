@@ -10,6 +10,7 @@ Hai entrypoint hiện hành: `tools/audit_episode.py` và `tools/artifact_store.
 | `analysis/timeline.py` | Nearest timestamp có tolerance, tie chọn mẫu trước; SE2 không ngoại suy, giới hạn gap và yaw đi theo cung ngắn. |
 | `analysis/geometry.py` | Sai số pose và signed linear swept-disc gap; runtime goal và auditor dùng cùng measurement, policy giữ quyền quyết định PASS/FAIL. |
 | `analysis/warehouse.py` | Swept gaps qua GEOS, worker–Gazebo trajectory, chuyển động và LiDAR cho common_gazebo, response_fix và warehouse_lifecycle; không import geometry của motion guard. |
+| `analysis/nav2.py` | Audit chung cho individual/container/groups: pose goal trước teardown, hình học, LiDAR, costmap, AMCL, provenance và archive; giữ policy/field riêng từng profile. |
 | `analysis/capture.py` | Audit capture mới, đọc MCAP qua dependency ROS lazy; không chạy lại mô phỏng hoặc thực thi source snapshot. |
 | `artifacts/store.py` | Pack/verify/restore có SHA256 và dọn raw theo phạm vi hạn chế, sau round trip. |
 
