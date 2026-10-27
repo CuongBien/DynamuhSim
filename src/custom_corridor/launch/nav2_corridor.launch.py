@@ -1,4 +1,5 @@
 import os
+import sys
 
 from ament_index_python.packages import get_package_share_directory
 
@@ -9,27 +10,20 @@ from launch.actions import (
 )
 from launch.event_handlers import OnProcessExit
 from launch.substitutions import EnvironmentVariable, LaunchConfiguration
-from launch_ros.actions import Node
 
+# Resolve from either the source tree or an installed package share.
+sys.path.insert(0, os.path.dirname(os.path.realpath(__file__)))
+from _dynamuhsim_nav2 import nav2_parameters, navigation_nodes, lifecycle_manager, goal_bridge
 
 def launch_setup(context, *args, **kwargs):
     package_share = get_package_share_directory("custom_corridor")
 
-    controller = LaunchConfiguration("controller").perform(context).lower().strip()
-    custom_params = LaunchConfiguration("params_file").perform(context).strip()
-    robot_model = LaunchConfiguration("robot_model").perform(context).lower().strip()
-    if robot_model not in ["burger", "tb3", "turtlebot3"]:
-        robot_model = "mecanum"
-
-    if custom_params and os.path.exists(custom_params):
-        nav2_params = custom_params
-    elif controller in ["mppi", "mppi_mecanum", "mppi_omni"]:
-        if robot_model == "mecanum" or controller in ["mppi_mecanum", "mppi_omni"]:
-            nav2_params = os.path.join(package_share, "config", "nav2_mppi_mecanum.yaml")
-        else:
-            nav2_params = os.path.join(package_share, "config", "nav2_mppi.yaml")
-    else:
-        nav2_params = os.path.join(package_share, "config", "nav2_corridor.yaml")
+    nav2_params = nav2_parameters(
+        package_share,
+        LaunchConfiguration("controller").perform(context).lower().strip(),
+        LaunchConfiguration("params_file").perform(context).strip(),
+        LaunchConfiguration("robot_model").perform(context).lower().strip(),
+    )
 
     map_name = LaunchConfiguration("map").perform(context).strip()
     map_override = {}
@@ -53,14 +47,6 @@ def launch_setup(context, *args, **kwargs):
     map_server_params = [nav2_params, map_override]
     episode_mode = LaunchConfiguration("episode_initial_pose").perform(context).lower() == "true"
 
-    map_server = Node(
-        package="nav2_map_server",
-        executable="map_server",
-        name="map_server",
-        output="screen",
-        parameters=map_server_params,
-    )
-
     amcl_params = [nav2_params]
     if episode_mode:
         amcl_params.append({"set_initial_pose": False, "transform_tolerance": 0.5})
@@ -82,117 +68,18 @@ def launch_setup(context, *args, **kwargs):
                 "initial_pose": {"x": -13.0, "y": 0.0, "z": 0.0, "yaw": 0.0},
             })
 
-    amcl = Node(
-        package="nav2_amcl",
-        executable="amcl",
-        name="amcl",
-        output="screen",
-        parameters=amcl_params,
-    )
-
-    planner_server = Node(
-        package="nav2_planner",
-        executable="planner_server",
-        name="planner_server",
-        output="screen",
-        parameters=[nav2_params],
-    )
-
     cmd_vel_topic = LaunchConfiguration("cmd_vel_topic").perform(context).strip() or "cmd_vel"
 
-    controller_server = Node(
-        package="nav2_controller",
-        executable="controller_server",
-        name="controller_server",
-        output="screen",
-        parameters=[nav2_params],
-        remappings=[("cmd_vel", cmd_vel_topic)],
-    )
-
-    bt_override = {}
-    try:
-        bt_share = get_package_share_directory("nav2_bt_navigator")
-        default_bt_xml = os.path.join(
-            bt_share, "behavior_trees", "navigate_to_pose_w_replanning_and_recovery.xml"
-        )
-        if os.path.exists(default_bt_xml):
-            bt_override["default_nav_to_pose_bt_xml"] = default_bt_xml
-    except Exception:
-        pass
-
-    bt_navigator_params = [nav2_params, bt_override] if bt_override else [nav2_params]
-
-    bt_navigator = Node(
-        package="nav2_bt_navigator",
-        executable="bt_navigator",
-        name="bt_navigator",
-        output="screen",
-        parameters=bt_navigator_params,
-    )
-
-    behavior_server = Node(
-        package="nav2_behaviors",
-        executable="behavior_server",
-        name="behavior_server",
-        output="screen",
-        parameters=[nav2_params],
-        remappings=[("cmd_vel", cmd_vel_topic)],
-    )
-
-    waypoint_follower = Node(
-        package="nav2_waypoint_follower",
-        executable="waypoint_follower",
-        name="waypoint_follower",
-        output="screen",
-        parameters=[nav2_params],
-    )
+    nodes = navigation_nodes(nav2_params, map_server_params, amcl_params, cmd_vel_topic)
 
     amcl_lifecycle_manager = TimerAction(
         period=2.0,
         actions=[
-            Node(
-                package="nav2_lifecycle_manager",
-                executable="lifecycle_manager",
-                name="lifecycle_manager_localization",
-                output="screen",
-                parameters=[
-                    {
-                        "use_sim_time": True,
-                        "autostart": True,
-                        "bond_timeout": 30.0,
-                        "attempt_respawn_reconnection": True,
-                        "node_names": [
-                            "map_server",
-                            "amcl",
-                        ],
-                    }
-                ],
-            )
+            lifecycle_manager('localization', ['map_server', 'amcl'])
         ],
     )
 
-    navigation_lifecycle_manager = Node(
-                package="nav2_lifecycle_manager",
-                executable="lifecycle_manager",
-                name="lifecycle_manager_navigation",
-                output="screen",
-                parameters=[
-                    {
-                        # MPPI configuration can be CPU-heavy in headless trials.
-                        "use_sim_time": True,
-                        "autostart": True,
-                        "bond_timeout": 30.0,
-                        "attempt_respawn_reconnection": True,
-                        "node_names": [
-                            "planner_server",
-                            "controller_server",
-                            "bt_navigator",
-                            "behavior_server",
-                            "waypoint_follower",
-                        ],
-                    }
-                ],
-            )
+    navigation_lifecycle_manager = lifecycle_manager('navigation', ['planner_server', 'controller_server', 'bt_navigator', 'behavior_server', 'waypoint_follower'])
 
     if episode_mode:
         pose_gate = ExecuteProcess(
@@ -215,27 +102,14 @@ def launch_setup(context, *args, **kwargs):
             period=5.0, actions=[navigation_lifecycle_manager]
         )]
 
-    goal_pose_bridge = Node(
-        package="custom_corridor",
-        executable="goal_pose_bridge.py",
-        name="goal_pose_bridge",
-        output="screen",
-        parameters=[{"use_sim_time": True}],
-    )
+    goal_pose_bridge = goal_bridge()
 
     return [
-        map_server,
-        amcl,
-        planner_server,
-        controller_server,
-        bt_navigator,
-        behavior_server,
-        waypoint_follower,
+        *nodes,
         amcl_lifecycle_manager,
         *navigation_actions,
         goal_pose_bridge,
     ]
-
 
 def generate_launch_description():
     ros_domain = SetEnvironmentVariable(

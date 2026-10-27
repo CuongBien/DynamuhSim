@@ -355,3 +355,33 @@ Protected historical artifacts and the dirty primary checkout remain unchanged.
 Work stays on `codex/shared-navigation-runtime`; the benchmark remote was restored
 to `9833565` at the user's request. Evidence:
 `benchmark/generated/layout_native_cleanup_20261027/`.
+
+
+## 2026-10-27 — share Nav2 launch construction and retire the old School generator
+
+Corridor/School and Hospital share `_dynamuhsim_nav2.py` for controller params,
+seven core nodes, lifecycle node construction and the goal bridge. Profiles
+retain their original map fallback/error rules, poses, cmd_vel remapping,
+auto-route selection, 2/5s versus 4/7s timing and School episode-pose gate.
+Launch declarations are AST-identical. A before/after matrix covers 2,240 cases:
+1,710 plans and 530 matching input errors, three BT availability modes and
+pose-gate callbacks for exits 0/1/-9. Action constructors are recorded in that
+matrix; an additional 12 cases construct real ROS launch actions from source,
+symlink and copy prefixes without starting nodes.
+
+Deleted the 522-line `generate_school_world_1.py` (history: `a17d00f`), which
+only generated the obsolete `school_arena_1.sdf` and has no remaining consumer
+or current source pin. Current canonical and demo generators remain. The
+HuNav pose applier remains because `run_school_gz_bridge.sh` still calls it.
+No current world/map/robot bytes or native plugin code change in this batch.
+
+The three launch implementation files total 436 lines, down from 626 in the
+two duplicated launch files. Shared trial and dataset-pilot source manifests
+include the extracted helper; the existing provenance regression checks it.
+Historical manifests/receipts are not rewritten. All 280 tests, fresh symlink
+build/copy install, five launch descriptions, three robot descriptions, four
+plugin dependency sets and installed School helper modes pass. This batch
+does not rerun a navigation benchmark or change controller/tolerance settings.
+The primary dirty checkout and 1,814 protected files remain unchanged; all
+changes stay on `codex/shared-navigation-runtime`. Local evidence:
+`benchmark/generated/launch_cleanup_20261027/`.
