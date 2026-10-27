@@ -44,3 +44,23 @@ Các evaluator, reset/replay và phép đo sensor còn giữ có phương pháp 
 threshold hoặc nguồn dữ liệu cần một công việc phát triển/kiểm chứng riêng.
 
 [Biên bản kiểm chứng](CLEANUP_ACCEPTANCE_2026-10-26.md) ghi kết quả và giới hạn.
+
+## Chốt rà soát sau refactor launch — 27/10/2026
+
+Đã rà 501 file source tracked (430 Python, 50 shell, phần còn lại C++),
+16 đường dẫn registry và 13 nhóm file trùng byte. Không thấy import project
+hoặc đường dẫn Python được phân giải tĩnh nào còn gọi source đã xoá. Không có
+hàm trùng AST từ 15 dòng ngoài các engine/upstream snapshot đã ghim.
+Bản sao frozen/vendor, loader portable và entrypoint tương thích mỏng có vai trò
+cụ thể, được giữ; đây không phải bằng chứng mọi nhánh động đều đã được phủ.
+
+Rà dependency phát hiện và sửa 11 khai báo ROS runtime bị thiếu, cùng các tên
+dependency native chưa đúng rosdep Jazzy. `rosdep check`, build mới hai package,
+282 tests, 33 CLI và kiểm tra installed runtime đều PASS; mã máy `.text` và
+thư viện liên kết của cả bốn plugin giống bản trước sửa. Tổng source đã giảm
+ròng **21.289 dòng** so với `9833565`, theo phạm vi ghi trong
+[receipt chốt cleanup](verification/cleanup_closure_2026-10-27.json).
+
+Phần cleanup trong các luồng đã rà được chốt tại đây. Việc tiếp theo là acceptance
+điều hướng end-to-end và chẩn đoán các ca đã FAIL/TIMEOUT, thuộc kiểm chứng chức
+năng riêng; không sửa kết quả cũ hoặc merge vào nhánh benchmark.

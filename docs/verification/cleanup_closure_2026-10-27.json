@@ -1,0 +1,57 @@
+{
+  "date": "2026-10-27",
+  "reviewed_revision": "1a57276a13b807bdd0709d363493c726b6a4c173",
+  "branch": "codex/shared-navigation-runtime",
+  "benchmark_preserved_at": "9833565fa546d55cb0e553f8388bf4a703c59583",
+  "result": "Cleanup scope closed for reviewed runtime, launch, entrypoint and retired harness flows; no claim of exhaustive dynamic equivalence.",
+  "fix": "Declare 11 direct ROS runtime dependencies; map native CMake dependencies to Jazzy Gazebo vendors and nlohmann-json-dev, and find the four vendor packages explicitly.",
+  "static_review": {
+    "tracked_source_files": 501,
+    "python_parsed": 430,
+    "shell_syntax_pass": 50,
+    "unresolved_static_project_imports": 0,
+    "lexically_resolved_deleted_path_calls": 0,
+    "registry_paths_present": 16,
+    "duplicate_file_groups_reviewed": 13,
+    "duplicate_functions_threshold_lines": 15,
+    "duplicate_functions_outside_frozen_or_upstream_copies": 0
+  },
+  "verification": {
+    "unit_tests_pass": 282,
+    "cli_help_pass": 33,
+    "rosdep_check": "PASS",
+    "fresh_colcon_packages": 2,
+    "copy_install": "PASS",
+    "installed_launch_descriptions": 5,
+    "robot_descriptions": 3,
+    "installed_executables": 3,
+    "native_plugins": 4,
+    "native_text_sections_and_linked_libraries_identical": true,
+    "protected_files_unchanged": 1814,
+    "primary_checkout_status_index_patch_unchanged": true
+  },
+  "source_totals_vs_benchmark": {
+    "base": "9833565fa546d55cb0e553f8388bf4a703c59583",
+    "head": "1a57276a13b807bdd0709d363493c726b6a4c173",
+    "scope": "Tracked Python/shell/C++ source excluding immutable report/result/control/snapshot, vendor/rvo2 and Valid paths; data/config/media excluded",
+    "source_added": 11939,
+    "source_deleted": 33228,
+    "net_reduction": 21289,
+    "changed_paths": 404
+  },
+  "retained_duplicates": [
+    "Frozen parent engines, classifier export artifacts and portable corpus loader",
+    "Vendored DR-SPAAM upstream reference and runtime checked by parity.py",
+    "Frozen normalizer contract plus current compatibility suite",
+    "Small stage/compatibility launch entrypoints; runtime loops already shared"
+  ],
+  "limits": [
+    "Static lexical references are not a complete dynamic/shell dependency proof.",
+    "No fresh full navigation benchmark in this phase; native machine code and linked libraries are identical to the prior accepted build.",
+    "Historical group standing42 goal mismatch, standing45 navigation timeout and old freeze gaps remain recorded unchanged.",
+    "Latest source-bound launch/camera/real TF proofs are at 1a57276; runtime and launch source bytes are unchanged by this phase.",
+    "No model training, held-out evaluation, dataset regeneration, controller tuning or merge into benchmark."
+  ],
+  "next_work": "Separate end-to-end navigation acceptance on current profiles, diagnosing recorded failure cases without changing historical outcomes.",
+  "local_evidence": "experiments/social_navigation/benchmark/generated/closure_audit_20261027/"
+}

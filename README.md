@@ -1,6 +1,6 @@
 # DynamuhSim 🤖
 
-**Phạm vi clean đã chốt 27/10/2026:** [mã đã nghỉ dùng và phần cần giữ](docs/CLEANUP_SCOPE.md).
+**Cleanup đã chốt 27/10/2026:** [phạm vi, source giảm và phần cần giữ](docs/CLEANUP_SCOPE.md) · [receipt kiểm chứng cuối](docs/verification/cleanup_closure_2026-10-27.json).
 
 **Nghiệm thu dọn repo 26/10/2026:** [kết quả, entrypoint và giới hạn kiểm chứng](docs/CLEANUP_ACCEPTANCE_2026-10-26.md).
 

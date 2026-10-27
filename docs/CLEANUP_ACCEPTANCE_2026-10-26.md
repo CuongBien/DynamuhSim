@@ -432,3 +432,19 @@ expected poses/orientations and stop cleanly. Fresh build/install checks pass.
 Accepted camera hash `14c154...` and all 1,814 protected files remain unchanged;
 no world/model/controller changes or Gazebo/navigation benchmark are introduced.
 Evidence: `benchmark/generated/camera_launch_cleanup_20261027/`.
+
+## 27/10 — Chốt entrypoint, import và dependency
+
+- Rà 501 source files, parse 430 Python và kiểm cú pháp 50 shell; 16 registry
+  paths còn tồn tại. Các kiểm tra import/lexical deleted-path không có lỗi;
+  13 nhóm file trùng được phân loại là frozen/upstream/portable/compatibility.
+- Tái hiện thiếu dependency trước sửa; bổ sung 11 runtime dependencies, dùng
+  Gazebo vendor packages và rosdep key JSON đúng trong manifest native/CMake.
+  `rosdep check --ignore-src --rosdistro jazzy` PASS, không cài thêm dependency.
+- 282 tests, 33 CLI; fresh colcon hai package và copy install PASS. Installed
+  runtime: 5 launch descriptions, 3 robot descriptions, 4 plugin libraries,
+  3 executables và School bundles PASS. Cả bốn plugin giữ nguyên `.text` và
+  linked library paths. 1.814 protected files và primary status/index/patch
+  không đổi. Không chạy lại navigation/Gazebo trong lượt chỉ sửa dependency.
+- [Receipt chốt phạm vi và giới hạn](verification/cleanup_closure_2026-10-27.json).
+  Tiếp theo: acceptance chức năng điều hướng riêng; giữ nhánh cleanup độc lập.
