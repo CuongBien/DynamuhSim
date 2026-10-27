@@ -14,6 +14,7 @@ Entry point chuẩn: `tools/capture_episode.py`. Camera/world/config/recorder l�
 | Trách nhiệm | File |
 |---|---|
 | Freeze/config, capture hooks, live parameters, label tail/quiesce | `python/dynamuhsim/runtime/capture.py` |
+| Pause/quiesce trước ordered shutdown, dùng chung với Nav2 | `python/dynamuhsim/runtime/shutdown.py` |
 | MCAP recorder, events/scene LABEL_ONLY, ON/OFF float32 | `python/dynamuhsim/runtime/capture_recording.py` |
 | Camera XML và moderate Nav2 treatment | `python/dynamuhsim/simulation/capture.py` |
 | Launch Mecanum và bridge; URDF sở hữu camera_link TF | `python/dynamuhsim/simulation/capture_launch.py` |

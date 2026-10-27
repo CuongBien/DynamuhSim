@@ -161,6 +161,7 @@ class RunnerHarness:
 
     def run(self, capture=None):
         with ExitStack() as stack:
+            stack.enter_context(patch.object(trial, "stop_paused", side_effect=lambda guard, stop: (self.events.append("quiesce"), stop(guard))[1]))
             stack.enter_context(patch.object(trial, "source_files", return_value=[self.entry, self.stage / "protocol.json"]))
             stack.enter_context(patch.object(trial.subprocess, "Popen", side_effect=self.popen))
             stack.enter_context(patch.object(trial.subprocess, "check_output", side_effect=lambda args, **kwargs: "fixed-commit" if args[0] == "git" else ""))
@@ -191,6 +192,7 @@ class RunnerIntegrationTests(unittest.TestCase):
                 self.assertEqual(result["cleanup"], {"status": "PASS", "remaining": []})
                 self.assertEqual(result["ros_launch_shutdown"]["status"], "STOPPED")
                 self.assertTrue(all(proc.returncode == 0 for proc in harness.processes))
+                self.assertLess(harness.events.index("quiesce"), harness.events.index("server_stop"))
                 self.assertLess(harness.events.index("server_stop"), harness.events.index("cleanup"))
                 self.assertEqual(len(result["source_sha256"]), 2)
                 if harness.profile.container_worker:
@@ -214,6 +216,53 @@ class RunnerIntegrationTests(unittest.TestCase):
             self.assertLess(harness.events.index("cancel"), harness.events.index("server_stop"))
             self.assertEqual(harness.events[-1], "cleanup")
             self.assertTrue(all(proc.returncode == 0 for proc in harness.processes))
+
+
+class QuiesceTests(unittest.TestCase):
+    def test_capture_and_nav2_use_the_same_shutdown_helper(self):
+        from dynamuhsim.runtime.capture import stop_paused as capture_stop
+        from dynamuhsim.runtime.shutdown import stop_paused
+        self.assertIs(capture_stop, stop_paused)
+        self.assertIs(trial.stop_paused, stop_paused)
+
+    def test_acknowledgement_and_clock_stability_are_recorded_before_ordered_stop(self):
+        from dynamuhsim.runtime import shutdown
+        for mode in ["stable", "advancing", "rejected", "unsubscribed"]:
+            with self.subTest(mode=mode), tempfile.TemporaryDirectory() as directory:
+                events = []
+                callbacks = []
+                class Transport:
+                    def subscribe(self, kind, topic, callback):
+                        events.append("subscribe"); callbacks.append(callback)
+                        return mode != "unsubscribed"
+                    def unsubscribe(self, topic):
+                        events.append("unsubscribe")
+                def stats(nsec):
+                    return NS(paused=True, sim_time=NS(sec=10, nsec=nsec))
+                def request(*args, **kwargs):
+                    events.append("pause_request")
+                    callbacks[0](stats(0))
+                    return NS(returncode=0 if mode != "rejected" else 1, stdout="data: true" if mode != "rejected" else "", stderr="")
+                def settle(seconds):
+                    events.append("settle")
+                    self.assertEqual(seconds, .5)
+                    callbacks[0](stats(1 if mode == "advancing" else 0))
+                guard = NS(runtime=Path(directory))
+                def stop(received):
+                    self.assertIs(received, guard); events.append("stop")
+                    return {"status": "STOPPED"}
+                modules = {"gz": NS(__path__=[]), "gz.transport13": NS(Node=Transport),
+                           "gz.msgs10": NS(__path__=[]), "gz.msgs10.world_stats_pb2": NS(WorldStatistics=object)}
+                with patch.dict(sys.modules, modules), patch.object(shutdown.subprocess, "run", side_effect=request), patch("time.sleep", side_effect=settle):
+                    result = shutdown.stop_paused(guard, stop)
+                self.assertLess(events.index("pause_request"), events.index("unsubscribe"))
+                self.assertLess(events.index("unsubscribe"), events.index("stop"))
+                self.assertEqual(events.count("stop"), 1)
+                self.assertEqual(result["status"], "STOPPED")
+                self.assertEqual(result["quiesce"]["pause_acknowledged"], mode in ["stable", "advancing"])
+                self.assertEqual(result["quiesce"]["simulation_time_stable"], mode == "stable")
+                self.assertFalse(result["quiesce"]["is_gpu_fence"])
+                self.assertEqual(json.loads((Path(directory) / "quiesce_shutdown.json").read_text()), result)
 
 
 if __name__ == "__main__":

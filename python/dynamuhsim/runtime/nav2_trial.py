@@ -21,6 +21,7 @@ import xml.etree.ElementTree as ET
 from .navigation import execute_goal, goal_metrics, wait_for
 from .profiles import PROFILES
 from .recording import TrialRecording, endpoint, yaw
+from .shutdown import stop_paused
 from dynamuhsim.simulation.warehouse import configure_world, runtime_nav2_config
 
 
@@ -326,7 +327,7 @@ def run_trial(profile, args, repo, entrypoint, *, dependencies=None, capture=Non
         if guard is not None:
             try:
                 result["server_shutdown"] = (capture.stop_server(guard, deps.shutdown.stop_server)
-                                             if capture is not None else deps.shutdown.stop_server(guard))
+                                             if capture is not None else stop_paused(guard, deps.shutdown.stop_server))
             except Exception as error:
                 result["shutdown_error"] = str(error)
         if container_name:
