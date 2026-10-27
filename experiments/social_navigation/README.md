@@ -30,7 +30,7 @@ Cần ROS Jazzy và overlay của đúng checkout đã build. Hình ảnh/log he
 
 ## Các vòng khảo sát đã kết thúc
 
-Runner/analyzer/report writer SocNavGym ban đầu, verifier scene cũ, scene/matrix của round2/round3 và 54 config phát sinh đã được gỡ khỏi HEAD. Các mode `run.sh socnavgym`/`verify` của thư mục này cũng được gỡ; verifier riêng của adapter khác không bị đổi.
+Runner/analyzer/report writer SocNavGym ban đầu, verifier scene cũ, scene/matrix của round2/round3 và 54 config phát sinh đã được gỡ khỏi HEAD. Các mode `run.sh socnavgym`/`verify` của thư mục này cũng được gỡ; các công cụ kiểm định adapter đời đầu cũng đã nghỉ dùng. Adapter SocNavGym giữ `build`/`demo`; native worker và nguồn fixture hiện hành vẫn được giữ.
 
 [Khảo sát ban đầu](https://github.com/CuongBien/DynamuhSim/commit/91f36207e0b7250b36e120554b99ac81be084c8f) · [Code/config trước khi gỡ](https://github.com/CuongBien/DynamuhSim/tree/ed208d24baab7d685ae1b6a8ac2b4140a73ab40e/experiments/social_navigation) · [Round2](round2/README.md) · [Round3](round3/README.md).
 

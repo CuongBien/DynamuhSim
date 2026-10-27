@@ -194,3 +194,21 @@ byte-identical. Six shell invocations match before/after; eight retired modes
 are rejected. Existing suites: 278 tests; CLI: 28; native geometry/ORCA: 22
 cases with identical before/after results. No new Gazebo run or tuning.
 Local evidence: `benchmark/generated/retired_root_cohorts_cleanup_20261027/`.
+
+
+## 2026-10-27 — retire completed adapter verification tools
+
+Deleted 10 historical tools / 611 Python lines: the first Gazebo integration
+verifier, checkpoint audit, patrol analyzer, generated-config probe, four
+CrowdSimPlus cohort validators and two counters with no remaining consumers.
+`gazebo_adapter/run.sh` reuses `task_runtime.sh` for build/ROS setup and retains
+explicit build/demo plus default demo; the retired verify mode returns usage.
+Six shell invocations match before/after, including build arguments and the
+missing-plugin guard. Existing suites: 278 tests; CLI: 28. Native worker parity:
+13 cases / 221 replies per version, including 11 pinned-image Docker cases,
+with identical metadata and replies after excluding only `compute_ms`; all
+10 fixture variants at seeds 42/43 match. Missing externalized pilot inputs
+were supplied from Git revision `9833565` in an isolated ignored fixture root.
+Kernels, workers, scene builders and plugins remain byte-identical. No Gazebo
+run, navigation tuning, training or dataset production. Local evidence:
+`benchmark/generated/retired_adapter_tools_cleanup_20261027/`.

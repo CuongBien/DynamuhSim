@@ -22,21 +22,18 @@ Thêm `--rviz` để mở RViz. Không truyền `--gui` để chạy server cùn
 
 Cần virtual environment SocNavGym của vòng 1 và workspace ROS đã build trước đó. Nếu thiếu venv, xem `../setup_socnavgym.sh`; không cài dependency vào Python hệ thống. Plugin này build bằng CMake riêng, không cần `colcon build` lại các gói robot.
 
-## Kiểm định có thời hạn
+## Kiểm định lịch sử
 
-```bash
-bash experiments/social_navigation/gazebo_adapter/run.sh verify --mode walking
-bash experiments/social_navigation/gazebo_adapter/run.sh verify --mode conversation --gui
-bash experiments/social_navigation/gazebo_adapter/run.sh verify --mode walking --observe-sim-seconds 35
-experiments/social_navigation/.venv-socnavgym/bin/python experiments/social_navigation/gazebo_adapter/probe_native.py
-python3 experiments/social_navigation/gazebo_adapter/audit_preservation.py
-```
+Verifier tích hợp đời đầu, probe lấy config từ `generated/walking_*`, analyzer
+patrol và audit theo checkpoint vòng 1 đã nghỉ dùng. Kết quả và các giới hạn
+hành vi vẫn nằm trong [report gốc](reports/ADAPTER_REPORT.md);
+[source cũ](https://github.com/CuongBien/DynamuhSim/tree/9833565fa546d55cb0e553f8388bf4a703c59583/experiments/social_navigation/gazebo_adapter)
+được ghim theo revision lịch sử. `run.sh` hiện hỗ trợ `build` và `demo`.
 
-Verifier kiểm tra `/scan`, `/imu`, `/odom`, `/clock`, lệnh tiến/ngang Mecanum, phản hồi pose/vận tốc robot, pause/resume, ID ổn định, pose model thật trong Gazebo và ray LiDAR so với hình trụ người. Lệnh chuyển động của verifier hiện tính theo **simulation time**. Các kết quả thử đầu tiên sử dụng thời lượng lệnh theo wall time được phân biệt trong báo cáo.
-
-Probe cần ít nhất một lượt walking đã chạy; audit dùng các snapshot local từ vòng 1.
-
-Kết quả ghi trong `reports/`; cùng mode/GUI sẽ thay báo cáo của lượt kiểm định trước. Các demo tương tác luôn có thư mục runtime riêng. Verifier chỉ dừng các process group nó tạo.
+Kiểm định contact/solver còn dùng nằm ở
+[hình học](../benchmark/geometry_comparison/README.md) và
+[robot-aware ORCA](../benchmark/avoidance_comparison/README.md).
+Để thu/audit episode mới, dùng [capture runtime](../../../docs/CAPTURE_RUNTIME.md).
 
 ## Cách nối và phạm vi
 

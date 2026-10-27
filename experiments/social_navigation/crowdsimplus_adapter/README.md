@@ -29,6 +29,12 @@ Seed fixture hiện hỗ trợ 42/43; `standing` là stationary control, không 
 
 Ma trận 7 lượt: CrowdSimPlus counterflow/standing seed 42/43, SocNavGym robot-aware group adapter counterflow seed 42/43, CrowdSimPlus invisible-robot counterflow seed 43. Chạy tuần tự, diagnostics bật ở cả hai backend. Comparator SocNavGym là bản adapter đã chỉnh ở vòng trước, **không phải hành vi nguyên bản upstream**.
 
+Các validator theo cohort và bộ đếm crossing/passage chỉ phục vụ các ma trận
+cũ đã nghỉ dùng cùng runner/analyzer. Kernel, worker, scene builders, native
+policy và Docker image giữ nguyên. Tái lập kiểm định cũ cần đúng
+[source đã ghim](https://github.com/CuongBien/DynamuhSim/tree/9833565fa546d55cb0e553f8388bf4a703c59583/experiments/social_navigation/crowdsimplus_adapter)
+và fixture/input ghi trong report.
+
 ## Cơ chế
 
 - Gazebo gửi pose và vận tốc robot thực qua Unix socket mỗi 0,1 s simulation. Docker tắt network, root filesystem read-only, chỉ mount code read-only và runtime/socket riêng. Worker không dùng ROS; Nav2 là controller robot duy nhất.
