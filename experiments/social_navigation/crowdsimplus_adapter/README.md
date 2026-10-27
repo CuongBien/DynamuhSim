@@ -1,5 +1,9 @@
 # CrowdSimPlus → Gazebo Harmonic / ROS 2 Jazzy
 
+Runner ma trận và analyzer của cohort này đã nghỉ dùng. Báo cáo giữ nguyên;
+[source và lệnh cũ](https://github.com/CuongBien/DynamuhSim/tree/9833565fa546d55cb0e553f8388bf4a703c59583/experiments/social_navigation/benchmark)
+được ghim theo revision lịch sử. Các lệnh `trial`/kiểm định còn dưới đây vẫn được hỗ trợ.
+
 Adapter thử nghiệm dùng CrowdSimPlus trong image Python 3.8 đã ghim ở vòng 2; robot Mecanum/Nav2 vẫn chạy trong ROS 2 Jazzy trên host Ubuntu 24.04. Không cài CrowdSimPlus vào Python hệ thống 3.12, không sửa source vendor, robot hoặc workspace build/install.
 
 ## Build và chạy
@@ -22,13 +26,6 @@ bash experiments/social_navigation/benchmark/run.sh trial \
 ```
 
 Seed fixture hiện hỗ trợ 42/43; `standing` là stationary control, không phải mô hình hội thoại native. Bỏ `--gui` vẫn chạy Gazebo physics/rendering và thu camera PNG/GIF. Không mở hai trial cùng ROS domain. Trial từ chối ghi đè report đã có.
-
-```bash
-bash experiments/social_navigation/benchmark/run.sh crowdsim-matrix \
-  --report-dir experiments/social_navigation/benchmark/crowdsim_comparison/reports/run02
-python3 experiments/social_navigation/benchmark/analyze_crowdsim.py \
-  experiments/social_navigation/benchmark/crowdsim_comparison/reports/run02
-```
 
 Ma trận 7 lượt: CrowdSimPlus counterflow/standing seed 42/43, SocNavGym robot-aware group adapter counterflow seed 42/43, CrowdSimPlus invisible-robot counterflow seed 43. Chạy tuần tự, diagnostics bật ở cả hai backend. Comparator SocNavGym là bản adapter đã chỉnh ở vòng trước, **không phải hành vi nguyên bản upstream**.
 

@@ -1,5 +1,9 @@
 # Nhóm người ORCA nhận biết robot — adapter thử nghiệm
 
+Runner ma trận và analyzer của cohort này đã nghỉ dùng. Báo cáo giữ nguyên;
+[source và lệnh cũ](https://github.com/CuongBien/DynamuhSim/tree/9833565fa546d55cb0e553f8388bf4a703c59583/experiments/social_navigation/benchmark)
+được ghim theo revision lịch sử. Các lệnh `trial`/kiểm định còn dưới đây vẫn được hỗ trợ.
+
 `--robot-avoidance` là lựa chọn opt-in trên SocNavGym adapter. Cả đối chứng và biến thể đều dùng `--geometry circle_contact`; đây là thay đổi hành vi sau khi đã chuẩn hóa contact, không phải bản SocNavGym gốc.
 
 Biến thể giữ nguyên thiết lập group ORCA native, thêm một agent robot với vị trí và vận tốc world thực đo từ Gazebo ở mỗi tick. Nó chỉ lấy vận tốc nhóm từ solver. Vận tốc robot do solver đề xuất bị bỏ qua; Nav2 vẫn là bộ điều khiển robot duy nhất. Native smoothing, giới hạn quay của người, nhiễu, waypoint, collision response và robot/LiDAR không đổi.
@@ -22,16 +26,9 @@ experiments/social_navigation/.venv-socnavgym/bin/python \
   --trial experiments/social_navigation/benchmark/diagnostic/reports/run01/socnavgym_counterflow_s43.json \
   --include-robot-orca \
   --output experiments/social_navigation/benchmark/avoidance_comparison/reports/run02
-
-# Sáu lượt Gazebo/Nav2, tuần tự, diagnostics ở cả hai bên
-bash experiments/social_navigation/benchmark/run.sh avoidance-matrix \
-  --report-dir experiments/social_navigation/benchmark/avoidance_comparison/reports/run02
-
-python3 experiments/social_navigation/benchmark/analyze_avoidance.py \
-  experiments/social_navigation/benchmark/avoidance_comparison/reports/run02
 ```
 
-Ma trận: counterflow seed 42/43 cho hai policy, standing seed 43 cho hai policy. Native/circle_contact không bị ghi đè. Matrix có thể tiếp tục từ trial hợp lệ trong cùng thư mục; kết quả lỗi được giữ để điều tra, không ghi đè bằng lượt khác.
+Ma trận lịch sử: counterflow seed 42/43 cho hai policy, standing seed 43 cho hai policy. Native/circle_contact không bị ghi đè. Runner cũ có thể tiếp tục từ trial hợp lệ trong cùng thư mục; kết quả lỗi được giữ để điều tra, không ghi đè bằng lượt khác.
 
 Xem GUI riêng:
 

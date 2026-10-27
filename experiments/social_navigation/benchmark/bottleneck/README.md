@@ -1,5 +1,9 @@
 # Native SFM/ORCA+ trong lối hẹp nhà xưởng
 
+Runner ma trận và analyzer của cohort này đã nghỉ dùng. Báo cáo giữ nguyên;
+[source và lệnh cũ](https://github.com/CuongBien/DynamuhSim/tree/9833565fa546d55cb0e553f8388bf4a703c59583/experiments/social_navigation/benchmark)
+được ghim theo revision lịch sử. Các lệnh `trial`/kiểm định còn dưới đây vẫn được hỗ trợ.
+
 Cảnh `bottleneck` dùng đúng khe giữa hai khối máy hiện có: x=12..20 m,
 y=-0,9..+0,9 m, rộng 1,8 m, dài 8 m. Robot bắt đầu (8,0), nhận goal (24,5,0).
 Ba người xuất phát bên phải, đi ngược chiều robot, có endpoint riêng ở hai
@@ -25,17 +29,9 @@ bash experiments/social_navigation/benchmark/run.sh trial \
 Robot tự nhận goal, GUI tự đóng khi lượt kết thúc. Không chạy hai trial cùng
 ROS domain. Headless vẫn lưu camera RGB Gazebo/GIF, góc nhìn đặt tại lối hẹp.
 
-## Kiểm định và ma trận
+## Protocol cohort lịch sử
 
-```bash
-bash experiments/social_navigation/benchmark/run.sh bottleneck-matrix \
-  --report-dir experiments/social_navigation/benchmark/bottleneck/reports/run02
-python3 experiments/social_navigation/benchmark/analyze_sfm.py \
-  experiments/social_navigation/benchmark/bottleneck/reports/run02 \
-  --goal-layout individual --condition bottleneck
-```
-
-Runner kiểm định bốn policy/seed trước, rồi chạy một empty control và bốn
+Runner lịch sử kiểm định bốn policy/seed trước, rồi chạy một empty control và bốn
 lượt có người tuần tự. Empty control phải tới đích và thực sự đi qua channel.
 `--validate-only` chỉ chạy worker. Cache ghim image, native bridge, scene
 builder, validator, kernel trước thay đổi và layout.

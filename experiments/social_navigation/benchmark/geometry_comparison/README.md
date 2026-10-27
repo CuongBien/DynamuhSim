@@ -1,5 +1,9 @@
 # Đối chứng hình học contact SocNavGym trong Gazebo
 
+Runner ma trận và analyzer của cohort này đã nghỉ dùng. Báo cáo giữ nguyên;
+[source và lệnh cũ](https://github.com/CuongBien/DynamuhSim/tree/9833565fa546d55cb0e553f8388bf4a703c59583/experiments/social_navigation/benchmark)
+được ghim theo revision lịch sử. Các lệnh `trial`/kiểm định còn dưới đây vẫn được hỗ trợ.
+
 Hai lựa chọn đều dùng native `GroupKernel` và cùng proxy tròn, scene, map, Nav2, LiDAR, robot:
 
 | Lựa chọn | Predicate người | Radius robot trong native | Né robot trong group ORCA | Contact response |
@@ -15,21 +19,12 @@ Radius robot 0,25 m là envelope danh định dùng trong benchmark, không thay
 
 ## Chạy
 
-Tại repository root, dùng output directory mới:
+Kiểm định hình học tại repository root, dùng output file mới:
 
 ```bash
-# Kiểm tra hình học và quỹ đạo trước contact (venv)
 experiments/social_navigation/.venv-socnavgym/bin/python \
   experiments/social_navigation/benchmark/validate_circle_contact.py \
-  --output experiments/social_navigation/benchmark/geometry_comparison/reports/run02/geometry_validation.json
-
-# 8 lượt tuần tự: native/circle_contact × standing/counterflow × seed 42/43
-bash experiments/social_navigation/benchmark/run.sh geometry-matrix \
-  --report-dir experiments/social_navigation/benchmark/geometry_comparison/reports/run02
-
-# Phân tích pose Gazebo, không đo pose worker cho một lựa chọn và pose simulator cho lựa chọn kia
-python3 experiments/social_navigation/benchmark/analyze_geometry.py \
-  experiments/social_navigation/benchmark/geometry_comparison/reports/run02
+  --output experiments/social_navigation/benchmark/generated/geometry_validation.json
 ```
 
 Xem riêng biến thể trên GUI:
@@ -41,7 +36,7 @@ bash experiments/social_navigation/benchmark/run.sh trial \
   --report-dir experiments/social_navigation/benchmark/geometry_comparison/reports/gui01
 ```
 
-`--geometry` mặc định là `native`. Biến thể yêu cầu `--backend socnavgym` và `--report-dir` riêng; trial từ chối ghi đè kết quả đã có. Matrix tái sử dụng trial protocol hợp lệ trong cùng thư mục, chạy tuần tự và đổi thứ tự variant theo parity seed. Nếu một trial lỗi, chọn directory mới sau khi xử lý lỗi; không xóa dữ liệu lỗi để che lịch sử.
+`--geometry` mặc định là `native`. Biến thể yêu cầu `--backend socnavgym` và `--report-dir` riêng; trial từ chối ghi đè kết quả đã có. Ma trận lịch sử tái sử dụng trial protocol hợp lệ trong cùng thư mục, chạy tuần tự và đổi thứ tự variant theo parity seed. Dùng directory mới cho trial; giữ dữ liệu lỗi để điều tra.
 
 Hai phía cùng bật passive diagnostics. Raw captures nằm trong `benchmark/generated/` (ignored); report giữ hash/path. Standing là negative control, khác biệt nhỏ về đường robot không phải bằng chứng khác biệt hành vi xã hội. Seed người chưa cố định đồng thời mẫu MPPI, AMCL và noise LiDAR; hai seed không đủ xếp hạng thống kê.
 

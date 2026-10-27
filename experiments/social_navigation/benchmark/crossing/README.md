@@ -1,5 +1,9 @@
 # Người đi cắt ngang lối robot: native SFM và ORCA+
 
+Runner ma trận và analyzer của cohort này đã nghỉ dùng. Báo cáo giữ nguyên;
+[source và lệnh cũ](https://github.com/CuongBien/DynamuhSim/tree/9833565fa546d55cb0e553f8388bf4a703c59583/experiments/social_navigation/benchmark)
+được ghim theo revision lịch sử. Các lệnh `trial`/kiểm định còn dưới đây vẫn được hỗ trợ.
+
 Cảnh `crossing` có ba người độc lập, xuất phát tại ba vị trí x gần
 -25,5/-24/-22,5 m và y luân phiên ±2,1 m. Mỗi người tuần tra sang phía đối
 ngược rồi quay lại. Seed 42/43 đổi hướng xuất phát và jitter x ±0,1 m.
@@ -26,17 +30,9 @@ Robot tự nhận goal; cửa sổ GUI đóng khi trial kết thúc. Bản headl
 ảnh/GIF từ camera RGB Gazebo. Các lượt báo cáo dùng headless, không tính là
 kiểm thử thao tác GUI trực tiếp.
 
-## Kiểm định và chạy lại benchmark
+## Protocol cohort lịch sử
 
-```bash
-bash experiments/social_navigation/benchmark/run.sh crossing-matrix \
-  --report-dir experiments/social_navigation/benchmark/crossing/reports/run02
-python3 experiments/social_navigation/benchmark/analyze_sfm.py \
-  experiments/social_navigation/benchmark/crossing/reports/run02 \
-  --goal-layout individual --condition crossing
-```
-
-Runner kiểm tra đủ bốn policy/seed trước khi chạy tuần tự bốn lượt Gazebo.
+Runner lịch sử kiểm tra đủ bốn policy/seed trước khi chạy tuần tự bốn lượt Gazebo.
 `--validate-only` chỉ kiểm tra worker. Validation cache ghim source adapter,
 fixture builder, validator, kernel trước thay đổi và Docker image.
 Các probe gồm parity với upstream env.step, regression fixture đích riêng cũ,

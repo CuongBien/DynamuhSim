@@ -1,5 +1,9 @@
 # CrowdSimPlus: đích riêng cho từng người
 
+Runner ma trận và analyzer của cohort này đã nghỉ dùng. Báo cáo giữ nguyên;
+[source và lệnh cũ](https://github.com/CuongBien/DynamuhSim/tree/9833565fa546d55cb0e553f8388bf4a703c59583/experiments/social_navigation/benchmark)
+được ghim theo revision lịch sử. Các lệnh `trial`/kiểm định còn dưới đây vẫn được hỗ trợ.
+
 Đây là fixture mới để kiểm tra tuần tra SFM/ORCA+, không chỉnh policy native.
 Giữ initial poses seed 42/43, map, Mecanum/Nav2, timestep 0,1 s, human radius
 0,36 m và preferred speed 0,8 m/s. Ba người có hai endpoint x=-28/-21, với
@@ -26,17 +30,9 @@ bash experiments/social_navigation/benchmark/run.sh trial \
 Robot tự nhận goal (-14,0). GUI tự đóng khi lượt benchmark kết thúc.
 Đổi `--human-policy orca_plus` để chạy đối chiếu; dùng report directory mới.
 
-## Kiểm định và benchmark lại
+## Protocol cohort lịch sử
 
-```bash
-bash experiments/social_navigation/benchmark/run.sh individual-goals-matrix \
-  --report-dir experiments/social_navigation/benchmark/individual_goals/reports/run02
-python3 experiments/social_navigation/benchmark/analyze_sfm.py \
-  experiments/social_navigation/benchmark/individual_goals/reports/run02 \
-  --goal-layout individual
-```
-
-Runner dùng image đã ghim và tự kiểm định trước khi chạy bốn lượt Gazebo tuần
+Runner lịch sử dùng image đã ghim và tự kiểm định trước khi chạy bốn lượt Gazebo tuần
 tự. Mỗi policy/seed phải khớp full native env.step qua 30 bước, giữ nguyên
 shared-mode dynamics so với kernel trước thay đổi, và hoàn tất >=2 chặng mỗi
 người trong 30 sim s với robot cố định ở xa. SFM seed 42 có thêm shared-endpoint

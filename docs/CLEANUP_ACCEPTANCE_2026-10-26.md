@@ -181,3 +181,16 @@ Bước tiếp theo: nghiệm thu một episode capture end-to-end qua API mới
 Recorder đóng0, MCAP có16 topic/1.019 depth frames. 1.012 cặp ON/OFF được đối chiếu bitwise; bảy raw frame thiếu auxiliary đều ở warmup, active/tail không thiếu. Tail3,34s,33frame trong tail; thêm hai frame sau observation_end. Native camera/friction/TF và teardown đạt; Gazebo clean, ROS launch0, không còn owned session. Ba action-status CDR được giải mã bằng ROS đang cài dù MCAP có cảnh báo embedded schema.
 
 Chỉ thêm tài liệu/receipt nghiệm thu; runtime giữ nguyên. Raw ~0,926GB local ignored, inventory/hash và mọi failure/outcome cũ được giữ. Chưa có capture WM training eligibility hoặc success-rate claim. Bước tiếp theo: phân tích đoạn cuối TIMEOUT từ bản ghi (AMCL, goal orientation, MPPI commands/path), không nới ngưỡng hoặc thay kết quả này.
+
+
+## 2026-10-27 — retire completed root benchmark cohorts
+
+Deleted 16 obsolete tools (1,420 Python lines): eight matrix runners, six
+cohort analyzers, a checkpoint-specific preservation audit and a native
+collision probe. Historical source is pinned at `9833565`; reports stay intact.
+`benchmark/run.sh` now exposes only the retained diagnostic `trial` route.
+The trial, workers, geometry/ORCA implementations, validators and replay are
+byte-identical. Six shell invocations match before/after; eight retired modes
+are rejected. Existing suites: 278 tests; CLI: 28; native geometry/ORCA: 22
+cases with identical before/after results. No new Gazebo run or tuning.
+Local evidence: `benchmark/generated/retired_root_cohorts_cleanup_20261027/`.
