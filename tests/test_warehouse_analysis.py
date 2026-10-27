@@ -13,6 +13,7 @@ import numpy as np
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "python"))
 from dynamuhsim.analysis import warehouse as measurements
+from dynamuhsim.analysis.warehouse import robot_human_gaps
 HAS_SHAPELY = importlib.util.find_spec("shapely") is not None
 NAMES = ("common_gazebo", "socnavgym_response_fix")
 FIXTURE = ROOT / "tests/fixtures/warehouse_analysis.json"
@@ -129,6 +130,14 @@ class WarehouseAnalysisTests(unittest.TestCase):
             dt = eval(compile(ast.Expression(call.args[2]),name,"eval"),dict(dt=.2))
             self.assertEqual(dt,.2)
             self.assertFalse(any(isinstance(n,ast.FunctionDef) and n.name=="measured_gaps" for n in tree.body))
+
+
+    def test_interval_gaps_match_audited_linear_closest_approach_boundaries(self):
+        # Crossing, stationary, past/future closest approach: no extrapolation.
+        before = [[[1.,0.]],[[1.,0.]],[[1.,0.]],[[2.,0.]]]
+        after = [[[-1.,0.]],[[1.,0.]],[[2.,0.]],[[1.,0.]]]
+        robot = [[0.,0.]]*4
+        np.testing.assert_array_equal(robot_human_gaps(before,after,robot,robot),[-.61,.39,.39,.39])
 
 
 if __name__ == "__main__":

@@ -212,3 +212,19 @@ were supplied from Git revision `9833565` in an isolated ignored fixture root.
 Kernels, workers, scene builders and plugins remain byte-identical. No Gazebo
 run, navigation tuning, training or dataset production. Local evidence:
 `benchmark/generated/retired_adapter_tools_cleanup_20261027/`.
+
+
+## 2026-10-27 — retire fixed-cohort Nav2 report producers
+
+Deleted 11 completed-cohort report/diagnostic/packaging tools, the now-unused
+`analysis/reporting.py`, its test file and policy-hash fixture: 14 files.
+The independent interval-gap regression was moved verbatim into warehouse
+tests; four tests specific to retired code were removed. Group audit/probe,
+gates, analyzers, workers and acceptance thresholds remain unchanged.
+Existing suites: 274 tests (previously 278), plus five replay/friction/failure
+regressions; 28 CLI probes; ten native worker probes including six Docker,
+65 replies, warmup and fault paths. Clean wheel build contains exactly the
+29 current Python modules, no retired module/cache, and fresh runtime/audit
+imports pass. New standing45/walking45 capture prepare/verify both pass;
+no simulator, training, dataset regeneration or historical receipt rewrite.
+Local evidence: `benchmark/generated/retired_nav2_reporting_cleanup_20261027/`.
