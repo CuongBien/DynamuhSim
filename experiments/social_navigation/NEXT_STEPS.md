@@ -2,43 +2,43 @@
 
 ## Cập nhật — đã thu batch đầu dữ liệu chuyển động cho WM
 
-[WM batch report](benchmark/wm_episode_batch/reports/WM_BATCH_REPORT.md): 10 lượt SocNavGym với 5 seed mới × standing/walking; **8 episode hợp lệ, 2 cách ly** vì Gazebo shutdown exit255. Không retry/thay thế/nới clean-exit gate. Có 5,106 cửa sổ, 5,094 target WM observed BEV hợp lệ; split 5 train / 2 validation / 1 test theo seed family. Test chỉ còn standing49. 6,696 depth khớp MCAP, 8 tests và audit causal/frame/portable/duplicate đạt.
+[WM batch report](../archive/social_navigation/reports/wm_episode_batch/WM_BATCH_REPORT.md): 10 lượt SocNavGym với 5 seed mới × standing/walking; **8 episode hợp lệ, 2 cách ly** vì Gazebo shutdown exit255. Không retry/thay thế/nới clean-exit gate. Có 5,106 cửa sổ, 5,094 target WM observed BEV hợp lệ; split 5 train / 2 validation / 1 test theo seed family. Test chỉ còn standing49. 6,696 depth khớp MCAP, 8 tests và audit causal/frame/portable/duplicate đạt.
 
 Input sensor/action history 2 s; future observed BEV +0.5/+1/+3 s và executed-action condition đọc riêng. GT chỉ ở LABEL; H1–H5/association/RL reward masked. Chưa fit/tune WM, HuNavSim chưa dùng. Full bundle khoảng 3.01 GB/raw ở generated cần backup riêng; Git có code/freeze/reports/window mẫu và media ghi thật. Bước kế: train thử WM observed BEV trên train/validation, chưa RL online hoặc đổi kiến trúc robot. Mốc lưu: `feat: collect a masked sensor-action pilot dataset for world models`.
 
 ## Cập nhật23/10/2026 — hoàn thành train thử classifier người/vật
 
-[Classifier report](benchmark/depth_person_classifier/reports/CLASSIFIER_REPORT.md):4cấu hình train CUDA RTX4060 trên54train/30validation; chọn linear depth31tham số,threshold0.5 trước khi mở48test. Validation11/12người,0/18đồ vật nhận nhầm; test23/24người,0/24đồ vật nhận nhầm, còn1FN dưới che khuất. Gate pilot đặt trước fit đạt; không suy ra end-to-end detector recall hoặc tổng quát ngoài một avatar/nhà xưởng.
+[Classifier report](../archive/social_navigation/reports/depth_person_classifier/CLASSIFIER_REPORT.md):4cấu hình train CUDA RTX4060 trên54train/30validation; chọn linear depth31tham số,threshold0.5 trước khi mở48test. Validation11/12người,0/18đồ vật nhận nhầm; test23/24người,0/24đồ vật nhận nhầm, còn1FN dưới che khuất. Gate pilot đặt trước fit đạt; không suy ra end-to-end detector recall hoặc tổng quát ngoài một avatar/nhà xưởng.
 
 10tests và audit68choice/132portable replay đạt; model/features/normalization/testseal/trọng số/reports/GIF validation thật lưu Git. Corpus/ROS/Nav2/staged user giữ nguyên, HuNavSim chưa dùng, H1–H5/association/WMtraining vẫnfalse. Mốc classifier đã đóng; bước kế quay lại thu episode robot chuyển động phục vụ WM/RL với nhãn chưa đủ tin cậy được mask, không chờ detector hoàn hảo. Mốc lưu: `feat: train and validate a depth person classifier pilot`.
 
 ## Cập nhật23/10/2026 — bộ pilot perception có nhãn đã xuất
 
-[Corpus report](benchmark/depth_perception_corpus/reports/CORPUS_REPORT.md):7cảnh GPU NVIDIA,525depth đối chứng/140scan native; xuất19frame/132proposal (64người,68môi trường), chia toàn họ bố cục train/validation/test trước thu. Static chỉ giữ midpoint; đầu vào depth+LiDAR tách LABEL, khôngRGB/H1–H5. 3frame đầu/21proposal thiếu scan nhân quả được mask, không dùng scan tương lai.
+[Corpus report](../archive/social_navigation/reports/depth_perception_corpus/CORPUS_REPORT.md):7cảnh GPU NVIDIA,525depth đối chứng/140scan native; xuất19frame/132proposal (64người,68môi trường), chia toàn họ bố cục train/validation/test trước thu. Static chỉ giữ midpoint; đầu vào depth+LiDAR tách LABEL, khôngRGB/H1–H5. 3frame đầu/21proposal thiếu scan nhân quả được mask, không dùng scan tương lai.
 
-9test và auditor02/portable QA đạt (84sample đổi nhãn không đổi input,13frame bỏ tương lai không đổi); auditor01 có giả định dư về scan và được giữ FAIL/source/diff. Không model test/tuning/preview test. [Mẫu train](benchmark/depth_perception_corpus/examples/train_p003/manifest.json) và [GIF replay thật](benchmark/depth_perception_corpus/reports/media/depth_labels.gif) lưu Git; full bundle/raw ở generated cần backup riêng. Chỉ nghiệm thu data pilot, một mesh/nhà xưởng và scripted motion; chưa detector/association/train WorldModel, không sửa ROS/Nav2/HuNavSim. Bước kế: baseline person-vs-environment trên train/validation rồi đóng băng trước test. Mốc lưu: `feat: add a labelled depth perception pilot corpus`.
+9test và auditor02/portable QA đạt (84sample đổi nhãn không đổi input,13frame bỏ tương lai không đổi); auditor01 có giả định dư về scan và được giữ FAIL/source/diff. Không model test/tuning/preview test. [Mẫu train](benchmark/depth_perception_corpus/examples/train_p003/manifest.json) và [GIF replay thật](../archive/social_navigation/reports/depth_perception_corpus/media/depth_labels.gif) lưu Git; full bundle/raw ở generated cần backup riêng. Chỉ nghiệm thu data pilot, một mesh/nhà xưởng và scripted motion; chưa detector/association/train WorldModel, không sửa ROS/Nav2/HuNavSim. Bước kế: baseline person-vs-environment trên train/validation rồi đóng băng trước test. Mốc lưu: `feat: add a labelled depth perception pilot corpus`.
 
 ## Cập nhật 23/10/2026 — depth planar-surface veto có nghiệm thu giới hạn
 
-[Surface guard](benchmark/depth_surface_guard/reports/SURFACE_GUARD_REPORT.md): giữLiDAR+depth theo người dùng, khôngRGB. Quy tắc CUDA chốt trước regression và fixture mới: rút8false-support rows trên hộp, không gắn planar cho người, giữ75proposal/40person-owned rows và true support1→1. Cũfull/null sai4→0/3→0; cảnh mới hộp xoay+trụ cong sai2→1, còn nhận nhầm trụ tại5s và thiếu recall.
+[Surface guard](../archive/social_navigation/reports/depth_surface_guard/SURFACE_GUARD_REPORT.md): giữLiDAR+depth theo người dùng, khôngRGB. Quy tắc CUDA chốt trước regression và fixture mới: rút8false-support rows trên hộp, không gắn planar cho người, giữ75proposal/40person-owned rows và true support1→1. Cũfull/null sai4→0/3→0; cảnh mới hộp xoay+trụ cong sai2→1, còn nhận nhầm trụ tại5s và thiếu recall.
 
 7test/75CPU–GPU comparisons/18270point residual audit đạt. Cảnh mới75depth+20scan GPU NVIDIA đóng sạch; source/config không đổi saufreeze. Chỉ surface-only gatePASS; full semantic vẫnFAIL, không defaultROS/Nav2/WorldModeltrain/HuNavSim, H1–H5 masked. Bước kế: bộ mẫu perception depth có nhãn nhỏ cho người/vật cong/chuyển động/occlusion; chưa batch trainWorldModel. Mốc lưu: `feat: add depth surface veto with independent clutter checks`.
 
 ## Cập nhật 23/10/2026 — pretrained LiDAR semantic pilot chưa đạt
 
-[DR-SPAAM report](benchmark/lidar_person_pilot/reports/LIDAR_PERSON_REPORT.md): API gốc/checkpoint JRDB ann chạy PyTorch2.7.1 CUDA12.8 trên RTX4060 trong venv riêng, parity88tensors/60312cutout/3synthetic sequences đạt. Hai capture GPU cùng fixture full/null đóng sạch:150depth+40scan. Full4frame khả dụng có5supported rows=1người+4đồ vật; null3false rows; cả qualitygate FAIL. Không hạ confidence0.5 hoặc bỏ các cụm chưa rõ.
+[DR-SPAAM report](../archive/social_navigation/reports/lidar_person_pilot/LIDAR_PERSON_REPORT.md): API gốc/checkpoint JRDB ann chạy PyTorch2.7.1 CUDA12.8 trên RTX4060 trong venv riêng, parity88tensors/60312cutout/3synthetic sequences đạt. Hai capture GPU cùng fixture full/null đóng sạch:150depth+40scan. Full4frame khả dụng có5supported rows=1người+4đồ vật; null3false rows; cả qualitygate FAIL. Không hạ confidence0.5 hoặc bỏ các cụm chưa rõ.
 
 Math/model/config chốt trước capture; chỉ sửa JSON NumPy-bool writer sau capture/trước quality evaluation, nguồn cũ/diff/failure được giữ. Audit14360rays/6real-prefix/10causal selections và9test đạt; integrity không thay semanticFAIL. Không ROS/Nav2/default/WorldModel/train/HuNavSim. Người dùng chốt giữLiDAR+depth, không RGB. Bước tiếp: conservative depth surface/object evidence với abstention, regression cũ rồi fixture mới. Mốc lưu: `feat: evaluate pretrained LiDAR person detection on GPU`.
 
 ## Cập nhật 23/10/2026 — pixel visibility và clutter control
 
-[Visibility report](benchmark/depth_visibility_pilot/reports/VISIBILITY_REPORT.md): một fixture tĩnh native mesh,15camera×5timestamp=75ảnh GPU NVIDIA. Nhãn10649pixel người không mâu thuẫn, ownership ổn định; audit57070pixel/9test đạt. Bốn người nhìn thấy đều có proposal, nhưng shape filter vẫn giữ2cụm đồ vật cả khi ẩn hết người: chưa thể gọi track là người hoặc bật association/train. Người phía sau chỉ còn11.92%silhouette nhìn thấy; chưa có fully-occluded case thật hoặc dynamic semantic acceptance.
+[Visibility report](../archive/social_navigation/reports/depth_visibility_pilot/VISIBILITY_REPORT.md): một fixture tĩnh native mesh,15camera×5timestamp=75ảnh GPU NVIDIA. Nhãn10649pixel người không mâu thuẫn, ownership ổn định; audit57070pixel/9test đạt. Bốn người nhìn thấy đều có proposal, nhưng shape filter vẫn giữ2cụm đồ vật cả khi ẩn hết người: chưa thể gọi track là người hoặc bật association/train. Người phía sau chỉ còn11.92%silhouette nhìn thấy; chưa có fully-occluded case thật hoặc dynamic semantic acceptance.
 
 Giữ lỗi wiring01–03 và strict inter-frame bitwise FAIL04. Protocol2 chốt trước05 dùng tolerance số học1mm đã có cho label, vẫn yêu cầu full/control cùng timestamp khớp từng byte;05 đạt numeric gate, strict bitwise vẫnfalse. Không thay inference/ROS/Nav2/dataset cũ; H1–H5/trainfalse, HuNavSim chưa dùng, navigationTIMEOUT giữ riêng. Bước tiếp: semantic person-vs-object sensor-only, kiểm lại clutter rồi động/occlusion và scene mới trước batch. Mốc lưu: `feat: add static depth visibility and clutter validation`.
 
 ## Cập nhật 23/10/2026 — sửa gap association, kiểm seed44 mới
 
-[Identity guard](benchmark/depth_identity_guard/reports/IDENTITY_GUARD_REPORT.md): candidate05 chặn case GT5→GT6 ở seed43 (pairing changes1→0), giữ đủ1983 paired rows; mesh42 giữ fragmentation10, repeat42 giảm8→7. Các bản01–04 chưa đạt được giữ code/hash/kết quả. 14 behavior tests và audit đạt; code/gate chốt trước seed44.
+[Identity guard](../archive/social_navigation/reports/depth_identity_guard/IDENTITY_GUARD_REPORT.md): candidate05 chặn case GT5→GT6 ở seed43 (pairing changes1→0), giữ đủ1983 paired rows; mesh42 giữ fragmentation10, repeat42 giảm8→7. Các bản01–04 chưa đạt được giữ code/hash/kết quả. 14 behavior tests và audit đạt; code/gate chốt trước seed44.
 
 Seed44 mới trên NVIDIA:1023depth bitwise,801cửa sổ/1episode. Parent/guard cùng2587paired,0pairing changes,fragmentation7: kiểm không suy giảm, chưa chứng minh cải thiện trên seed này. **Navigation TIMEOUT90.04s, goal còn4.012m** giữ nguyên. Identity-safety gate đạt; gate đầy đủ cũ vẫn FAIL trên43/44 vì fragmentation không giảm. Semantic/association/H1–H5/train vẫnfalse; không thay mặc định ROS. Bước kế: visibility/person-instance và semantic association trước batch; HuNavSim chưa dùng.
 
@@ -46,7 +46,7 @@ Mốc lưu: `fix: guard depth track identities across observation gaps`.
 
 ## Cập nhật 22/10/2026 — đã thu và kiểm chứng seed 43 mới
 
-[Seed43 report](benchmark/depth_seed43_validation/reports/SEED43_REPORT.md): một recording mới trên NVIDIA, cùng layout/depth mesh/Nav2, đổi seed 42→43; frozen engine trước capture, không tune. Có 1051 depth khớp raw bitwise, 802 cửa sổ/1 episode, dữ liệu/cleanup/audit đạt; quỹ đạo người thực tế khác seed42. **Navigation TIMEOUT 90.025 s, goal còn 3.7013 m**, không đổi thành success.
+[Seed43 report](../archive/social_navigation/reports/depth_seed43_validation/SEED43_REPORT.md): một recording mới trên NVIDIA, cùng layout/depth mesh/Nav2, đổi seed 42→43; frozen engine trước capture, không tune. Có 1051 depth khớp raw bitwise, 802 cửa sổ/1 episode, dữ liệu/cleanup/audit đạt; quỹ đạo người thực tế khác seed42. **Navigation TIMEOUT 90.025 s, goal còn 3.7013 m**, không đổi thành success.
 
 Combined giữ 1983 paired rows, unpaired 900→268, paired ratio 68.78→88.09%; fragmentation 9→9 và còn một pairing change nên **gate kết hợp FAIL**. Chưa nghiệm thu re-ID/semantic/association/train, baseline cũ giữ nguyên. Case GT5→GT6 ở 13.5→13.9 s đã lưu LABEL ONLY cho regression; nếu dùng để tune bản sau phải kiểm trên seed mới khác. Không thu batch hoặc sửa ROS; HuNavSim chưa dùng.
 
@@ -54,7 +54,7 @@ Mốc lưu: `feat: validate frozen depth tracking on a new seed`.
 
 ## Cập nhật 22/10/2026 — depth track refinement có giới hạn profile
 
-[Refinement report](benchmark/depth_track_refinement/reports/REFINEMENT_REPORT.md): frozen shape filter + dormant ID được so sánh bốn ablation trên ba recording. Hai lượt mesh depth cải thiện paired ratio 77.74→93.71% và 75.62→90.09%, fragmentation proxy 13→10 và 10→8. Đây là diagnostic hình học, không phải semantic accuracy.
+[Refinement report](../archive/social_navigation/reports/depth_track_refinement/REFINEMENT_REPORT.md): frozen shape filter + dormant ID được so sánh bốn ablation trên ba recording. Hai lượt mesh depth cải thiện paired ratio 77.74→93.71% và 75.62→90.09%, fragmentation proxy 13→10 và 10→8. Đây là diagnostic hình học, không phải semantic accuracy.
 
 **Validation proxy cũ FAIL:** paired rows 997→603 dù tỷ lệ ghép tăng; prior đã loại trực tiếp 383 baseline-paired rows của người dạng cylinder. Giữ failure và baseline cũ, không triển khai filter hay bật mask train. Lượt mesh bổ sung chọn sau failure, không phải held-out test; navigation nguồn vẫn TIMEOUT. 13 test/audit integrity đạt, không thay kết luận semantic. Bước kế: recording depth mesh với seed/layout khác và nhãn visibility/semantic trước batch; HuNavSim chưa dùng. Không chạy Gazebo mới hoặc sửa ROS trong lượt này.
 
@@ -62,7 +62,7 @@ Mốc lưu: `feat: evaluate depth track refinements across sensor profiles`.
 
 ## Cập nhật 22/10/2026 — pilot track cảm biến và nhãn BEV tương lai
 
-[Perception/target pilot](benchmark/perception_target_pilot/reports/PERCEPTION_TARGET_REPORT.md) chạy offline cùng episode: depth + odom tạo candidate tracks, GT chỉ ở nhánh label. 2577/3315 confirmed candidate rows ghép hình học được (77.74%, median 13.62 cm); đây không phải accuracy detector. Có phân mảnh ID và ứng viên chưa ghép, nên semantic/association/training masks vẫn false.
+[Perception/target pilot](../archive/social_navigation/reports/perception_target_pilot/PERCEPTION_TARGET_REPORT.md) chạy offline cùng episode: depth + odom tạo candidate tracks, GT chỉ ở nhánh label. 2577/3315 confirmed candidate rows ghép hình học được (77.74%, median 13.62 cm); đây không phải accuracy detector. Có phân mảnh ID và ứng viên chưa ghép, nên semantic/association/training masks vẫn false.
 
 Đã dựng 2469 target BEV ở +0.5/+1/+3 s cho 823 cửa sổ: future depth thực quan sát, warp về khung robot tại anchor, unknown được mask khỏi loss. GT ego poses chỉ dùng cho LABEL; input BEV warp bằng odom nhân quả và vẫn có sai số ước lượng. 12 test và audit độc lập đạt; portable bundle gốc/raw/ROS không đổi. Bước kế: nghiệm thu person detector từ depth, occlusion/đứt ID và alignment trên episode độc lập trước batch/train. Giữ HuNavSim cho test cuối.
 
@@ -70,7 +70,7 @@ Mốc lưu: `feat: prototype sensor tracks and anchor-frame future depth BEV lab
 
 ## Cập nhật 22/10/2026 — đã xuất portable episode, chưa train-ready
 
-[Portable episode](benchmark/portable_episode/reports/PORTABLE_EPISODE_REPORT.md): đã xuất **823 cửa sổ từ 1 episode**, history 2 s / nhãn tương lai 3 s, đủ **1013 ảnh depth khớp raw từng byte**. Loader NumPy đọc được ở thư mục khác mà không cần ROS/Gazebo; input và ground-truth supervision đọc riêng. Bundle đầy đủ khoảng 539 MB ở `benchmark/portable_episode/generated/episode01/`; Git giữ công cụ, báo cáo và một mẫu nhỏ.
+[Portable episode](../archive/social_navigation/reports/portable_episode/PORTABLE_EPISODE_REPORT.md): đã xuất **823 cửa sổ từ 1 episode**, history 2 s / nhãn tương lai 3 s, đủ **1013 ảnh depth khớp raw từng byte**. Loader NumPy đọc được ở thư mục khác mà không cần ROS/Gazebo; input và ground-truth supervision đọc riêng. Bundle đầy đủ khoảng 539 MB ở `benchmark/portable_episode/generated/episode01/`; Git giữ công cụ, báo cáo và một mẫu nhỏ.
 
 Depth khả dụng già 100 ms so với anchor theo rule sampling bảo thủ; BEV ở thời điểm đo depth, chưa bù chuyển động tới anchor. 194/823 goal quá tuổi được mask. H1–H5, sensor association, future BEV và training eligibility vẫn false; không coi cửa sổ chồng lấn là episode độc lập. Giữ split pilot_only và HuNavSim cho test cuối. Bước kế: xác thực sensor track/association và chốt target BEV tương lai, rồi nghiệm thu độc lập nhỏ trước batch. Lượt này xử lý offline, không chạy lại Gazebo hoặc sửa ROS/Nav2.
 
@@ -78,9 +78,9 @@ Mốc lưu: `feat: export a portable episode with causal windows and masked supe
 
 ## Cập nhật22/10/2026 — một episode tránh nhóm sớm đã tới đích thật
 
-[Pilot Nav2 tránh sớm](benchmark/early_avoidance_pilot/reports/EARLY_AVOIDANCE_REPORT.md):profile runtime radius0.25m/inflation0.8m, speed0.30/0.20mps đạt1lượt standingv3 seed42, AMCL/odom gốc:87.31sim s trong budget90s, goal thật14.42cm/0.069rad, nominal gapmin59.25cm, không hull intrusion nhóm standing theo metric. Đủ tail3.35s;16topicMCAP,1013depth/507scan/10120IMU;1008cặp depth đối chứng.5frame phụ thiếu đều warmup, shared OFF khớp raw bitwise; GPU NVIDIA/cleanup đạt.
+[Pilot Nav2 tránh sớm](../archive/social_navigation/reports/early_avoidance_pilot/EARLY_AVOIDANCE_REPORT.md):profile runtime radius0.25m/inflation0.8m, speed0.30/0.20mps đạt1lượt standingv3 seed42, AMCL/odom gốc:87.31sim s trong budget90s, goal thật14.42cm/0.069rad, nominal gapmin59.25cm, không hull intrusion nhóm standing theo metric. Đủ tail3.35s;16topicMCAP,1013depth/507scan/10120IMU;1008cặp depth đối chứng.5frame phụ thiếu đều warmup, shared OFF khớp raw bitwise; GPU NVIDIA/cleanup đạt.
 
-**Đính chính mốc động trước:**camera copier làm gz:expressed_in→ns0:expressed_in, khiến Gazebo bỏ frame ma sát4bánh; canonical XML audit đã bỏ sót. [Errata](benchmark/early_avoidance_pilot/reports/ERRATA.md). Fix riêng33427f4 khôi phục literal prefix trong runtime, SDKtest gốc4/bad0/fix4; src/robot và dataset pilot cũ không đổi. Ba lượt exploratory setup sai bị loại; slow fixed vẫn timeout và giữ FAIL. Không coi oracle/wz_std là fix hay tính success rate.
+**Đính chính mốc động trước:**camera copier làm gz:expressed_in→ns0:expressed_in, khiến Gazebo bỏ frame ma sát4bánh; canonical XML audit đã bỏ sót. [Errata](../archive/social_navigation/reports/early_avoidance_pilot/ERRATA.md). Fix riêng33427f4 khôi phục literal prefix trong runtime, SDKtest gốc4/bad0/fix4; src/robot và dataset pilot cũ không đổi. Ba lượt exploratory setup sai bị loại; slow fixed vẫn timeout và giữ FAIL. Không coi oracle/wz_std là fix hay tính success rate.
 
 Chỉ là1pilot cấu hình riêng, chưa default/robust social nav/train-ready. Native nhóm có thể tan; H1–H5 vẫn masked, association/futureBEV còn thiếu. Bước kế: chuẩn hóa episode đạt và provenance thành sample portable, rồi xác nhận độc lập nhỏ trước batch. Mốc lưu: `feat: complete an early avoidance pilot with native robot physics`.
 
@@ -88,7 +88,7 @@ Các mục dưới giữ lịch sử theo thời điểm đo.
 
 ## Cập nhật22/10/2026 — đối chứng cảnh03 và pilot depth động
 
-[Lifecycle và pilot động](benchmark/depth_proxy_lifecycle/reports/LIFECYCLE_MOTION_REPORT.md):cảnh03 đã đủbaseline/masked/null, camera ON/OFF/null và LiDAR chẩn đoán khớp bitwise,3exit0 trên NVIDIA với pause→stats dừng→đợi0.5s→stop. Control nguyên bản lượt này cũng đóng sạch; lỗi treo cũ chưa tái hiện/biết root cause, không tuyên bố sửa dứt điểm.
+[Lifecycle và pilot động](../archive/social_navigation/reports/depth_proxy_lifecycle/LIFECYCLE_MOTION_REPORT.md):cảnh03 đã đủbaseline/masked/null, camera ON/OFF/null và LiDAR chẩn đoán khớp bitwise,3exit0 trên NVIDIA với pause→stats dừng→đợi0.5s→stop. Control nguyên bản lượt này cũng đóng sạch; lỗi treo cũ chưa tái hiện/biết root cause, không tuyên bố sửa dứt điểm.
 
 Một pilot standingv3+Nav2 thu153cặp depth thật (68active), robot đi2.662m, người1/3 nhích4.09/11.26cm;153OFF khớp MCAP bitwise, renderer/cleanup đạt. **Điều hướng chưa đạt:** human guard fatal15.2025s, người1 cần0.311m/s trong khi cap0.20; replay offline tái hiện rejection. Lượt này quarantine, không train hoặc tính success. Không sửa ROS/Nav2/native worker/cap/clearance/defaultcamera/pilot cũ. Bước kế: replay và thử planner giảm tốc/tránh nhóm sớm trong runtime riêng, rồi1episode hoàn chỉnh; lifecycle vẫn cần theo dõi. Mốc lưu: `feat: validate ordered shutdown and record depth motion failure`.
 
@@ -96,7 +96,7 @@ Các mục dưới giữ lịch sử theo thời điểm đo.
 
 ## Cập nhật22/10/2026 — ablation trụ trong camera depth (nghiệm thu giới hạn)
 
-[Kiểm trụ depth và LiDAR](benchmark/depth_proxy_ablation/reports/DEPTH_PROXY_REPORT.md):2 cảnh tĩnh,6 fixture GPU NVIDIA sạch,160depth/30scan gốc/30scan chẩn đoán. Chỉ ẩn trụ ở camera OFF giúp thấy mesh người; camera ON và LiDAR chẩn đoán bằng bitwise với baseline,55 định nghĩa collision giữ nguyên. Audit raw/SHA và3test đạt. BEV có khe chân và khác đĩa bảo vệ LiDAR, không dùng để tự cho robot đi giữa nhóm.
+[Kiểm trụ depth và LiDAR](../archive/social_navigation/reports/depth_proxy_ablation/DEPTH_PROXY_REPORT.md):2 cảnh tĩnh,6 fixture GPU NVIDIA sạch,160depth/30scan gốc/30scan chẩn đoán. Chỉ ẩn trụ ở camera OFF giúp thấy mesh người; camera ON và LiDAR chẩn đoán bằng bitwise với baseline,55 định nghĩa collision giữ nguyên. Audit raw/SHA và3test đạt. BEV có khe chân và khác đĩa bảo vệ LiDAR, không dùng để tự cho robot đi giữa nhóm.
 
 **Chưa đạt đủ3 cảnh hoặc ổn định shutdown:** cảnh03 masked đo đủ nhưng2 lượt đóng phải SIGKILL; giữ lỗi run07/run08 và dừng retry. run06 lỗi GPU startup cũng giữ nguyên. Chỉ ghép2 cảnh hoàn chỉnh có lineage; không gọi toàn bộ run thành công. Không sửa ROS/Nav2/robot source hoặc tích hợp mặc định, không train. Bước kế: chẩn đoán lifecycle cảnh03, rồi1pilot động riêng trước recorder; còn association/persona và tương laiBEV. Mốc lưu: `feat: evaluate depth-only proxy filtering with static lidar controls`.
 
@@ -104,7 +104,7 @@ Các mục dưới giữ lịch sử theo thời điểm đo.
 
 ## Cập nhật22/10/2026 — kiểm chiều cao camera và hình BEV
 
-[A/B camera12/40cm](benchmark/camera_height_ab/reports/CAMERA_HEIGHT_REPORT.md) đã kiểm3snapshot tĩnh,2camera cùng timestamp trên GPU NVIDIA:60ảnh raw ổn định bitwise,5test đạt,3server clean exit/cleanup rỗng.40cm tăng độ phủ BEV ở3cảnh; tại cảnh sát nhóm, knownarea8.1%→11.5% nhưng62.7%→77.8%pixeldepth hợp lệ vẫn khớp mặt trụ proxy. Nâng camera chưa loại được hình người dạng cột; chưa chọn40cm làm mặc định. Thử nghiệm camera riêng, không Nav2/native human steps và không đổi robot source/pilot cũ.
+[A/B camera12/40cm](../archive/social_navigation/reports/camera_height_ab/CAMERA_HEIGHT_REPORT.md) đã kiểm3snapshot tĩnh,2camera cùng timestamp trên GPU NVIDIA:60ảnh raw ổn định bitwise,5test đạt,3server clean exit/cleanup rỗng.40cm tăng độ phủ BEV ở3cảnh; tại cảnh sát nhóm, knownarea8.1%→11.5% nhưng62.7%→77.8%pixeldepth hợp lệ vẫn khớp mặt trụ proxy. Nâng camera chưa loại được hình người dạng cột; chưa chọn40cm làm mặc định. Thử nghiệm camera riêng, không Nav2/native human steps và không đổi robot source/pilot cũ.
 
 Giữ các lỗi setup/animation/renderer run01–03; run04 là cohort tĩnh đạt. Bước kế ưu tiên ablation hình học mà depth nhìn thấy và kiểm lại LiDAR/collision trước tích hợp hoặc thu train lớn. Các nhãn H1–H5 vẫn cần kiểm chứng, robot chen nhóm vẫn cần metric/cost planner; không chờ World Model tự sửa những vấn đề này. Mốc commit: `feat: compare camera heights with paired Gazebo depth observations`.
 
@@ -113,7 +113,7 @@ Các mục dưới giữ lịch sử theo thời điểm đo.
 
 ## Cập nhật22/10/2026 — đã thu dataset pilot đầu tiên
 
-[Recorder và dataset pilot](benchmark/dataset_pilot/reports/PILOT_REPORT.md) đã thu1episode Gazebo headlessNVIDIA với6người/standingv3: goal thật14.72cm,404depth,202fullscans,4039IMU;16topicMCAP đọc lại,213cửa sổ lịch sử20bước/tương lai30bước. Audit độc lập xác nhận404ảnh depth bitwise bằng raw, không có quan sát tương lai và đủ nhãn quỹ đạo3s. Bản chính local ở `benchmark/dataset_pilot/episodes/pilot01/normalized`; raw/NPY lớn Gitignore, báo cáo/SHA/ảnh/GIFthật lưu Git. Chỉ runtime copy sửa metadata/TFcamera bị trùng; ROS/Nav2/human worker cũ giữ nguyên.
+[Recorder và dataset pilot](../archive/social_navigation/reports/dataset_pilot/PILOT_REPORT.md) đã thu1episode Gazebo headlessNVIDIA với6người/standingv3: goal thật14.72cm,404depth,202fullscans,4039IMU;16topicMCAP đọc lại,213cửa sổ lịch sử20bước/tương lai30bước. Audit độc lập xác nhận404ảnh depth bitwise bằng raw, không có quan sát tương lai và đủ nhãn quỹ đạo3s. Bản chính local ở `benchmark/dataset_pilot/episodes/pilot01/normalized`; raw/NPY lớn Gitignore, báo cáo/SHA/ảnh/GIFthật lưu Git. Chỉ runtime copy sửa metadata/TFcamera bị trùng; ROS/Nav2/human worker cũ giữ nguyên.
 
 Chốt nguồn theo năng lực: SocNavGym + CrowdSimPlus + ComplexityNav cho train/validation tách episode/seed/scene; HuNavSim hiện có giữ testcuối, không tuning. Giữ H1–H5 nhưng persona hiện tại null/maskfalse, không gán nhãn theo simulator hoặc đứng=H4. Chưa có bộ train hoàn chỉnh: cần kiểm persona xuyên guard/projection, sensor-track association và định nghĩa BEV tương lai, rồi pilot recorder từng nguồn còn lại trước batch12 nhỏ. Chưa triển khai World Model hay Isaac Sim. Mốc commit: `feat: record and validate a portable social navigation dataset pilot`.
 
@@ -122,7 +122,7 @@ Các mục bên dưới giữ lịch sử theo thời điểm đo.
 
 ## Cập nhật22/10/2026 — pilot nhóm với Nav2
 
-[Nhóm đi/đứng với Nav2 và camera thật](benchmark/socnavgym_group_nav2/reports/GROUP_NAV2_REPORT.md) đã được đo. Hai walking v2 quan sát được nhóm đi thật (seed42 tâm nhóm đi7.06m), nhưng actual goal lệch21.12/29.77cm nên chưa đạt ngưỡng20cm dù action SUCCEEDED. Standing v2 bị terminal stop sau15.06sim s do thành viên bị khóa; giữ nguyên đối chứng và không chạy seed43 v2.
+[Nhóm đi/đứng với Nav2 và camera thật](../archive/social_navigation/reports/socnavgym_group_nav2/GROUP_NAV2_REPORT.md) đã được đo. Hai walking v2 quan sát được nhóm đi thật (seed42 tâm nhóm đi7.06m), nhưng actual goal lệch21.12/29.77cm nên chưa đạt ngưỡng20cm dù action SUCCEEDED. Standing v2 bị terminal stop sau15.06sim s do thành viên bị khóa; giữ nguyên đối chứng và không chạy seed43 v2.
 
 Standing v3 riêng cho phép thành viên nhóm đứng gần robot nhích tránh≤0.2m/s, giữ floor hình học2mm và không đổi robot/Nav2. Replay interval lỗi cũ, offline/gate đạt; hai lượt headless NVIDIA tới đích thật18.87/15.85cm, max nhích0.150/0.126m/s. Bốn lượt hoàn tất không ghi overlap>5mm theo metric, nhưng clearance không tự chứng nhận social comfort. Nhóm ban đầu là fixture; native lifecycle tiếp tục, không gọi là formation tự phát.
 
@@ -134,7 +134,7 @@ Các mục dưới giữ lịch sử theo thời điểm đo.
 
 ## Cập nhật22/10/2026 — cùng nhiệm vụ Nav2 cho ba framework
 
-[Đối chiếu Nav2 và ảnh/GIF thật](benchmark/shared_nav2_pilot/reports/SHARED_NAV2_REPORT.md): đã chạy thêm2 CrowdSimPlus ORCA+ và2 ComplexityNav geometry, cùng6 người/cảnh/start-goal/MPPI/AMCL như2 SocNavGym v2 đã commit. Crowd01 đạt; crowd02 action SUCCEEDED nhưng world XY20.59cm vượt20cm nên giữ không đạt. Cả2 CN geometry đạt. Bốn lượt mới không ghi overlap>5mm theo metric, nhưng robot–người có lúc chỉ2.88–5.80cm, chưa chứng nhận social comfort.
+[Đối chiếu Nav2 và ảnh/GIF thật](../archive/social_navigation/reports/shared_nav2_pilot/SHARED_NAV2_REPORT.md): đã chạy thêm2 CrowdSimPlus ORCA+ và2 ComplexityNav geometry, cùng6 người/cảnh/start-goal/MPPI/AMCL như2 SocNavGym v2 đã commit. Crowd01 đạt; crowd02 action SUCCEEDED nhưng world XY20.59cm vượt20cm nên giữ không đạt. Cả2 CN geometry đạt. Bốn lượt mới không ghi overlap>5mm theo metric, nhưng robot–người có lúc chỉ2.88–5.80cm, chưa chứng nhận social comfort.
 
 YAML Nav2 byte-identical; world giống sau chuẩn hóa socket/native dt. CSPdt0.1s vàCNdt0.25s, native speed/observation khác nhau được giữ; không xếp hạng framework hoặc suy success rate từ2 lượt/model. GPU NVIDIA/cleanup đạt4 lượt, không sửa ROS/Nav2/vendor. Một assertion analyzer do pose tail trongshutdown đã sửa; không chạy thay simulator hoặc nâng ngưỡng. Source cũ,staging12 mục vàoutside worktree bảo toàn.
 
@@ -144,7 +144,7 @@ Các mục dưới giữ lịch sử theo thời điểm đo.
 
 ## Cập nhật22/10/2026 — pilot Nav2 với SocNavGym v2
 
-[Nav2 pilot đã đo](benchmark/socnavgym_nav2_pilot/reports/NAV2_PILOT_REPORT.md):1 empty control và2 lượt6 người giao cắt đều Nav2 SUCCEEDED, actual XY<=0.20m/yaw<=0.25rad. Hai lượt có người sai số XY17.86cm/14.54cm, min robot–human nominal disc gap6.18cm/19.71cm; không ghi overlap>5mm theo metric. Robot từ(−28,0) tới(−20,0), thực sự do Nav2 MPPI điều khiển; native người gate trongwarmup, bắt đầu sau accepted goal.
+[Nav2 pilot đã đo](../archive/social_navigation/reports/socnavgym_nav2_pilot/NAV2_PILOT_REPORT.md):1 empty control và2 lượt6 người giao cắt đều Nav2 SUCCEEDED, actual XY<=0.20m/yaw<=0.25rad. Hai lượt có người sai số XY17.86cm/14.54cm, min robot–human nominal disc gap6.18cm/19.71cm; không ghi overlap>5mm theo metric. Robot từ(−28,0) tới(−20,0), thực sự do Nav2 MPPI điều khiển; native người gate trongwarmup, bắt đầu sau accepted goal.
 
 Không sửa robot/Nav2 baseline/native/vendor; chỉ AMCL initial pose trongruntime copy. GPU NVIDIA được kiểm ở3 lượt, people RTF0.24–0.40 nên không gọi realtime hoặc benchmark tốc độ thuần. Source/staging ngoài experiment giữ nguyên. Mốc này dùng commit message `feat: validate SocNavGym v2 with bounded Nav2 warehouse pilot`. Bước kế: cùng bài Nav2 cho CrowdSimPlus ORCA+ và ComplexityNav geometry, rồi đối chiếu; SocNavGym group/formation+Nav2 cần pilot riêng. Không World Model/Isaac Sim.
 
@@ -152,7 +152,7 @@ Các mục dưới giữ kết quả các vòng trước theo thời điểm đo
 
 ## Cập nhật22/10/2026 — sửa SocNavGym response v2
 
-Baseline9 lượt Gazebo đã commit **`9ab3c9f`** (`feat: benchmark shared Gazebo scenes and retain SocNavGym crossing failure`). [Bản sửa response v2](benchmark/socnavgym_response_fix/reports/RESPONSE_FIX_REPORT.md) nằm trong experiment riêng:4 lượt bình thường hoàn tất (2 giao cắt,đối đầu,lối hẹp),2 test worker lỗi/socket loss đạt Pause interlock,6/6 offline và IPC exact20-step. Hai lượt crossing giữ khoảng hở robot–người đo thực khoảng4cm và không còn lỗi5.5s trong cửa sổ10s đã đo.
+Baseline9 lượt Gazebo đã commit **`9ab3c9f`** (`feat: benchmark shared Gazebo scenes and retain SocNavGym crossing failure`). [Bản sửa response v2](../archive/social_navigation/reports/socnavgym_response_fix/RESPONSE_FIX_REPORT.md) nằm trong experiment riêng:4 lượt bình thường hoàn tất (2 giao cắt,đối đầu,lối hẹp),2 test worker lỗi/socket loss đạt Pause interlock,6/6 offline và IPC exact20-step. Hai lượt crossing giữ khoảng hở robot–người đo thực khoảng4cm và không còn lỗi5.5s trong cửa sổ10s đã đo.
 
 Plugin Pause world và phát zero cmd_vel khi terminal fault; hai test có robot drift bằng0 theo samples, Play chỉ tiến1tick2.5ms rồi Pause lại. Đây là simulation interlock, không chứng nhận phanh robot thật. Không sửa ROS/Nav2/vendor hoặc baseline cũ, GPU NVIDIA được kiểm. Bằng chứng này cho6 cá nhân/seed42, không tự chuyển thành nghiệm thu formation/standing groups. Bước tiếp: pilot Nav2 nhỏ dùng v2, kiểm robot chủ động tránh/nhường trước benchmark navigation. Không World Model/Isaac Sim. Mốc sửa dùng commit message `fix: resolve SocNavGym crossing proposals and pause Gazebo on worker faults`.
 
@@ -160,7 +160,7 @@ Các mục dưới đây ghi lại những vòng trước theo thời điểm đ
 
 ## Cập nhật22/10/2026 — cohort Gazebo chung
 
-Offline36 ca đã commit **`ff79dbf`** (`feat: benchmark shared offline social navigation scenarios`). [Cohort Gazebo chung](benchmark/common_gazebo/reports/COMMON_GAZEBO_REPORT.md) đã thực hiện9 lượt (3 cấu hình ×3 near scenes,6 người/radius0.36m):8 hoàn tất10s; SocNavGym guarded crossing lỗi terminal tại5.5025s. Có actual poses/LiDAR/camera thật, GPU NVIDIA, shutdown/cleanup; không có Nav2 hoặc formation trong cohort này.
+Offline36 ca đã commit **`ff79dbf`** (`feat: benchmark shared offline social navigation scenarios`). [Cohort Gazebo chung](../archive/social_navigation/reports/common_gazebo/COMMON_GAZEBO_REPORT.md) đã thực hiện9 lượt (3 cấu hình ×3 near scenes,6 người/radius0.36m):8 hoàn tất10s; SocNavGym guarded crossing lỗi terminal tại5.5025s. Có actual poses/LiDAR/camera thật, GPU NVIDIA, shutdown/cleanup; không có Nav2 hoặc formation trong cohort này.
 
 Soc crossing còn gap+5.12mm trước fault nhưng robot trôi khi teardown gây signed gap−10.83cm. Chưa nghiệm thu cấu hình này cho tương tác sát robot/Nav2; bước kế là sửa proposal né robot và dừng robot khi worker fault trong phiên bản mới, tái kiểm đúng ca lỗi. Giữ SocNavGym cho mục tiêu nhóm theo bằng chứng lifecycle trước, CrowdSimPlus ORCA+ làm baseline và ComplexityNav geometry làm biến thể phụ. Không suy từ8 lượt hoàn tất ra an toàn/tự nhiên mọi cảnh. Kết quả Gazebo mới chưa commit; không sửa code robot/vendor hay staging ngoài experiment.
 
@@ -212,7 +212,7 @@ Giữ demo độc lập hiện có làm đối chứng. Chỉ nối Gazebo sau k
 
 ## Công việc kế tiếp sau đợt này
 
-Đã lưu ba commit: replay `b3f59e2`, observer AMCL `195f4e8`, Gazebo nhóm/GUI `e749fb5`. [Lifecycle SocNavGym](benchmark/socnavgym_lifecycle/README.md) đã kiểm tra ba seed với4100 update native: ID và reset prefix500 bước đạt, nhưng formation có nhảy vị trí tới32.6cm và overlap proxy hình tròn56–70cm. Quyết định: giữ formation độc lập, không promote vào Gazebo trong milestone này; không sửa policy để che hạn chế. Adapter nhóm cố định vẫn giữ nguyên.
+Đã lưu ba commit: replay `b3f59e2`, observer AMCL `195f4e8`, Gazebo nhóm/GUI `e749fb5`. [Lifecycle SocNavGym](https://github.com/CuongBien/DynamuhSim/blob/faf37964649820f91c479e7ef2df78ca388dc4bf/experiments/social_navigation/benchmark/socnavgym_lifecycle/README.md) đã kiểm tra ba seed với4100 update native: ID và reset prefix500 bước đạt, nhưng formation có nhảy vị trí tới32.6cm và overlap proxy hình tròn56–70cm. Quyết định: giữ formation độc lập, không promote vào Gazebo trong milestone này; không sửa policy để che hạn chế. Adapter nhóm cố định vẫn giữ nguyên.
 
 Bước kế tiếp chuyển sang contract/geometry ComplexityNav trước khi nối Gazebo: giữ runtime Python3.8 riêng, native human update và source gốc; kiểm tra robot feedback, ID/reset/clock và toàn bộ collision AABB nhà xưởng bằng fixture nhỏ, rồi native parity và LiDAR. Chưa chạy thêm ma trận AMCL hoặc thay kiến trúc robot. Khi backend đủ điều kiện, chạy bộ cảnh chung và chốt bảng lựa chọn; formation không đạt sẽ được ghi là hạn chế của phương án, không giữ toàn dự án chờ vô hạn.
 
@@ -256,7 +256,7 @@ Bước tiếp theo: commit pilot riêng, chốt protocol bộ cảnh chung cho3
 
 ## Sau cohort chung offline —22/10/2026
 
-Pilot ComplexityNav đã commit `c9dffe2`. [36 phép thử common response](benchmark/common_response/reports/run01/COMMON_RESPONSE_REPORT.md) đã hoàn tất,6 repeat-prefix đạt; đầu vào physical discs/targets/robot trace chung, native dt và prediction assumptions khác nhau được công bố. Guarded Soc, CSP ORCA+ và CN geometry không ghi overlap>1mm ở6 case/control; native Soc/CN và SFM giữ các hạn chế đã đo. Formation tắt trong cohort avoidance, không áp số6/6 cho nhóm.
+Pilot ComplexityNav đã commit `c9dffe2`. [36 phép thử common response](../archive/social_navigation/reports/common_response/run01/COMMON_RESPONSE_REPORT.md) đã hoàn tất,6 repeat-prefix đạt; đầu vào physical discs/targets/robot trace chung, native dt và prediction assumptions khác nhau được công bố. Guarded Soc, CSP ORCA+ và CN geometry không ghi overlap>1mm ở6 case/control; native Soc/CN và SFM giữ các hạn chế đã đo. Formation tắt trong cohort avoidance, không áp số6/6 cho nhóm.
 
 Theo mục tiêu người đi nhóm/đứng tương tác/formation, ưu tiên SocNavGym lifecycle variant đã có Gazebo; CrowdSimPlus ORCA+ giữ baseline tránh người. CN geometry là biến thể phụ, không gọi clustering là social formation hoặc ngầm dùng RGL chưa có checkpoint. Chưa chuyển backend mặc định của robot.
 

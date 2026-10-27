@@ -39,8 +39,8 @@ def run_trial(a, entrypoint, is_response):
     from PIL import Image
     HERE=entrypoint.parent;BENCH=HERE.parent;SOCIAL=BENCH.parent;REPO=SOCIAL.parent.parent
     adapter=load_file_module('_dynamuhsim_velocity_adapter',SOCIAL/'gazebo_adapter/run.py');make_world,stop=adapter.make_world,adapter.stop
-    gpu=load_file_module('_dynamuhsim_velocity_gpu',BENCH/'gpu_runtime/runtime_guard.py');RuntimeGuard,gpu_preflight=gpu.RuntimeGuard,gpu.gpu_preflight
-    shutdown=load_file_module('_dynamuhsim_velocity_shutdown',BENCH/'shutdown_fix/ordered_stop.py');launch_environment,stop_server=shutdown.launch_environment,shutdown.stop_server
+    from .gpu import RuntimeGuard,gpu_preflight
+    from .shutdown import launch_environment,stop_server
     library=HERE/('build/libresponse_adapter.so' if is_response else 'build/libcommon_adapter.so')
     out=a.report_dir.resolve();out.mkdir(parents=True,exist_ok=False);runtime=HERE/'generated'/out.name;runtime.mkdir(parents=True,exist_ok=False)
     backend=load_file_module('_dynamuhsim_velocity_backend',HERE/'runtime.py');COMMON,worker_command=backend.COMMON,backend.worker_command
@@ -54,6 +54,7 @@ def run_trial(a, entrypoint, is_response):
     source=[HERE/'worker.py',HERE/'runtime.py',HERE/'adapter.cc',HERE/'warehouse.launch.py',entrypoint,library,COMMON/'model_worker.py',COMMON/'inputs/protocol.json',COMMON/'inputs'/(a.case+'.json'),SOCIAL/'warehouse/layout.json',SOCIAL/'gazebo_adapter/run.py']
     if is_response:source[:0]=[BENCH/'common_gazebo/worker.py'];source[3:3]=[HERE/'projection.py',HERE/'responsive_motion.py']
     source += [Path(__file__),Path(__file__).with_name('nav2_trial.py')]
+    source += [Path(__file__).with_name('gpu.py'),Path(__file__).with_name('shutdown.py'),Path(__file__).with_name('ordered_stop.py'),Path(__file__).parent/'gl_probe.cpp']
     source += [REPO/'src/custom_corridor/launch/corridor_tb3.launch.py',REPO/'src/custom_corridor/launch/_dynamuhsim_simulation.py']
     result['source_sha256']={str(p.relative_to(REPO)):sha(p) for p in source}
     result['source_sha256'].update(json.loads((COMMON/'reports/run01/protocol.json').read_text())['source_sha256'])

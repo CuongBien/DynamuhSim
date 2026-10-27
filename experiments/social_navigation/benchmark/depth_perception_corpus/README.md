@@ -2,11 +2,11 @@
 
 Đã thu7cảnh GPU, xuất19frame/132proposal có nhãn (64người,68môi trường). Đây là bộ nhỏ thử pipeline phân biệt người/vật; chưa có model được nghiệm thu hay bộ train World Model. Không RGB, không đổi robot/ROS/Nav2 mặc định.
 
-- [Báo cáo và giới hạn](reports/CORPUS_REPORT.md)
-- [Schema và cách đọc sample](reports/SCHEMA.md)
-- [Audit cuối](reports/audit.json), [portable audit](reports/portable_audit.json)
+- [Báo cáo và giới hạn](../../../archive/social_navigation/reports/depth_perception_corpus/CORPUS_REPORT.md)
+- [Schema và cách đọc sample](../../../archive/social_navigation/reports/depth_perception_corpus/SCHEMA.md)
+- [Audit cuối](../../../archive/social_navigation/reports/depth_perception_corpus/audit.json), [portable audit](../../../archive/social_navigation/reports/depth_perception_corpus/portable_audit.json)
 - [Mẫu train đọc độc lập](examples/train_p003/manifest.json)
-- [GIF từ depth đã ghi thật](reports/media/depth_labels.gif)
+- [GIF từ depth đã ghi thật](../../../archive/social_navigation/reports/depth_perception_corpus/media/depth_labels.gif)
 
 Full bundle ở `generated/corpus01/`; raw ở `generated/runs/`. Hai thư mục này bị gitignore, cần backup riêng. Git giữ example train p003, code, nguồn freeze và báo cáo; test không có preview/score model ở mốc này.
 

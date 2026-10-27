@@ -10,7 +10,8 @@ Ba experiment `socnavgym_nav2_pilot`, `socnavgym_group_nav2` và `shared_nav2_pi
 | Khác biệt CLI, backend, nhóm và prerequisite gates | `python/dynamuhsim/runtime/profiles.py` |
 | Chờ action, budget, cancel và metric đích thật | `python/dynamuhsim/runtime/navigation.py` |
 | Nhận sensor/scene, xuất JSONL và camera preview | `python/dynamuhsim/runtime/recording.py` |
-| Pause/quiesce trước ordered Gazebo shutdown, dùng chung với capture | `python/dynamuhsim/runtime/shutdown.py` |
+| GPU preflight, session ownership và cleanup | `python/dynamuhsim/runtime/gpu.py` |
+| Pause/quiesce, ordered stop, D3D12 launch environment và exit acknowledgement | `python/dynamuhsim/runtime/shutdown.py` |
 | Cấu hình adapter/world, bản sao YAML và launch description | `python/dynamuhsim/simulation/warehouse.py` |
 | IPC cho common, response và hai pilot Nav2 cá nhân/backend cô lập | `experiments/social_navigation/benchmark/common_gazebo/worker.py` |
 | Một lệnh gọi các profile | `tools/nav2_trial.py` |

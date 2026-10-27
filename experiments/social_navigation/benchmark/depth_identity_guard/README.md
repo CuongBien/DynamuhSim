@@ -1,6 +1,6 @@
 # Causal identity guard — regression và seed44
 
-**Đã chặn case đổi pairing GT5→GT6 trên seed43, giữ đủ paired rows và không tăng phân mảnh trên regression. Seed44 mới không suy giảm. Chưa nghiệm thu person detector/train hoặc navigation.** [Báo cáo](reports/IDENTITY_GUARD_REPORT.md), [acceptance](reports/acceptance.json), [audit độc lập](reports/audit01/audit.json), [14 behavior tests](test_guard.py), [trace case thật](reports/regression_identity_trace.png), [ảnh đối chiếu](reports/identity_comparison.png).
+**Đã chặn case đổi pairing GT5→GT6 trên seed43, giữ đủ paired rows và không tăng phân mảnh trên regression. Seed44 mới không suy giảm. Chưa nghiệm thu person detector/train hoặc navigation.** [Báo cáo](../../../archive/social_navigation/reports/depth_identity_guard/IDENTITY_GUARD_REPORT.md), [acceptance](../../../archive/social_navigation/reports/depth_identity_guard/acceptance.json), [audit độc lập](../../../archive/social_navigation/reports/depth_identity_guard/audit01/audit.json), [14 behavior tests](test_guard.py), [trace case thật](../../../archive/social_navigation/reports/depth_identity_guard/regression_identity_trace.png), [ảnh đối chiếu](../../../archive/social_navigation/reports/depth_identity_guard/identity_comparison.png).
 
 Bản cuối là candidate05; candidate01–04 chưa đạt được giữ đủ code/hash/kết quả ở reports/candidates/. Không sửa threshold sau khi xem seed44. Bộ lọc hình dạng vẫn là prior thử nghiệm trên depth mesh; lỗi với proxy cũ giữ nguyên. Tracker vẫn chạy offline, không điều khiển robot hoặc thay default ROS.
 

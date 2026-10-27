@@ -1,6 +1,6 @@
 # Depth proxy ablation — isolated sensor experiment
 
-**Limited acceptance: two static scenes, six clean GPU fixtures. The planned third scene is not accepted.** Read [the report](reports/DEPTH_PROXY_REPORT.md) and [audit](reports/static02/audit.json). No default ROS/Nav2, robot geometry, human behavior, previous dataset or training setting was changed.
+**Limited acceptance: two static scenes, six clean GPU fixtures. The planned third scene is not accepted.** Read [the report](../../../archive/social_navigation/reports/depth_proxy_ablation/DEPTH_PROXY_REPORT.md) and [audit](../../../archive/social_navigation/reports/depth_proxy_ablation/static02/audit.json). No default ROS/Nav2, robot geometry, human behavior, previous dataset or training setting was changed.
 
 The source proxy cylinder is retained for collision and GPU LiDAR. An experiment-only Ogre2 camera listener hides its visual during only the two selected depth cameras, then restores it. Original all-visible depth cameras run alongside them. A separate null-human-visual control proves that actual human mesh remains visible. These are measured GPU depth arrays and deterministic plots, not AI-generated images.
 

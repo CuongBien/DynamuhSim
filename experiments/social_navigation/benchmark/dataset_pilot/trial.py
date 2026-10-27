@@ -21,8 +21,8 @@ from gz.msgs10.image_pb2 import Image as GzImage
 from PIL import Image
 HERE=Path(__file__).resolve().parent;BENCH=HERE.parent;BASE=BENCH/'socnavgym_group_nav2';SOCIAL=BENCH.parent;REPO=SOCIAL.parent.parent;FIX=BENCH/'socnavgym_response_fix';COMMON=BENCH/'common_response'
 sys.path.insert(0,str(SOCIAL/'gazebo_adapter'));from run import make_world,stop
-sys.path.insert(0,str(BENCH/'gpu_runtime'));from runtime_guard import RuntimeGuard,gpu_preflight
-sys.path.insert(0,str(BENCH));from shutdown_fix.ordered_stop import launch_environment,stop_server
+sys.path.insert(0,str(REPO/'python'));from dynamuhsim.runtime.gpu import RuntimeGuard,gpu_preflight
+sys.path.insert(0,str(BENCH));from dynamuhsim.runtime.shutdown import launch_environment,stop_server
 from amcl_observer import observer_qos,publisher_evidence
 from recording import Recording
 from prepare import prepare_camera

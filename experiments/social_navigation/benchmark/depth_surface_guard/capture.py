@@ -9,9 +9,9 @@ from rclpy.qos import qos_profile_sensor_data
 from sensor_msgs.msg import Image,CameraInfo,LaserScan
 from rosgraph_msgs.msg import Clock
 from fixture import create,HERE,BENCH,REPO,BASE
-sys.path[:0]=[str(BENCH),str(BENCH/'gpu_runtime'),str(BENCH/'depth_proxy_lifecycle'),str(BENCH.parent/'gazebo_adapter')]
-from runtime_guard import RuntimeGuard,gpu_preflight
-from shutdown_fix.ordered_stop import launch_environment,stop_server
+sys.path[:0]=[str(BENCH),str(BENCH/'depth_proxy_lifecycle'),str(BENCH.parent/'gazebo_adapter')]
+sys.path.insert(0,str(REPO/'python'));from dynamuhsim.runtime.gpu import RuntimeGuard,gpu_preflight
+from dynamuhsim.runtime.shutdown import launch_environment,stop_server
 from quiesce import stop_paused
 from run import stop
 

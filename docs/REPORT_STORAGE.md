@@ -1,5 +1,8 @@
 # Report lịch sử và dependency hydrate
 
+**Layout ngày 28/10/2026:** 23 cây control/report còn giữ đã chuyển nguyên byte sang `experiments/archive/social_navigation/reports/<stage>/`. Đường dẫn benchmark cũ là alias; các manifest lịch sử giữ nguyên. 13 thư mục cohort chỉ còn vỏ được gộp tại [danh mục nghỉ dùng](history/retired_benchmarks.md).
+
+
 Đã phân loại đủ **47 nhóm / 3.088 tệp / 239.670.204 byte** report từ revision trước migration. **24 nhóm / 1.060 tệp / 169.294.406 byte** được chuyển khỏi HEAD; **23 nhóm / 2.028 tệp / 70.375.798 byte** được giữ nguyên byte, gồm bảy gate và report capture/perception/WM cần kiểm dependency động.
 
 [Dependency plan](artifacts/report_dependency_plan_2026-10-25.json) · [Manifest migration](artifacts/report_migration_2026-10-25.json) · [Biên bản](verification/report_migration_2026-10-25.json).

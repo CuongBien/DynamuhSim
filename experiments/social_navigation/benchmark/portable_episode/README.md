@@ -1,6 +1,6 @@
 # Portable episode — chuẩn hóa dữ liệu đã ghi
 
-**Đã xuất823cửa sổ từ1episode thật**, không chạy lại Gazebo và chưa train World Model. [Báo cáo](reports/PORTABLE_EPISODE_REPORT.md), [audit raw độc lập](reports/audit02/audit.json), [một mẫu đầy đủ để xem](reports/examples/), [ảnh minh họa dữ liệu thật](reports/sample_preview.png).
+**Đã xuất823cửa sổ từ1episode thật**, không chạy lại Gazebo và chưa train World Model. [Báo cáo](../../../archive/social_navigation/reports/portable_episode/PORTABLE_EPISODE_REPORT.md), [audit raw độc lập](../../../archive/social_navigation/reports/portable_episode/audit02/audit.json), [một mẫu đầy đủ để xem](../../../archive/social_navigation/reports/portable_episode/examples), [ảnh minh họa dữ liệu thật](../../../archive/social_navigation/reports/portable_episode/sample_preview.png).
 
 Bản dữ liệu đầy đủ local: `generated/episode01/`, khoảng539MB theo byte inventory (không phải823episode độc lập). Đây là bản sao mới từ early_avoidance_pilot/avoidance_moderate01 đã đạt; raw cũ và ROS/Nav2/simulator source không đổi. Mọi cửa sổ chồng lấn giữ split=pilot_only; không chia ngẫu nhiên các cửa sổ cùng episode/seed/scene sang train/validation. HuNavSim giữ testcuối.
 

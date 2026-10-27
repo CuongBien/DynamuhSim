@@ -38,7 +38,7 @@ def main():
  for key in ['LIBGL_ALWAYS_SOFTWARE','LIBGL_ALWAYS_INDIRECT','MESA_LOADER_DRIVER_OVERRIDE','QT_XCB_GL_INTEGRATION','QT_QUICK_BACKEND','QT_QPA_PLATFORM_PLUGIN_PATH']:env.pop(key,None)
  env['LD_PRELOAD']='/usr/lib/wsl/lib/libd3d12core.so'
  env['QSG_RENDER_LOOP']='basic'
- probe=HERE.parent/'gpu_runtime/generated/gl_probe'
+ probe=HERE.parents[3]/'python/dynamuhsim/runtime/generated/gl_probe'
  checked=subprocess.run([str(probe)],env=env,capture_output=True,text=True,timeout=15)
  (out/'gpu_preflight.json').write_text(json.dumps({'returncode':checked.returncode,'stdout':checked.stdout,'stderr':checked.stderr},indent=2)+'\n')
  if checked.returncode or 'NVIDIA' not in checked.stdout:raise RuntimeError('Native GPU preflight failed: '+checked.stderr)

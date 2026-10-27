@@ -7,6 +7,7 @@ import tempfile
 
 from dynamuhsim.analysis.evidence import relative_name, sha256_file
 from .catalog import GitBlobHashes, tree_files, tree_identity, revision
+from .layout import report_target
 from .history import history_groups, verify_history, restore_history, _members, _GitPayloads
 
 
@@ -45,7 +46,7 @@ def _target(checkout, root):
     checkout = Path(checkout).resolve(strict=True)
     if not checkout.is_dir(): raise ValueError("Checkout must be an existing directory")
     relative = relative_name(root)
-    target = checkout.joinpath(*relative.parts)
+    target = report_target(checkout, relative)
     for path in [target, *target.parents]:
         if path == checkout: break
         if path.is_symlink(): raise ValueError("Hydration path contains a symlink")

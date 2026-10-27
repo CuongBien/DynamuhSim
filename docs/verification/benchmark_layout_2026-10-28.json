@@ -1,0 +1,136 @@
+{
+  "schema": "dynamuhsim_benchmark_layout/1",
+  "date": "2026-10-28",
+  "base_revision": "faf37964649820f91c479e7ef2df78ca388dc4bf",
+  "branch": "codex/shared-navigation-runtime",
+  "benchmark_branch_preserved_at": "9833565fa546d55cb0e553f8388bf4a703c59583",
+  "layout": {
+    "previous_stage_directories": 44,
+    "current_stage_directories": 29,
+    "retired_shell_directories": 13,
+    "report_trees_archived": 23,
+    "report_compatibility_aliases": 23,
+    "historical_support_aliases": 2,
+    "report_files": 1814,
+    "report_bytes": 53322406,
+    "fixtures_archived": 2
+  },
+  "runtime": {
+    "gpu": "python/dynamuhsim/runtime/gpu.py",
+    "shutdown": "python/dynamuhsim/runtime/shutdown.py",
+    "native_probe": "python/dynamuhsim/runtime/gl_probe.cpp",
+    "gpu_check": "tools/check_gpu_runtime.py --output NEW_DIRECTORY",
+    "current_runtime_loads_benchmark_GPU_or_shutdown": false,
+    "historical_support_role": "Three exact-byte source aliases reference canonical gpu.py, gl_probe.cpp and ordered_stop.py; no archived implementation copy.",
+    "duplicate_GPU_or_ordered_stop_implementations": 0
+  },
+  "preservation": {
+    "report_hashes_unchanged": 1814,
+    "old_support_hashes_unchanged": 3,
+    "fixture_hashes_unchanged": 2,
+    "model_test_seals_labels_splits_outcomes_unchanged": true,
+    "primary_checkout_status_index_patch_unchanged": true
+  },
+  "verification": {
+    "test_suites": [
+      {
+        "suite": "root",
+        "returncode": 0,
+        "count": 191,
+        "wall_s": 42.58
+      },
+      {
+        "suite": "scenario_generator",
+        "returncode": 0,
+        "count": 13,
+        "wall_s": 6.08
+      },
+      {
+        "suite": "dataset_runner",
+        "returncode": 0,
+        "count": 75,
+        "wall_s": 0.27
+      },
+      {
+        "suite": "dataset_production",
+        "returncode": 0,
+        "count": 11,
+        "wall_s": 19.71
+      }
+    ],
+    "unique_tests_passed": 290,
+    "existing_CLI_help_probes": 33,
+    "control_probes_before_after": "bundle and legacy JSON byte-identical",
+    "fresh_checkout": {
+      "status": "PASS",
+      "staged_tree": "3d76a540d064daf0b5e9770ba5f5eddeff4e5e3b",
+      "protected_report_files": 1814,
+      "probes": [
+        {
+          "mode": "bundle",
+          "status": "PASS_IDENTICAL_MEASURED_OUTPUTS",
+          "extra_source_reads_without_bytecode_cache": [
+            "python/dynamuhsim/analysis/__init__.py",
+            "python/dynamuhsim/analysis/evidence.py",
+            "python/dynamuhsim/controls/__init__.py",
+            "python/dynamuhsim/controls/bundle.py",
+            "python/dynamuhsim/perception/__init__.py",
+            "python/dynamuhsim/perception/depth_classifier.py"
+          ]
+        },
+        {
+          "mode": "legacy",
+          "status": "PASS_IDENTICAL_MEASURED_OUTPUTS",
+          "extra_source_reads_without_bytecode_cache": [
+            "experiments/social_navigation/benchmark/depth_person_classifier/inference.py"
+          ]
+        }
+      ],
+      "git_metadata_present": false,
+      "local_generated_dependencies_present": false,
+      "trace_note": "Additional fresh reads are tracked source imports only; model/engine/gate/tracker outputs match."
+    },
+    "hydration": [
+      {
+        "source": "git",
+        "media_restored": 1,
+        "controls_unchanged": true,
+        "historical_support_report_files": 24,
+        "whole_group_state": "present_verified"
+      },
+      {
+        "source": "archive",
+        "media_restored": 1,
+        "controls_unchanged": true,
+        "historical_support_report_files": 24,
+        "whole_group_state": "present_verified"
+      }
+    ],
+    "native_helper_logic": {
+      "gpu_functions_and_class_AST_identical": true,
+      "ordered_stop_functions_AST_identical": true,
+      "probe_cpp_bytes_identical": true,
+      "control_probes_byte_identical": [
+        "bundle",
+        "legacy"
+      ]
+    },
+    "offline_wheel": {
+      "status": "PASS",
+      "wheel_sha256": "d1935fba77f1bf0c93d77025e5784d014a4c632db6bc190c8ca7023bfb7e8d62",
+      "native_probe_included": true,
+      "offline_build": true,
+      "clean_build_tree": true
+    },
+    "GPU_and_orphan_checks": "PASS on real D3D12 NVIDIA; unrelated test process preserved",
+    "new_GPU_CLI_help": "PASS",
+    "exact_canonical_GPU_and_ordered_stop_bytes_match_frozen_sources": true
+  },
+  "limits": [
+    "No Gazebo/navigation reruns, controller tuning, dataset regeneration, training or held-out evaluation.",
+    "Current imported helpers moved; frozen source/report bytes and original manifests were not rewritten.",
+    "Old-path aliases are explicit migration compatibility, not general permission to follow symlinks.",
+    "Two known navigation failures remain separate functional work."
+  ],
+  "local_evidence": "experiments/social_navigation/benchmark/generated/benchmark_layout_cleanup_20261028"
+}

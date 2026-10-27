@@ -16,8 +16,8 @@ from rclpy.node import Node
 from rclpy.qos import qos_profile_sensor_data
 from sensor_msgs.msg import Image,CameraInfo,LaserScan
 from fixture import create_fixture,labels,REPO,SOCIAL,BENCH,HERE,HEIGHT
-sys.path.insert(0,str(BENCH/'gpu_runtime'));from runtime_guard import RuntimeGuard,gpu_preflight
-sys.path.insert(0,str(BENCH));from shutdown_fix.ordered_stop import launch_environment,stop_server
+sys.path.insert(0,str(REPO/'python'));from dynamuhsim.runtime.gpu import RuntimeGuard,gpu_preflight
+sys.path.insert(0,str(BENCH));from dynamuhsim.runtime.shutdown import launch_environment,stop_server
 sys.path.insert(0,str(SOCIAL/'gazebo_adapter'));from run import stop
 
 def sha(p):return hashlib.sha256(Path(p).read_bytes()).hexdigest()

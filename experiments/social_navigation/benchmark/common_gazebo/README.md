@@ -1,6 +1,6 @@
 # Cohort Gazebo chung —6 người,3 cấu hình,3 cảnh
 
-[Báo cáo và ảnh/GIF thật](reports/COMMON_GAZEBO_REPORT.md): đã chạy9 lượt,8 hoàn tất10s và1 SocNavGym crossing lỗi terminal tại5.5s. Worker/poses/LiDAR/camera/GPU và cleanup được kiểm. **Chưa nghiệm thu SocNavGym crossing hoặc Nav2; robot còn trôi sau fault trong baseline đã đo.** Giữ nguyên cả lỗi và overlap khi teardown.
+[Báo cáo và ảnh/GIF thật](../../../archive/social_navigation/reports/common_gazebo/COMMON_GAZEBO_REPORT.md): đã chạy9 lượt,8 hoàn tất10s và1 SocNavGym crossing lỗi terminal tại5.5s. Worker/poses/LiDAR/camera/GPU và cleanup được kiểm. **Chưa nghiệm thu SocNavGym crossing hoặc Nav2; robot còn trôi sau fault trong baseline đã đo.** Giữ nguyên cả lỗi và overlap khi teardown.
 
 Bộ offline trước đã commit `ff79dbf`. Cohort này dùng nguyên Runner đã đóng băng,6 người radius0.36m, robot nominal radius0.25m,42 AABBs, cùng initial fixtures và world-frame velocity script. Worker nhận pose/velocity đo thực từ Gazebo; không phát lại human trajectory có sẵn.3 cấu hình: SocNavGym guarded individual, CrowdSimPlus ORCA+, ComplexityNav geometry mixed. Formation tắt; group/lifecycle được kiểm riêng ở vòng trước. Đây là pilot one-seed10s, chỉ near conditions; không phải xếp hạng native algorithms hay navigation success.
 

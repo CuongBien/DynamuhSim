@@ -1,8 +1,8 @@
 # Depth filter lifecycle and one moving-robot pilot
 
-**Partial result:** the previously missing third static control passed with an experimental pause-before-stop sequence. The motion sensor prefix and shutdown checks passed, but navigation stopped on the unchanged human avoidance guard at15.2025s. This episode is quarantined, not a successful navigation or training episode. Read [the report](reports/LIFECYCLE_MOTION_REPORT.md).
+**Partial result:** the previously missing third static control passed with an experimental pause-before-stop sequence. The motion sensor prefix and shutdown checks passed, but navigation stopped on the unchanged human avoidance guard at15.2025s. This episode is quarantined, not a successful navigation or training episode. Read [the report](../../../archive/social_navigation/reports/depth_proxy_lifecycle/LIFECYCLE_MOTION_REPORT.md).
 
-No source under src/, native simulator policy, robot control, camera height, Nav2 parameters, prior dataset or previous experiment was modified. The original filter binary was reused byte-for-byte. Generated driver differences are [reviewable](reports/motion_driver.diff), with exact implementation snapshots in reports/implementation/.
+No source under src/, native simulator policy, robot control, camera height, Nav2 parameters, prior dataset or previous experiment was modified. The original filter binary was reused byte-for-byte. Generated driver differences are [reviewable](../../../archive/social_navigation/reports/depth_proxy_lifecycle/motion_driver.diff), with exact implementation snapshots in reports/implementation/.
 
 ## Read-only checks on this existing workspace
 

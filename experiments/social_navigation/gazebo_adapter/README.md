@@ -31,8 +31,8 @@ hành vi vẫn nằm trong [report gốc](reports/ADAPTER_REPORT.md);
 được ghim theo revision lịch sử. `run.sh` hiện hỗ trợ `build` và `demo`.
 
 Kiểm định contact/solver còn dùng nằm ở
-[hình học](../benchmark/geometry_comparison/README.md) và
-[robot-aware ORCA](../benchmark/avoidance_comparison/README.md).
+[hình học](https://github.com/CuongBien/DynamuhSim/blob/faf37964649820f91c479e7ef2df78ca388dc4bf/experiments/social_navigation/benchmark/geometry_comparison/README.md) và
+[robot-aware ORCA](https://github.com/CuongBien/DynamuhSim/blob/faf37964649820f91c479e7ef2df78ca388dc4bf/experiments/social_navigation/benchmark/avoidance_comparison/README.md).
 Để thu/audit episode mới, dùng [capture runtime](../../../docs/CAPTURE_RUNTIME.md).
 
 ## Cách nối và phạm vi
@@ -64,4 +64,4 @@ Xem [báo cáo kết quả](reports/ADAPTER_REPORT.md), [so sánh ba framework](
 
 Đã có [pilot ghép cặp với Nav2](../benchmark/reports/BENCHMARK_REPORT.md), dùng gate bắt đầu người sau khi Nav2 sẵn sàng. Protocol đó tách biệt với tùy chọn demo `--nav` ở trên.
 
-Demo hiện kiểm GPU thật trước khi chạy và bổ sung cleanup child detached theo token phiên. [Chi tiết GPU/cleanup](../benchmark/gpu_runtime/README.md). Không đổi native group policy hoặc cấu hình ROS gốc.
+Demo hiện kiểm GPU thật trước khi chạy và bổ sung cleanup child detached theo token phiên. [Chi tiết GPU/cleanup](https://github.com/CuongBien/DynamuhSim/blob/faf37964649820f91c479e7ef2df78ca388dc4bf/experiments/social_navigation/benchmark/gpu_runtime/README.md). Không đổi native group policy hoặc cấu hình ROS gốc.

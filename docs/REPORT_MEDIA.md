@@ -1,5 +1,8 @@
 # Media report, model và trạng thái test
 
+**Layout ngày 28/10/2026:** control/model/seal được lưu vật lý tại `experiments/archive/social_navigation/reports/<stage>/`, với alias đúng đường dẫn cũ. `check`/`hydrate` vẫn dùng group và manifest cũ; chỉ các alias nội bộ đã khai báo được chấp nhận. Các symlink khác vẫn bị từ chối.
+
+
 23 nhóm report còn giữ có dependency/runtime state cần bảo toàn. Đợt này chuyển riêng **214 media / 17.053.392 byte** khỏi HEAD; giữ nguyên byte **1.814 tệp / 53.322.406 byte** còn lại, gồm gate, config, snapshot, trọng số, review arrays, freeze và marker test.
 
 [Media policy](artifacts/report_media_plan_2026-10-25.json) · [Manifest và coverage của 23 nhóm](artifacts/report_media_migration_2026-10-25.json) · [Biên bản](verification/report_media_2026-10-25.json).

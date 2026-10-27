@@ -1,6 +1,6 @@
 # Camera height A/B — 12cm và40cm
 
-**Đã đo3cặp cảnh tĩnh trên Gazebo GPU: nâng camera tăng độ phủ trong các cảnh này, nhưng khối trụ người vẫn che phần lớn depth khi robot đến sát nhóm. Chưa chọn40cm làm cấu hình robot mặc định.** [Báo cáo](reports/CAMERA_HEIGHT_REPORT.md), [audit](reports/run04/audit.json), [số đo](reports/run04/summary.json).
+**Đã đo3cặp cảnh tĩnh trên Gazebo GPU: nâng camera tăng độ phủ trong các cảnh này, nhưng khối trụ người vẫn che phần lớn depth khi robot đến sát nhóm. Chưa chọn40cm làm cấu hình robot mặc định.** [Báo cáo](../../../archive/social_navigation/reports/camera_height_ab/CAMERA_HEIGHT_REPORT.md), [audit](../../../archive/social_navigation/reports/camera_height_ab/run04/audit.json), [số đo](../../../archive/social_navigation/reports/camera_height_ab/run04/summary.json).
 
 Đây là thử nghiệm riêng về vị trí camera, không tăng chiều cao thân robot, không chạy Nav2 hoặc native human step. Robot/human XYyaw lấy từ3snapshot của dataset_pilot/pilot01. Hai depth sensors chụp đồng thời cùng timestamp ở cùng x/y/yaw; offset base_link.z=.08/.36m, base_linkworld.z=.04m, tương ứng camera12/40cm cách sàn. FOV87°,424×240,float32,10Hz,clip.28–5m giữ nguyên. Không thêm giá đỡ/mast vật lý; đây là phép thử vị trí cảm biến ảo.
 

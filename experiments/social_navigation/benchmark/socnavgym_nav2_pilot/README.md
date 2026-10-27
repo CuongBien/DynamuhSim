@@ -1,6 +1,6 @@
 # Pilot Nav2 — SocNavGym response v2
 
-[Báo cáo, số đo và GIF thật](reports/NAV2_PILOT_REPORT.md).3 lượt đã định đều Nav2 SUCCEEDED và tới đích thật trong20cm/yaw0.25rad:1 empty control,2 phiên6 người giao cắt. Đây là pilot nhỏ one-seed, chưa phải benchmark Nav2 chung ba framework hoặc group lifecycle.
+[Báo cáo, số đo và GIF thật](../../../archive/social_navigation/reports/socnavgym_nav2_pilot/NAV2_PILOT_REPORT.md).3 lượt đã định đều Nav2 SUCCEEDED và tới đích thật trong20cm/yaw0.25rad:1 empty control,2 phiên6 người giao cắt. Đây là pilot nhỏ one-seed, chưa phải benchmark Nav2 chung ba framework hoặc group lifecycle.
 
 Robot bắt đầu(−28,0,0),goal(−20,0,0),budget45sim s. Nav2 MPPI/AMCL,map/robot/cảm biến giữ nguyên; bản YAML runtime chỉ đổi amcl initial_pose.x thành−28. Người dùng kernel/projector đã kiểm ởcommit8aaa357,6 cá nhân radius0.36m, planning0.1s; physics0.0025s. Native humans đứng yên trong warmup, bắt đầu khi goal được nhận. Robot nhận cmd_vel từ Nav2 controller/behavior, không có publisher velocity script trong recorder.
 

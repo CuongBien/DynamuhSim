@@ -3,9 +3,9 @@ import json,subprocess,sys
 from pathlib import Path
 from freeze import verify,sha
 HERE=Path(__file__).resolve().parent;BENCH=HERE.parent;REPO=BENCH.parents[2]
-sys.path[:0]=[str(BENCH/'early_avoidance_pilot'),str(BENCH/'depth_proxy_lifecycle'),str(BENCH/'gpu_runtime')]
+sys.path[:0]=[str(BENCH/'early_avoidance_pilot'),str(BENCH/'depth_proxy_lifecycle')]
 from namespace_prepare import prepare_camera
-from runtime_guard import gpu_preflight
+sys.path.insert(0,str(REPO/'python'));from dynamuhsim.runtime.gpu import gpu_preflight
 if __name__=='__main__':
     verify(HERE/'generated/final_engine.json');out=HERE/'generated/preflight';out.mkdir(parents=True,exist_ok=False)
     prepare_camera(out,REPO);gpu=gpu_preflight(out);check=json.loads(subprocess.check_output([str(BENCH/'early_avoidance_pilot/generated/check_friction'),str(out/'mecanum_camera.sdf')],text=True))

@@ -482,3 +482,19 @@ Evidence: `benchmark/generated/camera_launch_cleanup_20261027/`.
 - Tiếp theo: chẩn đoán map→odom/AMCL/world tại goal của walking45, và nguyên nhân
   đứng45 không tiến tới goal với moderate treatment. Đây là việc chức năng
   riêng; chưa tuning controller, chạy train/test model hay append dataset01.
+
+## 28/10 — Dọn cấu trúc benchmark trong một đợt
+
+[Receipt và bằng chứng layout](verification/benchmark_layout_2026-10-28.json).
+44 thư mục thực nghiệm còn 29: bỏ 13 thư mục vỏ, đưa GPU/ordered shutdown vào
+package runtime. Hai tên helper cũ là alias tới source freeze lưu trong archive.
+23 cây reports (1.814 file) chuyển nguyên byte sang `experiments/archive/`;
+alias đường dẫn cũ giữ model/seal/hash/hydration hoạt động, không nhân bản report.
+Hai fixture chuyển archive; ghi chú nghỉ dùng gộp thành một danh mục.
+
+290 tests, 33 CLI help, GPU/NVIDIA và orphan ownership checks PASS. Hai probe
+bundle/legacy trước và sau giống byte; checkout sạch không có generated/cache
+vẫn cho model/engine/gate/tracker outputs giống hệt (trace có thêm source imports).
+Git và archive đều hydrate media và nhóm report qua alias thật, control/source
+không đổi. Wheel build offline có native probe. Không chạy Gazebo/tuning thêm.
+Checkout chính, model, nhãn/split, seal và outcome lịch sử giữ nguyên.

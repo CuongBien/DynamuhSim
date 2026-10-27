@@ -1,5 +1,7 @@
 # DynamuhSim 🤖
 
+**Cấu trúc benchmark 28/10/2026:** [29 thư mục code/config hiện hành](experiments/social_navigation/benchmark/README.md) · [archive và các alias lịch sử](experiments/archive/README.md) · [kiểm chứng layout](docs/verification/benchmark_layout_2026-10-28.json).
+
 **Navigation end-to-end 28/10/2026:** [kết quả và hai lỗi điều hướng còn lại](docs/verification/cleanup_navigation_2026-10-28.json).
 
 **Cleanup đã chốt 27/10/2026:** [phạm vi, source giảm và phần cần giữ](docs/CLEANUP_SCOPE.md) · [receipt kiểm chứng cuối](docs/verification/cleanup_closure_2026-10-27.json).

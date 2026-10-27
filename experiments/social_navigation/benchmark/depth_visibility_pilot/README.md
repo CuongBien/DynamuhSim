@@ -2,7 +2,7 @@
 
 A label-only Gazebo experiment now distinguishes which measured depth pixels belong to each native human mesh. **The geometry candidate pipeline is still not a validated person detector:** it keeps four person-owned proposals and two object proposals; the no-human control keeps the same two objects. No ROS default, tracker threshold, navigation profile, dynamic dataset labels or training mask changed.
 
-[Report](reports/VISIBILITY_REPORT.md) · [acceptance](reports/acceptance.json) · [independent audit](reports/audit.json) · [real depth review](reports/visibility_review.png) · [evaluation](reports/evaluation.json).
+[Report](../../../archive/social_navigation/reports/depth_visibility_pilot/VISIBILITY_REPORT.md) · [acceptance](../../../archive/social_navigation/reports/depth_visibility_pilot/acceptance.json) · [independent audit](../../../archive/social_navigation/reports/depth_visibility_pilot/audit.json) · [real depth review](../../../archive/social_navigation/reports/depth_visibility_pilot/visibility_review.png) · [evaluation](../../../archive/social_navigation/reports/depth_visibility_pilot/evaluation.json).
 
 ## What ran
 

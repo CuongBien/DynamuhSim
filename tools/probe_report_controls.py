@@ -11,6 +11,7 @@ ROOT=Path(__file__).resolve().parents[1]
 sys.path.insert(0,str(ROOT/'python'))
 sys.dont_write_bytecode=True
 from dynamuhsim.runtime.profiles import PROFILES
+from dynamuhsim.artifacts.layout import logical_report_name
 
 
 def sha(path): return hashlib.sha256(Path(path).read_bytes()).hexdigest()
@@ -33,7 +34,7 @@ def main():
                 if flags & (os.O_WRONLY|os.O_RDWR|os.O_CREAT|os.O_TRUNC|os.O_APPEND):
                     denied.append(event);raise PermissionError('Control probe is read-only')
                 if path.is_relative_to(ROOT):
-                    name=path.relative_to(ROOT).as_posix()
+                    name=logical_report_name(path.relative_to(ROOT).as_posix())
                     if '/generated/' in name or '/episodes/' in name or 'LABEL_REVIEW_ONLY' in name:
                         denied.append(name);raise PermissionError('No raw/corpus or held-out predictions in control probe')
                     if args.consumer=='bundle' and any(name.startswith('experiments/social_navigation/benchmark/'+stage+'/reports/') for stage in ['depth_person_classifier','depth_identity_guard','depth_track_refinement']):

@@ -24,8 +24,8 @@ Các đường dẫn trong bảng tính từ gốc repository `/home/cuongbien/D
 | --- | --- |
 | Đọc dữ liệu đầy đủ | `experiments/social_navigation/benchmark/wm_episode_batch/generated/dataset01/` |
 | Reader không cần ROS, chỉ dùng NumPy | `dataset01/tools/loader.py` bên trong bộ dữ liệu |
-| Xem file, shape, timestamp và mask chi tiết | [Schema dữ liệu](../experiments/social_navigation/benchmark/wm_episode_batch/reports/SCHEMA.md) |
-| Xem kết quả thu và kiểm tra chất lượng | [Báo cáo batch](../experiments/social_navigation/benchmark/wm_episode_batch/reports/WM_BATCH_REPORT.md) |
+| Xem file, shape, timestamp và mask chi tiết | [Schema dữ liệu](../experiments/archive/social_navigation/reports/wm_episode_batch/SCHEMA.md) |
+| Xem kết quả thu và kiểm tra chất lượng | [Báo cáo batch](../experiments/archive/social_navigation/reports/wm_episode_batch/WM_BATCH_REPORT.md) |
 | Xem lại camera và quỹ đạo đã ghi | `experiments/social_navigation/benchmark/wm_dataset_replay/` |
 | Lấy bản sao đầy đủ | [Thư mục Google Drive](https://drive.google.com/drive/folders/1I3kfKbTm5X6Bj32RyPVck5kFSjmVgqnl) |
 
@@ -88,7 +88,7 @@ Gazebo pose replay và hướng dẫn build ở [README replay](../experiments/s
 3. Giải nén tất cả vào **cùng một thư mục mới**, giữ đường dẫn con. Không nối các ZIP thành một file.
 4. Dữ liệu portable nằm tại `wm_episode_batch/generated/dataset01/` trong thư mục vừa giải nén; trỏ `root` ở ví dụ Python tới đó.
 
-`replay_and_backup_tools.zip` là gói công cụ bổ sung, không phải part thứ 15 của dữ liệu. Bản sao dữ liệu đã được giải nén thử và đối chiếu SHA256 từng file tại máy; metadata Drive đã đối chiếu tên/dung lượng. Chi tiết và phạm vi những file được sao lưu ở [báo cáo backup](../experiments/social_navigation/benchmark/wm_episode_batch/reports/BACKUP_DRIVE.md).
+`replay_and_backup_tools.zip` là gói công cụ bổ sung, không phải part thứ 15 của dữ liệu. Bản sao dữ liệu đã được giải nén thử và đối chiếu SHA256 từng file tại máy; metadata Drive đã đối chiếu tên/dung lượng. Chi tiết và phạm vi những file được sao lưu ở [báo cáo backup](../experiments/archive/social_navigation/reports/wm_episode_batch/BACKUP_DRIVE.md).
 
 ## 6. Việc tiếp theo, theo thứ tự
 

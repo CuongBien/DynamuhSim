@@ -91,8 +91,7 @@ report=a.report_dir.resolve() if a.report_dir else HERE/'reports'
 report.mkdir(exist_ok=True,parents=True)
 if a.report_dir and (report/f'{name}.json').exists():
     p.error('Trial already exists in --report-dir; choose a new directory')
-sys.path.insert(0,str(HERE/'gpu_runtime'))
-from runtime_guard import RuntimeGuard,gpu_preflight
+sys.path.insert(0,str(REPO/'python'));from dynamuhsim.runtime.gpu import RuntimeGuard,gpu_preflight
 runtime_guard=RuntimeGuard(runtime)
 diag=None
 navigation_capture=None
@@ -282,7 +281,7 @@ try:
     launchlog=(report/f'{name}.log').open('w'); files.append(launchlog)
     launch_env=None
     if a.shutdown_mode=='wsl_d3d12':
-        from shutdown_fix.ordered_stop import launch_environment
+        from dynamuhsim.runtime.shutdown import launch_environment
         launch_env,result['shutdown_preload']=launch_environment(runtime)
     launch=subprocess.Popen(['ros2','launch',str(HERE/'warehouse.launch.py'),f'gui:={str(a.gui).lower()}'],
         stdout=launchlog,stderr=subprocess.STDOUT,start_new_session=True,env=launch_env)
@@ -388,7 +387,7 @@ finally:
     phase='finished'
     if a.shutdown_mode in ('server_control','wsl_d3d12'):
         try:
-            from shutdown_fix.ordered_stop import stop_server
+            from dynamuhsim.runtime.shutdown import stop_server
             result['server_shutdown']=stop_server(runtime_guard)
         except Exception as error:
             result['server_shutdown']=dict(status='ERROR',error=str(error))

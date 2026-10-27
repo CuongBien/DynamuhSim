@@ -2,11 +2,11 @@
 
 Đã thực hiện **10 lượt: 8 episode hợp lệ, 2 cách ly**. Xuất **5.106 cửa sổ**, trong đó **5.094 target WM observed BEV hợp lệ**. Chưa train WM hoặc RL. Test chỉ còn standing49; walking49 bị cách ly vì lỗi shutdown, không chạy lại thay thế.
 
-- [Báo cáo và mọi lượt đạt/lỗi](reports/WM_BATCH_REPORT.md)
-- [Schema, file, shape, thời gian và masks](reports/SCHEMA.md)
-- [Audit](reports/audit.json), [thống kê](reports/summary.json)
+- [Báo cáo và mọi lượt đạt/lỗi](../../../archive/social_navigation/reports/wm_episode_batch/WM_BATCH_REPORT.md)
+- [Schema, file, shape, thời gian và masks](../../../archive/social_navigation/reports/wm_episode_batch/SCHEMA.md)
+- [Audit](../../../archive/social_navigation/reports/wm_episode_batch/audit.json), [thống kê](../../../archive/social_navigation/reports/wm_episode_batch/summary.json)
 - [Một window để đọc](examples/window01/metadata.json)
-- [Ảnh train thật](reports/media/wm_sample.png), [GIF Gazebo thật](reports/media/native_observer_train_4x.gif)
+- [Ảnh train thật](../../../archive/social_navigation/reports/wm_episode_batch/media/wm_sample.png), [GIF Gazebo thật](../../../archive/social_navigation/reports/wm_episode_batch/media/native_observer_train_4x.gif)
 
 Bundle đầy đủ: `generated/dataset01/` (khoảng 3.01 GB); raw: `generated/runs/`, runtime: `generated/runtime/`. Cần backup riêng, full data không ở Git. Reader chỉ cần Python3 + NumPy. Capture/export đã chạy trên Ubuntu 24.04, ROS2 Jazzy, Gazebo Harmonic, Python3.12, cảm biến render NVIDIA; không cài dependency hoặc sửa ROS/Nav2 mặc định.
 

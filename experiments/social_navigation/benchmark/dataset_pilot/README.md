@@ -1,6 +1,6 @@
 # Dataset pilot cho World Model — chuẩn bị dữ liệu
 
-**Một episode Gazebo thật đã thu và đọc lại đạt QA; chưa có bộ train/validation và chưa train World Model.** [Kết quả](reports/PILOT_REPORT.md), [audit độc lập](reports/pilot01/audit.json), [khả năng nguồn/nhãn](CAPABILITIES.md), [contract](contract.json).
+**Một episode Gazebo thật đã thu và đọc lại đạt QA; chưa có bộ train/validation và chưa train World Model.** [Kết quả](../../../archive/social_navigation/reports/dataset_pilot/PILOT_REPORT.md), [audit độc lập](../../../archive/social_navigation/reports/dataset_pilot/pilot01/audit.json), [khả năng nguồn/nhãn](CAPABILITIES.md), [contract](contract.json).
 
 Giữ human worker SocNavGym đứng v3 từ mốc nhóm đã commit. Robot Mecanum vẫn do Nav2 MPPI điều khiển; không thêm publisher lệnh robot. Chạy headless, depth/camera dùng NVIDIA D3D12 RTX4060, giới hạn một luồng BLAS. GPU xử lý rendering; ROS, Nav2 và human policy vẫn có phần chạy CPU.
 

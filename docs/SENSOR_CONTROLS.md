@@ -1,5 +1,8 @@
 # Sensor control bundle và API inference
 
+**Layout ngày 28/10/2026:** report model/engine legacy đã chuyển sang archive với alias tương thích. Bundle mặc định và reader legacy cho kết quả probe giống byte trước chuyển; test seal và source frozen không đổi. Probe chuẩn hoá tên archive về logical path để giữ nguyên giới hạn đọc model/test.
+
+
 API mới đọc model/freeze từ `control_bundles/sensor_pilot_v1`, không dùng `reports/` làm kho model. Registry `configs/control_registry.json` pin SHA256 manifest; manifest pin từng file bên trong. Bundle có sáu tệp / 26.068 byte payload, cộng manifest 2.898 byte. Đây là artifact model đã chốt để dùng lại, không phải một run train/test mới.
 
 [Biên bản parity và portability](verification/control_bundle_2026-10-25.json) · [Registry](../configs/control_registry.json) · [Bundle manifest](../control_bundles/sensor_pilot_v1/manifest.json).

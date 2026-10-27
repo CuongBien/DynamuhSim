@@ -1,6 +1,6 @@
 # Cải tiến track depth — so sánh ba lượt ghi
 
-**Cải thiện hình học trên hai lượt depth mesh; không đạt trên dữ liệu proxy cũ. Chưa thay baseline hoặc bật train.** [Báo cáo](reports/REFINEMENT_REPORT.md), [quyết định nghiệm thu](reports/acceptance.json), [audit](reports/audit01/audit.json), [13 test](reports/contract_tests.txt), [hình so sánh dữ liệu thật](reports/profile_comparison.png).
+**Cải thiện hình học trên hai lượt depth mesh; không đạt trên dữ liệu proxy cũ. Chưa thay baseline hoặc bật train.** [Báo cáo](../../../archive/social_navigation/reports/depth_track_refinement/REFINEMENT_REPORT.md), [quyết định nghiệm thu](../../../archive/social_navigation/reports/depth_track_refinement/acceptance.json), [audit](../../../archive/social_navigation/reports/depth_track_refinement/audit01/audit.json), [13 test](../../../archive/social_navigation/reports/depth_track_refinement/contract_tests.txt), [hình so sánh dữ liệu thật](../../../archive/social_navigation/reports/depth_track_refinement/profile_comparison.png).
 
 Code thử gồm lọc bề mặt đứng cao dạng cột và nối lại ID sau mất quan sát ngắn nếu vị trí/hình dạng đủ rõ. Đây vẫn là candidate tracker theo hình học, chưa phải person detector được xác thực. Bốn ablation dùng cùng code/tham số cố định: baseline, shape_only, tracking_only, combined.
 

@@ -70,3 +70,11 @@ Nghiệm thu navigation ngày 28/10 đã thực hiện và sửa hai vấn đề
 dữ liệu/process PASS với 5/7 goal thật PASS. Hai ca capture còn TIMEOUT hoặc
 báo SUCCEEDED khi world XY vượt ngưỡng; bước tiếp theo là chẩn đoán chức năng
 AMCL/goal checker và moderate navigation, giữ nguyên các outcome đã ghi.
+
+## Cấu trúc experiments đã xử lý ngày 28/10
+
+Cây benchmark còn 29 thư mục code/config; 13 thư mục vỏ đã bỏ. Report/control
+được chuyển sang archive, helper GPU/shutdown dùng package chuẩn. Hai alias
+helper chỉ giữ nguồn freeze cũ; 23 alias reports giữ đường dẫn đọc/hydrate.
+Đây là phần dọn cấu trúc còn thiếu ở lần chốt trước, đã làm gộp trong một đợt.
+[Receipt layout và kiểm chứng](verification/benchmark_layout_2026-10-28.json).

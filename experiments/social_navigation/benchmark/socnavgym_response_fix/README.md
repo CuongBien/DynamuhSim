@@ -1,6 +1,6 @@
 # SocNavGym response v2 và terminal Pause interlock
 
-[Báo cáo, ảnh/GIF thật và kiểm chứng](reports/RESPONSE_FIX_REPORT.md). Baseline lỗi giữ trong commit `9ab3c9f`. Bản v2 dùng một experiment riêng, không sửa robot/Nav2/vendor hoặc evidence cũ. Đã có6/6 offline,4 lượt Gazebo bình thường (2 giao cắt,đối đầu,lối hẹp) và2 test worker fault/socket loss với Pause đúng. Chưa bật Nav2 hoặc kiểm formation bằng projector v2.
+[Báo cáo, ảnh/GIF thật và kiểm chứng](../../../archive/social_navigation/reports/socnavgym_response_fix/RESPONSE_FIX_REPORT.md). Baseline lỗi giữ trong commit `9ab3c9f`. Bản v2 dùng một experiment riêng, không sửa robot/Nav2/vendor hoặc evidence cũ. Đã có6/6 offline,4 lượt Gazebo bình thường (2 giao cắt,đối đầu,lối hẹp) và2 test worker fault/socket loss với Pause đúng. Chưa bật Nav2 hoặc kiểm formation bằng projector v2.
 
 Bản cũ chỉ scale chung một proposal ORCA; bản mới cho từng người chọn velocity riêng dưới support halfspaces/speed discs, target endpoint gap4cm, fallback2cm/2mm và swept validation floor2mm. Robot prediction giữ measured velocity, không giả định robot nhường. Bất khả thi/invalid input vẫn terminal. Plugin phát zero velocity và Pause world khi lỗi; đây là simulation interlock, không phải physical emergency braking. Sau fault cần session mới; Play bị interlock Pause lại sau một tick trong hai test đã đo.
 

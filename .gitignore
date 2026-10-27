@@ -78,3 +78,33 @@ src/dynabarn/DynaBARN.zip
 /experiments/social_navigation/benchmark/**/reports/**/*.jpeg
 /experiments/social_navigation/benchmark/**/reports/**/*.webm
 /experiments/social_navigation/benchmark/**/reports/**/*.mp4
+
+# Retired benchmark paths: preserve local outputs and hydrate history on demand.
+/experiments/social_navigation/benchmark/avoidance_comparison/
+/experiments/social_navigation/benchmark/bottleneck/
+/experiments/social_navigation/benchmark/complexitynav_gazebo/
+/experiments/social_navigation/benchmark/crossing/
+/experiments/social_navigation/benchmark/geometry_comparison/
+/experiments/social_navigation/benchmark/group_gazebo_demo/
+/experiments/social_navigation/benchmark/human_response_replay/
+/experiments/social_navigation/benchmark/individual_goals/
+/experiments/social_navigation/benchmark/localization_diagnosis/
+/experiments/social_navigation/benchmark/localization_validation/
+/experiments/social_navigation/benchmark/sfm_comparison/
+/experiments/social_navigation/benchmark/socnavgym_lifecycle/
+/experiments/social_navigation/benchmark/stability/
+/experiments/social_navigation/benchmark/gpu_runtime/
+/experiments/social_navigation/benchmark/shutdown_fix/
+
+# Archived report controls are tracked explicitly; recovered media/caches stay local.
+/experiments/archive/social_navigation/reports/
+
+/python/dynamuhsim/runtime/native/generated/
+
+/experiments/archive/social_navigation/support/**/generated/
+/experiments/archive/social_navigation/support/**/reports/
+
+# Local Python wheel/editable build metadata.
+*.egg-info/
+
+/python/dynamuhsim/runtime/generated/

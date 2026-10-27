@@ -2,7 +2,7 @@
 
 **The depth stage withdraws eight false person-support rows on planar boxes, preserves every measured proposal and all prior correct person support. It still leaves a curved-object false positive in the new scene. Overall person semantics remain FAIL.** Existing LiDAR + depth only; no RGB, ROS/default change or World Model training.
 
-[Report](reports/SURFACE_GUARD_REPORT.md) · [acceptance](reports/acceptance.json) · [audit](reports/audit.json) · [old before](reports/preview/old_before/semantic_review.png) / [after](reports/preview/old_after/semantic_review.png) · [remaining new failure](reports/preview/new_remaining_failure/semantic_review.png).
+[Report](../../../archive/social_navigation/reports/depth_surface_guard/SURFACE_GUARD_REPORT.md) · [acceptance](../../../archive/social_navigation/reports/depth_surface_guard/acceptance.json) · [audit](../../../archive/social_navigation/reports/depth_surface_guard/audit.json) · [old before](../../../archive/social_navigation/reports/depth_surface_guard/preview/old_before/semantic_review.png) / [after](../../../archive/social_navigation/reports/depth_surface_guard/preview/old_after/semantic_review.png) · [remaining new failure](../../../archive/social_navigation/reports/depth_surface_guard/preview/new_remaining_failure/semantic_review.png).
 
 ## Method
 

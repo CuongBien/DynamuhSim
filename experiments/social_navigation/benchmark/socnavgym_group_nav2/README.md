@@ -1,6 +1,6 @@
 # SocNavGym nhóm với robot chạy Nav2
 
-[Báo cáo, số đo và GIF Gazebo thật](reports/GROUP_NAV2_REPORT.md). Pilot gồm hai nhóm ba người đi cùng và hai nhóm ba người đứng quay vào tâm, seed42/43; nhóm được phép đổi membership/tan theo native lifecycle. Nhóm ban đầu là fixture, không phải formation tự phát. Đích thật, clearance và group coverage được đánh giá riêng; xem outcome trong report thay vì chỉ dựa action SUCCEEDED.
+[Báo cáo, số đo và GIF Gazebo thật](../../../archive/social_navigation/reports/socnavgym_group_nav2/GROUP_NAV2_REPORT.md). Pilot gồm hai nhóm ba người đi cùng và hai nhóm ba người đứng quay vào tâm, seed42/43; nhóm được phép đổi membership/tan theo native lifecycle. Nhóm ban đầu là fixture, không phải formation tự phát. Đích thật, clearance và group coverage được đánh giá riêng; xem outcome trong report thay vì chỉ dựa action SUCCEEDED.
 
 Để demo trên Ubuntu/WSL từ root repo, dùng thư mục kết quả **mới**, chạy lần lượt:
 

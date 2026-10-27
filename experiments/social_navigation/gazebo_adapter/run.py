@@ -133,8 +133,7 @@ def main():
         min_h_h_static_interactions=int(a.mode=='conversation'),max_h_h_static_interactions=int(a.mode=='conversation'),
         set_shape='rectangle',min_map_x=60,max_map_x=60,min_map_y=40,max_map_y=40)
     (runtime/'config.yaml').write_text(yaml.safe_dump(config))
-    sys.path.insert(0,str(ROOT/'benchmark/gpu_runtime'))
-    from runtime_guard import RuntimeGuard,gpu_preflight
+    sys.path.insert(0,str(ROOT.parent.parent/'python'));from dynamuhsim.runtime.gpu import RuntimeGuard,gpu_preflight
     runtime_guard=RuntimeGuard(runtime)
     processes = []
     try:

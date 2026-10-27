@@ -20,10 +20,9 @@ from sensor_msgs.msg import Image,CameraInfo
 from geometry_msgs.msg import TransformStamped
 from tf2_ros.static_transform_broadcaster import StaticTransformBroadcaster
 from fixture import create_fixture,REPO,SOCIAL,BENCH,HERE
-sys.path.insert(0,str(BENCH/'gpu_runtime'))
-from runtime_guard import RuntimeGuard,gpu_preflight
+sys.path.insert(0,str(REPO/'python'));from dynamuhsim.runtime.gpu import RuntimeGuard,gpu_preflight
 sys.path.insert(0,str(BENCH))
-from shutdown_fix.ordered_stop import launch_environment,stop_server
+from dynamuhsim.runtime.shutdown import launch_environment,stop_server
 sys.path.insert(0,str(SOCIAL/'gazebo_adapter'))
 from run import stop
 

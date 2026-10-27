@@ -1,6 +1,6 @@
 # Kiểm chứng depth tracker trên seed mới 43
 
-Đã thu **một recording thật mới**, seed 43, bằng Gazebo/NVIDIA. Thu dữ liệu và audit đạt; **navigation TIMEOUT và gate tracking kết hợp FAIL**, không đổi kết quả thành pass. [Báo cáo](reports/SEED43_REPORT.md), [acceptance](reports/acceptance.json), [audit raw](reports/raw_audit.json), [metric audit](reports/audit01/audit.json), [ảnh dữ liệu thật](reports/seed43_comparison.png), [GIF Gazebo thật](reports/capture/camera_preview_4x.gif).
+Đã thu **một recording thật mới**, seed 43, bằng Gazebo/NVIDIA. Thu dữ liệu và audit đạt; **navigation TIMEOUT và gate tracking kết hợp FAIL**, không đổi kết quả thành pass. [Báo cáo](../../../archive/social_navigation/reports/depth_seed43_validation/SEED43_REPORT.md), [acceptance](../../../archive/social_navigation/reports/depth_seed43_validation/acceptance.json), [audit raw](../../../archive/social_navigation/reports/depth_seed43_validation/raw_audit.json), [metric audit](../../../archive/social_navigation/reports/depth_seed43_validation/audit01/audit.json), [ảnh dữ liệu thật](../../../archive/social_navigation/reports/depth_seed43_validation/seed43_comparison.png), [GIF Gazebo thật](../../../archive/social_navigation/reports/depth_seed43_validation/capture/camera_preview_4x.gif).
 
 - 1051 ảnh depth khớp raw từng byte; 802 cửa sổ từ một episode, split internal_validation_only.
 - Frozen inference trước capture, không tune theo seed 43. Shape-only/combined giữ đủ 1983 paired rows, giảm ứng viên chưa ghép. Combined giảm unpaired 900→268, paired ratio 68.78→88.09%.

@@ -1,8 +1,8 @@
 # Early avoidance pilot — isolated Nav2 settings
 
-**One valid complete pilot achieved:** avoidance_moderate01, original AMCL/odometry, native standingv3 seed42, native robot friction semantics restored. Nav2 SUCCEEDED, actual goal error14.42cm/0.069rad,87.31sim s, minimum nominal robot–human gap59.25cm, no sampled standing-group hull intrusion, clean NVIDIA shutdown. This is one adaptive pilot, not a success rate or a default configuration promotion. [Report](reports/EARLY_AVOIDANCE_REPORT.md).
+**One valid complete pilot achieved:** avoidance_moderate01, original AMCL/odometry, native standingv3 seed42, native robot friction semantics restored. Nav2 SUCCEEDED, actual goal error14.42cm/0.069rad,87.31sim s, minimum nominal robot–human gap59.25cm, no sampled standing-group hull intrusion, clean NVIDIA shutdown. This is one adaptive pilot, not a success rate or a default configuration promotion. [Report](../../../archive/social_navigation/reports/early_avoidance_pilot/EARLY_AVOIDANCE_REPORT.md).
 
-First read [the correction](reports/ERRATA.md): the parent dynamic camera copier rewrote a literal Gazebo friction-frame attribute. Three exploratory runs here used the wrong physics setup and are excluded, with raw outcomes retained. The older completed dataset pilot and src/ robot are unchanged. [Native regression and fix](FRICTION_PREFIX_FIX.md).
+First read [the correction](../../../archive/social_navigation/reports/early_avoidance_pilot/ERRATA.md): the parent dynamic camera copier rewrote a literal Gazebo friction-frame attribute. Three exploratory runs here used the wrong physics setup and are excluded, with raw outcomes retained. The older completed dataset pilot and src/ robot are unchanged. [Native regression and fix](FRICTION_PREFIX_FIX.md).
 
 ## Run in the current Ubuntu24.04/Jazzy workspace
 

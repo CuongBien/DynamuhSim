@@ -1,6 +1,6 @@
 # Pilot track cảm biến và target BEV tương lai
 
-Đã chạy offline trên cùng episode standing seed 42: **823 cửa sổ, 1013 ảnh depth**, không thu thêm episode hoặc chạy lại Gazebo. [Báo cáo nghiệm thu](reports/PERCEPTION_TARGET_REPORT.md), [audit cuối](reports/audit02/audit.json), [12 test](reports/contract_tests.txt), [ảnh dữ liệu thật](reports/sample_preview.png), [mẫu sidecar](reports/examples/).
+Đã chạy offline trên cùng episode standing seed 42: **823 cửa sổ, 1013 ảnh depth**, không thu thêm episode hoặc chạy lại Gazebo. [Báo cáo nghiệm thu](../../../archive/social_navigation/reports/perception_target_pilot/PERCEPTION_TARGET_REPORT.md), [audit cuối](../../../archive/social_navigation/reports/perception_target_pilot/audit02/audit.json), [12 test](../../../archive/social_navigation/reports/perception_target_pilot/contract_tests.txt), [ảnh dữ liệu thật](../../../archive/social_navigation/reports/perception_target_pilot/sample_preview.png), [mẫu sidecar](../../../archive/social_navigation/reports/perception_target_pilot/examples).
 
 **Kết luận:** hình học/thời gian target BEV đạt ở pilot; nhận diện và giữ ID người **chưa đạt điều kiện train**. Đây là tracker cụm điểm hình học từ depth, chưa phải person detector. Không tự mở mask association hoặc H1–H5.
 

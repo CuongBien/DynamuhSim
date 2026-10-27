@@ -56,8 +56,8 @@ def load_dependencies(repo):
     social = repo / "experiments/social_navigation"
     benchmark = social / "benchmark"
     adapter = load_file_module("_dynamuhsim_gazebo_adapter", social / "gazebo_adapter/run.py")
-    gpu = load_file_module("_dynamuhsim_gpu_runtime", benchmark / "gpu_runtime/runtime_guard.py")
-    shutdown = load_file_module("_dynamuhsim_ordered_shutdown", benchmark / "shutdown_fix/ordered_stop.py")
+    from . import gpu
+    from . import shutdown
     observer = load_file_module("_dynamuhsim_amcl_observer", benchmark / "amcl_observer.py")
     return SimpleNamespace(**locals())
 
@@ -112,7 +112,7 @@ def source_files(repo, profile, entrypoint):
         files.append(stage / "runtime.py")
     files += sorted((repo / "python/dynamuhsim").rglob("*.py"))
     files += [repo / "pyproject.toml", social / "gazebo_adapter/run.py",
-              benchmark / "gpu_runtime/runtime_guard.py", benchmark / "shutdown_fix/ordered_stop.py",
+              repo / "python/dynamuhsim/runtime/gl_probe.cpp",
               benchmark / "amcl_observer.py"]
     return files
 

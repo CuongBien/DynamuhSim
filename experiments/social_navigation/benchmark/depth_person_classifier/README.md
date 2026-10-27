@@ -2,10 +2,10 @@
 
 Đã hoàn thành4 fit CUDA, chọn `depth_linear`/threshold0.5 trên validation rồi chấm test một lần:23/24 proposal người đúng,0/24 proposal môi trường bị nhận nhầm. Đây là classifier của những cụm đã có trong bộ nhỏ cùng avatar; không phải nghiệm thu detector đầy đủ/ROS rollout.
 
-- [Báo cáo, tiêu chí và lỗi còn lại](reports/CLASSIFIER_REPORT.md)
+- [Báo cáo, tiêu chí và lỗi còn lại](../../../archive/social_navigation/reports/depth_person_classifier/CLASSIFIER_REPORT.md)
 - [Trọng số và runtime NumPy](artifacts/)
-- [Ảnh/GIF dự đoán trên depth validation thật](reports/media/validation_predictions.gif)
-- [Test result](reports/test_result.json), [audit](reports/audit.json)
+- [Ảnh/GIF dự đoán trên depth validation thật](../../../archive/social_navigation/reports/depth_person_classifier/media/validation_predictions.gif)
+- [Test result](../../../archive/social_navigation/reports/depth_person_classifier/test_result.json), [audit](../../../archive/social_navigation/reports/depth_person_classifier/audit.json)
 
 `protocol.json` và `frozen.json` chốt trước fit. Toàn bộ fit/score/checkpoint output nhỏ được giữ trong reports; selected release ở artifacts. Raw corpus vẫn nằm ở stage trước `depth_perception_corpus/generated/corpus01`, cần backup riêng.
 
