@@ -419,3 +419,16 @@ not rewrite hashes to force PASS. New captures use fresh source manifests.
 The primary checkout and 1,814 protected files remain unchanged. Changes stay
 on `codex/shared-navigation-runtime`; benchmark remains `9833565`.
 Evidence: `benchmark/generated/simulation_launch_cleanup_20261027/`.
+
+
+## 2026-10-27 — share camera/TF and capture launch actions
+
+RGB bridge and optical/IMU TF now share one implementation; legacy mount TF,
+native URDF ownership, zero-string formatting and clock parameters are preserved.
+Native capture also reuses spawn/bridge/state/obstacle/Gazebo actions without
+changing its explicit SDF override. 282 tests, 10,188 before/after cases and 23
+real action constructions pass; two isolated real ROS TF trees retain their
+expected poses/orientations and stop cleanly. Fresh build/install checks pass.
+Accepted camera hash `14c154...` and all 1,814 protected files remain unchanged;
+no world/model/controller changes or Gazebo/navigation benchmark are introduced.
+Evidence: `benchmark/generated/camera_launch_cleanup_20261027/`.

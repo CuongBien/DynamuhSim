@@ -3,12 +3,12 @@ import sys
 import tempfile
 import xacro
 
-from launch_ros.actions import Node
 
 # Also installed beside these launch files and copied with legacy camera launches.
 sys.path.insert(0, os.path.dirname(os.path.realpath(__file__)))
 from _dynamuhsim_simulation import (
     robot_assets, gazebo_command, spawn_node, bridge_node, state_publisher_node, rviz_node,
+    image_bridge_node, camera_tf_nodes, obstacle_bridge_node,
 )
 from ament_index_python.packages import get_package_share_directory
 
@@ -199,73 +199,10 @@ def launch_setup(context):
 
     # ros_gz_image provides efficient RGB and float depth image conversion.
     # Names follow the RealSense ROS convention and both images are aligned.
-    image_bridge = Node(
-        package='ros_gz_image',
-        executable='image_bridge',
-        name='camera_image_bridge',
-        arguments=['/camera/image', '/camera/depth_image'],
-        remappings=[
-            ('/camera/image', '/camera/color/image_raw'),
-            ('/camera/depth_image', '/camera/depth/image_rect_raw'),
-        ],
-        parameters=[{'use_sim_time': True}],
-        output='screen',
-    )
+    image_bridge = image_bridge_node()
+    camera_link_tf, camera_optical_tf, camera_imu_tf = camera_tf_nodes()
 
-    # The installed Burger URDF has no camera frames, so publish the fixed
-    # transforms here. The optical frame follows the ROS camera convention:
-    # +Z forward, +X right, +Y down.
-    camera_link_tf = Node(
-        package='tf2_ros',
-        executable='static_transform_publisher',
-        name='camera_link_tf',
-        arguments=[
-            '--x', '0.08', '--y', '0.0', '--z', '0.20',
-            '--roll', '0.0', '--pitch', '0.0', '--yaw', '0.0',
-            '--frame-id', 'base_link',
-            '--child-frame-id', 'camera_link',
-        ],
-        output='screen',
-    )
-
-    camera_optical_tf = Node(
-        package='tf2_ros',
-        executable='static_transform_publisher',
-        name='camera_optical_tf',
-        arguments=[
-            '--x', '0.0', '--y', '0.0', '--z', '0.0',
-            '--roll', '-1.57079632679', '--pitch', '0.0',
-            '--yaw', '-1.57079632679',
-            '--frame-id', 'camera_link',
-            '--child-frame-id', 'camera_optical_frame',
-        ],
-        output='screen',
-    )
-
-    camera_imu_tf = Node(
-        package='tf2_ros',
-        executable='static_transform_publisher',
-        name='camera_imu_tf',
-        arguments=[
-            '--x', '0.0', '--y', '0.0', '--z', '0.0',
-            '--roll', '0.0', '--pitch', '0.0', '--yaw', '0.0',
-            '--frame-id', 'camera_link',
-            '--child-frame-id', 'camera_imu_frame',
-        ],
-        parameters=[{'use_sim_time': True}],
-        output='screen',
-    )
-
-    obstacle_bridge = Node(
-        package='ros_gz_bridge',
-        executable='parameter_bridge',
-        name='obstacle_type_bridge',
-        arguments=[
-            '/obstacle_type@std_msgs/msg/String]gz.msgs.StringMsg',
-            '/obstacle_type/status@std_msgs/msg/String[gz.msgs.StringMsg',
-        ],
-        output='screen',
-    )
+    obstacle_bridge = obstacle_bridge_node()
 
     # ---------------------------------------------------------
     # RViz

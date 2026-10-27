@@ -45,6 +45,22 @@ class FixtureTests(unittest.TestCase):
             self.assertNotIn("        camera_link_tf,\n", (out / "mecanum_camera.launch.py").read_text())
             self.assertIn(helper, capture.capture_sources(ROOT))
 
+    def test_shared_camera_frames_preserve_mount_ownership_and_clock_contract(self):
+        from dynamuhsim.runtime.nav2_trial import load_file_module
+        actions = NS(Node=lambda **kwargs: kwargs)
+        with patch.dict(sys.modules, {"launch_ros": NS(actions=actions), "launch_ros.actions": actions}):
+            helper = load_file_module("_camera_frame_contract_test", ROOT / "src/custom_corridor/launch/_dynamuhsim_simulation.py")
+        legacy = helper.camera_tf_nodes()
+        native = helper.camera_tf_nodes(mount_tf=False, zero="0", optical_sim_time=True)
+        self.assertEqual([n["name"] for n in legacy], ["camera_link_tf", "camera_optical_tf", "camera_imu_tf"])
+        self.assertEqual([n["name"] for n in native], ["camera_optical_tf", "camera_imu_tf"])
+        self.assertNotIn("parameters", legacy[0])
+        self.assertNotIn("parameters", legacy[1])
+        self.assertEqual(legacy[2]["parameters"], [{"use_sim_time": True}])
+        self.assertTrue(all(n["parameters"] == [{"use_sim_time": True}] for n in native))
+        self.assertEqual(legacy[0]["arguments"][:6], ["--x", "0.08", "--y", "0.0", "--z", "0.20"])
+        self.assertTrue(all(n["arguments"][-1] != "camera_link" for n in native))
+
     def test_nav2_treatment_matches_legacy_config_without_mutating_input(self):
         import yaml
         base = yaml.safe_load((ROOT / "experiments/social_navigation/warehouse/nav2_warehouse.yaml").read_text())
