@@ -281,3 +281,25 @@ seven workers including four Docker per version, 140 exact native prefix
 steps, 30 frozen warmup ticks and seven terminal bad-clock checks match.
 278 tests and 33 CLI probes pass. No ROS/Gazebo, training or dataset creation.
 Local evidence: `benchmark/generated/retired_transport_gates_cleanup_20261027/`.
+
+
+## 2026-10-27 — final source inventory and historical harness retirement
+
+[Final scope and retained entrypoints](CLEANUP_SCOPE.md). Retired 35 source files,
+10,729 lines (33 Python/two C++): completed A3/datagen/pilot300/scaling plots and
+harnesses, persona oracle/observability and first LiDAR pipeline. All references
+outside the retired closure and historical evidence were reviewed; A4's matching
+report-function name is a local definition, not a deleted-script import.
+25 Gazebo suite scripts, core/A3/MPPI/reset/replay/P4/scaling/sensors/live demos,
+V2 collectors and frozen WM/perception/export dependencies remain intact.
+278 tests, 33 CLI and ten real worker probes (six pinned Docker) pass. Bundle
+and legacy control probes are byte-identical before/after, as is the 40,000-step
+P4 CPU result. Syntax checks cover 425 current Python/47 shell files.
+Fresh symlink ROS build and copy install pass; both full asset audits pass.
+Installed checks pass for five launches, three robot descriptions, four plugin
+dependency sets, three executables and School helper/container-copy modes.
+No ROS nodes/Gazebo, training, held-out evaluation or dataset regeneration was
+started in this batch. Source reduction over `9833565` is 20,604 lines net,
+excluding data/media/config, frozen copies, vendor and gitlinks. This closes
+the obsolete-code cleanup scope; remaining intentional code is listed above.
+Evidence: `benchmark/generated/global_cleanup_audit_20261027/`.

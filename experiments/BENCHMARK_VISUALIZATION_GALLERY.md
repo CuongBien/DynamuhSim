@@ -1,5 +1,8 @@
 # DynamuhSim Benchmark Visualization Gallery
 
+Gallery này giữ kết quả lịch sử. Các producer/cohort đã hoàn thành được nghỉ dùng theo [phạm vi clean](../docs/CLEANUP_SCOPE.md); ảnh, dữ liệu và kết luận gốc giữ nguyên.
+
+
 This master document consolidates all diagnostic, validation, and benchmarking charts across the three core experiment modules:
 1. **Pipeline Verification** (`experiments/pipeline_verification/`)
 2. **Pedestrian Persona Benchmark** (`experiments/pedestrian_persona_benchmark/`)
