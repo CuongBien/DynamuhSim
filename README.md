@@ -18,7 +18,7 @@ Pilot sơ bộ, test seed 2 lượt và các logger cố định H3/401, Step1/3
 
 **Canary scaling:** chạy từ root bằng `python3 experiments/gazebo_benchmark/core/benchmark_runner.py --condition canary` (4 cấu hình uncapped, 3 lượt mỗi cấu hình) hoặc `python3 experiments/gazebo_benchmark/suites/scaling_perf/parallel_scaling_benchmark.py --canary` (1–4 instance, N=10). Hai profile giữ nguyên cấu hình và tệp JSON đầu ra của wrapper canary cũ; không dùng cờ canary thì hành vi mặc định của runner giữ nguyên.
 
-**Phân tích corridor cũ:** trong thư mục `experiments/corridor_090`, chạy `python3 analyze_k6_k12.py` cho K6–K12 hoặc thêm `--summary` cho báo cáo ngắn trước đây của `analyze_trial.py`. Hai chế độ giữ riêng cách tính vận tốc/thời gian dừng và dùng chung phần đọc bag; CLI phân tích có ground truth vẫn là `analyze_baseline.py` ở root.
+**Phân tích corridor cũ:** trong thư mục `experiments/corridor_090`, chạy `python3 analyze_k6_k12.py` cho K6–K12 hoặc thêm `--summary` cho báo cáo ngắn trước đây của `analyze_trial.py`. Hai chế độ giữ riêng cách tính vận tốc/thời gian dừng và dùng chung phần đọc bag; CLI phân tích có ground truth nằm ở `scripts/analyze_baseline.py`; lệnh cũ ở root vẫn được giữ.
 
 **Luồng hiện tại:** [Dữ liệu và baseline WM](docs/START_HERE_CURRENT.md) · [Runtime Nav2 dùng chung](docs/SHARED_NAV2_RUNTIME.md) · [Registry experiment](docs/experiment_registry.json) · [Capture mới](docs/CAPTURE_RUNTIME.md) · [Audit và artifact](docs/ANALYSIS_AND_ARTIFACTS.md) · [World assets](docs/WORLD_ASSETS.md) · [Archive lịch sử](docs/HISTORICAL_ARTIFACTS.md) · [Report và dependency](docs/REPORT_STORAGE.md) · [Media và test state](docs/REPORT_MEDIA.md) · [Sensor API](docs/SENSOR_CONTROLS.md)
 
@@ -55,27 +55,21 @@ DynamuhSim is a simulation and evaluation framework built on **ROS 2 Jazzy** and
 
 ```text
 DynamuhSim/
-├── RVO2_SOCIAL_NAVIGATION_GUIDE.md      # Detailed RVO2 / ORCA technical guide & cheat sheet
-├── Human_modelize_sync.md               # Technical specification for unified human pipeline
-├── BASELINE_TRIALS.md                   # Quick guide for automated trials
-├── run_baseline_trials.sh               # Automated batch trial orchestrator
-├── record_obstacle.py                   # Ground-truth obstacle pose recorder
-├── analyze_baseline.py                  # Single-trial offline metrics CLI facade
-├── evaluate_framework.py                # Batch evaluation & algorithm comparison
-├── evaluation/                          # Modular evaluation package (PSI, motion, jerk metrics)
+├── docs/                      # Technical guides, current workflow and verification
+├── scripts/                   # Environment, install, baseline and evaluation entrypoints
+├── tools/                     # Shared runtime, capture, audit and artifact commands
+├── python/dynamuhsim/         # Shared Python implementation
+├── evaluation/                # Offline trial metrics
+├── experiments/               # Current suites and preserved historical results
 ├── src/
-│   ├── custom_corridor/                 # Main simulation & Nav2 package
-│   │   ├── config/                      # Nav2 parameters (nav2_corridor.yaml, nav2_mppi.yaml)
-│   │   ├── launch/                      # Launch files (corridor_tb3, nav2_corridor, hospital_arena, nav2_hospital)
-│   │   ├── maps/                        # 2D maps (corridor_090, arena_obstacle, school_arena, hospital/)
-│   │   ├── models/                      # TurtleBot3 Burger, 3D animated humans (walk_orange, red, blue, trolley)
-│   │   ├── rviz/                        # RViz2 visualization setup
-│   │   ├── scripts/                     # Helper nodes (goal_pose_bridge.py, hospital_auto_route.py)
-│   │   └── worlds/                      # Gazebo SDF worlds (corridors, arena, hospital, school_arena)
-│   ├── custom_corridor_plugins/         # C++ Gazebo Sim System plugins
-│   │   ├── src/rvo2_human_system.cpp    # In-engine RVO2 / ORCA social navigation plugin
-│   │   └── src/rvo2/                    # Core RVO2 / ORCA C++ library
-│   └── dynabarn/                        # DynaBARN benchmark submodule
+│   ├── custom_corridor/       # Worlds, robot models, Nav2, launch files and School workflow
+│   └── custom_corridor_plugins/
+│       ├── src/rvo2_human_system.cpp  # Gazebo integration and ORCA orchestration
+│       ├── src/corridor_fsm.cpp      # Recess yielding and wall clamp
+│       ├── src/scenario_presets.cpp # Built-in presets and trolley synchronization
+│       ├── include/custom_corridor_plugins/ # Shared types and declarations
+│       └── src/rvo2/                # ORCA implementation
+└── setup_env.sh               # Compatibility entrypoint to scripts/setup_env.sh
 ```
 
 ---
@@ -126,7 +120,7 @@ source install/setup.bash
 
 ### Option 1: Manual Run & Testing
 
-> 💡 *For an exhaustive parameter reference, mathematical details, and benchmark tips, see the [RVO2 Social Navigation Guide](RVO2_SOCIAL_NAVIGATION_GUIDE.md).*
+> 💡 *For an exhaustive parameter reference, mathematical details, and benchmark tips, see the [RVO2 Social Navigation Guide](docs/RVO2_SOCIAL_NAVIGATION_GUIDE.md).*
 
 #### Quick Environment Cheat Sheet:
 | Environment | Simulation Command (`corridor_tb3` / `hospital_arena`) | Nav2 Command | Goal Pose `(x, y)` |
@@ -299,3 +293,7 @@ The modular evaluation framework computes 6 categories of performance metrics:
 - **Author**: CuongBien ([biencaocuongg@gmail.com](mailto:biencaocuongg@gmail.com))
 - **Repository**: [https://github.com/CuongBien/DynamuhSim.git](https://github.com/CuongBien/DynamuhSim.git)
 - **License**: Apache 2.0
+
+Các lệnh cũ `analyze_baseline.py`, `evaluate_framework.py`, `run_baseline_trials.sh`,
+`install_dependencies.sh` và `source setup_env.sh` ở root chỉ chuyển tiếp sang
+implementation trong `scripts/`; không có bản sao logic thứ hai.

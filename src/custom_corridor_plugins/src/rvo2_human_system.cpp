@@ -51,180 +51,15 @@
 
 #include "rvo2/RVO.h"
 
+#include "custom_corridor_plugins/types.hpp"
+#include "custom_corridor_plugins/scenario_presets.hpp"
+#include "custom_corridor_plugins/corridor_fsm.hpp"
+
 namespace custom_corridor
 {
 namespace
 {
 using json = nlohmann::json;
-
-constexpr double kPi = 3.14159265358979323846;
-constexpr double kEps = 1e-6;
-
-inline double NormalizeAngle(double val)
-{
-  return std::atan2(std::sin(val), std::cos(val));
-}
-
-inline double Distance2D(double x0, double y0, double x1, double y1)
-{
-  return std::hypot(x1 - x0, y1 - y0);
-}
-
-inline double HeadingTo(double x0, double y0, double x1, double y1)
-{
-  return std::atan2(y1 - y0, x1 - x0);
-}
-
-std::string TwoDigit(int id)
-{
-  std::ostringstream ss;
-  ss << std::setw(2) << std::setfill('0') << id;
-  return ss.str();
-}
-
-template <typename T>
-T SdfValueOr(
-    const std::shared_ptr<const sdf::Element> &_sdf,
-    const std::string &_name,
-    const T &_defaultValue)
-{
-  if (_sdf && _sdf->HasElement(_name))
-    return _sdf->Get<T>(_name);
-  return _defaultValue;
-}
-
-enum class HumanMode
-{
-  Hidden,
-  Stationary,
-  Autonomous
-};
-
-enum class HumanPersona
-{
-  H1_Cooperative = 1,     // Reciprocal ORCA (alpha = 0.50, ~40%)
-  H2_Unyielding = 2,      // Low-responsibility ORCA (alpha in [0.10, 0.35], ~10%)
-  H3_RobotBlind = 3,      // Completely ignores robot (neighbor filtering, ~25%)
-  H4_Static = 4,          // Stationary / conversational group (v_pref = 0, ~15%)
-  H5_SocialForce = 5      // Soft exponential repulsion + LPF (~10%)
-};
-
-inline std::string PersonaToString(HumanPersona p)
-{
-  switch (p)
-  {
-    case HumanPersona::H1_Cooperative: return "H1";
-    case HumanPersona::H2_Unyielding: return "H2";
-    case HumanPersona::H3_RobotBlind: return "H3";
-    case HumanPersona::H4_Static: return "H4";
-    case HumanPersona::H5_SocialForce: return "H5";
-    default: return "H1";
-  }
-}
-
-inline HumanPersona StringToPersona(const std::string &str)
-{
-  if (str == "H1" || str == "cooperative" || str == "1") return HumanPersona::H1_Cooperative;
-  if (str == "H2" || str == "unyielding" || str == "2") return HumanPersona::H2_Unyielding;
-  if (str == "H3" || str == "blind" || str == "robot_blind" || str == "3") return HumanPersona::H3_RobotBlind;
-  if (str == "H4" || str == "static" || str == "4") return HumanPersona::H4_Static;
-  if (str == "H5" || str == "social_force" || str == "sfm" || str == "5") return HumanPersona::H5_SocialForce;
-  return HumanPersona::H1_Cooperative;
-}
-
-enum class CorridorState
-{
-  Patrol,
-  YieldingEnter,
-  YieldingWait,
-  YieldingExit
-};
-
-struct Waypoint
-{
-  double x{0.0};
-  double y{0.0};
-};
-
-struct HumanAgent
-{
-  int id{0};
-  std::string name;
-  HumanMode mode{HumanMode::Hidden};
-  HumanPersona persona{HumanPersona::H1_Cooperative};
-  bool active{false};
-
-  // Kinematic state
-  double x{0.0};
-  double y{0.0};
-  double z{0.85};
-  double yaw{0.0};
-  double vx{0.0};
-  double vy{0.0};
-  double prefVx{0.0};
-  double prefVy{0.0};
-
-  // Navigation targets
-  double speed{0.85};
-  double maxSpeed{1.2};
-  double radius{0.28};
-  bool loop{true};
-  bool waitForRobot{false};
-  std::size_t waypointIndex{0};
-  std::vector<Waypoint> waypoints;
-  double waypointTolerance{0.35};
-
-  // Elevation and Scale
-  double visualZ{1.0};
-  double proxyZ{0.85};
-  double scale{1.0};
-
-  // Social traits & Personas H1-H5
-  double politeness{0.5}; // Yielding / politeness weight in [0.0 = distracted/stubborn, 1.0 = highly cooperative]
-  double responsibilityWeight{0.50}; // Continuous responsibility weight alpha (e.g. 0.50 for H1, 0.10..0.35 for H2)
-  double latencyTau{0.3}; // Reaction latency time constant (seconds)
-
-  // Corridor Recess State
-  CorridorState corridorState{CorridorState::Patrol};
-  double waitDuration{0.0};
-
-  // Gazebo entities
-  gz::sim::Entity modelEntity{gz::sim::kNullEntity};
-  gz::sim::Entity actorEntity{gz::sim::kNullEntity};
-  gz::math::Pose3d actorOrigin{0, 0, 0, 0, 0, 0};
-  bool isSingleModel{true};
-
-  // RVO agent index & animation
-  std::size_t rvoIndex{0};
-  double animTimeSec{0.0};
-  std::chrono::steady_clock::duration animationTime{0};
-
-  // Wall-clearance and safety tracking
-  uint64_t totalStepsCount{0};
-  uint64_t clampedStepsCount{0};
-  uint64_t penetrationStepsCount{0};
-  double maxPenetrationDepth{0.0};
-  double maxLateralDev{0.0};
-
-  void Reset()
-  {
-    this->vx = 0.0;
-    this->vy = 0.0;
-    this->prefVx = 0.0;
-    this->prefVy = 0.0;
-    this->waypointIndex = 0;
-    this->corridorState = CorridorState::Patrol;
-    this->waitDuration = 0.0;
-    this->animTimeSec = 0.0;
-    this->animationTime = std::chrono::steady_clock::duration{0};
-    this->totalStepsCount = 0;
-    this->clampedStepsCount = 0;
-    this->penetrationStepsCount = 0;
-    this->maxPenetrationDepth = 0.0;
-    this->maxLateralDev = 0.0;
-  }
-};
-
 } // namespace
 
 class RVO2HumanSystem final : public gz::sim::System,
@@ -375,45 +210,13 @@ public:
       human.vy = vel.y();
 
       // In corridor mode, clamp Y to guarantee agent never penetrates corridor or recess walls.
-      // Strict rule: max lateral dev of human center = corridor_half_width - 0.28 - 0.02
       if (this->corridorMode_)
       {
-        const double allowedY = std::max(0.05, this->corridorHalfWidth_ - human.radius - 0.02);
-        double minWallY = -allowedY;
-        double maxWallY = allowedY;
-
-        // If human is actively maneuvering within recess alcove
-        if (human.x >= (this->recessXMin_ - 0.1) && human.x <= (this->recessXMax_ + 0.1) &&
-            (human.corridorState == CorridorState::YieldingEnter ||
-             human.corridorState == CorridorState::YieldingWait ||
-             human.corridorState == CorridorState::YieldingExit))
+        const auto clampsBefore = human.clampedStepsCount;
+        ClampCorridorWallBoundaries(human, this->GetCorridorRecessConfig());
+        if (human.clampedStepsCount != clampsBefore)
         {
-          maxWallY = this->recessY_ + 0.10;
-        }
-
-        human.totalStepsCount++;
-        if (human.y < minWallY || human.y > maxWallY)
-        {
-          human.clampedStepsCount++;
-          human.y = std::clamp(human.y, minWallY, maxWallY);
           this->rvoSim_->setAgentPosition(human.rvoIndex, RVO::Vector2(human.x, human.y));
-        }
-
-        if (std::abs(human.y) > human.maxLateralDev)
-        {
-          human.maxLateralDev = std::abs(human.y);
-        }
-
-        // Track wall penetration (outer body boundary = |y| + radius)
-        const double outerEdgeY = std::abs(human.y) + human.radius;
-        if (outerEdgeY > this->corridorHalfWidth_)
-        {
-          human.penetrationStepsCount++;
-          const double depth = outerEdgeY - this->corridorHalfWidth_;
-          if (depth > human.maxPenetrationDepth)
-          {
-            human.maxPenetrationDepth = depth;
-          }
         }
       }
 
@@ -920,132 +723,16 @@ private:
     // Corridor Recess Yielding State Machine vs Open Arena Proxemic Yielding
     if (this->corridorMode_ && this->robotHasPrevPose_ && _human.persona != HumanPersona::H3_RobotBlind)
     {
-      const double rx = this->robotPrevX_ - _human.x;
-      const double ry = this->robotPrevY_ - _human.y;
-      const double distToRobot = std::hypot(rx, ry);
+      RobotTrackerState robot;
+      robot.x = this->robotPrevX_;
+      robot.y = this->robotPrevY_;
+      robot.vx = this->robotVx_;
+      robot.vy = this->robotVy_;
+      robot.speed = this->robotSpeed_;
+      robot.hasPrevPose = this->robotHasPrevPose_;
 
-      double patrolDirX = -1.0;
-      if (!_human.waypoints.empty())
-      {
-        const auto &wp = _human.waypoints[_human.waypointIndex];
-        patrolDirX = (wp.x - _human.x >= 0.0) ? 1.0 : -1.0;
-      }
-
-      // Robot is in front of human's travel direction
-      const bool robotInFront = (patrolDirX * rx > 0.0);
-      // Robot is actively moving towards human (closing distance)
-      const bool robotMovingTowards = (this->robotSpeed_ > 0.03 && (rx * this->robotVx_ < 0.0));
-      // Is corridor a single-lane bottleneck (< 1.10m)? (corridor_070 and corridor_090)
-      const bool isNarrowCorridor = (this->corridorHalfWidth_ < 0.55);
-
-      const double maxAllowedY = std::max(0.05, this->corridorHalfWidth_ - _human.radius - 0.02);
-
-      if (!isNarrowCorridor)
-      {
-        // Wide corridor (1.20m): agents can pass each other side-by-side!
-        // Human shifts to their right lane (+Y if heading -X, -Y if heading +X) up to maxAllowedY
-        if (robotInFront && distToRobot < 4.5)
-        {
-          const double rightY = (patrolDirX < 0.0) ? maxAllowedY : -maxAllowedY;
-          const double dyToRight = rightY - _human.y;
-          desiredVy += std::clamp(dyToRight * 1.5, -0.35, 0.35);
-        }
-      }
-      else
-      {
-        // Single-lane bottleneck (corridor 0.70m and 0.90m)
-        if (_human.corridorState == CorridorState::Patrol)
-        {
-          _human.waitDuration = 0.0;
-
-          // ONLY enter recess if human is right at the recess (x in [1.15, 2.95])
-          // AND robot is ACTUALLY CLOSE (distToRobot < 3.5m) and approaching!
-          const bool nearRecessAhead = (_human.x >= (this->recessXMin_ - 0.2) && _human.x <= (this->recessXMax_ + 0.3));
-          const bool robotCloseAndApproaching = robotInFront && (robotMovingTowards || distToRobot < 2.5) && (distToRobot < 3.5);
-
-          // Or if human is just past the recess (x in [-1.5, 1.15]) and meets robot close (< 2.8m)
-          const bool insideBottleneck = (_human.x < (this->recessXMin_ - 0.2) && _human.x >= (this->recessXMin_ - 2.5));
-          const bool confrontationNearAlcove = insideBottleneck && robotInFront && (robotMovingTowards || distToRobot < 2.5) && (distToRobot < 2.8);
-
-          if ((nearRecessAhead && robotCloseAndApproaching) || confrontationNearAlcove)
-          {
-            _human.corridorState = CorridorState::YieldingEnter;
-          }
-          else if (robotInFront && distToRobot < 4.0)
-          {
-            // When walking down the corridor, step to the right wall up to maxAllowedY
-            // If heading -X (patrolDirX < 0), right is +Y. If heading +X, right is -Y.
-            const double rightY = (patrolDirX < 0.0) ? maxAllowedY : -maxAllowedY;
-            const double dyToRight = rightY - _human.y;
-            desiredVy += std::clamp(dyToRight * 1.5, -0.35, 0.35);
-          }
-        }
-        else if (_human.corridorState == CorridorState::YieldingEnter)
-        {
-          const double targetX = this->recessXCenter_;
-          const double targetY = this->recessY_;
-          const double dxRecess = targetX - _human.x;
-          const double dyRecess = targetY - _human.y;
-          const double dRecess = std::hypot(dxRecess, dyRecess);
-
-          if (dRecess < 0.25)
-          {
-            _human.corridorState = CorridorState::YieldingWait;
-            _human.waitDuration = 0.0;
-            desiredVx = 0.0;
-            desiredVy = 0.0;
-          }
-          else
-          {
-            desiredVx = (dxRecess / dRecess) * _human.speed * 0.85;
-            desiredVy = (dyRecess / dRecess) * _human.speed * 0.85;
-          }
-        }
-        else if (_human.corridorState == CorridorState::YieldingWait)
-        {
-          desiredVx = 0.0;
-          desiredVy = 0.0;
-          _human.waitDuration += _dt;
-
-          // Human turns to face the corridor (-pi/2) while waiting for robot to pass
-          const double targetHeading = -1.5708;
-          const double headingDiff = NormalizeAngle(targetHeading - _human.yaw);
-          _human.yaw = NormalizeAngle(_human.yaw + std::clamp(headingDiff, -4.0 * _dt, 4.0 * _dt));
-
-          // Robot has cleared if it has driven past the recess in the direction of travel
-          // Robot travels +X from -13.0 to +5.0. When robot X > (recessXMax + 0.35), bottleneck is clear!
-          const bool robotPassedX = (this->robotVx_ >= -0.01) ?
-              (this->robotPrevX_ > (this->recessXMax_ + 0.35)) :
-              (this->robotPrevX_ < (this->recessXMin_ - 0.35));
-
-          // Fail-safe: if robot stopped or turned around for > 8.0s far away (dist > 4.5m), resume patrol
-          const bool robotGaveUp = (_human.waitDuration > 8.0 && this->robotSpeed_ < 0.03 && distToRobot > 4.5);
-
-          if (robotPassedX || robotGaveUp)
-          {
-            _human.corridorState = CorridorState::YieldingExit;
-          }
-        }
-        else if (_human.corridorState == CorridorState::YieldingExit)
-        {
-          const double targetX = this->recessXCenter_;
-          const double targetY = 0.0;
-          const double dxExit = targetX - _human.x;
-          const double dyExit = targetY - _human.y;
-          const double dExit = std::hypot(dxExit, dyExit);
-
-          if (std::abs(_human.y) < 0.12)
-          {
-            _human.corridorState = CorridorState::Patrol;
-            _human.waitDuration = 0.0;
-          }
-          else
-          {
-            desiredVx = (dxExit / std::max(0.01, dExit)) * _human.speed * 0.85;
-            desiredVy = (dyExit / std::max(0.01, dExit)) * _human.speed * 0.85;
-          }
-        }
-      }
+      UpdateCorridorRecessYielding(
+          _human, this->GetCorridorRecessConfig(), robot, _dt, desiredVx, desiredVy);
     }
     else if (_human.persona == HumanPersona::H5_SocialForce && this->robotHasPrevPose_)
     {
@@ -1119,32 +806,7 @@ private:
   void ApplyAllPoses(gz::sim::EntityComponentManager &_ecm)
   {
     // Synchronize trolley poses to their respective pusher
-    for (auto &human : this->humans_)
-    {
-      if (human.name.find("trolley") != std::string::npos &&
-          human.name.find("pusher") == std::string::npos)
-      {
-        for (const auto &pusher : this->humans_)
-        {
-          if (pusher.name.find("trolley_pusher") != std::string::npos)
-          {
-            bool match = false;
-            if (human.name.find("06") != std::string::npos && pusher.name.find("06") != std::string::npos) match = true;
-            else if (human.name.find("14") != std::string::npos && pusher.name.find("14") != std::string::npos) match = true;
-            else match = true;
-            if (match)
-            {
-              human.x = pusher.x;
-              human.y = pusher.y;
-              human.yaw = pusher.yaw;
-              human.animTimeSec = pusher.animTimeSec;
-              human.animationTime = pusher.animationTime;
-              break;
-            }
-          }
-        }
-      }
-    }
+    SyncTrolleyEntities(this->humans_);
 
     for (auto &human : this->humans_)
     {
@@ -1415,80 +1077,25 @@ private:
     {
       if (this->defaultScenarioFile_ == "hospital_easy")
       {
-        std::string jsonStr = R"({
-          "episode_id": 1,
-          "humans": [
-            {"id": 1, "name": "hospital_walking_human", "mode": "autonomous", "speed": 0.75, "scale": 1.00, "visual_z": 1.00, "proxy_z": 0.85, "waypoints": [[-14.0, 0.0], [-2.8, 0.0], [-2.8, -4.0], [-2.8, 0.0], [-14.0, 0.0]]},
-            {"id": 2, "name": "hospital_walking_human_2", "mode": "autonomous", "speed": 0.75, "scale": 0.95, "visual_z": 0.95, "proxy_z": 0.80, "waypoints": [[2.8, -4.0], [2.8, -1.1], [-19.6, -1.1], [-14.0, -1.1], [-14.0, 4.0], [-14.0, -1.1], [2.8, -1.1]]},
-            {"id": 3, "name": "hospital_walking_human_3", "mode": "autonomous", "speed": 0.70, "scale": 1.02, "visual_z": 1.02, "proxy_z": 0.85, "waypoints": [[-21.0, -2.1], [-21.0, -1.1], [-14.0, -1.1], [-14.0, 4.0], [-14.0, -1.1], [-21.0, -1.1]]}
-          ]
-        })";
-        this->LoadScenarioJson(jsonStr);
+        this->LoadScenarioJson(GetHospitalEasyPresetJson());
         return;
       }
 
       if (this->defaultScenarioFile_ == "hospital_medium")
       {
-        std::string jsonStr = R"({
-          "episode_id": 1,
-          "humans": [
-            {"id": 1, "name": "medium_walker_01", "mode": "autonomous", "speed": 0.75, "scale": 1.00, "visual_z": 1.00, "proxy_z": 0.85, "waypoints": [[-10.0, 0.0], [-16.0, 0.0], [-17.0, -1.3], [-26.0, -1.3], [-17.0, -1.3], [-16.0, 0.0], [-10.0, 0.0]]},
-            {"id": 2, "name": "medium_walker_02_head_on", "mode": "autonomous", "speed": 0.75, "scale": 0.95, "visual_z": 0.95, "proxy_z": 0.80, "waypoints": [[8.0, 0.0], [2.0, 0.0], [8.0, 0.0]]},
-            {"id": 3, "name": "medium_walker_03_room_crossing", "mode": "autonomous", "speed": 0.70, "scale": 1.06, "visual_z": 1.06, "proxy_z": 0.875, "waypoints": [[-2.8, -4.0], [-2.8, 4.0], [-2.8, -4.0]]},
-            {"id": 4, "name": "medium_walker_04_same_direction", "mode": "autonomous", "speed": 0.80, "scale": 1.00, "visual_z": 1.00, "proxy_z": 0.85, "waypoints": [[11.0, 0.0], [17.0, 0.0], [11.0, 0.0]]},
-            {"id": 5, "name": "medium_walker_05_wait_then_cross", "mode": "autonomous", "speed": 0.65, "scale": 0.98, "visual_z": 0.98, "proxy_z": 0.82, "waypoints": [[19.6, -4.0], [19.6, 4.0], [19.6, -4.0]]},
-            {"id": 6, "name": "medium_walker_06_trolley_pusher", "mode": "autonomous", "speed": 0.60, "scale": 1.00, "visual_z": 1.00, "proxy_z": 0.85, "waypoints": [[-24.0, 0.6], [-18.0, 0.6], [-24.0, 0.6]]},
-            {"id": 7, "name": "medium_trolley_06", "mode": "stationary", "speed": 0.0, "scale": 1.00, "visual_z": 1.00, "proxy_z": 0.85, "waypoints": []},
-            {"id": 8, "name": "medium_walker_07_yielding", "mode": "autonomous", "speed": 0.75, "scale": 1.02, "visual_z": 1.02, "proxy_z": 0.85, "waypoints": [[0.0, -1.35], [0.0, 1.35], [0.0, -1.35]]}
-          ]
-        })";
-        this->LoadScenarioJson(jsonStr);
+        this->LoadScenarioJson(GetHospitalMediumPresetJson());
         return;
       }
 
       if (this->defaultScenarioFile_ == "hospital_hard")
       {
-        std::string jsonStr = R"({
-          "episode_id": 1,
-          "humans": [
-            {"id": 1, "name": "medium_walker_01", "mode": "autonomous", "speed": 0.75, "scale": 1.00, "visual_z": 1.00, "proxy_z": 0.85, "waypoints": [[-10.0, 0.0], [-16.0, 0.0], [-17.0, -1.3], [-26.0, -1.3], [-17.0, -1.3], [-16.0, 0.0], [-10.0, 0.0]]},
-            {"id": 2, "name": "medium_walker_02_head_on", "mode": "autonomous", "speed": 0.75, "scale": 0.95, "visual_z": 0.95, "proxy_z": 0.80, "waypoints": [[8.0, 0.0], [2.0, 0.0], [8.0, 0.0]]},
-            {"id": 3, "name": "medium_walker_03_room_crossing", "mode": "autonomous", "speed": 0.70, "scale": 1.06, "visual_z": 1.06, "proxy_z": 0.875, "waypoints": [[-2.8, -4.0], [-2.8, 4.0], [-2.8, -4.0]]},
-            {"id": 4, "name": "medium_walker_04_same_direction", "mode": "autonomous", "speed": 0.80, "scale": 1.00, "visual_z": 1.00, "proxy_z": 0.85, "waypoints": [[11.0, 0.0], [17.0, 0.0], [11.0, 0.0]]},
-            {"id": 5, "name": "medium_walker_05_wait_then_cross", "mode": "autonomous", "speed": 0.65, "scale": 0.98, "visual_z": 0.98, "proxy_z": 0.82, "waypoints": [[19.6, -4.0], [19.6, 4.0], [19.6, -4.0]]},
-            {"id": 6, "name": "medium_walker_06_trolley_pusher", "mode": "autonomous", "speed": 0.60, "scale": 1.00, "visual_z": 1.00, "proxy_z": 0.85, "waypoints": [[-24.0, 0.6], [-18.0, 0.6], [-24.0, 0.6]]},
-            {"id": 7, "name": "medium_trolley_06", "mode": "stationary", "speed": 0.0, "scale": 1.00, "visual_z": 1.00, "proxy_z": 0.85, "waypoints": []},
-            {"id": 8, "name": "medium_walker_07_yielding", "mode": "autonomous", "speed": 0.75, "scale": 1.02, "visual_z": 1.02, "proxy_z": 0.85, "waypoints": [[0.0, -1.35], [0.0, 1.35], [0.0, -1.35]]},
-            {"id": 9, "name": "hard_walker_08_door_exit", "mode": "autonomous", "speed": 0.75, "scale": 1.00, "visual_z": 1.00, "proxy_z": 0.85, "waypoints": [[-2.8, 4.0], [-2.8, 1.35], [-7.0, 1.35], [-2.8, 1.35], [-2.8, 4.0]]},
-            {"id": 10, "name": "hard_walker_09_door_entry", "mode": "autonomous", "speed": 0.70, "scale": 0.96, "visual_z": 0.96, "proxy_z": 0.82, "waypoints": [[-7.0, -1.35], [-2.8, -1.35], [-2.8, -4.0], [-2.8, -1.35], [-7.0, -1.35]]},
-            {"id": 11, "name": "hard_walker_10_cross_south_to_north", "mode": "autonomous", "speed": 0.80, "scale": 1.02, "visual_z": 1.02, "proxy_z": 0.85, "waypoints": [[2.8, -4.0], [2.8, 4.0], [2.8, -4.0]]},
-            {"id": 12, "name": "hard_walker_11_cross_north_to_south", "mode": "autonomous", "speed": 0.80, "scale": 0.98, "visual_z": 0.98, "proxy_z": 0.82, "waypoints": [[8.4, 4.0], [8.4, -4.0], [8.4, 4.0]]},
-            {"id": 13, "name": "hard_walker_12_group", "mode": "autonomous", "speed": 0.70, "scale": 1.04, "visual_z": 1.04, "proxy_z": 0.86, "waypoints": [[11.5, -0.4], [18.5, -0.4], [11.5, -0.4]]},
-            {"id": 14, "name": "hard_walker_13_group", "mode": "autonomous", "speed": 0.70, "scale": 0.95, "visual_z": 0.95, "proxy_z": 0.80, "waypoints": [[11.5, 0.4], [18.5, 0.4], [11.5, 0.4]]},
-            {"id": 15, "name": "hard_walker_14_trolley_pusher", "mode": "autonomous", "speed": 0.60, "scale": 1.00, "visual_z": 1.00, "proxy_z": 0.85, "waypoints": [[22.0, -1.2], [12.8, -1.2], [22.0, -1.2]]},
-            {"id": 16, "name": "hard_trolley_14", "mode": "stationary", "speed": 0.0, "scale": 1.00, "visual_z": 1.00, "proxy_z": 0.85, "waypoints": []}
-          ]
-        })";
-        this->LoadScenarioJson(jsonStr);
+        this->LoadScenarioJson(GetHospitalHardPresetJson());
         return;
       }
 
       if (this->defaultScenarioFile_ == "school_arena")
       {
-        std::string jsonStr = R"({
-          "episode_id": 1,
-          "humans": [
-            {"id": 1, "name": "student_head_on_A", "mode": "autonomous", "speed": 0.80, "scale": 1.02, "visual_z": 1.02, "proxy_z": 0.85, "waypoints": [[-12.0, -8.05], [10.0, -8.05], [-12.0, -8.05]]},
-            {"id": 2, "name": "student_opposite_A", "mode": "autonomous", "speed": 0.75, "scale": 0.96, "visual_z": 0.96, "proxy_z": 0.82, "waypoints": [[10.0, -7.85], [-10.0, -7.85], [10.0, -7.85]]},
-            {"id": 3, "name": "student_corner_B", "mode": "autonomous", "speed": 0.70, "scale": 1.04, "visual_z": 1.04, "proxy_z": 0.86, "waypoints": [[15.05, -7.0], [15.05, -4.1], [10.5, -4.0], [15.05, -4.1], [15.05, -7.0]]},
-            {"id": 4, "name": "student_stair_loop", "mode": "autonomous", "speed": 0.75, "scale": 1.00, "visual_z": 1.00, "proxy_z": 0.85, "waypoints": [[14.85, -5.2], [15.0, -4.0], [7.0, -4.0], [7.0, 0.0], [14.9, 0.0], [15.0, 5.0], [14.9, 0.0], [7.0, 0.0], [7.0, -4.0], [15.0, -4.0], [14.85, -5.2]]},
-            {"id": 5, "name": "student_door_exit", "mode": "autonomous", "speed": 0.65, "scale": 0.95, "visual_z": 0.95, "proxy_z": 0.80, "waypoints": [[-3.73, -10.4], [-3.73, -8.05], [2.0, -8.05], [-3.73, -8.05], [-3.73, -10.4]]},
-            {"id": 6, "name": "student_vertical_up", "mode": "autonomous", "speed": 0.70, "scale": 1.02, "visual_z": 1.02, "proxy_z": 0.85, "waypoints": [[14.85, 1.4], [14.85, 12.4], [14.85, 1.4]]},
-            {"id": 7, "name": "student_vertical_down", "mode": "autonomous", "speed": 0.70, "scale": 0.98, "visual_z": 0.98, "proxy_z": 0.82, "waypoints": [[15.15, 12.0], [15.15, 2.0], [15.15, 12.0]]},
-            {"id": 8, "name": "student_short_cross", "mode": "autonomous", "speed": 0.60, "scale": 1.00, "visual_z": 1.00, "proxy_z": 0.85, "waypoints": [[15.15, 6.4], [14.65, 6.4], [15.35, 6.4], [15.15, 6.4]]}
-          ]
-        })";
-        this->LoadScenarioJson(jsonStr);
+        this->LoadScenarioJson(GetSchoolArenaPresetJson());
         return;
       }
 
@@ -1504,51 +1111,12 @@ private:
 
     if (this->corridorMode_)
     {
-      const double maxSpawnY = std::max(0.05, this->corridorHalfWidth_ - this->humanRadius_ - 0.02);
-      const std::vector<double> yOffsets = {0.0, maxSpawnY * 0.5, -maxSpawnY * 0.5, maxSpawnY, -maxSpawnY};
-      json root;
-      root["episode_id"] = 1;
-      root["corridor_mode"] = true;
-      root["humans"] = json::array();
-      for (int i = 1; i <= this->humanCount_; ++i)
-      {
-        json hObj;
-        hObj["id"] = i;
-        hObj["mode"] = "autonomous";
-        hObj["speed"] = 0.75;
-        const double spawnX = 3.5 + (i - 1) * (7.0 / std::max(this->humanCount_ - 1, 1));
-        const double spawnY = yOffsets[(i - 1) % yOffsets.size()];
-        hObj["start"] = {{"x", spawnX}, {"y", spawnY}, {"yaw", 3.14159}};
-        hObj["waypoints"] = json::array({{spawnX, spawnY}, {-5.0, spawnY}, {12.0, spawnY}});
-        root["humans"].push_back(hObj);
-      }
-      this->LoadScenarioJson(root.dump());
+      this->LoadScenarioJson(GetCorridorPresetJson(
+          this->humanCount_, this->corridorHalfWidth_, this->humanRadius_));
       return;
     }
 
-    if (this->humanCount_ == 1)
-    {
-      std::string jsonStr = R"({
-        "episode_id": 1,
-        "humans": [
-          {"id": 1, "mode": "autonomous", "speed": 0.75, "scale": 1.02, "visual_z": 1.02, "proxy_z": 0.85, "waypoints": [[1.0, 0.0], [-6.0, 0.0]]}
-        ]
-      })";
-      this->LoadScenarioJson(jsonStr);
-      return;
-    }
-
-    // Built-in default patrol for 4 dynamic agents - all active and moving with calibrated scale & tempo
-    std::string jsonStr = R"({
-      "episode_id": 1,
-      "humans": [
-        {"id": 1, "mode": "autonomous", "speed": 0.75, "scale": 1.02, "visual_z": 1.02, "proxy_z": 0.85, "waypoints": [[4.0, 0.0], [-10.0, 0.0]]},
-        {"id": 2, "mode": "autonomous", "speed": 0.85, "scale": 0.95, "visual_z": 0.95, "proxy_z": 0.80, "waypoints": [[-8.0, -1.2], [3.0, 1.0]]},
-        {"id": 3, "mode": "autonomous", "speed": 0.70, "scale": 1.06, "visual_z": 1.06, "proxy_z": 0.875, "waypoints": [[-3.0, -3.0], [-3.0, 3.0]]},
-        {"id": 4, "mode": "autonomous", "speed": 0.80, "scale": 1.00, "visual_z": 1.00, "proxy_z": 0.85, "waypoints": [[1.0, 2.5], [-7.0, -2.0]]}
-      ]
-    })";
-    this->LoadScenarioJson(jsonStr);
+    this->LoadScenarioJson(GetDefaultPresetJson(this->humanCount_));
   }
 
   void ResetScenarioRuntime()
@@ -1633,6 +1201,20 @@ private:
   double recessY_{0.75};
   double recessApproachDist_{5.0};
   double recessThreshold_{0.40};
+
+  CorridorRecessConfig GetCorridorRecessConfig() const
+  {
+    CorridorRecessConfig cfg;
+    cfg.corridorMode = this->corridorMode_;
+    cfg.corridorHalfWidth = this->corridorHalfWidth_;
+    cfg.recessXMin = this->recessXMin_;
+    cfg.recessXMax = this->recessXMax_;
+    cfg.recessXCenter = this->recessXCenter_;
+    cfg.recessY = this->recessY_;
+    cfg.recessApproachDist = this->recessApproachDist_;
+    cfg.recessThreshold = this->recessThreshold_;
+    return cfg;
+  }
 
   int humanCount_{4};
   std::vector<HumanAgent> humans_;

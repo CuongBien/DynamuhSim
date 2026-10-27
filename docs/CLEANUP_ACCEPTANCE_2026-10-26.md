@@ -319,3 +319,39 @@ The dirty primary checkout is not integrated: 16 overlapping tracked paths have
 different content; 942 overlap paths already match. No simulator/build rerun,
 training or historical outcome rewrite. Local evidence:
 `benchmark/generated/final_branch_review_20261027/`.
+
+
+## 2026-10-27 — organize entrypoints and split the native human plugin
+
+Five guides move into `docs/`; five implementation entrypoints move into
+`scripts/`. Root commands remain thin compatibility entrypoints. Path resolution
+continues to use the checkout root. Fifteen layout/argument/exit/environment
+checks pass, including sourced setup and paths containing spaces; four Python
+CLI routes pass from outside the repo. Implementation differs only in root resolution, the analyzer import path
+and removal of trailing whitespace in the moved shell files.
+
+The human plugin separates shared types, corridor FSM/wall clamp and presets /
+trolley synchronization. Six original JSON literals are preserved verbatim;
+local hospital_easy trajectory edits and local robot/world changes are excluded.
+The original outer persona/robot-pose guard and nonfinite clamp update behavior
+are retained. Re-expanding the extracted regions reproduces 12,398 original C++
+tokens; type tokens differ only by inline linkage of header functions. Native
+before/after comparisons pass for 100,000 FSM/wall cases, four nonfinite wall
+cases, 648 preset configurations and 12 trolley cases.
+
+Two minimal headless Gazebo scenes (corridor and hospital) each run 900 steps
+with both old and new libraries. All 1,800 ground-truth records per version are
+byte-identical; all four owned process scopes are empty after shutdown. This is
+a plugin integration probe, without Nav2, camera sensors or navigation claims.
+Fresh two-package symlink build and copy install pass, as do five installed
+launch descriptions, three robot descriptions, four plugin dependency sets,
+three executables and School helper modes. All 280 current tests pass.
+
+The plugin orchestrator moves from 1,677 to 1,259 lines; extracted headers/helpers
+contain 609 lines (total plugin source +191). This batch makes the state machine
+and presets directly reusable and testable; it does not claim net source deletion.
+The preceding repository-wide source reductions are recorded at their revisions.
+Protected historical artifacts and the dirty primary checkout remain unchanged.
+Work stays on `codex/shared-navigation-runtime`; the benchmark remote was restored
+to `9833565` at the user's request. Evidence:
+`benchmark/generated/layout_native_cleanup_20261027/`.

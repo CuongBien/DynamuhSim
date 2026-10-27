@@ -43,7 +43,7 @@ RTX 4060 sở hữu 8GB VRAM. Để tránh hiện tượng Out-Of-Memory (OOM) h
 ## 3. Chuẩn Hóa Mô Hình Thực Thể Con Người (Unified Single Model)
 
 ### 3.1. Cắt bỏ mô hình 2 lớp rời rạc
-* ❌ **Chính thức phế truất**: Việc tách riêng 1 `<actor>` visual (dùng DAE mesh) và 1 `<model>` collision (hình trụ tàng hình) như trong [`corridor_090.sdf`](src/custom_corridor/worlds/corridor_090.sdf) và [`arena_obstacle.sdf`](src/custom_corridor/worlds/arena_obstacle.sdf).
+* ❌ **Chính thức phế truất**: Việc tách riêng 1 `<actor>` visual (dùng DAE mesh) và 1 `<model>` collision (hình trụ tàng hình) như trong [`corridor_090.sdf`](../src/custom_corridor/worlds/corridor_090.sdf) và [`arena_obstacle.sdf`](../src/custom_corridor/worlds/arena_obstacle.sdf).
 * ✅ **Chuẩn hóa**: Toàn bộ con người trong mọi thế giới mô phỏng được định nghĩa bằng **một thẻ `<model>` duy nhất**:
 
 ```xml
@@ -85,8 +85,8 @@ RTX 4060 sở hữu 8GB VRAM. Để tránh hiện tượng Out-Of-Memory (OOM) h
 
 ### 3.2. Chuẩn hóa hình học & cảm biến Sim-to-Real
 1. **Camera RGB-D (RealSense D435i)**:
-   * Sử dụng các mesh 3D có hoạt ảnh xương ([`walk.dae`](src/custom_corridor/models/human/meshes/walk.dae), [`stand.dae`](src/custom_corridor/models/human/meshes/stand.dae)).
-   * **Domain Randomization**: Ngẫu nhiên hóa tỉ lệ cơ thể ($0.9\text{–}1.1$), màu sắc quần áo và phụ kiện (balo, xe đẩy [`push_trolley.dae`](src/custom_corridor/models/human/meshes/push_trolley.dae)).
+   * Sử dụng các mesh 3D có hoạt ảnh xương ([`walk.dae`](../src/custom_corridor/models/human/meshes/walk.dae), [`stand.dae`](../src/custom_corridor/models/human/meshes/stand.dae)).
+   * **Domain Randomization**: Ngẫu nhiên hóa tỉ lệ cơ thể ($0.9\text{–}1.1$), màu sắc quần áo và phụ kiện (balo, xe đẩy [`push_trolley.dae`](../src/custom_corridor/models/human/meshes/push_trolley.dae)).
    * **Depth Dropout**: Thêm nhiễu ngẫu nhiên vào kênh độ sâu (đặc biệt ở đường viền cơ thể) để mô phỏng sự khuếch tán hồng ngoại trên quần áo thực tế.
 2. **2D LiDAR**:
    * Trụ va chạm có bán kính $r = 0.25\text{ m}$ (bao quát cả thân và bước chân).
@@ -96,7 +96,7 @@ RTX 4060 sở hữu 8GB VRAM. Để tránh hiện tượng Out-Of-Memory (OOM) h
 
 ## 4. Tầng Động Cơ Huấn Luyện: C++ RVO2 / ORCA Plugin (Training Engine)
 
-Để phục vụ sinh hàng chục ngàn episode với tốc độ cao, thuật toán **RVO2 (Optimal Reciprocal Collision Avoidance)** được nhúng trực tiếp thành một C++ World System Plugin trong [`src/custom_corridor_plugins`](src/custom_corridor_plugins/).
+Để phục vụ sinh hàng chục ngàn episode với tốc độ cao, thuật toán **RVO2 (Optimal Reciprocal Collision Avoidance)** được nhúng trực tiếp thành một C++ World System Plugin trong [`src/custom_corridor_plugins`](../src/custom_corridor_plugins/).
 
 ### 4.1. Tích hợp tính Lịch sự (Politeness) & Khoảng cách xã hội (Proxemics)
 
@@ -130,12 +130,12 @@ Mặc định RVO2 chia đều $50\% - 50\%$ trách nhiệm né tránh. Để ro
 
 ## 5. Tầng Động Cơ Đánh Giá: HuNavSim Benchmark (Evaluation Engine)
 
-* **Giữ nguyên toàn bộ cấu hình HuNavSim**: Mọi script khởi chạy [`start_hunav_agents.sh`](src/custom_corridor/worlds/school_arena/demo_1/start_hunav_agents.sh), container Docker và world [`school_arena_hunav.sdf`](src/custom_corridor/worlds/school_arena/school_arena_hunav.sdf) được duy trì nguyên vẹn.
+* **Giữ nguyên toàn bộ cấu hình HuNavSim**: Mọi script khởi chạy [`start_hunav_agents.sh`](../src/custom_corridor/worlds/school_arena/demo_1/start_hunav_agents.sh), container Docker và world [`school_arena_hunav.sdf`](../src/custom_corridor/worlds/school_arena/school_arena_hunav.sdf) được duy trì nguyên vẹn.
 * **Quy trình đánh giá mù (Zero-Shot Generalization Test)**:
   1. Sau khi mô hình được huấn luyện hoàn tất từ tập dữ liệu RVO2, đóng băng trọng số (Freeze Policy weights).
-  2. Nạp Policy vào môi trường [`school_arena_hunav`](src/custom_corridor/worlds/school_arena/).
+  2. Nạp Policy vào môi trường [`school_arena_hunav`](../src/custom_corridor/worlds/school_arena/).
   3. Cho robot chạy 50–100 episodes dưới sự điều khiển của HuNavSim.
-  4. Trích xuất các chỉ số đo lường xã hội chuẩn từ [`evaluation/social_metrics.py`](evaluation/social_metrics.py):
+  4. Trích xuất các chỉ số đo lường xã hội chuẩn từ [`evaluation/social_metrics.py`](../evaluation/social_metrics.py):
      * **PSI (Personal Space Intrusion)**: Tỉ lệ thời gian và mức độ robot xâm phạm vùng an toàn của người.
      * **Proactive Yielding Rate**: Khả năng robot chủ động nhường đường tại các nút giao cắt hành lang hẹp.
      * **Navigation Success Rate & Time-to-Goal**.
@@ -182,7 +182,7 @@ Mặc định RVO2 chia đều $50\% - 50\%$ trách nhiệm né tránh. Để ro
 
 | Giai đoạn | Nội dung công việc cụ thể | File / Module phụ trách |
 |---|---|---|
-| **Phase 1: Model Consolidation** | Chuyển đổi toàn bộ model con người trong các world sang cấu trúc 1 thẻ `<model>` duy nhất (tích hợp DAE mesh visual + cylinder collision). | [`src/custom_corridor/models/human/model.sdf`](src/custom_corridor/models/human/model.sdf), các file `.sdf` trong [`worlds/`](src/custom_corridor/worlds/) |
-| **Phase 2: RVO2 C++ Integration** | Nhúng thư viện RVO2 C++ vào [`src/custom_corridor_plugins`](src/custom_corridor_plugins/), lập trình cơ chế Asymmetric Reciprocity (Politeness) và Anisotropic Proxemics chạy ở nhịp `PreUpdate()`. | [`src/custom_corridor_plugins/src/`](src/custom_corridor_plugins/src/), [`CMakeLists.txt`](src/custom_corridor_plugins/CMakeLists.txt) |
-| **Phase 3: Production Pipeline** | Cập nhật script sinh dataset chạy headless với động cơ RVO2 mới ở tần số 10 Hz, tối ưu mức ăn VRAM $< 1.5\text{ GB}$ trên RTX 4060. | [`produce_dataset_v1.py`](src/custom_corridor/worlds/school_arena/demo_1/produce_dataset_v1.py), [`dataset_runner/`](src/custom_corridor/worlds/school_arena/demo_1/dataset_runner/) |
-| **Phase 4: Evaluation Benchmark** | Đóng gói script kiểm thử tự động nạp Policy đã train vào [`school_arena_hunav`](src/custom_corridor/worlds/school_arena/school_arena_hunav.sdf) để chạy 50 episodes và tự động xuất báo cáo đánh giá PSI. | [`evaluation/social_metrics.py`](evaluation/social_metrics.py), [`evaluation/reporter.py`](evaluation/reporter.py) |
+| **Phase 1: Model Consolidation** | Chuyển đổi toàn bộ model con người trong các world sang cấu trúc 1 thẻ `<model>` duy nhất (tích hợp DAE mesh visual + cylinder collision). | [`src/custom_corridor/models/human/model.sdf`](../src/custom_corridor/models/human/model.sdf), các file `.sdf` trong [`worlds/`](../src/custom_corridor/worlds/) |
+| **Phase 2: RVO2 C++ Integration** | Nhúng thư viện RVO2 C++ vào [`src/custom_corridor_plugins`](../src/custom_corridor_plugins/), lập trình cơ chế Asymmetric Reciprocity (Politeness) và Anisotropic Proxemics chạy ở nhịp `PreUpdate()`. | [`src/custom_corridor_plugins/src/`](../src/custom_corridor_plugins/src/), [`CMakeLists.txt`](../src/custom_corridor_plugins/CMakeLists.txt) |
+| **Phase 3: Production Pipeline** | Cập nhật script sinh dataset chạy headless với động cơ RVO2 mới ở tần số 10 Hz, tối ưu mức ăn VRAM $< 1.5\text{ GB}$ trên RTX 4060. | [`produce_dataset_v1.py`](../src/custom_corridor/worlds/school_arena/demo_1/produce_dataset_v1.py), [`dataset_runner/`](../src/custom_corridor/worlds/school_arena/demo_1/dataset_runner/) |
+| **Phase 4: Evaluation Benchmark** | Đóng gói script kiểm thử tự động nạp Policy đã train vào [`school_arena_hunav`](../src/custom_corridor/worlds/school_arena/school_arena_hunav.sdf) để chạy 50 episodes và tự động xuất báo cáo đánh giá PSI. | [`evaluation/social_metrics.py`](../evaluation/social_metrics.py), [`evaluation/reporter.py`](../evaluation/reporter.py) |

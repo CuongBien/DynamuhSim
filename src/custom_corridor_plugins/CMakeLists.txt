@@ -67,8 +67,11 @@ install(TARGETS hospital_yielding_system
 
 add_library(rvo2_human_system SHARED
   src/rvo2_human_system.cpp
+  src/corridor_fsm.cpp
+  src/scenario_presets.cpp
 )
 
+target_include_directories(rvo2_human_system PRIVATE include)
 target_compile_features(rvo2_human_system PRIVATE cxx_std_17)
 
 target_link_libraries(rvo2_human_system PRIVATE

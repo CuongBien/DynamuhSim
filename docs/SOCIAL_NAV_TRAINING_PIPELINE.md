@@ -317,4 +317,4 @@ flowchart LR
 ```
 
 ---
-*Tài liệu được lưu trữ tại: [`SOCIAL_NAV_TRAINING_PIPELINE.md`](file:///home/cuongbien/DynamuhSim/SOCIAL_NAV_TRAINING_PIPELINE.md)*
+*Tài liệu được lưu trữ tại: [`SOCIAL_NAV_TRAINING_PIPELINE.md`](SOCIAL_NAV_TRAINING_PIPELINE.md)*
