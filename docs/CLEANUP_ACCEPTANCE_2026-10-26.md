@@ -448,3 +448,37 @@ Evidence: `benchmark/generated/camera_launch_cleanup_20261027/`.
   không đổi. Không chạy lại navigation/Gazebo trong lượt chỉ sửa dependency.
 - [Receipt chốt phạm vi và giới hạn](verification/cleanup_closure_2026-10-27.json).
   Tiếp theo: acceptance chức năng điều hướng riêng; giữ nhánh cleanup độc lập.
+
+## 27–28/10 — Navigation end-to-end và sửa teardown
+
+[Receipt, commit và hash bằng chứng](verification/cleanup_navigation_2026-10-28.json).
+
+| Ca cuối được chọn | Source | Action | Đạt goal thật | XY / yaw |
+|---|---|---|---|---|
+| Empty | e0c2566 | SUCCEEDED | Có | 0,156m / 0,028rad |
+| SocNavGym | e0c2566 | SUCCEEDED | Có | 0,167m / 0,008rad |
+| CrowdSimPlus | e0c2566 | SUCCEEDED | Có | 0,186m / 0,006rad |
+| ComplexityNav | e0c2566 | SUCCEEDED | Có | 0,128m / 0,027rad |
+| Group standing42 | 1096cb5 | SUCCEEDED | Có | 0,147m / 0,218rad |
+| Capture standing45 | 1096cb5 | TIMEOUT | Không | 1,291m / 0,850rad |
+| Capture walking45 | 1096cb5 | SUCCEEDED | Không | 0,299m / 0,170rad |
+
+- 7/7 ca trên qua audit dữ liệu/process và đóng sạch, nhưng chỉ 5/7 đạt goal
+  thật. Hai capture qua đủ 28 integrity checks mỗi lượt; navigation policies
+  đều FAIL đúng vì actual_goal_required. Không đổi ngưỡng 0,20 m / 0,25 rad.
+- Depth MCAP/OFF: standing 1.081, walking 679 frame khớp từng bit float32.
+  Hai raw frame warmup standing không có auxiliary pair vẫn giữ trong MCAP.
+  Tail nhãn lần lượt 3,3825 s và 3,4 s; filter teardown cân bằng.
+- Đã giữ lỗi empty ban đầu (server không dừng), một diagnostic pause riêng,
+  và lỗi group e0c2566 (exit255/already-read). Tổng 10 lượt Gazebo vật lý, không
+  thay lượt lỗi bằng lượt PASS. Chỉ 4 profile không bị ảnh hưởng được tái sử dụng
+  từ e0c2566; group và hai capture đo tại 1096cb5.
+- Bản sửa dùng chung pause/quiesce và chờ ROS launch ghi nhận child exit trước
+  SIGINT. Race Python 3.12 đã tái hiện độc lập; probe ROS launch thật giữ đúng
+  exit 0/7/255. Không thể khôi phục mã thoát thật của group e0c2566 từ log cũ.
+- 286 unit/in-memory tests PASS. AST run_trial ngoài finally giữ nguyên so với
+  068a2c7; controller, budget, start gate, metric và dữ liệu/nhãn cũ không đổi.
+  1.814 protected files và trạng thái/index/patch checkout chính không đổi.
+- Tiếp theo: chẩn đoán map→odom/AMCL/world tại goal của walking45, và nguyên nhân
+  đứng45 không tiến tới goal với moderate treatment. Đây là việc chức năng
+  riêng; chưa tuning controller, chạy train/test model hay append dataset01.

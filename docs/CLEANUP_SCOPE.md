@@ -64,3 +64,9 @@ ròng **21.289 dòng** so với `9833565`, theo phạm vi ghi trong
 Phần cleanup trong các luồng đã rà được chốt tại đây. Việc tiếp theo là acceptance
 điều hướng end-to-end và chẩn đoán các ca đã FAIL/TIMEOUT, thuộc kiểm chứng chức
 năng riêng; không sửa kết quả cũ hoặc merge vào nhánh benchmark.
+
+Nghiệm thu navigation ngày 28/10 đã thực hiện và sửa hai vấn đề teardown;
+[receipt](verification/cleanup_navigation_2026-10-28.json) phân biệt 7/7 audit
+dữ liệu/process PASS với 5/7 goal thật PASS. Hai ca capture còn TIMEOUT hoặc
+báo SUCCEEDED khi world XY vượt ngưỡng; bước tiếp theo là chẩn đoán chức năng
+AMCL/goal checker và moderate navigation, giữ nguyên các outcome đã ghi.

@@ -1,0 +1,357 @@
+{
+  "schema": "dynamuhsim_cleanup_navigation_acceptance/1",
+  "date": "2026-10-28",
+  "started_date": "2026-10-27",
+  "branch": "codex/shared-navigation-runtime",
+  "benchmark_preserved_at": "9833565fa546d55cb0e553f8388bf4a703c59583",
+  "source_revisions": [
+    "1096cb5453e22230a9d062708f8a784cc10015e6",
+    "e0c2566c88b694aec6110332c382254775f8fe16"
+  ],
+  "source_scope": "First four profiles audited at e0c2566; affected group and two captures at 1096cb5. Only teardown changed between these revisions; no fresh rerun of the four already accepted profiles.",
+  "unit_tests": [
+    {
+      "suite": "root",
+      "returncode": 0,
+      "count": 187,
+      "wall_s": 41.98
+    },
+    {
+      "suite": "scenario_generator",
+      "returncode": 0,
+      "count": 13,
+      "wall_s": 6.03
+    },
+    {
+      "suite": "dataset_runner",
+      "returncode": 0,
+      "count": 75,
+      "wall_s": 0.26
+    },
+    {
+      "suite": "dataset_production",
+      "returncode": 0,
+      "count": 11,
+      "wall_s": 19.35
+    }
+  ],
+  "real_ROS_launch_exit_probes": [
+    {
+      "child_exit_code": 0,
+      "shutdown": {
+        "status": "STOPPED",
+        "returncode": 0,
+        "signal_scope": "ROS launch parent; launch owns child shutdown",
+        "gazebo_exit": {
+          "status": "OBSERVED",
+          "clean": true,
+          "record": "[INFO] [gz-1]: process has finished cleanly [pid 14491]"
+        }
+      },
+      "remaining": []
+    },
+    {
+      "child_exit_code": 7,
+      "shutdown": {
+        "status": "STOPPED",
+        "returncode": 0,
+        "signal_scope": "ROS launch parent; launch owns child shutdown",
+        "gazebo_exit": {
+          "status": "OBSERVED",
+          "clean": false,
+          "record": "[ERROR] [gz-1]: process has died [pid 14496, exit code 7, cmd '/usr/bin/python3 -c import sys,time;print('PROBE_CHILD_EXIT',flush=True);time.sleep(.05);sys.exit(7)']."
+        }
+      },
+      "remaining": []
+    },
+    {
+      "child_exit_code": 255,
+      "shutdown": {
+        "status": "STOPPED",
+        "returncode": 0,
+        "signal_scope": "ROS launch parent; launch owns child shutdown",
+        "gazebo_exit": {
+          "status": "OBSERVED",
+          "clean": false,
+          "record": "[ERROR] [gz-1]: process has died [pid 14501, exit code 255, cmd '/usr/bin/python3 -c import sys,time;print('PROBE_CHILD_EXIT',flush=True);time.sleep(.05);sys.exit(255)']."
+        }
+      },
+      "remaining": []
+    }
+  ],
+  "final_selected_cases": [
+    {
+      "id": "01_empty",
+      "revision": "e0c2566c88b694aec6110332c382254775f8fe16",
+      "navigation_status": "SUCCEEDED",
+      "actual_goal_reached": true,
+      "goal_xy_m": 0.15586924586484224,
+      "goal_yaw_rad": 0.02814908361951745,
+      "integrity_audit": "AUDITED_NAV2_PILOT",
+      "geometry_outcome": "NO_OVERLAP_GT_5MM",
+      "gazebo_clean_exit": true,
+      "server_shutdown": "STOPPED",
+      "remaining_processes": [],
+      "result_sha256": "76d7b4be3aa12633cccceb6d766ff7a92d8265601f113c4f4e1638a3796944d0",
+      "validation_sha256": "9a62b95b8b1e7ddc1f7a24e19293cb7eba02e1589030c327101dd080663df767"
+    },
+    {
+      "id": "02_socnavgym",
+      "revision": "e0c2566c88b694aec6110332c382254775f8fe16",
+      "navigation_status": "SUCCEEDED",
+      "actual_goal_reached": true,
+      "goal_xy_m": 0.16689979976032296,
+      "goal_yaw_rad": 0.007874782783144022,
+      "integrity_audit": "AUDITED_NAV2_PILOT",
+      "geometry_outcome": "NO_OVERLAP_GT_5MM",
+      "gazebo_clean_exit": true,
+      "server_shutdown": "STOPPED",
+      "remaining_processes": [],
+      "result_sha256": "211e49fb4e65bffb5568a4f5510e8772ca2dad98e7d68d3a87887590b4854b8c",
+      "validation_sha256": "02ae2eb6776c81fcf96282c1c638d5e200ade484c809fdab52e4bd9bdf377652"
+    },
+    {
+      "id": "03_crowd",
+      "revision": "e0c2566c88b694aec6110332c382254775f8fe16",
+      "navigation_status": "SUCCEEDED",
+      "actual_goal_reached": true,
+      "goal_xy_m": 0.185977820875482,
+      "goal_yaw_rad": 0.006284652678065968,
+      "integrity_audit": "AUDITED_NAV2_PILOT",
+      "geometry_outcome": "NO_OVERLAP_GT_5MM",
+      "gazebo_clean_exit": true,
+      "server_shutdown": "STOPPED",
+      "remaining_processes": [],
+      "result_sha256": "2100790372c7cbecf7ba121c771981d235f8ac6ffa76fb0ad95f975552adc524",
+      "validation_sha256": "81e7d87e423e473ff10e62bffb59c612b11a4b5774e4c85c63c3b801ed39db02"
+    },
+    {
+      "id": "04_complex",
+      "revision": "e0c2566c88b694aec6110332c382254775f8fe16",
+      "navigation_status": "SUCCEEDED",
+      "actual_goal_reached": true,
+      "goal_xy_m": 0.12801417186021255,
+      "goal_yaw_rad": 0.026936739290425896,
+      "integrity_audit": "AUDITED_NAV2_PILOT",
+      "geometry_outcome": "NO_OVERLAP_GT_5MM",
+      "gazebo_clean_exit": true,
+      "server_shutdown": "STOPPED",
+      "remaining_processes": [],
+      "result_sha256": "88be3e6aa60b1efe166a02efa64f3896f81fe47a39e6302a38acf93fd461f90f",
+      "validation_sha256": "3f1c9ff54eb71bc46e458a60acea71302f56db50634e1984815f6e959773d301"
+    },
+    {
+      "id": "05_standing42",
+      "revision": "1096cb5453e22230a9d062708f8a784cc10015e6",
+      "navigation_status": "SUCCEEDED",
+      "actual_goal_reached": true,
+      "goal_xy_m": 0.14703053032862146,
+      "goal_yaw_rad": 0.21838697333802243,
+      "integrity_audit": "AUDITED_NAV2_PILOT",
+      "geometry_outcome": "NO_OVERLAP_GT_5MM",
+      "gazebo_clean_exit": true,
+      "server_shutdown": "STOPPED",
+      "remaining_processes": [],
+      "result_sha256": "2b57bfa216333e947fb592d92c28261ada3b37bdaa9a668033a39137572782e8",
+      "validation_sha256": "c8b4b02c9059408bbc43f1601fe9ebac86439e6ee6b996a81b57f2088d124aba"
+    },
+    {
+      "id": "06_capture_standing45",
+      "revision": "1096cb5453e22230a9d062708f8a784cc10015e6",
+      "navigation_status": "TIMEOUT",
+      "actual_goal_reached": false,
+      "goal_xy_m": 1.2906084889191412,
+      "goal_yaw_rad": 0.8502136011396417,
+      "integrity_audit": "PASS",
+      "navigation_goal_audit": "FAIL",
+      "gazebo_clean_exit": true,
+      "server_shutdown": "STOPPED",
+      "remaining_processes": [],
+      "paired_depth_timestamps": 1081,
+      "raw_to_OFF_bitwise_equal": 1081,
+      "raw_unpaired_depth_frames": 2,
+      "result_sha256": "b1b1e89cebe06a45268c67c3579b688db0b42d74f8a79335886ebed317009d49",
+      "integrity_sha256": "2fc5a34446842bab2eff7e3d9fd51434850a7919917c568d08a04e31575ca9b6"
+    },
+    {
+      "id": "07_capture_walking45",
+      "revision": "1096cb5453e22230a9d062708f8a784cc10015e6",
+      "navigation_status": "SUCCEEDED",
+      "actual_goal_reached": false,
+      "goal_xy_m": 0.29902399099154103,
+      "goal_yaw_rad": 0.170152949621075,
+      "integrity_audit": "PASS",
+      "navigation_goal_audit": "FAIL",
+      "gazebo_clean_exit": true,
+      "server_shutdown": "STOPPED",
+      "remaining_processes": [],
+      "paired_depth_timestamps": 679,
+      "raw_to_OFF_bitwise_equal": 679,
+      "raw_unpaired_depth_frames": 0,
+      "result_sha256": "614a0f50c566d0899120a71d23478627ede9325b2abe5a7621c22a26f63921a3",
+      "integrity_sha256": "333b2c6f7f4346d35ce31f12ec8edeae49f2056e9aeb7aede679445547d1587e"
+    }
+  ],
+  "earlier_attempts": [
+    {
+      "revision": "068a2c71245d9fc70be01da32a9e5965c383d3df",
+      "case": "initial empty",
+      "physical_goal": true,
+      "infrastructure": "FAIL: STILL_RUNNING, forced shutdown",
+      "retained": true
+    },
+    {
+      "revision": "068a2c71245d9fc70be01da32a9e5965c383d3df",
+      "case": "one explicit pause diagnostic overlay",
+      "physical_goal": true,
+      "infrastructure": "PASS; overlay hash retained",
+      "retained": true
+    },
+    {
+      "revision": "e0c2566c88b694aec6110332c382254775f8fe16",
+      "case": "group standing42 before exit acknowledgement fix",
+      "physical_goal": true,
+      "infrastructure": "FAIL: ROS launch reported 255 with child-exit-already-read warning; underlying child code unconfirmed",
+      "retained": true
+    }
+  ],
+  "physical_attempts_total": 10,
+  "old_failures_rewritten": false,
+  "goal_rule": "Action status4 plus world XY<=0.20m and yaw<=0.25rad; outcomes not substituted for integrity.",
+  "preservation": {
+    "run_trial_AST_outside_finally_identical_to_068a2c7": true,
+    "protected_files_unchanged": 1814,
+    "primary": [
+      {
+        "snapshot": "status_before",
+        "unchanged": true
+      },
+      {
+        "snapshot": "index_patch_before",
+        "unchanged": true
+      },
+      {
+        "snapshot": "working_patch_before",
+        "unchanged": true
+      }
+    ],
+    "source_revision": "1096cb5453e22230a9d062708f8a784cc10015e6"
+  },
+  "limits": [
+    "One fixed small attempt per selected configuration; no general success-rate, safety or performance claim.",
+    "Pause/quiesce is a mitigation, not a GPU fence or proof all driver shutdown failures are solved.",
+    "The Python3.12 race was independently reproduced; the original group child exit code cannot be recovered retroactively.",
+    "Capture integrity and navigation success remain separate; historical TIMEOUT and freeze gaps remain unchanged.",
+    "No controller tuning, training, held-out evaluation, dataset01 append or merge into benchmark."
+  ],
+  "local_evidence": "experiments/social_navigation/benchmark/generated/navigation_acceptance_20261027",
+  "summary": {
+    "selected_configurations": 7,
+    "physical_goal_passed": 5,
+    "integrity_audits_passed": 7,
+    "selected_cases_shutdown_clean": 7,
+    "unit_tests_passed": 286,
+    "raw_depth_bitwise_equal_frames": 1760,
+    "capture_raw_warmup_frames_without_aux_pair": 2
+  },
+  "shutdown_fixes": [
+    {
+      "commit": "e0c2566c88b694aec6110332c382254775f8fe16",
+      "change": "Reuse the capture pause/quiesce helper for ordinary Nav2; original helper AST retained."
+    },
+    {
+      "commit": "1096cb5453e22230a9d062708f8a784cc10015e6",
+      "change": "After the server stops, wait up to 2s for ROS launch to record the Gazebo child exit before sending parent SIGINT; preserve failed/unconfirmed status."
+    }
+  ],
+  "capture_details": [
+    {
+      "case": "06_capture_standing45",
+      "tail_sim_s": 3.3825,
+      "events_sha256": "efe496d36ad55cfcece2e8474eebaa560d71d39fbd3589ebbd2bae71adbbe18c"
+    },
+    {
+      "case": "07_capture_walking45",
+      "tail_sim_s": 3.4,
+      "events_sha256": "5b352eeec8accafe70c73deb92ff908f5cc3617a844522da27fba5b5821ac181"
+    }
+  ],
+  "capture_source_freezes_verified_after_run": true,
+  "source_snapshot_after_last_measurement": true,
+  "remaining_experiment_sessions": [],
+  "navigation_clues": [
+    {
+      "report": "experiments/social_navigation/benchmark/generated/navigation_acceptance_20261027/after_exit_ack/07_capture_walking45/run/episode",
+      "actual_goal_error": {
+        "xy_m": 0.29902399099154103,
+        "yaw_rad": 0.170152949621075
+      },
+      "amcl_goal_error": {
+        "xy_m": 0.2176183502587641,
+        "yaw_rad": 0.18248082411342625
+      },
+      "amcl_age_s": 0.19249999999999545,
+      "alignment_delta_s": 0.0024999999999977263,
+      "aligned_estimate_world_xy_difference_m": 0.09262512643199271,
+      "last10s": {
+        "command_count": 433,
+        "wz_min_rad_s": -0.09952949732542038,
+        "wz_max_rad_s": 0.3907405138015747,
+        "mean_abs_wz_rad_s": 0.09490060017231258,
+        "world_xy_error_start_m": 2.5020388918925094,
+        "world_xy_error_end_m": 0.29902399099154103,
+        "world_yaw_error_start_rad": 0.582823808494996,
+        "world_yaw_error_end_rad": 0.170152949621075,
+        "minimum_robot_human_disc_gap_m": 3.261395814379205
+      },
+      "max_recorded_recoveries": 1
+    },
+    {
+      "report": "experiments/social_navigation/benchmark/generated/navigation_acceptance_20261027/after_exit_ack/06_capture_standing45/run/episode",
+      "actual_goal_error": {
+        "xy_m": 1.2906084889191412,
+        "yaw_rad": 0.8502136011396417
+      },
+      "amcl_goal_error": {
+        "xy_m": 1.5307108432566499,
+        "yaw_rad": 0.8225289890379679
+      },
+      "amcl_age_s": 0.7549999999999955,
+      "alignment_delta_s": 0.0024999999999977263,
+      "aligned_estimate_world_xy_difference_m": 0.2643290071405857,
+      "last10s": {
+        "command_count": 491,
+        "wz_min_rad_s": -0.16871947050094604,
+        "wz_max_rad_s": 0.1209825724363327,
+        "mean_abs_wz_rad_s": 0.06723899768889254,
+        "world_xy_error_start_m": 1.2409824203442525,
+        "world_xy_error_end_m": 1.2906084889191412,
+        "world_yaw_error_start_rad": 0.9862763436639701,
+        "world_yaw_error_end_rad": 0.8502136011396417,
+        "minimum_robot_human_disc_gap_m": 0.8086688672411936
+      },
+      "max_recorded_recoveries": 1
+    }
+  ],
+  "next_work": [
+    "Diagnose map-to-odom/AMCL versus world pose at the walking45 goal-check decision; retain the 0.20m/0.25rad world criteria.",
+    "Diagnose standing45 progress, local path/costmap and MPPI commands under the current moderate treatment, using a separate declared protocol before controller changes."
+  ],
+  "evidence_sha256": {
+    "plan.json": "f49703edffb777e1b2b064eb3621616ff757259e8933305e45f6ac4d127e4290",
+    "progress.json": "6f19027e3ca25d6d3142ec2cb83e059995a0e1ceb49e6bdcc2377b759cf24b4d",
+    "initial_failure_receipt.json": "608def7dafb3eac837a250ff40ffd8a5c9eb756ec543fda7aade09dc452dae5f",
+    "diagnostic_pause_empty/diagnostic_result.json": "48251862dd308deced91ff8b83527f5528771562fab8df41db553cfa675635fe",
+    "after_fix/progress.json": "befcd34a1f74ee4ea639191255696a7136fc156d562e14b3a866e50f1ba41403",
+    "after_fix/audit_results.json": "2d0562bd7d83e6908ff49b69babd57e14083e99af10391155dcc9d951a9d2d8d",
+    "after_exit_ack/progress.json": "16cb0d28dfc4800e8b348835c89b92bc75bac140cad977c45c04fd77f7f060ee",
+    "after_exit_ack/audit_results.json": "e44dae64cc62b7792fad67e598fc0d95c9929cb089cd418849954872a6e0406c",
+    "after_exit_ack/capture_results.json": "7721b2f78089779ccaff4b0b8504a96b9844e6594c52df198ee2f4ef4a4a668f",
+    "navigation_diagnostics.json": "cddacad19f7a5c146fa61b8419022858ce297ebb357e770dfb2f26613986295e",
+    "exit_status_diagnostic/asyncio_reproduction.json": "2c08de3070451dac256ac0d48721215aff111e7eef93f42f1af1585122c1e410",
+    "exit_status_diagnostic/real_launch_probe.json": "a54913254f033480f44332de17d440708a36ba13f9d294929a43afa849fabbd1",
+    "exit_status_diagnostic/fix/test_results.json": "edd802aa271d8ffe8992f203a68c11c0a269aee0661acab767d6239c4e676af2",
+    "post_fix_preservation.json": "241ece5eafa536e927ba67e1a739f22baa81c94197e945d8df8ac3b618a65ab8",
+    "post_run_source_tail.json": "4aef424047c945f7a0baf9a1222fd84a0566ecbd982ff28dc9595bef5a02298f"
+  }
+}
