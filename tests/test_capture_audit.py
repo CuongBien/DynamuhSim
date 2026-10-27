@@ -65,6 +65,26 @@ class CaptureAuditTests(unittest.TestCase):
             yield "/tf_static", NS(transforms=[NS(child_frame_id="camera_link", header=NS(frame_id="base_link")), NS(child_frame_id="camera_optical_frame", header=NS(frame_id="camera_link"))])
         return root, run, policy, messages
 
+    def test_v2_audit_requires_the_declared_live_goal_and_critic_parameters(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root, run, policy, messages = self.fixture(directory)
+            config = json.loads((ROOT / "configs/capture/moderate_v2.json").read_text())
+            dump_json(run / "plan.json", dict(config=config))
+            result = json.loads((run / "episode/result.json").read_text())
+            result["capture_recipe_schema"] = config["schema"]
+            dump_json(run / "episode/result.json", result)
+            audit = audit_capture(run, policy, source_roots=[root], read_bag=messages)
+            self.assertFalse(audit["checks"]["live_moderate_parameters"])
+            controller = result["live_parameters"]["/controller_server"]
+            controller.update({"goal_checker.stateful": False, "goal_checker.xy_goal_tolerance": .05, "goal_checker.yaw_goal_tolerance": .15,
+                               "FollowPath.GoalCritic.threshold_to_consider": .45, "FollowPath.PathFollowCritic.threshold_to_consider": .45})
+            dump_json(run / "episode/result.json", result)
+            audit = audit_capture(run, policy, source_roots=[root], read_bag=messages)
+            self.assertTrue(audit["checks"]["live_moderate_parameters"])
+            self.assertTrue(audit["checks"]["declared_navigation_recipe"])
+            controller["goal_checker.stateful"] = True; dump_json(run / "episode/result.json", result)
+            self.assertFalse(audit_capture(run, policy, source_roots=[root], read_bag=messages)["checks"]["live_moderate_parameters"])
+
     def test_integrity_pass_does_not_turn_timeout_into_success(self):
         with tempfile.TemporaryDirectory() as directory:
             root, run, policy, messages = self.fixture(directory)

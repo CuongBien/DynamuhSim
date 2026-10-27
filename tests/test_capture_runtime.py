@@ -78,6 +78,38 @@ class FixtureTests(unittest.TestCase):
         self.assertEqual(base, before)
         self.assertIn("/local_costmap/local_costmap/ros__parameters/footprint", [x["path"] for x in config_changes(before, actual)])
 
+    def test_v2_requires_simultaneous_precise_goal_without_disabling_detour_following(self):
+        import yaml
+        config = json.loads((ROOT / "configs/capture/moderate_v2.json").read_text())
+        base = yaml.safe_load((ROOT / "experiments/social_navigation/warehouse/nav2_warehouse.yaml").read_text())
+        before = copy.deepcopy(base)
+        v1 = apply_nav2_treatment(base, config["nav2"])
+        v2 = apply_nav2_treatment(base, config["nav2"], navigation=config["navigation"])
+        expected = {"/controller_server/ros__parameters/goal_checker/" + key for key in ["stateful", "xy_goal_tolerance", "yaw_goal_tolerance"]}
+        expected |= {"/controller_server/ros__parameters/FollowPath/" + name + "/threshold_to_consider" for name in ["GoalCritic", "PathFollowCritic"]}
+        self.assertEqual({c["path"] for c in config_changes(v1, v2)}, expected)
+        goal = v2["controller_server"]["ros__parameters"]["goal_checker"]
+        self.assertFalse(goal["stateful"])
+        self.assertLess(goal["xy_goal_tolerance"], .20)
+        self.assertLess(goal["yaw_goal_tolerance"], .25)
+        follow = v2["controller_server"]["ros__parameters"]["FollowPath"]
+        horizon = follow["vx_max"] * follow["time_steps"] * follow["model_dt"]
+        for name in ["GoalCritic", "PathFollowCritic"]:
+            radius = follow[name]["threshold_to_consider"]
+            self.assertAlmostEqual(radius, horizon)
+            self.assertLess(radius, 1.55)  # The recorded 11.49m detour at XY1.55m stays in path mode.
+        self.assertEqual(base, before)
+
+    def test_v2_rejects_loosening_or_unrecorded_navigation_treatment(self):
+        config = json.loads((ROOT / "configs/capture/moderate_v2.json").read_text())
+        self.assertEqual(capture.validate_config(config), config)
+        for mutate in [lambda n: n["goal_checker"].update(stateful=True),
+                       lambda n: n["goal_checker"].update(stateful=0),
+                       lambda n: n["goal_checker"].update(xy_goal_tolerance=.3),
+                       lambda n: n.update(goal_critic_distance_m=2.5)]:
+            changed = copy.deepcopy(config); mutate(changed["navigation"])
+            with self.assertRaises(ValueError): capture.validate_config(changed)
+
     def test_config_rejects_oracle_or_silent_camera_or_controller_changes(self):
         config = json.loads((ROOT / "configs/capture/moderate.json").read_text())
         self.assertEqual(capture.validate_config(config), config)

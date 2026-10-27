@@ -49,7 +49,7 @@ def prepare_camera(runtime, repo):
                 off_topic="/camera/depth/image_rect_raw", on_topic="/proxy_check/on/depth")
 
 
-def apply_nav2_treatment(config, treatment):
+def apply_nav2_treatment(config, treatment, *, navigation=None):
     result = copy.deepcopy(config)
     for name in ["local_costmap", "global_costmap"]:
         params = result[name][name]["ros__parameters"]
@@ -60,6 +60,10 @@ def apply_nav2_treatment(config, treatment):
     follow = result["controller_server"]["ros__parameters"]["FollowPath"]
     follow.update(treatment["speed"])
     follow["CostCritic"]["consider_footprint"] = False
+    if navigation is not None:
+        result["controller_server"]["ros__parameters"]["goal_checker"].update(navigation["goal_checker"])
+        for critic in ["GoalCritic", "PathFollowCritic"]:
+            follow[critic]["threshold_to_consider"] = navigation["goal_critic_distance_m"]
     return result
 
 

@@ -26,7 +26,10 @@ def dump(path, value):
 
 def validate_config(config):
     expected = {"schema", "allowed_seeds", "sim_budget_s", "label_tail_s", "tail_wall_budget_s", "camera_sha256", "nav2"}
-    if set(config) != expected or config["schema"] != "dynamuhsim_capture_config/1":
+    version = config.get("schema")
+    if version == "dynamuhsim_capture_config/2":
+        expected.add("navigation")
+    if set(config) != expected or version not in ["dynamuhsim_capture_config/1", "dynamuhsim_capture_config/2"]:
         raise ValueError("Unsupported capture config schema or keys")
     if config["camera_sha256"] != CAMERA_SHA256:
         raise ValueError("Native camera/friction contract cannot change in config version1")
@@ -44,6 +47,11 @@ def validate_config(config):
     if nav != dict(robot_radius=.25, footprint_padding=.01, inflation_radius=.8, cost_scaling_factor=3.,
                    speed=dict(vx_max=.30, vx_min=-.15, vy_max=.20)):
         raise ValueError("Capture version1 retains the accepted moderate Nav2 treatment")
+    if version == "dynamuhsim_capture_config/2":
+        navigation = dict(goal_checker=dict(stateful=False, xy_goal_tolerance=.05, yaw_goal_tolerance=.15),
+                          goal_critic_distance_m=.45)
+        if config["navigation"] != navigation or type(config["navigation"]["goal_checker"]["stateful"]) is not bool:
+            raise ValueError("Capture version2 retains the declared precise-goal navigation treatment")
     return copy.deepcopy(config)
 
 
@@ -130,6 +138,7 @@ class CaptureContext:
         shutil.copyfile(self.run_dir / "assets/mecanum_camera.sdf", runtime / "mecanum_camera.sdf")
         result.update(capture_schema="dynamuhsim_capture/2", capture_freeze_sha256=sha(self.run_dir / "capture_freeze.json"),
                       experiment="Versioned capture API; native camera and moderate Nav2 treatment",
+                      capture_recipe_schema=self.config["schema"],
                       camera_runtime_corrections=json.loads((self.run_dir / "preflight.json").read_text()))
 
     def configure_world(self, tree):
@@ -138,7 +147,7 @@ class CaptureContext:
         ET.SubElement(tree.getroot().find("world"), "plugin", filename=str(library), name="depth_proxy_experiment::Filter")
 
     def configure_nav(self, config, output):
-        result = apply_nav2_treatment(config, self.config["nav2"])
+        result = apply_nav2_treatment(config, self.config["nav2"], navigation=self.config.get("navigation"))
         dump(output / "config_changes.json", config_changes(config, result))
         return result
 
@@ -157,7 +166,7 @@ class CaptureContext:
     def ready(self, node, wait, output, result, telemetry):
         if not wait(lambda: self.recorder.ready() and self.pairs.ready(), 30):
             raise RuntimeError("Full recorder/paired depth/calibration not ready")
-        result["live_parameters"] = capture_live_parameters(node, wait, self.config["nav2"])
+        result["live_parameters"] = capture_live_parameters(node, wait, self.config["nav2"], self.config.get("navigation"))
         dump(output / "live_parameters.json", result["live_parameters"])
         self.recorder.event("ready", round(telemetry.simtime() * 1e9), scenario=self.plan["scenario"], seed=self.plan["seed"])
 
@@ -191,10 +200,14 @@ class CaptureContext:
         return stop_paused(guard, original_stop)
 
 
-def capture_live_parameters(node, wait, treatment):
+def capture_live_parameters(node, wait, treatment, navigation=None):
     from rclpy.parameter_client import AsyncParameterClient
     expected = {"/controller_server": {"FollowPath." + key: value for key, value in treatment["speed"].items()}}
     expected["/controller_server"]["FollowPath.CostCritic.consider_footprint"] = False
+    if navigation is not None:
+        expected["/controller_server"].update({"goal_checker." + key: value for key, value in navigation["goal_checker"].items()})
+        for critic in ["GoalCritic", "PathFollowCritic"]:
+            expected["/controller_server"]["FollowPath." + critic + ".threshold_to_consider"] = navigation["goal_critic_distance_m"]
     for name in ["local_costmap", "global_costmap"]:
         expected[f"/{name}/{name}"] = {"robot_radius": treatment["robot_radius"], "footprint_padding": treatment["footprint_padding"],
                                       "inflation_layer.inflation_radius": treatment["inflation_radius"],
