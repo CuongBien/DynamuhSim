@@ -21,7 +21,7 @@ import xml.etree.ElementTree as ET
 from .navigation import execute_goal, goal_metrics, wait_for
 from .profiles import PROFILES
 from .recording import TrialRecording, endpoint, yaw
-from .shutdown import stop_paused
+from .shutdown import stop_paused, wait_gazebo_exit
 from dynamuhsim.simulation.warehouse import configure_world, runtime_nav2_config
 
 
@@ -62,7 +62,7 @@ def load_dependencies(repo):
     return SimpleNamespace(**locals())
 
 
-def stop_ros_launch(process, fallback_stop, timeout=15):
+def stop_ros_launch(process, fallback_stop, timeout=15, *, completed_child_log=None):
     """Let ROS launch signal its children once; retain group cleanup as fallback.
 
     killpg(SIGINT) hits both launch and every node. Launch then forwards SIGINT
@@ -70,18 +70,20 @@ def stop_ros_launch(process, fallback_stop, timeout=15):
     """
     if process.poll() is not None:
         return dict(status="ALREADY_EXITED", returncode=process.returncode)
+    observed = ({"gazebo_exit": wait_gazebo_exit(process, completed_child_log)}
+                if completed_child_log is not None else {})
     try:
         process.send_signal(signal.SIGINT)
         process.wait(timeout=timeout)
         return dict(status="STOPPED", returncode=process.returncode,
-                    signal_scope="ROS launch parent; launch owns child shutdown")
+                    signal_scope="ROS launch parent; launch owns child shutdown", **observed)
     except ProcessLookupError:
         process.wait(timeout=timeout)
-        return dict(status="ALREADY_EXITED", returncode=process.returncode)
+        return dict(status="ALREADY_EXITED", returncode=process.returncode, **observed)
     except subprocess.TimeoutExpired:
         fallback_stop(process)
         return dict(status="ESCALATED", returncode=process.returncode,
-                    signal_scope="process group fallback after launch grace period")
+                    signal_scope="process group fallback after launch grace period", **observed)
 
 
 def source_files(repo, profile, entrypoint):
@@ -337,7 +339,10 @@ def run_trial(profile, args, repo, entrypoint, *, dependencies=None, capture=Non
             result["container_remaining"] = subprocess.check_output(query, text=True).strip()
         for process in reversed(processes):
             if process is launch:
-                result["ros_launch_shutdown"] = stop_ros_launch(process, deps.adapter.stop)
+                result["ros_launch_shutdown"] = stop_ros_launch(
+                    process, deps.adapter.stop,
+                    completed_child_log=(out / "launch.log"
+                                         if result.get("server_shutdown", {}).get("status") == "STOPPED" else None))
             else:
                 deps.adapter.stop(process)
         if node is not None:

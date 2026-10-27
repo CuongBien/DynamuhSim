@@ -80,7 +80,7 @@ python3 tools/nav2_trial.py \
 - Goal action và tọa độ Gazebo thật được đánh giá riêng. XY≤0,20m và yaw≤0,25rad vẫn bắt buộc để actual_goal_reached.
 - Budget simulation/wall clock, hủy action khi timeout và lỗi worker terminal được giữ.
 - Nhóm mở GUI riêng sau readiness. Shared backend giữ Docker image/worker runtime đang pin và native dt.
-- Teardown giữ thứ tự GUI (nếu có), pause/quiesce rồi server, container thuộc phiên, owned processes, ROS và RuntimeGuard cleanup. Nav2 thường dùng cùng mitigation đã có ở capture: xác nhận pause, quan sát clock trong 0,5s và ghi receipt; đây không phải GPU fence hoặc bảo đảm mọi lỗi driver đều được giải quyết. ROS launch nhận SIGINT tại parent và có 15s để tự dừng node con; chỉ fallback sang process group khi hết grace period. Không kill theo tên process chung.
+- Teardown giữ thứ tự GUI (nếu có), pause/quiesce rồi server, container thuộc phiên, owned processes, ROS và RuntimeGuard cleanup. Nav2 thường dùng cùng mitigation đã có ở capture: xác nhận pause, quan sát clock trong 0,5s và ghi receipt; đây không phải GPU fence hoặc bảo đảm mọi lỗi driver đều được giải quyết. Khi server đã dừng, runner chờ tối đa 2s để ROS launch ghi nhận exit của Gazebo trước khi gửi SIGINT; record lỗi và timeout vẫn được giữ. ROS launch nhận SIGINT tại parent và có 15s để tự dừng node con; chỉ fallback sang process group khi hết grace period. Không kill theo tên process chung.
 - source_sha256 của lượt mới ghi cả entry point và các module dùng chung; kết quả cũ không được sửa hash để mang tên implementation mới.
 
 ## Điều phối cohort cũ đã gỡ

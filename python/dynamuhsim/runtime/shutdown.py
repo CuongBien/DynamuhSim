@@ -28,3 +28,28 @@ def stop_paused(guard,original_stop,world='social_warehouse'):
         response=request.stdout.strip(),stderr=request.stderr.strip(),is_gpu_fence=False)
     (guard.runtime/'quiesce_shutdown.json').write_text(json.dumps(result,indent=2)+'\n')
     return result
+
+
+def wait_gazebo_exit(process, launch_log, timeout=2):
+    """Wait for launch's child watcher, without polling/reaping its Gazebo child.
+
+    Closing launch before its pidfd callback can race subprocess transport.close
+    in Python 3.12 and replace the child's exit status with 255. A terminal log
+    record acknowledges that callback; a failed record is never made clean.
+    """
+    import time
+    deadline = time.monotonic() + timeout
+    while True:
+        try:
+            lines = launch_log.read_text(errors="replace").splitlines()
+        except FileNotFoundError:
+            lines = []
+        for line in reversed(lines):
+            if line.startswith("[INFO] [gz-1]: process has finished cleanly") or line.startswith("[ERROR] [gz-1]: process has died"):
+                return dict(status="OBSERVED", clean=line.startswith("[INFO]"), record=line)
+        if process.poll() is not None:
+            return dict(status="LAUNCH_EXITED", clean=False)
+        remaining = deadline - time.monotonic()
+        if remaining <= 0:
+            return dict(status="TIMEOUT", clean=False)
+        time.sleep(min(.02, remaining))

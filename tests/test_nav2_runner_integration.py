@@ -62,6 +62,9 @@ class RunnerHarness:
 
     def popen(self, command, **kwargs):
         self.events.append("spawn:" + command[0])
+        if command[0] == "ros2":
+            kwargs["stdout"].write("[INFO] [gz-1]: process has finished cleanly [pid 123]\n")
+            kwargs["stdout"].flush()
         process = NS(command=command, returncode=None)
         process.poll = lambda: process.returncode
         process.send_signal = lambda sig: self.stop(process)

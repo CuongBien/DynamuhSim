@@ -325,6 +325,41 @@ class LaunchShutdownTests(unittest.TestCase):
         result = stop_ros_launch(process, lambda proc: self.fail("already exited"))
         self.assertEqual(result, {"status": "ALREADY_EXITED", "returncode": 0})
 
+    def test_child_exit_acknowledgement_precedes_parent_sigint_and_preserves_failure(self):
+        for clean in [True, False]:
+            with self.subTest(clean=clean), tempfile.TemporaryDirectory() as directory:
+                log = Path(directory) / "launch.log"; log.write_text("")
+                events = []
+                record = ("[INFO] [gz-1]: process has finished cleanly [pid 123]" if clean else
+                          "[ERROR] [gz-1]: process has died [pid 123, exit code 255]")
+                process = NS(returncode=None); process.poll = lambda: process.returncode
+                def receive(seconds):
+                    events.append("child_exit_ack"); log.write_text(record + "\n")
+                def signal_parent(sig):
+                    self.assertEqual(sig, signal.SIGINT)
+                    self.assertIn("child_exit_ack", events)
+                    events.append("parent_sigint")
+                process.send_signal = signal_parent
+                process.wait = lambda timeout: setattr(process, "returncode", 0)
+                with patch("time.sleep", side_effect=receive):
+                    result = stop_ros_launch(process, lambda proc: self.fail("unexpected fallback"), completed_child_log=log)
+                self.assertEqual(events, ["child_exit_ack", "parent_sigint"])
+                self.assertEqual(result["gazebo_exit"], {"status": "OBSERVED", "clean": clean, "record": record})
+                self.assertEqual(log.read_text(), record + "\n")
+
+    def test_missing_child_record_has_bounded_wait_and_stays_unconfirmed(self):
+        with tempfile.TemporaryDirectory() as directory:
+            log = Path(directory) / "missing.log"; clock = [0.]; events = []
+            process = NS(returncode=None); process.poll = lambda: process.returncode
+            process.send_signal = lambda sig: events.append("parent_sigint")
+            process.wait = lambda timeout: setattr(process, "returncode", 0)
+            def advance(seconds):clock[0] += seconds
+            with patch("time.monotonic", side_effect=lambda: clock[0]), patch("time.sleep", side_effect=advance):
+                result = stop_ros_launch(process, lambda proc: self.fail("unexpected fallback"), completed_child_log=log)
+            self.assertEqual(clock[0], 2.)
+            self.assertEqual(events, ["parent_sigint"])
+            self.assertEqual(result["gazebo_exit"], {"status": "TIMEOUT", "clean": False})
+
 
 class EntryPointTests(unittest.TestCase):
     def test_legacy_entrypoints_help_without_ros(self):
