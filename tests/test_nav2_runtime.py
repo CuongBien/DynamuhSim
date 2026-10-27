@@ -83,6 +83,8 @@ class ProfileTests(unittest.TestCase):
             sources = source_files(ROOT, profile, entry)
             self.assertIn(ROOT / "python/dynamuhsim/runtime/navigation.py", sources)
             self.assertIn(ROOT / "src/custom_corridor/launch/_dynamuhsim_nav2.py", sources)
+            self.assertIn(ROOT / "src/custom_corridor/launch/_dynamuhsim_simulation.py", sources)
+            self.assertIn(ROOT / "src/custom_corridor/launch/corridor_tb3.launch.py", sources)
             self.assertIn(ROOT / "python/dynamuhsim/runtime/nav2_trial.py", sources)
             self.assertIn(ROOT / "python/dynamuhsim/analysis/nav2.py", sources)
             self.assertIn(ROOT / "python/dynamuhsim/simulation/warehouse.py", sources)

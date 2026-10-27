@@ -96,6 +96,8 @@ def source_files(repo, profile, entrypoint):
              social / "warehouse/warehouse.pgm", social / "warehouse/warehouse.sdf",
              repo / "src/custom_corridor/launch/nav2_corridor.launch.py",
              repo / "src/custom_corridor/launch/_dynamuhsim_nav2.py",
+             repo / "src/custom_corridor/launch/corridor_tb3.launch.py",
+             repo / "src/custom_corridor/launch/_dynamuhsim_simulation.py",
              repo / "src/custom_corridor/launch/publish_episode_initial_pose.py"]
     if profile.groups:
         files += [stage / name for name in ["fixture.py", "reactive_motion.py", "standing_projection.py", "config.yaml"]]

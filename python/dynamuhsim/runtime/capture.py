@@ -51,7 +51,7 @@ def capture_sources(repo):
     files = source_files(repo, PROFILES["socnavgym_group_nav2"], repo / "tools/capture_episode.py")
     files += [repo / "tools/capture_warehouse.launch.py", repo / "configs/capture/storage.yaml", repo / "configs/capture/qos.yaml",
               repo / "src/custom_corridor/models/mecanum_robot/model.sdf", repo / "src/custom_corridor/urdf/mecanum_robot.urdf",
-              repo / "src/custom_corridor/launch/corridor_tb3.launch.py", repo / "src/custom_corridor/config/mecanum_bridge.yaml",
+              repo / "src/custom_corridor/config/mecanum_bridge.yaml",
               benchmark / "depth_proxy_ablation/depth_proxy_filter.cc", benchmark / "depth_proxy_ablation/CMakeLists.txt",
               benchmark / "depth_proxy_ablation/generated/build_jazzy/libdepth_proxy_filter.so",
               benchmark / "early_avoidance_pilot/check_friction.cc", benchmark / "early_avoidance_pilot/generated/check_friction"]

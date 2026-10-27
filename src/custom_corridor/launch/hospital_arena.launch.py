@@ -1,4 +1,5 @@
 import os
+import sys
 import uuid
 import xml.etree.ElementTree as ET
 
@@ -10,8 +11,12 @@ from ament_index_python.packages import (
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument, ExecuteProcess, LogInfo, OpaqueFunction, SetEnvironmentVariable
 from launch.substitutions import LaunchConfiguration
-from launch_ros.actions import Node
 
+# Also installed beside these launch files and copied with legacy camera launches.
+sys.path.insert(0, os.path.dirname(os.path.realpath(__file__)))
+from _dynamuhsim_simulation import (
+    robot_assets, gazebo_command, spawn_node, bridge_node, state_publisher_node, rviz_node,
+)
 
 def launch_setup(context):
     package_share = get_package_share_directory("custom_corridor")
@@ -87,45 +92,18 @@ def launch_setup(context):
     if robot_model not in ["burger", "tb3", "turtlebot3"]:
         robot_model = "mecanum"
 
-    if robot_model == "burger":
-        robot_entity_name = "burger"
-        selected_robot_model = os.path.join(
-            package_share, "models", "turtlebot3_burger", "model.sdf"
-        )
-        bridge_config = os.path.join(
-            turtlebot_share, "params", "turtlebot3_burger_bridge.yaml"
-        )
-        urdf_file = os.path.join(
-            description_share, "urdf", "turtlebot3_burger.urdf"
-        )
-        spawn_z_offset = "0.01"
-    else:
-        robot_entity_name = "mecanum_robot"
-        selected_robot_model = os.path.join(
-            package_share, "models", "mecanum_robot", "model.sdf"
-        )
-        bridge_config = os.path.join(
-            package_share, "config", "mecanum_bridge.yaml"
-        )
-        urdf_file = os.path.join(
-            package_share, "urdf", "mecanum_robot.urdf"
-        )
-        spawn_z_offset = "0.04"
+    robot = robot_assets(robot_model, package_share, description_share,
+                         os.path.join(turtlebot_share, 'params', 'turtlebot3_burger_bridge.yaml'))
 
-    if not os.path.isfile(selected_robot_model):
+    if not os.path.isfile(robot.sdf):
         raise RuntimeError(
-            f"Robot model does not exist: {selected_robot_model}"
+            f"Robot model does not exist: {robot.sdf}"
         )
 
     # ---------------------------------------------------------
     # Gazebo
     # ---------------------------------------------------------
-    gz_cmd = ["gz", "sim", "-r"]
-
-    if gui in ["false", "0", "no", "headless"]:
-        gz_cmd.append("-s")
-
-    gz_cmd.append(world_file)
+    gz_cmd = gazebo_command(world_file, gui)
 
     gz_resource_path = os.pathsep.join(
         p for p in [model_path, turtlebot_model_path, existing_resource_path] if p
@@ -155,65 +133,27 @@ def launch_setup(context):
     # y = 0
     # yaw = 0 -> +X
     # ---------------------------------------------------------
-    spawn_robot = Node(
-        package="ros_gz_sim",
-        executable="create",
-        arguments=[
-            "-name",
-            robot_entity_name,
-            "-file",
-            selected_robot_model,
-            "-x",
-            "-18.0",
-            "-y",
-            "0.0",
-            "-z",
-            spawn_z_offset,
-            "-Y",
-            "0.0",
-        ],
-        output="screen",
-    )
+    spawn_robot = spawn_node(robot, "-18.0", "0.0", "0.0")
 
     # ---------------------------------------------------------
     # ROS <-> Gazebo bridge
     # ---------------------------------------------------------
-    bridge = Node(
-        package="ros_gz_bridge",
-        executable="parameter_bridge",
-        parameters=[
-            {
-                "config_file": bridge_config,
-            }
-        ],
-        output="screen",
-    )
+    bridge = bridge_node(robot.bridge)
 
     # ---------------------------------------------------------
     # Robot State Publisher
     # ---------------------------------------------------------
-    if not os.path.isfile(urdf_file):
+    if not os.path.isfile(robot.urdf):
         raise RuntimeError(
-            f"Robot URDF does not exist: {urdf_file}"
+            f"Robot URDF does not exist: {robot.urdf}"
         )
 
     import xacro
 
-    doc = xacro.process_file(urdf_file)
+    doc = xacro.process_file(robot.urdf)
     robot_description = doc.toxml()
 
-    robot_state_publisher = Node(
-        package="robot_state_publisher",
-        executable="robot_state_publisher",
-        name="robot_state_publisher",
-        parameters=[
-            {
-                "robot_description": robot_description,
-                "use_sim_time": True,
-            }
-        ],
-        output="screen",
-    )
+    robot_state_publisher = state_publisher_node(robot_description)
 
     # ---------------------------------------------------------
     # RViz
@@ -224,21 +164,7 @@ def launch_setup(context):
         "corridor.rviz",
     )
 
-    rviz = Node(
-        package="rviz2",
-        executable="rviz2",
-        name="rviz2",
-        arguments=[
-            "-d",
-            rviz_config,
-        ],
-        parameters=[
-            {
-                "use_sim_time": True,
-            }
-        ],
-        output="screen",
-    )
+    rviz = rviz_node(rviz_config)
 
     nodes = [
         LogInfo(msg=f"[Hospital] difficulty={difficulty}; world={expected_world}; actors={len(actors)}"),
@@ -247,19 +173,11 @@ def launch_setup(context):
         SetEnvironmentVariable(name="GZ_PARTITION", value=gz_partition),
         SetEnvironmentVariable(
             name="GZ_SIM_SYSTEM_PLUGIN_PATH",
-            value=os.pathsep.join(
-                path for path in [plugin_path, existing_plugin_path] if path
-            ),
+            value=gz_plugin_path,
         ),
         SetEnvironmentVariable(
             name="GZ_SIM_RESOURCE_PATH",
-            value=os.pathsep.join(
-                path for path in [
-                    model_path,
-                    turtlebot_model_path,
-                    existing_resource_path,
-                ] if path
-            ),
+            value=gz_resource_path,
         ),
         gazebo,
         spawn_robot,
@@ -271,7 +189,6 @@ def launch_setup(context):
         nodes.append(rviz)
 
     return nodes
-
 
 def generate_launch_description():
 

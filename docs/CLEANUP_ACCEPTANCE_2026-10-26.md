@@ -385,3 +385,37 @@ does not rerun a navigation benchmark or change controller/tolerance settings.
 The primary dirty checkout and 1,814 protected files remain unchanged; all
 changes stay on `codex/shared-navigation-runtime`. Local evidence:
 `benchmark/generated/launch_cleanup_20261027/`.
+
+
+## 2026-10-27 — share simulation robot assets and actions
+
+Corridor/School and Hospital now use `_dynamuhsim_simulation.py` for robot
+assets, spawn, parameter bridge, state publisher, RViz and Gazebo command
+construction. Burger bridge paths, custom-model fallback, spawn coordinates,
+heights, corridor pause, Hospital partition/validation and timestamp options
+retain their original values. Robot aliases retain their existing behavior.
+Hospital environment actions reuse the already-computed identical paths.
+Camera/TF actions remain unchanged, including the legacy camera-link filter.
+
+Before/after comparison passes 10,080 cases (7,380 plans and 2,700 matching
+errors): full action data and constructor order, GUI/pause/RViz modes, aliases,
+custom assets and world/model/URDF failures. Filtered world bytes match.
+Launch declarations are AST-identical. Another 21 cases construct actual ROS
+actions from source, symlink/copy installs and a copied camera launch. No ROS
+nodes/Gazebo are started by these checks.
+
+Legacy `prepare_camera` now carries the extracted helper into its runtime
+folder and records source/runtime hashes. A new regression covers helper
+bytes/hashes, the original TF repair and capture source closure. Nav2,
+velocity and dataset source manifests include indirect simulation dependencies.
+All 281 tests pass, as do fresh symlink build/copy install and installed checks
+for five launches, three robot descriptions, four plugin dependency sets and
+School helper modes. World/map/robot/native plugin bytes are unchanged.
+
+Historical freeze JSON and outcomes are preserved. The recorded source hashes
+for `dataset_pilot/prepare.py` and `corridor_tb3.launch.py` now differ from the
+refactored files; historical reproduction must use the recorded Git revision,
+not rewrite hashes to force PASS. New captures use fresh source manifests.
+The primary checkout and 1,814 protected files remain unchanged. Changes stay
+on `codex/shared-navigation-runtime`; benchmark remains `9833565`.
+Evidence: `benchmark/generated/simulation_launch_cleanup_20261027/`.

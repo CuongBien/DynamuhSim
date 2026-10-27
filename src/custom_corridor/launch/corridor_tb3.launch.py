@@ -1,8 +1,15 @@
 import os
+import sys
 import tempfile
 import xacro
 
 from launch_ros.actions import Node
+
+# Also installed beside these launch files and copied with legacy camera launches.
+sys.path.insert(0, os.path.dirname(os.path.realpath(__file__)))
+from _dynamuhsim_simulation import (
+    robot_assets, gazebo_command, spawn_node, bridge_node, state_publisher_node, rviz_node,
+)
 from ament_index_python.packages import get_package_share_directory
 
 from launch import LaunchDescription
@@ -14,7 +21,6 @@ from launch.actions import (
 )
 from launch.conditions import IfCondition
 from launch.substitutions import EnvironmentVariable, LaunchConfiguration
-
 
 def launch_setup(context):
 
@@ -80,51 +86,13 @@ def launch_setup(context):
         'turtlebot3_description'
     )
 
-    if robot_model == 'burger':
-        urdf_file = os.path.join(
-            description_share,
-            'urdf',
-            'turtlebot3_burger.urdf'
-        )
-        selected_robot_model = os.path.join(
-            corridor_share,
-            'models',
-            'turtlebot3_burger',
-            'model.sdf'
-        )
-        selected_bridge_config = os.path.join(
-            corridor_share,
-            'config',
-            'turtlebot3_burger_bridge.yaml'
-        )
-        robot_entity_name = 'burger'
-        spawn_z_offset = '0.01'
-    else:
-        urdf_file = os.path.join(
-            corridor_share,
-            'urdf',
-            'mecanum_robot.urdf'
-        )
-        custom_robot_model = LaunchConfiguration('custom_robot_model').perform(context).strip()
-        if custom_robot_model and os.path.isfile(custom_robot_model):
-            selected_robot_model = custom_robot_model
-        else:
-            selected_robot_model = os.path.join(
-                corridor_share,
-                'models',
-                'mecanum_robot',
-                'model.sdf'
-            )
+    custom_model = (LaunchConfiguration('custom_robot_model').perform(context).strip()
+                    if robot_model != 'burger' else '')
+    robot = robot_assets(robot_model, corridor_share, description_share,
+                         os.path.join(corridor_share, 'config', 'turtlebot3_burger_bridge.yaml'),
+                         custom_model)
 
-        selected_bridge_config = os.path.join(
-            corridor_share,
-            'config',
-            'mecanum_bridge.yaml'
-        )
-        robot_entity_name = 'mecanum_robot'
-        spawn_z_offset = '0.04'
-
-    doc = xacro.process_file(urdf_file)
+    doc = xacro.process_file(robot.urdf)
     robot_description = doc.toxml()
     # ---------------------------------------------------------
     # World
@@ -177,14 +145,7 @@ def launch_setup(context):
 
     gui = LaunchConfiguration('gui').perform(context).lower().strip()
     paused = LaunchConfiguration('paused').perform(context).lower().strip()
-    gz_cmd = ['gz', 'sim']
-    if paused not in ['true', '1', 'yes']:
-        gz_cmd.append('-r')
-    if gui in ['false', '0', 'no', 'headless']:
-        gz_cmd.append('-s')
-    gz_cmd.append(world_file)
-
-
+    gz_cmd = gazebo_command(world_file, gui, paused)
 
     local_models = os.path.join(corridor_share, 'models')
     gazebo_models = os.path.join(turtlebot_share, 'models')
@@ -229,33 +190,12 @@ def launch_setup(context):
         spawn_y = y_val if y_val else '0.0'
         spawn_yaw = yaw_val if yaw_val else '0.0'
 
-    spawn_robot = Node(
-        package='ros_gz_sim',
-        executable='create',
-        arguments=[
-            '-name', robot_entity_name,
-            '-file', selected_robot_model,
-
-            '-x', spawn_x,
-            '-y', spawn_y,
-            '-z', spawn_z_offset,
-
-            '-Y', spawn_yaw,
-        ],
-        output='screen',
-    )
+    spawn_robot = spawn_node(robot, spawn_x, spawn_y, spawn_yaw)
 
     # ---------------------------------------------------------
     # ROS <-> Gazebo bridge
     # ---------------------------------------------------------
-    bridge = Node(
-        package='ros_gz_bridge',
-        executable='parameter_bridge',
-        parameters=[{
-            'config_file': selected_bridge_config,
-        }],
-        output='screen',
-    )
+    bridge = bridge_node(robot.bridge)
 
     # ros_gz_image provides efficient RGB and float depth image conversion.
     # Names follow the RealSense ROS convention and both images are aligned.
@@ -336,33 +276,9 @@ def launch_setup(context):
         'corridor.rviz',
     )
 
-    rviz = Node(
-        package='rviz2',
-        executable='rviz2',
-        name='rviz2',
-        arguments=[
-            '-d',
-            rviz_config,
-        ],
-        parameters=[{
-            'use_sim_time': True,
-        }],
-        output='screen',
-    )
+    rviz = rviz_node(rviz_config)
 
-    robot_state_publisher = Node(
-        package='robot_state_publisher',
-        executable='robot_state_publisher',
-        name='robot_state_publisher',
-        parameters=[
-            {
-                'robot_description': robot_description,
-                'use_sim_time': True,
-                'ignore_timestamp': True,
-            }
-        ],
-        output='screen',
-    )
+    robot_state_publisher = state_publisher_node(robot_description, ignore_timestamp=True)
     rviz_enabled = LaunchConfiguration('rviz').perform(context).lower().strip()
     nodes = [
         gazebo,
@@ -470,8 +386,6 @@ def generate_launch_description():
         description='Start Gazebo in paused mode (true or false)',
     )
 
-
-
     # ---------------------------------------------------------
     # Gazebo resource path
     #
@@ -574,7 +488,6 @@ def generate_launch_description():
      custom_robot_model_arg,
      paused_arg,
      x_arg,
-
 
      y_arg,
      yaw_arg,

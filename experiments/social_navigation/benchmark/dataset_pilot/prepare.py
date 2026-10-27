@@ -7,6 +7,8 @@ def prepare_camera(runtime, repo):
     runtime, repo = Path(runtime), Path(repo)
     launch = repo / 'src/custom_corridor/launch/corridor_tb3.launch.py'
     model = repo / 'src/custom_corridor/models/mecanum_robot/model.sdf'
+    helper = launch.with_name('_dynamuhsim_simulation.py')
+    helper_source = helper.read_text()
     old_launch, old_model = launch.read_text(), model.read_text()
     assert old_launch.count('        camera_link_tf,\n') == 1
     new_launch = old_launch.replace('        camera_link_tf,\n', '')
@@ -17,6 +19,7 @@ def prepare_camera(runtime, repo):
     for original, before, after, name in [
         (launch, old_launch, new_launch, 'mecanum_camera.launch.py'),
         (model, old_model, new_model, 'mecanum_camera.sdf'),
+        (helper, helper_source, helper_source, helper.name),
     ]:
         target = runtime / name
         target.write_text(after)

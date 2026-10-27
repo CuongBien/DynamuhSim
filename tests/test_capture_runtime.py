@@ -31,6 +31,20 @@ class FixtureTests(unittest.TestCase):
             self.assertEqual(hashlib.sha256((Path(out) / "mecanum_camera.sdf").read_bytes()).hexdigest(), capture.CAMERA_SHA256)
             self.assertEqual(source.read_bytes(), before)
 
+    def test_legacy_camera_launch_carries_its_helper_and_source_hash(self):
+        from dynamuhsim.runtime.nav2_trial import load_file_module
+        legacy = load_file_module("_legacy_camera_copy_test", ROOT / "experiments/social_navigation/benchmark/dataset_pilot/prepare.py")
+        helper = ROOT / "src/custom_corridor/launch/_dynamuhsim_simulation.py"
+        with tempfile.TemporaryDirectory() as directory:
+            out = Path(directory)
+            result = legacy.prepare_camera(out, ROOT)
+            self.assertEqual((out / helper.name).read_bytes(), helper.read_bytes())
+            digest = hashlib.sha256(helper.read_bytes()).hexdigest()
+            self.assertEqual(result[helper.name]["runtime_sha256"], digest)
+            self.assertEqual(result[helper.name]["original_sha256"], digest)
+            self.assertNotIn("        camera_link_tf,\n", (out / "mecanum_camera.launch.py").read_text())
+            self.assertIn(helper, capture.capture_sources(ROOT))
+
     def test_nav2_treatment_matches_legacy_config_without_mutating_input(self):
         import yaml
         base = yaml.safe_load((ROOT / "experiments/social_navigation/warehouse/nav2_warehouse.yaml").read_text())
