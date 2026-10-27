@@ -265,3 +265,19 @@ captures/source snapshots remain separate ignored evidence, not a benchmark.
 278 suite tests, focused final receipt tests, five replay/friction/failure
 regressions, 33 CLI, a fresh 31-module wheel and prepare/verify pass. No robot
 controller/native policy change. Evidence: `benchmark/generated/shared_velocity_runtime_cleanup_20261027/`.
+
+
+## 2026-10-27 — retire completed transport/gate producers
+
+Deleted four legacy producers / 134 Python lines: Common/Response transport
+and the fixed-output individual/container gate scripts. Ten retained shell
+routes preserve exact commands, arguments and environment; four retired modes
+return exit 2 before ROS/worker startup. The parameterized group gate stays.
+Existing gate receipts and `TrialProfile.validate_gates` remain byte-identical;
+all three profiles still pass their real prerequisite checks.
+Before/after native probes use the unchanged original assertions and four
+reference trajectories from pinned test revision `9833565`, in isolated roots:
+seven workers including four Docker per version, 140 exact native prefix
+steps, 30 frozen warmup ticks and seven terminal bad-clock checks match.
+278 tests and 33 CLI probes pass. No ROS/Gazebo, training or dataset creation.
+Local evidence: `benchmark/generated/retired_transport_gates_cleanup_20261027/`.

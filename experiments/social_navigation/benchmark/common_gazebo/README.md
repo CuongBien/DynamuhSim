@@ -24,11 +24,7 @@ Cảnh chọn `crossing_near`, `opposed_near`, `blocked_narrow_near`; model ch�
 
 Cần runtime đã có của project: ROS2 Jazzy trên Python3.12, SocNavGym venv3.12,2 Docker image Python3.8.13 ghim content ID trong common_response/inputs/images.json, generated deps common_response/complexitynav_geometry và install/robot hiện có. Nếu deps offline bị thiếu, chạy preflight của hai experiment common_response/complexitynav_gazebo trước; không thay system Python. NVIDIA D3D12 được preflight và Ogre log kiểm; không fallback software. Worker giới hạn2 CPU/4GB container và một BLAS thread; physics/native ORCA vẫn dùng CPU, camera/GPU LiDAR/rendering dùng GPU.
 
-Test IPC thực vào output mới:
-
-```bash
-bash experiments/social_navigation/benchmark/common_gazebo/run.sh transport --report-name my_transport
-```
+Producer transport của cohort đã nghỉ dùng; receipt so sánh prefix vẫn giữ nguyên. Tái lập phép đo cũ cần [source đã ghim](https://github.com/CuongBien/DynamuhSim/tree/68b2dded70b1ae41361f2e1aa8dad593ae2111f6/experiments/social_navigation/benchmark).
 
 Transport01 đã khớp exact20 bước saved offline của cả3 cấu hình, rồi gửi clock sai và xác nhận worker đóng terminal. Một attempt đầu thiếu omega giữ trong reports/transport_attempt01; worker từ chối trước update0. CLI sau đo chỉ thêm lựa chọn tên report mới; worker/policy không sửa.5.5s error không phải test fault chủ động.
 

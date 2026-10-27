@@ -11,7 +11,6 @@ case "$TASK_MODE" in
   export OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1
   exec python3 "$TASK_DIR/verify_live.py" "$@"
   ;;
- transport) exec python3 "$TASK_DIR/transport.py" "$@" ;;
  analyze) exec "$TASK_DIR/../../.venv-socnavgym/bin/python" "$TASK_DIR/analyze.py" "$@" ;;
- *) echo 'Usage: bash run.sh {build|transport|live|analyze} [arguments]' ;;
+ *) echo 'Usage: bash run.sh {build|live|analyze} [arguments]' >&2; exit 2 ;;
 esac

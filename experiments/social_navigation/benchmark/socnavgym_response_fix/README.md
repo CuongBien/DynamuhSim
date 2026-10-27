@@ -34,11 +34,7 @@ Thêm `--fault-mode disconnect` để worker đóng socket thay vì trả lỗi.
 
 Cần ROS2 Jazzy, existing install/robot và SocNavGym Python3.12 venv của project. Không cài SciPy, system packages, Docker image mới hoặc đổi ROS Python. Dependencies numpy/RVO2 đã có; analyzer dùng Shapely/PIL/Matplotlib trong venv. Build/live dùng run.sh để source Jazzy/workspace; native/backend source và locked fixtures lấy từ common_response đã commit. Source hashes, copied snapshots và local preservation checkpoint được kiểm; máy khác cần checkpoint tương đương hoặc cohort mới.
 
-IPC vào output mới:
-
-```bash
-bash experiments/social_navigation/benchmark/socnavgym_response_fix/run.sh transport --report-name my_transport
-```
+Producer transport của cohort đã nghỉ dùng; receipt so sánh prefix vẫn giữ nguyên. Tái lập dùng [source đã ghim](https://github.com/CuongBien/DynamuhSim/tree/68b2dded70b1ae41361f2e1aa8dad593ae2111f6/experiments/social_navigation/benchmark).
 
 IPC01 đã so exact20 bước với output offline v2 và xác nhận đóng terminal khi clock sai. Các công cụ diagnose/offline/analyze_offline và tổng hợp report cố định đã nghỉ dùng; dữ liệu và [source trước khi dọn](https://github.com/CuongBien/DynamuhSim/tree/fbfa33a6c5ed8b062afe7523073f24b77477b852/experiments/social_navigation/benchmark) giữ nguyên. `test_projection.py` vẫn giữ các kiểm tra hình học. Script cohort cố định đã gỡ khỏi entrypoint hiện hành; bản gốc còn trong `reports/source_snapshot/cohort.py`. Dùng `run.sh live/analyze` ở trên cho output mới. script tổng hợp lịch sử chỉ vẽ dữ liệu đo.5 tests hình học kiểm bằng closest-approach/GEOS độc lập, gồm trường hợp bất khả thi phải từ chối.
 
