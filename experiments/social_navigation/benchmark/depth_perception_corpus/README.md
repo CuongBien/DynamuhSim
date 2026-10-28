@@ -55,3 +55,7 @@ Capture hiện tại dùng chung `python/dynamuhsim/runtime/sensor_capture.py`; 
 synchronization, giới hạn số frame và các gate static/moving/null giữ nguyên.
 Source hash của lượt mới ghi thêm module dùng chung. Không append lượt mới vào
 corpus/freeze cũ; tái lập kết quả lịch sử bằng source revision trong manifest.
+
+World của profile được dựng bởi `python/dynamuhsim/simulation/sensor_fixture.py`.
+Các file fixture tại stage chỉ chọn input; không gọi vòng qua fixture stage khác.
+XML/URDF và metadata đã được đối chiếu byte với source trước khi gom.

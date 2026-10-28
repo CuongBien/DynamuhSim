@@ -6,7 +6,7 @@
 
 ## Source and environment
 
-Use the [authors' repository](https://github.com/RWTHVision/2D_lidar_person_detection), pinned commit d12e90225d52ba6c85d20061f1e7286d6a64aade, and their fully supervised JRDB checkpoint ckpt_jrdb_ann_dr_spaam_e20.pth. [upstream.json](upstream.json) records the official model-zoo link, checkpoint SHA and source hashes. Original/compatible inference sources and GPL-3.0 licenses are retained. Only NumPy int-alias conversion and restricted CPU-mapped checkpoint loading change upstream code; [parity](../../../archive/social_navigation/reports/lidar_person_pilot/compatibility_parity.json) verifies identical cutouts, tensors and synthetic outputs.
+Use the [authors' repository](https://github.com/RWTHVision/2D_lidar_person_detection), pinned commit d12e90225d52ba6c85d20061f1e7286d6a64aade, and their fully supervised JRDB checkpoint ckpt_jrdb_ann_dr_spaam_e20.pth. [upstream.json](upstream.json) records the official model-zoo link, checkpoint SHA and source hashes. Compatible inference source and its GPL-3.0 license remain in `runtime/`. The original source is retained at the recorded Git revision linked below. Only NumPy int-alias conversion and restricted CPU-mapped checkpoint loading change upstream code; [parity](../../../archive/social_navigation/reports/lidar_person_pilot/compatibility_parity.json) verifies identical cutouts, tensors and synthetic outputs.
 
 A separate experiment venv uses Python3.12.3, PyTorch2.7.1+cu128 and CUDA12.8 on RTX4060. Ubuntu/ROS/default Python and existing SocNavGym environment are unchanged. The venv reuses system/user NumPy1.26.4/SciPy1.11.4/OpenCV4.6 read-only, so it is not a hermetic container. [Environment](../../../archive/social_navigation/reports/lidar_person_pilot/environment.json), [CUDA lock](requirements-cuda.lock.txt). Original upstream ROS node is ROS1; this trial uses plain Python offline, without a Jazzy node integration claim.
 
@@ -25,7 +25,7 @@ python3 "$TASK/download_checkpoint.py"
 bash "$TASK/run.sh" test
 ```
 
-CUDA smoke/parity scripts use fixed output names which refuse overwrite. Their existing measured results are in reports/. The inherited visibility/actor-freezer plugins must already be built with the ROS Jazzy vendor SDK, as in the preceding stage.
+The CUDA smoke script uses a fixed output name which refuses overwrite. The completed parity script and duplicate upstream tree have been retired from HEAD; their measured receipt remains in reports/. The inherited visibility/actor-freezer plugins must already be built with the ROS Jazzy vendor SDK, as in the preceding stage.
 
 ## Capture and inference
 
@@ -60,3 +60,13 @@ Capture hiện tại dùng chung `python/dynamuhsim/runtime/sensor_capture.py`; 
 synchronization, giới hạn số frame và các gate static/moving/null giữ nguyên.
 Source hash của lượt mới ghi thêm module dùng chung. Không append lượt mới vào
 corpus/freeze cũ; tái lập kết quả lịch sử bằng source revision trong manifest.
+
+World của profile được dựng bởi `python/dynamuhsim/simulation/sensor_fixture.py`.
+Các file fixture tại stage chỉ chọn input; không gọi vòng qua fixture stage khác.
+XML/URDF và metadata đã được đối chiếu byte với source trước khi gom.
+
+Đã gỡ `upstream_original/` và script parity chỉ dùng một lần. Bản runtime,
+checkpoint, protocol và mọi source pin của engine không đổi.
+[Source upstream và parity trước khi gỡ](https://github.com/CuongBien/DynamuhSim/tree/c28907172edf8afe6fe99f687c3ce5bce438de5f/experiments/social_navigation/benchmark/lidar_person_pilot)
+vẫn đúng hash trong `upstream.json`. Auditor chỉ đọc byte của parity đã nghỉ
+qua revision Git này để đối chiếu receipt cũ; không thực thi source lịch sử.

@@ -27,7 +27,7 @@ def run_capture(out, *, here, repo, benchmark, create_world, sources,
  HERE,BENCH,REPO=Path(here),Path(benchmark),Path(repo)
  with_scan=condition is not None
  out.mkdir(parents=True,exist_ok=False);runtime=out/'runtime';runtime.mkdir();protocol=json.loads((HERE/protocol_name).read_text())
- sources=[*sources,Path(__file__),REPO/'python/dynamuhsim/runtime/gpu.py',REPO/'python/dynamuhsim/runtime/shutdown.py',REPO/'python/dynamuhsim/runtime/ordered_stop.py']
+ sources=[*sources,REPO/'python/dynamuhsim/simulation/sensor_fixture.py',Path(__file__),REPO/'python/dynamuhsim/runtime/gpu.py',REPO/'python/dynamuhsim/runtime/shutdown.py',REPO/'python/dynamuhsim/runtime/ordered_stop.py']
  before={str(p.relative_to(REPO)):sha(p) for p in sources}
  (out/'source_before.json').write_text(json.dumps(before,indent=2)+'\n')
  lock=(BENCH/'common_gazebo/generated/domain91.lock').open('a');fcntl.flock(lock,fcntl.LOCK_EX|fcntl.LOCK_NB)

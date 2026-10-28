@@ -4,19 +4,24 @@ import argparse,hashlib,json,sys,xml.etree.ElementTree as ET
 from pathlib import Path
 import numpy as np
 import torch
-HERE=Path(__file__).resolve().parent;BENCH=HERE.parent;REPO=BENCH.parents[2];sys.path[:0]=[str(HERE/'runtime'),str(BENCH/'depth_visibility_pilot')]
+HERE=Path(__file__).resolve().parent;BENCH=HERE.parent;REPO=BENCH.parents[2];sys.path[:0]=[str(REPO/'python'),str(HERE/'runtime'),str(BENCH/'depth_visibility_pilot')]
 from dr_spaam.detector import Detector
 from labels import ownership
 from sensor_adapter import prepare_scan
+from dynamuhsim.analysis.evidence import resolve_sources
 
 def sha(p):return hashlib.sha256(Path(p).read_bytes()).hexdigest()
 def rows(p):return [json.loads(v) for v in p.read_text().splitlines()]
 def run(out):
- out.mkdir(parents=True,exist_ok=False);frozen=json.loads((HERE/'frozen.json').read_text());assert all(sha(REPO/p)==h for p,h in frozen['engine_sha256'].items());cfg=json.loads((HERE/'protocol.json').read_text());torch.set_num_threads(1);assert torch.cuda.is_available();reports={};point_checks=0;prefix_checks=0;archived_checks=0;causal_checks=0
+ out.mkdir(parents=True,exist_ok=False);frozen=json.loads((HERE/'frozen.json').read_text());assert all(sha(REPO/p)==h for p,h in frozen['engine_sha256'].items());cfg=json.loads((HERE/'protocol.json').read_text());torch.set_num_threads(1);assert torch.cuda.is_available();reports={};point_checks=0;prefix_checks=0;archived_checks=0;retired_checks=0;causal_checks=0
  for condition,capture_name,infer_name in [('full','full01','full02'),('null','null01','null01')]:
   capture=HERE/'generated/runs'/capture_name;inference=HERE/'generated/inference'/infer_name;evaldir=HERE/'generated/evaluation'/capture_name
   cap=json.loads((capture/'result.json').read_text());ev=json.loads((evaldir/'evaluation_LABEL_ONLY.json').read_text());inf=json.loads((inference/'result.json').read_text());assert cap['capture_accepted'] and cap['gazebo_exit']==0 and cap['actual_nvidia_renderer'] and cap['callbacks_balanced'] and not cap['cleanup']['remaining'];assert inf['frozen_sha256']==sha(HERE/'frozen.json')
   for p,h in cap['source_sha256'].items():
+   if p=='experiments/social_navigation/benchmark/lidar_person_pilot/parity.py' and not (REPO/p).is_file():
+    resolved,missing=resolve_sources({p:h},git_repo=REPO,commit="c28907172edf8afe6fe99f687c3ce5bce438de5f")
+    assert not missing,'Retired parity source is unavailable at the recorded revision'
+    retired_checks+=1;continue
    if sha(REPO/p)==h:continue
    archived=HERE/'reports/engine01/source'/p
    if p.endswith('/frozen.json'):archived=HERE/'reports/engine01/frozen.json'
@@ -52,7 +57,7 @@ def run(out):
    assert supported==scored['supported_proposals'] and false==scored['false_supported_proposals'];assert sorted(set(persons)&set(scored['eligible_people']))==scored['supported_people'];false_rows+=len(false);true_rows+=len(set(persons))
   assert false_rows==ev['counts']['false_supported_rows'];assert true_rows==ev['counts']['supported_person_rows'];assert unknown==ev['counts']['unknown_rows'];reports[condition]=dict(capture_pass=True,actual_gpu=cap['cleanup']['ogre_renderer_lines'],scan_count=len(predictions),frames=len(fusion),frames_with_legal_scan=available_frames,false_supported_rows=false_rows,true_supported_person_rows=true_rows,restricted_gate=ev['restricted_static_gate_pass'])
  original=json.loads((HERE/'generated/checkpoint/files.json').read_text());assert all(sha(REPO/p)==h for p,h in original.items())
- result=dict(status='PASS',scope='Integrity audit; semantic quality gate FAIL remains',conditions=reports,native_ray_geometry_checks=point_checks,real_prefix_scans_replayed=prefix_checks,causal_selection_checks=causal_checks,capture_source_checks_from_archived_version=archived_checks,preexisting_files_unchanged=len(original),model_cuda=True,semantic_person_validated=False,association_accepted=False,training_ready=False,availability_limit='Receive-clock max(header,latest observed sim clock); discrete clock does not measure wall-time callback latency or ordering within equal clock ticks',original_engine_manifest_retained=True,serialization_only_revision_declared=True)
+ result=dict(status='PASS',scope='Integrity audit; semantic quality gate FAIL remains',conditions=reports,native_ray_geometry_checks=point_checks,real_prefix_scans_replayed=prefix_checks,causal_selection_checks=causal_checks,capture_source_checks_from_archived_version=archived_checks,capture_source_checks_from_recorded_git=retired_checks,preexisting_files_unchanged=len(original),model_cuda=True,semantic_person_validated=False,association_accepted=False,training_ready=False,availability_limit='Receive-clock max(header,latest observed sim clock); discrete clock does not measure wall-time callback latency or ordering within equal clock ticks',original_engine_manifest_retained=True,serialization_only_revision_declared=True)
  (out/'audit.json').write_text(json.dumps(result,indent=2)+'\n');print(json.dumps(result,indent=2))
 if __name__=='__main__':
  p=argparse.ArgumentParser();p.add_argument('--output',type=Path,required=True);a=p.parse_args();run(a.output.resolve())
