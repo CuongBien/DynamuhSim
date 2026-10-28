@@ -1,0 +1,72 @@
+{
+  "schema": "dynamuhsim_sensor_capture_cleanup/1",
+  "date": "2026-10-28",
+  "base_revision": "637596b5aa4ba14ecc7b1bab092b12f6ac8f215c",
+  "measured_revision": "9567441ddb754d7a6dd764f27e9042ce3ca1eb1e",
+  "branch": "codex/shared-navigation-runtime",
+  "shared_implementation": "python/dynamuhsim/runtime/sensor_capture.py",
+  "profiles": [
+    "depth_visibility_pilot",
+    "lidar_person_pilot",
+    "depth_surface_guard",
+    "depth_perception_corpus"
+  ],
+  "removed": [
+    "experiments/social_navigation/benchmark/wm_episode_batch/close_dataset.py",
+    "experiments/social_navigation/benchmark/wm_episode_batch/finalize.py",
+    "experiments/social_navigation/benchmark/wm_episode_batch/write_report.py"
+  ],
+  "removed_sources_retained_exactly_in_git": true,
+  "production_python_line_delta": -373,
+  "tests": {
+    "shared_and_project": 299,
+    "original_fixture_tests": 34,
+    "total": 333,
+    "all_passed": true,
+    "skipped": 0
+  },
+  "before_after_replay": {
+    "cases": 18,
+    "status": "PASS",
+    "bitwise_array_values": 17095704,
+    "compared": [
+      "image/scan arrays including NaN/Inf/big-endian/padding",
+      "timestamps and calibration",
+      "results except declared source-provenance map",
+      "complete bridge arguments",
+      "owned teardown and preserved partial failures"
+    ]
+  },
+  "native": {
+    "final_cases": 6,
+    "all_passed": true,
+    "depth_frames": 450,
+    "scan_messages": 100,
+    "full_control_bitwise_all": true,
+    "gazebo_exit_all": 0,
+    "owned_sessions_remaining": [],
+    "scenarios": [
+      "visibility",
+      "lidar_full",
+      "lidar_null",
+      "surface",
+      "corpus_static_train",
+      "corpus_moving_train"
+    ],
+    "earlier_revision_cases_retained": 6
+  },
+  "preservation": {
+    "protected_files": 1814,
+    "all_hashes_unchanged": true,
+    "primary_changes_preserved": true,
+    "benchmark_branch": "9833565fa546d55cb0e553f8388bf4a703c59583"
+  },
+  "limits": [
+    "No navigation/controller tuning, dataset append, model training or held-out model evaluation.",
+    "Existing frozen receipts and outcomes were not rewritten; historical cohorts require their recorded source checkout.",
+    "Initial legacy-test failures were retained: one source-location assumption updated, generated directory prepared, original CUDA venv reused read-only, smoke supplied a fresh development capture.",
+    "Native tests used static/moving train scenes p001/p003 and full/null controls; all initial and final runs retained."
+  ],
+  "local_evidence": "experiments/social_navigation/benchmark/generated/sensor_capture_cleanup_20261028",
+  "next_work": "Consolidate repeated world/fixture XML construction for the same four profiles."
+}
