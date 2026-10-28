@@ -1,0 +1,20 @@
+{
+  "schema": "dynamuhsim_recording_cleanup/1",
+  "date": "2026-10-28",
+  "base_revision": "62fed27adbfc87032ebfd5a240a49ca46080c19f",
+  "measured_revision": "59968d33497935c9aa300cfe62c93f56d73043f2",
+  "branch": "codex/shared-navigation-runtime",
+  "shared_implementation": "python/dynamuhsim/runtime/capture_recording.py",
+  "compatibility": "Legacy Recording preserves dataset_pilot config paths; Pairs is a direct re-export. Data/command schemas and thresholds unchanged.",
+  "retired_scripts": ["wm_episode_batch/resume_capture.py", "wm_episode_batch/resume_export.py"],
+  "retired_sources_recorded_at": "62fed27adbfc87032ebfd5a240a49ca46080c19f",
+  "python_line_delta": -103,
+  "tests": {"project": 301, "related_contracts": 9, "total": 310, "all_passed": true, "skipped": 0},
+  "before_after_parity": {"cases": 10, "all_passed": true, "includes": "CLI arguments, publishers, witness/ready, events/labels, SIGINT/TERM/timeouts, raw float32/endian/padding/dedup and index bytes"},
+  "native_ROS_transport": [{"kind": "legacy", "raw_to_OFF_bitwise_equal": 15, "missing_OFF_raw_warmup_only": true, "command_messages": 0}, {"kind": "canonical", "raw_to_OFF_bitwise_equal": 15, "missing_OFF_raw_warmup_only": true, "command_messages": 0}],
+  "native_Gazebo": [{"case": "standing46", "xy_m": 0.09541337234927567, "yaw_rad": 0.04127534818058509, "active_sim_s": 30.417500000000004, "audit_passed": 2, "raw_to_OFF_bitwise_equal": 430, "OFF_without_raw": 0, "OFF_without_raw_by_phase": {}}, {"case": "walking46", "xy_m": 0.08738977155652487, "yaw_rad": 0.045092310412400666, "active_sim_s": 26.47, "audit_passed": 2, "raw_to_OFF_bitwise_equal": 393, "OFF_without_raw": 0, "OFF_without_raw_by_phase": {}}],
+  "preservation": {"protected_files": 1814, "all_hashes_unchanged": true, "all_four_cohort_manifests_unchanged": true, "primary_changes_preserved": true, "benchmark_branch": "9833565fa546d55cb0e553f8388bf4a703c59583"},
+  "limits": ["Synthetic ROS probes use fabricated payloads and isolated domains; Gazebo cases use real camera/robot data.", "Warmup auxiliary frames absent from MCAP are reported and excluded from bitwise matched counts.", "No dataset append, model training, held-out evaluation or controller tuning. Old freezes require recorded checkouts, not rewritten hashes."],
+  "local_evidence": "experiments/social_navigation/benchmark/generated/recording_cleanup_20261028",
+  "next_work": "Retire obsolete cohort/driver orchestration and consolidate the remaining audit/export entrypoints."
+}
