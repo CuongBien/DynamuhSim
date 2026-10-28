@@ -32,27 +32,45 @@ print(y['future_bev']['occupancy'].shape) # [3,64,64]
 
 Chỉ fit trên train. Respect split dù task mask true; test API mặc định bị chặn. Depth NaN/Inf phải có finite/range mask trước preprocessing. Future occupancy −1 là unknown, chỉ tính loss trên cell_loss_valid. M1 track-aligned, H1–H5 và RL reward chưa có supervision hợp lệ; reward NaN không phải 0.
 
-Ba script backup cố định `backup.py`, `split_backup.py`, `verify_restore.py` đã gỡ khỏi entrypoint hiện hành; source còn ở commit `9686d88256011d4a8ec3d0c7429d94e7f31be8bd`. Các ZIP, manifest và biên bản khôi phục giữ nguyên; cách lấy dữ liệu ở [hướng dẫn hiện hành](../../../../docs/START_HERE_CURRENT.md#5-khôi-phục-dữ-liệu-từ-drive). Script capture/export/continuation và audit còn bị freeze ràng buộc vẫn giữ nguyên.
-
-## Tái kiểm
+## Tái kiểm độc lập
 
 ```bash
 TASK_DIR=experiments/social_navigation/benchmark/wm_episode_batch
 bash "$TASK_DIR/run.sh" test
-OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 python3 "$TASK_DIR/audit02.py"
+bash "$TASK_DIR/run.sh" audit \
+  --dataset "$TASK_DIR/generated/dataset01" \
+  --raw-root "$TASK_DIR/generated/runs" \
+  --runtime-root "$PWD" \
+  --output "$TASK_DIR/generated/audit_recheck_01"
 ```
 
-Audit cần full bundle/raw đúng đường dẫn đã lưu. Capture/export gốc dừng ở standing47; review01 cho phép năm lượt chưa thử với cùng frozen driver, review02 đóng sổ cuối khi walking49 cũng shutdown exit255. Hai lượt lỗi giữ raw và bị loại; criteria/source math không thay. Một batch mới cần IDs/output/protocol/freeze mới, không ghi đè evidence. Script/freeze đầu và continuation được giữ để tái lập, không dùng rerun để thay FAIL.
+`--runtime-root` là checkout chứa các đường dẫn runtime trong raw `result.json`.
+Output phải là thư mục mới, ngoài dataset/raw/báo cáo lưu trữ và cùng filesystem
+với dataset (audit dùng hardlink chỉ đọc cho phép thử tách nhãn). Không cần ROS
+hoặc Gazebo. `audit.json` giữ schema và tiêu chí của sổ cuối 8/2;
+`source_provenance.json` ghi nguồn bytes đã kiểm SHA256. Nếu source cũ đã gỡ,
+audit đọc bytes từ commit benchmark cố định `9833565fa546d55cb0e553f8388bf4a703c59583`
+hoặc `--source-root CHECKOUT`; không chạy source lấy từ lịch sử. Reader, protocol
+và phép tính hình học đang dùng phải khớp hash frozen ban đầu. Thiếu nguồn hoặc
+sai hash sẽ dừng, không sửa freeze để chấp nhận code mới.
 
-Đã có dữ liệu để train thử WM dự báo BEV quan sát; chưa có reward/contact truth hoặc Gym step/reset để train RL online. Không cần mở thêm vòng detector trước khi thử WM này.
+Audit kiểm định dữ liệu, bao gồm tính toàn vẹn phần test và việc API mặc định
+chặn test; không train hay đánh giá mô hình trên test. Dataset, ledger, quarantine,
+freeze và báo cáo đã công bố giữ nguyên. Capture/export gốc dừng ở standing47;
+review01 cho phép năm lượt chưa thử, review02 đóng sổ khi walking49 cũng lỗi
+shutdown exit255. Hai lượt lỗi giữ raw, không chạy lại để thay FAIL.
 
-Đã gỡ ba công cụ chỉ phục vụ đóng và viết báo cáo dataset01:
-`close_dataset.py`, `finalize.py`, `write_report.py`. Không có caller trong code
-hiện tại. Dataset, ledger, quarantine và `final_accounting_sources.json` giữ
-nguyên; [source trước khi gỡ](https://github.com/CuongBien/DynamuhSim/tree/637596b5aa4ba14ecc7b1bab092b12f6ac8f215c/experiments/social_navigation/benchmark/wm_episode_batch)
-phục vụ tái lập công đoạn cũ. Các lệnh capture/export/audit đang công khai vẫn giữ.
+## Source lịch sử và công việc mới
 
-Hai script tiếp tục cohort một lần (`resume_capture.py`, `resume_export.py`)
-đã được gỡ sau khi dataset01 đóng. Không có caller hiện tại; `resume_frozen.json`
-và ledger/quarantine vẫn giữ nguyên. [Source đúng hash trước khi gỡ](https://github.com/CuongBien/DynamuhSim/tree/62fed27adbfc87032ebfd5a240a49ca46080c19f/experiments/social_navigation/benchmark/wm_episode_batch)
-phục vụ tái lập, không dùng để append vào dataset01 hiện có.
+Cohort dataset01 đã đóng. Đã gỡ các writer một lần `capture.py`, `export.py`,
+`follow_export.py`, hai auditor trùng `audit.py`/`audit02.py`, các script resume,
+đóng sổ và backup. [Checkout trước lượt dọn này](https://github.com/CuongBien/DynamuhSim/tree/e02d8443a8242751443763690491c53d3b00bcfc/experiments/social_navigation/benchmark/wm_episode_batch)
+giữ các writer/auditor vừa gỡ; [source resume](https://github.com/CuongBien/DynamuhSim/tree/62fed27adbfc87032ebfd5a240a49ca46080c19f/experiments/social_navigation/benchmark/wm_episode_batch),
+[source đóng sổ](https://github.com/CuongBien/DynamuhSim/tree/637596b5aa4ba14ecc7b1bab092b12f6ac8f215c/experiments/social_navigation/benchmark/wm_episode_batch)
+và source backup ở commit `9686d88256011d4a8ec3d0c7429d94e7f31be8bd` phục vụ tái lập
+quy trình cũ. Khôi phục full data theo [hướng dẫn hiện hành](../../../../docs/START_HERE_CURRENT.md#5-khôi-phục-dữ-liệu-từ-drive).
+
+Thu episode mới qua `python3 tools/capture_episode.py --help`; công cụ này không
+xuất dataset WM. Batch WM mới cần IDs, output, protocol và freeze mới, cùng quy
+trình export riêng; không append vào dataset01. Đã có dữ liệu thử WM dự báo BEV
+quan sát; chưa có reward/contact truth hoặc Gym step/reset để train RL online.

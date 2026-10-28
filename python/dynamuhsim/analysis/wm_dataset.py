@@ -1,11 +1,63 @@
-#!/usr/bin/env python3
-"""Raw/causal/geometry/portable integrity of fixed corpus; no learned model evaluation."""
-import hashlib,json,sys,tempfile,shutil,os
+"""Read-only integrity audit for the closed dataset01 cohort; no model evaluation."""
+import hashlib,json,os,shutil,tempfile,importlib.util,builtins
 from pathlib import Path
 import numpy as np
-from loader import Dataset
-from targets import raster
-from export import HERE,REPO,DATASET,sha,verify,dump
+from .evidence import sha256_file as sha,load_json,resolve_sources,relative_name
+
+RECORDED_SOURCE_REVISION='9833565fa546d55cb0e553f8388bf4a703c59583'
+STAGE=Path('experiments/social_navigation/benchmark/wm_episode_batch')
+
+
+def report_directory(output, dataset, raw_root, repository, runtime_root=None):
+ """Reserve a new output directory outside datasets, raw captures and history."""
+ output=Path(output).resolve();repository=Path(repository).resolve()
+ forbidden=[Path(dataset).resolve(),Path(raw_root).resolve()]
+ for root in {repository,Path(runtime_root or repository).resolve()}:
+  forbidden.extend([(root/'experiments/archive').resolve(),(root/STAGE/'reports').resolve()])
+ if any(output==p or output.is_relative_to(p) or p.is_relative_to(output) for p in forbidden):
+  raise ValueError('Audit output must be outside datasets, raw captures and archived evidence')
+ output.mkdir(parents=True,exist_ok=False)
+ return output
+
+
+def source_context(repository, runtime_root, source_roots=(), source_revision=RECORDED_SOURCE_REVISION):
+ """Check historical bytes without executing them; pin live reader/grid math."""
+ repository,runtime_root=Path(repository).resolve(),Path(runtime_root).resolve();stage=repository/STAGE
+ receipts={name:load_json(stage/name) for name in ['capture_frozen.json','export_frozen.json']}
+ origins={}
+ for name,receipt in receipts.items():
+  resolved,missing=resolve_sources(receipt['source_sha256'],roots=[repository,runtime_root,*source_roots],git_repo=repository,commit=source_revision)
+  if missing:raise ValueError('Historical source unavailable: '+', '.join(missing))
+  origins[name]={p:info['origin'] for p,info in resolved.items()}
+ pins=receipts['export_frozen.json']['source_sha256']
+ for name in [STAGE/'loader.py',STAGE/'targets.py',STAGE/'protocol.json',Path('experiments/social_navigation/benchmark/perception_target_pilot/geometry.py'),Path('experiments/social_navigation/benchmark/perception_target_pilot/sensor.py')]:
+  if sha(repository/name)!=pins[str(name)]:raise ValueError('Active dataset math differs from frozen source: '+str(name))
+ return origins
+
+
+def _module(path,name,bindings=None):
+ spec=importlib.util.spec_from_file_location(name,path);module=importlib.util.module_from_spec(spec)
+ if bindings:
+  # Bind legacy short imports only inside this verified module, never sys.path/modules.
+  def imported(name,*args,**kwargs):return bindings[name] if name in bindings else builtins.__import__(name,*args,**kwargs)
+  module.__dict__['__builtins__']=dict(vars(builtins),__import__=imported)
+ spec.loader.exec_module(module);return module
+
+
+def audit_dataset(dataset, *, repository, raw_root, runtime_root, work_dir, source_roots=(), source_revision=RECORDED_SOURCE_REVISION):
+ repository=Path(repository).resolve();stage=repository/STAGE;dataset=Path(dataset).resolve();raw_root=Path(raw_root).resolve();work_dir=report_directory(work_dir,dataset,raw_root,repository,runtime_root)
+ metadata=load_json(dataset/'dataset.json')
+ for name,key in [('capture_frozen.json','source_capture_freeze_sha256'),('export_frozen.json','source_export_freeze_sha256')]:
+  if sha(stage/name)!=metadata[key]:raise ValueError('Dataset source receipt identity differs: '+name)
+ verify=lambda:source_context(repository,runtime_root,source_roots,source_revision)
+ provenance=verify()
+ Dataset=_module(stage/'loader.py','verified_wm_dataset_reader').Dataset
+ sensor=_module(repository/'experiments/social_navigation/benchmark/perception_target_pilot/sensor.py','verified_wm_sensor_math')
+ raster=_module(repository/'experiments/social_navigation/benchmark/perception_target_pilot/geometry.py','verified_wm_grid_math',{'sensor':sensor}).raster
+ with np.errstate(invalid='ignore'):
+  result=_audit(dataset,stage,Path(runtime_root).resolve(),raw_root,work_dir,Dataset,raster,verify)
+ return result,dict(recorded_source_revision=source_revision,source_origins=provenance,active_math='Current tracked reader/grid code, exact frozen hashes',historical_source_executed=False)
+
 
 def points(depth,k,t):
  v,u=np.mgrid[0:depth.shape[0]:4,0:depth.shape[1]:4];z=depth[::4,::4];ok=np.isfinite(z)&(z>=.28)&(z<=5.);q=np.c_[(u[ok]-k[2])*z[ok]/k[0],(v[ok]-k[5])*z[ok]/k[4],z[ok]];return q@t[:3,:3].T+t[:3,3]
@@ -15,15 +67,15 @@ def digest_observation(sample):
  h=hashlib.sha256()
  for key in sorted(sample['history']):h.update(key.encode());h.update(np.asarray(sample['history'][key]).tobytes())
  h.update(sample['depth_history'].tobytes());h.update(sample['bev_anchor_estimated'].tobytes());h.update(str(sample['bev_frame_valid']).encode());return h.hexdigest()
-def run():
- verify();capture=json.loads((HERE/'capture_frozen.json').read_text());assert all(sha(REPO/n)==h for n,h in capture['source_sha256'].items());cfg=json.loads((HERE/'protocol.json').read_text());ds=Dataset(DATASET);assert ds.metadata['complete'] and len(ds.metadata['episodes'])==8;assert ds.metadata['source_capture_freeze_sha256']==sha(HERE/'capture_frozen.json') and ds.metadata['source_export_freeze_sha256']==sha(HERE/'export_frozen.json');reports=[];seen={};duplicates=[];replays=0;portable=0;frame_hashes={};test_denied=0;family_split={};source_hashes={};np.seterr(invalid='ignore')
+def _audit(DATASET, HERE, REPO, RAW, WORK, Dataset, raster, verify):
+ verify();cfg=json.loads((HERE/'protocol.json').read_text());ds=Dataset(DATASET);assert ds.metadata['complete'] and len(ds.metadata['episodes'])==8;assert ds.metadata['source_capture_freeze_sha256']==sha(HERE/'capture_frozen.json') and ds.metadata['source_export_freeze_sha256']==sha(HERE/'export_frozen.json');reports=[];seen={};duplicates=[];replays=0;portable=0;frame_hashes={};test_denied=0;family_split={};source_hashes={};np.seterr(invalid='ignore')
  review=json.loads((HERE/'reports/quarantine_review02.json').read_text());assert ds.metadata['review_amendment_sha256']==sha(HERE/'reports/quarantine_review02.json');quarantined={q['episode_id'] for q in review['quarantined']};assert quarantined=={'wm_standing_47','wm_walking_49'};assert len(ds.metadata['episodes'])+len(quarantined)==10
  for q in review['quarantined']:
-  rejected=HERE/'generated/runs'/q['episode_id'];assert sha(rejected/'result.json')==q['raw_result_sha256'];assert not json.loads((rejected/'capture_audit.json').read_text())['infrastructure_pass'];assert not (DATASET/'episodes'/q['episode_id']).exists()
+  rejected=RAW/q['episode_id'];assert sha(rejected/'result.json')==q['raw_result_sha256'];assert not json.loads((rejected/'capture_audit.json').read_text())['infrastructure_pass'];assert not (DATASET/'episodes'/q['episode_id']).exists()
  accepted_plan=[v for v in cfg['episodes'] if v['episode_id'] not in quarantined]
  for meta,plan in zip(ds.metadata['episodes'],accepted_plan,strict=True):
   sid=meta['episode_id'];assert sid==plan['episode_id'] and meta['split']==plan['split'];family_split.setdefault(meta['family'],set()).add(meta['split']);root=DATASET/meta['relative_path'];inventory=json.loads((root/'inventory.json').read_text());assert all((root/n).stat().st_size==v['bytes'] and sha(root/n)==v['sha256'] for n,v in inventory.items());assert not any(f.is_symlink() for f in root.rglob('*'))
-  e=ds.episode(sid,allow_test=True);x=e.x;raw=HERE/'generated/runs'/sid;ca=json.loads((raw/'capture_audit.json').read_text());r=json.loads((raw/'result.json').read_text());ra=json.loads((raw/'raw_export_audit.json').read_text());assert ca['infrastructure_pass'] and ca['raw_result_sha256']==sha(raw/'result.json');assert ra['status']=='PASS' and ra['raw_future_actions_exact'] and ra['no_gt_or_future_fields_in_observations'];source_hashes[sid]=sha(raw/'result.json');assert meta['raw_depth_frames']==ra['depth_frames_bitwise_equal']==len(e.depth);runtime=REPO/r['runtime'];assert sha(runtime/'mecanum_camera.sdf')==json.loads((HERE/'reports/preflight.json').read_text())['camera_sha256'];assert r['sim_budget_s']==90. and r['live_parameters']['/controller_server']['FollowPath.vx_max']==.3
+  e=ds.episode(sid,allow_test=True);x=e.x;raw=RAW/sid;ca=json.loads((raw/'capture_audit.json').read_text());r=json.loads((raw/'result.json').read_text());ra=json.loads((raw/'raw_export_audit.json').read_text());assert ca['infrastructure_pass'] and ca['raw_result_sha256']==sha(raw/'result.json');assert ra['status']=='PASS' and ra['raw_future_actions_exact'] and ra['no_gt_or_future_fields_in_observations'];source_hashes[sid]=sha(raw/'result.json');assert meta['raw_depth_frames']==ra['depth_frames_bitwise_equal']==len(e.depth);runtime=REPO/relative_name(r['runtime']);assert sha(runtime/'mecanum_camera.sdf')==json.loads((HERE/'reports/preflight.json').read_text())['camera_sha256'];assert r['sim_budget_s']==90. and r['live_parameters']['/controller_server']['FollowPath.vx_max']==.3
   for modality in ['scan','imu','odom','action','depth']:
    assert np.all(x[modality+'_stamp_ns']<=x['history_query_ns']) and np.all(x[modality+'_available_ns']<=x['history_query_ns'])
   assert np.all(x['history_query_ns']<=x['anchor_ns'][:,None]);assert not any(any(w in key for w in ['human','future','persona','world','backend']) for key in x);assert np.all(e.bev['source_odom_stamp_ns'][e.bev['frame_valid']]<=e.bev['depth_stamp_ns'][e.bev['frame_valid']]);assert np.all(e.bev['source_odom_available_ns'][e.bev['frame_valid']]<=e.bev['depth_stamp_ns'][e.bev['frame_valid']]);assert np.all(e.bev['anchor_odom_stamp_ns'][e.bev['frame_valid']]<=x['anchor_ns'][e.bev['frame_valid']]);assert np.all(e.bev['anchor_odom_available_ns'][e.bev['frame_valid']]<=x['anchor_ns'][e.bev['frame_valid']])
@@ -52,7 +104,7 @@ def run():
    else:raise AssertionError('Test API not sealed')
   else:
    # Read-only input hardlinks, independent copied LABEL files; destructive edits only in temporary copy.
-   with tempfile.TemporaryDirectory(dir=HERE/'generated') as directory:
+   with tempfile.TemporaryDirectory(dir=WORK) as directory:
     copy=Path(directory);(copy/'dataset.json').write_text(json.dumps(dict(episodes=[meta])));dest=copy/'episodes'/sid;(dest/'inputs').mkdir(parents=True);(dest/'labels').mkdir()
     for file in (root/'inputs').iterdir():os.link(file,dest/'inputs'/file.name)
     for file in (root/'labels').iterdir():shutil.copy2(file,dest/'labels'/file.name)
@@ -61,5 +113,4 @@ def run():
     after=digest_observation(temp.episode(sid).observation(i));assert before==after;portable+=1
   reports.append(dict(episode_id=sid,split=meta['split'],windows=len(e),wm_valid=int(m['wm_observed_bev_train_valid'].sum()),depth_bitwise=ra['depth_frames_bitwise_equal'],navigation_status=meta['navigation_status'],max_robot_translation_m=ca['max_robot_translation_from_start_m'],goal_valid_windows=int(x['goal_valid'].sum())))
  assert all(len(v)==1 for v in family_split.values());assert not duplicates,'Cross-split duplicate sensor/action windows';verify();result=dict(status='PASS',episodes=reports,total_episodes=8,planned_attempts=10,quarantined_episodes=2,total_windows=sum(v['windows'] for v in reports),wm_observed_bev_valid_windows=sum(v['wm_valid'] for v in reports),total_raw_depth_bitwise=sum(v['depth_bitwise'] for v in reports),geometry_grids_replayed=replays,cross_split_duplicate_windows=len(duplicates),portable_label_independence_episodes=portable,test_episodes_default_denied=test_denied,WM_models_evaluated=0,persona_valid=False,RL_reward_valid=False,HuNavSim_used=False,raw_result_sha256=source_hashes)
- dump(HERE/'reports/audit.json',result);print(json.dumps({k:v for k,v in result.items() if k not in ['episodes','raw_result_sha256']},indent=2))
-if __name__=='__main__':run()
+ return result

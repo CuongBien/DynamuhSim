@@ -1,0 +1,17 @@
+{
+  "schema": "dynamuhsim_cohort_cleanup/1",
+  "date": "2026-10-28",
+  "base_revision": "e02d8443a8242751443763690491c53d3b00bcfc",
+  "branch": "codex/shared-navigation-runtime",
+  "retired": ["wm_episode_batch/capture.py", "wm_episode_batch/export.py", "wm_episode_batch/follow_export.py", "wm_episode_batch/audit.py", "wm_episode_batch/audit02.py"],
+  "replacement": "tools/audit_wm_dataset.py; run.sh audit requires a fresh --output, supports external dataset/raw/runtime roots",
+  "behavior": "Final 8 accepted / 2 quarantined audit; no cohort append/export writer remains. Existing reader, preview, protocol, receipts and datasets unchanged.",
+  "parity": {"full_published_audit_json_exact": true, "core_assertions_AST_unchanged": 34, "geometry_helpers_AST_unchanged": 3, "episodes": 8, "windows": 5106, "valid_WM_windows": 5094, "raw_depth_frames_bitwise": 6696, "grids_replayed": 96},
+  "source_resolution": {"capture_sources": 51, "export_sources": 15, "original_revision": "9833565fa546d55cb0e553f8388bf4a703c59583", "retired_sources_resolved_from_recorded_git": true, "historical_code_executed": false, "active_reader_protocol_geometry_frozen_hashes_required": true},
+  "tests": {"root": 209, "scenario_generator": 13, "dataset_runner": 75, "dataset_production": 11, "WM_reader_geometry_contracts": 8, "total": 316, "final_all_passed": true, "new_regressions": 7},
+  "initial_test_failure": "Existing MPPI /proc process-disappearance race raised ProcessLookupError; initial log retained. Complete root suite rerun passed 209/209. No production change to mask it.",
+  "preservation": {"historical_report_hashes_unchanged": 1814, "primary_status_index_working_patch_unchanged": true, "benchmark_revision_untouched": "9833565fa546d55cb0e553f8388bf4a703c59583"},
+  "limits": ["Read-only integrity QA, including sealed test integrity/API checks; no model evaluation/training or new Gazebo capture.", "Old writer modes intentionally retired; new WM cohorts require a new export protocol. Audit temporary hardlinks require output on the dataset filesystem."],
+  "local_evidence": "experiments/social_navigation/benchmark/generated/cohort_cleanup_20261028",
+  "next_work": "Review and consolidate remaining capture/export/audit orchestration in depth_perception_corpus, retiring closed-cohort-only writers after caller and behavior checks."
+}
