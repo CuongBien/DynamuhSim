@@ -87,8 +87,8 @@ class MPPITrajectoryRecorder(Node):
 def run_single_mppi_run(trial_idx: int, mode_name: str, params_file: str, root_dir: str, duration_s=15.0, *, _processes=None):
     print(f"\n  [{mode_name.upper()} - RUN {trial_idx + 1}/3] Cold starting Gazebo & Nav2 MPPI...", flush=True)
 
-    world_file = os.path.join(root_dir, "experiments/gazebo_benchmark/configs/generated/world_n5_actor_and_cylinder.sdf")
-    robot_file = os.path.join(root_dir, "experiments/gazebo_benchmark/configs/generated/burger_lidar1_depth1_640x480_10fps.sdf")
+    world_file = os.path.join(root_dir, "experiments/gazebo_benchmark/configs/fixtures/world_n5_actor_and_cylinder.sdf")
+    robot_file = os.path.join(root_dir, "experiments/gazebo_benchmark/configs/fixtures/burger_lidar1_depth1_640x480_10fps.sdf")
     bridge_config = os.path.join(root_dir, "src/custom_corridor/config/turtlebot3_burger_bridge.yaml")
     urdf_file = "/tmp/tb3_burger_processed.urdf"
 
@@ -217,7 +217,7 @@ def evaluate_mode(mode_name: str, params_file: str, root_dir: str):
 
 
 def main():
-    root_dir = "/home/cuongbien/DynamuhSim"
+    root_dir = str(Path(__file__).resolve().parents[4])
     det_params = os.path.join(root_dir, "experiments/gazebo_benchmark/configs/nav2_mppi/mppi_params_deterministic.yaml")
     stoch_params = os.path.join(root_dir, "experiments/gazebo_benchmark/configs/nav2_mppi/mppi_params_stochastic.yaml")
 

@@ -85,11 +85,11 @@ def generate_sample_trajectory(num_steps=200, dt=0.1):
 
 
 @scoped_processes
-def run_replay_trial(traj, root_dir="/home/cuongbien/DynamuhSim", trial_idx=1, *, _processes=None):
+def run_replay_trial(traj, root_dir=str(Path(__file__).resolve().parents[4]), trial_idx=1, *, _processes=None):
     print(f"\n[REPLAY TRIAL {trial_idx}] Starting Gazebo in synchronous step mode...")
 
-    world_file = os.path.join(root_dir, "experiments/gazebo_benchmark/configs/generated/world_n5_actor_and_cylinder.sdf")
-    robot_file = os.path.join(root_dir, "experiments/gazebo_benchmark/configs/generated/burger_lidar1_depth1_640x480_30fps.sdf")
+    world_file = os.path.join(root_dir, "experiments/gazebo_benchmark/configs/fixtures/world_n5_actor_and_cylinder.sdf")
+    robot_file = os.path.join(root_dir, "experiments/gazebo_benchmark/configs/fixtures/burger_lidar1_depth1_640x480_30fps.sdf")
     bridge_config = os.path.join(root_dir, "src/custom_corridor/config/turtlebot3_burger_bridge.yaml")
     env = build_benchmark_env(root_dir, turtlebot3=True, d3d12=False)
 

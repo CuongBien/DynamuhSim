@@ -13,6 +13,7 @@ Definition:
 """
 
 import os
+from pathlib import Path
 import sys
 import time
 import json
@@ -28,8 +29,7 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../.
 from experiments.gazebo_benchmark.core.mppi_trial import scoped_processes
 from experiments.gazebo_benchmark.core.sim_env import build_benchmark_env
 
-SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
-ROOT_DIR = os.path.dirname(os.path.dirname(SCRIPT_DIR))
+ROOT_DIR = str(Path(__file__).resolve().parents[4])
 
 
 class DepthListener(Node):
@@ -54,7 +54,7 @@ def measure_single_instance_trial(domain_id: int, partition_name: str, trial_idx
     env = build_benchmark_env(ROOT_DIR)
     env["ROS_DOMAIN_ID"] = str(domain_id)
     env["GZ_PARTITION"] = partition_name
-    world_file = os.path.join(ROOT_DIR, "experiments/gazebo_benchmark/configs/generated/world_n5_actor_and_cylinder.sdf")
+    world_file = os.path.join(ROOT_DIR, "experiments/gazebo_benchmark/configs/fixtures/world_n5_actor_and_cylinder.sdf")
     params_file = os.path.join(ROOT_DIR, "install/custom_corridor/share/custom_corridor/config/nav2_mppi_mecanum.yaml")
 
     nav2_log_path = f"/tmp/nav2_cold_restart_{domain_id}_{trial_idx}.log"

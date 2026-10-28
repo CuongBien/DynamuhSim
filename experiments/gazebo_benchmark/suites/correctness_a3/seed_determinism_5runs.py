@@ -68,7 +68,7 @@ class TrajectoryCollector(Node):
 
 
 @scoped_processes
-def run_single_trial(run_idx, world_file, robot_file, root_dir="/home/cuongbien/DynamuhSim", *, _processes=None):
+def run_single_trial(run_idx, world_file, robot_file, root_dir=str(Path(__file__).resolve().parents[4]), *, _processes=None):
     print(f"\n--- Launching Run {run_idx + 1} of 5 ---")
     bridge_config = os.path.join(root_dir, "src/custom_corridor/config/turtlebot3_burger_bridge.yaml")
     env = build_benchmark_env(root_dir, turtlebot3=True)
@@ -96,9 +96,9 @@ def run_single_trial(run_idx, world_file, robot_file, root_dir="/home/cuongbien/
 
 
 def main():
-    root_dir = "/home/cuongbien/DynamuhSim"
-    world_file = os.path.join(root_dir, "experiments/gazebo_benchmark/configs/generated/world_n10_actor_and_cylinder.sdf")
-    robot_file = os.path.join(root_dir, "experiments/gazebo_benchmark/configs/generated/burger_lidar1_depth1_640x480_10fps.sdf")
+    root_dir = str(Path(__file__).resolve().parents[4])
+    world_file = os.path.join(root_dir, "experiments/gazebo_benchmark/configs/fixtures/world_n10_actor_and_cylinder.sdf")
+    robot_file = os.path.join(root_dir, "experiments/gazebo_benchmark/configs/fixtures/burger_lidar1_depth1_640x480_10fps.sdf")
 
     print("=" * 70)
     print("STARTING 5-RUN SEED DETERMINISM BENCHMARK (N=10 Humans, 20s duration)")

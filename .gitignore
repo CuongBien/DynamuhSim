@@ -108,3 +108,9 @@ src/dynabarn/DynaBARN.zip
 *.egg-info/
 
 /python/dynamuhsim/runtime/generated/
+
+# Generated benchmark cases are runtime output, never tracked baseline inputs.
+/experiments/gazebo_benchmark/configs/generated/
+# Closed experiment payloads are restored explicitly from the pinned Git revision.
+/experiments/pedestrian_persona_benchmark/
+/experiments/pipeline_verification/

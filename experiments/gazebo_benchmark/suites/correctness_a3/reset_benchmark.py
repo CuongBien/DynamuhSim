@@ -25,7 +25,7 @@ from experiments.gazebo_benchmark.core.mppi_trial import scoped_processes
 
 
 @scoped_processes
-def benchmark_process_restart(world_file, root_dir="/home/cuongbien/DynamuhSim", n_trials=3, *, _processes=None):
+def benchmark_process_restart(world_file, root_dir=str(Path(__file__).resolve().parents[4]), n_trials=3, *, _processes=None):
     print("\n--- Measuring Method A: Process Restart (Cold Restart) ---")
     env = build_benchmark_env(root_dir, turtlebot3=True)
 
@@ -53,7 +53,7 @@ def benchmark_process_restart(world_file, root_dir="/home/cuongbien/DynamuhSim",
 
 
 @scoped_processes
-def benchmark_service_and_teleport(world_file, root_dir="/home/cuongbien/DynamuhSim", n_trials=10, *, _processes=None):
+def benchmark_service_and_teleport(world_file, root_dir=str(Path(__file__).resolve().parents[4]), n_trials=10, *, _processes=None):
     print("\n--- Measuring Method B & C: In-Process Reset / Teleport ---")
     env = build_benchmark_env(root_dir, turtlebot3=True)
 
@@ -98,8 +98,8 @@ def benchmark_service_and_teleport(world_file, root_dir="/home/cuongbien/Dynamuh
 
 
 def main():
-    root_dir = "/home/cuongbien/DynamuhSim"
-    world_file = os.path.join(root_dir, "experiments/gazebo_benchmark/configs/generated/world_n5_actor_and_cylinder.sdf")
+    root_dir = str(Path(__file__).resolve().parents[4])
+    world_file = os.path.join(root_dir, "experiments/gazebo_benchmark/configs/fixtures/world_n5_actor_and_cylinder.sdf")
 
     restarts = benchmark_process_restart(world_file, root_dir, n_trials=3)
     service_resets, teleports = benchmark_service_and_teleport(world_file, root_dir, n_trials=10)

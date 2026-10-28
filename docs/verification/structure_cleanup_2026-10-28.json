@@ -1,0 +1,149 @@
+{
+  "schema": "dynamuhsim_generated_structure_cleanup/1",
+  "date": "2026-10-28",
+  "base_revision": "d9cf082b2984b05b767d115d5505388f5afbb622",
+  "branch": "codex/shared-navigation-runtime",
+  "externalized_payloads": [
+    {
+      "id": "gazebo_generated",
+      "root": "experiments/gazebo_benchmark/configs/generated",
+      "files": 1505,
+      "bytes": 11266397,
+      "revision": "d9cf082b2984b05b767d115d5505388f5afbb622",
+      "archive_sha256": "64dccd32bf64462738bea1ff0df698a9e7434a3ff9f039875ff42c3f253e1357",
+      "archive_bytes": 217757,
+      "roundtrip_passed": true
+    },
+    {
+      "id": "persona_history",
+      "root": "experiments/pedestrian_persona_benchmark",
+      "files": 24,
+      "bytes": 22560383,
+      "revision": "d9cf082b2984b05b767d115d5505388f5afbb622",
+      "archive_sha256": "1154c4547c90e33d671949c5d99c7c369065c62afff3c87de24a0f8e07dfc566",
+      "archive_bytes": 6027481,
+      "roundtrip_passed": true
+    },
+    {
+      "id": "lidar_step1_history",
+      "root": "experiments/pipeline_verification",
+      "files": 5,
+      "bytes": 205876,
+      "revision": "d9cf082b2984b05b767d115d5505388f5afbb622",
+      "archive_sha256": "a7234a946d91ed33c452baa4d336de647ddf49683ed34152ad3ef51f31cbecd3",
+      "archive_bytes": 176986,
+      "roundtrip_passed": true
+    }
+  ],
+  "baseline_inputs": {
+    "retained_files": 7,
+    "path": "experiments/gazebo_benchmark/configs/fixtures",
+    "all_bytes_modes_git_blobs_exact": true,
+    "world_counts": [
+      0,
+      2,
+      5,
+      10,
+      24
+    ],
+    "burger_depth_fps": [
+      10,
+      30
+    ]
+  },
+  "consumer_updates": {
+    "paths": [
+      "experiments/gazebo_benchmark/suites/correctness_a3/benchmark_mppi_reproducibility.py",
+      "experiments/gazebo_benchmark/suites/correctness_a3/replay_benchmark.py",
+      "experiments/gazebo_benchmark/suites/correctness_a3/reset_benchmark.py",
+      "experiments/gazebo_benchmark/suites/correctness_a3/rigorous_reset_benchmark.py",
+      "experiments/gazebo_benchmark/suites/correctness_a3/seed_determinism_5runs.py",
+      "experiments/gazebo_benchmark/suites/correctness_a3/test_a3_2_fixed_cmdvel_repeatability.py",
+      "experiments/gazebo_benchmark/suites/correctness_a3/test_a3_3_nav2_goal_navigation.py",
+      "experiments/gazebo_benchmark/suites/scaling_perf/benchmark_a4_throughput_nav2.py",
+      "experiments/gazebo_benchmark/suites/scaling_perf/measure_cold_restart_latency.py"
+    ],
+    "changes": "Read fixed baseline inputs from fixtures, not generated output; resolve the calling checkout instead of an absolute home path. Cold-start root previously stopped two levels too early; corrected.",
+    "all_other_algorithm_and_launch_statements_AST_identical": true,
+    "generator_and_MPPI_runtime_bytes_unchanged": true
+  },
+  "verification": {
+    "main_tests": 314,
+    "test_suites": [
+      {
+        "suite": "root",
+        "returncode": 0,
+        "count": 215,
+        "wall_s": 41.73
+      },
+      {
+        "suite": "scenario_generator",
+        "returncode": 0,
+        "count": 13,
+        "wall_s": 6.68
+      },
+      {
+        "suite": "dataset_runner",
+        "returncode": 0,
+        "count": 75,
+        "wall_s": 0.37
+      },
+      {
+        "suite": "dataset_production",
+        "returncode": 0,
+        "count": 11,
+        "wall_s": 22.94
+      }
+    ],
+    "new_regressions": 3,
+    "main_CLI_help_passed": 33,
+    "nine_consumer_imports_ROS_and_process_start_blocked": true,
+    "fresh_source": {
+      "staged_tree": "f14b660f136b26c29f9dc7d6e20a21904322cab6",
+      "git_metadata": false,
+      "generated_history_present": false,
+      "fresh_tests": 3,
+      "consumer_imports": 9,
+      "all_passed": true
+    },
+    "stale_current_source_references": []
+  },
+  "initial_failures_and_fixes": [
+    "New checkout probe exposed the old cold-start root miscalculation; test scope also needed the existing SCRIPT_DIR binding. Root fix and final probe PASS.",
+    "Project venv lacked SciPy used by prior corpus tests; final root run uses existing system SciPy 1.11.4 as last sys.path fallback, retaining venv NumPy/rvo2. No packages installed or venv files changed.",
+    "Existing School test published an empty ready file before JSON was complete. Test fixture now publishes atomically; cleanup signals owned descendants before draining inherited stderr. All signal/ownership assertions retained."
+  ],
+  "tree_counts": {
+    "before": {
+      "tracked_entries": 4984,
+      "all_directories": 486,
+      "experiment_directories": 423,
+      "experiment_root_groups": 7
+    },
+    "after": {
+      "tracked_entries": 3463,
+      "all_directories": 476,
+      "experiment_directories": 413,
+      "experiment_root_groups": 5
+    }
+  },
+  "preservation": {
+    "protected_files_unchanged": 1814,
+    "primary_checkout_unchanged": {
+      "status_before": true,
+      "index_patch_before": true,
+      "working_patch_before": true
+    }
+  },
+  "scope_limits": [
+    "Payload removal shrinks HEAD/checkout, not Git history; no history rewrite. Removed SDF/JSON/data lines are not claimed as source-code reduction.",
+    "No simulator/physics reruns, model training/evaluation or dataset regeneration. Exact baseline bytes and algorithm AST parity retain their stated scope.",
+    "Git tree contains fewer folders; ignored local caches in retired paths are retained and are absent from GitHub."
+  ],
+  "whole_repository_structure_complete": false,
+  "remaining_work": [
+    "Group the 29 social-navigation stage directories by capability, updating current imports/fixture/CMake/runtime and historical source resolution together.",
+    "Run affected CLI/tests, preservation and suitable runtime smoke after that regrouping; keep benchmark branch and primary checkout untouched."
+  ],
+  "local_evidence": "experiments/social_navigation/benchmark/generated/structure_cleanup_20261028"
+}

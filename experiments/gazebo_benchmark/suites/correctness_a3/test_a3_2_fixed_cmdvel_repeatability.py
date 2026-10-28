@@ -157,7 +157,7 @@ def control_sim(action="unpause", world_name="corridor_0.90"):
 
 
 @scoped_processes
-def run_single_trial(run_idx, world_file, robot_file, root_dir="/home/cuongbien/DynamuhSim", duration_s=20.0, *, _processes=None):
+def run_single_trial(run_idx, world_file, robot_file, root_dir=str(Path(__file__).resolve().parents[4]), duration_s=20.0, *, _processes=None):
     print(f"\n>>> [TRIAL {run_idx + 1}/5] Starting Cold-Restart Simulation...")
     bridge_config = os.path.join(root_dir, "src/custom_corridor/config/mecanum_bridge.yaml")
     env = build_benchmark_env(root_dir)
@@ -210,8 +210,8 @@ def run_single_trial(run_idx, world_file, robot_file, root_dir="/home/cuongbien/
 
 
 def main():
-    root_dir = "/home/cuongbien/DynamuhSim"
-    world_file = os.path.join(root_dir, "experiments/gazebo_benchmark/configs/generated/world_n10_actor_and_cylinder.sdf")
+    root_dir = str(Path(__file__).resolve().parents[4])
+    world_file = os.path.join(root_dir, "experiments/gazebo_benchmark/configs/fixtures/world_n10_actor_and_cylinder.sdf")
     robot_file = os.path.join(root_dir, "src/custom_corridor/models/mecanum_robot/model.sdf")
 
     print("=" * 80)

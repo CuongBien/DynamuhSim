@@ -104,3 +104,21 @@ Phạm vi dọn mã đã rà được chốt. Đây không phải chứng minh m
 không đổi simulator/controller hoặc tạo lại dataset. Các công việc sản phẩm
 như baseline WM và hiển thị WSLg có scope riêng; không tính thành clean còn nợ.
 Nhánh benchmark giữ tại `9833565`, không merge thay người dùng.
+
+## Phần cấu trúc còn lại — cập nhật 28/10/2026
+
+Các mục “chốt” phía trên mô tả những luồng code và batch writer đã rà, chưa phải
+nghiệm thu toàn bộ cách tổ chức thư mục. Sau rà cây Git đã push, bổ sung phần
+cấu trúc còn thiếu:
+
+| Việc | Trạng thái |
+|---|---|
+| 1.505 file Gazebo generated trộn với input benchmark | Đã archive/restore kiểm đầy đủ; giữ 7 baseline nguyên byte tại `configs/fixtures`, chuyển 9 consumer; output mới bị ignore |
+| Hai cây persona/Step1 chỉ còn report | Đã externalize 29 file; index/history và cách khôi phục được ghi riêng |
+| Gom 29 stage social-navigation theo chức năng | Còn lại; phải cập nhật import, fixture/CMake/runtime và nguồn frozen, không chỉ đổi tên thư mục |
+| Nghiệm thu sau khi gom stage | Còn lại; test/CLI, source/data preservation và smoke phù hợp các đường chạy bị chuyển |
+
+[Payload index](artifacts/closed_payloads_2026-10-28.json) và
+[hướng dẫn lịch sử](history/closed_experiment_payloads.md). Không dùng số dòng
+SDF/JSON/data bị bỏ để báo mức giảm code. Checkout gốc và benchmark branch
+không bị merge hoặc reset.

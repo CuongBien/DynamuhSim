@@ -1,5 +1,7 @@
 # DynamuhSim 🤖
 
+**Dọn cấu trúc đang tiếp tục:** khối 1.505 generated output và hai experiment chỉ còn báo cáo đã được externalize sau kiểm archive/restore. [Baseline đầu vào](experiments/gazebo_benchmark/configs/fixtures/README.md) · [payload lịch sử/cách khôi phục](docs/history/closed_experiment_payloads.md). **Việc gom 29 stage social-navigation theo chức năng còn lại; chưa chốt xong cấu trúc toàn repo.**
+
 **Cấu trúc benchmark 28/10/2026:** [29 thư mục code/config hiện hành](experiments/social_navigation/benchmark/README.md) · [archive và các alias lịch sử](experiments/archive/README.md) · [kiểm chứng layout](docs/verification/benchmark_layout_2026-10-28.json).
 
 **Navigation end-to-end 28/10/2026:** [kết quả và hai lỗi điều hướng còn lại](docs/verification/cleanup_navigation_2026-10-28.json).

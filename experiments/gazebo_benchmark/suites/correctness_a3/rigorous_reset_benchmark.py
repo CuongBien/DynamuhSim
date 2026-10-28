@@ -62,7 +62,7 @@ class FirstFrameWaiter(Node):
 
 
 @scoped_processes
-def measure_cold_restart_to_first_frame(world_file, robot_file, root_dir="/home/cuongbien/DynamuhSim", n_trials=3, *, _processes=None):
+def measure_cold_restart_to_first_frame(world_file, robot_file, root_dir=str(Path(__file__).resolve().parents[4]), n_trials=3, *, _processes=None):
     print("\n" + "=" * 70)
     print("MEASURING COLD RESTART DURATION TO FIRST VALID SENSOR FRAME")
     print("=" * 70)
@@ -103,7 +103,7 @@ def measure_cold_restart_to_first_frame(world_file, robot_file, root_dir="/home/
 
 
 @scoped_processes
-def measure_consecutive_episode_leakage(world_file, robot_file, root_dir="/home/cuongbien/DynamuhSim", n_episodes=3, *, _processes=None):
+def measure_consecutive_episode_leakage(world_file, robot_file, root_dir=str(Path(__file__).resolve().parents[4]), n_episodes=3, *, _processes=None):
     print("\n" + "=" * 70)
     print("EVALUATING IN-PROCESS STATE LEAKAGE ACROSS 3 CONSECUTIVE EPISODES")
     print("=" * 70)
@@ -200,9 +200,9 @@ def measure_consecutive_episode_leakage(world_file, robot_file, root_dir="/home/
 
 
 def main():
-    root_dir = "/home/cuongbien/DynamuhSim"
-    world_file = os.path.join(root_dir, "experiments/gazebo_benchmark/configs/generated/world_n5_actor_and_cylinder.sdf")
-    robot_file = os.path.join(root_dir, "experiments/gazebo_benchmark/configs/generated/burger_lidar1_depth1_640x480_10fps.sdf")
+    root_dir = str(Path(__file__).resolve().parents[4])
+    world_file = os.path.join(root_dir, "experiments/gazebo_benchmark/configs/fixtures/world_n5_actor_and_cylinder.sdf")
+    robot_file = os.path.join(root_dir, "experiments/gazebo_benchmark/configs/fixtures/burger_lidar1_depth1_640x480_10fps.sdf")
 
     cold_times = measure_cold_restart_to_first_frame(world_file, robot_file, root_dir, n_trials=3)
     leak_21, leak_31 = measure_consecutive_episode_leakage(world_file, robot_file, root_dir, n_episodes=3)

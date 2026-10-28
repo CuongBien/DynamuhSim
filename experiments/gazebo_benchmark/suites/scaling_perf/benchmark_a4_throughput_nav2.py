@@ -14,6 +14,7 @@ Specifications:
 """
 
 import os
+from pathlib import Path
 import sys
 import time
 import signal
@@ -89,7 +90,7 @@ def get_process_cpu_breakdown():
 
 @scoped_processes
 def run_benchmark_trial(num_instances: int, num_humans: int, with_nav2: bool, root_dir: str, measure_duration_s=12.0, warmup_s=5.0, *, _processes=None):
-    world_file = os.path.join(root_dir, f"experiments/gazebo_benchmark/configs/generated/world_n{num_humans}_actor_and_cylinder.sdf")
+    world_file = os.path.join(root_dir, f"experiments/gazebo_benchmark/configs/fixtures/world_n{num_humans}_actor_and_cylinder.sdf")
     params_file = os.path.join(root_dir, "install/custom_corridor/share/custom_corridor/config/nav2_mppi_mecanum.yaml")
     base_env = build_benchmark_env(root_dir)
 
@@ -228,7 +229,7 @@ def run_benchmark_trial(num_instances: int, num_humans: int, with_nav2: bool, ro
 
 
 def main():
-    root_dir = "/home/cuongbien/DynamuhSim"
+    root_dir = str(Path(__file__).resolve().parents[4])
     print("=" * 80)
     print("A4: THROUGHPUT & SCALING BENCHMARK FOR SMALL MECANUM ROBOT")
     print("=" * 80)

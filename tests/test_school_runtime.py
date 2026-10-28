@@ -33,7 +33,10 @@ from pathlib import Path
 child = subprocess.Popen([sys.executable, '-c',
     'import signal,time; signal.signal(signal.SIGINT, signal.SIG_IGN); '
     'signal.signal(signal.SIGTERM, signal.SIG_IGN); time.sleep(60)'])
-Path(sys.argv[1]).write_text(json.dumps([os.getpid(), child.pid, os.getpgrp()]))
+ready = Path(sys.argv[1])
+pending = ready.with_suffix('.tmp')
+pending.write_text(json.dumps([os.getpid(), child.pid, os.getpgrp()]))
+pending.replace(ready)
 if sys.argv[2] != 'stay':
     time.sleep(0.1)
     sys.exit(int(sys.argv[2]))
@@ -63,14 +66,15 @@ time.sleep(60)
         return process
 
     def reap(self, process):
-        if process.poll() is None:
-            process.kill()
-        process.communicate(timeout=5)
+        # Stop descendants before draining their inherited stderr pipe.
         if self.ready.exists():
             try:
                 os.killpg(json.loads(self.ready.read_text())[2], signal.SIGKILL)
             except ProcessLookupError:
                 pass
+        if process.poll() is None:
+            process.kill()
+        process.communicate(timeout=5)
 
     def verify(self, process, status):
         _, error = process.communicate(timeout=12)

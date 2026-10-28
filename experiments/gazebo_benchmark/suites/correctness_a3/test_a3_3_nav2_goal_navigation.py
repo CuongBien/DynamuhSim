@@ -232,7 +232,7 @@ def run_single_trial(run_idx: int, root_dir: str, *, _processes=None):
     print(f">>> [RUN {run_idx + 1}/10] Testing Nav2 MPPI Goal Navigation...")
     print(f"========================================================")
 
-    world_file = os.path.join(root_dir, "experiments/gazebo_benchmark/configs/generated/world_n5_actor_and_cylinder.sdf")
+    world_file = os.path.join(root_dir, "experiments/gazebo_benchmark/configs/fixtures/world_n5_actor_and_cylinder.sdf")
     params_file = os.path.join(root_dir, "install/custom_corridor/share/custom_corridor/config/nav2_mppi_mecanum.yaml")
     env = build_benchmark_env(root_dir)
 
@@ -315,7 +315,7 @@ def main():
     parser.add_argument("--run", type=int, default=None, help="Run single index (0-9)")
     args = parser.parse_args()
 
-    root_dir = "/home/cuongbien/DynamuhSim"
+    root_dir = str(Path(__file__).resolve().parents[4])
 
     if args.run is not None:
         run_single_trial(args.run, root_dir)
