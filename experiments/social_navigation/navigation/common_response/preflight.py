@@ -13,8 +13,8 @@ if not target.exists():target.write_text(text)
 assert target.read_text()==text
 method=lambda source,name:ast.dump(next(node for cls in ast.parse(source).body if isinstance(cls,ast.ClassDef) for node in cls.body if isinstance(node,ast.FunctionDef) and node.name==name),include_attributes=False)
 for name in ['advance','humans','metadata']:assert method(base,name)==method(text,name)
-geom=SOCIAL/'benchmark/complexitynav_geometry';(geom/'generated').mkdir(exist_ok=True)
-for source,name in [(SOCIAL/'benchmark/complexitynav_contract/kernel.py','native_contract.py'),(SOCIAL/'benchmark/socnavgym_warehouse_lifecycle/geometry.py','swept.py'),(SOCIAL/'warehouse/layout.json','layout.json')]:
+geom=HERE.parent/'complexitynav_geometry';(geom/'generated').mkdir(exist_ok=True)
+for source,name in [(HERE.parent/'complexitynav_contract/kernel.py','native_contract.py'),(HERE.parent/'socnavgym_warehouse_lifecycle/geometry.py','swept.py'),(SOCIAL/'warehouse/layout.json','layout.json')]:
     target=geom/'generated'/name
     if not target.exists():target.write_bytes(source.read_bytes())
     assert target.read_bytes()==source.read_bytes(),name

@@ -18,6 +18,10 @@ source=common/'model_worker.py';sha=lambda p:hashlib.sha256(p.read_bytes()).hexd
 for name,digest in protocol['input_sha256'].items():assert sha(common/name)==digest,name
 node=next(n for n in ast.parse(source.read_text()).body if isinstance(n,ast.ClassDef) and n.name=='Runner')
 ns=dict(HERE=common,a=a,protocol=protocol,model=model,dt=dt,layout=layout,sha=sha,Path=Path,np=np,random=random,copy=copy,math=math,sys=sys)
+# Bind the frozen Runner's short imports to the live sibling stage.
+if a.model.startswith('soc_'):
+    sys.path.insert(0,str(common.parent/'socnavgym_warehouse_lifecycle'))
+    import kernel,motion  # Populate canonical modules before the frozen Runner adds its legacy path.
 exec(compile(ast.Module(body=[node],type_ignores=[]),str(source),'exec'),ns)
 k=ns['Runner'](case)
 if variant=='shared':

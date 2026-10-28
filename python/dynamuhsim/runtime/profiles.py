@@ -70,7 +70,7 @@ class TrialProfile:
                               "--scenario", args.scenario, "--seed", str(args.seed)]
         if self.container_worker:
             raise ValueError("Container command must come from the pinned backend runtime")
-        return command + ["--common", str(social / "benchmark/common_response"), "--runtime", str(runtime),
+        return command + ["--common", str(stage_directory(social.parents[1], "common_response")), "--runtime", str(runtime),
                           "--socket", socket_path, "--model", "soc_guarded_orca", "--case", "crossing_near"]
 
 

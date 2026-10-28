@@ -137,3 +137,19 @@ riêng; raw ignored, source frozen/vendor và báo cáo nguyên bản không b�
 để giảm số thư mục. Các mục cấu trúc đã xác định trong bảng trên đã xử lý;
 không có batch gom stage nào còn chờ trong phạm vi này. Công việc phát triển WM,
 nghiệm thu thêm seed/backend và hiển thị WSLg thuộc phạm vi riêng.
+
+## Bổ sung nghiệm thu backend sau gom stage — 28/10/2026
+
+Đường group capture đã qua smoke ở lượt trước; lượt này khởi động worker thật
+đã bắt được các chỗ sót ở backend cá nhân/Docker: đường `--common`, preflight
+geometry/contract và mount protocol nằm sau alias report. Worker cá nhân nạp
+kernel/motion hiện hành trước Runner đã khóa để source ignored cũ không lấn
+source mới. Registry trỏ đúng implementation hiện hành. Runner, motion math,
+inputs và image pins giữ nguyên; prefix số 20 bước không đổi sau chốt import.
+
+[Biên bản backend/seed](verification/backend_acceptance_2026-10-28.json) ghi các
+lỗi tái hiện trước sửa, kiểm source sạch/cache cũ và các kết quả mới. Batch
+standing/walking seed47–49 có 6/6 integrity PASS nhưng chỉ 4/6 goal PASS.
+Standing47 và walking48 TIMEOUT là việc điều hướng cần chẩn đoán tiếp; không
+được dùng audit dữ liệu hoặc cleanup làm bằng chứng rằng mọi goal đã đạt.
+Đợt này không điều chỉnh controller, budget, threshold hoặc dataset/test seal.

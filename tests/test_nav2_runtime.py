@@ -66,6 +66,17 @@ class ProfileTests(unittest.TestCase):
                 self.assertEqual(command[-4:], ["--scenario", "walking", "--seed", "42"])
             else:
                 self.assertEqual(command[-4:], ["--model", "soc_guarded_orca", "--case", "crossing_near"])
+                self.assertEqual(command[command.index("--common") + 1], str(social / "navigation/common_response"))
+
+    def test_container_mounts_the_locked_protocol_behind_the_report_alias(self):
+        from dynamuhsim.runtime.nav2_trial import load_file_module
+        backend = load_file_module("_test_capability_container", stage_directory(ROOT, "shared_nav2_pilot") / "runtime.py")
+        command, _, _ = backend.worker_command(Path("/fixture/runtime"), Path("/fixture/socket"), "crowd_orca_plus", "testtoken")
+        volumes = [command[i + 1] for i, item in enumerate(command) if item == "-v"]
+        protocol = (stage_directory(ROOT, "common_response") / "reports/run01/protocol.json").resolve()
+        self.assertIn(str(protocol) + ":/archive/social_navigation/reports/common_response/run01/protocol.json:ro", volumes)
+        self.assertIn(str(stage_directory(ROOT, "common_gazebo")) + ":/common_gazebo:ro", volumes)
+        self.assertIn(str(stage_directory(ROOT, "complexitynav_geometry")) + ":/geometry:ro", volumes)
 
     def test_existing_prerequisite_gates_still_apply(self):
         for profile in PROFILES.values():
@@ -77,6 +88,29 @@ class ProfileTests(unittest.TestCase):
             path.write_text('{"status": "FAIL"}')
             with self.assertRaisesRegex(RuntimeError, "Prerequisite gate failed"):
                 PROFILES["socnavgym_nav2_pilot"].validate_gates(root)
+
+    def test_preflight_rebuilds_dependencies_without_legacy_stage_tree(self):
+        import shutil
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            social = root / "experiments/social_navigation"
+            common = social / "navigation/common_response"
+            shutil.copytree(stage_directory(ROOT, "common_response") / "inputs", common / "inputs")
+            relatives = ["navigation/common_response/preflight.py", "crowdsimplus_adapter/kernel.py",
+                         "navigation/complexitynav_contract/kernel.py",
+                         "navigation/socnavgym_warehouse_lifecycle/geometry.py", "warehouse/layout.json"]
+            for relative in relatives:
+                destination = social / relative
+                destination.parent.mkdir(parents=True, exist_ok=True)
+                shutil.copyfile(ROOT / "experiments/social_navigation" / relative, destination)
+            (social / "navigation/complexitynav_geometry").mkdir()
+            process = subprocess.run([sys.executable, str(common / "preflight.py")], capture_output=True, text=True)
+            self.assertEqual(process.returncode, 0, process.stderr)
+            self.assertFalse((social / "benchmark").exists())
+            generated = social / "navigation/complexitynav_geometry/generated"
+            self.assertEqual((generated / "native_contract.py").read_bytes(), (social / relatives[2]).read_bytes())
+            self.assertEqual((generated / "swept.py").read_bytes(), (social / relatives[3]).read_bytes())
+            self.assertTrue((common / "generated/crowd_kernel_n6.py").is_file())
 
     def test_source_manifest_includes_shared_implementation_and_launch(self):
         for profile in PROFILES.values():

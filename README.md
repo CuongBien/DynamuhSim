@@ -4,7 +4,9 @@
 
 **Generated và lịch sử:** 1.505 generated output cùng hai experiment chỉ còn báo cáo đã externalize sau kiểm archive/restore. [Input chuẩn](experiments/gazebo_benchmark/configs/fixtures/README.md) · [khôi phục payload](docs/history/closed_experiment_payloads.md) · [phạm vi clean và phần giữ lại](docs/CLEANUP_SCOPE.md).
 
-**Navigation end-to-end 28/10/2026:** [kết quả và hai lỗi điều hướng còn lại](docs/verification/cleanup_navigation_2026-10-28.json).
+**Nghiệm thu sau gom stage:** [3 backend IPC và sáu ca Nav2 seed47–49](docs/verification/backend_acceptance_2026-10-28.json): worker/start gate/dt/repeat/cleanup đạt; Nav2 4/6 tới đích, 6/6 audit dữ liệu đạt. Hai ca TIMEOUT còn cần chẩn đoán.
+
+**Lịch sử nghiệm thu navigation:** [outcome trước các lần sửa recipe](docs/verification/cleanup_navigation_2026-10-28.json).
 
 **Cleanup đã chốt 27/10/2026:** [phạm vi, source giảm và phần cần giữ](docs/CLEANUP_SCOPE.md) · [receipt kiểm chứng cuối](docs/verification/cleanup_closure_2026-10-27.json).
 

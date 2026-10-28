@@ -155,3 +155,5 @@ chung `python/dynamuhsim/runtime/velocity_trial.py`, giữ CLI/runtime/plugin ri
 Đây là robot nhận velocity script, không chạy Nav2 action. Common giữ lỗi
 baseline; Response giữ zero command/Pause, fault injection và một lần thử Play.
 Provenance mới ghim cả entrypoint, runner chung và loader; report cũ giữ nguyên.
+
+Container mount thêm đúng `common_response/reports/run01/protocol.json` ở vị trí archive mà alias `reports` trỏ tới, ở chế độ chỉ đọc. Worker dùng file này để kiểm hash của Runner; không mount hoặc thực thi source snapshot báo cáo. Dependency/preflight dùng các stage `navigation/` hiện hành.
