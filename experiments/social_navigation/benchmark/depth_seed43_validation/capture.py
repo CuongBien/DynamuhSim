@@ -22,7 +22,7 @@ def prepare():
         protocol=protocol,parent_driver_sha256=sha(parent),driver_sha256=sha(driver),parent_commit=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),
         driver_change='Runtime output location only; seed43 passed as CLI argument',
         inference_frozen_sha256=sha(original),inference_engine_sha256=fixed['engine_sha256'],inference_config=fixed['config'],
-        helper_sha256={str(p.relative_to(REPO)):sha(p) for p in [HERE/'capture.py',HERE/'protocol.json',*[BENCH/'early_avoidance_pilot'/n for n in ['namespace_prepare.py','moderate_config.py','config_runtime.py']],BENCH/'depth_proxy_lifecycle/motion_prepare.py',BENCH/'depth_proxy_lifecycle/quiesce.py',BENCH/'depth_proxy_lifecycle/pair_recording.py',REPO/'python/dynamuhsim/runtime/gpu.py',BENCH/'depth_proxy_ablation/generated/build_jazzy/libdepth_proxy_filter.so']})
+        helper_sha256={str(p.relative_to(REPO)):sha(p) for p in [HERE/'capture.py',HERE/'protocol.json',*[BENCH/'early_avoidance_pilot'/n for n in ['namespace_prepare.py','moderate_config.py','config_runtime.py']],BENCH/'depth_proxy_lifecycle/motion_prepare.py',BENCH/'depth_proxy_lifecycle/quiesce.py',BENCH/'depth_proxy_lifecycle/pair_recording.py',REPO/'python/dynamuhsim/runtime/capture_recording.py',REPO/'python/dynamuhsim/runtime/gpu.py',BENCH/'depth_proxy_ablation/generated/build_jazzy/libdepth_proxy_filter.so']})
     (driver_dir/'manifest.json').write_text(json.dumps(manifest,indent=2)+'\n');return driver,manifest
 
 

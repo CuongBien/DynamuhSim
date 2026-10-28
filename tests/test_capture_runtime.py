@@ -208,6 +208,45 @@ class FreezeTests(unittest.TestCase):
 
 
 class RecordingTests(unittest.TestCase):
+    def test_legacy_entrypoints_share_implementation_and_preserve_config_paths(self):
+        from dynamuhsim.runtime.nav2_trial import load_file_module
+        from dynamuhsim.runtime import capture_recording as shared
+        benchmark = ROOT / "experiments/social_navigation/benchmark"
+        legacy = load_file_module("_legacy_recorder_import", benchmark / "dataset_pilot/recording.py")
+        pairs = load_file_module("_legacy_pairs_import", benchmark / "depth_proxy_lifecycle/pair_recording.py")
+        self.assertIs(pairs.Pairs, shared.Pairs)
+        self.assertIs(legacy.Recording.witness, shared.Recording.witness)
+        self.assertIs(legacy.Recording.close, shared.Recording.close)
+        for name in ["qos.yaml", "storage.yaml"]:
+            self.assertEqual((benchmark / "dataset_pilot" / name).read_bytes(), (ROOT / "configs/capture" / name).read_bytes())
+        node = NS(create_publisher=lambda *a: NS(), create_subscription=lambda *a: None)
+        modules = {"std_msgs.msg": NS(String=NS), "rclpy.qos": NS(QoSProfile=NS, ReliabilityPolicy=NS(BEST_EFFORT="best_effort")),
+                   "sensor_msgs.msg": NS(Image=type("Image", (), {}), CameraInfo=type("CameraInfo", (), {}))}
+        with tempfile.TemporaryDirectory() as directory, patch.dict(sys.modules, modules), patch.object(shared.subprocess, "Popen") as popen:
+            recorder = legacy.Recording(node, directory)
+            self.assertIn(str(benchmark / "dataset_pilot/storage.yaml"), recorder.command)
+            self.assertIn(str(benchmark / "dataset_pilot/qos.yaml"), recorder.command)
+            recorder.log.close()
+            self.assertTrue(popen.call_args.kwargs["start_new_session"])
+
+    def test_recorder_close_retains_signal_order_and_bad_exit_code(self):
+        import signal
+        from dynamuhsim.runtime import capture_recording as shared
+        with tempfile.TemporaryDirectory() as directory, patch.object(shared.os, "killpg") as kill:
+            recorder = Recording.__new__(Recording)
+            recorder.output, recorder.log = Path(directory), io.StringIO()
+            recorder.command, recorder.observed = ["recorder"], {}
+            process = unittest.mock.Mock(pid=123, returncode=7)
+            process.poll.return_value = None
+            process.wait.side_effect = [subprocess.TimeoutExpired("recorder", 30), None]
+            recorder.process = process
+            result = recorder.close()
+            self.assertEqual(kill.call_args_list, [unittest.mock.call(123, signal.SIGINT), unittest.mock.call(123, signal.SIGTERM)])
+            self.assertEqual(process.wait.call_args_list, [unittest.mock.call(timeout=30), unittest.mock.call(timeout=5)])
+            self.assertEqual(result["returncode"], 7)
+            self.assertFalse(result["metadata_present"])
+            self.assertTrue(recorder.log.closed)
+
     def test_recorder_process_exit_is_terminal_and_bad_close_is_rejected(self):
         context = capture.CaptureContext.__new__(capture.CaptureContext)
         context.recorder = NS(process=NS(poll=lambda: 1), close=lambda: dict(returncode=1, metadata_present=False))

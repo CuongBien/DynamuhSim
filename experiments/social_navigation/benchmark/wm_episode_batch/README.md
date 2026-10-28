@@ -51,3 +51,8 @@ Audit cần full bundle/raw đúng đường dẫn đã lưu. Capture/export g�
 hiện tại. Dataset, ledger, quarantine và `final_accounting_sources.json` giữ
 nguyên; [source trước khi gỡ](https://github.com/CuongBien/DynamuhSim/tree/637596b5aa4ba14ecc7b1bab092b12f6ac8f215c/experiments/social_navigation/benchmark/wm_episode_batch)
 phục vụ tái lập công đoạn cũ. Các lệnh capture/export/audit đang công khai vẫn giữ.
+
+Hai script tiếp tục cohort một lần (`resume_capture.py`, `resume_export.py`)
+đã được gỡ sau khi dataset01 đóng. Không có caller hiện tại; `resume_frozen.json`
+và ledger/quarantine vẫn giữ nguyên. [Source đúng hash trước khi gỡ](https://github.com/CuongBien/DynamuhSim/tree/62fed27adbfc87032ebfd5a240a49ca46080c19f/experiments/social_navigation/benchmark/wm_episode_batch)
+phục vụ tái lập, không dùng để append vào dataset01 hiện có.

@@ -4,6 +4,7 @@ import os
 from pathlib import Path
 import signal
 import subprocess
+import numpy as np
 
 HERE = Path(__file__).resolve().parents[3] / "configs/capture"
 TOPICS = [
@@ -14,7 +15,7 @@ TOPICS = [
 ]
 
 class Recording:
-    def __init__(self, node, output):
+    def __init__(self, node, output, *, config_dir=None):
         from std_msgs.msg import String
         from rclpy.qos import QoSProfile, ReliabilityPolicy
         self.message_type = String
@@ -29,11 +30,12 @@ class Recording:
                             ('/camera/camera_info', CameraInfo)]:
             qos = QoSProfile(depth=5, reliability=ReliabilityPolicy.BEST_EFFORT)
             node.create_subscription(kind, topic, lambda msg, t=topic: self.witness(t, msg), qos)
+        config_dir = HERE if config_dir is None else Path(config_dir)
         self.log = (self.output / 'recorder.log').open('w')
         cmd = ['ros2', 'bag', 'record', '--storage', 'mcap', '--use-sim-time',
                '--disable-keyboard-controls', '--node-name', 'dataset_pilot_recorder',
-               '--storage-config-file', str(HERE / 'storage.yaml'),
-               '--qos-profile-overrides-path', str(HERE / 'qos.yaml'),
+               '--storage-config-file', str(config_dir / 'storage.yaml'),
+               '--qos-profile-overrides-path', str(config_dir / 'qos.yaml'),
                '--max-cache-size', '33554432', '--include-hidden-topics',
                '--output', str(self.output / 'raw_bag'), '--topics', *TOPICS]
         self.process = subprocess.Popen(cmd, stdout=self.log, stderr=subprocess.STDOUT,
@@ -97,10 +99,7 @@ class Recording:
                     topics=TOPICS)
 
 
-"""Observed ON/OFF images saved at original float32 precision, no command publisher."""
-import json,sys
-from pathlib import Path
-import numpy as np
+# ON/OFF sidecars retain the original float32 payload and duplicate-stamp policy.
 class Pairs:
     def __init__(self,node,output,phase):
         from sensor_msgs.msg import Image

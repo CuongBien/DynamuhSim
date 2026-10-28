@@ -90,3 +90,9 @@ Bản launch/SDF runtime riêng bỏ static TF camera_link bị trùng với Mec
 2. Chốt sensor tracker/association và định nghĩa target BEV tương lai; khi chưa có, dùng pilot cho QA dữ liệu và giữ mask đúng.
 3. Nối recorder contract cho CrowdSimPlus/ComplexityNav tuần tự, pilot một episode/backend; kiểm đa cơ chế và phân bố nhãn trước pilot12 cảnh/seed. Pilot12 chỉ kiểm pipeline/độ phủ, không đủ dataset train chính thức.
 4. Sau các gate trên mới freeze split/thu quy mô lớn; HuNavSim đánh giá cuối. Chưa chuyển Isaac Sim hoặc triển khai World Model trong mốc này.
+
+Recorder MCAP và cặp depth ON/OFF hiện dùng chung
+`python/dynamuhsim/runtime/capture_recording.py`. Các import cũ giữ đầu vào
+mỏng; đường dẫn storage/QoS của dataset pilot và định dạng dữ liệu không đổi.
+Receipt lượt mới ghi thêm hash triển khai dùng chung; source freeze cũ không
+được sửa để chấp nhận code mới. Tái lập cohort cũ bằng checkout đã ghi.

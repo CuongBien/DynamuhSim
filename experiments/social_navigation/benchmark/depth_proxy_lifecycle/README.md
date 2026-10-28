@@ -31,3 +31,9 @@ The motion driver is a generated copy of dataset_pilot/trial.py with runtime cam
 Replay the saved failed worker request and evaluate an isolated planner-side early slowdown/group-avoidance treatment before collecting a new complete episode. Preserve the0.2m/s standing cap and2mm guard; do not force humans aside or relabel the failed episode as success. Diagnose/monitor the intermittent shutdown separately, without claiming it resolved. No World Model, Isaac Sim, new framework matrix or large dataset batch in this stage.
 
 Cập nhật dọn 27/10/2026: `motion_prepare.py`, `pair_recording.py`, `quiesce.py` vẫn được capture/freeze sử dụng và giữ nguyên byte. [Code trước khi gỡ](https://github.com/CuongBien/DynamuhSim/tree/fc3f2d1dd8b41de0538679309d29f43e20da4e3c/experiments/social_navigation/benchmark/depth_proxy_lifecycle) giữ nguồn acquisition/diagnostic lịch sử.
+
+Recorder MCAP và cặp depth ON/OFF hiện dùng chung
+`python/dynamuhsim/runtime/capture_recording.py`. Các import cũ giữ đầu vào
+mỏng; đường dẫn storage/QoS của dataset pilot và định dạng dữ liệu không đổi.
+Receipt lượt mới ghi thêm hash triển khai dùng chung; source freeze cũ không
+được sửa để chấp nhận code mới. Tái lập cohort cũ bằng checkout đã ghi.
