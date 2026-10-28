@@ -90,7 +90,7 @@ def replay(profile, *, source=None, moving=False, fault=None, condition='full'):
   scan=None
   if (out/'scan_SENSOR_ONLY.npz').exists():
    with np.load(out/'scan_SENSOR_ONLY.npz',allow_pickle=False) as archive:scan={k:archive[k] for k in archive.files}
-  events=[x for x in events if x[0] not in ['start']]+[('commands',[p.cmd[:3] for p in processes])]
+  events=[x for x in events if x[0] not in ['start']]+[('commands',[p.cmd if p.cmd[0]=='ros2' else p.cmd[:3] for p in processes])]
   return result,arrays,metadata,scan,events,error
 
 class SensorCaptureTests(unittest.TestCase):

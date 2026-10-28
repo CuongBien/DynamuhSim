@@ -1,4 +1,4 @@
-import importlib.util,json,tempfile,unittest,sys,shutil
+import importlib.util,json,tempfile,unittest,sys,shutil,os
 from pathlib import Path
 import numpy as np
 HERE=Path(__file__).resolve().parent;spec=importlib.util.spec_from_file_location('corpus_export',HERE/'export.py');ex=importlib.util.module_from_spec(spec);spec.loader.exec_module(ex)
@@ -33,7 +33,7 @@ class Corpus(unittest.TestCase):
       minimum=min(minimum,float(distance))
   self.assertGreater(minimum-.008,.02)
  def test_portable_smoke_and_no_label_input(self):
-  source=HERE.parent/'lidar_person_pilot/generated/runs/full01'
+  source=Path(os.environ['DYNAMUHSIM_SMOKE_CAPTURE']) if 'DYNAMUHSIM_SMOKE_CAPTURE' in os.environ else HERE.parent/'lidar_person_pilot/generated/runs/full01'
   with tempfile.TemporaryDirectory(dir=HERE/'generated') as folder:
    root=Path(folder);(root/'inputs').mkdir();(root/'labels').mkdir();(root/'inputs/calibration_SENSOR_ONLY.json').write_bytes((HERE.parent/'lidar_person_pilot/calibration_SENSOR_ONLY.json').read_bytes())
    scene=dict(scene_id='smoke',split='train',family='development',moving=False,selected_depth_indices=[2]);summary=ex.build_scene(source,scene,root,CFG);self.assertEqual(summary['person_samples'],4);self.assertEqual(summary['environment_samples'],2);self.assertEqual(summary['ambiguous_samples'],0);(root/'manifest.json').write_text(json.dumps(dict(scenes=[summary])))

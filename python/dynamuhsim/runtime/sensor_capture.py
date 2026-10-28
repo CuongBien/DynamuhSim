@@ -8,6 +8,14 @@ from experiments.social_navigation.gazebo_adapter.run import stop
 
 def sha(path):return hashlib.sha256(Path(path).read_bytes()).hexdigest()
 
+def bridge_arguments(modes, scan_topic=None):
+ """Match the depth camera's camera_info suffix exactly."""
+ args=['/clock@rosgraph_msgs/msg/Clock[gz.msgs.Clock',scan_topic+'@sensor_msgs/msg/LaserScan[gz.msgs.LaserScan'] if scan_topic is not None else []
+ for mode in modes:
+  topic='/visibility/'+mode
+  args.extend([topic+'/depth@sensor_msgs/msg/Image[gz.msgs.Image',topic+'/camera_info@sensor_msgs/msg/CameraInfo[gz.msgs.CameraInfo'])
+ return args
+
 def run_capture(out, *, here, repo, benchmark, create_world, sources,
                 protocol_name="protocol.json", condition=None, scene_id=None, scene=None):
  """One bounded capture; fixture/labels and each profile's acceptance stay separate."""
@@ -45,12 +53,11 @@ def run_capture(out, *, here, repo, benchmark, create_world, sources,
    a=np.frombuffer(bytes(m.data),dtype='>f4' if m.is_bigendian else '<f4').reshape(m.height,m.step//4)[:,:m.width]
    if len(rows[mode])<20:
     rows[mode][stamp]=a.astype(np.float32,copy=True);image_available[mode][stamp]=max(stamp,clock[0])
-  bridge=['/clock@rosgraph_msgs/msg/Clock[gz.msgs.Clock',protocol['scan_topic']+'@sensor_msgs/msg/LaserScan[gz.msgs.LaserScan'] if with_scan else []
+  bridge=bridge_arguments(protocol['modes'],protocol['scan_topic'] if with_scan else None)
   for mode in protocol['modes']:
    topic='/visibility/'+mode
    node.create_subscription(Image,topic+'/depth',lambda m,k=mode:image(k,m),qos_profile_sensor_data)
    node.create_subscription(CameraInfo,topic+'/camera_info',lambda m,k=mode:infos.update({k:m}),qos_profile_sensor_data)
-   bridge.extend([topic+'/depth@sensor_msgs/msg/Image[gz.msgs.Image',topic+'/camera_info@sensor_msgs/msg/CameraInfo[gz.msgs.CameraInfo'])
   for name,cmd in [('bridge',['ros2','run','ros_gz_bridge','parameter_bridge',*bridge]),('gazebo',['gz','sim','-r','-s',str(world)])]:
    log=(out/(name+'.log')).open('w');logs.append(log);processes.append(subprocess.Popen(cmd,stdout=log,stderr=subprocess.STDOUT,env=env,start_new_session=True))
   deadline=time.monotonic()+protocol['max_wall_s']

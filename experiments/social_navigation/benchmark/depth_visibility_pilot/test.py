@@ -19,7 +19,12 @@ class Labels(unittest.TestCase):
  def test_tolerance_keeps_original_label_scale(self):
   obj=json.loads((HERE/'protocol.json').read_text());self.assertEqual(obj['static_depth_tolerance_m'],obj['depth_equality_tolerance_m']);self.assertEqual(obj['static_depth_tolerance_m'],.001)
  def test_bridge_and_sensor_info_suffix_agree(self):
-  source=(HERE/'capture.py').read_text();self.assertNotIn("topic+'/info",source);self.assertIn("topic+'/camera_info@sensor_msgs/msg/CameraInfo[gz.msgs.CameraInfo'",source)
+  import sys
+  sys.path[:0]=[str(HERE.parents[3]/'python'),str(HERE.parents[3])]
+  from dynamuhsim.runtime.sensor_capture import bridge_arguments
+  args=bridge_arguments(['full'])
+  self.assertIn('/visibility/full/camera_info@sensor_msgs/msg/CameraInfo[gz.msgs.CameraInfo',args)
+  self.assertFalse(any('/info@' in item for item in args))
  def test_fixture_is_static_and_camera_only(self):
   with tempfile.TemporaryDirectory(dir=HERE/'generated') as d:
    p=create(Path(d));world=ET.parse(p).getroot().find('world');robot=world.find("model[@name='mecanum_robot']")
