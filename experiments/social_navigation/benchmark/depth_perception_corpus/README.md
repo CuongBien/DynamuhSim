@@ -49,3 +49,9 @@ bash "$TASK_DIR/run.sh" capture --scene p003 --output "$TASK_DIR/generated/manua
 Output phải chưa tồn tại, chạy từng lượt. Capture tự source Jazzy/install, dùng runtime partition/domain91 lock và GPU preflight; dừng nếu không đúng NVIDIA hoặc không đạt dữ liệu/cleanup. Không dùng killall. Chuyển động ở đây được lập trình cho diagnostic, không phải policy social nav. Build lại có thể đổi binary SHA: không ghi đè freeze cũ hoặc tái diễn giải corpus01; một đợt thu mới cần protocol/freeze phiên bản mới. Export official7scene bằng `run.sh export --output <new-directory>` chỉ khi source hashes khớp freeze.
 
 Ảnh/GIF: script final `reports/preview02.py --corpus <bundle> --output <new-media-dir> --scene p003`; chỉ train/validation, cần Matplotlib/Pillow. Đây là replay depth và label/point projection, không dùng image generation.
+
+Capture hiện tại dùng chung `python/dynamuhsim/runtime/sensor_capture.py`; file
+`capture.py` của stage chỉ chọn fixture, protocol và provenance. Nhận ảnh/scan,
+synchronization, giới hạn số frame và các gate static/moving/null giữ nguyên.
+Source hash của lượt mới ghi thêm module dùng chung. Không append lượt mới vào
+corpus/freeze cũ; tái lập kết quả lịch sử bằng source revision trong manifest.

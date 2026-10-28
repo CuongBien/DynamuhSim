@@ -54,3 +54,9 @@ Inference math/config were frozen before scan capture. First JSON write failed o
 Git keeps source, small raw scan arrays, representative LABEL ONLY views, complete prediction JSONLs, reports and true measured plots. Full depth stacks/CUDA packages/weights remain local under generated/ and are not backed up by Git. No World Model training, dataset batch, HuNavSim, original ROS/tracker changes or navigation TIMEOUT repair occurred. Next is conservative depth surface evidence on the fixed regression and a new clutter fixture; this will remain separate from validated person semantics.
 
 Cập nhật dọn 27/10/2026: đã gỡ các công cụ chỉ phục vụ cohort/report cũ: `preview_midpoint.py`. [Code trước khi gỡ](https://github.com/CuongBien/DynamuhSim/tree/87b0c6eea9b54794db7b4cb794fae57c78f11c70/experiments/social_navigation/benchmark/lidar_person_pilot) giữ cách tái lập; report, engine, source freeze và outcome cũ không đổi.
+
+Capture hiện tại dùng chung `python/dynamuhsim/runtime/sensor_capture.py`; file
+`capture.py` của stage chỉ chọn fixture, protocol và provenance. Nhận ảnh/scan,
+synchronization, giới hạn số frame và các gate static/moving/null giữ nguyên.
+Source hash của lượt mới ghi thêm module dùng chung. Không append lượt mới vào
+corpus/freeze cũ; tái lập kết quả lịch sử bằng source revision trong manifest.

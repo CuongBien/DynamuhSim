@@ -40,3 +40,9 @@ Pixel ownership requires both a deeper/empty ray after removing the person and e
 The one-Hz static capture is not a tracking benchmark: active TTL is0.5s, so the existing tracker cannot accumulate normal 10Hz continuity. Empty confirmed-nonperson fields do not prove false-positive rejection. Semantic, association, persona H1–H5 and training masks remain false. Existing seeds42/43/44 are not retrospectively annotated by this snapshot. HuNavSim remains unused for final testing; navigation TIMEOUT remains separate.
 
 Next: add a sensor-only person-vs-object semantic stage, validate it on this fixed clutter/visibility regression, then a dynamic occlusion fixture and a new independent scene. Do not tune on HuNavSim or start a training batch from these labels.
+
+Capture hiện tại dùng chung `python/dynamuhsim/runtime/sensor_capture.py`; file
+`capture.py` của stage chỉ chọn fixture, protocol và provenance. Nhận ảnh/scan,
+synchronization, giới hạn số frame và các gate static/moving/null giữ nguyên.
+Source hash của lượt mới ghi thêm module dùng chung. Không append lượt mới vào
+corpus/freeze cũ; tái lập kết quả lịch sử bằng source revision trong manifest.

@@ -45,3 +45,9 @@ OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 python3 "$TASK_DIR/audit02.py"
 Audit cần full bundle/raw đúng đường dẫn đã lưu. Capture/export gốc dừng ở standing47; review01 cho phép năm lượt chưa thử với cùng frozen driver, review02 đóng sổ cuối khi walking49 cũng shutdown exit255. Hai lượt lỗi giữ raw và bị loại; criteria/source math không thay. Một batch mới cần IDs/output/protocol/freeze mới, không ghi đè evidence. Script/freeze đầu và continuation được giữ để tái lập, không dùng rerun để thay FAIL.
 
 Đã có dữ liệu để train thử WM dự báo BEV quan sát; chưa có reward/contact truth hoặc Gym step/reset để train RL online. Không cần mở thêm vòng detector trước khi thử WM này.
+
+Đã gỡ ba công cụ chỉ phục vụ đóng và viết báo cáo dataset01:
+`close_dataset.py`, `finalize.py`, `write_report.py`. Không có caller trong code
+hiện tại. Dataset, ledger, quarantine và `final_accounting_sources.json` giữ
+nguyên; [source trước khi gỡ](https://github.com/CuongBien/DynamuhSim/tree/637596b5aa4ba14ecc7b1bab092b12f6ac8f215c/experiments/social_navigation/benchmark/wm_episode_batch)
+phục vụ tái lập công đoạn cũ. Các lệnh capture/export/audit đang công khai vẫn giữ.

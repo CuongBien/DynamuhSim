@@ -51,3 +51,9 @@ Surface-only gate PASS is limited to boxes in two layouts of one warehouse/nativ
 Fresh capture75depth/20scan uses NVIDIA and exits cleanly. CPU replay agrees with CUDA on75proposals; saved-plane residuals independently checked on18270points. All old files and user index changes are preserved. Git keeps small scan/raw-depth representative bundles, LABEL ONLY views, predictions, logs/hashes and true measured plots; full counterfactual arrays remain local in generated/ and are not backed up by Git. Next: a small annotated depth perception corpus with curved clutter and moving/occluded people, to validate a semantic person-vs-object classifier before World Model training batches.
 
 Cập nhật dọn 27/10/2026: đã gỡ các công cụ chỉ phục vụ cohort/report cũ: `preview.py`. [Code trước khi gỡ](https://github.com/CuongBien/DynamuhSim/tree/87b0c6eea9b54794db7b4cb794fae57c78f11c70/experiments/social_navigation/benchmark/depth_surface_guard) giữ cách tái lập; report, engine, source freeze và outcome cũ không đổi.
+
+Capture hiện tại dùng chung `python/dynamuhsim/runtime/sensor_capture.py`; file
+`capture.py` của stage chỉ chọn fixture, protocol và provenance. Nhận ảnh/scan,
+synchronization, giới hạn số frame và các gate static/moving/null giữ nguyên.
+Source hash của lượt mới ghi thêm module dùng chung. Không append lượt mới vào
+corpus/freeze cũ; tái lập kết quả lịch sử bằng source revision trong manifest.
