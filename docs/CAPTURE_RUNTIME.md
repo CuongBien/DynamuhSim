@@ -52,10 +52,10 @@ source install/setup.bash
 python3 experiments/social_navigation/navigation/common_response/preflight.py
 bash experiments/social_navigation/navigation/socnavgym_response_fix/run.sh build
 bash experiments/social_navigation/perception/depth_proxy_ablation/run.sh build
-mkdir -p experiments/social_navigation/navigation/early_avoidance_pilot/generated
+mkdir -p python/dynamuhsim/runtime/native/generated
 g++ -std=c++17 -O2 \
-  experiments/social_navigation/navigation/early_avoidance_pilot/check_friction.cc \
-  -o experiments/social_navigation/navigation/early_avoidance_pilot/generated/check_friction \
+  python/dynamuhsim/runtime/native/check_friction.cc \
+  -o python/dynamuhsim/runtime/native/generated/check_friction \
   $(pkg-config --cflags --libs sdformat14)
 ```
 

@@ -2,6 +2,7 @@
 from dataclasses import dataclass
 from pathlib import Path
 from dynamuhsim.workspace import stage_directory
+from .workers import host_worker_command
 import argparse
 import json
 
@@ -70,8 +71,8 @@ class TrialProfile:
                               "--scenario", args.scenario, "--seed", str(args.seed)]
         if self.container_worker:
             raise ValueError("Container command must come from the pinned backend runtime")
-        return command + ["--common", str(stage_directory(social.parents[1], "common_response")), "--runtime", str(runtime),
-                          "--socket", socket_path, "--model", "soc_guarded_orca", "--case", "crossing_near"]
+        return host_worker_command(stage, stage_directory(social.parents[1], "common_response"), social,
+                                   runtime, socket_path, "soc_guarded_orca", "crossing_near")
 
 
 PROFILES = {

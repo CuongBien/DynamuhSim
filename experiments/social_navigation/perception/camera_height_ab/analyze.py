@@ -10,9 +10,9 @@ import xml.etree.ElementTree as ET
 import numpy as np
 from PIL import Image,ImageDraw,ImageFont
 from geometry import optical_transform,world_rays,floor_depth,cylinder_depth,proxy_interior
-HERE=Path(__file__).resolve().parent;BENCH=HERE.parent
-sys.path.insert(0,str(BENCH.parent/'datasets/dataset_pilot'))
-from dataset_core import observed_bev,depth_points
+HERE=Path(__file__).resolve().parent;BENCH=HERE.parent;REPO=HERE.parents[3]
+sys.path.insert(0,str(REPO/'python'))
+from dynamuhsim.datasets.normalization import observed_bev,depth_points
 
 
 def dump(path,value):Path(path).write_text(json.dumps(value,indent=2,allow_nan=False)+'\n')
@@ -103,7 +103,7 @@ def analyze(root,out):
                  paired_frames_per_camera=10,physical_robot_height_changed=False,
                  navigation_rerun=False,human_policy_rerun=False,
                  results=all_results,
-                 algorithm_source_sha256=sha(BENCH.parent/'datasets/dataset_pilot/dataset_core.py'),
+                 algorithm_source_sha256=sha(REPO/'python/dynamuhsim/datasets/normalization.py'),
                  analysis_source_sha256={p.name:sha(p) for p in [Path(__file__),HERE/'geometry.py',HERE/'protocol.json']},
                  raw_sha256={str(p.relative_to(root)):sha(p) for p in sorted(root.rglob('*')) if p.is_file()},
                  caveats=protocol['limits'])

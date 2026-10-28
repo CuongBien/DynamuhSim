@@ -10,7 +10,7 @@ from freeze import sha,verify
 import sys
 sys.path.insert(0,str(REPO/'python'))
 from dynamuhsim.analysis.evidence import verify_sources
-from dynamuhsim.workspace import stage_directory,logical_source_name
+from dynamuhsim.workspace import stage_directory,source_path,logical_source_name
 ARTIFACT_ROOT=REPO
 def sources(expected):return verify_sources(expected,repository=REPO,roots=[ARTIFACT_ROOT],revision='9833565fa546d55cb0e553f8388bf4a703c59583')
 
@@ -26,11 +26,11 @@ def audit(output):
     assert sha(HERE/'generated/drivers/depth_seed43_01/driver.py')==capture['driver_sha256']
     source_unchanged=bool(sources(r['source_sha256']))
     ready=json.loads((runtime/'ready.json').read_text())
-    friction=json.loads(subprocess.check_output([str(stage_directory(ARTIFACT_ROOT,'early_avoidance_pilot')/'generated/check_friction'),str(runtime/'mecanum_camera.sdf')],text=True))
+    friction=json.loads(subprocess.check_output([str(source_path(ARTIFACT_ROOT,'experiments/social_navigation/benchmark/early_avoidance_pilot/generated/check_friction')),str(runtime/'mecanum_camera.sdf')],text=True))
     expected=stage_directory(ARTIFACT_ROOT,'portable_episode')/'generated/episode01/config_snapshot/runtime'
     camera_equal=sha(runtime/'mecanum_camera.sdf')==sha(expected/'mecanum_camera.sdf')
     nav_equal=sha(runtime/'nav2_runtime.yaml')==sha(expected/'nav2_runtime.yaml')
-    live_equal=json.loads((root/'live_parameters.json').read_text())==json.loads((stage_directory(ARTIFACT_ROOT,'early_avoidance_pilot')/'reports/avoidance_moderate01/live_parameters.json').read_text())
+    live_equal=json.loads((root/'live_parameters.json').read_text())==json.loads((REPO/'experiments/archive/social_navigation/reports/early_avoidance_pilot/avoidance_moderate01/live_parameters.json').read_text())
     q=r.get('server_shutdown',{}).get('quiesce',{})
     events=rows(root/'events.jsonl');em={e['event']:e for e in events};tail=(em.get('observation_end',{}).get('stamp_ns',0)-em.get('action_end',{}).get('stamp_ns',0))/1e9
     log=(root/'launch.log').read_text(errors='replace');m=re.search(r'teardown pre=(\d+) post=(\d+)',log)

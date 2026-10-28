@@ -1,7 +1,7 @@
 """Explicit compatibility paths for archived immutable benchmark reports."""
 import os
 from pathlib import Path, PurePosixPath
-from dynamuhsim.workspace import source_path, logical_source_name, SOCIAL, STAGE_GROUPS
+from dynamuhsim.workspace import source_path, logical_source_name, SOCIAL, STAGE_GROUPS, ARCHIVE_ONLY_STAGES
 
 BENCHMARK = PurePosixPath("experiments/social_navigation/benchmark")
 ARCHIVE = PurePosixPath("experiments/archive/social_navigation/reports")
@@ -50,6 +50,11 @@ def report_target(checkout, relative):
                 alias = checkout / BENCHMARK / parts[3] / "reports"
             destination = checkout / ARCHIVE / parts[3]
             suffix = parts[5:]
+            if parts[3] in ARCHIVE_ONLY_STAGES and destination.is_dir():
+                for parent in [destination, *destination.parents]:
+                    if parent == checkout: break
+                    if parent.is_symlink(): raise ValueError("Archive path contains a symlink")
+                return destination.joinpath(*suffix)
     if alias is not None and alias.is_symlink():
         if os.readlink(alias) != os.path.relpath(destination, alias.parent):
             raise ValueError("Unrecognized archive symlink")

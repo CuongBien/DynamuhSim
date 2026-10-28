@@ -5,7 +5,7 @@ from pathlib import Path
 import numpy as np
 from PIL import Image,ImageDraw,ImageFont
 from fixture import HERE,BENCH,REPO,HEIGHT
-sys.path.insert(0,str(BENCH.parent/'datasets/dataset_pilot'));from dataset_core import observed_bev
+sys.path.insert(0,str(REPO/'python'));from dynamuhsim.datasets.normalization import observed_bev
 sys.path.insert(0,str(HEIGHT));from geometry import optical_transform,proxy_interior
 plot_spec=importlib.util.spec_from_file_location('height_plot_helpers',HEIGHT/'analyze.py')
 plot_helpers=importlib.util.module_from_spec(plot_spec);plot_spec.loader.exec_module(plot_helpers)
@@ -102,7 +102,7 @@ def analyze(root,out):
                  runtime_capability='static sensor-selective mask only',
                  default_project_changed=False,training_ready=False,navigation_tested=False,
                  collision_dynamics_tested=False,raw_files=raw_files,
-                 analysis_source_sha256={str(p.relative_to(REPO)):sha(p) for p in [Path(__file__),HERE/'protocol.json',HEIGHT/'geometry.py',HEIGHT/'analyze.py',BENCH.parent/'datasets/dataset_pilot/dataset_core.py']},
+                 analysis_source_sha256={str(p.relative_to(REPO)):sha(p) for p in [Path(__file__),HERE/'protocol.json',HEIGHT/'geometry.py',HEIGHT/'analyze.py',REPO/'python/dynamuhsim/datasets/normalization.py']},
                  caveats=protocol['limits'])
     dump(out/'summary.json',summary)
     dump(out/'protocol.json',protocol)

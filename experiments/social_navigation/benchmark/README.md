@@ -1,12 +1,12 @@
 # Hạ tầng tương thích benchmark
 
-29 stage đã chuyển sang bốn khu vực chức năng; không còn code stage tại đây.
+26 stage code hiện hành nằm ở bốn khu vực chức năng. Ba chuỗi capture/cohort cũ đã nghỉ dùng; không còn code stage tại đây.
 
 | Khu vực | Vai trò |
 |---|---|
-| [Navigation](../navigation/README.md) | 13 stage điều hướng, worker, adapter, lifecycle và chẩn đoán; 13 helper Nav2 chung |
-| [Perception](../perception/README.md) | 11 stage camera/depth/LiDAR, classifier và tracker |
-| [Datasets](../datasets/README.md) | 4 stage reader, target, portable và dataset pilot |
+| [Navigation](../navigation/README.md) | 12 stage điều hướng, worker, adapter, lifecycle và chẩn đoán; 13 helper Nav2 chung |
+| [Perception](../perception/README.md) | 10 stage camera/depth/LiDAR, classifier và tracker |
+| [Datasets](../datasets/README.md) | 3 stage reader, target, portable và dataset pilot |
 | [Replay](../replay/README.md) | Xem lại dataset/recording |
 
 `task_runtime.sh` là implementation shell dùng chung. Mỗi nhóm liên kết tới

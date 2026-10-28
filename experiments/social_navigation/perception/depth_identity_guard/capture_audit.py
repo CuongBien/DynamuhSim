@@ -8,7 +8,7 @@ HERE=Path(__file__).resolve().parent;BENCH=HERE.parent;REPO=BENCH.parents[2]
 import sys
 sys.path.insert(0,str(REPO/'python'))
 from dynamuhsim.analysis.evidence import verify_sources
-from dynamuhsim.workspace import stage_directory,logical_source_name
+from dynamuhsim.workspace import stage_directory,source_path,logical_source_name
 ARTIFACT_ROOT=REPO
 def sources(expected):return verify_sources(expected,repository=REPO,roots=[ARTIFACT_ROOT],revision='9833565fa546d55cb0e553f8388bf4a703c59583')
 
@@ -22,7 +22,7 @@ def audit(output):
     assert manifest['engine_sha256']==fixed['engine_sha256'] and manifest['final_engine_sha256']==sha(HERE/'generated/final_engine.json')
     sources({logical_source_name(str(HERE.relative_to(ARTIFACT_ROOT)/'capture44.py')):manifest['capture_helper_sha256'],**manifest['source_sha256']})
     unchanged=bool(sources(r['source_sha256']));ready=json.loads((runtime/'ready.json').read_text())
-    check=json.loads(subprocess.check_output([str(stage_directory(ARTIFACT_ROOT,'early_avoidance_pilot')/'generated/check_friction'),str(runtime/'mecanum_camera.sdf')],text=True))
+    check=json.loads(subprocess.check_output([str(source_path(ARTIFACT_ROOT,'experiments/social_navigation/benchmark/early_avoidance_pilot/generated/check_friction')),str(runtime/'mecanum_camera.sdf')],text=True))
     expected=stage_directory(ARTIFACT_ROOT,'portable_episode')/'generated/episode01/config_snapshot/runtime';worlds=[ET.parse(p).getroot() for p in [expected/'warehouse.sdf',runtime/'warehouse.sdf']]
     for tree in worlds:
         for n in tree.iter('socket'):n.text='OWNED_SOCKET'

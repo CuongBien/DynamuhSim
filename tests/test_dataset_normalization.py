@@ -2,7 +2,7 @@ import json
 from pathlib import Path
 import unittest
 import numpy as np
-from dataset_core import causal_indices, interpolate_labels, depth_points, observed_bev, validate_clock, group_membership
+from dynamuhsim.datasets.normalization import causal_indices, interpolate_labels, depth_points, observed_bev, validate_clock, group_membership
 
 class ContractTests(unittest.TestCase):
     def test_late_delivery_cannot_enter_past(self):
@@ -53,7 +53,7 @@ class ContractTests(unittest.TestCase):
                               dict(id=8,type='standing',members=[1])],[1])
 
     def test_persona_unknown_is_not_a_fake_h_class(self):
-        c=json.loads((Path(__file__).parent/'contract.json').read_text())
+        c=json.loads((Path(__file__).resolve().parents[1]/'python/dynamuhsim/datasets/normalization_contract.json').read_text())
         self.assertIsNone(c['persona_unknown']['persona'])
         self.assertFalse(c['persona_unknown']['persona_valid'])
         self.assertEqual(c['action_components'],['vx','vy','wz'])

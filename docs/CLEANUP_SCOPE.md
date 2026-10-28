@@ -153,3 +153,16 @@ standing/walking seed47–49 có 6/6 integrity PASS nhưng chỉ 4/6 goal PASS.
 Standing47 và walking48 TIMEOUT là việc điều hướng cần chẩn đoán tiếp; không
 được dùng audit dữ liệu hoặc cleanup làm bằng chứng rằng mọi goal đã đạt.
 Đợt này không điều chỉnh controller, budget, threshold hoặc dataset/test seal.
+
+## Chốt lại refactor/clean theo source toàn repo — 29/10/2026
+
+Các lần chốt trước chưa loại hết chuỗi cohort capture đầu; đã bổ sung và xử lý
+trong một lượt source, không chuyển sang tuning điều hướng. Ba cây code
+`dataset_pilot`, `depth_proxy_lifecycle`, `early_avoidance_pilot` đã nghỉ dùng;
+`wm_episode_batch/tools/legacy` không còn implementation thứ hai. Math/auditor
+còn cần được đưa vào package chuẩn, parser native dùng chung, ba worker runtime
+sử dụng một bộ dựng command. Bundle data không còn là nơi nạp code để audit.
+
+[Checklist hiện hành](REFACTOR_STATUS.md) ghi phần đã chốt và lý do giữ các
+module/folder còn lại. Các outcome lỗi, dataset/seal và snapshot lịch sử giữ
+nguyên; chúng không được thay bằng kết quả refactor hoặc lượt chạy mới.

@@ -3,8 +3,8 @@ from pathlib import Path
 import numpy as np
 from loader import Dataset
 HERE=Path(__file__).resolve().parent
-sys.path.insert(0,str(HERE/'tools/legacy'))
-from dataset_core import causal_indices
+sys.path.insert(0,str(HERE.parents[3]/'python'))
+from dynamuhsim.datasets.normalization import causal_indices
 sys.path.insert(0,str(HERE.parent/'perception_target_pilot'))
 from geometry import warp,raster,interpolate,nearest_frame
 from sensor import project

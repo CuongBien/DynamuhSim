@@ -61,14 +61,13 @@ def validate_config(config):
 
 
 def capture_sources(repo):
-    benchmark = repo / "experiments/social_navigation/benchmark"
     files = source_files(repo, PROFILES["socnavgym_group_nav2"], repo / "tools/capture_episode.py")
     files += [repo / "tools/capture_warehouse.launch.py", repo / "configs/capture/storage.yaml", repo / "configs/capture/qos.yaml",
               repo / "src/custom_corridor/models/mecanum_robot/model.sdf", repo / "src/custom_corridor/urdf/mecanum_robot.urdf",
               repo / "src/custom_corridor/config/mecanum_bridge.yaml",
               stage_directory(repo, 'depth_proxy_ablation') / 'depth_proxy_filter.cc', stage_directory(repo, 'depth_proxy_ablation') / 'CMakeLists.txt',
               stage_directory(repo, 'depth_proxy_ablation') / 'generated/build_jazzy/libdepth_proxy_filter.so',
-              stage_directory(repo, 'early_avoidance_pilot') / 'check_friction.cc', stage_directory(repo, 'early_avoidance_pilot') / 'generated/check_friction']
+              repo / 'python/dynamuhsim/runtime/native/check_friction.cc', repo / 'python/dynamuhsim/runtime/native/generated/check_friction']
     return sorted(set(files))
 
 
@@ -90,7 +89,7 @@ def prepare_run(repo, run_dir, config_path, scenario, seed, gui=False):
     camera = prepare_camera(assets, repo)
     if camera["runtime_sha256"] != CAMERA_SHA256:
         raise RuntimeError("Camera fixture differs from accepted native bytes")
-    checker = repo / "experiments/social_navigation/navigation/early_avoidance_pilot/generated/check_friction"
+    checker = repo / "python/dynamuhsim/runtime/native/generated/check_friction"
     friction = subprocess.run([str(checker), str(assets / "mecanum_camera.sdf")], capture_output=True, text=True, check=True)
     friction = json.loads(friction.stdout)
     if friction["recognized_gz_base_link_frames"] != 4:

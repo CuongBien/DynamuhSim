@@ -1,0 +1,460 @@
+path,role,lines,sha256
+analyze_baseline.py,public CLI or compatibility/diagnostic entrypoint,6,d352fb9637aa2bbbfd106b28e213c2da7b207c4693b38cc3a93cdf1517d3b88d
+evaluate_framework.py,public CLI or compatibility/diagnostic entrypoint,6,27cc7a7bdf1e985054bee2c260e30d65cbd0e40addf2e33bf9491f2c98cf4e26
+evaluation/__init__.py,offline evaluation metric library,29,cfffdfcac7268a84969e56e3d4f1e7f640b44df025e953a03778ad8c94c41216
+evaluation/analyzer.py,offline evaluation metric library,454,648ea7a22e29c2f61e6e681db7d16b3caef5aa01bc2dfbba5a8b527a420874e5
+evaluation/bag_reader.py,offline evaluation metric library,200,d3baacea052c566e65ec2d09a59710c610ed47f22187fa2aed5a0e55491dee67
+evaluation/failure_taxonomy.py,offline evaluation metric library,137,dc7ae326b33dbfee28feed7f553543cd855cb70f81670b9934b6a9f67410f4d2
+evaluation/ground_truth.py,offline evaluation metric library,123,a58ad7c17176623cf269cb73f765daea926a78f241b57477f18b326182663586
+evaluation/motion_metrics.py,offline evaluation metric library,129,be129ac9014e218c681f3ea18a72226a368be197241b026b2a92a5de90e45c46
+evaluation/plotting.py,offline evaluation metric library,184,a810f2f2443d16e6d4991935628e8668ce1ed24d2cb27d394dceef44974ec429
+evaluation/reporter.py,offline evaluation metric library,153,3df168601e95a2f04f8ef260cb7c9b313724189509fdee1b49035e212cd498f7
+evaluation/social_metrics.py,offline evaluation metric library,261,31ac57bc96e55ca3fd7fa5ce6e70edb84d7a0b088134cc98ac797b7e96ad037b
+evaluation/spatial_alignment.py,offline evaluation metric library,70,86ac4e7669bfc9d186524502f93169f94d320d4ccb82bf2b81fa116da4c56322
+evaluation/types.py,offline evaluation metric library,171,1315f55c2a65920834ad4f01e91c7408b925e4452f24698afe3ef550f74f431c
+experiments/corridor_090/analyze_k6_k12.py,maintained corridor CLI with distinct K6–K12 and short-summary metric contracts,339,ab62278c1b745bcd5d1297affb99adfee1f90a8f970a0ee36c80e72162ab11a5
+experiments/gazebo_benchmark/core/__init__.py,maintained benchmark core/suite/profiler,33,385143e58e135eb58a0c095a6a44d5f6328dedc0ba3133ad6e94acb9fad74343
+experiments/gazebo_benchmark/core/benchmark_runner.py,maintained benchmark core/suite/profiler,355,f81bf5c7e03248dd3a8039b4cd627aebe76786a34d564329be2cddbf0ded75a5
+experiments/gazebo_benchmark/core/benchmark_world_generator.py,maintained benchmark core/suite/profiler,256,bad9d7ce6fe677f45f4a7eff298dfd2c8b2ed19346e12ed75a1c20fec57dc193
+experiments/gazebo_benchmark/core/geometry.py,maintained benchmark core/suite/profiler,150,5926c8256535483a39cf229ac1498a783e5619f6169ff502867abd27fe922b1a
+experiments/gazebo_benchmark/core/mppi_monitor.py,maintained benchmark core/suite/profiler,424,bdc147b16ed3caa3f30e2b9336fbe1750833011c113c12dadab3e091f42c7927
+experiments/gazebo_benchmark/core/mppi_trial.py,maintained benchmark core/suite/profiler,346,a13e91f805cc20919db29e16e46ed27de81b1d817c805f3f529b24504ba85d59
+experiments/gazebo_benchmark/core/policies.py,maintained benchmark core/suite/profiler,383,1fc7d9beaae52bac203ef67a6b22b6f319d5c7469e1af2a414ae841f1de2c5ca
+experiments/gazebo_benchmark/core/profiler/__init__.py,maintained benchmark core/suite/profiler,41,8d10d5e858cc4b066b043eba273c396b888cf602513708361d9aa27ab6d18d5d
+experiments/gazebo_benchmark/core/profiler/benchmark_profiler.py,maintained benchmark core/suite/profiler,285,0e628109aeec47b3bcd269857719ac106d37be33fe5eedc3cc76a7fbf573ba12
+experiments/gazebo_benchmark/core/profiler/controller_profiler.cpp,maintained benchmark core/suite/profiler,83,8943d320e76acafcff3fd43abd06ca989ee89d7ec6d00aad32d4c89ddd1b6097
+experiments/gazebo_benchmark/core/sim_env.py,maintained benchmark core/suite/profiler,131,62c52b5e8b15225e6bf6a377528d40302b57f019820709c117e20867bfe7c5fe
+experiments/gazebo_benchmark/core/trajectory.py,maintained benchmark core/suite/profiler,98,8b851263e350b1278e85c28901c7729cf7a4ae06e2ec7e6cdf7faa0bab21d316
+experiments/gazebo_benchmark/suites/correctness_a3/benchmark_mppi_reproducibility.py,maintained benchmark core/suite/profiler,260,8a22747ac2a0e282b2d0cb8143a6d4e748883fd7314b3ce62f4faae3e5c43990
+experiments/gazebo_benchmark/suites/correctness_a3/replay_benchmark.py,maintained benchmark core/suite/profiler,228,f74fde707909faadf3d776036e75a864ef40dd328bca004510a1bde799ed8b6e
+experiments/gazebo_benchmark/suites/correctness_a3/reset_benchmark.py,maintained benchmark core/suite/profiler,139,fd95b00bcc47e482ee3acba1ee4d7f8392f2bc0f1bb2c5a0b3ee4b18ff5d9f88
+experiments/gazebo_benchmark/suites/correctness_a3/rigorous_reset_benchmark.py,maintained benchmark core/suite/profiler,226,0f6ee04574ce4af8a150d0dcabc2f8bc48de728ba07cf0d9625d1fb89c421a31
+experiments/gazebo_benchmark/suites/correctness_a3/seed_determinism_5runs.py,maintained benchmark core/suite/profiler,165,02b98ec6db40009d360227162bc366f4c0d9390b9da044074ff08718a6cf5ab0
+experiments/gazebo_benchmark/suites/correctness_a3/test_a3_1_velocity_tracking.py,maintained benchmark core/suite/profiler,198,7c8bb5fbfefdbccf28b23f5d956e315db7a95a82dcca2d39f9cd52f1adcc4ecf
+experiments/gazebo_benchmark/suites/correctness_a3/test_a3_2_fixed_cmdvel_repeatability.py,maintained benchmark core/suite/profiler,299,bb2e44b17c5e6a26b0788d675484d2a2bd0c2e28f774ebbd604159dd9563f252
+experiments/gazebo_benchmark/suites/correctness_a3/test_a3_3_nav2_goal_navigation.py,maintained benchmark core/suite/profiler,414,c22a934af7d9fb26cc52dff22e2824ce57d3fd3615d7d1651f15be1f926a49cb
+experiments/gazebo_benchmark/suites/correctness_a3/test_a3_4_mppi_cmdvel_replay.py,maintained benchmark core/suite/profiler,552,9d3e3a4d23a33f126bf95bd30deeab1aeeab9541856902712a906f494602acd6
+experiments/gazebo_benchmark/suites/correctness_a3/test_mecanum_smoke.py,maintained benchmark core/suite/profiler,152,d14da3bd7967b344a36b6fe3a2a4d8c37fca5325b902ba32328ee489f77308cd
+experiments/gazebo_benchmark/suites/correctness_a3/test_mppi_mecanum_reproducibility.py,maintained benchmark core/suite/profiler,279,a0340b49eb04fd05a8fe960d3c11cd37219b142cb78f658f354e3e5263b44e39
+experiments/gazebo_benchmark/suites/datagen_4policies/test_p4_filter.py,maintained benchmark core/suite/profiler,83,546c7a4221e833d90d1f47906621db31d59ceac7a3df51466466c460b803b46f
+experiments/gazebo_benchmark/suites/hospital_live_demo.py,maintained benchmark core/suite/profiler,257,82d348b8e334c21d19de3b112606a7480ec2c1557d86b02104aa7a1cd6fdb9eb
+experiments/gazebo_benchmark/suites/live_interactive_demo.py,maintained benchmark core/suite/profiler,371,b4294fcdd0e39b9d88e65c8bbefcb3743ac3967db146ea44046013edeb4c3a9e
+experiments/gazebo_benchmark/suites/mppi_ablation/benchmark_a3_3_step1_vision.py,maintained benchmark core/suite/profiler,239,fcf29d40234ff450cf37ff697817de605190f966c2324e3e0debff013d8c2dde
+experiments/gazebo_benchmark/suites/mppi_ablation/benchmark_a3_3_step2.py,maintained benchmark core/suite/profiler,254,5b119a66d840c51c24acdf44164da59fec6c19cb0489192a9dd2bef017d42b4f
+experiments/gazebo_benchmark/suites/mppi_ablation/benchmark_a3_3_step3.py,maintained benchmark core/suite/profiler,288,3019488d082b57438366e0402fe9bcaba82b4b8c405c97256e08f5aece09020f
+experiments/gazebo_benchmark/suites/mppi_ablation/benchmark_a3_3_wall_clearance.py,maintained benchmark core/suite/profiler,677,cd8d04bb4c35bd907b606624b0d406282b37ef40e7f1df719560ec84588977a8
+experiments/gazebo_benchmark/suites/mppi_ablation/run_step2_full.py,maintained benchmark core/suite/profiler,37,14914be38ddf0fa0f677d606342de1e27dac9a0a1119c478c49a82bc0ecd772f
+experiments/gazebo_benchmark/suites/mppi_ablation/run_step3_full.py,maintained benchmark core/suite/profiler,42,155c62eeb0313101e34885c0c7e08c5e84635c9e06c13acd96af87ba0382c57f
+experiments/gazebo_benchmark/suites/scaling_perf/benchmark_a4_throughput_nav2.py,maintained benchmark core/suite/profiler,419,00b01fd6ddadbb1ee40623930487276a234fa01a6b050c515b02b47af764b8cb
+experiments/gazebo_benchmark/suites/scaling_perf/benchmark_nav2_controller_frequency.py,maintained benchmark core/suite/profiler,482,cfa9f14d53b2b3e8ebe704b00596349780b449ae1fa30b6fd7c484aa214775a5
+experiments/gazebo_benchmark/suites/scaling_perf/measure_cold_restart_latency.py,maintained benchmark core/suite/profiler,306,82d2d381981db5ebf51eb08d6ba75442ce2630df6ab119df5635c8951be4029c
+experiments/gazebo_benchmark/suites/scaling_perf/measure_depth_noise.py,maintained benchmark core/suite/profiler,247,1d28dcd69ea9094f5a35dbec496bbc5b82da4dd2a558e3ac2270863759704098
+experiments/gazebo_benchmark/suites/scaling_perf/parallel_scaling_benchmark.py,maintained benchmark core/suite/profiler,246,2b63aaa897ce79bcd5a407e0fb5efc4bb8ac4f780ef04e90e1d5deafd04fd4d8
+experiments/social_navigation/benchmark/task_runtime.sh,"current backend adapter, fixture, frozen math, reader, audit or replay",18,f59d13ff486dcbdba16221bf123e7e249967a4082539afb11a905a9e54910edf
+experiments/social_navigation/crowdsimplus_adapter/adapter.cc,"current backend adapter, fixture, frozen math, reader, audit or replay",141,3abded9205fdb54f572a256aeac1ce893f0a125d040532390e8e9d7c3c576cf7
+experiments/social_navigation/crowdsimplus_adapter/bottleneck_scene.py,"current backend adapter, fixture, frozen math, reader, audit or replay",35,b45ee225b0b78f3a90ba6de8ad7281bf8f5a1722c2eea6511cffd7ca2529bf89
+experiments/social_navigation/crowdsimplus_adapter/crossing_scene.py,"current backend adapter, fixture, frozen math, reader, audit or replay",31,def4549e854eae2211e20cd440719070e95ed9b145ae024eb5f7e375b068227a
+experiments/social_navigation/crowdsimplus_adapter/crowd_host.py,"current backend adapter, fixture, frozen math, reader, audit or replay",69,c8c3353177819abac41f895e0dd2eda2ba702ab87c86f2ee672c4b4040e7471c
+experiments/social_navigation/crowdsimplus_adapter/kernel.py,"current backend adapter, fixture, frozen math, reader, audit or replay",97,4122df6c256c189d3f4c440894f9582d8e1c811300e6d86664019db23c6ef227
+experiments/social_navigation/crowdsimplus_adapter/worker.py,"current backend adapter, fixture, frozen math, reader, audit or replay",28,4145ae9f98444f39372fd9cf875dc2bdf6fd26efd71976188b2761a829102a0a
+experiments/social_navigation/datasets/perception_target_pilot/association.py,"current backend adapter, fixture, frozen math, reader, audit or replay",17,13ea3e6615704604c4721a2d85e0d361f2d89ffca5e2cd8f8b64ccb4685d176e
+experiments/social_navigation/datasets/perception_target_pilot/audit.py,"current backend adapter, fixture, frozen math, reader, audit or replay",104,695026e6989df15e9bb63b2121966ced131d63c4e920a9ece463f73c204becbe
+experiments/social_navigation/datasets/perception_target_pilot/build_labels.py,"current backend adapter, fixture, frozen math, reader, audit or replay",109,3f638133240c966f4de5c02a33544f07d174dc638850497769a06b795e858f15
+experiments/social_navigation/datasets/perception_target_pilot/geometry.py,"current backend adapter, fixture, frozen math, reader, audit or replay",49,214928e004785fb0ff26ff0614c8f879ea118dabfbc716efbf46bde31163cf4f
+experiments/social_navigation/datasets/perception_target_pilot/run.sh,"current backend adapter, fixture, frozen math, reader, audit or replay",11,5ab69c092fa3152d0519e6c5fda08fa6e06cf89eccb853ebe9133a749d806e3f
+experiments/social_navigation/datasets/perception_target_pilot/sensor.py,"current backend adapter, fixture, frozen math, reader, audit or replay",91,0fe703e72335c3f768584d051351b8e16f8aa1eb48ecd51b7f8dd6dd767bc7d1
+experiments/social_navigation/datasets/perception_target_pilot/test_contract.py,regression/contract test,77,5d919794a2e6b5ed0b9bfd3b752234d1c4073aeff0a8a09b03520a8230e69efe
+experiments/social_navigation/datasets/perception_target_pilot/track_episode.py,"current backend adapter, fixture, frozen math, reader, audit or replay",79,a4e903f12388492878d1acd56c00703c0603f690ada868077bc086e00285219d
+experiments/social_navigation/datasets/portable_episode/audit.py,"current backend adapter, fixture, frozen math, reader, audit or replay",76,22170676590f7077339fdc980df1a2ce6b901d568f5af4cc01912395375b880d
+experiments/social_navigation/datasets/portable_episode/portable_loader.py,"current backend adapter, fixture, frozen math, reader, audit or replay",5,aa1c95857751c2391c56d0ba880542fc78ffb9a408b945be6c3f8d8dc0095160
+experiments/social_navigation/datasets/portable_episode/provenance_checks.py,"current backend adapter, fixture, frozen math, reader, audit or replay",19,5c43dfee902c871960c766db714fd53c2a3602331b19348ba11e65c6bc3d5485
+experiments/social_navigation/datasets/portable_episode/run.sh,"current backend adapter, fixture, frozen math, reader, audit or replay",11,8bc6437f521059f8956a41a5ee25958423e58e9ad7d32806f340dad48d79432a
+experiments/social_navigation/datasets/portable_episode/smoke.py,"current backend adapter, fixture, frozen math, reader, audit or replay",6,907f33e1c31396cfbf98bcf0532a272e5e5e5b57150255578bae7832ef3761e5
+experiments/social_navigation/datasets/wm_episode_batch/loader.py,"current backend adapter, fixture, frozen math, reader, audit or replay",29,c74f06790dd83686421dcd56104ada60295eb2f05d4eafba71058ac7622d55fc
+experiments/social_navigation/datasets/wm_episode_batch/preview.py,"current backend adapter, fixture, frozen math, reader, audit or replay",19,caa550bb1a1981e4bd35f1bae88a79d1256bffd19f187f4cd96ca0508599d938
+experiments/social_navigation/datasets/wm_episode_batch/run.sh,"current backend adapter, fixture, frozen math, reader, audit or replay",11,c6c64625b4261770b9b24e93b75c2ac57d88d841d671c1bcf1600b915a0b84b6
+experiments/social_navigation/datasets/wm_episode_batch/targets.py,"current backend adapter, fixture, frozen math, reader, audit or replay",24,de29cea162cabb824cf9fdac61da641414b9f0baa6eae1a6480fd25703ad5324
+experiments/social_navigation/datasets/wm_episode_batch/test.py,regression/contract test,36,5d07d397093c5b1a3ed290bf154f115e5da6a4bd391381a544aae0906b55fafe
+experiments/social_navigation/gazebo_adapter/adapter.cc,"current backend adapter, fixture, frozen math, reader, audit or replay",141,bbb979dcacf8f61d7b0ff6bd2e8be2f8eebc0d631639ef547b4fb2804ba8f6a1
+experiments/social_navigation/gazebo_adapter/kernel.py,"current backend adapter, fixture, frozen math, reader, audit or replay",78,e360ebb4fd9a58910fd65c77396d47f543be74061cc310682111fc4ba4c1d982
+experiments/social_navigation/gazebo_adapter/run.py,"current backend adapter, fixture, frozen math, reader, audit or replay",182,e5c6de81427f74a1e13eaf8637dca836f343b906e25bfa7f4b417c3f23bdef26
+experiments/social_navigation/gazebo_adapter/run.sh,"current backend adapter, fixture, frozen math, reader, audit or replay",15,214a0e39d7c3f04bb31c351a8d3881e03fb6d1e57e6223486d9dcbca60d25213
+experiments/social_navigation/gazebo_adapter/warehouse.launch.py,"current backend adapter, fixture, frozen math, reader, audit or replay",27,d0dd562e79adebc7a1ec83a887aad9a3d9a9a7a7207c822cac81e214b5b973fb
+experiments/social_navigation/gazebo_adapter/worker.py,"current backend adapter, fixture, frozen math, reader, audit or replay",53,78bd513d6b308fbe787cde3c5523228652e73dafc19ad3e94352d8bfe5471bf7
+experiments/social_navigation/generate_warehouse.py,"current backend adapter, fixture, frozen math, reader, audit or replay",113,dffcf929ff916de8e4e669e611fdb1a91f6d3542a97bd8d5f170edb923751c23
+experiments/social_navigation/navigation/amcl_observer.py,"current backend adapter, fixture, frozen math, reader, audit or replay",42,0bc3517b4d1a6b22db56f6e7394f029c4f0ac279309ee7352ad01716b1a37117
+experiments/social_navigation/navigation/check_crowd_sensors.py,"current backend adapter, fixture, frozen math, reader, audit or replay",39,9437afaea6d53ae3b0b6ef6750d13a28bf972365d1c87463534cbed1500af77b
+experiments/social_navigation/navigation/circle_contact.py,"current backend adapter, fixture, frozen math, reader, audit or replay",61,9661cc003c2324357cf15c3714eb8f886ec441723b7f95b10f967aec5c34fc55
+experiments/social_navigation/navigation/common_gazebo/adapter.cc,"current backend adapter, fixture, frozen math, reader, audit or replay",90,512263407f51f33f23238deaeb3f3b2c94bebb6ddabdb3966b6fddd4f492e7d0
+experiments/social_navigation/navigation/common_gazebo/analyze.py,"current backend adapter, fixture, frozen math, reader, audit or replay",116,e82096b6f2d99b4d3b8dd30858a2887b128ea8f1ef53692e8c63a81159c01566
+experiments/social_navigation/navigation/common_gazebo/run.sh,"current backend adapter, fixture, frozen math, reader, audit or replay",16,beb34cbe41e21b70a16c9cde313bc65d13c8109fbf3461c97ab392abd74f11e4
+experiments/social_navigation/navigation/common_gazebo/runtime.py,"current backend adapter, fixture, frozen math, reader, audit or replay",13,b1e7f467718d3387b694c409d8bdd57442cf060c29ee2b0592e7c43fecdff1a7
+experiments/social_navigation/navigation/common_gazebo/verify_live.py,"current backend adapter, fixture, frozen math, reader, audit or replay",8,650e66fb26a41f5cd726955c9055d4b856c59b983743b88a1c7691a57ff3649b
+experiments/social_navigation/navigation/common_gazebo/warehouse.launch.py,"current backend adapter, fixture, frozen math, reader, audit or replay",14,e4a0758bb8b46ea2b57aee03699b02482feffc97130d62b97de4c18610656aff
+experiments/social_navigation/navigation/common_gazebo/worker.py,"current backend adapter, fixture, frozen math, reader, audit or replay",87,835c587af4608e187958ffebc73b0250bba8807ce3bbc86cb64522bccbb8d45a
+experiments/social_navigation/navigation/common_response/model_worker.py,"current backend adapter, fixture, frozen math, reader, audit or replay",98,74f2ff2e08a105aa7a6d34e01d032bff81fafaac9c8652a25302a747ed39f3be
+experiments/social_navigation/navigation/common_response/preflight.py,"current backend adapter, fixture, frozen math, reader, audit or replay",22,60c94c2a3828cede90d6656ac599979b515e601b8a973d7d167a6944a3c16ab5
+experiments/social_navigation/navigation/complexitynav_contract/kernel.py,"current backend adapter, fixture, frozen math, reader, audit or replay",89,ce10fd8605037f114b8cb0706572e9541d4ad11613394e40ff73111c98eb01fc
+experiments/social_navigation/navigation/complexitynav_geometry/kernel.py,"current backend adapter, fixture, frozen math, reader, audit or replay",65,0868d4df16724fc3e2e3436cc49581c71220b28351fdd0ab2925a0e8f9b76983
+experiments/social_navigation/navigation/complexitynav_geometry/roadmap.py,"current backend adapter, fixture, frozen math, reader, audit or replay",59,77cca14fb7e393cf6e7068673016616e1514573061aaf6606cfb3ce84ed9ff07
+experiments/social_navigation/navigation/diagnostics.py,"current backend adapter, fixture, frozen math, reader, audit or replay",52,ccddf244a01d07f53cb011d73e1e1ea1c6f2f0b51a44538743205c9ec6239040
+experiments/social_navigation/navigation/footprint_geometry.py,"current backend adapter, fixture, frozen math, reader, audit or replay",17,a0de62997aabf0e0c94c4e053d2ff8b50a2f8a97a7a340a87a6dd5e67646cda5
+experiments/social_navigation/navigation/localization_trials/profiles.py,"current backend adapter, fixture, frozen math, reader, audit or replay",43,f9dd6ae173a3cbf7ce4c9e7e2bd1ce945d8eb62814f2676dd7c5091dbe597441
+experiments/social_navigation/navigation/navigation_diagnostics/capture.py,"current backend adapter, fixture, frozen math, reader, audit or replay",69,8d5be4aa82ea44da90bad0d88cc2bbd5b287ee8458cd58196601ef495fd4e289
+experiments/social_navigation/navigation/replay_contact_geometry.py,"current backend adapter, fixture, frozen math, reader, audit or replay",65,920ff4ad17470c6bb951c9f20e9ba71804bee49fd882013356ecaa992982d7ef
+experiments/social_navigation/navigation/robot_orca.py,"current backend adapter, fixture, frozen math, reader, audit or replay",65,76a98d59c5a80c14cf7f23dc2ef308dbff44a7f19a1f44b5022802d24e9f6c8a
+experiments/social_navigation/navigation/run.sh,"current backend adapter, fixture, frozen math, reader, audit or replay",9,96ddcd1a7bd9d168d71401edc2391b612cc9ac2132ddb1cc9232d51a94985a91
+experiments/social_navigation/navigation/shared_nav2_pilot/analyze.py,"current backend adapter, fixture, frozen math, reader, audit or replay",10,ff4c70c749af0c9554bd3847a463fe4e06372921c27e59b2af305bb6e8e3ca37
+experiments/social_navigation/navigation/shared_nav2_pilot/run.sh,"current backend adapter, fixture, frozen math, reader, audit or replay",12,147082c9a388192181ce4cdc5859335d70de9a586225d516a1f291de4ced52bc
+experiments/social_navigation/navigation/shared_nav2_pilot/runtime.py,"current backend adapter, fixture, frozen math, reader, audit or replay",13,2472157bef44584f99917f0cc43de164ad98266e972631a35147a11b3864f444
+experiments/social_navigation/navigation/shared_nav2_pilot/trial.py,"current backend adapter, fixture, frozen math, reader, audit or replay",10,26ababe3550a8b3b9c005c71a0269b0782dda6036b9a7f9e2405414346cfd081
+experiments/social_navigation/navigation/shared_nav2_pilot/warehouse.launch.py,"current backend adapter, fixture, frozen math, reader, audit or replay",10,0fb24811eccebab21ee3fc9cdac23d8867f5627d82ba5c0e788085b7a806256f
+experiments/social_navigation/navigation/shared_nav2_pilot/worker.py,"current backend adapter, fixture, frozen math, reader, audit or replay",8,be15740daba38d622f2fa238ef4ecc9f8428884b1ac11e28f9d98ab521ea713b
+experiments/social_navigation/navigation/socnavgym_group_nav2/analyze.py,"current backend adapter, fixture, frozen math, reader, audit or replay",10,70bbb3203f2c782dc51969255acc19af26c9632e2d387456e34d607f2b5ffb11
+experiments/social_navigation/navigation/socnavgym_group_nav2/fixture.py,"current backend adapter, fixture, frozen math, reader, audit or replay",33,2f217fc7d87bbb5950567b119d68baafba1b62515229c8b416247484c5b93a02
+experiments/social_navigation/navigation/socnavgym_group_nav2/group_audit.py,"current backend adapter, fixture, frozen math, reader, audit or replay",31,4870f43e479f7d76d4955fc06ef95c21c44880ca131fdda016205d2321710137
+experiments/social_navigation/navigation/socnavgym_group_nav2/probe.py,"current backend adapter, fixture, frozen math, reader, audit or replay",24,c28901015648f2f9d75a913f93dfeed1dd3206726df8dfb3497ac67686703078
+experiments/social_navigation/navigation/socnavgym_group_nav2/reactive_motion.py,"current backend adapter, fixture, frozen math, reader, audit or replay",48,821380fc1f1d95d647a8b0576a9ca6f8573c2af66feec20a08f3f361e3981085
+experiments/social_navigation/navigation/socnavgym_group_nav2/run.sh,"current backend adapter, fixture, frozen math, reader, audit or replay",13,df05cefd160cfdcd7adc1173393eef96286e1a78cac3f1527db518a4c79ba8d1
+experiments/social_navigation/navigation/socnavgym_group_nav2/standing_projection.py,"current backend adapter, fixture, frozen math, reader, audit or replay",55,be1d9f1546333aa57234c2d6b4cf622fc016ef4f1fd63251f28d8efbea194e40
+experiments/social_navigation/navigation/socnavgym_group_nav2/test_gate.py,regression/contract test,31,2af8aa11677a5dd76b24d7cbbcd8e14a2156e4544df1d1112934d16e4cc15be8
+experiments/social_navigation/navigation/socnavgym_group_nav2/test_reaction.py,regression/contract test,17,cb91276cfaddbcd41ac5e48fc5a377d27e7375e35c6647bbcd88ab7a5a2d03af
+experiments/social_navigation/navigation/socnavgym_group_nav2/trial.py,"current backend adapter, fixture, frozen math, reader, audit or replay",10,53f0581abfdd925daaf97f0ead16b4c5ffe6279d2e50a174ee7f998661e898d9
+experiments/social_navigation/navigation/socnavgym_group_nav2/warehouse.launch.py,"current backend adapter, fixture, frozen math, reader, audit or replay",10,0fb24811eccebab21ee3fc9cdac23d8867f5627d82ba5c0e788085b7a806256f
+experiments/social_navigation/navigation/socnavgym_group_nav2/worker.py,"current backend adapter, fixture, frozen math, reader, audit or replay",38,46d866e93f4a5b3e2dbaf33f5f99a71b95206fd65774613ccc562d2acfd14b6b
+experiments/social_navigation/navigation/socnavgym_lifecycle_fix/continuous_groups.py,"current backend adapter, fixture, frozen math, reader, audit or replay",124,b3fc3f1c7cfab0570620b823aea31d22047922d402447b5f9b1869cc4652ec60
+experiments/social_navigation/navigation/socnavgym_lifecycle_fix/test_swept.py,regression/contract test,17,fc3af5c3fb47d1d58d342d4771af1e93cd5986a9f41e460a380dff37e7f6bc30
+experiments/social_navigation/navigation/socnavgym_nav2_pilot/analyze.py,"current backend adapter, fixture, frozen math, reader, audit or replay",10,89b5e2a035df5334f4eaf32d076def4d86b5b4f7b303e2aefb5bb404454cebca
+experiments/social_navigation/navigation/socnavgym_nav2_pilot/run.sh,"current backend adapter, fixture, frozen math, reader, audit or replay",12,147082c9a388192181ce4cdc5859335d70de9a586225d516a1f291de4ced52bc
+experiments/social_navigation/navigation/socnavgym_nav2_pilot/trial.py,"current backend adapter, fixture, frozen math, reader, audit or replay",10,7caefff761ae2d2abc3e1bff210ce6d2255daaf8c9d22d5fd31e17dbbcdd768d
+experiments/social_navigation/navigation/socnavgym_nav2_pilot/warehouse.launch.py,"current backend adapter, fixture, frozen math, reader, audit or replay",10,0fb24811eccebab21ee3fc9cdac23d8867f5627d82ba5c0e788085b7a806256f
+experiments/social_navigation/navigation/socnavgym_nav2_pilot/worker.py,"current backend adapter, fixture, frozen math, reader, audit or replay",8,8be0e13001e6bb4ace45dc570cbad5d72163d3e5a442985823afa3d140a555a9
+experiments/social_navigation/navigation/socnavgym_response_fix/adapter.cc,"current backend adapter, fixture, frozen math, reader, audit or replay",95,ffbcda748dc1dba4e06beb79c6e8fa93c77da25fbe2348b10f92062c36279abb
+experiments/social_navigation/navigation/socnavgym_response_fix/analyze.py,"current backend adapter, fixture, frozen math, reader, audit or replay",131,17e9f3cae5e26831030a1a706233559bf7f71bbb89bc9faa2191b6f1334aa399
+experiments/social_navigation/navigation/socnavgym_response_fix/audit_geometry.py,"current backend adapter, fixture, frozen math, reader, audit or replay",13,bceedca675f6033f43e43ff39d9c0ef98707df6be3f757ec2fd8f92666071a98
+experiments/social_navigation/navigation/socnavgym_response_fix/projection.py,"current backend adapter, fixture, frozen math, reader, audit or replay",54,260d0775a10bc6b510c217a26e02a877a4394ef3f3f56475740ea14d52c841d9
+experiments/social_navigation/navigation/socnavgym_response_fix/responsive_motion.py,"current backend adapter, fixture, frozen math, reader, audit or replay",61,7e94fb78bb1a6552c7c6b17654bf90ba2a937145837916b783ddeaa36b45a4c4
+experiments/social_navigation/navigation/socnavgym_response_fix/run.sh,"current backend adapter, fixture, frozen math, reader, audit or replay",16,beb34cbe41e21b70a16c9cde313bc65d13c8109fbf3461c97ab392abd74f11e4
+experiments/social_navigation/navigation/socnavgym_response_fix/runtime.py,"current backend adapter, fixture, frozen math, reader, audit or replay",11,891f367a2d2a574c4779c685afc3ece1c8509936b7010a18da41702e9f52ab19
+experiments/social_navigation/navigation/socnavgym_response_fix/test_projection.py,regression/contract test,30,614fc10b9d29ee1220b2e17c786b8e73d49773cdfa94acb690bbf4e16d301527
+experiments/social_navigation/navigation/socnavgym_response_fix/verify_live.py,"current backend adapter, fixture, frozen math, reader, audit or replay",8,99420f32143e2f04cb2898b5b9e95a5237ad4ea96fff3bb8b6acb8ecd1719fcc
+experiments/social_navigation/navigation/socnavgym_response_fix/warehouse.launch.py,"current backend adapter, fixture, frozen math, reader, audit or replay",14,e4a0758bb8b46ea2b57aee03699b02482feffc97130d62b97de4c18610656aff
+experiments/social_navigation/navigation/socnavgym_response_fix/worker.py,"current backend adapter, fixture, frozen math, reader, audit or replay",8,7de35853654a46190ec5a90b097241dc6bdeace4463ea468d570b7add233917b
+experiments/social_navigation/navigation/socnavgym_warehouse_lifecycle/geometry.py,"current backend adapter, fixture, frozen math, reader, audit or replay",42,693a35314cce682f00c91f6dfeebd5225851663410920cac393a66a7936df5a3
+experiments/social_navigation/navigation/socnavgym_warehouse_lifecycle/kernel.py,"current backend adapter, fixture, frozen math, reader, audit or replay",62,611a86973b6733473e7ff2a3abb2e8b7cc43173f3bc903d00c0a820d6b6d3aed
+experiments/social_navigation/navigation/socnavgym_warehouse_lifecycle/motion.py,"current backend adapter, fixture, frozen math, reader, audit or replay",56,bef8b4a8a527f2f5725d306f6844bb128099fbcbac977fa684c2188715afbe04
+experiments/social_navigation/navigation/socnavgym_warehouse_lifecycle/test_geometry.py,regression/contract test,16,9f3bfc6a44ba329695536b544d10dd86ff67ba815e4bf086395855ca40522e39
+experiments/social_navigation/navigation/trial.py,"current backend adapter, fixture, frozen math, reader, audit or replay",431,48b231fbc4f60260e919698f6d42a21df8ca76995919fa763ca5a67e6bdd3104
+experiments/social_navigation/navigation/validate_circle_contact.py,"current backend adapter, fixture, frozen math, reader, audit or replay",66,ea8df02730c8a13c2fd4b57c4d881f2a13491e2662ff83874408c6fb0c5b9f20
+experiments/social_navigation/navigation/validate_robot_orca.py,"current backend adapter, fixture, frozen math, reader, audit or replay",59,fd1b62b1ff67de8af1e564db0d8e5641ec7d4ed0d7d0d549a9a78c702e037943
+experiments/social_navigation/navigation/warehouse.launch.py,"current backend adapter, fixture, frozen math, reader, audit or replay",25,2f3f6e8d77518fc58a815d995242235c113cae908740720c29abb8e19b1bef86
+experiments/social_navigation/navigation/worker.py,"current backend adapter, fixture, frozen math, reader, audit or replay",107,ea255ef6d24fdbc7e78424cc606d5103c8e005ba86f3896faa041e6d0ecc723f
+experiments/social_navigation/perception/camera_height_ab/analyze.py,"current backend adapter, fixture, frozen math, reader, audit or replay",116,6ec1b1a94c2214ac612c58931a8723b8b7495bb08278ebe9b842e1d6ee564126
+experiments/social_navigation/perception/camera_height_ab/capture.py,"current backend adapter, fixture, frozen math, reader, audit or replay",133,e97bb9a23cd3a31eb03ef9566846e0c963c6cc929a136cbafac01175be71bd4d
+experiments/social_navigation/perception/camera_height_ab/fixture.py,"current backend adapter, fixture, frozen math, reader, audit or replay",70,f3eda45c2367ae75cb99a9335a7d2a46fa582323660f7e18afcfe3cd22a205db
+experiments/social_navigation/perception/camera_height_ab/freeze_actors.cc,"current backend adapter, fixture, frozen math, reader, audit or replay",42,88bdb87dace01e1a7b5f0ff4aec442e38edd6d608cec9b9b7ca6f9cd64ba7cfa
+experiments/social_navigation/perception/camera_height_ab/geometry.py,"current backend adapter, fixture, frozen math, reader, audit or replay",52,b04eec9361ead8c30bb9178f42faf26e8c1f0da3c2798e02071a66b4f6a65374
+experiments/social_navigation/perception/camera_height_ab/run.sh,"current backend adapter, fixture, frozen math, reader, audit or replay",11,c45c0a8c4c86ce98e264d48becc48185d1305e2dd643d20ab3ec2fa994471e0e
+experiments/social_navigation/perception/camera_height_ab/test_geometry.py,regression/contract test,51,dd07fd097b83cd2251cad79715fb7b250ee457ea2ff69b82db7956011cf93329
+experiments/social_navigation/perception/depth_identity_guard/audit.py,"current backend adapter, fixture, frozen math, reader, audit or replay",67,68991b70d9d2ba52676d8087c19c9f10c8a9234a920c3c09fe6f76746c4f1a54
+experiments/social_navigation/perception/depth_identity_guard/capture_audit.py,"current backend adapter, fixture, frozen math, reader, audit or replay",45,2f83874a810c2141619fae93b02e25a659a7ea3561d07cf8ca190a2ea400c53a
+experiments/social_navigation/perception/depth_identity_guard/evaluate.py,"current backend adapter, fixture, frozen math, reader, audit or replay",20,e77f8ed6658da88ea5954a12c6a471f39a8ec8f5fb3d3445e0576f5a32606507
+experiments/social_navigation/perception/depth_identity_guard/freeze.py,"current backend adapter, fixture, frozen math, reader, audit or replay",32,34cb9f85f71ffc9a0c8d3e53789b40a11aa3d86d30d20a2bd8eb7b5b49886bf4
+experiments/social_navigation/perception/depth_identity_guard/guard_tracker.py,"current backend adapter, fixture, frozen math, reader, audit or replay",111,43e34e41126bf9b8c2ea89e4d394cb12832dcbbbf04b49880846553592af7263
+experiments/social_navigation/perception/depth_identity_guard/replay.py,"current backend adapter, fixture, frozen math, reader, audit or replay",38,c4051c7c4d8bba885b90b5d7880032d96d558925e7ebc1aaaf3290d8bddcc697
+experiments/social_navigation/perception/depth_identity_guard/run.sh,"current backend adapter, fixture, frozen math, reader, audit or replay",10,bcf09d43b417bcd6edd060f88b4228b76678f99200ab2b05844d917ed750fd62
+experiments/social_navigation/perception/depth_identity_guard/test_guard.py,regression/contract test,82,c7e00d18d76be94445a59fad5deb6d7be52c977fce157c4f0e0f32695cb81ab5
+experiments/social_navigation/perception/depth_perception_corpus/capture.py,"current backend adapter, fixture, frozen math, reader, audit or replay",15,1640a5aee99400463acd0a119f53e5599309bb5ffc4fd387f88220c515c2e1ca
+experiments/social_navigation/perception/depth_perception_corpus/corpus_motion.cc,"current backend adapter, fixture, frozen math, reader, audit or replay",40,830796cb3bf808aa8281e6f1c00071dca1de8dda889e5dfcfff90ce561c123f4
+experiments/social_navigation/perception/depth_perception_corpus/examples/train_p003/loader.py,"current backend adapter, fixture, frozen math, reader, audit or replay",21,2f42ea0693f4e77250b9b66182d2a86af05c6a6192369e70775eddf1b28c169b
+experiments/social_navigation/perception/depth_perception_corpus/fixture.py,"current backend adapter, fixture, frozen math, reader, audit or replay",8,c3bb2274501ff70cfd592d85f7fc57bda64647422bf9564ed90c8e8490d0f54b
+experiments/social_navigation/perception/depth_perception_corpus/loader.py,"current backend adapter, fixture, frozen math, reader, audit or replay",21,2f42ea0693f4e77250b9b66182d2a86af05c6a6192369e70775eddf1b28c169b
+experiments/social_navigation/perception/depth_perception_corpus/preview.py,"current backend adapter, fixture, frozen math, reader, audit or replay",25,2d1345139291c72cb1731cc9d4f14cf99ea88b93b1efbc3eacbd45962d6fd6ee
+experiments/social_navigation/perception/depth_perception_corpus/run.sh,"current backend adapter, fixture, frozen math, reader, audit or replay",13,994775f28ccb9f0e223bdd0f4c13fe52a48bcd02f4d51be9612a965ed6481c43
+experiments/social_navigation/perception/depth_perception_corpus/test.py,regression/contract test,51,cea58320d3fbcb8e88207adb1f1fd3d7227f7c082bc5cb8243536c199f5c486a
+experiments/social_navigation/perception/depth_person_classifier/artifacts/features.py,"current backend adapter, fixture, frozen math, reader, audit or replay",13,237868f375ee6fe0c34d0a13cfcf1995f5daa133c67599656b2be726c9e099f6
+experiments/social_navigation/perception/depth_person_classifier/artifacts/inference.py,"current backend adapter, fixture, frozen math, reader, audit or replay",13,5e92b561b53a22c8087eef4d7535d68fd1b69062085b3d9cccd34e0c52af6fc1
+experiments/social_navigation/perception/depth_person_classifier/artifacts/predict.py,"current backend adapter, fixture, frozen math, reader, audit or replay",11,aff7ee18543d2ab0ff0fd975ffdcbb11c4c681ee71dd8c7a651bbdbc3b6a6637
+experiments/social_navigation/perception/depth_person_classifier/data.py,"current backend adapter, fixture, frozen math, reader, audit or replay",26,b58f36c05f84cab1f20cbf9a9fd5272ff994fb377611e88bf0c6eb9124e39e72
+experiments/social_navigation/perception/depth_person_classifier/evaluate.py,"current backend adapter, fixture, frozen math, reader, audit or replay",23,b3c2cb22899e2766271b1948b420c4e668991613aff0eac14207a5e1fa5a3cd0
+experiments/social_navigation/perception/depth_person_classifier/features.py,"current backend adapter, fixture, frozen math, reader, audit or replay",13,237868f375ee6fe0c34d0a13cfcf1995f5daa133c67599656b2be726c9e099f6
+experiments/social_navigation/perception/depth_person_classifier/inference.py,"current backend adapter, fixture, frozen math, reader, audit or replay",13,5e92b561b53a22c8087eef4d7535d68fd1b69062085b3d9cccd34e0c52af6fc1
+experiments/social_navigation/perception/depth_person_classifier/integrity.py,"current backend adapter, fixture, frozen math, reader, audit or replay",23,459911831c4e3518ed277e24bc1b481713f709c85d1855b40af4477344e0e7a8
+experiments/social_navigation/perception/depth_person_classifier/metrics.py,"current backend adapter, fixture, frozen math, reader, audit or replay",14,a2ced5329d97038a44cef87fca4b181332b6bf424a8b398ab67feaf9d366bcdf
+experiments/social_navigation/perception/depth_person_classifier/model.py,"current backend adapter, fixture, frozen math, reader, audit or replay",16,8172c9adbd22f26268c75735926138f1f01ea68a68b7c6d1b811085ef74b3876
+experiments/social_navigation/perception/depth_person_classifier/run.sh,"current backend adapter, fixture, frozen math, reader, audit or replay",11,f68367545e14aec242d159d1d1759ba8af879e3ba9024b8859b34a03fa756b28
+experiments/social_navigation/perception/depth_person_classifier/test.py,regression/contract test,48,d9a279283c66d255a14d787810f9c4ea95939952da117663ce0067fd063de489
+experiments/social_navigation/perception/depth_person_classifier/train.py,"current backend adapter, fixture, frozen math, reader, audit or replay",35,8a1c565ce2cae4eeed7a3e7a74426ea1cce262d498e08af710d54f5a484d52d8
+experiments/social_navigation/perception/depth_proxy_ablation/analyze.py,"current backend adapter, fixture, frozen math, reader, audit or replay",115,455a824d0fb1f8184aa4d98df733df7a0292a2136566640fbd4169aa810b628a
+experiments/social_navigation/perception/depth_proxy_ablation/audit.py,"current backend adapter, fixture, frozen math, reader, audit or replay",71,acba324ea8c000607ff7cd0b0c91fca3e4af2d0dc97b491d36a4cba322e87673
+experiments/social_navigation/perception/depth_proxy_ablation/capture.py,"current backend adapter, fixture, frozen math, reader, audit or replay",134,b1d9094511377855015fddd8f03d34cab3e26555f2e78e95cea986e2719f38b2
+experiments/social_navigation/perception/depth_proxy_ablation/depth_proxy_filter.cc,"current backend adapter, fixture, frozen math, reader, audit or replay",73,d89b1e17930df29471d10548a8ac5f9e0e80a6acf4b10f64c431cf3ae41fb1c4
+experiments/social_navigation/perception/depth_proxy_ablation/fixture.py,"current backend adapter, fixture, frozen math, reader, audit or replay",81,d8e2add391bee45667785fc6ecddf94841b4884247156a94481bd60f532f74e8
+experiments/social_navigation/perception/depth_proxy_ablation/run.sh,"current backend adapter, fixture, frozen math, reader, audit or replay",14,f652e2e4360d634347516b1675c5f8a9024f4ee1dbecf0286be82880b27b28e2
+experiments/social_navigation/perception/depth_proxy_ablation/test_fixture.py,regression/contract test,51,da396bc4dc1379b7c7d467828bc6c7e2998cc9c6279333ae152c5a86466582e9
+experiments/social_navigation/perception/depth_seed43_validation/audit.py,"current backend adapter, fixture, frozen math, reader, audit or replay",70,266f78dabad38aab8b07d87950e7385d72928dbb9485176de7007edecf4c694d
+experiments/social_navigation/perception/depth_seed43_validation/capture_audit.py,"current backend adapter, fixture, frozen math, reader, audit or replay",69,0211bf21d61134497a7bf73dd8840161cfd688d04e5acd9a19e957fc043d16d4
+experiments/social_navigation/perception/depth_seed43_validation/run.sh,"current backend adapter, fixture, frozen math, reader, audit or replay",9,ae7b7a14189714987f355f7b03cf81c54e3aa762ad56059bd872251aecf059e6
+experiments/social_navigation/perception/depth_surface_guard/audit.py,"current backend adapter, fixture, frozen math, reader, audit or replay",43,c99a15288499e1d372d949c9c4361de640b886f7a1f7a446328ce6fd8730e42e
+experiments/social_navigation/perception/depth_surface_guard/capture.py,"current backend adapter, fixture, frozen math, reader, audit or replay",14,e4c52c7c6e1b4d4eb53979ef6c968a09562a41e1fb11f35df55ce45321af8cbd
+experiments/social_navigation/perception/depth_surface_guard/fixture.py,"current backend adapter, fixture, frozen math, reader, audit or replay",9,3ea848777c5efa8f2e9e50cac980e40f456979c829431fa8113929008332a0c3
+experiments/social_navigation/perception/depth_surface_guard/run.sh,"current backend adapter, fixture, frozen math, reader, audit or replay",13,cc9d59925de978321680d231bb93e450b797f722bbe851000e67dcdd7a86f2ae
+experiments/social_navigation/perception/depth_surface_guard/surface.py,"current backend adapter, fixture, frozen math, reader, audit or replay",33,4412556b2d70e5b6ea9c0d4ef8e28721a48cae33d383a12ded304eb2b61f7a1a
+experiments/social_navigation/perception/depth_surface_guard/surface_runner.py,"current backend adapter, fixture, frozen math, reader, audit or replay",39,152583c9fc1eae22afb902e8d1011b67b38268321a6863f75e96b7496d1f98e5
+experiments/social_navigation/perception/depth_surface_guard/test.py,regression/contract test,20,00bee5b4e6d0b39f30e8e15e9b0b8718c59a788ea2ee55259d785fb7dcc94614
+experiments/social_navigation/perception/depth_track_refinement/audit.py,"current backend adapter, fixture, frozen math, reader, audit or replay",74,4becf8db9782cc98c03851f20b8b3dabd36fe14c45d7d157825d303ff9f5636a
+experiments/social_navigation/perception/depth_track_refinement/evaluate.py,"current backend adapter, fixture, frozen math, reader, audit or replay",61,a8797bc49e24aad6fb5854a895af0a9f7fabcd26cc194c3c81d8bf5d8de8ceee
+experiments/social_navigation/perception/depth_track_refinement/freeze.py,"current backend adapter, fixture, frozen math, reader, audit or replay",35,98834cb480eef9755522899cd82f54b4faa9b15c48ac7c87fd7e55dff3d3a469
+experiments/social_navigation/perception/depth_track_refinement/refinement.py,"current backend adapter, fixture, frozen math, reader, audit or replay",89,4988dfcbb9e8754c5cb63b801479430d7bb2e59e5d2f7e7601e34634d38758db
+experiments/social_navigation/perception/depth_track_refinement/replay.py,"current backend adapter, fixture, frozen math, reader, audit or replay",48,2d0bb2f6a1b5690a8cb42a4c86a8c9d46bb0db647f57487e79f772e0f7134cac
+experiments/social_navigation/perception/depth_track_refinement/run.sh,"current backend adapter, fixture, frozen math, reader, audit or replay",9,86879542bf395f30dfd110e36739c34b67d3780e0c352fe6a3c48a970df4693a
+experiments/social_navigation/perception/depth_track_refinement/test_refinement.py,regression/contract test,79,84792141c529c367928a940c198babd9c01e4f4f85952353ec5656eb7e7e94b7
+experiments/social_navigation/perception/depth_visibility_pilot/analyze.py,"current backend adapter, fixture, frozen math, reader, audit or replay",94,cdf87168c00c64d9e3b1d2d901ded8d62be72d3f10996de83cbef71c2f702847
+experiments/social_navigation/perception/depth_visibility_pilot/audit.py,"current backend adapter, fixture, frozen math, reader, audit or replay",60,07f0154995f7f93ba19bf64fa6086acd56bdafa044d480d184a2614d174374fd
+experiments/social_navigation/perception/depth_visibility_pilot/capture.py,"current backend adapter, fixture, frozen math, reader, audit or replay",14,230cc966a7228a32da593020a9295d5754fed8311ab6a965f36a08f1455e6906
+experiments/social_navigation/perception/depth_visibility_pilot/fixture.py,"current backend adapter, fixture, frozen math, reader, audit or replay",7,6206157b6ac4bfd2ddbdaec0fff45a13f60bd75cc79fcdaf6f66c8161e26c017
+experiments/social_navigation/perception/depth_visibility_pilot/labels.py,"current backend adapter, fixture, frozen math, reader, audit or replay",21,fa6a94dcf23b1909de2d5756d96d733ff7cc4d6ca5a9309f55b48e21eec2cc38
+experiments/social_navigation/perception/depth_visibility_pilot/run.sh,"current backend adapter, fixture, frozen math, reader, audit or replay",13,1299688fd6c7beb02e30f5e59d22900a0ee843eb895b23d7cf2097f3332e6e2f
+experiments/social_navigation/perception/depth_visibility_pilot/test.py,regression/contract test,36,2a6659f74269182a662b0185d70bbe76a831d26a17619064c4d27683b0ec23a2
+experiments/social_navigation/perception/depth_visibility_pilot/visibility_filter.cc,"current backend adapter, fixture, frozen math, reader, audit or replay",67,8a0bbacb7e2f5e7d14cdf2adf6c7ab107fc36fa7e7a3c39db5780b623afa8790
+experiments/social_navigation/perception/lidar_person_pilot/audit.py,"current backend adapter, fixture, frozen math, reader, audit or replay",63,88b31d822d6141528b363f45b9293db135ebe9bd96ee0082f245420ed4b44f51
+experiments/social_navigation/perception/lidar_person_pilot/capture.py,"current backend adapter, fixture, frozen math, reader, audit or replay",14,1ef43bf43e33a135f7983b96cf0269063ff17bedd4edfa27e04d0fd09a5594f2
+experiments/social_navigation/perception/lidar_person_pilot/download_checkpoint.py,"current backend adapter, fixture, frozen math, reader, audit or replay",11,861f9f7c8c53268501ec31a277eb8040ac3655f65e9f72bf5ed40c4155aa0761
+experiments/social_navigation/perception/lidar_person_pilot/evaluate.py,"current backend adapter, fixture, frozen math, reader, audit or replay",51,6aaf1ae308655ebce14e7fa177e0aec7d26239c2af72b2b011806926b9cf9533
+experiments/social_navigation/perception/lidar_person_pilot/fixture.py,"current backend adapter, fixture, frozen math, reader, audit or replay",7,b93bebbbd1653d19cf590eab9d9fd2c3db7dab18130f91464fe6b2f57d58a897
+experiments/social_navigation/perception/lidar_person_pilot/infer.py,"current backend adapter, fixture, frozen math, reader, audit or replay",54,70abcf6bcec8dc968144f7ce1f0f3e4811940591b7c0bae0dc13795d6df90c37
+experiments/social_navigation/perception/lidar_person_pilot/run.sh,"current backend adapter, fixture, frozen math, reader, audit or replay",13,cb1f0acfd3f00e611e0486fb0a705b5a7c6f96001ef6bee4748d3e307b27ddb3
+experiments/social_navigation/perception/lidar_person_pilot/sensor_adapter.py,"current backend adapter, fixture, frozen math, reader, audit or replay",26,d1c8e0fad83d899a9c15ba5e0b81e55cd422621f342181e806b720f5303e4502
+experiments/social_navigation/perception/lidar_person_pilot/smoke.py,"current backend adapter, fixture, frozen math, reader, audit or replay",19,c3e665c3144762d49f753eef9abea0a82baf7cff2c9257aa64f404a3d7dd9b7e
+experiments/social_navigation/perception/lidar_person_pilot/test.py,regression/contract test,32,869c219a8fd127c27feb4f1a868a252172846d57761527dd2369001155cd5ccd
+experiments/social_navigation/replay/wm_dataset_replay/replay.cc,"current backend adapter, fixture, frozen math, reader, audit or replay",67,44c15e3b885675851beb23a03f4839cb3c9f7d60004f455ba57a790773f849db
+experiments/social_navigation/replay/wm_dataset_replay/run.py,"current backend adapter, fixture, frozen math, reader, audit or replay",67,5be6616f39e920dc9f5d7ed978dbf1761b99ce1c2dbb07b2cf5d53af40c8ef36
+experiments/social_navigation/replay/wm_dataset_replay/serve_recording.py,"current backend adapter, fixture, frozen math, reader, audit or replay",15,447750196c1e2edd84b76fcd702a13b3b54ef7c5a541271930fdde0a0dd8cc38
+experiments/social_navigation/replay/wm_dataset_replay/verify.py,"current backend adapter, fixture, frozen math, reader, audit or replay",26,2e94c14afd539aad8cfd8649c926fa3f6c0322b7a06d09a01e40744ea431b2e5
+experiments/social_navigation/round2/run.sh,"current backend adapter, fixture, frozen math, reader, audit or replay",12,5ee7f6ca0ca27d1a400bf64fd5e8a51fddff0e1ab1fd76e619a4daf7d123efc9
+experiments/social_navigation/round3/run.sh,"current backend adapter, fixture, frozen math, reader, audit or replay",15,08945dc8c92cde4de8d55f8eb9387db4296bb16029b61958c15b3f4aaea1d8bd
+experiments/social_navigation/run.sh,"current backend adapter, fixture, frozen math, reader, audit or replay",20,218b9185375ef2b807f160304e81efaf7cb967342ea270dfc7cae9a8dffd9a2d
+experiments/social_navigation/setup_socnavgym.sh,"current backend adapter, fixture, frozen math, reader, audit or replay",36,40592a7f852cfabc601fd7bb542733e83c81069d9bbfaf5a62bf1afcb3791a11
+experiments/social_navigation/warehouse/warehouse.launch.py,"current backend adapter, fixture, frozen math, reader, audit or replay",24,ef02835186d843362a75b240dcbf8a40a8b400cd516f5d7336b3ff911e4feaca
+experiments/trajectory_risk_v0/run_all_scenarios.sh,maintained V2 trajectory collector/scenario pipeline,20,ff59ec844ba10a1e60e8c0b53a29a68a6eaf8e11fc0fce86e7c987241fd18bd8
+experiments/trajectory_risk_v0/run_long_traverse.sh,maintained V2 trajectory collector/scenario pipeline,39,78099300e9abcdb1705ccbc6e84c45b9e11f7a184ae91f85ec57ca15681c4ced
+experiments/trajectory_risk_v0/run_scenario.sh,maintained V2 trajectory collector/scenario pipeline,17,aeadf26acb2c1b32419e3e0028f95a6e78163184d70386b465259950decb3753
+experiments/trajectory_risk_v0/run_v2_all.sh,maintained V2 trajectory collector/scenario pipeline,249,3735884a080b4a81b90b1e7fead4e6dd2df3a370c91129fe6116b7547ab1d975
+experiments/trajectory_risk_v0/scripts/collect_dataset_scenarios.py,maintained V2 trajectory collector/scenario pipeline,646,a496701f6838c54a43a61171386fa4a2a70a5f02b7f28a716655c68b8a16028e
+experiments/trajectory_risk_v0/scripts/collect_episode_v2.py,maintained V2 trajectory collector/scenario pipeline,2457,3438a22fd0ce74f8dde76ff51b655e4a2891e4d91c139ed88b37289a7fae059b
+experiments/trajectory_risk_v0/scripts/generate_scenarios_v2.py,maintained V2 trajectory collector/scenario pipeline,380,cfed1b17f36135359903a71b43f3d505f3a66f0d7391de868d9ac8f64d226c82
+experiments/trajectory_risk_v0/scripts/human_scenario_manager.py,maintained V2 trajectory collector/scenario pipeline,1143,245eca118c305ff69fcf40a1970d7970e821f0d5b0acfbdb053542dfe9c7479d
+experiments/trajectory_risk_v0/scripts/log_frame_csv.py,maintained V2 trajectory collector/scenario pipeline,54,32562e2e76afc1c9ff6eed163100709ad29370a39f8ceacf85dcf5ef274d484e
+experiments/trajectory_risk_v0/scripts/mine_hard_negatives.py,maintained V2 trajectory collector/scenario pipeline,14,4d20ea83c6b6d4c386e90c9f7e05e291cff3a0897f1b4a805d3deb47aa3d7232
+experiments/trajectory_risk_v0/scripts/publish_gz_scenario.py,maintained V2 trajectory collector/scenario pipeline,10,79b8121dec5185c81977347263345a82aea84ce01dfae74c385e4dd2dec7574d
+experiments/trajectory_risk_v0/scripts/qa_gate_c5.py,maintained V2 trajectory collector/scenario pipeline,273,f1c113860b0b4406d3978d1c1d95a31e5af056cdd11a266650dbb3519c52d457
+install_dependencies.sh,public CLI or compatibility/diagnostic entrypoint,2,e3049c2421e88870090017d1ad1bde683e7912185924b7f53bc06dcc83eb5841
+python/dynamuhsim/__init__.py,"shared runtime, data, analysis or artifact implementation",1,7eb1d8f64ab30371b46729aab1f468ce3ec8d9f0454d3ab4f3b792cd7fd02d18
+python/dynamuhsim/analysis/__init__.py,"shared runtime, data, analysis or artifact implementation",1,8197689375e99bd17f36d48b131eca34eef04a6c4c549ceb50846d690ffc329e
+python/dynamuhsim/analysis/capture.py,"shared runtime, data, analysis or artifact implementation",149,1f888fc3e527131467795f101e342ca48842ef9a828e570e13f297057d509466
+python/dynamuhsim/analysis/evidence.py,"shared runtime, data, analysis or artifact implementation",111,5decf00bc197379571c716cf0eff50fa058faea6f2abe66ec883c4acb3324699
+python/dynamuhsim/analysis/geometry.py,"shared runtime, data, analysis or artifact implementation",19,39544085e9ec5ea7ecefe8c2d6a8ec759d285385dcded08bc8b95d84fda8bcea
+python/dynamuhsim/analysis/nav2.py,"shared runtime, data, analysis or artifact implementation",191,ba0e57e4e095fc6fdcd20e4739422f748d6ebf06a6ec1b77fc05302658c4d9fb
+python/dynamuhsim/analysis/perception_corpus.py,"shared runtime, data, analysis or artifact implementation",67,eccb9ced573dd89a55cea37d9cdd15684a8a4392dcaef8f6efbc5567ff9c1bf0
+python/dynamuhsim/analysis/timeline.py,"shared runtime, data, analysis or artifact implementation",41,b63d293d45778c68baa83e0aac1b8e510f976a4fd969e890fbf1e86f282f1f0b
+python/dynamuhsim/analysis/warehouse.py,"shared runtime, data, analysis or artifact implementation",119,31afc701f1a0061196f7eb253e1487d17c216043198880c6e81f12a2d91e08a9
+python/dynamuhsim/analysis/wm_dataset.py,"shared runtime, data, analysis or artifact implementation",100,6a099372a782a5c18d02785d69c2f9246461d9ab5ca0095018021c7728d6af4d
+python/dynamuhsim/artifacts/__init__.py,"shared runtime, data, analysis or artifact implementation",1,13c5796370d6dbd69821cf4f41a09fad0291f5cfd7671a50f4afc011f0b3347f
+python/dynamuhsim/artifacts/catalog.py,"shared runtime, data, analysis or artifact implementation",287,7880c8874e40037225a9be3a65852100803ac52f7d9b3080243bbd2b64240948
+python/dynamuhsim/artifacts/history.py,"shared runtime, data, analysis or artifact implementation",298,51f2b483f5c0e903db86bc9fd74aead5b8f8456130ef6409ed0dd74c63f71e37
+python/dynamuhsim/artifacts/hydrate.py,"shared runtime, data, analysis or artifact implementation",119,aca7b4cc56e031f6415506a6c65208f3d632a424c478be75629397070e4165b9
+python/dynamuhsim/artifacts/layout.py,"shared runtime, data, analysis or artifact implementation",76,6b7dc9206bd7e747fe1d481a57e756fe7410ebc434c41fa3b1e82f02ef4c0302
+python/dynamuhsim/artifacts/report_media.py,"shared runtime, data, analysis or artifact implementation",123,a5e71a5064a74094cafe99dccee19500d86a55fb95b5c34fe3b9fe7dd545f0c7
+python/dynamuhsim/artifacts/report_plan.py,"shared runtime, data, analysis or artifact implementation",206,82f30a782fffabcd9315a2cd6c4fa64fb9ed7dfd0555c09122de54ee3859ddf0
+python/dynamuhsim/artifacts/store.py,"shared runtime, data, analysis or artifact implementation",316,c853a931c799a103430842c0179661c4dbfe3dca7769cc22d74f1cae0623c173
+python/dynamuhsim/controls/__init__.py,"shared runtime, data, analysis or artifact implementation",1,5c3edd1ce4812d233e5a93dff1b5fc470fc18f1ca8a2b4fb616b3de17c40921e
+python/dynamuhsim/controls/bundle.py,"shared runtime, data, analysis or artifact implementation",126,531628ebcb75b719f098d87c1f74b1142dbdacd853d1e923e4b9a844466f2d5c
+python/dynamuhsim/datasets/__init__.py,"shared runtime, data, analysis or artifact implementation",13,600c6ef7656d903246ad913cb1950b5f9471b061008e8a79c902c449a7c1c4ef
+python/dynamuhsim/datasets/normalization.py,"shared runtime, data, analysis or artifact implementation",85,1bee12f29d587a09e08d0a44388bc8767131b90e0bee7ddb101e9a03b347ef3e
+python/dynamuhsim/datasets/normalized_audit.py,"shared runtime, data, analysis or artifact implementation",130,fd4f0fcbba8e1c14d0d21ed96c2481c163968a0b22e80c5bb056e708917d5a85
+python/dynamuhsim/datasets/portable.py,"shared runtime, data, analysis or artifact implementation",47,5b07875e1a7f3b514bdea719d4df9e51639faab19578061863c2c6129c1d5c13
+python/dynamuhsim/perception/__init__.py,"shared runtime, data, analysis or artifact implementation",1,5c3edd1ce4812d233e5a93dff1b5fc470fc18f1ca8a2b4fb616b3de17c40921e
+python/dynamuhsim/perception/corpus.py,"shared runtime, data, analysis or artifact implementation",35,c74bf553956f4fc87abdbed794a475fe5f612d84a3c72c75ed4f435c9413f9d3
+python/dynamuhsim/perception/depth_classifier.py,"shared runtime, data, analysis or artifact implementation",83,e6046980a3391fe5f65f1d5a615693530f99d1bf2884e230a587279078d33f6b
+python/dynamuhsim/runtime/__init__.py,"shared runtime, data, analysis or artifact implementation",1,271642e6401ed1f7a70256f1e167882717b21ababb498bc593a16e89597e2af1
+python/dynamuhsim/runtime/capture.py,"shared runtime, data, analysis or artifact implementation",223,f3f99384dfe9686859c0734af8fb0b3e5f54007009661b35a821fcbee8d366ae
+python/dynamuhsim/runtime/capture_recording.py,"shared runtime, data, analysis or artifact implementation",122,482b828e518b8ed007fdb1656b53e9363780c9b6d362ec065a192f00eebde2c2
+python/dynamuhsim/runtime/gl_probe.cpp,"shared runtime, data, analysis or artifact implementation",24,9a9f5478053290b51f18beed987563a7e3a2349f143e8fccd0ce41bf57ec5bab
+python/dynamuhsim/runtime/gpu.py,"shared runtime, data, analysis or artifact implementation",74,384e1e6ca012527524a92c37aab136588a36e5dc57a98ed6f9d58268648410e3
+python/dynamuhsim/runtime/native/check_friction.cc,"shared runtime, data, analysis or artifact implementation",20,df78cdfa3737d78a4d87d7e93d54e74fc48755693ab9d1f6d504a56a8e91bfc9
+python/dynamuhsim/runtime/nav2_trial.py,"shared runtime, data, analysis or artifact implementation",378,02eeec09a8ef282f3118fb326df0b6c1b9c7d223a95fd7707ee0075a471b7b52
+python/dynamuhsim/runtime/navigation.py,"shared runtime, data, analysis or artifact implementation",60,e80aa2a2999c0c371d7ec71471f7a0e37fbfaf01af4f831e3faafe59f6c536dd
+python/dynamuhsim/runtime/ordered_stop.py,"shared runtime, data, analysis or artifact implementation",43,003debbc1fc1c6b27184b875bec9864c4c3ede6b4144c197c32f60d0811dadd2
+python/dynamuhsim/runtime/profiles.py,"shared runtime, data, analysis or artifact implementation",82,e84d9977fce094f92eebaa63b042181cdff0e5b2d4e1a3d72f655b16ab40adb9
+python/dynamuhsim/runtime/recording.py,"shared runtime, data, analysis or artifact implementation",104,9e8f61a6ebb33c91a1b89ec3445fb126ab766eb7c5f1fe49c316316e019c3ee8
+python/dynamuhsim/runtime/sensor_capture.py,"shared runtime, data, analysis or artifact implementation",118,430c263bc714570bf4ee714f925af816ef6ad44e0a110283b9e90372d3bc3a0d
+python/dynamuhsim/runtime/shutdown.py,"shared runtime, data, analysis or artifact implementation",56,afb9e109a27bce6eaab2e1d9163ce753956047bd43661f99c194692792391359
+python/dynamuhsim/runtime/velocity_trial.py,"shared runtime, data, analysis or artifact implementation",176,c891f6409706f598780357ede4b8383470f2bd5549171a43e159ec66d40f94f7
+python/dynamuhsim/runtime/workers.py,"shared runtime, data, analysis or artifact implementation",27,5fd7b3e5fbcd6748e69f7c69d166555800c153aa11c2800d4c1b72934c14db09
+python/dynamuhsim/simulation/__init__.py,"shared runtime, data, analysis or artifact implementation",1,ebe222be60735f57681920035750e8bf18543201a1fbc5410e472c83fe62743b
+python/dynamuhsim/simulation/capture.py,"shared runtime, data, analysis or artifact implementation",98,5f5743665dd45ff47ababb91a665ddbb89afbe8c25d29ff92a525cfb2a465f6a
+python/dynamuhsim/simulation/capture_launch.py,"shared runtime, data, analysis or artifact implementation",51,4c35ded0616ee3bea1283e7059bc365fc41d4474f1fc9d45c24804a761c5b8e6
+python/dynamuhsim/simulation/sensor_fixture.py,"shared runtime, data, analysis or artifact implementation",68,fed687c3bada5ba9cf88fe1d49a234db1a2253a7e9216293b1c796516a42dfc4
+python/dynamuhsim/simulation/warehouse.py,"shared runtime, data, analysis or artifact implementation",65,b8202cb4cc2112f8b01130f15fe125752fc4b4fa53fe4f72cac426cafc4f51a6
+python/dynamuhsim/workspace.py,"shared runtime, data, analysis or artifact implementation",87,3b4f5783bfa1ae59e556ea1caa168b1d2c10f92cbfbbf9c81ed763eb12a70412
+record_obstacle.py,public CLI or compatibility/diagnostic entrypoint,109,b90470beac0a282e03179511f8d196163fe7379ec5a9cef9c32cc057ae96bcab
+run_baseline_trials.sh,public CLI or compatibility/diagnostic entrypoint,2,54a47a261cad01db6423879e06d8f1629c7072a1889134737c1f26ae28bfa5fc
+scan_front.py,public CLI or compatibility/diagnostic entrypoint,29,c53de0f93f160996a6f799ac5abbc9d80649053e2dc2fdb445be3dfffd6b003a
+scripts/analyze_baseline.py,public CLI or compatibility/diagnostic entrypoint,184,b7aab2d0963a7db45ef822dcdd1b028544aa5b783976aad24c701152f9020433
+scripts/evaluate_framework.py,public CLI or compatibility/diagnostic entrypoint,344,cd9283efd2f19b27390bdf38e4f177370d085be7de37f8afb53519e81966c16c
+scripts/install_dependencies.sh,public CLI or compatibility/diagnostic entrypoint,67,dcb778ac86385d4582d74e2357c2b8d96b1fb1f6715d9a4485e240cca6def89b
+scripts/run_baseline_trials.sh,public CLI or compatibility/diagnostic entrypoint,855,8acbeae08db597557133f9f3d6617f98b300c92cfccead313a9651e36a564a87
+scripts/setup_env.sh,public CLI or compatibility/diagnostic entrypoint,58,cc185766436360cd4b5b008fefa637b1580d897b912c4f4d8b51e1e9bacae926
+setup_env.sh,public CLI or compatibility/diagnostic entrypoint,2,d51731059c444774d9248838bb6025271b4ae27be4ef53afc3918e8490eaf471
+src/custom_corridor/launch/_dynamuhsim_nav2.py,installed launch/resource generator or School scenario/dataset runtime,59,8d225f228c929143799f865241488762b560d9dd974b187e181c8b3c4bdb4935
+src/custom_corridor/launch/_dynamuhsim_simulation.py,installed launch/resource generator or School scenario/dataset runtime,100,58e75906e5f7f81cede9f427296ea289b4c3ea5670da0b26635436d9fee2fd68
+src/custom_corridor/launch/corridor.launch.py,installed launch/resource generator or School scenario/dataset runtime,58,1974d42fddce5f28584ce0ad765d931ea9c7090996afce344e991d8736227799
+src/custom_corridor/launch/corridor_tb3.launch.py,installed launch/resource generator or School scenario/dataset runtime,434,c134c998a6ba25bf18a306f2267dd75cb8e0053a43c2bd41a1498ef3c3e91e10
+src/custom_corridor/launch/hospital_arena.launch.py,installed launch/resource generator or School scenario/dataset runtime,238,a703f7f5dd4b3c32e302ede3ce84d251ca7ac9b92c4601fae32a66bb1a4be097
+src/custom_corridor/launch/nav2_corridor.launch.py,installed launch/resource generator or School scenario/dataset runtime,172,107f91176ec6c346daaaaa69735ab63af94489244ccd065aaa7277d9e7a5e184
+src/custom_corridor/launch/nav2_hospital.launch.py,installed launch/resource generator or School scenario/dataset runtime,205,8fc8b702573698b914ed03cd6e37e436c694b3f151263ec5fcb1ecce5398652e
+src/custom_corridor/launch/publish_episode_initial_pose.py,installed launch/resource generator or School scenario/dataset runtime,115,1b54e51430bfa21e410891c3e8b1b55cec604683abf3fd3b6e9eb968ebd89728
+src/custom_corridor/scripts/d435i_viewer.py,installed launch/resource generator or School scenario/dataset runtime,334,7295a4dd1fae7d121f9030bc7fe8e0023edd19fce758e98e69e52b7531ac15aa
+src/custom_corridor/scripts/generate_corridors.py,installed launch/resource generator or School scenario/dataset runtime,175,f321e63489c58f9be08e7ef3e3d56119cdc5174a689289d314db114918b2f727
+src/custom_corridor/scripts/generate_randomized_mecanum_sdf.py,installed launch/resource generator or School scenario/dataset runtime,506,45fe29be59800f031020d12f65dcde465cac0ac2198912414fe0432d94ea51e7
+src/custom_corridor/scripts/goal_pose_bridge.py,installed launch/resource generator or School scenario/dataset runtime,88,f8fd9944984477c0260baf068cd58596cb72071440a0b1b36280ab0ac605d297
+src/custom_corridor/scripts/hospital_auto_route.py,installed launch/resource generator or School scenario/dataset runtime,98,f3174e09764064c0ad1f041d6ea72a3c24a2788fbd298a15407d18b60f9b6a99
+src/custom_corridor/worlds/hospital/generate_hospital.py,installed launch/resource generator or School scenario/dataset runtime,1387,c2b8775690f114a16831f9af7b44de1522eaa2b8a850299d44c93425347cf257
+src/custom_corridor/worlds/hospital/generate_hospital_map.py,installed launch/resource generator or School scenario/dataset runtime,69,24cbe68503e403f2a7147fa7cbb4d2f0e6efa5929c520442c6977b1bf4cace4b
+src/custom_corridor/worlds/school_arena/demo_1/collision_safe_pose_applier.py,installed launch/resource generator or School scenario/dataset runtime,196,c6c216b8d45a417e87e90313b1cd78ed935baaa3bd225419427273384d1c61ee
+src/custom_corridor/worlds/school_arena/demo_1/dataset_production/__init__.py,installed launch/resource generator or School scenario/dataset runtime,1,94cfcfdd2e0cbfa43a00c0bb61e2b99f5a278bed34050c325eaa1df791879c70
+src/custom_corridor/worlds/school_arena/demo_1/dataset_production/audit.py,installed launch/resource generator or School scenario/dataset runtime,147,e2aa1d2a8ee405c0a043542d8f1d869ee7a3a679fe9df698b5afe9f8283b59a7
+src/custom_corridor/worlds/school_arena/demo_1/dataset_production/balance.py,installed launch/resource generator or School scenario/dataset runtime,64,a8c73d6ed4ce14d2659475832f9c37a8e5b324b4c1f4f1dbd8fb2cd96baaf34e
+src/custom_corridor/worlds/school_arena/demo_1/dataset_production/classification.py,installed launch/resource generator or School scenario/dataset runtime,34,9fe5ddf09d5239dc060c143078c1ba6bc68b61dfd3a0cc9ede4fd5f3f63b65e9
+src/custom_corridor/worlds/school_arena/demo_1/dataset_production/freeze.py,installed launch/resource generator or School scenario/dataset runtime,133,38b446fbeb9fcb2f46f8e669aac906ee48858aeaaf673c6f818b8fd75c461528
+src/custom_corridor/worlds/school_arena/demo_1/dataset_production/integrity.py,installed launch/resource generator or School scenario/dataset runtime,160,b5bf53ffb4653e4dc7d01fd01bed65af746dc0b3ad964caa9c3ee895a9f87e64
+src/custom_corridor/worlds/school_arena/demo_1/dataset_production/plan.py,installed launch/resource generator or School scenario/dataset runtime,217,e2cbe380ad077daf8c3a9ae063e813e23f2e261f4bb2e8f9cc91f4314ccb44ce
+src/custom_corridor/worlds/school_arena/demo_1/dataset_production/prepare.py,installed launch/resource generator or School scenario/dataset runtime,50,2a93bf29437744b1501160445f982f62f1cdf63517406a854d3d9b611490df26
+src/custom_corridor/worlds/school_arena/demo_1/dataset_production/runner.py,installed launch/resource generator or School scenario/dataset runtime,61,cfee2e236ed0ba8e2d5456537d5f47ca3b06587a7ff9a4d892a74039ffdcffc7
+src/custom_corridor/worlds/school_arena/demo_1/dataset_production/runtime_backend.py,installed launch/resource generator or School scenario/dataset runtime,258,ac518e5166a0a6289101de58892198b970dafd3f917cd782518ccc1d271974f9
+src/custom_corridor/worlds/school_arena/demo_1/dataset_production/service_preflight.py,installed launch/resource generator or School scenario/dataset runtime,18,a2c18aecaa0f7a72ef80d0f605ef2ce1a9ab490c1a44386aac34d5af8f39b717
+src/custom_corridor/worlds/school_arena/demo_1/dataset_production/tests/test_audit.py,regression/contract test,35,52f1e98911a205537c3a4151a5b115af786447cb8c5c141b032703486d2d3b29
+src/custom_corridor/worlds/school_arena/demo_1/dataset_production/tests/test_balance.py,regression/contract test,30,a5e7ca0ff6237cc347284635ace9e6025079e75df7d8cb85878066714bc793f4
+src/custom_corridor/worlds/school_arena/demo_1/dataset_production/tests/test_classification.py,regression/contract test,30,fdbda5c8e4cc503e8277a868de3c4dc735e1023550c53add8ad3543a8acf7788
+src/custom_corridor/worlds/school_arena/demo_1/dataset_production/tests/test_freeze.py,regression/contract test,50,1a76ee310d9c4869f17950a194fda568f7a59200815698e18fef9669dd3958cc
+src/custom_corridor/worlds/school_arena/demo_1/dataset_production/tests/test_plan.py,regression/contract test,60,6c6c24cd43c5e090b5f013c492bb522bece52166b744cda25b04e8bb6ecabe7b
+src/custom_corridor/worlds/school_arena/demo_1/dataset_production/tests/test_prepare.py,regression/contract test,29,f798e49ae5c26763ca3ca55b1ab6d140c3a18f221f2692b4eb58e1c39d3d1885
+src/custom_corridor/worlds/school_arena/demo_1/dataset_production/tests/test_runner.py,regression/contract test,43,792dbd48be149d0b65f7b0e26b4abd0e1a16b94323df15d434400e11bb745996
+src/custom_corridor/worlds/school_arena/demo_1/dataset_runner/__init__.py,installed launch/resource generator or School scenario/dataset runtime,22,101e2b3a9e9de2429c0b2eec4850fed51300330ae6d7274b60f08555fa35ae3e
+src/custom_corridor/worlds/school_arena/demo_1/dataset_runner/episode_loader.py,installed launch/resource generator or School scenario/dataset runtime,136,b6d75e45a8f4d40a9821644fc83ec0ff0d0d0465d63c945aa21af340a5bdc77e
+src/custom_corridor/worlds/school_arena/demo_1/dataset_runner/episode_monitor.py,installed launch/resource generator or School scenario/dataset runtime,236,bd3eff9ab534323aeb12d905d558712d5498fd86f063bdd4f0d8bb12aeb1373a
+src/custom_corridor/worlds/school_arena/demo_1/dataset_runner/episode_runner.py,installed launch/resource generator or School scenario/dataset runtime,213,381d703374434193eb645d49b0e20f551c7417f176a55b1d75c1333aad9a013f
+src/custom_corridor/worlds/school_arena/demo_1/dataset_runner/episode_types.py,installed launch/resource generator or School scenario/dataset runtime,95,ba56c449d9c94da543c4fa805df9c474dc405f538b061ec9eea7e3d794ccbd8b
+src/custom_corridor/worlds/school_arena/demo_1/dataset_runner/hunav_container_probe.py,installed launch/resource generator or School scenario/dataset runtime,103,284d1128c38c015b1ef7a30a53fb2adebb9ff56e6d8368528b8854c30ef0054e
+src/custom_corridor/worlds/school_arena/demo_1/dataset_runner/hunav_manager.py,installed launch/resource generator or School scenario/dataset runtime,470,f0c301dcbb018a267cb248b71a7edb42e4086755a46e5cdde29a01240c959c8f
+src/custom_corridor/worlds/school_arena/demo_1/dataset_runner/nav2_manager.py,installed launch/resource generator or School scenario/dataset runtime,331,cea778ad74162fb3d8fef3665aa15df59fa2fdbb4c7ccf8b833506bf5953bcaa
+src/custom_corridor/worlds/school_arena/demo_1/dataset_runner/readiness_checker.py,installed launch/resource generator or School scenario/dataset runtime,281,5ab311965f9b90ab7b7011bd75350c7e99ca847df88ff0b9d49b115c55e96b1e
+src/custom_corridor/worlds/school_arena/demo_1/dataset_runner/scripts/smoke_hunav.py,installed launch/resource generator or School scenario/dataset runtime,42,6aeb2dc61e3aed63fc0cf7d8e20702f69119d27af6ead12c59987f879c7d5da8
+src/custom_corridor/worlds/school_arena/demo_1/dataset_runner/scripts/smoke_nav2.py,installed launch/resource generator or School scenario/dataset runtime,60,53dd10071697a4f2d2581b814eaa591d17291da7867df35230c99efb5f600242
+src/custom_corridor/worlds/school_arena/demo_1/dataset_runner/simulator_manager.py,installed launch/resource generator or School scenario/dataset runtime,319,2192b87fa8091fd10aff2c47ad8aa870c4ff92b25245c490a81974d177e13b74
+src/custom_corridor/worlds/school_arena/demo_1/dataset_runner/tests/test_episode_monitor.py,regression/contract test,217,6b3d26b98fa122975d898d7ee349ecdc5fe113313f7fa18e6ea6f0b9db8c3c1e
+src/custom_corridor/worlds/school_arena/demo_1/dataset_runner/tests/test_episode_runner.py,regression/contract test,315,f663d6bd670a2f26e8965fa574f77b800a66c942f5cd5d030273c6a67c3b5917
+src/custom_corridor/worlds/school_arena/demo_1/dataset_runner/tests/test_hunav_manager.py,regression/contract test,210,11628eac02e47721c1b7547513994779f321702de7dc7afd2b9130fe2c0a9c8e
+src/custom_corridor/worlds/school_arena/demo_1/dataset_runner/tests/test_hunav_preflight.py,regression/contract test,116,6322abc53ceb1c2d215ccb4442156553bd224aec5ed492dcfb2fdfe0a3321c20
+src/custom_corridor/worlds/school_arena/demo_1/dataset_runner/tests/test_nav2_manager.py,regression/contract test,151,615a1272daae32baab64dae424186b6cadead76b2796666f2cf7a6a0603b4b0c
+src/custom_corridor/worlds/school_arena/demo_1/dataset_runner/tests/test_readiness_checker.py,regression/contract test,138,6245ed65f36a5d712563de2cc9e0a094e5c69e0ead3855ecc28f9a6ac9f260c5
+src/custom_corridor/worlds/school_arena/demo_1/dataset_runner/tests/test_simulator_manager.py,regression/contract test,228,bdedfc9454f6462be24110d9fc797d279262b02bc8b1905cdccb4b343b672951
+src/custom_corridor/worlds/school_arena/demo_1/generate_demo.py,installed launch/resource generator or School scenario/dataset runtime,471,e468da81277df7258f2f04b8b6cfa5545016402a3ff43c05579cdbd23081c9a5
+src/custom_corridor/worlds/school_arena/demo_1/hunav_runtime_probe.py,installed launch/resource generator or School scenario/dataset runtime,64,3bf9d9362fe560462f04608a2aa4cd44ec69fa4847cf7654e43c2cf140409796
+src/custom_corridor/worlds/school_arena/demo_1/nav2_baseline_test.py,installed launch/resource generator or School scenario/dataset runtime,167,37198de58946570f4b262a4289f71d0c07b564fc7dbc05113e79270c9199a9f7
+src/custom_corridor/worlds/school_arena/demo_1/nav2_plan_clearance_test.py,installed launch/resource generator or School scenario/dataset runtime,96,c8f904c8192367d4b4360329dcd6b0107eef502b01a31ac325803d676616a823
+src/custom_corridor/worlds/school_arena/demo_1/pose_sync_monitor.py,installed launch/resource generator or School scenario/dataset runtime,161,98ac7100d2ab050793e3169760bb7b4154d37f74a0da54d62712b5c18fc1e5f1
+src/custom_corridor/worlds/school_arena/demo_1/produce_dataset_v1.py,installed launch/resource generator or School scenario/dataset runtime,167,5489b3fbea92014ae2e421389025c5472b89c430c71903f38dc02b9d025123e9
+src/custom_corridor/worlds/school_arena/demo_1/run_hunav_inside.sh,installed launch/resource generator or School scenario/dataset runtime,49,513bcffa7b5ffc6dcbdc6d4276a591ba115f7f1fd40dc7cf144259ff7ab24850
+src/custom_corridor/worlds/school_arena/demo_1/scenario_generator/install_episode.sh,installed launch/resource generator or School scenario/dataset runtime,56,41a914d4a03e4769b43c88376f0198837a79d6c3bdae647c99beb36f8fd9a2eb
+src/custom_corridor/worlds/school_arena/demo_1/scenario_generator/launch_episode.sh,installed launch/resource generator or School scenario/dataset runtime,48,28ce4eab7f7eb71c75273f6a9c0f9bceb08f0dcb058639ef705b33e046492645
+src/custom_corridor/worlds/school_arena/demo_1/scenario_generator/runtime_smoke_v1.py,installed launch/resource generator or School scenario/dataset runtime,100,f75198b899ae5a9363d09ddf2dc3185a788f34e569ea9348811b91350fdc29a7
+src/custom_corridor/worlds/school_arena/demo_1/scenario_generator/scenario_coverage.py,installed launch/resource generator or School scenario/dataset runtime,140,cb8be150f845386ff17ec2cbd66aac3897b602edd62eae829edfd7ec2aec6b91
+src/custom_corridor/worlds/school_arena/demo_1/scenario_generator/scenario_generator.py,installed launch/resource generator or School scenario/dataset runtime,7,39fff32cc3dcf84d96ef6d4b0f0bfff323af5901cdcfc4cf7e477520b629717c
+src/custom_corridor/worlds/school_arena/demo_1/scenario_generator/src/__init__.py,installed launch/resource generator or School scenario/dataset runtime,1,b5a8c73c4f9fd52bd67e3880b41a720f466e9872e4f5084dc4c9d54d86de13c3
+src/custom_corridor/worlds/school_arena/demo_1/scenario_generator/src/group_mixed.py,installed launch/resource generator or School scenario/dataset runtime,291,78b21de8e23e52fc13bc5a3c521da56be2d6095185a6be6387ff22d6981bf83b
+src/custom_corridor/worlds/school_arena/demo_1/scenario_generator/src/human_sampler.py,installed launch/resource generator or School scenario/dataset runtime,86,5440f9d150a74d4e77e3271d03b4e6acf13831229bf6c3d36a640ede32228758
+src/custom_corridor/worlds/school_arena/demo_1/scenario_generator/src/individual_temporal.py,installed launch/resource generator or School scenario/dataset runtime,225,35f097b9f593df427f3af51e6f232ee0cf5586d3b4f18deca51f7fa511bc472e
+src/custom_corridor/worlds/school_arena/demo_1/scenario_generator/src/models.py,installed launch/resource generator or School scenario/dataset runtime,123,e452663fb37f5f38e8b805ee77fceca17639cf507801344baa011ba1a261b029
+src/custom_corridor/worlds/school_arena/demo_1/scenario_generator/src/route_sampler.py,installed launch/resource generator or School scenario/dataset runtime,83,2d7752778253a0350adcdc3a55fd7ad76f8f8b4f4289d2da8ec91c749a66f99d
+src/custom_corridor/worlds/school_arena/demo_1/scenario_generator/src/scenario_generator.py,installed launch/resource generator or School scenario/dataset runtime,318,6dd28914da982006aa239df1ba45d860c7f78536f60384ca020bad0f6406b3ae
+src/custom_corridor/worlds/school_arena/demo_1/scenario_generator/src/validators.py,installed launch/resource generator or School scenario/dataset runtime,431,940fc2198e14fdbcbad6d34ccbdf31138a029fa64a75c28c10c3f3bbb15757bc
+src/custom_corridor/worlds/school_arena/demo_1/scenario_generator/src/zone_sampler.py,installed launch/resource generator or School scenario/dataset runtime,59,ef1a31423d406b0fede2b25b86eeb25bc17dedbd927fa752982214afee711711
+src/custom_corridor/worlds/school_arena/demo_1/scenario_generator/tests/test_coverage_v1.py,regression/contract test,100,2ae4ca0c4d84ffe54b311ac573999ee77b5584a652f1af4ff4d2683a0d66ac7b
+src/custom_corridor/worlds/school_arena/demo_1/scenario_generator/tests/test_generator.py,regression/contract test,78,8c2aaa5fb200758317c7494660748a7e46ba1c09d28b7b96c05f6edbe6d02bbc
+src/custom_corridor/worlds/school_arena/demo_1/scenario_generator/tests/test_models.py,regression/contract test,25,f38c1ef9e02bf03c475245d853a81c79ce076ee631130b451dc95a1c1952369f
+src/custom_corridor/worlds/school_arena/demo_1/scenario_generator/tests/test_sampling.py,regression/contract test,35,2c433e48c087c5f20a21f4d94ea890a6ccc1e02ffa6f07a269de85047d453f97
+src/custom_corridor/worlds/school_arena/demo_1/school_demo.launch.py,installed launch/resource generator or School scenario/dataset runtime,158,9646592bc7c2ebc34f509e17ad07d77cb84d7661bd2153bdc133ea713e71da4a
+src/custom_corridor/worlds/school_arena/demo_1/school_hunav_demo.launch.py,installed launch/resource generator or School scenario/dataset runtime,188,ce182c25495c807649e4a0473ffe1efecb94a82fe60a5ad0b65a4a8e427aa6ec
+src/custom_corridor/worlds/school_arena/demo_1/start_hunav_agents.sh,installed launch/resource generator or School scenario/dataset runtime,32,152a61af2877cb59f1639a599607773bc9fcfdae10958349ca724510ddf3b98c
+src/custom_corridor/worlds/school_arena/demo_1/validate_demo.py,installed launch/resource generator or School scenario/dataset runtime,203,0b9c1f91d6da3fdeb2fa6931ee7f118cb7a47314283a1ab57dcc8831fa4511ef
+src/custom_corridor/worlds/school_arena/demo_1/wait_for_robot_tf.py,installed launch/resource generator or School scenario/dataset runtime,48,75916593a11b63dced6aa4aa67f293eb7e076226523c62e19780a3be39f01914
+src/custom_corridor/worlds/school_arena/generate_school_world.py,installed launch/resource generator or School scenario/dataset runtime,336,675cad4ca6ce92727ef7be7251565e15b01b6adbd042e878edaa8655b23178e2
+src/custom_corridor/worlds/school_arena/hunav_gz8_pose_applier.py,installed launch/resource generator or School scenario/dataset runtime,110,ead358ea19ac88b8b9fabebfdad767cbb62fa7dcf1884b7a2fc287e2e29518ad
+src/custom_corridor/worlds/school_arena/hunav_gz8_school_bridge.py,installed launch/resource generator or School scenario/dataset runtime,685,1fc1170bdcf2ce4ce384af63e5c6074ec57f2cc1edda431b63c7f521cd9df0b2
+src/custom_corridor/worlds/school_arena/robot_camera_teleop.py,installed launch/resource generator or School scenario/dataset runtime,169,60f44eef920ba927548ea57c4b8ea36f5f2eaf922de4d5d0890e30aa1d0fc243
+src/custom_corridor/worlds/school_arena/run_robot_camera_teleop.sh,installed launch/resource generator or School scenario/dataset runtime,17,c50700db8f43ee1352c93f280363c3b044487c6fc6d008bc38cd48d6d030661b
+src/custom_corridor/worlds/school_arena/run_school_arena.sh,installed launch/resource generator or School scenario/dataset runtime,18,4aaaee6593897c00c97dae9d9fb9d6230f4cabd1d5594bd87d738008819acefb
+src/custom_corridor/worlds/school_arena/run_school_gz_bridge.sh,installed launch/resource generator or School scenario/dataset runtime,20,626e09b1e6ad7762f5cfc53a28ee97d8254e1290685f8027cf4eb2ee33d7d4e0
+src/custom_corridor/worlds/school_arena/run_school_teleop.sh,installed launch/resource generator or School scenario/dataset runtime,14,7be949b807c291d345636073d288e4247442647d8ea0e3917a06898978d9778e
+src/custom_corridor/worlds/school_arena/school_runtime.sh,installed launch/resource generator or School scenario/dataset runtime,15,7b2cbde684f38c13545ad02d000dba61ba244e4a077f36143dddda80e26050ad
+src/custom_corridor/worlds/school_arena/spawn_school_robot_camera.sh,installed launch/resource generator or School scenario/dataset runtime,14,4b89c21f47ffd34f556fb591d3c475a28befb15a1fe7b57f9ffabe23736969c9
+src/custom_corridor_plugins/include/custom_corridor_plugins/corridor_fsm.hpp,ROS/Gazebo native plugin or build dependency,42,5759d894f1fe0c4719116f2eb13f0d9279d2fc54eb47aeb70aca77db8cd473e7
+src/custom_corridor_plugins/include/custom_corridor_plugins/scenario_presets.hpp,ROS/Gazebo native plugin or build dependency,20,8afe6855be13fb1765314c6ff6cc684ddd0dc5d844410d8aa424532531aa13bd
+src/custom_corridor_plugins/include/custom_corridor_plugins/types.hpp,ROS/Gazebo native plugin or build dependency,187,fdf3c884fe8b60be4eaf047daf6d4909bbf898b4ed93dccc9c0238a3e0b94a43
+src/custom_corridor_plugins/src/corridor_fsm.cpp,ROS/Gazebo native plugin or build dependency,201,7f1db28a8474f14ec0bd58de326c1f80d07e4ece91d51d34a66d906a1bb6d26e
+src/custom_corridor_plugins/src/hospital_yielding_system.cc,ROS/Gazebo native plugin or build dependency,103,821213611f400bd3509b8e7cb252706769f5386cd58ec34eda1ad1798eeaacd9
+src/custom_corridor_plugins/src/multi_human_scenario_system.cpp,ROS/Gazebo native plugin or build dependency,1564,56f806d4ad3afbda1318f1f0c09de77d327fc7738f404de381d6477063be76fe
+src/custom_corridor_plugins/src/oscillating_obstacle_system.cc,ROS/Gazebo native plugin or build dependency,295,09b34bdc6992fb2f972667dac0752fc3f5dc8d0d60cd534a33455696815c0a68
+src/custom_corridor_plugins/src/rvo2_human_system.cpp,ROS/Gazebo native plugin or build dependency,1259,4d1af0a51e4a74ac48a287a2805bdd2d51a1880755d274100a6f1ce4d8b549b3
+src/custom_corridor_plugins/src/scenario_presets.cpp,ROS/Gazebo native plugin or build dependency,159,d7b8f76d7501b069d16ddd780f96ebaed27f74c3e49425797f7d220eba0c5653
+tests/test_analysis.py,regression/contract test,89,6b78ea5ce6c6caf541b7af2b9f86aa681edf3bc4de6c139ad99c4f89a9f66c72
+tests/test_artifact_store.py,regression/contract test,176,1886cb717e9454d5d14048cbb622f5011f7c6c5d77ec4acbaac652eb5019f153
+tests/test_asset_catalog.py,regression/contract test,163,120e80f801fdd86527a96d85d57c213406d5d0dadff0a3630af2e759498defa3
+tests/test_benchmark_inputs.py,regression/contract test,39,0354301923de74056d40bc6c3cbe2fba2bc4338c94faeffb7e55d9f23c8d2f9a
+tests/test_benchmark_resources.py,regression/contract test,119,1a76ff8d92eb1e86ce6dba7389500cec73633889b368fff3c4d54b4ed6222b45
+tests/test_capture_audit.py,regression/contract test,155,c0dddf9966339eca7210f0962f24dbc8934f02811ff7b77107e177e9b60bc637
+tests/test_capture_runtime.py,regression/contract test,316,500e4a67551d8fbf765d8b1131d2127d6f912701b2cba8f901ca0a9caaeb63ac
+tests/test_control_bundle.py,regression/contract test,175,ca4df777ee998be83b42c511e405ef95e243fbd418e5129cf6187f88ba93666f
+tests/test_correctness_runtime.py,regression/contract test,130,5e27a628bab7917d3dd547c6c66462a7f943f2d590a59bf0c7c27dd1adf5a07d
+tests/test_dataset_normalization.py,regression/contract test,67,267487e0046d09f3f855cf935e26eb5a4382532f12461908f38df0f092940223
+tests/test_dataset_provenance.py,regression/contract test,32,544cff7d12fdd02748e6a0c7be761abe7b9f00ff786d42d9b08fc5edcfb827c7
+tests/test_group_projection_regressions.py,regression/contract test,24,87f9f765196c5f908e4136dcad72a856a9f991a5a04e8fc284354b788369f206
+tests/test_history_archive.py,regression/contract test,205,ba66567db91d69c6db8d711b71fae54bbbbab8587e5c608a970e337ee174e900
+tests/test_hydration.py,regression/contract test,156,97ff710f207eab434acadcad08d0bcf56d858e50961f22f899ae790b95cbe61a
+tests/test_mppi_monitor.py,regression/contract test,133,16887f800093708ef2bc289372ae90f6a39a096939de8674489090bfdae8d6b2
+tests/test_mppi_trial.py,regression/contract test,547,12f42df662ec5dca3a692adbee6aa96e1c1a4519da4332b49b753d583e14aa19
+tests/test_nav2_runner_integration.py,regression/contract test,273,f94d8ec96920dfc94ef40dd5029caa08d0a703cb6cbcedaff91682c870b0db9e
+tests/test_nav2_runtime.py,regression/contract test,415,53c5a91016dc9f2d1758cb602bdcac141ce1690f2408b39492a89113628e5e83
+tests/test_perception_corpus_audit.py,regression/contract test,28,543d1dcbb1c672e842ffdafcfd3e1f6e93c4cce027d286cfd92ff6137504163e
+tests/test_portable_reader.py,regression/contract test,29,53d0f95f268648ad49139a055b633c62e841d46abcdd42f53c71cc22cfb35af2
+tests/test_report_layout.py,regression/contract test,71,73626f4db063dcc644da2ca33aff1db625589b1ae6e65b76d29475fdd550df93
+tests/test_report_media.py,regression/contract test,131,7fa1ab2a0524eda1be8203a675be4c99d4080e74b43462eff0cab29fe5bac80a
+tests/test_report_plan.py,regression/contract test,100,cfa39395ae78eb3665eb1ff478ca4492ff05d2f1665f6af8ea132aafef4d20fd
+tests/test_school_runtime.py,regression/contract test,127,b6c6141d93d34bff2a99ae7a75aa47d46b0b5e76527b28f660a9b58aebe23849
+tests/test_sensor_capture.py,regression/contract test,121,d50f6ee81dc2c6def6f7088906c38dd9050f87e909d2277e3ed49ea151a1aecc
+tests/test_velocity_trial.py,regression/contract test,41,bde88d3cec185e3df461e84a567af5ba1724b2f56132a67c2caaef490e62dd0d
+tests/test_warehouse_analysis.py,regression/contract test,145,4dd5a030b18275a6dfe3a4a707b33e3a3e04199deca570a865f4374d9f925587
+tests/test_wm_dataset_audit.py,regression/contract test,51,f09691d93194585d65214c9bb04a3af19b78a79580500c99e20b610faee97b5c
+tests/test_worker_commands.py,regression/contract test,20,ea4f3e620cb91e3e92fed08adf92fa76cde98919378ccf252aeb366237d507c3
+tests/test_workspace_layout.py,regression/contract test,61,fa3182c274f0e8f617ca93835e519eb2a51b85250fd5fe217ccaada33832b024
+tools/archive_history.py,public CLI or compatibility/diagnostic entrypoint,38,155d83c8a084e7b62e2a5ed2d3ba6e2eb426299467947490a0eae72a0305d88f
+tools/artifact_store.py,public CLI or compatibility/diagnostic entrypoint,35,93907c7f21040acf99eb67a65782e0a35fb97cb18330f5315495787a6248fb4b
+tools/audit_episode.py,public CLI or compatibility/diagnostic entrypoint,37,1f0e3b8476ae8f3350a649c3c655a0345b3fb3a80dd1abae536f12033196ada0
+tools/audit_perception_corpus.py,public CLI or compatibility/diagnostic entrypoint,18,3f282527d28316964d77a7fb205e9f295066fe8988c20436859928fbf739c485
+tools/audit_wm_dataset.py,public CLI or compatibility/diagnostic entrypoint,20,53963f4ef34006083f3afff4bb560b8dd71c40df6c1f0e8f4aaf7c2db66f4e0c
+tools/capture_episode.py,public CLI or compatibility/diagnostic entrypoint,43,6766894c4aacb6860b60f7fb251f4634e3c6424ce30dae3be4488cc06d2f5863
+tools/capture_warehouse.launch.py,public CLI or compatibility/diagnostic entrypoint,5,d31613d6b83b2a375400269c38d1c17e3b19e12980b31fc2347d470e8bce7e72
+tools/catalog_assets.py,public CLI or compatibility/diagnostic entrypoint,39,fe0e07ebaef020d9c6927331b07d3675add7ee7d7cb0b29f8672331c682ca2c3
+tools/check_gpu_runtime.py,public CLI or compatibility/diagnostic entrypoint,39,d4ce6c5416432ce98dd833b93a8f4553573d460825a61ca5ee2efaceed370e30
+tools/export_control_bundle.py,public CLI or compatibility/diagnostic entrypoint,15,c7e6d010e1e4185427827a0e0cb5129c2a208d1762cb71bef961f1f8d3a7f73e
+tools/hydrate_history.py,public CLI or compatibility/diagnostic entrypoint,32,73aff468bd709d03842b470f6a12aac79728f32283c04463ae00644b02dd2cf5
+tools/hydrate_reports.py,public CLI or compatibility/diagnostic entrypoint,40,f06bc961674339a96c5bb7c0c611561e9e722cf3f58c524ba01621742fcbf943
+tools/nav2_trial.py,public CLI or compatibility/diagnostic entrypoint,25,6601482905b8bcf8dd9816db9f776d674200158c3e884517a19e34f3159311d2
+tools/probe_portable_episode.py,public CLI or compatibility/diagnostic entrypoint,25,c029605b018399fb7c40f0b1a1ac637fa60248937859e5c5b8e9926dd6f2a21f
+tools/probe_report_controls.py,public CLI or compatibility/diagnostic entrypoint,105,85879aebd70e87219903aa6b4bd71aa7e44fb475169b25d9cbbbd5929c3110f0
+tools/process_runtime.sh,public CLI or compatibility/diagnostic entrypoint,83,d1db963949696972cd9d0394a7ff9e113bd6ccff0f565137cb3bfc32fa580c99
+tools/report_dependencies.py,public CLI or compatibility/diagnostic entrypoint,24,c5fcae4f0633d13841b3f68a684e49170edf4e5b837f6a05934701b910fab672
+tools/report_media.py,public CLI or compatibility/diagnostic entrypoint,38,aa9f8593a38a88540ce4ae3be0f38d1822a9225dea04a5ebf95d9365f45c2630
+tools/ros_environment.sh,public CLI or compatibility/diagnostic entrypoint,31,7ff0f910ced3a9af67ec54cab73aad86bc27a9e5e98809a5d7c69e9502384200
+tools/verify_control_bundle.py,public CLI or compatibility/diagnostic entrypoint,21,e6f5ac0a8ae1521385e4eed38ad787f2a455ae25a65f67405ccce7e6fa6217d8

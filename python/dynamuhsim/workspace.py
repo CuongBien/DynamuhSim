@@ -34,6 +34,21 @@ STAGE_GROUPS = {'camera_height_ab': 'perception',
  'wm_episode_batch': 'datasets'}
 
 
+ARCHIVE_ONLY_STAGES = frozenset(['dataset_pilot', 'depth_proxy_lifecycle', 'early_avoidance_pilot'])
+CURRENT_STAGE_GROUPS = {name: group for name, group in STAGE_GROUPS.items() if name not in ARCHIVE_ONLY_STAGES}
+RELOCATED_FILES = {
+    'experiments/social_navigation/benchmark/wm_episode_batch/tools/legacy/dataset_core.py': 'python/dynamuhsim/datasets/normalization.py',
+    'experiments/social_navigation/benchmark/wm_episode_batch/tools/legacy/contract.json': 'python/dynamuhsim/datasets/normalization_contract.json',
+    'experiments/social_navigation/benchmark/dataset_pilot/contract.json': 'python/dynamuhsim/datasets/normalization_contract.json',
+    'experiments/social_navigation/benchmark/dataset_pilot/qos.yaml': 'configs/capture/qos.yaml',
+    'experiments/social_navigation/benchmark/dataset_pilot/storage.yaml': 'configs/capture/storage.yaml',
+    'experiments/social_navigation/benchmark/early_avoidance_pilot/check_friction.cc': 'python/dynamuhsim/runtime/native/check_friction.cc',
+    'experiments/social_navigation/benchmark/early_avoidance_pilot/generated/check_friction': 'python/dynamuhsim/runtime/native/generated/check_friction',
+    'experiments/social_navigation/benchmark/early_avoidance_pilot/protocol.json': 'configs/history/early_avoidance_pilot.json',
+    'experiments/social_navigation/benchmark/depth_proxy_lifecycle/protocol.json': 'configs/history/depth_proxy_lifecycle.json',
+}
+
+
 def stage_directory(repository, stage):
     group = STAGE_GROUPS[stage]
     repository = Path(repository)
@@ -47,6 +62,11 @@ def source_path(repository, relative):
     name = PurePosixPath(relative)
     if name.is_absolute() or '..' in name.parts: raise ValueError('Expected repository-relative source path')
     parts = name.parts
+    relocated = RELOCATED_FILES.get(logical_source_name(str(name)))
+    if relocated is not None:
+        current = Path(repository) / relocated
+        if current.exists() or (Path(repository) / 'python/dynamuhsim/datasets/__init__.py').is_file():
+            return current
     if parts[:2] == ('experiments', 'social_navigation') and len(parts) >= 4:
         group, stage = parts[2:4]
         if stage in STAGE_GROUPS and group in ('benchmark', STAGE_GROUPS[stage]):

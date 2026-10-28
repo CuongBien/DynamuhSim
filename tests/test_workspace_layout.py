@@ -2,7 +2,7 @@
 import hashlib,importlib.util,json,os,tempfile,unittest
 from pathlib import Path,PurePosixPath
 from unittest.mock import patch
-from dynamuhsim.workspace import STAGE_GROUPS,stage_directory,source_path,logical_source_name
+from dynamuhsim.workspace import STAGE_GROUPS,CURRENT_STAGE_GROUPS,stage_directory,source_path,logical_source_name
 from dynamuhsim.artifacts.layout import report_target,logical_report_name
 from dynamuhsim.analysis.evidence import resolve_sources
 ROOT=Path(__file__).resolve().parents[1]
@@ -10,7 +10,7 @@ ROOT=Path(__file__).resolve().parents[1]
 class WorkspaceLayout(unittest.TestCase):
  def test_complete_stage_map_and_current_sources(self):
   self.assertEqual(len(STAGE_GROUPS),29);self.assertEqual(set(STAGE_GROUPS.values()),{'navigation','perception','datasets','replay'})
-  for stage,group in STAGE_GROUPS.items():self.assertTrue((ROOT/'experiments/social_navigation'/group/stage).is_dir())
+  for stage,group in CURRENT_STAGE_GROUPS.items():self.assertTrue((ROOT/'experiments/social_navigation'/group/stage).is_dir())
  def test_legacy_and_current_ids_choose_current_and_never_shadow_missing_math(self):
   with tempfile.TemporaryDirectory() as directory:
    root=Path(directory);old=root/'experiments/social_navigation/benchmark/wm_episode_batch';new=root/'experiments/social_navigation/datasets/wm_episode_batch';old.mkdir(parents=True);(old/'loader.py').write_text('legacy')
@@ -27,6 +27,14 @@ class WorkspaceLayout(unittest.TestCase):
    old=PurePosixPath('experiments/social_navigation/benchmark/wm_episode_batch/reports/audit.json');current=PurePosixPath('experiments/social_navigation/datasets/wm_episode_batch/reports/audit.json')
    self.assertEqual(report_target(root,old),archive/'audit.json');self.assertEqual(report_target(root,current),archive/'audit.json');self.assertEqual(logical_report_name(str(current)),str(old));alias.unlink();alias.symlink_to('../outside')
    with self.assertRaises(ValueError):report_target(root,old)
+ def test_retired_stage_reports_resolve_without_code_alias_and_reject_archive_symlinks(self):
+  with tempfile.TemporaryDirectory() as directory:
+   root=Path(directory);archive=root/'experiments/archive/social_navigation/reports/dataset_pilot';archive.mkdir(parents=True)
+   relative=PurePosixPath('experiments/social_navigation/benchmark/dataset_pilot/reports/audit.json')
+   self.assertEqual(report_target(root,relative),archive/'audit.json')
+   self.assertFalse((root/'experiments/social_navigation/datasets/dataset_pilot').exists())
+   archive.rmdir();outside=root/'outside';outside.mkdir();archive.symlink_to(outside,target_is_directory=True)
+   with self.assertRaises(ValueError):report_target(root,relative)
  def test_history_hydration_without_current_stage_retains_legacy_location(self):
   with tempfile.TemporaryDirectory() as directory:
    root=Path(directory);name=PurePosixPath('experiments/social_navigation/benchmark/wm_episode_batch/reports/audit.json');self.assertEqual(report_target(root,name),root/name)

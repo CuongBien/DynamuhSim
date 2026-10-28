@@ -1,6 +1,6 @@
 # Social navigation — các đường chạy hiện tại
 
-Code được chia theo [navigation](navigation/README.md), [perception](perception/README.md), [datasets](datasets/README.md) và [replay](replay/README.md). 29 stage giữ hợp đồng riêng; implementation tái sử dụng nằm trong `python/dynamuhsim/`. `benchmark` chỉ giữ shell runtime chung và alias source lịch sử.
+Code được chia theo [navigation](navigation/README.md), [perception](perception/README.md), [datasets](datasets/README.md) và [replay](replay/README.md). 26 stage code hiện hành giữ hợp đồng riêng; implementation tái sử dụng nằm trong `python/dynamuhsim/`. `benchmark` chỉ giữ shell runtime chung và alias source lịch sử.
 
 [START_HERE_CURRENT](../../docs/START_HERE_CURRENT.md) hướng dẫn đọc dataset WM, masks và replay. Đây là điểm bắt đầu cho công việc WM hiện tại; không cần chạy lại các vòng khảo sát simulator ban đầu.
 

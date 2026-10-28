@@ -1,6 +1,11 @@
-"""Own only the isolated SocNavGym response worker; no container or ROS modification."""
+"""Stage contract over the shared live-worker command builder."""
+import sys
 from pathlib import Path
-HERE=Path(__file__).resolve().parent;COMMON=HERE.parent/'common_response';SOCIAL=HERE.parent.parent
-def worker_command(runtime,socket_dir,model,case,token):
-    assert model=='soc_guarded_orca'
-    return [str(SOCIAL/'.venv-socnavgym/bin/python'),str(HERE/'worker.py'),'--common',str(COMMON),'--runtime',str(runtime),'--socket',str(socket_dir/'worker.sock'),'--model',model,'--case',case],None
+HERE = Path(__file__).resolve().parent
+COMMON = HERE.parent / "common_response"
+SOCIAL = HERE.parent.parent
+sys.path.insert(0, str(HERE.parents[3] / 'python'))
+from dynamuhsim.runtime.workers import worker_command as build_command
+def worker_command(runtime, socket_dir, model, case, token):
+    assert model == 'soc_guarded_orca'
+    return build_command(HERE, runtime, socket_dir, model, case, token)[:2]

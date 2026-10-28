@@ -47,18 +47,18 @@
   "preserved_capture_pipeline": [
     {
       "name": "dataset_pilot",
-      "runtime": "existing_frozen_pipeline",
-      "reason": "Historical frozen pipeline for reproducing accepted/quarantined results. Use the versioned capture API for fresh episodes; no historical manifest or driver is rewritten."
+      "runtime": "retired_source_in_recorded_git",
+      "reason": "Closed producer/auditor chain retired. Current capture and shared normalization/auditor modules replace new work; reports, source receipts and original raw data remain preserved."
     },
     {
       "name": "depth_proxy_lifecycle",
-      "runtime": "existing_frozen_pipeline",
-      "reason": "Historical frozen driver snapshots and required helpers retained; obsolete driver factories retired from HEAD. Reproduction requires the recorded source revision/manifest; fresh episodes use the versioned capture API."
+      "runtime": "retired_source_in_recorded_git",
+      "reason": "Closed producer/auditor chain retired. Current capture and shared normalization/auditor modules replace new work; reports, source receipts and original raw data remain preserved."
     },
     {
       "name": "early_avoidance_pilot",
-      "runtime": "existing_frozen_pipeline",
-      "reason": "Historical frozen driver snapshots and required helpers retained; obsolete driver factories retired from HEAD. Reproduction requires the recorded source revision/manifest; fresh episodes use the versioned capture API."
+      "runtime": "retired_source_in_recorded_git",
+      "reason": "Closed producer/auditor chain retired. Current capture and shared normalization/auditor modules replace new work; reports, source receipts and original raw data remain preserved."
     },
     {
       "name": "wm_episode_batch",
@@ -181,7 +181,6 @@
   },
   "capability_groups": {
     "datasets": [
-      "dataset_pilot",
       "perception_target_pilot",
       "portable_episode",
       "wm_episode_batch"
@@ -191,7 +190,6 @@
       "common_response",
       "complexitynav_contract",
       "complexitynav_geometry",
-      "early_avoidance_pilot",
       "localization_trials",
       "navigation_diagnostics",
       "shared_nav2_pilot",
@@ -207,7 +205,6 @@
       "depth_perception_corpus",
       "depth_person_classifier",
       "depth_proxy_ablation",
-      "depth_proxy_lifecycle",
       "depth_seed43_validation",
       "depth_surface_guard",
       "depth_track_refinement",

@@ -7,6 +7,7 @@ import json
 import math
 from pathlib import Path
 import numpy as np
+from dynamuhsim.analysis.evidence import verify_sources
 import rosbag2_py
 from rclpy.serialization import deserialize_message
 from rosidl_runtime_py.utilities import get_message
@@ -19,7 +20,7 @@ def sha(path):
     return h.hexdigest()
 
 
-def audit(episode,normalized):
+def audit(episode,normalized,*,repository=None,source_roots=()):
     contract=json.loads((normalized/'contract.json').read_text())
     manifest=json.loads((normalized/'manifest.json').read_text())
     qa=json.loads((normalized/'qa.json').read_text())
@@ -101,7 +102,7 @@ def audit(episode,normalized):
         p=episode/name
         assert p.stat().st_size==v['bytes'] and sha(p)==v['sha256'], 'Manifest file mismatch: '+name
         checked+=1
-    for name,h in manifest['builder_sha256'].items():assert sha(Path(__file__).parent/name)==h
+    verify_sources({'experiments/social_navigation/benchmark/wm_episode_batch/tools/legacy/'+name:h for name,h in manifest['builder_sha256'].items()}, repository=repository or Path(__file__).resolve().parents[3], roots=source_roots, revision='9833565fa546d55cb0e553f8388bf4a703c59583')
     result=json.loads((episode/'result.json').read_text())
     assert any('NVIDIA' in s for s in result['cleanup']['ogre_renderer_lines'])
     assert result['cleanup']['status']=='PASS' and not result['cleanup']['remaining']
@@ -123,6 +124,7 @@ def audit(episode,normalized):
 if __name__=='__main__':
     p=argparse.ArgumentParser();p.add_argument('--episode',type=Path,required=True)
     p.add_argument('--normalized',default='normalized');p.add_argument('--report',type=Path,required=True)
-    a=p.parse_args();r=audit(a.episode.resolve(),a.episode.resolve()/a.normalized)
+    p.add_argument('--repository',type=Path);p.add_argument('--source-root',type=Path,action='append',default=[])
+    a=p.parse_args();r=audit(a.episode.resolve(),a.episode.resolve()/a.normalized,repository=a.repository,source_roots=a.source_root)
     assert not a.report.exists();a.report.parent.mkdir(parents=True,exist_ok=True)
     a.report.write_text(json.dumps(r,indent=2)+'\n')

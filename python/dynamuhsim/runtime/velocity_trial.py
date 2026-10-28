@@ -53,7 +53,7 @@ def run_trial(a, entrypoint, is_response):
     result=dict(status='ERROR',gui=a.gui,sim_budget_s=a.sim_seconds,runtime=str(runtime.relative_to(REPO)),scope='Common6-person Gazebo integration, actual robot feedback, no Nav2; physical start fixture shared with offline',model=a.model,case=a.case,native_dt=planning_dt,**variant,head=subprocess.check_output(['git','rev-parse','HEAD'],cwd=REPO,text=True).strip())
     source=[HERE/'worker.py',HERE/'runtime.py',HERE/'adapter.cc',HERE/'warehouse.launch.py',entrypoint,library,COMMON/'model_worker.py',COMMON/'inputs/protocol.json',COMMON/'inputs'/(a.case+'.json'),SOCIAL/'warehouse/layout.json',SOCIAL/'gazebo_adapter/run.py']
     if is_response:source[:0]=[BENCH/'common_gazebo/worker.py'];source[3:3]=[HERE/'projection.py',HERE/'responsive_motion.py']
-    source += [Path(__file__),Path(__file__).with_name('nav2_trial.py')]
+    source += [Path(__file__),Path(__file__).with_name('nav2_trial.py'),Path(__file__).with_name('workers.py'),COMMON/'inputs/images.json']
     source += [Path(__file__).with_name('gpu.py'),Path(__file__).with_name('shutdown.py'),Path(__file__).with_name('ordered_stop.py'),Path(__file__).parent/'gl_probe.cpp']
     source += [REPO/'src/custom_corridor/launch/corridor_tb3.launch.py',REPO/'src/custom_corridor/launch/_dynamuhsim_simulation.py']
     result['source_sha256']={str(p.relative_to(REPO)):sha(p) for p in source}

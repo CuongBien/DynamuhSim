@@ -1,13 +1,15 @@
 #!/usr/bin/env python3
 """Independent closed-raw roundtrip + label masks, bundle provenance and relocation checks."""
-import argparse,hashlib,importlib.util,json,os,shutil,subprocess,sys
+import argparse,hashlib,json,os,shutil,subprocess,sys
 from pathlib import Path
 import numpy as np
 import rosbag2_py
 from rclpy.serialization import deserialize_message
 from std_msgs.msg import String
-HERE=Path(__file__).resolve().parent;BENCH=HERE.parent
+HERE=Path(__file__).resolve().parent;BENCH=HERE.parent;REPO=HERE.parents[3]
+sys.path.insert(0,str(REPO/'python'))
 from provenance_checks import verify as verify_provenance
+from dynamuhsim.workspace import source_path
 
 def sha(p):
     h=hashlib.sha256()
@@ -15,16 +17,16 @@ def sha(p):
         for b in iter(lambda:f.read(1<<20),b''):h.update(b)
     return h.hexdigest()
 def dump(p,v):p.parent.mkdir(parents=True,exist_ok=True);p.write_text(json.dumps(v,indent=2,allow_nan=False)+'\n')
-def audit(root,out):
+def audit(root,out,artifact_root=None):
     assert not out.exists();out.mkdir(parents=True)
     lineage=verify_provenance(root);dump(out/'provenance_timing_audit.json',lineage)
-    script=root/'tools/legacy/audit.py';spec=importlib.util.spec_from_file_location('bundled_legacy_raw_audit',script);legacy=importlib.util.module_from_spec(spec);spec.loader.exec_module(legacy)
-    base=legacy.audit(root,root/'normalized');dump(out/'legacy_raw_audit.json',base)
+    from dynamuhsim.datasets.normalized_audit import audit as audit_normalized
+    base=audit_normalized(root,root/'normalized',repository=REPO);dump(out/'legacy_raw_audit.json',base)
     provenance=json.loads((root/'provenance.json').read_text());manifest=json.loads((root/'bundle_manifest.json').read_text());checked=0
     for name,v in manifest['files'].items():
         f=(root/name).resolve();assert f.is_relative_to(root) and f.stat().st_size==v['bytes'] and sha(f)==v['sha256'];checked+=1
     for name,v in provenance['copied_files'].items():assert sha(root/name)==v['sha256']
-    source=BENCH.parent/'navigation/early_avoidance_pilot/generated/runs/avoidance_moderate01'
+    source=source_path(artifact_root or REPO,'experiments/social_navigation/benchmark/early_avoidance_pilot')/'generated/runs/avoidance_moderate01'
     for f in (source/'raw_bag').iterdir():
         if f.is_file():assert sha(f)==sha(root/'raw_bag'/f.name)
     assert sha(root/'config_snapshot/runtime/mecanum_camera.sdf')==provenance['final_artifact_sha256']['mecanum_camera.sdf']
@@ -59,7 +61,7 @@ def audit(root,out):
     # Relocate all files with hardlinks (read-only smoke), so no second full data copy is needed.
     relocated=HERE/'generated/relocation'/out.name;assert not relocated.exists();shutil.copytree(root,relocated,copy_function=os.link)
     env=os.environ.copy();env.pop('PYTHONPATH',None);env.pop('AMENT_PREFIX_PATH',None)
-    probe=subprocess.run([sys.executable,'-I',str(relocated/'tools/smoke.py'),str(relocated)],capture_output=True,text=True,env=env,timeout=60)
+    probe=subprocess.run([sys.executable,'-I',str(REPO/'tools/probe_portable_episode.py'),str(relocated)],capture_output=True,text=True,env=env,timeout=60)
     assert probe.returncode==0,probe.stderr;relocation=json.loads(probe.stdout);assert relocation['status']=='PASS'
     # Reading through the relocated bundle must not modify any original file.
     assert all(sha(root/name)==v['sha256'] for name,v in manifest['files'].items())
@@ -71,4 +73,4 @@ def audit(root,out):
         scope='Offline data integrity/portability QA only; not tracker/persona/future-BEV/split acceptance',training_ready=False)
     dump(out/'audit.json',result);print(json.dumps(result,indent=2));return result
 if __name__=='__main__':
-    p=argparse.ArgumentParser();p.add_argument('--bundle',type=Path,required=True);p.add_argument('--report-dir',type=Path,required=True);a=p.parse_args();audit(a.bundle.resolve(),a.report_dir.resolve())
+    p=argparse.ArgumentParser();p.add_argument('--bundle',type=Path,required=True);p.add_argument('--report-dir',type=Path,required=True);p.add_argument('--artifact-root',type=Path);a=p.parse_args();audit(a.bundle.resolve(),a.report_dir.resolve(),a.artifact_root)
