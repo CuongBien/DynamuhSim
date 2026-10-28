@@ -1,0 +1,96 @@
+{
+  "schema": "dynamuhsim_corpus_and_closed_writers_cleanup/1",
+  "date": "2026-10-28",
+  "base_revision": "3b133626809a39991babe0e6fcc52d2572c2c03b",
+  "branch": "codex/shared-navigation-runtime",
+  "retired_files": {
+    "depth_perception_corpus": [
+      "audit.py",
+      "export.py"
+    ],
+    "portable_episode": [
+      "prepare.py",
+      "build.py",
+      "finalize.py"
+    ],
+    "depth_identity_guard": [
+      "seal.py",
+      "holdout.py",
+      "capture44.py",
+      "preflight.py"
+    ],
+    "depth_seed43_validation": [
+      "capture.py",
+      "preflight.py"
+    ],
+    "depth_track_refinement": [
+      "extend_freeze.py"
+    ]
+  },
+  "shared_code": [
+    "python/dynamuhsim/perception/corpus.py",
+    "python/dynamuhsim/analysis/perception_corpus.py",
+    "python/dynamuhsim/analysis/evidence.py"
+  ],
+  "behavior": "run.sh audit uses final auditor02 missing-scan rules; label/proposal math extracted unchanged; fixed cohort writers and dispatches removed. Current readers, inference engines, classifier and source receipts unchanged.",
+  "data_parity": {
+    "entire_corpus_audit_JSON_exact": true,
+    "corpus_frames": 19,
+    "proposals": 132,
+    "causal_lidar": 111,
+    "missing_lidar_masked": 21,
+    "corpus_math_functions_AST_exact": 3,
+    "corpus_data_audit_AST_exact": true,
+    "seed43_capture_audit_and_raw_inventory_JSON_exact": true,
+    "seed44_capture_audit_and_raw_inventory_JSON_exact": true,
+    "WM_audit_JSON_exact": true,
+    "WM_windows": 5106,
+    "WM_raw_depth_frames_bitwise": 6696,
+    "portable_smoke_samples": 823,
+    "portable_smoke_depth_frames": 1013
+  },
+  "tests": {
+    "main_regression": 308,
+    "new_regression": 3,
+    "corpus_contract": 9,
+    "refinement_contract": 13,
+    "identity_contract": 14,
+    "WM_contract": 8,
+    "total": 355,
+    "all_passed": true
+  },
+  "entrypoint_checks": {
+    "main_CLI_help_ROS_init_and_subprocess_blocked": 33,
+    "stage_current_and_retired_modes": 24,
+    "all_passed": true,
+    "dependency_audit": "PASS"
+  },
+  "initial_CLI_failure": "Portable audit unnecessarily sourced a missing local install overlay. It only needs standard Jazzy MCAP/messages; wrapper now sources Jazzy alone. Rechecked help PASS. Initial result retained.",
+  "static_review": {
+    "python_parsed": 392,
+    "shell_syntax_pass": 50,
+    "benchmark_python_files": 163,
+    "shell_errors": [],
+    "duplicate_functions_at_least_15_lines": [],
+    "scope": "Tracked/current project sources; excludes immutable archive/report/snapshot/parent/artifact/example/generated and vendor trees. Benchmark duplicate scan excludes test functions."
+  },
+  "preservation": {
+    "published_report_hashes_unchanged": 1814,
+    "frozen_engine_contract_classifier_source_files_unchanged": 33,
+    "primary_status_index_working_patch_unchanged": true,
+    "benchmark_branch_unchanged": "9833565fa546d55cb0e553f8388bf4a703c59583"
+  },
+  "retained_on_purpose": "Two freeze.py modules remain byte-identical because active replay/evaluators import their verifiers and sealed engine identities pin their bytes. Wrapper freeze/seal/holdout creation commands are retired. Generic perception targets, reusable classifier training/inference and readers remain; frozen snapshots/vendor are provenance or runtime dependencies.",
+  "limits": [
+    "Static scans do not prove every dynamic branch; unchanged archived/bundled code was not executed to compare results. Current math and 3 full-data audit families were exercised against original receipts.",
+    "No new simulator capture, native code/controller change, training, test model evaluation, data regeneration or benchmark merge. Prior build and native navigation proofs retain their own revisions."
+  ],
+  "closure": {
+    "corpus_package": "complete",
+    "remaining_closed_writer_review": "complete",
+    "regression_CLI_preservation_review": "complete",
+    "identified_cleanup_items_pending": 0
+  },
+  "local_evidence": "experiments/social_navigation/benchmark/generated/corpus_cleanup_20261028",
+  "next_work": "Review this isolated branch for integration when the owner requests it; new WM training or WSLg work is separate from this completed cleanup scope."
+}

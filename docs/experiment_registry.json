@@ -63,7 +63,7 @@
     {
       "name": "wm_episode_batch",
       "runtime": "existing_frozen_pipeline",
-      "reason": "Historical frozen pipeline for reproducing accepted/quarantined results. Use the versioned capture API for fresh episodes; no historical manifest or driver is rewritten."
+      "reason": "Closed dataset01: reader, final read-only auditor and original freezes retained; cohort capture/resume/export writers retired. Recorded source bytes remain in Git; fresh episodes use the versioned capture API."
     }
   ],
   "historical_evidence": "Pinned Git history and verified local archives preserve historical bytes. Gates, models, frozen/test state and non-media report controls remain tracked; historical report groups and media hydrate on demand.",
@@ -82,7 +82,7 @@
       "early_avoidance_pilot/run_validated.py",
       "wm_episode_batch/capture.py"
     ],
-    "historical_cohort_export_status": "Frozen cohort capture/resume/export code retained for recorded dataset01 provenance; historical capture freeze has pre-existing missing/generated and changed-source requirements on HEAD. Use the recorded source revision for historical reproduction; new API captures standalone episodes and does not append to dataset01."
+    "historical_cohort_export_status": "Dataset01 and corpus01 are closed. One-shot capture/export/seal writers are retired from HEAD; reproduce old writers from their recorded Git revision. New capture API produces standalone episodes, not WM/corpus exports."
   },
   "shared_analysis": {
     "helpers": "python/dynamuhsim/analysis/",
@@ -91,7 +91,7 @@
       "configs/audit/capture_integrity.json",
       "configs/audit/navigation_goal.json"
     ],
-    "historical_audits": "Preserved unchanged; current helper migration applies to shared runtime and versioned capture audit."
+    "historical_audits": "Published receipts stay unchanged. Current WM/corpus audit entrypoints reproduce final integrity rules and resolve retired source bytes by exact hashes without executing historical source."
   },
   "artifact_storage": {
     "entrypoint": "tools/artifact_store.py {pack,verify,restore,evict-raw}",
@@ -173,5 +173,10 @@
     "scope": "Shared IPC with distinct response/start-gate/metadata/fault behavior; group worker unchanged",
     "container_mount": "/common_gazebo:ro",
     "provenance": "Canonical source included for new shared Nav2 and response live runs"
+  },
+  "offline_integrity_audits": {
+    "wm_dataset": "tools/audit_wm_dataset.py",
+    "perception_corpus": "tools/audit_perception_corpus.py",
+    "output_policy": "Fresh output directory outside dataset, raw captures and archived evidence; original published reports are never overwritten."
   }
 }

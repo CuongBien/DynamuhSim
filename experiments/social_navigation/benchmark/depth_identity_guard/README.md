@@ -17,26 +17,13 @@ bash "$TASK/run.sh" evaluate --frozen "$TASK/reports/final_engine/frozen.json" -
 
 Nguồn regression: mesh42, repeat42, regression43. proxy_stress dùng kiểm giới hạn profile, không chứng nhận semantic. Seed43 đã trở thành dữ liệu phát triển của bản mới, không gọi lại là held-out.
 
-`seal.py` chỉ chốt candidate sau khi ba gate regression đạt; ghi source/config/gate hashes. `capture44.py` chỉ chạy một lần khi sealed source còn nguyên và preflight Nvidia/native friction đạt. Thay đổi driver chỉ gồm vị trí runtime và cho phép input seed44; camera/world/Nav2/native worker giữ nguyên.
+Các bước seal, preflight và capture seed44 đã hoàn thành. Đã gỡ `seal.py`,
+`holdout.py`, `preflight.py`, `capture44.py` khỏi mã hiện hành;
+[source trước khi gỡ](https://github.com/CuongBien/DynamuhSim/tree/3b133626809a39991babe0e6fcc52d2572c2c03b/experiments/social_navigation/benchmark/depth_identity_guard)
+giữ quy trình cũ. Final engine, gate, seal và outcome không đổi. Capture mới dùng
+`tools/capture_episode.py` với output/protocol mới; không thay seed44 đã đo.
 
-```bash
-# Các lệnh này đã chạy. Tên cố định sẽ từ chối ghi đè lần thu hiện có.
-bash "$TASK/run.sh" seal --candidate "$TASK/generated/candidate05.json" --tag 05
-bash "$TASK/run.sh" preflight
-bash "$TASK/run.sh" capture44
-```
-
-Capture/normalize/raw-audit dùng ROS 2 Jazzy + overlay hiện có. Ví dụ đọc lại raw đã đóng vào output mới:
-
-```bash
-source /opt/ros/jazzy/setup.bash
-source install/setup.bash
-export OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 MKL_NUM_THREADS=1
-EPISODE="$TASK/generated/runs/identity_seed44_01"
-python3 experiments/social_navigation/benchmark/portable_episode/generated/episode01/tools/legacy/build.py --episode "$EPISODE" --output "$EPISODE/my_normalized"
-```
-
-Bộ đã đo dùng normalized/ trong episode, generated/final_with_seed44.json, generated/seed44_44/ và generated/seed44_eval44/. `holdout.py` thêm source mới mà không đổi engine/gate. Đọc lại phép so sánh vào output mới:
+Bộ đã đo dùng normalized/ trong episode, generated/final_with_seed44.json, generated/seed44_44/ và generated/seed44_eval44/. Receipt đã thêm source seed44 sau khi seal, engine/gate giữ nguyên. Đọc lại phép so sánh vào output mới:
 
 ```bash
 bash "$TASK/run.sh" replay --frozen "$TASK/reports/final_with_seed44.json" --dataset seed44 --output "$TASK/generated/my_seed44_sensor"
@@ -55,3 +42,5 @@ Không nhầm identity_observed/confirmed với semantic person hoặc associati
 Trên seed44, cả parent và guard đều không đổi pairing và có cùng fragmentation 7, paired rows 2587: kiểm không suy giảm, chưa chứng minh guard cải thiện trên seed này. Navigation nguồn vẫn TIMEOUT, goal còn 4.012 m. Bước kế cần kiểm nhãn visibility/person instance và semantic association trước batch/train; giữ HuNavSim test cuối. Lỗi điều hướng là việc riêng chưa sửa trong lượt này.
 
 Cập nhật dọn 27/10/2026: đã gỡ các công cụ chỉ phục vụ cohort/report cũ: `diagnose_case.py`, `finalize_reports.py`, `preview.py`. [Code trước khi gỡ](https://github.com/CuongBien/DynamuhSim/tree/87b0c6eea9b54794db7b4cb794fae57c78f11c70/experiments/social_navigation/benchmark/depth_identity_guard) giữ cách tái lập; report, engine, source freeze và outcome cũ không đổi.
+
+`freeze.py` còn là verifier được engine/evaluator frozen import và được seal pin hash; giữ nguyên bytes, không mở lại lệnh tạo/seal candidate qua wrapper. Capture audit hỗ trợ `--artifact-root /PATH/TO/RECORDED_CHECKOUT`; source helper đã nghỉ dùng được kiểm hash từ root đó hoặc Git `9833565`, không chạy lại source lịch sử.

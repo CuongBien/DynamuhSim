@@ -18,11 +18,12 @@ Từ root repo, dùng Python hiện tại với NumPy/SciPy; không cài gì m�
 export OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1
 TASK_DIR=experiments/social_navigation/benchmark/depth_perception_corpus
 bash "$TASK_DIR/run.sh" test
-python3 "$TASK_DIR/reports/audit02.py" --corpus "$TASK_DIR/generated/corpus01" --output "$TASK_DIR/generated/recheck.json"
-python3 -I "$TASK_DIR/reports/verify_portable.py" --corpus "$TASK_DIR/generated/corpus01" --output "$TASK_DIR/generated/portable_recheck.json"
+bash "$TASK_DIR/run.sh" audit --corpus "$TASK_DIR/generated/corpus01" \
+  --raw-root "$TASK_DIR/generated/runs" --source-root "$PWD" \
+  --output "$TASK_DIR/generated/recheck_01"
 ```
 
-Auditor01 `run.sh audit` giữ nguyên để tái hiện lỗi giả định mọi sample phải có scan; **auditor02 là command nghiệm thu**. Loader đã hỗ trợ missing mask trước thu:21proposal/3frame đầu không có scan khả dụng đúng thời điểm, giữNaN/validfalse thay vì lấy scan tương lai. Không bỏ các sample này một cách âm thầm khi train.
+`run.sh audit` hiện dùng logic auditor02 đã nghiệm thu. Auditor01 và exporter cố định bảy cảnh đã gỡ khỏi mã hiện hành; source trước dọn ở commit `3b133626809a39991babe0e6fcc52d2572c2c03b`, các FAIL/source/diff trong báo cáo giữ nguyên. Hàm gán nhãn/proposal còn dùng nằm tại `python/dynamuhsim/perception/corpus.py`. Loader đã hỗ trợ missing mask trước thu:21proposal/3frame đầu không có scan khả dụng đúng thời điểm, giữNaN/validfalse thay vì lấy scan tương lai. Không bỏ các sample này một cách âm thầm khi train.
 
 ```python
 import sys
@@ -46,9 +47,9 @@ bash "$TASK_DIR/run.sh" build
 bash "$TASK_DIR/run.sh" capture --scene p003 --output "$TASK_DIR/generated/manual_motion01"
 ```
 
-Output phải chưa tồn tại, chạy từng lượt. Capture tự source Jazzy/install, dùng runtime partition/domain91 lock và GPU preflight; dừng nếu không đúng NVIDIA hoặc không đạt dữ liệu/cleanup. Không dùng killall. Chuyển động ở đây được lập trình cho diagnostic, không phải policy social nav. Build lại có thể đổi binary SHA: không ghi đè freeze cũ hoặc tái diễn giải corpus01; một đợt thu mới cần protocol/freeze phiên bản mới. Export official7scene bằng `run.sh export --output <new-directory>` chỉ khi source hashes khớp freeze.
+Output phải chưa tồn tại, chạy từng lượt. Capture tự source Jazzy/install, dùng runtime partition/domain91 lock và GPU preflight; dừng nếu không đúng NVIDIA hoặc không đạt dữ liệu/cleanup. Không dùng killall. Chuyển động ở đây được lập trình cho diagnostic, không phải policy social nav. Build lại có thể đổi binary SHA: không ghi đè freeze cũ hoặc tái diễn giải corpus01; một đợt thu mới cần protocol/freeze phiên bản mới. Cohort corpus01 đã đóng; writer `run.sh export` đã nghỉ dùng. Một bộ dữ liệu mới cần quy trình/protocol/freeze mới, không append corpus01.
 
-Ảnh/GIF: script final `reports/preview02.py --corpus <bundle> --output <new-media-dir> --scene p003`; chỉ train/validation, cần Matplotlib/Pillow. Đây là replay depth và label/point projection, không dùng image generation.
+Ảnh/GIF: `run.sh preview --corpus <bundle> --output <new-media-dir> --scene p003`; chỉ train/validation, cần Matplotlib/Pillow. Đây là replay depth và label/point projection, không dùng image generation.
 
 Capture hiện tại dùng chung `python/dynamuhsim/runtime/sensor_capture.py`; file
 `capture.py` của stage chỉ chọn fixture, protocol và provenance. Nhận ảnh/scan,
@@ -59,3 +60,5 @@ corpus/freeze cũ; tái lập kết quả lịch sử bằng source revision tro
 World của profile được dựng bởi `python/dynamuhsim/simulation/sensor_fixture.py`.
 Các file fixture tại stage chỉ chọn input; không gọi vòng qua fixture stage khác.
 XML/URDF và metadata đã được đối chiếu byte với source trước khi gom.
+
+Audit chỉ ghi vào output mới, ngoài dataset/raw/archive; kết quả tách `audit.json` và `source_provenance.json`. `--source-root` cung cấp dependency raw/generated còn thiếu; source cũ chỉ đọc bytes và đối chiếu hash từ checkout chỉ định hoặc commit benchmark `9833565`, không import/chạy report source. Reader/protocol/scenes và phép gán nhãn hiện hành phải khớp hash freeze. Test portable dùng example train p003 có trong Git, không còn cần raw GPU fixture để chạy.

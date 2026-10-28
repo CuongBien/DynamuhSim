@@ -78,3 +78,29 @@ Cây benchmark còn 29 thư mục code/config; 13 thư mục vỏ đã bỏ. Rep
 helper chỉ giữ nguồn freeze cũ; 23 alias reports giữ đường dẫn đọc/hydrate.
 Đây là phần dọn cấu trúc còn thiếu ở lần chốt trước, đã làm gộp trong một đợt.
 [Receipt layout và kiểm chứng](verification/benchmark_layout_2026-10-28.json).
+
+## Chốt cohort/reader/auditor — 28/10/2026
+
+Ba gói cuối đã hoàn tất: corpus depth, rà writer cohort còn lại và nghiệm thu
+source/CLI/dữ liệu. [Biên bản](verification/corpus_cleanup_2026-10-28.json)
+ghi 12 source bị gỡ trong lượt này; lượt trước đã gỡ 5 entrypoint WM cũ.
+Không còn hạng mục xoá/gộp đã xác định đang chờ trong ba gói này.
+
+- Corpus dùng một auditor theo sổ cuối: 132 proposal/19 frame, 21 missing-LiDAR
+  giữ mask; các hàm gán nhãn/proposal dùng chung, không import exporter cohort.
+- Gỡ writer portable và các script thu/seal/holdout seed43–44 một lần.
+  `freeze.py` của refinement/identity giữ nguyên vì verifier còn được engine
+  import và sealed source pin hash; wrapper không còn mở lệnh freeze/seal.
+- Giữ target builder tổng quát, classifier train/inference, reader, tracker,
+  runtime, native plugins và contract tests có consumer; snapshot/vendor/control
+  giữ vai trò provenance hoặc dependency. Số thư mục không phải số việc còn lại.
+- 355 test PASS; 33 CLI chính và 24 mode stage PASS. 392 Python parse và 50 shell
+  syntax PASS; không thấy hàm benchmark trùng AST từ 15 dòng ngoài phạm vi
+  snapshot/vendor/test đã loại. Corpus/WM/capture audits khớp toàn bộ JSON cũ;
+  1.814 báo cáo và checkout/index/patch chính nguyên vẹn.
+
+Phạm vi dọn mã đã rà được chốt. Đây không phải chứng minh mọi nhánh động đều
+đã được thử. Build/native navigation trước đó giữ revision riêng; lượt này
+không đổi simulator/controller hoặc tạo lại dataset. Các công việc sản phẩm
+như baseline WM và hiển thị WSLg có scope riêng; không tính thành clean còn nợ.
+Nhánh benchmark giữ tại `9833565`, không merge thay người dùng.

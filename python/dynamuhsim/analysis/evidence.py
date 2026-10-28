@@ -1,5 +1,7 @@
 """Strict evidence I/O and hash-checked source resolution; snapshots are never executed."""
 import gzip
+import builtins
+import importlib.util
 import hashlib
 import json
 from pathlib import Path, PurePosixPath
@@ -75,3 +77,34 @@ def resolve_sources(expected, roots=(), *, git_repo=None, commit=None):
                 raise RuntimeError("Source changed while resolving: " + name)
             resolved[name] = found
     return resolved, missing
+
+
+def module_from_path(path, name, bindings=None):
+    """Load current code by explicit path, with module-local legacy import bindings."""
+    spec = importlib.util.spec_from_file_location(name, path)
+    module = importlib.util.module_from_spec(spec)
+    if bindings:
+        def imported(name, *args, **kwargs):
+            return bindings[name] if name in bindings else builtins.__import__(name, *args, **kwargs)
+        module.__dict__['__builtins__'] = dict(vars(builtins), __import__=imported)
+    spec.loader.exec_module(module)
+    return module
+
+
+def reserve_audit_directory(output, dataset, raw_root, repository, stage, source_roots=()):
+    """Reserve a fresh output outside datasets, raw captures and archived history."""
+    output, repository = Path(output).resolve(), Path(repository).resolve()
+    forbidden = [Path(dataset).resolve(), Path(raw_root).resolve()]
+    for root in {repository, *(Path(root).resolve() for root in source_roots)}:
+        forbidden.extend([(root/'experiments/archive').resolve(), (root/stage/'reports').resolve()])
+    if any(output == p or output.is_relative_to(p) or p.is_relative_to(output) for p in forbidden):
+        raise ValueError('Audit output must be outside datasets, raw captures and archived evidence')
+    output.mkdir(parents=True, exist_ok=False)
+    return output
+
+
+def verify_sources(expected, *, repository, roots=(), revision):
+    """Require exact recorded bytes; this proves provenance, not executable code parity."""
+    found, missing = resolve_sources(expected, roots=[repository,*roots], git_repo=repository, commit=revision)
+    if missing: raise ValueError('Historical source unavailable: '+', '.join(missing))
+    return {name:value['origin'] for name,value in found.items()}

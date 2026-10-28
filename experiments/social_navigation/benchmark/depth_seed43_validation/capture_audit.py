@@ -7,6 +7,12 @@ HERE=Path(__file__).resolve().parent;BENCH=HERE.parent;REPO=BENCH.parents[2]
 sys.path.insert(0,str(BENCH/'depth_track_refinement'))
 from freeze import sha,verify
 
+import sys
+sys.path.insert(0,str(REPO/'python'))
+from dynamuhsim.analysis.evidence import verify_sources
+ARTIFACT_ROOT=REPO
+def sources(expected):return verify_sources(expected,repository=REPO,roots=[ARTIFACT_ROOT],revision='9833565fa546d55cb0e553f8388bf4a703c59583')
+
 
 def rows(p):return [json.loads(l) for l in p.read_text().splitlines()]
 def audit(output):
@@ -15,9 +21,9 @@ def audit(output):
     r=json.loads((root/'result.json').read_text());capture=json.loads((HERE/'generated/drivers/depth_seed43_01/manifest.json').read_text())
     fixed=verify(BENCH/'depth_track_refinement/reports/frozen01.json');protocol=json.loads((HERE/'protocol.json').read_text())
     assert capture['inference_engine_sha256']==fixed['engine_sha256'] and capture['inference_config']==fixed['config']
-    assert capture['protocol']==protocol and all(sha(REPO/n)==v for n,v in capture['helper_sha256'].items())
+    assert capture['protocol']==protocol;sources(capture['helper_sha256'])
     assert sha(HERE/'generated/drivers/depth_seed43_01/driver.py')==capture['driver_sha256']
-    source_unchanged=all(sha(REPO/n)==v for n,v in r['source_sha256'].items())
+    source_unchanged=bool(sources(r['source_sha256']))
     ready=json.loads((runtime/'ready.json').read_text())
     friction=json.loads(subprocess.check_output([str(BENCH/'early_avoidance_pilot/generated/check_friction'),str(runtime/'mecanum_camera.sdf')],text=True))
     expected=BENCH/'portable_episode/generated/episode01/config_snapshot/runtime'
@@ -59,4 +65,4 @@ def audit(output):
     rawfiles={p.name:dict(bytes=p.stat().st_size,sha256=sha(p)) for p in (root/'raw_bag').iterdir() if p.is_file()}
     (output/'closed_raw_inventory.json').write_text(json.dumps(rawfiles,indent=2)+'\n');print(json.dumps(result,indent=2));return result
 if __name__=='__main__':
-    p=argparse.ArgumentParser();p.add_argument('--output',type=Path,required=True);a=p.parse_args();audit(a.output.resolve())
+    p=argparse.ArgumentParser();p.add_argument('--output',type=Path,required=True);p.add_argument('--artifact-root',type=Path,default=REPO);a=p.parse_args();ARTIFACT_ROOT=a.artifact_root.resolve();HERE=ARTIFACT_ROOT/HERE.relative_to(REPO);BENCH=HERE.parent;audit(a.output.resolve())

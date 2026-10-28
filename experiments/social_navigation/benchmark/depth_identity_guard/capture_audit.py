@@ -5,6 +5,12 @@ import numpy as np
 from freeze import verify,sha
 HERE=Path(__file__).resolve().parent;BENCH=HERE.parent;REPO=BENCH.parents[2]
 
+import sys
+sys.path.insert(0,str(REPO/'python'))
+from dynamuhsim.analysis.evidence import verify_sources
+ARTIFACT_ROOT=REPO
+def sources(expected):return verify_sources(expected,repository=REPO,roots=[ARTIFACT_ROOT],revision='9833565fa546d55cb0e553f8388bf4a703c59583')
+
 
 def rows(p):return [json.loads(l) for l in p.read_text().splitlines()]
 def canonical(e):return [e.tag,sorted(e.attrib.items()),(e.text or '').strip(),[canonical(c) for c in e]]
@@ -13,8 +19,8 @@ def audit(output):
     output.mkdir(parents=True,exist_ok=False);root=HERE/'generated/runs/identity_seed44_01';runtime=HERE/'generated/runtime/identity_seed44_01'
     r=json.loads((root/'result.json').read_text());manifest=json.loads((HERE/'generated/drivers/identity_seed44_01/manifest.json').read_text());fixed=verify(HERE/'generated/final_engine.json')
     assert manifest['engine_sha256']==fixed['engine_sha256'] and manifest['final_engine_sha256']==sha(HERE/'generated/final_engine.json')
-    assert manifest['capture_helper_sha256']==sha(HERE/'capture44.py') and all(sha(REPO/n)==h for n,h in manifest['source_sha256'].items())
-    unchanged=all(sha(REPO/n)==h for n,h in r['source_sha256'].items());ready=json.loads((runtime/'ready.json').read_text())
+    sources({str(HERE.relative_to(ARTIFACT_ROOT)/'capture44.py'):manifest['capture_helper_sha256'],**manifest['source_sha256']})
+    unchanged=bool(sources(r['source_sha256']));ready=json.loads((runtime/'ready.json').read_text())
     check=json.loads(subprocess.check_output([str(BENCH/'early_avoidance_pilot/generated/check_friction'),str(runtime/'mecanum_camera.sdf')],text=True))
     expected=BENCH/'portable_episode/generated/episode01/config_snapshot/runtime';worlds=[ET.parse(p).getroot() for p in [expected/'warehouse.sdf',runtime/'warehouse.sdf']]
     for tree in worlds:
@@ -35,4 +41,4 @@ def audit(output):
         diversity_caveat='Same initial layout; coupled robot inputs also differ, not isolated RNG effect',frozen_before_capture=True,training_ready=False)
     (output/'capture_audit.json').write_text(json.dumps(result,indent=2)+'\n');inventory={p.name:dict(bytes=p.stat().st_size,sha256=sha(p)) for p in (root/'raw_bag').iterdir() if p.is_file()};(output/'closed_raw_inventory.json').write_text(json.dumps(inventory,indent=2)+'\n');print(json.dumps(result,indent=2))
 if __name__=='__main__':
-    p=argparse.ArgumentParser();p.add_argument('--output',type=Path,required=True);a=p.parse_args();audit(a.output.resolve())
+    p=argparse.ArgumentParser();p.add_argument('--output',type=Path,required=True);p.add_argument('--artifact-root',type=Path,default=REPO);a=p.parse_args();ARTIFACT_ROOT=a.artifact_root.resolve();HERE=ARTIFACT_ROOT/HERE.relative_to(REPO);BENCH=HERE.parent;audit(a.output.resolve())

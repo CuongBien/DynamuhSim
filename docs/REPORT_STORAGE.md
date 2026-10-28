@@ -107,4 +107,4 @@ Giữ nguyên index/catalog lịch sử làm nguồn hydrate. Sau migration, t�
 
 Đã dọn riêng các bản hydrate dùng kiểm thử; giữ archive canonical và log. Checkout/index chính, dataset01, split/nhãn/freeze và 23 nhóm report giữ lại không thay đổi. Không chạy Gazebo/Docker/Nav2 mới và không rewrite lịch sử Git. Tổng hai đợt world + report chuyển **465.049.600 byte / 12.884 tệp payload** khỏi HEAD; dung lượng lịch sử clone vẫn giữ nguyên.
 
-Bước còn lại là kiểm dependency động/raw input của 23 nhóm được giữ, theo từng consumer, trước khi chuyển tiếp.
+23 nhóm control/report được giữ trong archive có chủ đích; việc chuyển thêm payload cần kiểm dependency động/raw input theo từng consumer. Đây là điều kiện cho một đợt externalize khác, không phải danh sách mã còn nợ cleanup. Trạng thái dọn mã hiện hành ở [phạm vi đã chốt](CLEANUP_SCOPE.md).

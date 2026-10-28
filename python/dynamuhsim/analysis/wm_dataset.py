@@ -1,23 +1,15 @@
 """Read-only integrity audit for the closed dataset01 cohort; no model evaluation."""
-import hashlib,json,os,shutil,tempfile,importlib.util,builtins
+import hashlib,json,os,shutil,tempfile
 from pathlib import Path
 import numpy as np
-from .evidence import sha256_file as sha,load_json,resolve_sources,relative_name
+from .evidence import sha256_file as sha,load_json,resolve_sources,relative_name,module_from_path as _module,reserve_audit_directory
 
 RECORDED_SOURCE_REVISION='9833565fa546d55cb0e553f8388bf4a703c59583'
 STAGE=Path('experiments/social_navigation/benchmark/wm_episode_batch')
 
 
 def report_directory(output, dataset, raw_root, repository, runtime_root=None):
- """Reserve a new output directory outside datasets, raw captures and history."""
- output=Path(output).resolve();repository=Path(repository).resolve()
- forbidden=[Path(dataset).resolve(),Path(raw_root).resolve()]
- for root in {repository,Path(runtime_root or repository).resolve()}:
-  forbidden.extend([(root/'experiments/archive').resolve(),(root/STAGE/'reports').resolve()])
- if any(output==p or output.is_relative_to(p) or p.is_relative_to(output) for p in forbidden):
-  raise ValueError('Audit output must be outside datasets, raw captures and archived evidence')
- output.mkdir(parents=True,exist_ok=False)
- return output
+ return reserve_audit_directory(output,dataset,raw_root,repository,STAGE,[runtime_root] if runtime_root else [])
 
 
 def source_context(repository, runtime_root, source_roots=(), source_revision=RECORDED_SOURCE_REVISION):
@@ -33,15 +25,6 @@ def source_context(repository, runtime_root, source_roots=(), source_revision=RE
  for name in [STAGE/'loader.py',STAGE/'targets.py',STAGE/'protocol.json',Path('experiments/social_navigation/benchmark/perception_target_pilot/geometry.py'),Path('experiments/social_navigation/benchmark/perception_target_pilot/sensor.py')]:
   if sha(repository/name)!=pins[str(name)]:raise ValueError('Active dataset math differs from frozen source: '+str(name))
  return origins
-
-
-def _module(path,name,bindings=None):
- spec=importlib.util.spec_from_file_location(name,path);module=importlib.util.module_from_spec(spec)
- if bindings:
-  # Bind legacy short imports only inside this verified module, never sys.path/modules.
-  def imported(name,*args,**kwargs):return bindings[name] if name in bindings else builtins.__import__(name,*args,**kwargs)
-  module.__dict__['__builtins__']=dict(vars(builtins),__import__=imported)
- spec.loader.exec_module(module);return module
 
 
 def audit_dataset(dataset, *, repository, raw_root, runtime_root, work_dir, source_roots=(), source_revision=RECORDED_SOURCE_REVISION):

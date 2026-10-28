@@ -7,6 +7,7 @@ case "$TASK_MODE" in
   task_ros workspace
   if [[ "$TASK_MODE" == build ]]; then task_cmake "$TASK_DIR/generated/build" 1
   else exec python3 "$TASK_DIR/capture.py" "$@"; fi ;;
- test|export|audit|preview) exec python3 "$TASK_DIR/$TASK_MODE.py" "$@" ;;
- *) echo 'Usage: bash run.sh {build|capture|test|export|audit|preview}' ;;
+ audit) exec python3 "$TASK_ROOT/tools/audit_perception_corpus.py" "$@" ;;
+ test|preview) exec python3 "$TASK_DIR/$TASK_MODE.py" "$@" ;;
+ *) echo 'Usage: bash run.sh {build|capture|test|audit --corpus BUNDLE --output NEW_DIRECTORY|preview}' >&2; exit 2 ;;
 esac

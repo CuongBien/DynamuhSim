@@ -19,16 +19,16 @@ Python 3.12, NumPy/SciPy; Matplotlib cho ảnh. Wrapper giới hạn BLAS/OMP/MK
 ```bash
 TASK=experiments/social_navigation/benchmark/depth_track_refinement
 bash "$TASK/run.sh" test
-bash "$TASK/run.sh" freeze --output "$TASK/generated/my_frozen.json"
-bash "$TASK/run.sh" replay --frozen "$TASK/generated/my_frozen.json" --dataset development --output "$TASK/generated/my_development"
-bash "$TASK/run.sh" replay --frozen "$TASK/generated/my_frozen.json" --dataset validation --output "$TASK/generated/my_validation"
-bash "$TASK/run.sh" evaluate --frozen "$TASK/generated/my_frozen.json" --dataset development --sensor "$TASK/generated/my_development" --output "$TASK/generated/my_development_evaluation"
-bash "$TASK/run.sh" evaluate --frozen "$TASK/generated/my_frozen.json" --dataset validation --sensor "$TASK/generated/my_validation" --output "$TASK/generated/my_validation_evaluation"
+FROZEN="$TASK/reports/frozen01.json"
+bash "$TASK/run.sh" replay --frozen "$FROZEN" --dataset development --output "$TASK/generated/my_development"
+bash "$TASK/run.sh" replay --frozen "$FROZEN" --dataset validation --output "$TASK/generated/my_validation"
+bash "$TASK/run.sh" evaluate --frozen "$FROZEN" --dataset development --sensor "$TASK/generated/my_development" --output "$TASK/generated/my_development_evaluation"
+bash "$TASK/run.sh" evaluate --frozen "$FROZEN" --dataset validation --sensor "$TASK/generated/my_validation" --output "$TASK/generated/my_validation_evaluation"
 ```
 
 `frozen01.json` lưu hash engine/config/input trước replay hai lượt đầu; `frozen02.json` thêm nguồn mesh-repeat, **engine và config y hệt**. Các bản receipt được lưu Git tại reports/. Mã snapshot baseline byte-identical với stage trước.
 
-Lượt mesh-repeat và các outcome TIMEOUT/FAIL vẫn giữ nguyên. Công cụ copy recording cố định, wrapper extra-repeat, profile diagnostic và preview của cohort đó đã được gỡ khỏi HEAD. `extend_freeze.py`, engine/config/replay/evaluator và auditor còn được giữ; các pin WM/classifier không đổi. Chuỗi lịch sử dùng source revision/manifest và raw inputs đã ghi.
+Lượt mesh-repeat và các outcome TIMEOUT/FAIL vẫn giữ nguyên. Công cụ copy recording cố định, wrapper extra-repeat, profile diagnostic và preview của cohort đó đã được gỡ khỏi HEAD. `extend_freeze.py` một lần đã gỡ; engine/config/replay/evaluator và auditor còn được giữ; các pin WM/classifier không đổi. Chuỗi lịch sử dùng source revision/manifest và raw inputs đã ghi.
 
 Audit còn dùng:
 
@@ -39,3 +39,5 @@ bash "$TASK/run.sh" audit --output "$TASK/generated/my_audit"
 Quyết định: refinement là thử nghiệm riêng, không tự áp dụng trên profile depth khác/không rõ. Các mask semantic, association, H1–H5 và training vẫn false. Bước kế là episode mới với depth mesh và seed/layout khác, có tiêu chí visibility/semantic, trước khi xác nhận person detector hoặc thu batch train.
 
 Cập nhật dọn 27/10/2026: đã gỡ các công cụ chỉ phục vụ cohort/report cũ: `diagnose_profiles.py`, `extra_repeat.py`, `prepare_repeat.py`, `preview.py`. [Code trước khi gỡ](https://github.com/CuongBien/DynamuhSim/tree/87b0c6eea9b54794db7b4cb794fae57c78f11c70/experiments/social_navigation/benchmark/depth_track_refinement) giữ cách tái lập; report, engine, source freeze và outcome cũ không đổi.
+
+`freeze.py` giữ nguyên vì các consumer hiện hành import verifier từ đây; không còn lệnh freeze trong wrapper. Đợt dữ liệu mới cần protocol/source identity riêng. Source extension lịch sử nằm tại commit `3b133626809a39991babe0e6fcc52d2572c2c03b`; các receipt hiện có không đổi.

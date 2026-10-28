@@ -11,27 +11,19 @@
 
 Capture dùng Ubuntu 24.04 + ROS 2 Jazzy, Python 3.12 và venv SocNavGym hiện có. GPU preflight và actual Ogre log đều là NVIDIA RTX 4060 D3D12; giữ startup preload/ordered pause-stop theo parent. Không mở GUI ở lượt này; ảnh/GIF do camera observer Gazebo ghi thật. Physics/Nav2 vẫn dùng CPU cho phần việc của chúng; không tuyên bố toàn bộ mô phỏng chạy GPU.
 
-Các lệnh thu **đã chạy một lần**. Tên recording/runtime cố định và từ chối ghi đè; giữ artifact cũ khi chuẩn bị lượt khác.
+Hai script capture/preflight một lần đã gỡ sau khi recording seed43 đóng;
+[source trước khi gỡ](https://github.com/CuongBien/DynamuhSim/tree/3b133626809a39991babe0e6fcc52d2572c2c03b/experiments/social_navigation/benchmark/depth_seed43_validation)
+giữ driver preparation và nguồn chính xác. Không thay recording hoặc TIMEOUT.
 
 ```bash
 TASK=experiments/social_navigation/benchmark/depth_seed43_validation
-bash "$TASK/run.sh" preflight
-bash "$TASK/run.sh" capture
-bash "$TASK/run.sh" capture-audit --output "$TASK/reports/capture"
+bash "$TASK/run.sh" capture-audit --artifact-root /PATH/TO/RECORDED_CHECKOUT --output "$TASK/generated/my_capture_audit"
 ```
 
-Chỉ driver copy thay một đường dẫn runtime, truyền `--seed 43`; giữ nguyên helper/native worker/robot/world/Nav2. Driver, diff và manifest thực tế ở reports/driver/. Parent HEAD lúc capture là 5e5de7e, mã wrapper khi đó chưa commit; SHA driver/helper và frozen engine được lưu, không coi HEAD cũ đã chứa wrapper mới.
-
-Chuẩn hóa lại từ raw đã đóng (dùng output mới để giữ bản hiện tại):
-
-```bash
-source /opt/ros/jazzy/setup.bash
-source install/setup.bash
-export OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 MKL_NUM_THREADS=1
-TASK=experiments/social_navigation/benchmark/depth_seed43_validation
-EPISODE="$TASK/generated/runs/depth_seed43_01"
-python3 experiments/social_navigation/benchmark/portable_episode/generated/episode01/tools/legacy/build.py --episode "$EPISODE" --output "$EPISODE/my_normalized"
-```
+Artifact root chứa raw/runtime/driver đã ghi; implementation auditor chạy từ
+checkout hiện hành. Helper sources đối chiếu SHA256 từ artifact root hoặc Git
+`9833565`, không thực thi source lấy từ lịch sử. Episode mới thu qua
+`tools/capture_episode.py` với protocol/output mới.
 
 Bộ artifact đã đo vẫn giữ `normalized/`, frozen engine, sensor replay và evaluation. `capture_audit.py` và `audit.py` còn tái kiểm bộ artifact cố định; runner so sánh/source extension, diagnostic, preview và công cụ chốt report của cohort đã hoàn tất được gỡ khỏi HEAD. Tái lập chuỗi cũ dùng source revision và inputs đã ghi, không ghi lại outcome cũ. Raw MCAP/NPY/JSONL lớn vẫn ở generated/ và không thay đổi.
 

@@ -34,21 +34,19 @@ masks = episode.task_masks(0)
 
 Để chuyển dữ liệu, copy **toàn bộ generated/episode01/** và kiểm bundle_manifest.json SHA256. Array loader không cần repo/ROS/simulator. SDF/launch trong snapshot còn path tài sản lịch sử; rerun mô phỏng cần remap assets/dependencies. Chưa thử Isaac Sim, không coi bản binary plugin snapshot là portable runtime.
 
-## Tạo lại từ raw hiện có, không mô phỏng lại
-
-Chọn tên output mới; mọi bước từ chối ghi đè dữ liệu cũ:
+## Đọc và kiểm bundle đã đóng
 
 ```bash
 TASK=experiments/social_navigation/benchmark/portable_episode
-BUNDLE="$TASK/generated/my_episode_copy"
-bash "$TASK/run.sh" prepare --output "$BUNDLE"
-bash "$TASK/run.sh" build --bundle "$BUNDLE"
-bash "$TASK/run.sh" finalize --bundle "$BUNDLE"
-bash "$TASK/run.sh" audit --bundle "$BUNDLE" --report-dir "$TASK/generated/my_audit"
-bash "$TASK/run.sh" smoke "$BUNDLE"
+bash "$TASK/run.sh" smoke "$TASK/generated/episode01"
+bash "$TASK/run.sh" audit --bundle "$TASK/generated/episode01" --report-dir "$TASK/generated/my_audit"
 ```
 
-Build/audit source ROS2Jazzy để đọc MCAP; loader/smoke không dùng ROS. Build dùng bản copy byte-identical của exporter/contract/core cũ để giữ quy tắc sampling; không sửa các file cũ. Chuỗi thực tế của bundle01 chạy bản exporter đã copy trực tiếp, cùng implementation byte-identical. Thư mục raw/array lớn bị Gitignore; manifest, QA, code, hình và một mẫu nhỏ được lưu Git.
+Loader/smoke không dùng ROS; auditor MCAP cần ROS2 Jazzy. Ba writer một lần
+`prepare.py`, `build.py`, `finalize.py` đã gỡ; [source trước khi gỡ](https://github.com/CuongBien/DynamuhSim/tree/3b133626809a39991babe0e6fcc52d2572c2c03b/experiments/social_navigation/benchmark/portable_episode)
+giữ quy trình tạo bundle lịch sử. Bundle, source snapshot, manifest và eligibility
+không đổi. Thu episode mới dùng `tools/capture_episode.py`; đóng gói theo protocol
+mới, không ghi lại episode01 hoặc chạy snapshot cũ trong luồng hiện hành.
 
 ## Những gì đã và chưa có
 
