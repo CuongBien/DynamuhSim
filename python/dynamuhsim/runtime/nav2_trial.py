@@ -4,6 +4,7 @@ Historical reports/drivers and the camera/WM capture pipeline are immutable inpu
 of earlier stages, not templates for this runner.
 """
 from pathlib import Path
+from dynamuhsim.workspace import stage_directory
 from types import SimpleNamespace
 import fcntl
 import hashlib
@@ -54,11 +55,11 @@ def load_dependencies(repo):
     from gz.msgs10.image_pb2 import Image as GzImage
 
     social = repo / "experiments/social_navigation"
-    benchmark = social / "benchmark"
+    benchmark = stage_directory(repo, "common_gazebo").parent
     adapter = load_file_module("_dynamuhsim_gazebo_adapter", social / "gazebo_adapter/run.py")
     from . import gpu
     from . import shutdown
-    observer = load_file_module("_dynamuhsim_amcl_observer", benchmark / "amcl_observer.py")
+    observer = load_file_module("_dynamuhsim_amcl_observer", repo / "experiments/social_navigation/navigation/amcl_observer.py")
     return SimpleNamespace(**locals())
 
 
@@ -88,7 +89,7 @@ def stop_ros_launch(process, fallback_stop, timeout=15, *, completed_child_log=N
 
 def source_files(repo, profile, entrypoint):
     social = repo / "experiments/social_navigation"
-    benchmark = social / "benchmark"
+    benchmark = stage_directory(repo, "common_gazebo").parent
     stage = benchmark / profile.name
     fix = benchmark / "socnavgym_response_fix"
     common = benchmark / "common_response"
@@ -113,14 +114,14 @@ def source_files(repo, profile, entrypoint):
     files += sorted((repo / "python/dynamuhsim").rglob("*.py"))
     files += [repo / "pyproject.toml", social / "gazebo_adapter/run.py",
               repo / "python/dynamuhsim/runtime/gl_probe.cpp",
-              benchmark / "amcl_observer.py"]
+              repo / "experiments/social_navigation/navigation/amcl_observer.py"]
     return files
 
 
 def run_trial(profile, args, repo, entrypoint, *, dependencies=None, capture=None):
     deps = dependencies if dependencies is not None else load_dependencies(repo)
     social = repo / "experiments/social_navigation"
-    benchmark = social / "benchmark"
+    benchmark = stage_directory(repo, "common_gazebo").parent
     stage = benchmark / profile.name
     plan = json.loads((stage / "protocol.json").read_text())
     dt = profile.planning_dt(plan, args)

@@ -1,13 +1,14 @@
 """Read-only final corpus01 QA: retain missing-scan masks; no model evaluation."""
 import hashlib,json
 from pathlib import Path
+from dynamuhsim.workspace import source_path, stage_directory
 import numpy as np
 from .evidence import load_json,sha256_file as sha,resolve_sources,module_from_path
 from dynamuhsim.perception.corpus import STAGE,corpus_math
 RECORDED_SOURCE_REVISION='9833565fa546d55cb0e553f8388bf4a703c59583'
 
 def audit_corpus(root, *, repository, raw_root, source_roots=(), source_revision=RECORDED_SOURCE_REVISION):
- root=Path(root).resolve();repository=Path(repository).resolve();stage=repository/STAGE;raw_root=Path(raw_root).resolve();freeze=load_json(stage/'frozen.json');manifest=load_json(root/'manifest.json');origins={}
+ root=Path(root).resolve();repository=Path(repository).resolve();stage=stage_directory(repository,"depth_perception_corpus");raw_root=Path(raw_root).resolve();freeze=load_json(stage/'frozen.json');manifest=load_json(root/'manifest.json');origins={}
  if manifest['source_frozen_sha256']!=sha(stage/'frozen.json'):raise ValueError('Corpus source receipt identity differs')
  def verify(expected=None):
   expected=freeze['source_sha256'] if expected is None else expected
@@ -17,7 +18,7 @@ def audit_corpus(root, *, repository, raw_root, source_roots=(), source_revision
  verify()
  for name in ['loader.py','protocol.json','scenes_LABEL_ONLY.json']:
   path=STAGE/name
-  if sha(repository/path)!=freeze['source_sha256'][str(path)]:raise ValueError('Active corpus contract differs from frozen source: '+name)
+  if sha(source_path(repository,str(path)))!=freeze['source_sha256'][str(path)]:raise ValueError('Active corpus contract differs from frozen source: '+name)
  math=corpus_math(repository);loader=module_from_path(stage/'loader.py','verified_corpus_loader')
  with np.errstate(invalid='ignore'):
   result=_audit(root,stage,raw_root,math.label_pixels,math.clusters,loader.load_input,loader.INPUT_KEYS,verify)

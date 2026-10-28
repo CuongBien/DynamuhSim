@@ -45,13 +45,13 @@ Cần ROS2 Jazzy/Gazebo Harmonic, GPU NVIDIA, robot packages đã build từ sou
 ```bash
 source /opt/ros/jazzy/setup.bash
 source install/setup.bash
-python3 experiments/social_navigation/benchmark/common_response/preflight.py
-bash experiments/social_navigation/benchmark/socnavgym_response_fix/run.sh build
-bash experiments/social_navigation/benchmark/depth_proxy_ablation/run.sh build
-mkdir -p experiments/social_navigation/benchmark/early_avoidance_pilot/generated
+python3 experiments/social_navigation/navigation/common_response/preflight.py
+bash experiments/social_navigation/navigation/socnavgym_response_fix/run.sh build
+bash experiments/social_navigation/perception/depth_proxy_ablation/run.sh build
+mkdir -p experiments/social_navigation/navigation/early_avoidance_pilot/generated
 g++ -std=c++17 -O2 \
-  experiments/social_navigation/benchmark/early_avoidance_pilot/check_friction.cc \
-  -o experiments/social_navigation/benchmark/early_avoidance_pilot/generated/check_friction \
+  experiments/social_navigation/navigation/early_avoidance_pilot/check_friction.cc \
+  -o experiments/social_navigation/navigation/early_avoidance_pilot/generated/check_friction \
   $(pkg-config --cflags --libs sdformat14)
 ```
 

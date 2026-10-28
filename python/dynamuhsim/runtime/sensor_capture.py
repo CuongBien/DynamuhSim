@@ -1,6 +1,7 @@
 """Shared counterfactual sensor capture. No model inference, labels or robot commands."""
 import fcntl,hashlib,json,os,re,subprocess,time,traceback
 from pathlib import Path
+from dynamuhsim.workspace import stage_directory
 import numpy as np
 from .gpu import RuntimeGuard,gpu_preflight
 from .shutdown import launch_environment,stop_server,stop_paused
@@ -27,10 +28,12 @@ def run_capture(out, *, here, repo, benchmark, create_world, sources,
  HERE,BENCH,REPO=Path(here),Path(benchmark),Path(repo)
  with_scan=condition is not None
  out.mkdir(parents=True,exist_ok=False);runtime=out/'runtime';runtime.mkdir();protocol=json.loads((HERE/protocol_name).read_text())
- sources=[*sources,REPO/'python/dynamuhsim/simulation/sensor_fixture.py',Path(__file__),REPO/'python/dynamuhsim/runtime/gpu.py',REPO/'python/dynamuhsim/runtime/shutdown.py',REPO/'python/dynamuhsim/runtime/ordered_stop.py']
+ sources=[*sources,REPO/'python/dynamuhsim/workspace.py',REPO/'python/dynamuhsim/simulation/sensor_fixture.py',Path(__file__),REPO/'python/dynamuhsim/runtime/gpu.py',REPO/'python/dynamuhsim/runtime/shutdown.py',REPO/'python/dynamuhsim/runtime/ordered_stop.py']
  before={str(p.relative_to(REPO)):sha(p) for p in sources}
  (out/'source_before.json').write_text(json.dumps(before,indent=2)+'\n')
- lock=(BENCH/'common_gazebo/generated/domain91.lock').open('a');fcntl.flock(lock,fcntl.LOCK_EX|fcntl.LOCK_NB)
+ lock_root=stage_directory(REPO,'common_gazebo') if BENCH.parent==REPO/'experiments/social_navigation' else BENCH/'common_gazebo'
+ (lock_root/'generated').mkdir(parents=True,exist_ok=True)
+ lock=(lock_root/'generated/domain91.lock').open('a');fcntl.flock(lock,fcntl.LOCK_EX|fcntl.LOCK_NB)
  os.environ.update(ROS_DOMAIN_ID='91',GZ_PARTITION=f'{"lidar_person" if with_scan else "visibility"}_{os.getpid()}',ROS_LOG_DIR=str(runtime/'ros_logs'),ROS_AUTOMATIC_DISCOVERY_RANGE='LOCALHOST',FASTDDS_BUILTIN_TRANSPORTS='UDPv4',QT_QPA_PLATFORM='xcb')
  guard=RuntimeGuard(runtime);processes=[];logs=[];node=None;rows={mode:{} for mode in protocol['modes']};infos={};result={'status':'ERROR','static_fixture':not scene['moving'] if scene is not None else True,'training_ready':False,'nav2_actions':0,'native_human_steps':0}
  if scene is not None:result.update(scripted_motion=scene['moving'],scene_id=scene_id)

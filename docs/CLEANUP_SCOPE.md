@@ -115,10 +115,25 @@ cấu trúc còn thiếu:
 |---|---|
 | 1.505 file Gazebo generated trộn với input benchmark | Đã archive/restore kiểm đầy đủ; giữ 7 baseline nguyên byte tại `configs/fixtures`, chuyển 9 consumer; output mới bị ignore |
 | Hai cây persona/Step1 chỉ còn report | Đã externalize 29 file; index/history và cách khôi phục được ghi riêng |
-| Gom 29 stage social-navigation theo chức năng | Còn lại; phải cập nhật import, fixture/CMake/runtime và nguồn frozen, không chỉ đổi tên thư mục |
-| Nghiệm thu sau khi gom stage | Còn lại; test/CLI, source/data preservation và smoke phù hợp các đường chạy bị chuyển |
+| Gom 29 stage social-navigation theo chức năng | Đã chuyển sang navigation 13 / perception 11 / datasets 4 / replay 1; chuyển thêm 13 Nav2 helper; không giữ alias thư mục code cũ |
+| Nghiệm thu sau khi gom stage | Đã chạy test/CLI, build 8 target, audit đầy đủ WM/corpus, control parity và capture native/Nav2; chi tiết receipt bên dưới |
 
 [Payload index](artifacts/closed_payloads_2026-10-28.json) và
 [hướng dẫn lịch sử](history/closed_experiment_payloads.md). Không dùng số dòng
 SDF/JSON/data bị bỏ để báo mức giảm code. Checkout gốc và benchmark branch
 không bị merge hoặc reset.
+
+## Gom stage theo chức năng — 28/10/2026
+
+[Receipt cuối](verification/capability_layout_2026-10-28.json) ghi kiểm chứng cho
+cấu trúc mới. Giữ cùng độ sâu thư mục để các relative root và native CMake còn
+đúng; cập nhật caller chéo nhóm qua một resolver duy nhất. Các ID đã freeze
+không đổi, source thực thi vẫn bắt buộc khớp hash. Không dùng bản sao cache cũ
+để che file hiện hành bị thiếu hoặc bị sửa.
+
+Đây là lượt sắp xếp code có consumer, không báo file di chuyển thành code bị
+xoá hoặc cộng dồn số dòng từ generated payload. Những stage còn giữ có vai trò
+riêng; raw ignored, source frozen/vendor và báo cáo nguyên bản không bị xoá chỉ
+để giảm số thư mục. Các mục cấu trúc đã xác định trong bảng trên đã xử lý;
+không có batch gom stage nào còn chờ trong phạm vi này. Công việc phát triển WM,
+nghiệm thu thêm seed/backend và hiển thị WSLg thuộc phạm vi riêng.

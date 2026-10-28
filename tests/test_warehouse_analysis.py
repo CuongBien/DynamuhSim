@@ -5,6 +5,7 @@ import importlib.util
 import json
 import math
 from pathlib import Path
+from dynamuhsim.workspace import stage_directory
 import sys
 import unittest
 
@@ -117,12 +118,12 @@ class WarehouseAnalysisTests(unittest.TestCase):
         fixture = json.loads(FIXTURE.read_text())
         for name in NAMES:
             with self.subTest(analyzer=name):
-                source = (ROOT / "experiments/social_navigation/benchmark" / name / "analyze.py").read_text()
+                source = (stage_directory(ROOT,name) / "analyze.py").read_text()
                 self.assertEqual(policy(source),fixture["policies"][name])
 
     def test_entrypoints_wire_the_original_proxy_names_and_time_steps(self):
         for name in NAMES:
-            tree = ast.parse((ROOT / "experiments/social_navigation/benchmark" / name / "analyze.py").read_text())
+            tree = ast.parse((stage_directory(ROOT,name) / "analyze.py").read_text())
             proxies = next(n for n in tree.body if isinstance(n,ast.Assign) and any(isinstance(t,ast.Name) and t.id=="PROXIES" for t in n.targets))
             ns = {}; exec(compile(ast.Module(body=[proxies],type_ignores=[]),name,"exec"),ns)
             self.assertEqual(ns["PROXIES"],{i:f"common_{i}_proxy" for i in range(1,7)})

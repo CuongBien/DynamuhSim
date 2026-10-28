@@ -33,7 +33,7 @@ class FixtureTests(unittest.TestCase):
 
     def test_legacy_camera_launch_carries_its_helper_and_source_hash(self):
         from dynamuhsim.runtime.nav2_trial import load_file_module
-        legacy = load_file_module("_legacy_camera_copy_test", ROOT / "experiments/social_navigation/benchmark/dataset_pilot/prepare.py")
+        legacy = load_file_module("_legacy_camera_copy_test", ROOT / "experiments/social_navigation/datasets/dataset_pilot/prepare.py")
         helper = ROOT / "src/custom_corridor/launch/_dynamuhsim_simulation.py"
         with tempfile.TemporaryDirectory() as directory:
             out = Path(directory)
@@ -65,7 +65,7 @@ class FixtureTests(unittest.TestCase):
         import yaml
         base = yaml.safe_load((ROOT / "experiments/social_navigation/warehouse/nav2_warehouse.yaml").read_text())
         before = copy.deepcopy(base)
-        source = ROOT / "experiments/social_navigation/benchmark/early_avoidance_pilot/config_runtime.py"
+        source = ROOT / "experiments/social_navigation/navigation/early_avoidance_pilot/config_runtime.py"
         namespace = {}
         tree = ast.parse(source.read_text())
         function = next(x for x in tree.body if isinstance(x, ast.FunctionDef) and x.name == "apply_runtime_config")
@@ -212,20 +212,20 @@ class RecordingTests(unittest.TestCase):
         from dynamuhsim.runtime.nav2_trial import load_file_module
         from dynamuhsim.runtime import capture_recording as shared
         benchmark = ROOT / "experiments/social_navigation/benchmark"
-        legacy = load_file_module("_legacy_recorder_import", benchmark / "dataset_pilot/recording.py")
-        pairs = load_file_module("_legacy_pairs_import", benchmark / "depth_proxy_lifecycle/pair_recording.py")
+        legacy = load_file_module("_legacy_recorder_import", benchmark.parent/'datasets/dataset_pilot/recording.py')
+        pairs = load_file_module("_legacy_pairs_import", benchmark.parent/'perception/depth_proxy_lifecycle/pair_recording.py')
         self.assertIs(pairs.Pairs, shared.Pairs)
         self.assertIs(legacy.Recording.witness, shared.Recording.witness)
         self.assertIs(legacy.Recording.close, shared.Recording.close)
         for name in ["qos.yaml", "storage.yaml"]:
-            self.assertEqual((benchmark / "dataset_pilot" / name).read_bytes(), (ROOT / "configs/capture" / name).read_bytes())
+            self.assertEqual((benchmark.parent/'datasets/dataset_pilot' / name).read_bytes(), (ROOT / "configs/capture" / name).read_bytes())
         node = NS(create_publisher=lambda *a: NS(), create_subscription=lambda *a: None)
         modules = {"std_msgs.msg": NS(String=NS), "rclpy.qos": NS(QoSProfile=NS, ReliabilityPolicy=NS(BEST_EFFORT="best_effort")),
                    "sensor_msgs.msg": NS(Image=type("Image", (), {}), CameraInfo=type("CameraInfo", (), {}))}
         with tempfile.TemporaryDirectory() as directory, patch.dict(sys.modules, modules), patch.object(shared.subprocess, "Popen") as popen:
             recorder = legacy.Recording(node, directory)
-            self.assertIn(str(benchmark / "dataset_pilot/storage.yaml"), recorder.command)
-            self.assertIn(str(benchmark / "dataset_pilot/qos.yaml"), recorder.command)
+            self.assertIn(str(benchmark.parent/'datasets/dataset_pilot/storage.yaml'), recorder.command)
+            self.assertIn(str(benchmark.parent/'datasets/dataset_pilot/qos.yaml'), recorder.command)
             recorder.log.close()
             self.assertTrue(popen.call_args.kwargs["start_new_session"])
 

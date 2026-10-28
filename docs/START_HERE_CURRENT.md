@@ -1,6 +1,6 @@
 # Bắt đầu ở đây — những phần đang dùng
 
-Cập nhật ngày **23/10/2026**. Công việc hiện tại: **đọc bộ dữ liệu đầu tiên, xem lại dữ liệu và chuẩn bị train thử World Model dự báo BEV**. Các thử nghiệm trước được giữ để tra cứu, chưa cần chạy lại.
+Cập nhật đường dẫn source ngày **28/10/2026**. Công việc hiện tại: **đọc bộ dữ liệu đầu tiên, xem lại dữ liệu và chuẩn bị train thử World Model dự báo BEV**. Các thử nghiệm trước được giữ để tra cứu, chưa cần chạy lại.
 
 ## 1. Hiện tại đã có gì?
 
@@ -26,8 +26,14 @@ Các đường dẫn trong bảng tính từ gốc repository `/home/cuongbien/D
 | Reader không cần ROS, chỉ dùng NumPy | `dataset01/tools/loader.py` bên trong bộ dữ liệu |
 | Xem file, shape, timestamp và mask chi tiết | [Schema dữ liệu](../experiments/archive/social_navigation/reports/wm_episode_batch/SCHEMA.md) |
 | Xem kết quả thu và kiểm tra chất lượng | [Báo cáo batch](../experiments/archive/social_navigation/reports/wm_episode_batch/WM_BATCH_REPORT.md) |
-| Xem lại camera và quỹ đạo đã ghi | `experiments/social_navigation/benchmark/wm_dataset_replay/` |
+| Xem lại camera và quỹ đạo đã ghi | `experiments/social_navigation/replay/wm_dataset_replay/` |
 | Lấy bản sao đầy đủ | [Thư mục Google Drive](https://drive.google.com/drive/folders/1I3kfKbTm5X6Bj32RyPVck5kFSjmVgqnl) |
+
+Code reader/target hiện ở `experiments/social_navigation/datasets/`, replay ở
+`experiments/social_navigation/replay/`. Dữ liệu local cũ trong các ví dụ bên
+dưới vẫn ở `benchmark/<stage>/generated`; đợt refactor không chuyển raw/dataset.
+Khi restore vào chỗ khác, truyền `--dataset`/`--raw-root` hoặc đổi `root` cho đúng
+vị trí thực. Receipt cũ vẫn giữ ID nguồn `benchmark/<stage>` và hash gốc.
 
 **GitHub chứa code và báo cáo. Full dataset và raw MCAP nằm ở máy/Drive, không được tải về chỉ bằng `git clone`.**
 
@@ -72,14 +78,14 @@ Trong terminal Ubuntu/WSL:
 
 ```bash
 cd /home/cuongbien/DynamuhSim
-python3 experiments/social_navigation/benchmark/wm_dataset_replay/serve_recording.py --port 8765
+python3 experiments/social_navigation/replay/wm_dataset_replay/serve_recording.py --port 8765
 ```
 
 Mở **http://localhost:8765/** trong trình duyệt Windows. Giữ terminal chạy khi xem; `Ctrl+C` để dừng. Nếu cổng đã bận, bỏ `--port 8765` và mở URL mới được in ra.
 
 Trang có dừng, tua, tốc độ 1×/2×/4× và toàn màn hình. Video là **90 frame camera Gazebo ghi thật**, mặc định phát nhanh 4×; camera ngoài chỉ dùng minh họa, không phải đầu vào WM.
 
-Gazebo pose replay và hướng dẫn build ở [README replay](../experiments/social_navigation/benchmark/wm_dataset_replay/README.md). Chỉ dùng khi cần kiểm tra 3D: nó nội suy XY/yaw đã ghi, không chạy lại Nav2/vật lý hay tái tạo cảm biến. Hiện ưu tiên trình duyệt để xem, vì lỗi hiển thị cửa sổ WSLg còn tồn tại.
+Gazebo pose replay và hướng dẫn build ở [README replay](../experiments/social_navigation/replay/wm_dataset_replay/README.md). Chỉ dùng khi cần kiểm tra 3D: nó nội suy XY/yaw đã ghi, không chạy lại Nav2/vật lý hay tái tạo cảm biến. Hiện ưu tiên trình duyệt để xem, vì lỗi hiển thị cửa sổ WSLg còn tồn tại.
 
 ## 5. Khôi phục dữ liệu từ Drive
 

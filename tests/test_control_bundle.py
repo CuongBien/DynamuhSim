@@ -1,5 +1,6 @@
 import copy,hashlib,importlib.util,json,shutil,subprocess,sys,tempfile,unittest
 from pathlib import Path
+from dynamuhsim.workspace import stage_directory,source_path
 import numpy as np
 ROOT=Path(__file__).resolve().parents[1]
 sys.path.insert(0,str(ROOT/'python'))
@@ -7,7 +8,7 @@ from dynamuhsim.controls.bundle import ControlBundle,registered_bundle,export_bu
 from dynamuhsim.perception.depth_classifier import FrozenDepthClassifier,depth_features
 BUNDLE=ROOT/'control_bundles/sensor_pilot_v1'
 DIGEST=json.loads((ROOT/'configs/control_registry.json').read_text())['bundles']['sensor_pilot_v1']['manifest_sha256']
-LEGACY=ROOT/'experiments/social_navigation/benchmark/depth_person_classifier'
+LEGACY=stage_directory(ROOT,'depth_person_classifier')
 
 
 def load(name):
@@ -121,7 +122,7 @@ class ControlBundleTests(unittest.TestCase):
                 frozen=bundle.document(engine['metadata'])
                 for source in frozen['engine_sha256']:
                     path=repo/engine['source_root']/source;path.parent.mkdir(parents=True,exist_ok=True)
-                    path.write_bytes((ROOT/engine['source_root']/source).read_bytes())
+                    path.write_bytes((source_path(ROOT,engine['source_root'])/source).read_bytes())
                 self.assertEqual(bundle.verify_engine(name,repo),frozen)
             source=repo/bundle.manifest['engines']['identity']['source_root']/'guard_tracker.py';source.write_text('raise RuntimeError("not executed")')
             with self.assertRaisesRegex(ValueError,'changed'):bundle.verify_engine('identity',repo)
@@ -147,11 +148,11 @@ class ControlBundleTests(unittest.TestCase):
             for target,origin in ORIGINS.items():
                 path=repo/origin;path.parent.mkdir(parents=True,exist_ok=True);path.write_bytes((BUNDLE/target).read_bytes())
             for origin in manifest['provenance_only']:
-                path=repo/origin;path.parent.mkdir(parents=True,exist_ok=True);path.write_bytes((ROOT/origin).read_bytes())
+                path=repo/origin;path.parent.mkdir(parents=True,exist_ok=True);path.write_bytes(source_path(ROOT,origin).read_bytes())
             for name,engine in manifest['engines'].items():
                 frozen=json.loads((BUNDLE/engine['metadata']).read_text())
                 for source in frozen['engine_sha256']:
-                    path=repo/engine['source_root']/source;path.parent.mkdir(parents=True,exist_ok=True);path.write_bytes((ROOT/engine['source_root']/source).read_bytes())
+                    path=repo/engine['source_root']/source;path.parent.mkdir(parents=True,exist_ok=True);path.write_bytes((source_path(ROOT,engine['source_root'])/source).read_bytes())
             subprocess.run(['git','init','-q',str(repo)],check=True);subprocess.run(['git','-C',str(repo),'add','.'],check=True)
             subprocess.run(['git','-C',str(repo),'-c','user.name=Bundle Test','-c','user.email=bundle@example.invalid','commit','-qm','controls'],check=True)
             dirty=repo/CLASSIFIER/'reports/selected_model.npz';dirty.write_bytes(b'local edit')

@@ -4,6 +4,7 @@ from functools import partial
 import io
 import json
 from pathlib import Path
+from dynamuhsim.workspace import stage_directory
 import shutil
 import sys
 import tempfile
@@ -31,9 +32,9 @@ class RunnerHarness:
         self.goal_active = False
         self.goal_ticks = self.canceled = 0
         self.fixture = json.loads((FIXTURES / "telemetry.json").read_text())
-        self.stage = root / "experiments/social_navigation/benchmark" / name
+        self.stage = stage_directory(root,name)
         self.stage.mkdir(parents=True)
-        shutil.copyfile(BENCH / name / "protocol.json", self.stage / "protocol.json")
+        shutil.copyfile(stage_directory(ROOT,name) / "protocol.json", self.stage / "protocol.json")
         self.entry = self.stage / "trial.py"
         self.entry.write_text("# compatibility entry point\n")
         self.args = self.profile.parse_args(flags + ["--report-dir", str(root.parent / "report")])
@@ -51,8 +52,8 @@ class RunnerHarness:
         warehouse.mkdir(parents=True)
         (warehouse / "nav2_warehouse.yaml").write_text(json.dumps({"amcl": {"ros__parameters": {"initial_pose": {"x": 0, "y": 0, "yaw": 0}}}}))
         if self.profile.container_worker:
-            shutil.copyfile(BENCH / name / "runtime.py", self.stage / "runtime.py")
-            inputs = benchmark / "common_response/inputs"
+            shutil.copyfile(stage_directory(ROOT,name) / "runtime.py", self.stage / "runtime.py")
+            inputs = benchmark/'common_response/inputs'
             inputs.mkdir(parents=True)
             (inputs / "images.json").write_text(json.dumps({"dynamuhsim-crowdsimplus:round2": "pinned:csp", "dynamuhsim-complexitynav:round3": "pinned:cn"}))
         self.humans = [dict(id=i, x=-25 + i / 10, y=i / 10) for i in range(1, 7)]

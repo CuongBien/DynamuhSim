@@ -1,6 +1,7 @@
 """Read-only integrity audit for the closed dataset01 cohort; no model evaluation."""
 import hashlib,json,os,shutil,tempfile
 from pathlib import Path
+from dynamuhsim.workspace import source_path, stage_directory
 import numpy as np
 from .evidence import sha256_file as sha,load_json,resolve_sources,relative_name,module_from_path as _module,reserve_audit_directory
 
@@ -14,7 +15,7 @@ def report_directory(output, dataset, raw_root, repository, runtime_root=None):
 
 def source_context(repository, runtime_root, source_roots=(), source_revision=RECORDED_SOURCE_REVISION):
  """Check historical bytes without executing them; pin live reader/grid math."""
- repository,runtime_root=Path(repository).resolve(),Path(runtime_root).resolve();stage=repository/STAGE
+ repository,runtime_root=Path(repository).resolve(),Path(runtime_root).resolve();stage=stage_directory(repository, "wm_episode_batch")
  receipts={name:load_json(stage/name) for name in ['capture_frozen.json','export_frozen.json']}
  origins={}
  for name,receipt in receipts.items():
@@ -23,20 +24,20 @@ def source_context(repository, runtime_root, source_roots=(), source_revision=RE
   origins[name]={p:info['origin'] for p,info in resolved.items()}
  pins=receipts['export_frozen.json']['source_sha256']
  for name in [STAGE/'loader.py',STAGE/'targets.py',STAGE/'protocol.json',Path('experiments/social_navigation/benchmark/perception_target_pilot/geometry.py'),Path('experiments/social_navigation/benchmark/perception_target_pilot/sensor.py')]:
-  if sha(repository/name)!=pins[str(name)]:raise ValueError('Active dataset math differs from frozen source: '+str(name))
+  if sha(source_path(repository, str(name)))!=pins[str(name)]:raise ValueError('Active dataset math differs from frozen source: '+str(name))
  return origins
 
 
 def audit_dataset(dataset, *, repository, raw_root, runtime_root, work_dir, source_roots=(), source_revision=RECORDED_SOURCE_REVISION):
- repository=Path(repository).resolve();stage=repository/STAGE;dataset=Path(dataset).resolve();raw_root=Path(raw_root).resolve();work_dir=report_directory(work_dir,dataset,raw_root,repository,runtime_root)
+ repository=Path(repository).resolve();stage=stage_directory(repository, "wm_episode_batch");dataset=Path(dataset).resolve();raw_root=Path(raw_root).resolve();work_dir=report_directory(work_dir,dataset,raw_root,repository,runtime_root)
  metadata=load_json(dataset/'dataset.json')
  for name,key in [('capture_frozen.json','source_capture_freeze_sha256'),('export_frozen.json','source_export_freeze_sha256')]:
   if sha(stage/name)!=metadata[key]:raise ValueError('Dataset source receipt identity differs: '+name)
  verify=lambda:source_context(repository,runtime_root,source_roots,source_revision)
  provenance=verify()
  Dataset=_module(stage/'loader.py','verified_wm_dataset_reader').Dataset
- sensor=_module(repository/'experiments/social_navigation/benchmark/perception_target_pilot/sensor.py','verified_wm_sensor_math')
- raster=_module(repository/'experiments/social_navigation/benchmark/perception_target_pilot/geometry.py','verified_wm_grid_math',{'sensor':sensor}).raster
+ sensor=_module(source_path(repository,'experiments/social_navigation/benchmark/perception_target_pilot/sensor.py'),'verified_wm_sensor_math')
+ raster=_module(source_path(repository,'experiments/social_navigation/benchmark/perception_target_pilot/geometry.py'),'verified_wm_grid_math',{'sensor':sensor}).raster
  with np.errstate(invalid='ignore'):
   result=_audit(dataset,stage,Path(runtime_root).resolve(),raw_root,work_dir,Dataset,raster,verify)
  return result,dict(recorded_source_revision=source_revision,source_origins=provenance,active_math='Current tracked reader/grid code, exact frozen hashes',historical_source_executed=False)

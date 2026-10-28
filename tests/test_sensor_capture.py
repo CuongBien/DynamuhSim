@@ -1,6 +1,7 @@
 """Middleware replay covers synchronization, float32 encoding and owned teardown."""
 import contextlib,importlib.util,io,json,sys,tempfile,types,unittest
 from pathlib import Path
+from dynamuhsim.workspace import stage_directory
 from unittest.mock import patch
 import numpy as np
 

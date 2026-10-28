@@ -1,25 +1,24 @@
-# Benchmark hiện hành
+# Hạ tầng tương thích benchmark
 
-Cây này còn **29 thư mục thực nghiệm có code/config hiện hành**, thay vì 44
-thư mục lẫn lịch sử. 13 thư mục chỉ còn vỏ đã bỏ; hai helper cũ trở thành alias
-source freeze. Các cây `reports` là alias tới archive, không chứa bản sao nữa.
+29 stage đã chuyển sang bốn khu vực chức năng; không còn code stage tại đây.
 
-| Cần làm | Điểm vào / thành phần |
+| Khu vực | Vai trò |
 |---|---|
-| Nav2 cá nhân, nhóm và backend cô lập | `tools/nav2_trial.py`; `socnavgym_nav2_pilot`, `socnavgym_group_nav2`, `shared_nav2_pilot` |
-| Capture mới | `tools/capture_episode.py`, `configs/capture/`, `python/dynamuhsim/runtime/` |
-| Worker, adapter và kernel còn được dùng | `common_gazebo`, `common_response`, `socnavgym_response_fix`, `complexitynav_contract`, `complexitynav_geometry`, lifecycle helpers |
-| Depth/LiDAR/classifier | `depth_*`, `lidar_person_pilot`, `perception_target_pilot`; các pipeline/freeze đã chốt giữ hợp đồng riêng |
-| Đọc/export dataset, replay | `wm_episode_batch`, `wm_dataset_replay`, `portable_episode`, compatibility `dataset_pilot` |
-| Chẩn đoán còn hỗ trợ | Root `run.sh trial`, `navigation_diagnostics`, `localization_trials`, camera/proxy suites |
-| GPU, ownership cleanup và ordered shutdown | `python/dynamuhsim/runtime/gpu.py`, `shutdown.py`, `native/gl_probe.cpp`; `tools/check_gpu_runtime.py --output NEW_DIRECTORY` |
-| Report/control lịch sử | [Archive](../../archive/README.md) và [hydrate](../../../docs/REPORT_MEDIA.md) |
-| Cohort không còn chạy | [Danh mục đã nghỉ dùng](../../../docs/history/retired_benchmarks.md) |
+| [Navigation](../navigation/README.md) | 13 stage điều hướng, worker, adapter, lifecycle và chẩn đoán; 13 helper Nav2 chung |
+| [Perception](../perception/README.md) | 11 stage camera/depth/LiDAR, classifier và tracker |
+| [Datasets](../datasets/README.md) | 4 stage reader, target, portable và dataset pilot |
+| [Replay](../replay/README.md) | Xem lại dataset/recording |
 
-Các `trial.py`, `analyze.py`, `worker.py` tương thích chỉ chuyển tiếp tới code dùng
-chung khi experiment đã được migration; trùng tên file không đồng nghĩa còn
-bản sao vòng chạy. Source frozen/upstream dùng đối chứng vẫn giữ nguyên byte.
+`task_runtime.sh` là implementation shell dùng chung. Mỗi nhóm liên kết tới
+file này; wrapper stage đã freeze giữ nguyên byte. `gpu_runtime`/`shutdown_fix`
+là hai alias source lịch sử, không phải implementation thứ hai.
 
-Chạy mới theo [shared Nav2](../../../docs/SHARED_NAV2_RUNTIME.md) và
-[capture API](../../../docs/CAPTURE_RUNTIME.md), luôn dùng output directory mới.
-Không đổi controller, ngưỡng goal, model, split/nhãn hoặc kết quả cũ trong cleanup.
+Tên `benchmark/<stage>` trong receipt/manifest đã freeze vẫn là ID nguồn cũ.
+`python/dynamuhsim/workspace.py` ánh xạ sang source hiện hành, rồi verifier
+vẫn kiểm đúng hash; code thiếu hoặc sai hash không được thay bằng cache cũ.
+Report alias nằm cạnh stage mới và trỏ tới archive nguyên bản.
+
+Các thư mục `generated` cũ ở máy chỉ là dữ liệu ignored, không nằm trong cây Git
+mới và không bị di chuyển/xoá trong đợt này. Dùng đường dẫn dữ liệu tường minh
+khi đọc raw/dataset ở vị trí cũ. [WM workflow](../../../docs/START_HERE_CURRENT.md)
+và [receipt kiểm chứng](../../../docs/verification/capability_layout_2026-10-28.json).

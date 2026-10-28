@@ -1,5 +1,6 @@
 """Frozen pilot label/proposal rules, reusable without running a cohort exporter."""
 from pathlib import Path
+from dynamuhsim.workspace import source_path, stage_directory
 from types import SimpleNamespace
 import numpy as np
 from scipy.ndimage import binary_dilation,label
@@ -7,9 +8,9 @@ from dynamuhsim.analysis.evidence import load_json,sha256_file,module_from_path
 STAGE=Path('experiments/social_navigation/benchmark/depth_perception_corpus')
 
 def corpus_math(repository):
- repository=Path(repository);pins=load_json(repository/STAGE/'frozen.json')['source_sha256'];modules=[]
+ repository=Path(repository);pins=load_json(stage_directory(repository,'depth_perception_corpus')/'frozen.json')['source_sha256'];modules=[]
  for name in ['experiments/social_navigation/benchmark/depth_identity_guard/parent/snapshots/sensor.py','experiments/social_navigation/benchmark/depth_visibility_pilot/labels.py']:
-  path=repository/name
+  path=source_path(repository,name)
   if sha256_file(path)!=pins[name]:raise ValueError('Active corpus math differs from frozen source: '+name)
   modules.append(module_from_path(path,'verified_corpus_'+path.stem))
  project,candidates=modules[0].project,modules[0].candidates

@@ -1,0 +1,64 @@
+# Pilot dataset cho perception LiDAR + depth
+
+Đã thu7cảnh GPU, xuất19frame/132proposal có nhãn (64người,68môi trường). Đây là bộ nhỏ thử pipeline phân biệt người/vật; chưa có model được nghiệm thu hay bộ train World Model. Không RGB, không đổi robot/ROS/Nav2 mặc định.
+
+- [Báo cáo và giới hạn](../../../archive/social_navigation/reports/depth_perception_corpus/CORPUS_REPORT.md)
+- [Schema và cách đọc sample](../../../archive/social_navigation/reports/depth_perception_corpus/SCHEMA.md)
+- [Audit cuối](../../../archive/social_navigation/reports/depth_perception_corpus/audit.json), [portable audit](../../../archive/social_navigation/reports/depth_perception_corpus/portable_audit.json)
+- [Mẫu train đọc độc lập](examples/train_p003/manifest.json)
+- [GIF từ depth đã ghi thật](../../../archive/social_navigation/reports/depth_perception_corpus/media/depth_labels.gif)
+
+Full bundle ở `generated/corpus01/`; raw ở `generated/runs/`. Hai thư mục này bị gitignore, cần backup riêng. Git giữ example train p003, code, nguồn freeze và báo cáo; test không có preview/score model ở mốc này.
+
+## Chạy offline trong Ubuntu/WSL
+
+Từ root repo, dùng Python hiện tại với NumPy/SciPy; không cài gì mới:
+
+```bash
+export OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1
+TASK_DIR=experiments/social_navigation/perception/depth_perception_corpus
+bash "$TASK_DIR/run.sh" test
+bash "$TASK_DIR/run.sh" audit --corpus "$TASK_DIR/generated/corpus01" \
+  --raw-root "$TASK_DIR/generated/runs" --source-root "$PWD" \
+  --output "$TASK_DIR/generated/recheck_01"
+```
+
+`run.sh audit` hiện dùng logic auditor02 đã nghiệm thu. Auditor01 và exporter cố định bảy cảnh đã gỡ khỏi mã hiện hành; source trước dọn ở commit `3b133626809a39991babe0e6fcc52d2572c2c03b`, các FAIL/source/diff trong báo cáo giữ nguyên. Hàm gán nhãn/proposal còn dùng nằm tại `python/dynamuhsim/perception/corpus.py`. Loader đã hỗ trợ missing mask trước thu:21proposal/3frame đầu không có scan khả dụng đúng thời điểm, giữNaN/validfalse thay vì lấy scan tương lai. Không bỏ các sample này một cách âm thầm khi train.
+
+```python
+import sys
+sys.path.insert(0, "experiments/social_navigation/perception/depth_perception_corpus")
+from loader import load_input, load_label
+root = "experiments/social_navigation/perception/depth_perception_corpus/generated/corpus01"
+x = load_input(root, "p003", 0)
+y = load_label(root, "p003", 0)   # LABEL supervision đọc riêng
+print(x["points_xyz"].shape, x["scan_valid"], y["class_index"])
+```
+
+Có thể copy `examples/train_p003/` sang máy khác và import loader bên trong, chỉ cần NumPy. Đọc test mặc định bị chặn; chỉ dùng `allow_test=True` cho giai đoạn đã chốt hoặc integrity QA, không tune từ test.
+
+## Thu lại một cảnh mới để chẩn đoán
+
+Có ROS2Jazzy/GazeboHarmonic và dependency benchmark cũ trong workspace:
+
+```bash
+TASK_DIR=experiments/social_navigation/perception/depth_perception_corpus
+bash "$TASK_DIR/run.sh" build
+bash "$TASK_DIR/run.sh" capture --scene p003 --output "$TASK_DIR/generated/manual_motion01"
+```
+
+Output phải chưa tồn tại, chạy từng lượt. Capture tự source Jazzy/install, dùng runtime partition/domain91 lock và GPU preflight; dừng nếu không đúng NVIDIA hoặc không đạt dữ liệu/cleanup. Không dùng killall. Chuyển động ở đây được lập trình cho diagnostic, không phải policy social nav. Build lại có thể đổi binary SHA: không ghi đè freeze cũ hoặc tái diễn giải corpus01; một đợt thu mới cần protocol/freeze phiên bản mới. Cohort corpus01 đã đóng; writer `run.sh export` đã nghỉ dùng. Một bộ dữ liệu mới cần quy trình/protocol/freeze mới, không append corpus01.
+
+Ảnh/GIF: `run.sh preview --corpus <bundle> --output <new-media-dir> --scene p003`; chỉ train/validation, cần Matplotlib/Pillow. Đây là replay depth và label/point projection, không dùng image generation.
+
+Capture hiện tại dùng chung `python/dynamuhsim/runtime/sensor_capture.py`; file
+`capture.py` của stage chỉ chọn fixture, protocol và provenance. Nhận ảnh/scan,
+synchronization, giới hạn số frame và các gate static/moving/null giữ nguyên.
+Source hash của lượt mới ghi thêm module dùng chung. Không append lượt mới vào
+corpus/freeze cũ; tái lập kết quả lịch sử bằng source revision trong manifest.
+
+World của profile được dựng bởi `python/dynamuhsim/simulation/sensor_fixture.py`.
+Các file fixture tại stage chỉ chọn input; không gọi vòng qua fixture stage khác.
+XML/URDF và metadata đã được đối chiếu byte với source trước khi gom.
+
+Audit chỉ ghi vào output mới, ngoài dataset/raw/archive; kết quả tách `audit.json` và `source_provenance.json`. `--source-root` cung cấp dependency raw/generated còn thiếu; source cũ chỉ đọc bytes và đối chiếu hash từ checkout chỉ định hoặc commit benchmark `9833565`, không import/chạy report source. Reader/protocol/scenes và phép gán nhãn hiện hành phải khớp hash freeze. Test portable dùng example train p003 có trong Git, không còn cần raw GPU fixture để chạy.

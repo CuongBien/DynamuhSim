@@ -1,5 +1,6 @@
 """Versioned capture hooks. New runs never execute report snapshots or rewrite source."""
 from pathlib import Path, PurePosixPath
+from dynamuhsim.workspace import stage_directory
 import copy
 import datetime
 import json
@@ -65,9 +66,9 @@ def capture_sources(repo):
     files += [repo / "tools/capture_warehouse.launch.py", repo / "configs/capture/storage.yaml", repo / "configs/capture/qos.yaml",
               repo / "src/custom_corridor/models/mecanum_robot/model.sdf", repo / "src/custom_corridor/urdf/mecanum_robot.urdf",
               repo / "src/custom_corridor/config/mecanum_bridge.yaml",
-              benchmark / "depth_proxy_ablation/depth_proxy_filter.cc", benchmark / "depth_proxy_ablation/CMakeLists.txt",
-              benchmark / "depth_proxy_ablation/generated/build_jazzy/libdepth_proxy_filter.so",
-              benchmark / "early_avoidance_pilot/check_friction.cc", benchmark / "early_avoidance_pilot/generated/check_friction"]
+              stage_directory(repo, 'depth_proxy_ablation') / 'depth_proxy_filter.cc', stage_directory(repo, 'depth_proxy_ablation') / 'CMakeLists.txt',
+              stage_directory(repo, 'depth_proxy_ablation') / 'generated/build_jazzy/libdepth_proxy_filter.so',
+              stage_directory(repo, 'early_avoidance_pilot') / 'check_friction.cc', stage_directory(repo, 'early_avoidance_pilot') / 'generated/check_friction']
     return sorted(set(files))
 
 
@@ -89,7 +90,7 @@ def prepare_run(repo, run_dir, config_path, scenario, seed, gui=False):
     camera = prepare_camera(assets, repo)
     if camera["runtime_sha256"] != CAMERA_SHA256:
         raise RuntimeError("Camera fixture differs from accepted native bytes")
-    checker = repo / "experiments/social_navigation/benchmark/early_avoidance_pilot/generated/check_friction"
+    checker = repo / "experiments/social_navigation/navigation/early_avoidance_pilot/generated/check_friction"
     friction = subprocess.run([str(checker), str(assets / "mecanum_camera.sdf")], capture_output=True, text=True, check=True)
     friction = json.loads(friction.stdout)
     if friction["recognized_gz_base_link_frames"] != 4:
@@ -147,7 +148,7 @@ class CaptureContext:
 
     def configure_world(self, tree):
         import xml.etree.ElementTree as ET
-        library = self.repo / "experiments/social_navigation/benchmark/depth_proxy_ablation/generated/build_jazzy/libdepth_proxy_filter.so"
+        library = self.repo / "experiments/social_navigation/perception/depth_proxy_ablation/generated/build_jazzy/libdepth_proxy_filter.so"
         ET.SubElement(tree.getroot().find("world"), "plugin", filename=str(library), name="depth_proxy_experiment::Filter")
 
     def configure_nav(self, config, output):

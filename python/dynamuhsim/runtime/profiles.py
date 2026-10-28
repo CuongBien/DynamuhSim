@@ -1,6 +1,7 @@
 """Explicit differences between the three existing Nav2 pilot entry points."""
 from dataclasses import dataclass
 from pathlib import Path
+from dynamuhsim.workspace import stage_directory
 import argparse
 import json
 
@@ -46,6 +47,9 @@ class TrialProfile:
         return dict(response_variant="v2_frozen_until_goal_accepted")
 
     def validate_gates(self, benchmark):
+        benchmark = Path(benchmark)
+        if benchmark.parent.name == "social_navigation":
+            benchmark = stage_directory(benchmark.parents[2], self.name).parent
         stage = benchmark / self.name
         gates = [(stage / "reports/gate01/validation.json", "status", "PASS")]
         if self.groups:
@@ -59,7 +63,7 @@ class TrialProfile:
                 raise RuntimeError(f"Prerequisite gate failed: {path}: {key}={value!r}")
 
     def worker_command(self, social, runtime, socket_path, args):
-        stage = social / "benchmark" / self.name
+        stage = stage_directory(social.parents[1], self.name)
         command = [str(social / ".venv-socnavgym/bin/python"), str(stage / "worker.py")]
         if self.groups:
             return command + ["--runtime", str(runtime), "--socket", socket_path,

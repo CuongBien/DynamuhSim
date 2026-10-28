@@ -1,0 +1,281 @@
+{
+  "schema": "dynamuhsim_capability_layout_verification/1",
+  "date": "2026-10-28",
+  "status": "PASS",
+  "branch": "codex/shared-navigation-runtime",
+  "tested_base_revision": "5f3f7cdc9a99208f806d5bea2575418a61cdc7af",
+  "scope": "Complete the identified 29-stage social-navigation capability regrouping. Moved source is not counted as deleted code; no algorithm/controller/data treatment change.",
+  "layout": {
+    "stage_groups": {
+      "datasets": [
+        "dataset_pilot",
+        "perception_target_pilot",
+        "portable_episode",
+        "wm_episode_batch"
+      ],
+      "navigation": [
+        "common_gazebo",
+        "common_response",
+        "complexitynav_contract",
+        "complexitynav_geometry",
+        "early_avoidance_pilot",
+        "localization_trials",
+        "navigation_diagnostics",
+        "shared_nav2_pilot",
+        "socnavgym_group_nav2",
+        "socnavgym_lifecycle_fix",
+        "socnavgym_nav2_pilot",
+        "socnavgym_response_fix",
+        "socnavgym_warehouse_lifecycle"
+      ],
+      "perception": [
+        "camera_height_ab",
+        "depth_identity_guard",
+        "depth_perception_corpus",
+        "depth_person_classifier",
+        "depth_proxy_ablation",
+        "depth_proxy_lifecycle",
+        "depth_seed43_validation",
+        "depth_surface_guard",
+        "depth_track_refinement",
+        "depth_visibility_pilot",
+        "lidar_person_pilot"
+      ],
+      "replay": [
+        "wm_dataset_replay"
+      ]
+    },
+    "stage_count": 29,
+    "moved_stage_entries": 380,
+    "moved_entries_identical_bytes": 333,
+    "moved_nav2_root_helpers_unchanged_bytes": 13,
+    "legacy_stage_source_entries_remaining": 0,
+    "legacy_stage_directory_aliases": 0,
+    "shared_shell_group_links": 4,
+    "source_resolver": "python/dynamuhsim/workspace.py",
+    "recorded_source_IDs_unchanged": true
+  },
+  "verification": {
+    "root_tests": 222,
+    "school_suites": {
+      "scenario_generator": 13,
+      "dataset_runner": 75,
+      "dataset_production": 11
+    },
+    "stage_contracts": {
+      "depth_track_refinement": 13,
+      "depth_identity_guard": 14,
+      "dataset_pilot": 8,
+      "perception_target_pilot": 12,
+      "wm_episode_batch": 8,
+      "depth_perception_corpus": 9
+    },
+    "total_tests": 385,
+    "cli_help_probes": 33,
+    "CLI_ROS_init_and_subprocess_blocked": true,
+    "python_parse": 415,
+    "shell_syntax": 50,
+    "native_builds": [
+      {
+        "stage": "navigation/socnavgym_response_fix",
+        "returncode": 0,
+        "wall_s": 33.63
+      },
+      {
+        "stage": "navigation/common_gazebo",
+        "returncode": 0,
+        "wall_s": 28.76
+      },
+      {
+        "stage": "perception/camera_height_ab",
+        "returncode": 0,
+        "wall_s": 23.0
+      },
+      {
+        "stage": "perception/depth_visibility_pilot",
+        "returncode": 0,
+        "wall_s": 24.06
+      },
+      {
+        "stage": "perception/depth_perception_corpus",
+        "returncode": 0,
+        "wall_s": 26.41
+      },
+      {
+        "stage": "perception/depth_proxy_ablation",
+        "returncode": 0,
+        "wall_s": 24.73
+      },
+      {
+        "stage": "replay/wm_dataset_replay",
+        "returncode": 0,
+        "wall_s": 34.42
+      },
+      {
+        "stage": "navigation/early_avoidance_pilot/check_friction",
+        "returncode": 0
+      }
+    ],
+    "control_bundle_and_legacy_numerical_parity_with_base": true,
+    "git_and_cache_free_source": {
+      "control_consumers": 2,
+      "exact_numerical_parity": true,
+      "CLI_help_probes": 33,
+      "layout_and_replay_tests": 7,
+      "replay_explicit_input_help": true
+    },
+    "classifier_executable_math_and_original_corpus_integrity": "PASS"
+  },
+  "data_audits": {
+    "wm": {
+      "status": "PASS",
+      "accepted": 8,
+      "quarantined": 2,
+      "windows": 5106,
+      "valid_windows": 5094,
+      "raw_depth_bitwise": 6696,
+      "published_JSON_exactly_equal": true
+    },
+    "corpus": {
+      "status": "PASS",
+      "frames": 19,
+      "proposals": 132,
+      "causal_lidar": 111,
+      "masked_missing_lidar": 21,
+      "published_JSON_exactly_equal": true
+    },
+    "training_run": false,
+    "model_evaluation_run": false
+  },
+  "native_sensor_captures": [
+    {
+      "case": "visibility03",
+      "capture_accepted": true,
+      "source_pins": 27,
+      "all_current_source_hashes_match": true,
+      "workspace_source_pinned": true,
+      "modes": 15,
+      "frames_per_mode": 5,
+      "full_control_bitwise": true,
+      "gazebo_exit": 0,
+      "cleanup": "PASS",
+      "remaining_processes": [],
+      "motion_observer": null,
+      "renderer": [
+        "18:21:43: GL_RENDERER = D3D12 (NVIDIA GeForce RTX 4060 Laptop GPU)"
+      ],
+      "result_sha256": "f8cfa69a43dc5fd19ec7fee39d1e0a465eb12dace51b566402a9197867cf1c85"
+    },
+    {
+      "case": "corpus_train_p00303",
+      "capture_accepted": true,
+      "source_pins": 33,
+      "all_current_source_hashes_match": true,
+      "workspace_source_pinned": true,
+      "modes": 15,
+      "frames_per_mode": 5,
+      "full_control_bitwise": true,
+      "gazebo_exit": 0,
+      "cleanup": "PASS",
+      "remaining_processes": [],
+      "motion_observer": {
+        "rows": 40,
+        "max_actor_proxy_xy_error_m": 3.580361673049448e-15,
+        "max_actor_displacement_m": 0.39,
+        "changed_depth_pixels": 9716,
+        "accepted": true
+      },
+      "renderer": [
+        "18:21:57: GL_RENDERER = D3D12 (NVIDIA GeForce RTX 4060 Laptop GPU)"
+      ],
+      "result_sha256": "ad7ed07ed893a28e8153de89a8747afd7ea344d8359e7de9b03a61f362cb497f"
+    }
+  ],
+  "versioned_nav2_captures": [
+    {
+      "case": "standing46",
+      "seed": 46,
+      "physical_attempts": 1,
+      "status": "SUCCEEDED",
+      "actual_goal_reached": true,
+      "xy_error_world_m": 0.030744969338639083,
+      "yaw_error_world_rad": 0.04184113886762872,
+      "audits": {
+        "capture_integrity": "PASS",
+        "navigation_goal": "PASS"
+      },
+      "raw_depth_messages": 438,
+      "paired_ON_OFF": 438,
+      "raw_OFF_bitwise_equal": 438,
+      "raw_frames_without_auxiliary_OFF": 0,
+      "source_pins": 92,
+      "all_current_source_hashes_match": true,
+      "result_sha256": "828da2e2654fdcc4b7d82466587ade31b9a01355d07732e2af05897b1ae28bdb"
+    },
+    {
+      "case": "walking46",
+      "seed": 46,
+      "physical_attempts": 1,
+      "status": "SUCCEEDED",
+      "actual_goal_reached": true,
+      "xy_error_world_m": 0.034015741326566505,
+      "yaw_error_world_rad": 0.026812426644727078,
+      "audits": {
+        "capture_integrity": "PASS",
+        "navigation_goal": "PASS"
+      },
+      "raw_depth_messages": 433,
+      "paired_ON_OFF": 432,
+      "raw_OFF_bitwise_equal": 432,
+      "raw_frames_without_auxiliary_OFF": 1,
+      "source_pins": 92,
+      "all_current_source_hashes_match": true,
+      "result_sha256": "51b3eaa282070bbe9e3742652219f64b229d8c0127039bacc2c617de5d1a80e7"
+    }
+  ],
+  "preservation": {
+    "protected_report_files": 1814,
+    "primary_checkout": {
+      "status_before": {
+        "unchanged": true,
+        "sha256": "0586474a816d3db7cd86d5af9d585d875458eeb6811c3099fc2d94f8de1994c4"
+      },
+      "index_patch_before": {
+        "unchanged": true,
+        "sha256": "5805d100b5671ba0d81af0b839f36713068726e83983827e1c33b4a2da3b11a1"
+      },
+      "working_patch_before": {
+        "unchanged": true,
+        "sha256": "77b3c51ce7b935270a2972d5a13d5cb934386a4fa6b0a7f6386ca58af847559c"
+      }
+    },
+    "moved_entries": 380,
+    "moved_exact_bytes": 333
+  },
+  "frozen_source_policy": {
+    "live_model_data_math_train_evaluate_hashes_unchanged": true,
+    "protocols_manifests_labels_weights_native_sources_CMake_unchanged": true,
+    "bootstrap_provenance_only": {
+      "classifier_integrity.py": "5f3f7cdc9a99208f806d5bea2575418a61cdc7af",
+      "classifier_run.sh": "9833565fa546d55cb0e553f8388bf4a703c59583"
+    },
+    "historical_source_read_for_hash_only_not_executed": true,
+    "missing_live_math_not_shadowed_by_legacy_cache": true
+  },
+  "evidence_directory": "experiments/social_navigation/benchmark/generated/capability_layout_20261028",
+  "retained_diagnostics": {
+    "initial_path_import_and_ROS_environment_failures_preserved": true,
+    "sensor_capture_01_02_preserved_then_03_added_after_docs_source_pin_update": true,
+    "no_original_outcome_replaced": true
+  },
+  "limits": [
+    "Raw/generated datasets remain at original local locations. Source moves do not migrate ignored data; replay supports explicit raw/runtime roots.",
+    "Released controls, maintained capture paths and listed contracts/builds were checked. Fully frozen historical pipelines still require recorded checkout and inputs.",
+    "Walking46 has one raw frame without an auxiliary OFF pair. Raw MCAP remains authoritative; every saved OFF pair matches a raw frame.",
+    "Native navigation smoke covers standing/walking seed46 on the existing group backend; not all seeds/backends or WSLg GUI visibility.",
+    "Intentional frozen/vendor/report copies are retained. This closes the identified capability-layout work, not a proof that all future duplication or dynamic paths have been exhausted."
+  ],
+  "remaining_identified_layout_tasks": [],
+  "benchmark_branch_expected": "9833565fa546d55cb0e553f8388bf4a703c59583",
+  "merged_into_benchmark": false
+}

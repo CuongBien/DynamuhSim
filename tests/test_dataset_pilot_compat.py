@@ -2,6 +2,7 @@
 import hashlib
 import json
 from pathlib import Path
+from dynamuhsim.workspace import stage_directory,source_path
 import runpy
 import subprocess
 import tempfile
@@ -11,14 +12,14 @@ from unittest.mock import patch
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
-PILOT = ROOT / "experiments/social_navigation/benchmark/dataset_pilot"
+PILOT = stage_directory(ROOT,'dataset_pilot')
 BATCH = PILOT.parent / "wm_episode_batch"
 
 
 class DatasetPilotCompatTests(unittest.TestCase):
     def test_math_exports_are_the_same_function_objects_as_the_frozen_engine(self):
-        from experiments.social_navigation.benchmark.dataset_pilot import dataset_core as current
-        from experiments.social_navigation.benchmark.wm_episode_batch.tools.legacy import dataset_core as frozen
+        from experiments.social_navigation.datasets.dataset_pilot import dataset_core as current
+        from experiments.social_navigation.datasets.wm_episode_batch.tools.legacy import dataset_core as frozen
         for name in current.__all__:
             with self.subTest(function=name):
                 self.assertIs(getattr(current, name), getattr(frozen, name))
@@ -53,7 +54,7 @@ class DatasetPilotCompatTests(unittest.TestCase):
         pins = {name: digest for name, digest in frozen.items() if "/tools/legacy/" in name}
         self.assertEqual(len(pins), 5)
         for name, digest in pins.items():
-            self.assertEqual(hashlib.sha256((ROOT / name).read_bytes()).hexdigest(), digest, name)
+            self.assertEqual(hashlib.sha256(source_path(ROOT,name).read_bytes()).hexdigest(), digest, name)
 
     def test_math_shim_rejects_changed_dependency_even_if_its_own_hash_stays_pinned(self):
         with tempfile.TemporaryDirectory() as directory:

@@ -5,6 +5,7 @@ import json
 import math
 import signal
 from pathlib import Path
+from dynamuhsim.workspace import stage_directory
 import subprocess
 import sys
 import tempfile
@@ -44,7 +45,7 @@ class ProfileTests(unittest.TestCase):
         self.assertEqual((args.condition, args.scenario, args.seed, args.gui), ("people", "standing", 43, True))
         self.assertEqual(groups.result_fields(args, .1)["response_variant"], "bounded_reactive_standing_v3")
         shared = PROFILES["shared_nav2_pilot"]
-        plan = json.loads((BENCH / shared.name / "protocol.json").read_text())
+        plan = json.loads((stage_directory(ROOT,shared.name) / "protocol.json").read_text())
         for model, dt in [("crowd_orca_plus", .1), ("complex_geometry_mixed", .25)]:
             args = shared.parse_args(["--model", model, "--report-dir", "/tmp/fixed"])
             self.assertEqual(shared.planning_dt(plan, args), dt)
@@ -59,7 +60,7 @@ class ProfileTests(unittest.TestCase):
             args = profile.parse_args(flags + ["--report-dir", "/tmp/test"])
             command = profile.worker_command(social, runtime, "/fixture/worker.sock", args)
             self.assertEqual(command[0], str(social / ".venv-socnavgym/bin/python"))
-            self.assertEqual(command[1], str(social / "benchmark" / name / "worker.py"))
+            self.assertEqual(command[1], str(social / "navigation" / name / "worker.py"))
             self.assertEqual(command[command.index("--socket") + 1], "/fixture/worker.sock")
             if profile.groups:
                 self.assertEqual(command[-4:], ["--scenario", "walking", "--seed", "42"])
@@ -79,7 +80,7 @@ class ProfileTests(unittest.TestCase):
 
     def test_source_manifest_includes_shared_implementation_and_launch(self):
         for profile in PROFILES.values():
-            entry = BENCH / profile.name / "trial.py"
+            entry = stage_directory(ROOT,profile.name) / "trial.py"
             sources = source_files(ROOT, profile, entry)
             self.assertIn(ROOT / "python/dynamuhsim/runtime/navigation.py", sources)
             self.assertIn(ROOT / "src/custom_corridor/launch/_dynamuhsim_nav2.py", sources)
@@ -88,7 +89,7 @@ class ProfileTests(unittest.TestCase):
             self.assertIn(ROOT / "python/dynamuhsim/runtime/nav2_trial.py", sources)
             self.assertIn(ROOT / "python/dynamuhsim/analysis/nav2.py", sources)
             self.assertIn(ROOT / "python/dynamuhsim/simulation/warehouse.py", sources)
-            self.assertIn(BENCH / "common_gazebo/worker.py", sources)
+            self.assertIn(BENCH.parent/'navigation/common_gazebo/worker.py', sources)
             self.assertIn(entry, sources)
             self.assertIn(entry.parent / "warehouse.launch.py", sources)
 
@@ -129,7 +130,7 @@ class ConfigurationTests(unittest.TestCase):
             "ament_index_python.packages": NS(get_package_share_directory=lambda name: "/fixture/share/" + name),
         }
         with patch.dict(sys.modules, modules), patch.dict("os.environ", NAV2_PILOT_WORLD="/fixture/world.sdf", NAV2_PILOT_PARAMS="/fixture/nav2.yaml"):
-            launch = generate_launch_description(BENCH / "socnavgym_nav2_pilot/warehouse.launch.py")
+            launch = generate_launch_description(BENCH.parent/'navigation/socnavgym_nav2_pilot/warehouse.launch.py')
         declare, sim, bridge, timer = launch.args[0]
         args = dict(sim.kwargs["launch_arguments"])
         self.assertEqual(args["custom_world"], "/fixture/world.sdf")
@@ -364,7 +365,7 @@ class LaunchShutdownTests(unittest.TestCase):
 class EntryPointTests(unittest.TestCase):
     def test_legacy_entrypoints_help_without_ros(self):
         for name in PROFILES:
-            path = BENCH / name / "trial.py"
+            path = stage_directory(ROOT,name) / "trial.py"
             result = subprocess.run([sys.executable, str(path), "--help"], capture_output=True, text=True)
             self.assertEqual(result.returncode, 0, result.stderr)
             self.assertIn("--report-dir", result.stdout)

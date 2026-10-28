@@ -7,8 +7,8 @@
       "name": "socnavgym_nav2_pilot",
       "runtime": "shared",
       "entrypoint": "tools/nav2_trial.py --experiment socnavgym_nav2_pilot",
-      "compatibility_entrypoint": "experiments/social_navigation/benchmark/socnavgym_nav2_pilot/trial.py",
-      "protocol": "experiments/social_navigation/benchmark/socnavgym_nav2_pilot/protocol.json",
+      "compatibility_entrypoint": "experiments/social_navigation/navigation/socnavgym_nav2_pilot/trial.py",
+      "protocol": "experiments/social_navigation/navigation/socnavgym_nav2_pilot/protocol.json",
       "worker": "existing SocNavGym response-v2 worker",
       "modes": [
         "empty",
@@ -19,8 +19,8 @@
       "name": "socnavgym_group_nav2",
       "runtime": "shared",
       "entrypoint": "tools/nav2_trial.py --experiment socnavgym_group_nav2",
-      "compatibility_entrypoint": "experiments/social_navigation/benchmark/socnavgym_group_nav2/trial.py",
-      "protocol": "experiments/social_navigation/benchmark/socnavgym_group_nav2/protocol.json",
+      "compatibility_entrypoint": "experiments/social_navigation/navigation/socnavgym_group_nav2/trial.py",
+      "protocol": "experiments/social_navigation/navigation/socnavgym_group_nav2/protocol.json",
       "worker": "existing native-initial-group worker",
       "modes": [
         "walking",
@@ -35,8 +35,8 @@
       "name": "shared_nav2_pilot",
       "runtime": "shared",
       "entrypoint": "tools/nav2_trial.py --experiment shared_nav2_pilot",
-      "compatibility_entrypoint": "experiments/social_navigation/benchmark/shared_nav2_pilot/trial.py",
-      "protocol": "experiments/social_navigation/benchmark/shared_nav2_pilot/protocol.json",
+      "compatibility_entrypoint": "experiments/social_navigation/navigation/shared_nav2_pilot/trial.py",
+      "protocol": "experiments/social_navigation/navigation/shared_nav2_pilot/protocol.json",
       "worker": "existing pinned Docker runtime",
       "models": [
         "crowd_orca_plus",
@@ -178,5 +178,44 @@
     "wm_dataset": "tools/audit_wm_dataset.py",
     "perception_corpus": "tools/audit_perception_corpus.py",
     "output_policy": "Fresh output directory outside dataset, raw captures and archived evidence; original published reports are never overwritten."
+  },
+  "capability_groups": {
+    "datasets": [
+      "dataset_pilot",
+      "perception_target_pilot",
+      "portable_episode",
+      "wm_episode_batch"
+    ],
+    "navigation": [
+      "common_gazebo",
+      "common_response",
+      "complexitynav_contract",
+      "complexitynav_geometry",
+      "early_avoidance_pilot",
+      "localization_trials",
+      "navigation_diagnostics",
+      "shared_nav2_pilot",
+      "socnavgym_group_nav2",
+      "socnavgym_lifecycle_fix",
+      "socnavgym_nav2_pilot",
+      "socnavgym_response_fix",
+      "socnavgym_warehouse_lifecycle"
+    ],
+    "perception": [
+      "camera_height_ab",
+      "depth_identity_guard",
+      "depth_perception_corpus",
+      "depth_person_classifier",
+      "depth_proxy_ablation",
+      "depth_proxy_lifecycle",
+      "depth_seed43_validation",
+      "depth_surface_guard",
+      "depth_track_refinement",
+      "depth_visibility_pilot",
+      "lidar_person_pilot"
+    ],
+    "replay": [
+      "wm_dataset_replay"
+    ]
   }
 }

@@ -13,7 +13,7 @@ Ba experiment `socnavgym_nav2_pilot`, `socnavgym_group_nav2` và `shared_nav2_pi
 | GPU preflight, session ownership và cleanup | `python/dynamuhsim/runtime/gpu.py` |
 | Pause/quiesce, ordered stop, D3D12 launch environment và exit acknowledgement | `python/dynamuhsim/runtime/shutdown.py` |
 | Cấu hình adapter/world, bản sao YAML và launch description | `python/dynamuhsim/simulation/warehouse.py` |
-| IPC cho common, response và hai pilot Nav2 cá nhân/backend cô lập | `experiments/social_navigation/benchmark/common_gazebo/worker.py` |
+| IPC cho common, response và hai pilot Nav2 cá nhân/backend cô lập | `experiments/social_navigation/navigation/common_gazebo/worker.py` |
 | Một lệnh gọi các profile | `tools/nav2_trial.py` |
 | Danh sách entry point và ranh giới migration | `docs/experiment_registry.json` |
 
@@ -35,7 +35,7 @@ Không cần pip install để chạy các entry point từ source. `pyproject.t
 Với checkout/worktree mới, dựng dependency ignored cho backend dùng chung trước lượt chạy:
 
 ```bash
-python3 experiments/social_navigation/benchmark/common_response/preflight.py
+python3 experiments/social_navigation/navigation/common_response/preflight.py
 ```
 
 Preflight hiện có đối chiếu input/hash đã khóa và dựng `common_response/generated/crowd_kernel_n6.py` cùng `complexitynav_geometry/generated/{native_contract.py,swept.py,layout.json}`. Không cần chạy lại cohort offline để có các file này. Có Docker image chưa đủ để chạy ComplexityNav nếu thiếu các file được mount từ host. Vendor/venv SocNavGym, ROS packages và adapter `.so` vẫn cần chuẩn bị riêng.

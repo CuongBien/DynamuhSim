@@ -12,6 +12,7 @@ sys.path.insert(0,str(ROOT/'python'))
 sys.dont_write_bytecode=True
 from dynamuhsim.runtime.profiles import PROFILES
 from dynamuhsim.artifacts.layout import logical_report_name
+from dynamuhsim.workspace import stage_directory
 
 
 def sha(path): return hashlib.sha256(Path(path).read_bytes()).hexdigest()
@@ -66,19 +67,19 @@ def main():
     else:
         engines={}
         for stage,relative in [('depth_identity_guard','reports/final_engine/frozen.json'),('depth_track_refinement','reports/frozen02.json')]:
-            module=load('_control_'+stage,benchmark/stage/'freeze.py')
-            value=module.verify(benchmark/stage/relative)
-            engines[stage]=dict(status='PASS',engine_files=len(value['engine_sha256']),freeze_sha256=sha(benchmark/stage/relative))
-        folder=benchmark/'depth_person_classifier/reports'
+            module=load('_control_'+stage,stage_directory(ROOT,stage)/'freeze.py')
+            value=module.verify(stage_directory(ROOT,stage)/relative)
+            engines[stage]=dict(status='PASS',engine_files=len(value['engine_sha256']),freeze_sha256=sha(stage_directory(ROOT,stage)/relative))
+        folder=stage_directory(ROOT, 'depth_person_classifier') / 'reports'
         frozen=json.loads((folder/'selected_frozen.json').read_text())
         for name,key in [('selected_model.npz','model_sha256'),('selected_model.pt','torch_weights_sha256'),('training.json','training_sha256')]:
             assert sha(folder/name)==frozen[key]
-        assert sha(benchmark/'depth_person_classifier/frozen.json')==frozen['source_freeze_sha256']
+        assert sha(stage_directory(ROOT, 'depth_person_classifier') / 'frozen.json')==frozen['source_freeze_sha256']
         seal=folder/'test_opened.json';assert seal.is_file()
         seal_sha=sha(seal)
         assert json.loads(seal.read_text())['selected_frozen_sha256']==sha(folder/'selected_frozen.json')
         arrays=dict(np.load(folder/'selected_model.npz',allow_pickle=False))
-        inference=load('_control_classifier_inference',benchmark/'depth_person_classifier/inference.py')
+        inference=load('_control_classifier_inference',stage_directory(ROOT, 'depth_person_classifier') / 'inference.py')
         synthetic=dict(depth=np.linspace(-1,1,90,dtype=np.float32).reshape(3,30),lidar=np.zeros((3,8),dtype=np.float32),lidar_mask=np.array([True,False,True]))
         logits=inference.numpy_logits(synthetic,arrays,frozen['hidden'],frozen['modality'])
         assert sha(seal)==seal_sha
@@ -87,7 +88,7 @@ def main():
     result['classifier']=dict(status='PASS',candidate=frozen['candidate'],threshold=frozen['threshold'],model_sha256=frozen['model_sha256'],test_seal_sha256=seal_sha,
                               synthetic_rows=3,logits_sha256=hashlib.sha256(logits.tobytes()).hexdigest(),training_run=False,held_out_data_opened=False,test_evaluation_run=False)
     # Exercise the actual dynamic imports and tracker with fabricated geometry only.
-    guard=load('_control_identity_guard',benchmark/'depth_identity_guard/guard_tracker.py')
+    guard=load('_control_identity_guard',stage_directory(ROOT, 'depth_identity_guard') / 'guard_tracker.py')
     tracker=guard.IdentityGuard();rows=[]
     for i in range(4):
         detection=dict(xy=np.array([1.+.01*i,.2]),shape=np.array([1.5,.2,.15]),points=80,extent=np.array([.4,.3,1.5]))

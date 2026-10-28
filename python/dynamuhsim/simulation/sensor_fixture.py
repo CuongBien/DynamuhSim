@@ -1,6 +1,7 @@
 """One XML assembly for static, LiDAR, surface and scripted sensor fixtures."""
 import copy,importlib.util,json
 from pathlib import Path
+from dynamuhsim.workspace import stage_directory
 import xml.etree.ElementTree as ET
 
 
@@ -26,7 +27,7 @@ def _place_human(world, ident, x, y, yaw):
 def create_fixture(runtime, *, benchmark, repo, lidar=False, condition='full', snapshot=None, motion=None, motion_library=None):
  """Preserve native sensor bytes, actor frames, object order and metadata sidecars."""
  assert condition in ['full','null']
- benchmark,repo=Path(benchmark),Path(repo);base=benchmark/'depth_visibility_pilot'
+ repo=Path(repo);benchmark=stage_directory(repo,'depth_visibility_pilot').parent;base=benchmark/'depth_visibility_pilot'
  initial=json.loads((base/'snapshot.json').read_text());modes=json.loads((base/'protocol.json').read_text())['modes']
  spec=importlib.util.spec_from_file_location('sensor_height_fixture',benchmark/'camera_height_ab/fixture.py');height=importlib.util.module_from_spec(spec);spec.loader.exec_module(height)
  height.create_fixture(runtime,initial);tree=ET.parse(runtime/'warehouse.sdf');world=tree.getroot().find('world');robot=world.find("model[@name='mecanum_robot']");ET.register_namespace('gz','urn:gz')

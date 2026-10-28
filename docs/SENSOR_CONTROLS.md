@@ -78,3 +78,16 @@ Native probe cũ/mới cho toàn bộ functional fields giống nhau: hai engine
 Một process riêng chạy classifier từ bản package+bundle sao chép trong thư mục trống, chặn đọc repo gốc/process/network và import Torch/ROS: PASS với hai proposal tổng hợp. Không có experiments hay `.git` trong thư mục đó. Bản sao kiểm thử đã được dọn, log và kết quả retained.
 
 Không train/test lại, không tune threshold, không dùng raw/corpus/label để kiểm accuracy, không chạy Gazebo/Nav2 và không thêm tuyên bố nhận diện thực tế. Checkout/index chính, report cũ, dataset01, split/nhãn/freeze/outcome giữ nguyên. Bước này tách ba đường đọc mặc định; không xóa thêm payload hoặc giảm clone history.
+
+## Source sau khi gom theo chức năng
+
+Các stage hiện nằm ở `experiments/social_navigation/perception/`; source ID trong
+manifest vẫn dùng tên `benchmark/<stage>` cũ. Resolver chọn file hiện hành và
+vẫn kiểm hash. `depth_person_classifier/integrity.py` cập nhật phần phân giải
+nguồn/corpus: model, features, data, train, evaluate và các phép tính giữ nguyên
+hash freeze. Riêng bootstrap verifier/runner được đối chiếu bằng byte từ đúng
+revision đã ghi trong verifier; không thực thi source lấy từ Git hoặc report.
+`verify(corpus_root=...)` cho phép audit corpus local ở vị trí cũ, không train
+hoặc mở lại test. Các pipeline lịch sử đòi toàn closure đã freeze vẫn cần
+checkout/input của revision tương ứng; API control hiện hành ở trên được kiểm
+parity độc lập.

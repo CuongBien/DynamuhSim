@@ -1,8 +1,8 @@
 # DynamuhSim 🤖
 
-**Dọn cấu trúc đang tiếp tục:** khối 1.505 generated output và hai experiment chỉ còn báo cáo đã được externalize sau kiểm archive/restore. [Baseline đầu vào](experiments/gazebo_benchmark/configs/fixtures/README.md) · [payload lịch sử/cách khôi phục](docs/history/closed_experiment_payloads.md). **Việc gom 29 stage social-navigation theo chức năng còn lại; chưa chốt xong cấu trúc toàn repo.**
+**Cấu trúc social-navigation 28/10/2026:** 29 stage đã chuyển sang [navigation (13)](experiments/social_navigation/navigation/README.md), [perception (11)](experiments/social_navigation/perception/README.md), [datasets (4)](experiments/social_navigation/datasets/README.md) và [replay (1)](experiments/social_navigation/replay/README.md). Runtime, import, reader và đường dẫn report đã cập nhật; không giữ 29 alias thư mục code ở `benchmark`. [Kiểm chứng](docs/verification/capability_layout_2026-10-28.json).
 
-**Cấu trúc benchmark 28/10/2026:** [29 thư mục code/config hiện hành](experiments/social_navigation/benchmark/README.md) · [archive và các alias lịch sử](experiments/archive/README.md) · [kiểm chứng layout](docs/verification/benchmark_layout_2026-10-28.json).
+**Generated và lịch sử:** 1.505 generated output cùng hai experiment chỉ còn báo cáo đã externalize sau kiểm archive/restore. [Input chuẩn](experiments/gazebo_benchmark/configs/fixtures/README.md) · [khôi phục payload](docs/history/closed_experiment_payloads.md) · [phạm vi clean và phần giữ lại](docs/CLEANUP_SCOPE.md).
 
 **Navigation end-to-end 28/10/2026:** [kết quả và hai lỗi điều hướng còn lại](docs/verification/cleanup_navigation_2026-10-28.json).
 

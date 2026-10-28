@@ -4,6 +4,7 @@ import json
 from pathlib import Path
 import re
 import subprocess
+from dynamuhsim.workspace import source_path
 
 from dynamuhsim.analysis.evidence import relative_name, sha256_file, load_json
 
@@ -106,7 +107,7 @@ class ControlBundle:
         frozen = self.document(engine["metadata"])
         if frozen["schema"] != engine["schema"]: raise ValueError("Engine schema mismatch")
         repo = Path(repo).resolve(strict=True)
-        root = repo / str(relative_name(engine["source_root"]))
+        root = source_path(repo, str(relative_name(engine["source_root"])))
         for path, digest in frozen["engine_sha256"].items():
             source = root / str(relative_name(path))
             if source.is_symlink(): raise ValueError("Engine source cannot be a symlink")

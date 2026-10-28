@@ -1,5 +1,7 @@
 # Social navigation — các đường chạy hiện tại
 
+Code được chia theo [navigation](navigation/README.md), [perception](perception/README.md), [datasets](datasets/README.md) và [replay](replay/README.md). 29 stage giữ hợp đồng riêng; implementation tái sử dụng nằm trong `python/dynamuhsim/`. `benchmark` chỉ giữ shell runtime chung và alias source lịch sử.
+
 [START_HERE_CURRENT](../../docs/START_HERE_CURRENT.md) hướng dẫn đọc dataset WM, masks và replay. Đây là điểm bắt đầu cho công việc WM hiện tại; không cần chạy lại các vòng khảo sát simulator ban đầu.
 
 | Công việc | Entry point / hướng dẫn |
@@ -9,8 +11,8 @@
 | Thu một episode mới | [Capture API](../../docs/CAPTURE_RUNTIME.md), `tools/capture_episode.py` |
 | Audit capture và artifact | [Analysis/artifacts](../../docs/ANALYSIS_AND_ARTIFACTS.md) |
 | Classifier/control đã freeze | [Sensor controls](../../docs/SENSOR_CONTROLS.md) |
-| Ghi thêm global plan/costmap/particle cloud | [Navigation capture](benchmark/navigation_diagnostics/README.md) |
-| Input/preflight cho native worker | [Common response](benchmark/common_response/README.md) |
+| Ghi thêm global plan/costmap/particle cloud | [Navigation capture](navigation/navigation_diagnostics/README.md) |
+| Input/preflight cho native worker | [Common response](navigation/common_response/README.md) |
 
 Dataset pilot có 8 episode được chấp nhận và 2 lượt cách ly; WM chưa được train/nghiệm thu. Nhãn H1–H5/association/RL reward còn bị mask. Dùng train để fit, validation để chọn cấu hình và giữ test theo protocol. Full dataset/raw không đi kèm `git clone`; hướng dẫn backup/restore nằm ở workflow trên.
 

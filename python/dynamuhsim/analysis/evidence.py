@@ -7,6 +7,7 @@ import json
 from pathlib import Path, PurePosixPath
 import re
 import subprocess
+from dynamuhsim.workspace import source_path
 
 
 def _reject_constant(value):
@@ -60,7 +61,7 @@ def resolve_sources(expected, roots=(), *, git_repo=None, commit=None):
             raise ValueError("Invalid source SHA256: " + name)
         found = None
         for root in roots:
-            path = Path(root) / name
+            path = source_path(root, name)
             if path.is_file() and sha256_file(path) == digest:
                 found = dict(data=path.read_bytes(), mode=path.stat().st_mode & 0o777, origin="file")
                 break
@@ -96,7 +97,7 @@ def reserve_audit_directory(output, dataset, raw_root, repository, stage, source
     output, repository = Path(output).resolve(), Path(repository).resolve()
     forbidden = [Path(dataset).resolve(), Path(raw_root).resolve()]
     for root in {repository, *(Path(root).resolve() for root in source_roots)}:
-        forbidden.extend([(root/'experiments/archive').resolve(), (root/stage/'reports').resolve()])
+        forbidden.extend([(root/'experiments/archive').resolve(), (root/stage/'reports').resolve(), source_path(root, str(Path(stage)/'reports')).resolve()])
     if any(output == p or output.is_relative_to(p) or p.is_relative_to(output) for p in forbidden):
         raise ValueError('Audit output must be outside datasets, raw captures and archived evidence')
     output.mkdir(parents=True, exist_ok=False)

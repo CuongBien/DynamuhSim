@@ -3,10 +3,11 @@
 import argparse,json,sys
 from pathlib import Path
 ROOT=Path(__file__).resolve().parents[1];sys.path.insert(0,str(ROOT/'python'))
+from dynamuhsim.workspace import stage_directory
 from dynamuhsim.analysis.wm_dataset import audit_dataset,report_directory,RECORDED_SOURCE_REVISION,STAGE
 
 def main(argv=None):
- p=argparse.ArgumentParser(description=__doc__);p.add_argument('--dataset',type=Path,default=ROOT/STAGE/'generated/dataset01');p.add_argument('--raw-root',type=Path);p.add_argument('--runtime-root',type=Path,default=ROOT);p.add_argument('--source-root',type=Path,action='append',default=[]);p.add_argument('--source-revision',default=RECORDED_SOURCE_REVISION);p.add_argument('--output',type=Path,required=True);args=p.parse_args(argv)
+ p=argparse.ArgumentParser(description=__doc__);p.add_argument('--dataset',type=Path,default=stage_directory(ROOT,'wm_episode_batch')/'generated/dataset01');p.add_argument('--raw-root',type=Path);p.add_argument('--runtime-root',type=Path,default=ROOT);p.add_argument('--source-root',type=Path,action='append',default=[]);p.add_argument('--source-revision',default=RECORDED_SOURCE_REVISION);p.add_argument('--output',type=Path,required=True);args=p.parse_args(argv)
  raw=args.raw_root or args.dataset.parent/'runs'
  output=report_directory(args.output,args.dataset,raw,ROOT,args.runtime_root)
  try:
