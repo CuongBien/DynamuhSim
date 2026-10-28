@@ -1,0 +1,62 @@
+{
+  "schema": "dynamuhsim_fixture_cleanup/1",
+  "date": "2026-10-28",
+  "base_revision": "c28907172edf8afe6fe99f687c3ce5bce438de5f",
+  "measured_revision": "3a13647be66c2c2393b6a26b3a9f7c02eb0a31fd",
+  "branch": "codex/shared-navigation-runtime",
+  "shared_factory": "python/dynamuhsim/simulation/sensor_fixture.py",
+  "profiles": [
+    "depth_visibility_pilot",
+    "lidar_person_pilot",
+    "depth_surface_guard",
+    "depth_perception_corpus"
+  ],
+  "removed": {
+    "files": 10,
+    "duplicate_tree": "lidar_person_pilot/upstream_original",
+    "completed_script": "lidar_person_pilot/parity.py",
+    "original_bytes_retrievable_from": "c28907172edf8afe6fe99f687c3ce5bce438de5f",
+    "runtime_license_retained": true
+  },
+  "python_line_delta": -1454,
+  "verification": {
+    "xml_urdf_metadata_byte_identical_cases": 11,
+    "shared_project_tests": 299,
+    "original_fixture_tests": 34,
+    "total_tests": 333,
+    "skipped": 0,
+    "native_cases": 6,
+    "native_all_passed": true,
+    "native_depth_frames": 450,
+    "native_scan_messages": 100,
+    "native_full_control_bitwise_all": true,
+    "native_gazebo_exit_all": 0,
+    "owned_sessions_remaining": [],
+    "retirement": {
+      "original_source_hashes_match_upstream": 8,
+      "retired_capture_source_resolved_from_recorded_git": true,
+      "tampered_digest_rejected": true,
+      "retired_commit": "c28907172edf8afe6fe99f687c3ce5bce438de5f"
+    }
+  },
+  "preservation": {
+    "protected_files": 1814,
+    "all_protected_hashes_unchanged": true,
+    "lidar_runtime_files": 9,
+    "all_runtime_hashes_unchanged": true,
+    "frozen_engine_source_pins": 15,
+    "all_engine_source_hashes_unchanged": true,
+    "checkpoint_hash_unchanged": true,
+    "primary_changes_preserved": true,
+    "benchmark_branch": "9833565fa546d55cb0e553f8388bf4a703c59583"
+  },
+  "limits": [
+    "Native capture covers full/null controls and train scenes p001/p003; no model inference, training or held-out model evaluation.",
+    "All seven scene definitions were assembled only for XML comparison, not used to evaluate a model.",
+    "No controller tuning, navigation reruns, data append or historical outcome/seal rewrite.",
+    "Legacy captured parity provenance requires the explicit recorded Git revision; those source bytes are never executed.",
+    "Full legacy model-quality auditor was not rerun; source preservation, strict retired-source resolution and CLI help were verified."
+  ],
+  "local_evidence": "experiments/social_navigation/benchmark/generated/fixture_cleanup_20261028",
+  "next_work": "Consolidate dataset recorder and ON/OFF pair recorder implementations."
+}
