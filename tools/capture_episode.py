@@ -21,12 +21,13 @@ def main(argv=None):
     prepare.add_argument("--seed", type=int, required=True)
     prepare.add_argument("--gui", action="store_true")
     prepare.add_argument("--planner-diagnostics", action="store_true", help="Record exact native costmaps without changing navigation")
+    prepare.add_argument("--human-motion-profile", choices=["legacy", "group_orca_v1"], default="legacy")
     for name in ["verify", "run"]:
         cmd = commands.add_parser(name)
         cmd.add_argument("--run-dir", type=Path, required=True)
     args = parser.parse_args(argv)
     if args.mode == "prepare":
-        prepare_run(ROOT, args.run_dir, args.config, args.scenario, args.seed, args.gui, planner_diagnostics=args.planner_diagnostics)
+        prepare_run(ROOT, args.run_dir, args.config, args.scenario, args.seed, args.gui, planner_diagnostics=args.planner_diagnostics, human_motion_profile=args.human_motion_profile)
         print("Prepared new capture freeze:", args.run_dir.resolve())
         return 0
     verify_run(ROOT, args.run_dir)

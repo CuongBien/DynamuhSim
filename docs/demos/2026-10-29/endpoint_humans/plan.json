@@ -1,0 +1,52 @@
+{
+  "schema": "endpoint_humans_plan/1",
+  "raw_root": "experiments/social_navigation/benchmark/generated/endpoint_humans_20261029",
+  "seed": 45,
+  "robot_cases": [
+    {
+      "id": "standing_resample",
+      "scenario": "standing",
+      "config": "configs/capture/geometry_v7_mppi_resample.json",
+      "human_motion_profile": "legacy"
+    },
+    {
+      "id": "walking_resample",
+      "scenario": "walking",
+      "config": "configs/capture/geometry_v7_mppi_resample.json",
+      "human_motion_profile": "legacy"
+    }
+  ],
+  "human_cases": [
+    {
+      "id": "walking_group",
+      "scenario": "walking",
+      "config": "configs/capture/geometry_v7_mppi_resample.json",
+      "human_motion_profile": "group_orca_v1"
+    },
+    {
+      "id": "standing_group",
+      "scenario": "standing",
+      "config": "configs/capture/geometry_v7_mppi_resample.json",
+      "human_motion_profile": "group_orca_v1"
+    }
+  ],
+  "offline": {
+    "source": "experiments/social_navigation/benchmark/generated/factory_regression_20261029/walking_h5/runtime/worker_trajectory.jsonl",
+    "active_steps": 120,
+    "dt_s": 0.1,
+    "conditions": [
+      "legacy",
+      "group_orca_v1"
+    ],
+    "scope": "Same recorded ego inputs, no Nav2 reaction; not a closed-loop comparison. Baseline reproduction error is measured. Native host-time goal expiry limits long offline counterfactuals."
+  },
+  "criteria": [
+    "One fresh attempt per cell, preserve any failure; no tuning during capture series.",
+    "All captures must pass native GPU/raw sensor/TF/costmap integrity audit.",
+    "Robot screen: actual goal reached (world XY<=.2m yaw<=.25rad), positive swept human/static clearance and zero progress failures/recoveries; compare both original v6 captures.",
+    "Human offline screen: aggregate yaw total variation at least 50% below legacy over same 12s robot input. Report path lengths, yaw/metre, heading versus velocity, group spread and safety projection diagnostics; reduction alone is not social realism acceptance.",
+    "Human closed-loop: audit plus actual goal and positive swept clearances; compare to matched legacy v7. Report rotations over first 12s and full episode, group cohesion/lifecycle and progress failures.",
+    "No default promotion or dataset/WM acceptance. MPPI RNG is not pinned, seed45 is not multi-seed robustness. Group motion adapter changes radius and velocity initialization together; no individual-parameter causal claim."
+  ],
+  "unchanged": "Native robot/camera/TF, map/start/goal, Nav2 tolerances/progress checker and speed limits, six initial humans, native human goals/lifecycle/RNG/turn limits, per-person ORCA and swept collision projection; human virtual robot radius .25 retained."
+}

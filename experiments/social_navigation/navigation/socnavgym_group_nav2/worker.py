@@ -9,8 +9,13 @@ import numpy as np
 from fixture import make_kernel
 p=argparse.ArgumentParser();p.add_argument('--scenario',choices=['walking','standing'],required=True);p.add_argument('--seed',type=int,required=True);p.add_argument('--runtime',type=Path,required=True);p.add_argument('--socket',required=True);a=p.parse_args()
 k=make_kernel(a.scenario,a.seed);dt=.1
+sys.path.insert(0,str(Path(__file__).resolve().parents[4]/'python'))
+from dynamuhsim.simulation.human_groups import load_profile
+human_motion=load_profile(k,a.runtime)
 current=copy.deepcopy(k.humans());server=socket.socket(socket.AF_UNIX,socket.SOCK_STREAM);server.bind(a.socket);server.listen(1)
 (a.runtime/'ready.json').write_text(json.dumps(dict(humans=current,groups=k.groups(),obstacles=42,native_dt=dt,robot_radius=.25,human_radius=.36,epoch=0,scenario=a.scenario,seed=a.seed,response_variant='native_initial_groups_continuous_lifecycle_response_v2',reactive_standing=a.scenario=='standing',standing_speed_cap_mps=.2,activation_center_distance_m=1.4,requires_start_gate=True)))
+if human_motion is not None:
+    ready=json.loads((a.runtime/'ready.json').read_text());ready['human_motion_profile']='group_orca_v1';(a.runtime/'ready.json').write_text(json.dumps(ready))
 try:
     conn,_=server.accept()
     with conn,conn.makefile('rb') as stream,(a.runtime/'worker_trajectory.jsonl').open('w',buffering=1) as log:
@@ -30,6 +35,7 @@ try:
                 if active:k.advance(robot);current=copy.deepcopy(k.humans())
                 previous=t;transport_step+=1
                 reply=dict(time=t,state_time=t+dt,step=transport_step,native_step=k.steps,active_phase=active,before=before,humans=current,groups_before=groups_before,groups=k.groups(),finish_events=k.motion.events[events:],motion_guard=k.motion.steps[-1] if active else None,compute_ms=1000*(time.monotonic()-start))
+                if human_motion is not None:reply["group_orca"]=human_motion.last
                 log.write(json.dumps(dict(**reply,robot_input=robot),allow_nan=False)+'\n')
             except Exception as error:
                 reply=dict(error=str(error),fatal=True,restart_required=True,step=k.steps);safe_request=json.loads(json.dumps(request),parse_constant=lambda value:value);log.write(json.dumps(dict(**reply,request=safe_request,last_safe_humans=current),allow_nan=False)+'\n')

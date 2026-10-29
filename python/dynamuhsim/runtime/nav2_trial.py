@@ -108,7 +108,8 @@ def source_files(repo, profile, entrypoint):
         files += [benchmark / "socnavgym_warehouse_lifecycle" / name for name in ["kernel.py", "motion.py", "geometry.py", "config.yaml"]]
         files += [benchmark / "socnavgym_lifecycle_fix/continuous_groups.py",
                   social / "vendor/SocNavGym/socnavgym/envs/socnavenv_v2.py",
-                  social / "vendor/SocNavGym/socnavgym/envs/utils/human_human.py"]
+                  social / "vendor/SocNavGym/socnavgym/envs/utils/human_human.py",
+                  social / "vendor/SocNavGym/socnavgym/envs/utils/human.py"]
     if profile.container_worker:
         files.append(stage / "runtime.py")
     files += sorted((repo / "python/dynamuhsim").rglob("*.py"))
