@@ -1,6 +1,6 @@
 # Bắt đầu ở đây — những phần đang dùng
 
-Cập nhật ngày **29/10/2026**. Công việc hiện tại: **đọc bộ dữ liệu đầu tiên, xem lại dữ liệu và chuẩn bị train thử World Model dự báo BEV**. Các thử nghiệm trước được giữ để tra cứu, chưa cần chạy lại.
+Cập nhật ngày **29/10/2026**. Công việc hiện tại: **kiểm tra điều hướng và sửa chuyển động nhóm người trước đợt thu dữ liệu mới**. `dataset01` là bộ pilot đã có, chưa thay đổi hoặc gán nhãn lại; World Model chưa train.
 
 ## 1. Hiện tại đã có gì?
 
@@ -96,15 +96,19 @@ Gazebo pose replay và hướng dẫn build ở [README replay](../experiments/s
 
 `replay_and_backup_tools.zip` là gói công cụ bổ sung, không phải part thứ 15 của dữ liệu. Bản sao dữ liệu đã được giải nén thử và đối chiếu SHA256 từng file tại máy; metadata Drive đã đối chiếu tên/dung lượng. Chi tiết và phạm vi những file được sao lưu ở [báo cáo backup](../experiments/archive/social_navigation/reports/wm_episode_batch/BACKUP_DRIVE.md).
 
-## Chú ý kích thước trước khi thu dữ liệu mới
+## Trạng thái mô phỏng mới nhất — 29/10
 
-Kiểm tra29/10 xác nhận SDF collision bao24×28cm nhưng footprint Nav2 ngang52cm; URDF thân28×22cm cũng khác SDF24×20cm. Camera mount TF x14cm khác SDF12cm. Cần thống nhất model/TF và footprint trước capture mới; chưa sửa hoặc relabel dữ liệu cũ. [Phép đo và phân tích inflation](demos/2026-10-29/footprint_review/README.md). Các hình candidate chỉ là tính offline, chưa phải episode robot lách qua đã nghiệm thu.
+Các capture mới dùng geometry profile riêng: collision robot bao24×28cm, Nav2 radius17cm + padding1cm, URDF/TF dựng khớp SDF và camera x12cm. Model/cấu hình ROS mặc định vẫn giữ nguyên; dữ liệu cũ không bị sửa. Cấu hình MPPI horizon5s đã qua cả khe80cm và52,7cm trong fixture tĩnh, nhưng lượt nhà xưởng cũ cần recovery gần đích.
+
+Đợt mới đã thử resampling MPPI và adapter nhóm người riêng biệt: **4/4 lượt Gazebo GPU tới đích, audit PASS, không recovery**. Cùng12 giây đầu vào robot, adapter giảm tổng góc quay73%; kiểm tra pose Gazebo trong các lượt tương tác cũng giảm quay rõ rệt. Chưa nghiệm thu hoàn toàn tính tự nhiên: cần thêm gặp ngược chiều/cắt ngang và nhiều seed. Chưa nâng lên mặc định hoặc đăng ký thành dataset train mới.
+
+Xem [báo cáo hiện tại và video](demos/2026-10-29/endpoint_humans/README.md), [trang xem trực quan](demos/2026-10-29/endpoint_humans/index.html) và [khe hẹp](demos/2026-10-29/static_gap/README.md).
 
 ## 6. Việc tiếp theo, theo thứ tự
 
-1. Viết baseline WM nhỏ cho nhiệm vụ **dự báo BEV có điều kiện hành động**, dùng reader và masks hiện có.
-2. Train trên train, chọn cấu hình/ngưỡng bằng validation; lưu checkpoint, cấu hình và báo cáo.
-3. Cố định mô hình và quy trình đánh giá, rồi mới mở test để đánh giá cuối.
-4. Dựa vào kết quả mới quyết định mở rộng tình huống/dữ liệu. Chuẩn bị RL sau khi có reward và step/reset hợp lệ.
+1. Kiểm tra nhóm người trong tình huống ngược chiều/cắt ngang và nhiều seed; kiểm tra recipe7 trên hai khe tĩnh trước khi chốt cấu hình thu mới.
+2. Đóng băng cấu hình đã nghiệm thu và thu pilot mới khi cần mở rộng dữ liệu. Không trộn kết quả thử nghiệm với các mẫu train đã chấp nhận.
+3. Với `dataset01` có sẵn, bước WM vẫn là baseline nhỏ dự báo BEV có điều kiện hành động: train trên train, chọn bằng validation, cố định rồi mới đánh giá test. Chưa thực hiện trainer trong vòng sửa mô phỏng này.
+4. Chuẩn bị RL sau khi có reward và step/reset hợp lệ.
 
-**Chưa có trainer WM đã triển khai/nghiệm thu trong bước hiện tại**, nên tài liệu chưa có lệnh train WM. Chưa cần mở thêm vòng detector, chạy lại toàn bộ benchmark, thêm simulator hoặc chuyển sang Isaac Sim để hoàn thành bước baseline này.
+**Chưa có trainer WM đã triển khai/nghiệm thu trong bước hiện tại**, nên tài liệu chưa có lệnh train WM. Việc đổi simulator hoặc chuyển Isaac Sim chưa nằm trong vòng kiểm tra hiện tại.

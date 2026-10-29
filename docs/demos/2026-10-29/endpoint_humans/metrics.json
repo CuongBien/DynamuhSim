@@ -1,0 +1,810 @@
+{
+  "offline": {
+    "legacy": {
+      "samples": 120,
+      "time_span_s": 11.9,
+      "yaw_total_rad": [
+        12.671837747110688,
+        12.942755522398278,
+        12.812408886580693,
+        13.506204391542612,
+        13.453691152418932,
+        13.398044369530977
+      ],
+      "yaw_total_turns": [
+        2.016785615511133,
+        2.059903518619612,
+        2.0391582072138443,
+        2.1495791913234714,
+        2.141221449739171,
+        2.1323649891753913
+      ],
+      "path_m": [
+        2.639090989671094,
+        2.8233583030013305,
+        3.4038600466931292,
+        2.8696430429668522,
+        2.599537615002171,
+        2.955246845099187
+      ],
+      "yaw_rad_per_m": [
+        4.801591834728654,
+        4.58417038625231,
+        3.7640821628456864,
+        4.7065799436779026,
+        5.17541699522886,
+        4.533646450464715
+      ],
+      "moving_heading_error_median_deg": 6.616782355531276,
+      "moving_backwards_fraction": 0.0,
+      "moving_group_member_radius_max_m": 1.2706587084316845,
+      "moving_group_member_radius_median_m": 0.9192058827743466,
+      "minimum_sampled_human_human_gap_m": 0.24944028321649325
+    },
+    "group_orca_v1": {
+      "samples": 120,
+      "time_span_s": 11.9,
+      "yaw_total_rad": [
+        2.542691041828009,
+        2.573226067672999,
+        2.6037425010301494,
+        4.472092836287925,
+        4.690062851475846,
+        4.358560626191436
+      ],
+      "yaw_total_turns": [
+        0.40468184806240887,
+        0.4095416483630778,
+        0.41439848957740266,
+        0.7117556808610775,
+        0.7464466862240506,
+        0.6936864684240738
+      ],
+      "path_m": [
+        6.488071094074946,
+        6.407634212530472,
+        6.866968560645084,
+        6.235879219252272,
+        5.842269900052584,
+        6.660776787385931
+      ],
+      "yaw_rad_per_m": [
+        0.3919024629908961,
+        0.4015875410991654,
+        0.37916913089602866,
+        0.717155140285761,
+        0.8027809279118775,
+        0.6543622110930974
+      ],
+      "moving_heading_error_median_deg": 6.193752263964141,
+      "moving_backwards_fraction": 0.007142857142857143,
+      "moving_group_member_radius_max_m": 1.1147263608551854,
+      "moving_group_member_radius_median_m": 0.9640209400820094,
+      "minimum_sampled_human_human_gap_m": 0.41510653466563885
+    }
+  },
+  "offline_reproduction": {
+    "legacy": {
+      "steps": 120,
+      "wall_s": 18.179653274000884,
+      "yaw_total_rad": [
+        12.671837747110688,
+        12.942755522398278,
+        12.812408886580693,
+        13.506204391542612,
+        13.453691152418932,
+        13.398044369530977
+      ],
+      "path_m": [
+        2.639090989671094,
+        2.8233583030013305,
+        3.4038600466931292,
+        2.8696430429668522,
+        2.599537615002171,
+        2.955246845099187
+      ],
+      "yaw_rad_per_m": [
+        4.801591834728654,
+        4.58417038625231,
+        3.7640821628456864,
+        4.7065799436779026,
+        5.17541699522886,
+        4.533646450464715
+      ],
+      "reference_pose_rmse": 0.0
+    },
+    "group_orca_v1": {
+      "steps": 120,
+      "wall_s": 13.528971198000363,
+      "yaw_total_rad": [
+        2.542691041828009,
+        2.573226067672999,
+        2.6037425010301494,
+        4.472092836287925,
+        4.690062851475846,
+        4.358560626191436
+      ],
+      "path_m": [
+        6.488071094074946,
+        6.407634212530472,
+        6.866968560645084,
+        6.235879219252272,
+        5.842269900052584,
+        6.660776787385931
+      ],
+      "yaw_rad_per_m": [
+        0.3919024629908961,
+        0.4015875410991654,
+        0.37916913089602866,
+        0.717155140285761,
+        0.8027809279118775,
+        0.6543622110930974
+      ],
+      "reference_pose_rmse": 1.3549705903391316
+    },
+    "aggregate_yaw_reduction_fraction": 0.7304005642889595,
+    "screen_pass": true
+  },
+  "cases": [
+    {
+      "run": "experiments/social_navigation/benchmark/generated/endpoint_humans_20261029/standing_resample",
+      "status": "SUCCEEDED",
+      "actual_goal_reached": true,
+      "xy_error_m": 0.08760846720273836,
+      "active_sim_s": 32.05499999999999,
+      "path_length_m": 8.910306094749856,
+      "world_y_min_m": -0.0741795494970038,
+      "world_y_max_m": 1.5323342946645682,
+      "minimum_swept_robot_human_gap_m": 0.329621784718371,
+      "minimum_static_gap_lower_bound_m": 0.9054581071108277,
+      "static_box_count": 42,
+      "global_plan_probe": {
+        "time_sim_s": 32.2025,
+        "nearest_point_to_initial_gate_x": [
+          -22.071958996973716,
+          1.2317203676482424
+        ]
+      },
+      "native_contact_force_recorded": false,
+      "gate_A_crossings": [],
+      "passes_original_narrow_gap_A": false,
+      "rendering": "D3D12 (NVIDIA GeForce RTX 4060 Laptop GPU)",
+      "id": "standing_resample",
+      "human_motion_profile": "legacy",
+      "progress_failure_count": 0,
+      "max_action_recoveries": 0,
+      "human_first12": {
+        "samples": 120,
+        "time_span_s": 11.900000000000002,
+        "yaw_total_rad": [
+          0.0,
+          2.220446049250313e-16,
+          0.0,
+          0.0,
+          2.220446049250313e-16,
+          0.0
+        ],
+        "yaw_total_turns": [
+          0.0,
+          3.533949646070574e-17,
+          0.0,
+          0.0,
+          3.533949646070574e-17,
+          0.0
+        ],
+        "path_m": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "yaw_rad_per_m": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "moving_heading_error_median_deg": null,
+        "moving_backwards_fraction": null,
+        "moving_group_member_radius_max_m": null,
+        "moving_group_member_radius_median_m": null,
+        "minimum_sampled_human_human_gap_m": 0.5270765814495901
+      },
+      "human_full": {
+        "samples": 320,
+        "time_span_s": 31.9,
+        "yaw_total_rad": [
+          0.0,
+          2.220446049250313e-16,
+          0.0,
+          0.0,
+          2.220446049250313e-16,
+          0.0
+        ],
+        "yaw_total_turns": [
+          0.0,
+          3.533949646070574e-17,
+          0.0,
+          0.0,
+          3.533949646070574e-17,
+          0.0
+        ],
+        "path_m": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "yaw_rad_per_m": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "moving_heading_error_median_deg": null,
+        "moving_backwards_fraction": null,
+        "moving_group_member_radius_max_m": null,
+        "moving_group_member_radius_median_m": null,
+        "minimum_sampled_human_human_gap_m": 0.5270765814495901
+      },
+      "minimum_human_static_gap_lower_bound_m": 1.6164617092752032,
+      "native_human_full": {
+        "duration_s": 32.0475,
+        "yaw_total_turns": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "path_m": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      },
+      "native_human_first12": {
+        "duration_s": 11.992500000000001,
+        "yaw_total_turns": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "path_m": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      },
+      "social_diagnostic": {
+        "standing_trio_samples": 3204,
+        "nondegenerate_triangle_tests": 3204,
+        "robot_center_entry_samples": 0,
+        "speed_qualified_entry_samples": 0,
+        "any_entry_duration_approx_s": 0.0,
+        "speed_qualified_entry_duration_approx_s": 0.0,
+        "max_standing_member_shift_from_initial_m": 3.972054645195637e-15,
+        "max_pose_to_group_metadata_alignment_s": 0.009999999999999787,
+        "skipped_metadata_alignment": 0,
+        "entries": [],
+        "scope": "Actual proxy triangles plus nearest native group membership/type. Robot center only, not full footprint or validated O-space/social label. Duration approximated at group-message rate; no contact-force evidence."
+      },
+      "capture_integrity": "PASS",
+      "physical_pass": true,
+      "recovery_free_pass": true
+    },
+    {
+      "run": "experiments/social_navigation/benchmark/generated/endpoint_humans_20261029/walking_resample",
+      "status": "SUCCEEDED",
+      "actual_goal_reached": true,
+      "xy_error_m": 0.011404162972054738,
+      "active_sim_s": 34.089999999999996,
+      "path_length_m": 8.903989779260092,
+      "world_y_min_m": -0.2410684885431906,
+      "world_y_max_m": 1.4284384806251174,
+      "minimum_swept_robot_human_gap_m": 0.12813552721879995,
+      "minimum_static_gap_lower_bound_m": 1.056321495918848,
+      "static_box_count": 42,
+      "global_plan_probe": {
+        "time_sim_s": 30.9925,
+        "nearest_point_to_initial_gate_x": [
+          -22.481069829823657,
+          0.85438778676048
+        ]
+      },
+      "native_contact_force_recorded": false,
+      "gate_A_crossings": [],
+      "passes_original_narrow_gap_A": false,
+      "rendering": "D3D12 (NVIDIA GeForce RTX 4060 Laptop GPU)",
+      "id": "walking_resample",
+      "human_motion_profile": "legacy",
+      "progress_failure_count": 0,
+      "max_action_recoveries": 0,
+      "human_first12": {
+        "samples": 120,
+        "time_span_s": 11.899999999999999,
+        "yaw_total_rad": [
+          12.786474471828534,
+          12.973282538978419,
+          12.919218352583236,
+          13.490752211937632,
+          13.545448093077066,
+          13.476701486935939
+        ],
+        "yaw_total_turns": [
+          2.0350306169098427,
+          2.06476204420619,
+          2.056157461697155,
+          2.147119900557795,
+          2.1558250204079026,
+          2.144883658219751
+        ],
+        "path_m": [
+          2.5960346317139336,
+          2.8083219948268137,
+          3.384283035042296,
+          2.857830827670824,
+          2.593595166567821,
+          2.930035947290003
+        ],
+        "yaw_rad_per_m": [
+          4.925386709262329,
+          4.6195851340681,
+          3.8174166341326043,
+          4.7206265959881195,
+          5.222653198803631,
+          4.599500391590953
+        ],
+        "moving_heading_error_median_deg": 6.531743963019483,
+        "moving_backwards_fraction": 0.0,
+        "moving_group_member_radius_max_m": 1.098879670516122,
+        "moving_group_member_radius_median_m": 0.9169966458142853,
+        "minimum_sampled_human_human_gap_m": 0.24215944157241742
+      },
+      "human_full": {
+        "samples": 341,
+        "time_span_s": 34.0,
+        "yaw_total_rad": [
+          34.28895247723125,
+          34.66313058136103,
+          34.23109039074494,
+          33.399354408594476,
+          33.30336761846778,
+          33.34970369601613
+        ],
+        "yaw_total_turns": [
+          5.457256280194443,
+          5.516808575063452,
+          5.448047243112536,
+          5.315672350205897,
+          5.30039557808571,
+          5.3077701938710184
+        ],
+        "path_m": [
+          8.280770649642829,
+          8.685388564648987,
+          10.285906014382535,
+          10.208273850267961,
+          9.307982365655056,
+          10.279936397005358
+        ],
+        "yaw_rad_per_m": [
+          4.140792436838016,
+          3.9909706196042727,
+          3.3279606427358397,
+          3.271792557535843,
+          3.5779362605317995,
+          3.2441546725650183
+        ],
+        "moving_heading_error_median_deg": 7.222607548362918,
+        "moving_backwards_fraction": 0.0,
+        "moving_group_member_radius_max_m": 1.6691356141891436,
+        "moving_group_member_radius_median_m": 1.0351028292982098,
+        "minimum_sampled_human_human_gap_m": 0.24215944157241742
+      },
+      "minimum_human_static_gap_lower_bound_m": 0.6090334825503878,
+      "native_human_full": {
+        "duration_s": 34.08,
+        "yaw_total_turns": [
+          5.456122125412062,
+          5.516277745169451,
+          5.447945848381462,
+          5.314605107416391,
+          5.300612339617866,
+          5.308704186152107
+        ],
+        "path_m": [
+          8.26751792571552,
+          8.677274273948909,
+          10.284821330020463,
+          10.252273848712843,
+          9.320466755708074,
+          10.249611607192675
+        ]
+      },
+      "native_human_first12": {
+        "duration_s": 11.995,
+        "yaw_total_turns": [
+          2.0277896822843076,
+          2.057441298650558,
+          2.0487995638173393,
+          2.145109135063066,
+          2.1532935653499674,
+          2.14592989064099
+        ],
+        "path_m": [
+          2.6074193954632228,
+          2.8250729424988035,
+          3.4123124099884756,
+          2.9302107562925177,
+          2.637119723389355,
+          2.927813878928826
+        ]
+      },
+      "social_diagnostic": {
+        "standing_trio_samples": 0,
+        "nondegenerate_triangle_tests": 0,
+        "robot_center_entry_samples": 0,
+        "speed_qualified_entry_samples": 0,
+        "any_entry_duration_approx_s": 0.0,
+        "speed_qualified_entry_duration_approx_s": 0.0,
+        "max_standing_member_shift_from_initial_m": 0.0,
+        "max_pose_to_group_metadata_alignment_s": 0.010000000000001563,
+        "skipped_metadata_alignment": 0,
+        "entries": [],
+        "scope": "Actual proxy triangles plus nearest native group membership/type. Robot center only, not full footprint or validated O-space/social label. Duration approximated at group-message rate; no contact-force evidence."
+      },
+      "capture_integrity": "PASS",
+      "physical_pass": true,
+      "recovery_free_pass": true
+    },
+    {
+      "run": "experiments/social_navigation/benchmark/generated/endpoint_humans_20261029/walking_group",
+      "status": "SUCCEEDED",
+      "actual_goal_reached": true,
+      "xy_error_m": 0.05817702428778711,
+      "active_sim_s": 30.697500000000005,
+      "path_length_m": 8.090174440975858,
+      "world_y_min_m": -0.0017285536989153697,
+      "world_y_max_m": 0.40832202366528836,
+      "minimum_swept_robot_human_gap_m": 1.7009283182838293,
+      "minimum_static_gap_lower_bound_m": 1.6816988731542788,
+      "static_box_count": 42,
+      "global_plan_probe": {
+        "time_sim_s": 30.6025,
+        "nearest_point_to_initial_gate_x": [
+          -22.02362182546924,
+          0.37378487749654776
+        ]
+      },
+      "native_contact_force_recorded": false,
+      "gate_A_crossings": [],
+      "passes_original_narrow_gap_A": false,
+      "rendering": "D3D12 (NVIDIA GeForce RTX 4060 Laptop GPU)",
+      "id": "walking_group",
+      "human_motion_profile": "group_orca_v1",
+      "progress_failure_count": 0,
+      "max_action_recoveries": 0,
+      "human_first12": {
+        "samples": 120,
+        "time_span_s": 11.900000000000002,
+        "yaw_total_rad": [
+          2.95185992954724,
+          3.0101312494747825,
+          2.980612133491302,
+          5.43617490742927,
+          5.4344505764788815,
+          5.219280651550182
+        ],
+        "yaw_total_turns": [
+          0.46980309910233714,
+          0.4790772677092948,
+          0.47437915448482093,
+          0.8651941080294948,
+          0.8649196722352143,
+          0.8306743150780996
+        ],
+        "path_m": [
+          6.246253800184414,
+          6.014281745634773,
+          6.518092211920981,
+          5.997773400042773,
+          5.552401602251417,
+          6.40459116934005
+        ],
+        "yaw_rad_per_m": [
+          0.4725808498943942,
+          0.500497212598922,
+          0.4572829037367776,
+          0.9063655034700882,
+          0.9787567553246314,
+          0.8149279967370647
+        ],
+        "moving_heading_error_median_deg": 5.926732352296668,
+        "moving_backwards_fraction": 0.00860832137733142,
+        "moving_group_member_radius_max_m": 1.046987817426597,
+        "moving_group_member_radius_median_m": 0.9505187015275028,
+        "minimum_sampled_human_human_gap_m": 0.4150178095259591
+      },
+      "human_full": {
+        "samples": 307,
+        "time_span_s": 30.6,
+        "yaw_total_rad": [
+          10.931525387587312,
+          11.009774296497692,
+          10.897488196557692,
+          13.067048313055011,
+          12.903216954622865,
+          12.786046963521795
+        ],
+        "yaw_total_turns": [
+          1.7398063009690679,
+          1.7522600016137022,
+          1.7343891137677407,
+          2.079685330643317,
+          2.0536107601153812,
+          2.0349625768496122
+        ],
+        "path_m": [
+          14.632035208838012,
+          14.113700766433602,
+          15.801704271045944,
+          16.125195576464492,
+          15.328914241726066,
+          17.002105124650075
+        ],
+        "yaw_rad_per_m": [
+          0.7470953446711551,
+          0.7800770668655573,
+          0.6896400546190178,
+          0.8103497567574935,
+          0.841756744877577,
+          0.7520272854321002
+        ],
+        "moving_heading_error_median_deg": 6.384444926791502,
+        "moving_backwards_fraction": 0.0034403669724770644,
+        "moving_group_member_radius_max_m": 1.5112815460960378,
+        "moving_group_member_radius_median_m": 1.0268506772506565,
+        "minimum_sampled_human_human_gap_m": 0.4150178095259591
+      },
+      "minimum_human_static_gap_lower_bound_m": 0.20893568191566214,
+      "native_human_full": {
+        "duration_s": 30.675000000000004,
+        "yaw_total_turns": [
+          1.7396865998893372,
+          1.7515208909176712,
+          1.7342756279307516,
+          2.0797667879702852,
+          2.0542603503999524,
+          2.0352785780777163
+        ],
+        "path_m": [
+          14.612460564449142,
+          14.102409640167046,
+          15.796893032079167,
+          16.167329208297677,
+          15.33515880896955,
+          16.969780335567517
+        ]
+      },
+      "native_human_first12": {
+        "duration_s": 11.977500000000001,
+        "yaw_total_turns": [
+          0.4690730832760859,
+          0.4788765919748331,
+          0.47394218277083366,
+          0.865320798495915,
+          0.8651058034038347,
+          0.8308793619234529
+        ],
+        "path_m": [
+          6.240149979112628,
+          6.017749183588476,
+          6.529060284137326,
+          6.046425915812674,
+          5.5735038876291565,
+          6.37470425784298
+        ]
+      },
+      "social_diagnostic": {
+        "standing_trio_samples": 0,
+        "nondegenerate_triangle_tests": 0,
+        "robot_center_entry_samples": 0,
+        "speed_qualified_entry_samples": 0,
+        "any_entry_duration_approx_s": 0.0,
+        "speed_qualified_entry_duration_approx_s": 0.0,
+        "max_standing_member_shift_from_initial_m": 0.0,
+        "max_pose_to_group_metadata_alignment_s": 0.009999999999999787,
+        "skipped_metadata_alignment": 0,
+        "entries": [],
+        "scope": "Actual proxy triangles plus nearest native group membership/type. Robot center only, not full footprint or validated O-space/social label. Duration approximated at group-message rate; no contact-force evidence."
+      },
+      "capture_integrity": "PASS",
+      "physical_pass": true,
+      "recovery_free_pass": true
+    },
+    {
+      "run": "experiments/social_navigation/benchmark/generated/endpoint_humans_20261029/standing_group",
+      "status": "SUCCEEDED",
+      "actual_goal_reached": true,
+      "xy_error_m": 0.1339641152733564,
+      "active_sim_s": 31.5325,
+      "path_length_m": 8.836621382134004,
+      "world_y_min_m": -0.03981725182774018,
+      "world_y_max_m": 1.530853541249218,
+      "minimum_swept_robot_human_gap_m": 0.3314115239373805,
+      "minimum_static_gap_lower_bound_m": 0.9053129989068601,
+      "static_box_count": 42,
+      "global_plan_probe": {
+        "time_sim_s": 31.56,
+        "nearest_point_to_initial_gate_x": [
+          -22.087714531006622,
+          1.2327571597912184
+        ]
+      },
+      "native_contact_force_recorded": false,
+      "gate_A_crossings": [],
+      "passes_original_narrow_gap_A": false,
+      "rendering": "D3D12 (NVIDIA GeForce RTX 4060 Laptop GPU)",
+      "id": "standing_group",
+      "human_motion_profile": "group_orca_v1",
+      "progress_failure_count": 0,
+      "max_action_recoveries": 0,
+      "human_first12": {
+        "samples": 120,
+        "time_span_s": 11.9,
+        "yaw_total_rad": [
+          0.0,
+          2.220446049250313e-16,
+          0.0,
+          0.0,
+          2.220446049250313e-16,
+          0.0
+        ],
+        "yaw_total_turns": [
+          0.0,
+          3.533949646070574e-17,
+          0.0,
+          0.0,
+          3.533949646070574e-17,
+          0.0
+        ],
+        "path_m": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "yaw_rad_per_m": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "moving_heading_error_median_deg": null,
+        "moving_backwards_fraction": null,
+        "moving_group_member_radius_max_m": null,
+        "moving_group_member_radius_median_m": null,
+        "minimum_sampled_human_human_gap_m": 0.5270765814495901
+      },
+      "human_full": {
+        "samples": 316,
+        "time_span_s": 31.5,
+        "yaw_total_rad": [
+          0.0,
+          2.220446049250313e-16,
+          0.0,
+          0.0,
+          2.220446049250313e-16,
+          0.0
+        ],
+        "yaw_total_turns": [
+          0.0,
+          3.533949646070574e-17,
+          0.0,
+          0.0,
+          3.533949646070574e-17,
+          0.0
+        ],
+        "path_m": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "yaw_rad_per_m": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "moving_heading_error_median_deg": null,
+        "moving_backwards_fraction": null,
+        "moving_group_member_radius_max_m": null,
+        "moving_group_member_radius_median_m": null,
+        "minimum_sampled_human_human_gap_m": 0.5270765814495901
+      },
+      "minimum_human_static_gap_lower_bound_m": 1.6164617092752032,
+      "native_human_full": {
+        "duration_s": 31.529999999999998,
+        "yaw_total_turns": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "path_m": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      },
+      "native_human_first12": {
+        "duration_s": 11.982499999999998,
+        "yaw_total_turns": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "path_m": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      },
+      "social_diagnostic": {
+        "standing_trio_samples": 3154,
+        "nondegenerate_triangle_tests": 3154,
+        "robot_center_entry_samples": 0,
+        "speed_qualified_entry_samples": 0,
+        "any_entry_duration_approx_s": 0.0,
+        "speed_qualified_entry_duration_approx_s": 0.0,
+        "max_standing_member_shift_from_initial_m": 3.972054645195637e-15,
+        "max_pose_to_group_metadata_alignment_s": 0.009999999999999787,
+        "skipped_metadata_alignment": 0,
+        "entries": [],
+        "scope": "Actual proxy triangles plus nearest native group membership/type. Robot center only, not full footprint or validated O-space/social label. Duration approximated at group-message rate; no contact-force evidence."
+      },
+      "capture_integrity": "PASS",
+      "physical_pass": true,
+      "recovery_free_pass": true
+    }
+  ]
+}

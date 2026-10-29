@@ -1,0 +1,104 @@
+{
+  "schema": "endpoint_humans_verification/1",
+  "status": "PASS",
+  "checks": {
+    "standing:v6_to_v7_only_resampling": true,
+    "standing:human_treatment_same_nav_config": true,
+    "standing:same:assets/mecanum_camera.sdf": true,
+    "standing:same:assets/mecanum_aligned.urdf": true,
+    "standing:same_initial_humans": true,
+    "standing:same_initial_groups": true,
+    "standing:world_same_except_socket": true,
+    "standing:same_vendor_backend": true,
+    "standing_resample:integrity": true,
+    "standing_resample:native_gpu": true,
+    "standing_resample:no_injected_velocity": true,
+    "standing_resample:clean_exit": true,
+    "standing_resample:human_profile": true,
+    "standing_group:integrity": true,
+    "standing_group:native_gpu": true,
+    "standing_group:no_injected_velocity": true,
+    "standing_group:clean_exit": true,
+    "standing_group:human_profile": true,
+    "walking:v6_to_v7_only_resampling": true,
+    "walking:human_treatment_same_nav_config": true,
+    "walking:same:assets/mecanum_camera.sdf": true,
+    "walking:same:assets/mecanum_aligned.urdf": true,
+    "walking:same_initial_humans": true,
+    "walking:same_initial_groups": true,
+    "walking:world_same_except_socket": true,
+    "walking:same_vendor_backend": true,
+    "walking_resample:integrity": true,
+    "walking_resample:native_gpu": true,
+    "walking_resample:no_injected_velocity": true,
+    "walking_resample:clean_exit": true,
+    "walking_resample:human_profile": true,
+    "walking_group:integrity": true,
+    "walking_group:native_gpu": true,
+    "walking_group:no_injected_velocity": true,
+    "walking_group:clean_exit": true,
+    "walking_group:human_profile": true
+  },
+  "runs": {
+    "standing_resample": {
+      "head": "8c158f738205dfb8e80432d00ead1e633108dbf3",
+      "files_sha256": {
+        "capture_freeze.json": "b95a08baedf41f2a59151073504323bad47f59e88993b3e136c848979e59f82f",
+        "plan.json": "58a85b7f45eb2e434cbdb53b028c0f46eb359cc38f6583df318b5081a5556ade",
+        "runtime/nav2_runtime.yaml": "c060ecd317402ba2aae7474437bf3db4a6ea8481a12b77d35fd6097e93e557f2",
+        "runtime/warehouse.sdf": "b419c5c4a6ca0390ab47fb3d5c0e2801055469b75ba67e7203c3666e5df2d966",
+        "episode/result.json": "cf2f5a4cec2db2eeadd7ad616e182e0482fa6a8c7f733691c717a7c54babddaa",
+        "episode/gazebo_poses.jsonl": "3ad8467ec23d3aa88733b2cbdfbebe896b5398cf318f282fb333954ef7900066",
+        "episode/native_costmaps.jsonl": "32fd3095e8bfee4bd686a890f72e29a35e31d5bbc69f8dc8c099623524ab9128",
+        "episode/events.jsonl": "7008a0c78f63598b4c7e2f7905e05568ba27181e04b3a2ecb43e1964a77d85c9",
+        "episode/camera_preview_4x.gif": "e1bde68da3113ac19b83d6ce00a44f0956d3ba44976a816a4074df62ebaf08d1",
+        "runtime/worker_trajectory.jsonl": "04056af2bcccc2fa717d5959eec099a63976d29f6a2bd5f598b9a586d0ef6535"
+      }
+    },
+    "standing_group": {
+      "head": "8c158f738205dfb8e80432d00ead1e633108dbf3",
+      "files_sha256": {
+        "capture_freeze.json": "333de4f108a3345736ed99dd40c7455389511b354a1e9d7699a7f6a721b06ccc",
+        "plan.json": "a5e7b8764761303fa575e9589d788c57e62e20e54809ac8de88bb59219691269",
+        "runtime/nav2_runtime.yaml": "c060ecd317402ba2aae7474437bf3db4a6ea8481a12b77d35fd6097e93e557f2",
+        "runtime/warehouse.sdf": "11594e8d3fae830452adc246b30b13c1389cadc473422ad2af8542f59f99e3b9",
+        "episode/result.json": "659833d5e663652961d0807a4b75a934cde2aae68d27faad835b84f0a20408de",
+        "episode/gazebo_poses.jsonl": "5431cf81554c0729722960226a5778594c4b806ebfaa1b81c547c0851da7ae77",
+        "episode/native_costmaps.jsonl": "fb881ffc41e9d04144e808e807969918ff1e3c5fecc6a8f98039db315e34952b",
+        "episode/events.jsonl": "c6629d13c981d57206be516dfd14f28a55806305dd6badc2445b22de77782d06",
+        "episode/camera_preview_4x.gif": "c3e512112ad8cf66604d29a1d3840632819091156640dc8cc2b246a06ef730a2",
+        "runtime/worker_trajectory.jsonl": "5321b760e2901691510a6ac02a86a44adc088d4c3a82b700aba270ec0dee1456"
+      }
+    },
+    "walking_resample": {
+      "head": "8c158f738205dfb8e80432d00ead1e633108dbf3",
+      "files_sha256": {
+        "capture_freeze.json": "dc4b0f4fd5829ad02d68bb722d08b1f68864c90bce18a305a93cc4c36c277d8a",
+        "plan.json": "9a916b6f88357391265d0084127a4b1a00cf7b6638b68b54edf1f655e6257f01",
+        "runtime/nav2_runtime.yaml": "c060ecd317402ba2aae7474437bf3db4a6ea8481a12b77d35fd6097e93e557f2",
+        "runtime/warehouse.sdf": "f17bb7a75c737c29f140663660f84b8f41fdb95de1f4d630d4d20781021e5db2",
+        "episode/result.json": "22b762903976dc543a3ef2851c102fa91b7438cd6d8b8a3644c6e87458a66ec9",
+        "episode/gazebo_poses.jsonl": "2daf36b05bb597da1336092159e20d498349e294e3a5123a8f99984f27679ccc",
+        "episode/native_costmaps.jsonl": "3df4016f6482b45c78d8f58499241e0713ac0d527003d7f88f2bdda7e694a0ed",
+        "episode/events.jsonl": "f0ec695f338c8238d414c9315a7d256f09190799c04ff8efb18029b3b9435614",
+        "episode/camera_preview_4x.gif": "b7b12748b3493c2631b82a784dc65cb99b598a35b0ff3162c3cfcb2423cb2fbd",
+        "runtime/worker_trajectory.jsonl": "164c12a2ad40c7a201addc00860756ccc76ba1f2f3f41cb6944000789530d364"
+      }
+    },
+    "walking_group": {
+      "head": "8c158f738205dfb8e80432d00ead1e633108dbf3",
+      "files_sha256": {
+        "capture_freeze.json": "14c58d2425608ce081a295fa04ed87efed7ac095aeb32b54737c646c6e995c34",
+        "plan.json": "946106c4eef3dd6dbccb38539fdab6efdcf3d621dd06b72f045ea90a2c44149e",
+        "runtime/nav2_runtime.yaml": "c060ecd317402ba2aae7474437bf3db4a6ea8481a12b77d35fd6097e93e557f2",
+        "runtime/warehouse.sdf": "33be0bb9e8874da8d216a300d3e8f9a6ec10842765eaa80f7d301b2664d1de29",
+        "episode/result.json": "529eee02c04f4843cc0a0c822945e5f56dc753b6a97651d0300b644ac1d6faab",
+        "episode/gazebo_poses.jsonl": "a985b4276da96a62d5390b35735d7cfb9a1a20e5c7b0d580773e6846f6c9fb17",
+        "episode/native_costmaps.jsonl": "2facde364ebf7a164beaa6896c7ef9e1430fb8dfb1231fda477657c06a480867",
+        "episode/events.jsonl": "06d6aa8259cb9cca212ffe227a9fb20caa44fa92197075d37d2ac2a7e6dcb23f",
+        "episode/camera_preview_4x.gif": "9b60792bbead46c196fad9f2c506266abe9a6835326bfed026330ba4c73723e5",
+        "runtime/worker_trajectory.jsonl": "03f69956425a909de9b1f2973f0dae26febd16add2847003ec4b098c4256bd71"
+      }
+    }
+  }
+}
