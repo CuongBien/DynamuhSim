@@ -1,0 +1,9 @@
+# Human goal expiry on simulation time
+
+This isolated profile replaces only the human elapsed-goal-time predicate with Gazebo simulation time. Initial goals start at the accepted navigation goal timestamp written into runtime/start_gate. Later native set_goal/set assignments reset the deadline at their native step. Native geometric arrival and strict age>50s are retained, as are all native setter side effects/RNG. The existing native_wall path remains the default; vendor files and ROS robot/default launch are unchanged.
+
+The adapter binds the existing six Human instances. Native membership/type changes may move those objects between lists/groups. Object replacement, untracked direct goal mutation, gate changes or clock discontinuities are terminal rather than silently reverting to wall time. A run-local human_goal_clock.json is frozen and audited. Logs retain native wall-age telemetry for diagnosis only; sim_v1 behavior uses the separate goal_clock trace.
+
+Before capture:266 shared unit tests OK (2 conditional skips). Tests exercise exact deadline boundary, geometric/default/explicit offsets, static behavior, original setter side effects and same-target resets, pre-start waiting, freeze ownership and altered-clock-trace detection. The native preflight runs identical measured ego inputs under two deliberately different synthetic wall clocks; this is component determinism verification only.
+
+Plan.json declares four fresh GPU captures with the existing head-on/crossing fixtures and legacy/group_orca_v1 human motion, all using the unchanged recipe7 controller and seed45. Historical native_wall captures from encounter_regression_20261029 remain the reference and are never rewritten. Subsequent live trajectories differ; MPPI RNG is not pinned. No WM/RL training or default promotion is part of this step.

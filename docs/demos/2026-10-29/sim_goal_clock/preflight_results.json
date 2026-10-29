@@ -1,0 +1,131 @@
+{
+  "schema": "sim_goal_clock_preflight/1",
+  "status": "PASS",
+  "cases": [
+    {
+      "id": "head_on_legacy",
+      "identical_human_xy_yaw": true,
+      "max_abs_mixed_pose_difference": 0.0,
+      "schedules": {
+        "fast_host": {
+          "clock_trace": {
+            "evaluations": 122,
+            "assignments": 3,
+            "expired_evaluations": 0,
+            "last_state_time_sim_s": 17.302500000000002
+          },
+          "host_start_s": 1000.0,
+          "host_end_s": 1000.5999999999995,
+          "steps": 60,
+          "first_active_goal_age_sim_s": 0.20999999999999908
+        },
+        "slow_host": {
+          "clock_trace": {
+            "evaluations": 122,
+            "assignments": 3,
+            "expired_evaluations": 0,
+            "last_state_time_sim_s": 17.302500000000002
+          },
+          "host_start_s": 1000000.0,
+          "host_end_s": 1006000.0,
+          "steps": 60,
+          "first_active_goal_age_sim_s": 0.20999999999999908
+        }
+      }
+    },
+    {
+      "id": "head_on_group",
+      "identical_human_xy_yaw": true,
+      "max_abs_mixed_pose_difference": 0.0,
+      "schedules": {
+        "fast_host": {
+          "clock_trace": {
+            "evaluations": 122,
+            "assignments": 3,
+            "expired_evaluations": 0,
+            "last_state_time_sim_s": 18.5025
+          },
+          "host_start_s": 1000.0,
+          "host_end_s": 1000.5999999999995,
+          "steps": 60,
+          "first_active_goal_age_sim_s": 0.125
+        },
+        "slow_host": {
+          "clock_trace": {
+            "evaluations": 122,
+            "assignments": 3,
+            "expired_evaluations": 0,
+            "last_state_time_sim_s": 18.5025
+          },
+          "host_start_s": 1000000.0,
+          "host_end_s": 1006000.0,
+          "steps": 60,
+          "first_active_goal_age_sim_s": 0.125
+        }
+      }
+    },
+    {
+      "id": "crossing_legacy",
+      "identical_human_xy_yaw": true,
+      "max_abs_mixed_pose_difference": 0.0,
+      "schedules": {
+        "fast_host": {
+          "clock_trace": {
+            "evaluations": 120,
+            "assignments": 0,
+            "expired_evaluations": 0,
+            "last_state_time_sim_s": 17.602500000000003
+          },
+          "host_start_s": 1000.0,
+          "host_end_s": 1000.5999999999995,
+          "steps": 60,
+          "first_active_goal_age_sim_s": 0.17749999999999844
+        },
+        "slow_host": {
+          "clock_trace": {
+            "evaluations": 120,
+            "assignments": 0,
+            "expired_evaluations": 0,
+            "last_state_time_sim_s": 17.602500000000003
+          },
+          "host_start_s": 1000000.0,
+          "host_end_s": 1006000.0,
+          "steps": 60,
+          "first_active_goal_age_sim_s": 0.17749999999999844
+        }
+      }
+    },
+    {
+      "id": "crossing_group",
+      "identical_human_xy_yaw": true,
+      "max_abs_mixed_pose_difference": 0.0,
+      "schedules": {
+        "fast_host": {
+          "clock_trace": {
+            "evaluations": 120,
+            "assignments": 0,
+            "expired_evaluations": 0,
+            "last_state_time_sim_s": 17.602500000000003
+          },
+          "host_start_s": 1000.0,
+          "host_end_s": 1000.5999999999995,
+          "steps": 60,
+          "first_active_goal_age_sim_s": 0.2049999999999983
+        },
+        "slow_host": {
+          "clock_trace": {
+            "evaluations": 120,
+            "assignments": 0,
+            "expired_evaluations": 0,
+            "last_state_time_sim_s": 17.602500000000003
+          },
+          "host_start_s": 1000000.0,
+          "host_end_s": 1006000.0,
+          "steps": 60,
+          "first_active_goal_age_sim_s": 0.2049999999999983
+        }
+      }
+    }
+  ],
+  "scope": "60 native-kernel steps per cell, same measured ego inputs and RNG seed; wall-clock schedules deliberately differ. No physics/closed-loop/naturalness acceptance."
+}

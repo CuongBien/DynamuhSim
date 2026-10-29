@@ -85,7 +85,7 @@ def capture_sources(repo):
     return sorted(set(files))
 
 
-def prepare_run(repo, run_dir, config_path, scenario, seed, gui=False, *, planner_diagnostics=False, human_motion_profile="legacy", encounter_profile=None):
+def prepare_run(repo, run_dir, config_path, scenario, seed, gui=False, *, planner_diagnostics=False, human_motion_profile="legacy", encounter_profile=None, human_goal_clock="native_wall"):
     repo, run_dir, config_path = Path(repo).resolve(), Path(run_dir).resolve(), Path(config_path).resolve()
     run_dir.relative_to(repo)
     config = validate_config(json.loads(config_path.read_text()))
@@ -93,6 +93,8 @@ def prepare_run(repo, run_dir, config_path, scenario, seed, gui=False, *, planne
         raise ValueError("Scenario/seed not allowed by capture config")
     if human_motion_profile not in ["legacy", "group_orca_v1"]:
         raise ValueError("Unsupported human motion profile")
+    if human_goal_clock not in ["native_wall", "sim_v1"]:
+        raise ValueError("Unsupported human goal clock")
     encounter = None
     if encounter_profile is not None:
         from dynamuhsim.simulation.encounters import fixture, initial_clearance
@@ -135,6 +137,11 @@ def prepare_run(repo, run_dir, config_path, scenario, seed, gui=False, *, planne
         dump(assets / "encounter.json", encounter)
         files.append(assets / "encounter.json")
         plan["encounter_profile"] = encounter_profile
+    if human_goal_clock != "native_wall":
+        from dynamuhsim.simulation.goal_clock import PROFILE
+        dump(assets / "human_goal_clock.json", PROFILE)
+        files.append(assets / "human_goal_clock.json")
+        plan["human_goal_clock"] = human_goal_clock
     if planner_diagnostics:plan["planner_diagnostics"] = True
     dump(run_dir / "plan.json", plan)
     files += [assets / "mecanum_camera.sdf", run_dir / "plan.json", run_dir / "preflight.json"]
@@ -180,6 +187,13 @@ def verify_run(repo, run_dir):
             raise RuntimeError("Encounter fixture missing from freeze")
         if validate_fixture(json.loads(asset.read_text()))["profile"] != plan["encounter_profile"]:
             raise RuntimeError("Encounter fixture differs from plan")
+    if "human_goal_clock" in plan:
+        from dynamuhsim.simulation.goal_clock import validate_profile
+        asset = run_dir / "assets/human_goal_clock.json"
+        if str(asset.relative_to(repo)) not in manifest["source_sha256"]:
+            raise RuntimeError("Human goal clock missing from freeze")
+        if validate_profile(json.loads(asset.read_text()))["profile"] != plan["human_goal_clock"]:
+            raise RuntimeError("Human goal clock differs from plan")
     return manifest
 
 
@@ -207,6 +221,9 @@ class CaptureContext:
         if "encounter_profile" in self.plan:
             shutil.copyfile(self.run_dir / "assets/encounter.json", runtime / "encounter.json")
             result["encounter_profile"] = self.plan["encounter_profile"]
+        if "human_goal_clock" in self.plan:
+            shutil.copyfile(self.run_dir / "assets/human_goal_clock.json", runtime / "human_goal_clock.json")
+            result["human_goal_clock"] = self.plan["human_goal_clock"]
         result.update(capture_schema="dynamuhsim_capture/2", capture_freeze_sha256=sha(self.run_dir / "capture_freeze.json"),
                       experiment="Versioned capture API; native camera and moderate Nav2 treatment",
                       capture_recipe_schema=self.config["schema"],

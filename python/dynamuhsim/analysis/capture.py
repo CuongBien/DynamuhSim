@@ -68,6 +68,20 @@ def audit_capture(run, policy, *, source_roots=(), git_repo=None, read_bag=bag_m
         observed = {h["id"]:h for h in ready["humans"]}
         checks["encounter_initial_humans"] = set(observed) == set(range(1,7)) and all(all(abs(h[key]-observed[h["id"]][key]) < 1e-10 for key in ["x","y","yaw"]) for h in initial_humans(spec))
         checks["encounter_initial_goals"] = ready["encounter"]["initial_groups"] == [dict(members=g["members"],goal=g["goal"]) for g in spec["groups"]]
+    if plan_path.is_file() and "human_goal_clock" in load_json(plan_path):
+        from dynamuhsim.simulation.goal_clock import validate_profile, verify_trace
+        asset, runtime = run / "assets/human_goal_clock.json", run / "runtime/human_goal_clock.json"
+        config = validate_profile(load_json(asset))
+        declared = load_json(plan_path)["human_goal_clock"]
+        ready = load_json(run / "runtime/ready.json")["goal_clock"]
+        checks["human_goal_clock_profile"] = config["profile"] == declared == r.get("human_goal_clock") == ready["profile"]
+        checks["human_goal_clock_bytes"] = sha256_file(asset) == sha256_file(runtime)
+        freeze = load_json(run / "capture_freeze.json")["source_sha256"]
+        checks["human_goal_clock_frozen"] = any(name.endswith("/assets/human_goal_clock.json") and digest == sha256_file(asset) for name, digest in freeze.items())
+        gate = float((run / "runtime/start_gate").read_text())
+        events_for_clock = list(jsonl_rows(out / "events.jsonl"))
+        checks["goal_clock_gate_matches_accepted_goal"] = abs(gate-next(v["stamp_ns"]/1e9 for v in events_for_clock if v["event"]=="goal_accepted")) < 1e-8
+        checks["goal_clock_trace"], metrics["goal_clock_trace"] = verify_trace(jsonl_rows(run / "runtime/worker_trajectory.jsonl"), gate, ready)
     checks["freeze_identity"] = sha256_file(run / "capture_freeze.json") == r["capture_freeze_sha256"]
     q = r["server_shutdown"]["quiesce"]
     checks["pause_acknowledged"] = q["pause_acknowledged"] and q["simulation_time_stable"]

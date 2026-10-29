@@ -1,0 +1,63 @@
+{
+  "schema": "sim_goal_clock_plan/1",
+  "raw_root": "experiments/social_navigation/benchmark/generated/sim_goal_clock_20261029",
+  "reference_root": "experiments/social_navigation/benchmark/generated/encounter_regression_20261029",
+  "cases": [
+    {
+      "id": "head_on_legacy_sim",
+      "reference_id": "head_on_legacy",
+      "encounter_profile": "head_on",
+      "human_motion_profile": "legacy",
+      "scenario": "walking",
+      "seed": 45,
+      "config": "configs/capture/geometry_v7_mppi_resample.json",
+      "human_goal_clock": "sim_v1"
+    },
+    {
+      "id": "head_on_group_sim",
+      "reference_id": "head_on_group",
+      "encounter_profile": "head_on",
+      "human_motion_profile": "group_orca_v1",
+      "scenario": "walking",
+      "seed": 45,
+      "config": "configs/capture/geometry_v7_mppi_resample.json",
+      "human_goal_clock": "sim_v1"
+    },
+    {
+      "id": "crossing_legacy_sim",
+      "reference_id": "crossing_legacy",
+      "encounter_profile": "crossing",
+      "human_motion_profile": "legacy",
+      "scenario": "walking",
+      "seed": 45,
+      "config": "configs/capture/geometry_v7_mppi_resample.json",
+      "human_goal_clock": "sim_v1"
+    },
+    {
+      "id": "crossing_group_sim",
+      "reference_id": "crossing_group",
+      "encounter_profile": "crossing",
+      "human_motion_profile": "group_orca_v1",
+      "scenario": "walking",
+      "seed": 45,
+      "config": "configs/capture/geometry_v7_mppi_resample.json",
+      "human_goal_clock": "sim_v1"
+    }
+  ],
+  "criteria": [
+    "Freeze source/config/clock/encounter inputs before first native capture. One attempt per declared cell; preserve any failure without retry or overwrite.",
+    "Clock contract: gate equals accepted Nav2 goal timestamp; initial goals born at gate, later goals at native assignment step. Geometric arrival, native setters/RNG and strict50s timeout threshold are retained; expiry depends only on simulation time. Inactive steps consume zero goal age.",
+    "Clock unit boundary50.0/50.1, geometric/default/explicit offsets, static rule, setter side effects, missing input/freeze and tampered trace checks must pass.",
+    "Native component preflight: same measured ego inputs/RNG under fast and extremely slow synthetic host clock must reproduce human XY/yaw exactly in first60 native steps. This is not closed-loop behavior acceptance.",
+    "Native capture integrity, including reconstructed clock trace, native NVIDIA renderer, paired depth, numeric TF, native costmaps and cleanup must PASS.",
+    "Robot screen: SUCCEEDED and independent actual goal XY<=.2m/yaw<=.25rad; positive conservative swept robot/human, human/human and static clearance; report every progress failure/action recovery.",
+    "Encounter coverage: native center distance<=1.5m for>=.5s union duration; verify initial direction coverage>=1s first12s. Mark missing coverage separately rather than claiming avoidance tested.",
+    "Compare first12s/whole-run yaw rates, near duration, goal target changes and actual geometry against the four historical wall-clock cases. MPPI RNG is not fixed and subsequent ego inputs differ. No sole-cause or naturalness acceptance claim.",
+    "Keep nav2/controller/goal tolerance/progress checker/robot/camera/map/ORCA/group envelope unchanged. No WM/RL training registration or promotion of defaults."
+  ],
+  "unit_suite": {
+    "tests": 266,
+    "skipped": 2,
+    "status": "OK"
+  }
+}
