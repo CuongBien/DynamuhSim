@@ -18,3 +18,11 @@ python3 tools/audit_episode.py --run-dir experiments/social_navigation/benchmark
 ```
 
 Use NEW paths; existing runs and audit outputs refuse overwrite.
+
+## Original treatment: measured failure retained
+
+Both baseline runs TIMEOUT at90s despite global plans passing through the opening. Final actual x is -24.572m (wide) and -24.702m (narrow), before gate x=-24. All sensor/TF/native-costmap capture audits PASS. They are navigation failures, not missing-data failures.
+
+In the wide local costmap, samples .4m ahead of the stopped robot have native cost149. The configured CostCritic near_collision_cost140 treats those traversable cells as near-collision and adds critical_cost300 per evaluated point before averaging/weighting. CostCritic weight16 is also much higher than the Jazzy source default3.81; source default near_collision_cost is253. The rollout critic breakdown itself was not recorded, so this is an inspected-configuration/source diagnosis, not a claim to have logged each critic's score.
+
+Primary source: [Jazzy CostCritic](https://raw.githubusercontent.com/ros-navigation/navigation2/jazzy/nav2_mppi_controller/src/critics/cost_critic.cpp). Subsequent treatments, if run, will be separately declared and captured, never replacing these failures.

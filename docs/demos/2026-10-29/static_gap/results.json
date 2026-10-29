@@ -1,0 +1,63 @@
+{
+  "schema": "static_gap_acceptance/1",
+  "status": "FAIL",
+  "cases": [
+    {
+      "case": "wide80",
+      "gap_width_m": 0.8,
+      "navigation_status": "TIMEOUT",
+      "actual_goal_reached": false,
+      "world_goal_xy_error_m": 4.572249154799089,
+      "active_sim_s": 90.0325,
+      "path_length_m": 4.961902836540998,
+      "gate_crossings": [],
+      "passed_gap_with_bounding_circle": false,
+      "minimum_continuous_static_gap_lower_bound_m": 0.3146240609580615,
+      "critical_clearance": {
+        "box": "gate_bottom",
+        "interval_sim_s": [
+          78.78,
+          78.7975
+        ]
+      },
+      "capture_audit": "PASS",
+      "accepted": false,
+      "no_native_contact_force_stream": true,
+      "runtime_commit": "d6a265bab1337085ebd408c8196739a8261a18aa",
+      "run": "experiments/social_navigation/benchmark/generated/static_gap_20261029/wide80"
+    },
+    {
+      "case": "narrow52",
+      "gap_width_m": 0.5270765814495917,
+      "navigation_status": "TIMEOUT",
+      "actual_goal_reached": false,
+      "world_goal_xy_error_m": 4.7024456724644885,
+      "active_sim_s": 90.03750000000001,
+      "path_length_m": 4.67801179961695,
+      "gate_crossings": [],
+      "passed_gap_with_bounding_circle": false,
+      "minimum_continuous_static_gap_lower_bound_m": 0.321139684389541,
+      "critical_clearance": {
+        "box": "gate_top",
+        "interval_sim_s": [
+          88.58,
+          88.5975
+        ]
+      },
+      "capture_audit": "PASS",
+      "accepted": false,
+      "no_native_contact_force_stream": true,
+      "runtime_commit": "d6a265bab1337085ebd408c8196739a8261a18aa",
+      "run": "experiments/social_navigation/benchmark/generated/static_gap_20261029/narrow52"
+    }
+  ],
+  "criteria": [
+    "Each attempt preserved. No automatic retry or unreported tuning.",
+    "Actual goal status SUCCEEDED and world XY<=.2m / yaw<=.25rad (existing independent policy).",
+    "Recorded physical robot crosses gate x=-24 from left to right; bounding circle must fit gap.",
+    "Conservative continuous-segment lower-bound distance to every fixture box minus native enclosing radius .168062484748657 must remain positive.",
+    "Native uint8 costmaps and static TF/camera bytes audited against MCAP.",
+    "No native force-contact stream; geometric certificate is not contact-force truth."
+  ],
+  "scope": "Single attempt per width. Geometry/arrival and capture integrity only; no moving-people or social-policy claim. Contact-force truth unavailable."
+}
