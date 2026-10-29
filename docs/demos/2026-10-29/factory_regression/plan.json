@@ -1,0 +1,56 @@
+{
+  "schema": "factory_regression_plan/1",
+  "runtime": "experiments/social_navigation/benchmark/generated/factory_regression_20261029",
+  "seed": 45,
+  "cases": [
+    {
+      "id": "standing_base",
+      "scenario": "standing",
+      "treatment": "baseline",
+      "config": "configs/capture/geometry_v4_inflation045.json"
+    },
+    {
+      "id": "standing_h5",
+      "scenario": "standing",
+      "treatment": "horizon5",
+      "config": "configs/capture/geometry_v6_mppi_horizon5.json"
+    },
+    {
+      "id": "walking_base",
+      "scenario": "walking",
+      "treatment": "baseline",
+      "config": "configs/capture/geometry_v4_inflation045.json"
+    },
+    {
+      "id": "walking_h5",
+      "scenario": "walking",
+      "treatment": "horizon5",
+      "config": "configs/capture/geometry_v6_mppi_horizon5.json"
+    }
+  ],
+  "changed_control_parameters": {
+    "FollowPath.CostCritic.cost_weight": [
+      16.0,
+      3.81
+    ],
+    "FollowPath.CostCritic.near_collision_cost": [
+      140,
+      253
+    ],
+    "FollowPath.time_steps": [
+      30,
+      100
+    ]
+  },
+  "controls": "Same native robot/camera/aligned TF/radius/padding/inflation/cost scale/speeds/map/start/goal, backend source and initial six-person geometry per scenario. Headless NVIDIA GPU. Humans react to robot, so subsequent human trajectories are outcomes, not fixed replay. MPPI RNG not fixed.",
+  "criteria": [
+    "Each declared cell gets one fresh attempt; no overwrite, retry or tuning during this series.",
+    "Capture integrity audit including native uint8 costmaps and numeric static TF must PASS.",
+    "Candidate actual goal status SUCCEEDED and independent world XY<=.2m, yaw<=.25rad.",
+    "Candidate conservative swept human gap and static-box continuous-segment lower bound must be positive.",
+    "Report robot-center entry into triangle of standing-type three-person groups; separately qualify all member speeds<=.05m/s. This is not a validated full social-space label.",
+    "Flag minimum human gap reduction>0.10m versus matched baseline for review; do not hide it behind success.",
+    "No force-contact stream, no single-parameter causal claim, no multi-seed or social-policy acceptance. Defaults are not promoted in this task."
+  ],
+  "simulation_budget_per_case_s": 90
+}
