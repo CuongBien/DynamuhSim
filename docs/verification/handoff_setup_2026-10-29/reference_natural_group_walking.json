@@ -1,0 +1,60 @@
+{
+  "status": "COMMANDS_ONLY",
+  "mode": "natural_group_walking",
+  "commands": [
+    [
+      "/usr/bin/python3",
+      "/home/cuongbien/DynamuhSim/tools/capture_episode.py",
+      "prepare",
+      "--run-dir",
+      "/home/cuongbien/DynamuhSim/experiments/social_navigation/benchmark/generated/handoff_reference/acceptance_natural_group_walking",
+      "--config",
+      "/home/cuongbien/DynamuhSim/configs/capture/geometry_v7_mppi_resample.json",
+      "--scenario",
+      "walking",
+      "--seed",
+      "46",
+      "--planner-diagnostics",
+      "--human-motion-profile",
+      "group_cohesion_v2",
+      "--human-goal-clock",
+      "sim_v1",
+      "--human-lifecycle-profile",
+      "native",
+      "--encounter-profile",
+      "head_on"
+    ],
+    [
+      "/usr/bin/python3",
+      "/home/cuongbien/DynamuhSim/tools/capture_episode.py",
+      "verify",
+      "--run-dir",
+      "/home/cuongbien/DynamuhSim/experiments/social_navigation/benchmark/generated/handoff_reference/acceptance_natural_group_walking"
+    ],
+    [
+      "/usr/bin/python3",
+      "/home/cuongbien/DynamuhSim/tools/capture_episode.py",
+      "run",
+      "--run-dir",
+      "/home/cuongbien/DynamuhSim/experiments/social_navigation/benchmark/generated/handoff_reference/acceptance_natural_group_walking"
+    ],
+    [
+      "/usr/bin/python3",
+      "/home/cuongbien/DynamuhSim/tools/audit_episode.py",
+      "--run-dir",
+      "/home/cuongbien/DynamuhSim/experiments/social_navigation/benchmark/generated/handoff_reference/acceptance_natural_group_walking",
+      "--source-root",
+      "/home/cuongbien/DynamuhSim",
+      "--output",
+      "/home/cuongbien/DynamuhSim/experiments/social_navigation/benchmark/generated/handoff_reference/acceptance_natural_group_walking_audit.json"
+    ]
+  ],
+  "bash": [
+    "/usr/bin/python3 /home/cuongbien/DynamuhSim/tools/capture_episode.py prepare --run-dir /home/cuongbien/DynamuhSim/experiments/social_navigation/benchmark/generated/handoff_reference/acceptance_natural_group_walking --config /home/cuongbien/DynamuhSim/configs/capture/geometry_v7_mppi_resample.json --scenario walking --seed 46 --planner-diagnostics --human-motion-profile group_cohesion_v2 --human-goal-clock sim_v1 --human-lifecycle-profile native --encounter-profile head_on",
+    "/usr/bin/python3 /home/cuongbien/DynamuhSim/tools/capture_episode.py verify --run-dir /home/cuongbien/DynamuhSim/experiments/social_navigation/benchmark/generated/handoff_reference/acceptance_natural_group_walking",
+    "/usr/bin/python3 /home/cuongbien/DynamuhSim/tools/capture_episode.py run --run-dir /home/cuongbien/DynamuhSim/experiments/social_navigation/benchmark/generated/handoff_reference/acceptance_natural_group_walking",
+    "/usr/bin/python3 /home/cuongbien/DynamuhSim/tools/audit_episode.py --run-dir /home/cuongbien/DynamuhSim/experiments/social_navigation/benchmark/generated/handoff_reference/acceptance_natural_group_walking --source-root /home/cuongbien/DynamuhSim --output /home/cuongbien/DynamuhSim/experiments/social_navigation/benchmark/generated/handoff_reference/acceptance_natural_group_walking_audit.json"
+  ],
+  "simulator_started": false,
+  "note": "Commands are printed, never executed; source ROS/workspace explicitly before use"
+}

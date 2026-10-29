@@ -50,3 +50,7 @@ python3 tools/handoff.py reference-command --mode natural_group_walking --run-di
 Tài liệu lịch sử nằm trong `docs/history/`,`experiments/archive/` và các báo cáo `docs/demos/`. Chúng vẫn cần cho provenance/đối chiếu; không chuyển/xóa những path đang có hash/reference. Build/install/log,venv,vendor và generated cần được quản lý theo setup/artifact receipt,không copy vào một Python package mới.
 
 Người tiếp nhận bắt đầu MuJoCo ở boundary đã ghi,giữ contract đầu ra và kiểm lại hai cảnh/loader. Vòng này chưa cài MuJoCo,viết MJCF/adapter,thu batch lớn hoặc thay kiến trúc robot.
+
+## Nghiệm thu vòng chuẩn bị
+
+[Biên bản setup](verification/handoff_setup_2026-10-29/README.md):310unit tests OK (2skip),38contract smoke tests,doctor đủ3scope,fresh ZIP restore+loader PASS;116protected hashes và2capture freezes cũ giữ nguyên. Không mở simulator/cài software trong vòng này.

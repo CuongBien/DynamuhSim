@@ -1,0 +1,62 @@
+{
+  "status": "PASS",
+  "scope": "export",
+  "checks": [
+    {
+      "name": "python>=3.10",
+      "status": "PASS",
+      "value": "3.12.3 (main, Aug 31 2026, 10:18:26) [GCC 13.3.0]"
+    },
+    {
+      "name": "numpy",
+      "status": "PASS",
+      "version": "1.26.4"
+    },
+    {
+      "name": "scipy",
+      "status": "PASS",
+      "version": "1.11.4"
+    },
+    {
+      "name": "matplotlib",
+      "status": "PASS",
+      "version": "3.6.3"
+    },
+    {
+      "name": "PIL",
+      "status": "PASS",
+      "version": "10.2.0"
+    },
+    {
+      "name": "yaml",
+      "status": "PASS",
+      "version": "6.0.1"
+    },
+    {
+      "name": "rclpy",
+      "status": "PASS",
+      "version": null
+    },
+    {
+      "name": "rosbag2_py",
+      "status": "PASS",
+      "version": null
+    },
+    {
+      "name": "rosidl_runtime_py",
+      "status": "PASS",
+      "version": null
+    },
+    {
+      "name": "ROS_DISTRO=jazzy",
+      "status": "PASS",
+      "value": "jazzy",
+      "remedy": "source /opt/ros/jazzy/setup.bash"
+    }
+  ],
+  "validated_reference_python": "3.12.3",
+  "actual_rendering_test": "NOT_RUN",
+  "new_simulator_runs": 0,
+  "meaning": "ROS Jazzy MCAP reader and existing target math; no simulator startup",
+  "auto_install": false
+}

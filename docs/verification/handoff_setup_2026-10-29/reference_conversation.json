@@ -1,0 +1,58 @@
+{
+  "status": "COMMANDS_ONLY",
+  "mode": "conversation",
+  "commands": [
+    [
+      "/usr/bin/python3",
+      "/home/cuongbien/DynamuhSim/tools/capture_episode.py",
+      "prepare",
+      "--run-dir",
+      "/home/cuongbien/DynamuhSim/experiments/social_navigation/benchmark/generated/handoff_reference/acceptance_conversation",
+      "--config",
+      "/home/cuongbien/DynamuhSim/configs/capture/geometry_v7_mppi_resample.json",
+      "--scenario",
+      "standing",
+      "--seed",
+      "46",
+      "--planner-diagnostics",
+      "--human-motion-profile",
+      "legacy",
+      "--human-goal-clock",
+      "sim_v1",
+      "--human-lifecycle-profile",
+      "persistent_conversation_v1"
+    ],
+    [
+      "/usr/bin/python3",
+      "/home/cuongbien/DynamuhSim/tools/capture_episode.py",
+      "verify",
+      "--run-dir",
+      "/home/cuongbien/DynamuhSim/experiments/social_navigation/benchmark/generated/handoff_reference/acceptance_conversation"
+    ],
+    [
+      "/usr/bin/python3",
+      "/home/cuongbien/DynamuhSim/tools/capture_episode.py",
+      "run",
+      "--run-dir",
+      "/home/cuongbien/DynamuhSim/experiments/social_navigation/benchmark/generated/handoff_reference/acceptance_conversation"
+    ],
+    [
+      "/usr/bin/python3",
+      "/home/cuongbien/DynamuhSim/tools/audit_episode.py",
+      "--run-dir",
+      "/home/cuongbien/DynamuhSim/experiments/social_navigation/benchmark/generated/handoff_reference/acceptance_conversation",
+      "--source-root",
+      "/home/cuongbien/DynamuhSim",
+      "--output",
+      "/home/cuongbien/DynamuhSim/experiments/social_navigation/benchmark/generated/handoff_reference/acceptance_conversation_audit.json"
+    ]
+  ],
+  "bash": [
+    "/usr/bin/python3 /home/cuongbien/DynamuhSim/tools/capture_episode.py prepare --run-dir /home/cuongbien/DynamuhSim/experiments/social_navigation/benchmark/generated/handoff_reference/acceptance_conversation --config /home/cuongbien/DynamuhSim/configs/capture/geometry_v7_mppi_resample.json --scenario standing --seed 46 --planner-diagnostics --human-motion-profile legacy --human-goal-clock sim_v1 --human-lifecycle-profile persistent_conversation_v1",
+    "/usr/bin/python3 /home/cuongbien/DynamuhSim/tools/capture_episode.py verify --run-dir /home/cuongbien/DynamuhSim/experiments/social_navigation/benchmark/generated/handoff_reference/acceptance_conversation",
+    "/usr/bin/python3 /home/cuongbien/DynamuhSim/tools/capture_episode.py run --run-dir /home/cuongbien/DynamuhSim/experiments/social_navigation/benchmark/generated/handoff_reference/acceptance_conversation",
+    "/usr/bin/python3 /home/cuongbien/DynamuhSim/tools/audit_episode.py --run-dir /home/cuongbien/DynamuhSim/experiments/social_navigation/benchmark/generated/handoff_reference/acceptance_conversation --source-root /home/cuongbien/DynamuhSim --output /home/cuongbien/DynamuhSim/experiments/social_navigation/benchmark/generated/handoff_reference/acceptance_conversation_audit.json"
+  ],
+  "simulator_started": false,
+  "note": "Commands are printed, never executed; source ROS/workspace explicitly before use"
+}

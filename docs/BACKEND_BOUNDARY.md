@@ -36,3 +36,9 @@ Persistent conversation là mode chọn rõ,tắt dispersal cho designated tripl
 ## Phần chưa triển khai
 
 Chưa có MJCF,MuJoCo renderer/ray/IMU collector,reset driver hoặc bridge MuJoCo. Người nhận tạo chúng theo boundary và checklist trong HANDOFF_MUJOCO.md,rồi xuất hai episode mới để so schema/time/frame/masks. Đây là bước tiếp sau chuẩn bị bàn giao,không gộp vào cleanup hiện tại.
+
+## Source closure và versioning
+
+`runtime/nav2_trial.py::source_files` hiện đưa toàn bộ `python/dynamuhsim/**/*.py` vào closure capture. Bổ sung module trong package đó có thể khiến `verify_run` của một run đã prepare đòi thêm source mới. Khi port,giữ checkout baseline để tái lập và tạo source freeze/version mới cho lượt mới;không sửa manifest cũ để nhận source mới. Raw audit provenance có thể đối chiếu source ở recorded Git commit.
+
+Vòng bàn giao này đặt wrapper trong `tools/` và metadata trong `configs/handoff/`,nên giữ nguyên closure/runtime đã nghiệm thu. Baseline guard kiểm116file chọn rõ;đó không phải một signed security policy hay chứng nhận implementation MuJoCo tương lai.

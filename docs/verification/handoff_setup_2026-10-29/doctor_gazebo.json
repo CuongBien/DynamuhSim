@@ -1,0 +1,128 @@
+{
+  "status": "PASS",
+  "scope": "gazebo",
+  "checks": [
+    {
+      "name": "python>=3.10",
+      "status": "PASS",
+      "value": "3.12.3 (main, Aug 31 2026, 10:18:26) [GCC 13.3.0]"
+    },
+    {
+      "name": "numpy",
+      "status": "PASS",
+      "version": "1.26.4"
+    },
+    {
+      "name": "scipy",
+      "status": "PASS",
+      "version": "1.11.4"
+    },
+    {
+      "name": "matplotlib",
+      "status": "PASS",
+      "version": "3.6.3"
+    },
+    {
+      "name": "PIL",
+      "status": "PASS",
+      "version": "10.2.0"
+    },
+    {
+      "name": "yaml",
+      "status": "PASS",
+      "version": "6.0.1"
+    },
+    {
+      "name": "rclpy",
+      "status": "PASS",
+      "version": null
+    },
+    {
+      "name": "rosbag2_py",
+      "status": "PASS",
+      "version": null
+    },
+    {
+      "name": "rosidl_runtime_py",
+      "status": "PASS",
+      "version": null
+    },
+    {
+      "name": "gz.transport13",
+      "status": "PASS",
+      "version": null
+    },
+    {
+      "name": "gz.msgs10",
+      "status": "PASS",
+      "version": null
+    },
+    {
+      "name": "ROS_DISTRO=jazzy",
+      "status": "PASS",
+      "value": "jazzy",
+      "remedy": "source /opt/ros/jazzy/setup.bash"
+    },
+    {
+      "name": "ros2",
+      "status": "PASS",
+      "path": "/opt/ros/jazzy/bin/ros2"
+    },
+    {
+      "name": "gz",
+      "status": "PASS",
+      "path": "/opt/ros/jazzy/opt/gz_tools_vendor/bin/gz"
+    },
+    {
+      "name": "install/setup.bash",
+      "status": "PASS"
+    },
+    {
+      "name": "experiments/social_navigation/navigation/socnavgym_response_fix/build/libresponse_adapter.so",
+      "status": "PASS"
+    },
+    {
+      "name": "experiments/social_navigation/perception/depth_proxy_ablation/generated/build_jazzy/libdepth_proxy_filter.so",
+      "status": "PASS"
+    },
+    {
+      "name": "python/dynamuhsim/runtime/native/generated/check_friction",
+      "status": "PASS"
+    },
+    {
+      "name": "/usr/lib/wsl/lib/libd3d12core.so",
+      "status": "PASS"
+    },
+    {
+      "name": "socnav_venv:numpy",
+      "status": "PASS",
+      "version": "1.26.4"
+    },
+    {
+      "name": "socnav_venv:gymnasium",
+      "status": "PASS",
+      "version": "0.29.1"
+    },
+    {
+      "name": "socnav_venv:rvo2",
+      "status": "PASS",
+      "version": null
+    },
+    {
+      "name": "socnav_venv:socnavgym",
+      "status": "PASS",
+      "version": null
+    },
+    {
+      "name": "NVIDIA_device_query",
+      "status": "PASS",
+      "device": "NVIDIA GeForce RTX 4060 Laptop GPU, 610.47",
+      "error": ""
+    }
+  ],
+  "validated_reference_python": "3.12.3",
+  "actual_rendering_test": "NOT_RUN",
+  "new_simulator_runs": 0,
+  "meaning": "Current WSL/NVIDIA Gazebo reference prerequisites only; import/file availability is not native-run acceptance",
+  "auto_install": false
+}

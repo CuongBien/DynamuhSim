@@ -1,0 +1,54 @@
+{
+  "schema": "handoff_setup_result/1",
+  "status": "PASS",
+  "baseline_commit": "121a727",
+  "implementation_commit": "4b6cafe",
+  "checks": {
+    "protected116_bytes_before_after": "PASS",
+    "existing_capture_freezes": "PASS2/2",
+    "dependency_doctor": "PASS data/export/gazebo prerequisites",
+    "fresh_archive_restore": "PASS41files,517windows,ROS_imported=false",
+    "contract_smoke": "PASS38tests",
+    "full_suite": {
+      "status": "PASS",
+      "tests": 310,
+      "conditional_skips": 2,
+      "elapsed_s": 49.288,
+      "scope": "Full unit suite; benchmark failure-path log messages are mocked test output, not actual simulator launches"
+    },
+    "reference_commands": "Printed accepted v7 flags, no run created",
+    "new_local_doc_links": "PASS",
+    "dataset01_metadata_inventory_unchanged": true,
+    "planned_implementation_hashes_unchanged": true
+  },
+  "new_simulator_runs": 0,
+  "software_installed": false,
+  "MuJoCo_implemented": false,
+  "training_performed": false,
+  "scope": "Additive setup/entrypoint/docs and fresh-directory data restore on existing Ubuntu24.04 WSL reference host; not fresh-OS provisioning or new native-render/physics acceptance",
+  "changed_paths": [
+    "README.md",
+    "configs/handoff/backend_contract.json",
+    "configs/handoff/baseline.json",
+    "configs/handoff/dependencies.json",
+    "configs/handoff/reference_environment.json",
+    "docs/BACKEND_BOUNDARY.md",
+    "docs/CAPTURE_RUNTIME.md",
+    "docs/HANDOFF_SETUP.md",
+    "docs/HANDOFF_START.md",
+    "docs/REFACTOR_STATUS.md",
+    "docs/START_HERE_CURRENT.md",
+    "docs/verification/handoff_setup_2026-10-29/plan.json",
+    "requirements/handoff-data.txt",
+    "tests/test_handoff_tools.py",
+    "tools/handoff.py"
+  ],
+  "delivery": {
+    "start": "docs/HANDOFF_START.md",
+    "setup": "docs/HANDOFF_SETUP.md",
+    "boundary": "docs/BACKEND_BOUNDARY.md",
+    "original_data_contract": "docs/HANDOFF_MUJOCO.md",
+    "cli": "tools/handoff.py",
+    "portable_zip_sha256": "b64bdb394f4a2ddabc6d97f2e9ccd3704dd9c6b0855e5d52fb11c6eeaea23ee2"
+  }
+}
