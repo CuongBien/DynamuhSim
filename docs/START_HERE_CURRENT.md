@@ -1,6 +1,8 @@
 # Bắt đầu ở đây — những phần đang dùng
 
-Cập nhật ngày **29/10/2026**. Công việc hiện tại: **đã chốt cấu hình pilot nhà xưởng với hai chế độ người; chuẩn bị thu dữ liệu mới**. `dataset01` là bộ pilot đã có, chưa thay đổi hoặc gán nhãn lại; World Model chưa train.
+Cập nhật ngày **29/10/2026**. Công việc hiện tại: **đã hoàn thành pilot dữ liệu nhỏ và đủ mốc bàn giao backend MuJoCo**. `dataset01` là bộ pilot đã có, chưa thay đổi hoặc gán nhãn lại; World Model chưa train.
+
+**Pilot bàn giao mới đã PASS:**2episode/517window,910depth bitwise và2068BEV replay;loader NumPy-only và LABEL independence đạt. [Mẫu/ZIP/report local](http://localhost:35315/handoff_pilot/index.html),[tài liệu bàn giao MuJoCo](HANDOFF_MUJOCO.md). Bộ này pilot_only,không train/val/test;dataset01 cũ vẫn giữ nguyên. Đã đủ mốc tạm dừng phase Gazebo; migration chưa bắt đầu.
 
 ## 1. Hiện tại đã có gì?
 
@@ -8,6 +10,7 @@ Cập nhật ngày **29/10/2026**. Công việc hiện tại: **đã chốt cấ
 | --- | --- |
 | Robot và môi trường thu dữ liệu | Mecanum + LiDAR 2D + depth + IMU, Nav2, nhà xưởng Gazebo; con người từ SocNavGym với adapter phản ứng hiện có |
 | Bộ dữ liệu `dataset01` | 8 episode được chấp nhận; 2 lượt lỗi đã cách ly |
+| Pilot bàn giao mới |2episode/517window,raw/BEV/loader audit PASS;pilot_only,không cho phép train |
 | Mẫu đủ điều kiện học dự báo BEV | **5.094**: train **2.763**, validation **1.652**, test **679** |
 | World Model | Đã có dữ liệu pilot; **chưa train WM** |
 | RL | Chưa có reward hợp lệ hoặc giao diện step/reset đã nghiệm thu |
@@ -116,9 +119,9 @@ Xem [báo cáo hiện tại/cách chạy đúng profile](demos/2026-10-29/group_
 
 ## 6. Việc tiếp theo, theo thứ tự
 
-1. Bộ recipe **factory_social_pilot_v1 đã chốt cho phạm vi thử nhà xưởng hiện tại**: conversation persistent và natural walking;295 test OK (2 skip), component control tái hiện đúng native, ba seed đạt hợp đồng nhóm/clock và hai lượt teardown mới full PASS. Không có cam kết hết mọi race condition; mọi episode mới vẫn phải audit.
-2. Khai báo một pilot dữ liệu nhỏ mới với variation/seed/split trước khi chạy; thu bằng recipe đã chốt, cách ly mọi FAIL rồi kiểm tra xuất depth/BEV/timestamps/mask. Các seed dùng kiểm chứng simulator không tự trở thành split train/validation/test. Không trộn raw thử nghiệm với dataset đã chấp nhận.
+1. Phase Gazebo hiện tại đã đạt mốc bàn giao:recipe factory_social_pilot_v1 + pilot end-to-end hai episode đã audit. Đọc [HANDOFF_MUJOCO.md](HANDOFF_MUJOCO.md) và chuyển gói portable; chưa cần thêm vòng tuning/thu batch lớn trong phase này.
+2. Người tiếp nhận port backend MuJoCo theo clock/frame/action/sensor/label contract, rồi xuất hai cảnh tương đương và kiểm tra loader/BEV/masks. Sau khi backend mới đạt mới khai báo variation/seed/split cho batch;pilot này không phải train/validation/test.
 3. Với `dataset01` có sẵn, bước WM vẫn là baseline nhỏ dự báo BEV có điều kiện hành động: train trên train, chọn bằng validation, cố định rồi mới đánh giá test. Chưa thực hiện trainer trong vòng sửa mô phỏng này.
 4. Chuẩn bị RL sau khi có reward và step/reset hợp lệ.
 
-**Chưa có trainer WM đã triển khai/nghiệm thu trong bước hiện tại**, nên tài liệu chưa có lệnh train WM. Việc đổi simulator hoặc chuyển Isaac Sim chưa nằm trong vòng kiểm tra hiện tại.
+**Chưa có trainer WM đã triển khai/nghiệm thu trong bước hiện tại**, nên tài liệu chưa có lệnh train WM. Việc port MuJoCo là phase bàn giao tiếp theo; chưa được thực hiện trong pilot dữ liệu này.

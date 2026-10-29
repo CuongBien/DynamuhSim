@@ -1,0 +1,119 @@
+{
+  "schema": "handoff_pilot_protocol/1",
+  "output": "experiments/social_navigation/datasets/handoff_pilot/generated/pilot01",
+  "episodes": [
+    {
+      "episode_id": "pilot_conversation",
+      "split": "pilot_only",
+      "source_run": "experiments/social_navigation/benchmark/generated/transport_order_20261029/conversation_s48_transport",
+      "source_audit": "experiments/social_navigation/benchmark/generated/transport_order_20261029/conversation_s48_transport_audit.json",
+      "source_sha256": {
+        "experiments/social_navigation/benchmark/generated/transport_order_20261029/conversation_s48_transport/episode/raw_bag/raw_bag_0.mcap": "1f8865d80fd5fcd11d5dde8aa3e003937d2842587f93aed70309d93a2a5bdc1f",
+        "experiments/social_navigation/benchmark/generated/transport_order_20261029/conversation_s48_transport/episode/raw_bag/metadata.yaml": "56085c37e17d7b4575b911ec2217964beba1cda4b629160cc41a1ae2e1d5010b",
+        "experiments/social_navigation/benchmark/generated/transport_order_20261029/conversation_s48_transport/episode/result.json": "d7201083f50c8695aa89756ce9c31acf274d98337166a6326c7c56833fa506e1",
+        "experiments/social_navigation/benchmark/generated/transport_order_20261029/conversation_s48_transport/capture_freeze.json": "76dca963f3192a195c6aac264deefc0cf18f12bdc7c53c7f8884e3fd2d66c28b",
+        "experiments/social_navigation/benchmark/generated/transport_order_20261029/conversation_s48_transport_audit.json": "559c3a32673af7015006d775578d1d80b7b2a25542206c52903dc5e7d69a05bf",
+        "experiments/social_navigation/benchmark/generated/transport_order_20261029/conversation_s48_transport/episode/events.jsonl": "e667ff7d88d1e31f78c8241808510633cfb44bdcd97fc74d6936d773daa77e64"
+      }
+    },
+    {
+      "episode_id": "pilot_walking",
+      "split": "pilot_only",
+      "source_run": "experiments/social_navigation/benchmark/generated/transport_order_20261029/walking_s46_transport",
+      "source_audit": "experiments/social_navigation/benchmark/generated/transport_order_20261029/walking_s46_transport_audit.json",
+      "source_sha256": {
+        "experiments/social_navigation/benchmark/generated/transport_order_20261029/walking_s46_transport/episode/raw_bag/raw_bag_0.mcap": "d44cde89dac861c1dc219e917c0cf13c95345676cd1a9d2f1143f2f5b7eb0653",
+        "experiments/social_navigation/benchmark/generated/transport_order_20261029/walking_s46_transport/episode/raw_bag/metadata.yaml": "29e7dfc7c95bfa8525ed9294569a705fd6b51d455c89c3beafc389d25b49b238",
+        "experiments/social_navigation/benchmark/generated/transport_order_20261029/walking_s46_transport/episode/result.json": "7d6ff1e1cf6b86180acd0be661c893d27e2a91b132163e3cc8d30876162d363f",
+        "experiments/social_navigation/benchmark/generated/transport_order_20261029/walking_s46_transport/capture_freeze.json": "694bbc14de65b4da159fb1e1248d6187853ff2499382a1d8120b16af9b3366e4",
+        "experiments/social_navigation/benchmark/generated/transport_order_20261029/walking_s46_transport_audit.json": "d8b26f83edbac7706c3af29b953ae7118cdcb557e1459dbf3b9ba14b1f55298f",
+        "experiments/social_navigation/benchmark/generated/transport_order_20261029/walking_s46_transport/episode/events.jsonl": "2eb3d266035525f40473f95d3ca0af5c297f94a9436598d8f8477678fd859afb"
+      }
+    }
+  ],
+  "history_offsets_ns": [
+    -1900000000,
+    -1800000000,
+    -1700000000,
+    -1600000000,
+    -1500000000,
+    -1400000000,
+    -1300000000,
+    -1200000000,
+    -1100000000,
+    -1000000000,
+    -900000000,
+    -800000000,
+    -700000000,
+    -600000000,
+    -500000000,
+    -400000000,
+    -300000000,
+    -200000000,
+    -100000000,
+    0
+  ],
+  "future_offsets_ns": [
+    500000000,
+    1000000000,
+    3000000000
+  ],
+  "future_action_offsets_ns": [
+    0,
+    100000000,
+    200000000,
+    300000000,
+    400000000,
+    500000000,
+    600000000,
+    700000000,
+    800000000,
+    900000000,
+    1000000000,
+    1100000000,
+    1200000000,
+    1300000000,
+    1400000000,
+    1500000000,
+    1600000000,
+    1700000000,
+    1800000000,
+    1900000000,
+    2000000000,
+    2100000000,
+    2200000000,
+    2300000000,
+    2400000000,
+    2500000000,
+    2600000000,
+    2700000000,
+    2800000000,
+    2900000000
+  ],
+  "anchor_start": "ceil((goal_accepted+2s)/.1s)*.1s",
+  "anchor_end": "action_end-3s",
+  "max_sensor_age_ns": {
+    "scan": 250000000,
+    "depth": 200000000,
+    "imu": 150000000,
+    "odom": 150000000,
+    "action": 150000000
+  },
+  "availability": "max(header_stamp,MCAP sim-clock receive stamp); no wall-latency claim",
+  "purpose": "Two-episode end-to-end export/loader handoff check only; no new simulation, training or train/val/test split",
+  "criteria": [
+    "Require both original full capture audits PASS and all source input hashes unchanged. Never append/overwrite dataset01 or an existing pilot/export/audit.",
+    "Read closed MCAP, retain every depth float32 bit-for-bit including NaN/Inf. Validate frame/TF/calibration; preserve per-topic header/receive/conservative available integer ns.",
+    "Accept windows only with causal history coverage (all IMU/odom/action, >=90% scan/depth and current valid), supported future scene labels and executed actions through+2.9s before action_end.",
+    "Observation contains sensor/action histories, estimated local odometry/AMCL goal and causal depth-only BEV. No GT people/world poses, backend IDs, persona or future observations. Future actions use a separate explicit condition accessor.",
+    "Reuse tracked existing loader and sensor/BEV target math. Future observed BEV is warped into true anchor with GT ego LABEL ONLY; unknown=-1, free=0, occupied=1; loss mask only observed supported cells.",
+    "Audit all raw depth equality, all timestamp/availability causality, executed action ZOH, raw GT trajectories, BEV replay, mask semantics, output hash inventory and standalone NumPy loader/label independence. Preserve failures.",
+    "H1\u2013H5/person association/reward remain invalid, reward NaN. Add training_authorized=False for all samples; pilot_only is not a model training split. No WM/RL training or model evaluation."
+  ],
+  "navigation_goal_map": [
+    -20.0,
+    0.0,
+    0.0
+  ],
+  "goal_source": "Frozen commanded Nav2 goal in map; use only causal AMCL pose, never measured world ego"
+}

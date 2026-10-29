@@ -1,0 +1,65 @@
+{
+  "status": "PASS",
+  "checks": {
+    "http:index.html": true,
+    "http:audit.json": true,
+    "http:summary.json": true,
+    "http:pilot_samples.png": true,
+    "http:HANDOFF_MUJOCO.md": true,
+    "http:handoff_data_pilot01.zip": true,
+    "http:examples/window01/observation_SENSOR_ONLY.npz": true,
+    "export_freeze.json": true,
+    "audit_freeze.json": true,
+    "pilot_conversation:raw_unchanged": true,
+    "pilot_walking:raw_unchanged": true,
+    "dataset01_metadata_inventory_unchanged": true,
+    "audit_pass": true,
+    "zip_all_members_sha_crc_pass": true,
+    "standalone_no_ROS_imported": true
+  },
+  "http": {
+    "index.html": {
+      "status": 200,
+      "bytes": 1898,
+      "sha256": "429d9e96e5b0641e31d15b00d7365afec3e83bd516c689b7efe11ddd495b4600"
+    },
+    "audit.json": {
+      "status": 200,
+      "bytes": 3315,
+      "sha256": "603e3653a00d6d6fb2b5bfa9a1d94cced58033fe816210fa78057366cadb4e7c"
+    },
+    "summary.json": {
+      "status": 200,
+      "bytes": 1119,
+      "sha256": "a7d74f9307d34ac1ec28bd85142e287b339c3d32683f1f51b694986416cbacbd"
+    },
+    "pilot_samples.png": {
+      "status": 200,
+      "bytes": 167501,
+      "sha256": "034e5940a401021d85d4d1b668434d06826a3e832f21f662630415a4891147a3"
+    },
+    "HANDOFF_MUJOCO.md": {
+      "status": 200,
+      "bytes": 8438,
+      "sha256": "dd8348904001f646ea02bed6f5528c67fa6562f8181af186205e0aa32d2b1830"
+    },
+    "handoff_data_pilot01.zip": {
+      "status": 200,
+      "bytes": 31706091,
+      "sha256": "b64bdb394f4a2ddabc6d97f2e9ccd3704dd9c6b0855e5d52fb11c6eeaea23ee2"
+    },
+    "examples/window01/observation_SENSOR_ONLY.npz": {
+      "status": 200,
+      "bytes": 963546,
+      "sha256": "3710da040eb269bc1adbde193007cd2e559f5741e75769654ec3504f62d0b542"
+    }
+  },
+  "visual_qa": "Depth/BEV figure inspected; axes,unknown masks and INPUT/LABEL separation visible. No browser visual/Windows GUI assertion.",
+  "tests": {
+    "new_export_boundary_tests": 4,
+    "status": "PASS"
+  },
+  "phase_handoff_ready": true,
+  "training_ready": false,
+  "new_simulator_runs": 0
+}

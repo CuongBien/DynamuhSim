@@ -1,0 +1,161 @@
+{
+  "schema": "handoff_pilot_audit/1",
+  "status": "PASS",
+  "episodes": [
+    {
+      "episode_id": "pilot_conversation",
+      "status": "PASS",
+      "windows": 264,
+      "wm_target_valid": 264,
+      "raw_depth_bitwise_equal": 464,
+      "grids_replayed": 1056,
+      "observation_shape": {
+        "depth_history": [
+          20,
+          240,
+          424
+        ],
+        "action_history": [
+          20,
+          3
+        ],
+        "imu_history": [
+          20,
+          10
+        ],
+        "odom_history": [
+          20,
+          9
+        ]
+      },
+      "future_bev_shape": [
+        3,
+        64,
+        64
+      ],
+      "source_topic_counts": {
+        "/tf_static": 3,
+        "/tf": 20021,
+        "/clock": 18518,
+        "/dataset/scene_poses": 2768,
+        "/camera/camera_info": 464,
+        "/camera/depth/image_rect_raw": 464,
+        "/scan": 232,
+        "/imu": 4630,
+        "/common/ground_truth": 2314,
+        "/odom": 1322,
+        "/map": 1,
+        "/amcl_pose": 131,
+        "/global_costmap/costmap_raw": 32,
+        "/local_costmap/costmap_raw": 151,
+        "/dataset/events": 4,
+        "/navigate_to_pose/_action/status": 2,
+        "/plan": 95,
+        "/cmd_vel": 1918
+      },
+      "training_authorized": false
+    },
+    {
+      "episode_id": "pilot_walking",
+      "status": "PASS",
+      "windows": 253,
+      "wm_target_valid": 253,
+      "raw_depth_bitwise_equal": 446,
+      "grids_replayed": 1012,
+      "observation_shape": {
+        "depth_history": [
+          20,
+          240,
+          424
+        ],
+        "action_history": [
+          20,
+          3
+        ],
+        "imu_history": [
+          20,
+          10
+        ],
+        "odom_history": [
+          20,
+          9
+        ]
+      },
+      "future_bev_shape": [
+        3,
+        64,
+        64
+      ],
+      "source_topic_counts": {
+        "/tf_static": 3,
+        "/tf": 19137,
+        "/clock": 17809,
+        "/dataset/scene_poses": 2661,
+        "/camera/camera_info": 446,
+        "/camera/depth/image_rect_raw": 446,
+        "/scan": 223,
+        "/imu": 4452,
+        "/common/ground_truth": 2226,
+        "/odom": 1272,
+        "/map": 1,
+        "/amcl_pose": 132,
+        "/global_costmap/costmap_raw": 32,
+        "/local_costmap/costmap_raw": 150,
+        "/dataset/events": 4,
+        "/navigate_to_pose/_action/status": 2,
+        "/plan": 90,
+        "/cmd_vel": 1816
+      },
+      "training_authorized": false
+    }
+  ],
+  "total_windows": 517,
+  "wm_target_valid": 517,
+  "depth_frames_bitwise": 910,
+  "all_bev_grids_replayed": 2068,
+  "standalone_numpy_loader": [
+    {
+      "id": "pilot_conversation",
+      "windows": 264,
+      "depth_shape": [
+        20,
+        240,
+        424
+      ],
+      "future_actions": [
+        30,
+        3
+      ],
+      "future_bev": [
+        3,
+        64,
+        64
+      ]
+    },
+    {
+      "id": "pilot_walking",
+      "windows": 253,
+      "depth_shape": [
+        20,
+        240,
+        424
+      ],
+      "future_actions": [
+        30,
+        3
+      ],
+      "future_bev": [
+        3,
+        64,
+        64
+      ]
+    }
+  ],
+  "label_independent_observation": [
+    "pilot_conversation",
+    "pilot_walking"
+  ],
+  "training_ready": false,
+  "WM_models_trained": 0,
+  "RL_models_trained": 0
+}

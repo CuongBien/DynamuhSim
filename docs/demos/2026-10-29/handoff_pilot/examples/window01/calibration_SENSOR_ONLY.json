@@ -1,0 +1,175 @@
+{
+  "schema": "social_calibration/1",
+  "depth_topic": "/camera/depth/image_rect_raw",
+  "frame_id": "camera_optical_frame",
+  "width": 424,
+  "height": 240,
+  "k": [
+    223.40148705705286,
+    0.0,
+    212.0,
+    0.0,
+    223.40148705705283,
+    120.0,
+    0.0,
+    0.0,
+    1.0
+  ],
+  "p": [
+    223.40148705705286,
+    0.0,
+    212.0,
+    0.0,
+    0.0,
+    223.40148705705283,
+    120.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0
+  ],
+  "d": [
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0
+  ],
+  "distortion_model": "plumb_bob",
+  "optical_to_base_link": [
+    [
+      4.896638650109253e-12,
+      4.896583138958022e-12,
+      1.0,
+      0.12
+    ],
+    [
+      -1.0,
+      0.0,
+      4.896583138958022e-12,
+      0.0
+    ],
+    [
+      5.551115123125783e-17,
+      -1.0,
+      4.896638650109253e-12,
+      0.08
+    ],
+    [
+      0.0,
+      0.0,
+      0.0,
+      1.0
+    ]
+  ],
+  "depth_unit": "m",
+  "valid_depth_range_m": [
+    0.28,
+    5.0
+  ],
+  "tf_static": {
+    "camera_optical_frame": [
+      "camera_link",
+      0.0,
+      0.0,
+      0.0,
+      -0.5,
+      0.4999999999975517,
+      -0.5,
+      0.5000000000024483
+    ],
+    "camera_imu_frame": [
+      "camera_link",
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      1.0
+    ],
+    "base_link": [
+      "base_footprint",
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      1.0
+    ],
+    "camera_link": [
+      "base_link",
+      0.12,
+      0.0,
+      0.08,
+      0.0,
+      0.0,
+      0.0,
+      1.0
+    ],
+    "imu_link": [
+      "base_link",
+      0.0,
+      0.0,
+      0.06,
+      0.0,
+      0.0,
+      0.0,
+      1.0
+    ],
+    "base_scan": [
+      "base_link",
+      0.0,
+      0.0,
+      0.12,
+      0.0,
+      0.0,
+      0.0,
+      1.0
+    ]
+  },
+  "lidar_geometry": {
+    "frame_id": "base_scan",
+    "angle_min": 0.0,
+    "angle_max": 6.2831854820251465,
+    "angle_increment": 0.017501909285783768,
+    "range_min": 0.11999999731779099,
+    "range_max": 3.5,
+    "rays": 360,
+    "scan_time": 0.0,
+    "time_increment": 0.0
+  },
+  "imu_channels": [
+    "qx",
+    "qy",
+    "qz",
+    "qw",
+    "wx",
+    "wy",
+    "wz",
+    "ax",
+    "ay",
+    "az"
+  ],
+  "odom_channels": [
+    "x",
+    "y",
+    "yaw",
+    "vx",
+    "vy",
+    "vz",
+    "wx",
+    "wy",
+    "wz"
+  ],
+  "action_channels": [
+    "vx",
+    "vy",
+    "wz"
+  ],
+  "action_frame": "base_link planar axes (validated aligned with base_footprint)",
+  "goal_source": "Frozen commanded map goal + causal AMCL; no GT ego",
+  "caveat": "Planar SE2 labels; no general world-3D calibration claim"
+}

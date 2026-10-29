@@ -1,12 +1,13 @@
 # Datasets
 
-Reader, supervision/target, portable contract và dataset pilot. Có 3 stage.
+Reader, supervision/target, portable contract và dataset pilot. Có 4 stage.
 
 | Stage | Hướng dẫn |
 |---|---|
 | `perception_target_pilot` | [perception_target_pilot](perception_target_pilot/README.md) |
 | `portable_episode` | [portable_episode](portable_episode/README.md) |
 | `wm_episode_batch` | [wm_episode_batch](wm_episode_batch/README.md) |
+| `handoff_pilot` | [Pilot bàn giao MuJoCo](handoff_pilot/README.md) |
 
 Implementation dùng chung ở `python/dynamuhsim/`; wrapper/profile riêng giữ hợp đồng của từng phép đo. Source snapshots, manifests và report đã freeze giữ nguyên bằng chứng gốc.
 
