@@ -1,0 +1,49 @@
+{
+  "schema": "static_gap_cost_followup_plan/1",
+  "runtime": "experiments/social_navigation/benchmark/generated/static_gap_20261029",
+  "cases": [
+    {
+      "id": "wide80_cost",
+      "fixture": "wide",
+      "gap_m": 0.8
+    },
+    {
+      "id": "narrow52_cost",
+      "fixture": "narrow",
+      "gap_m": 0.5270765814495917
+    }
+  ],
+  "config": "configs/capture/geometry_v5_mppi_native_cost.json",
+  "start": [
+    -28.0,
+    0.0,
+    0.0
+  ],
+  "goal": [
+    -20.0,
+    0.0,
+    0.0
+  ],
+  "scope": "Two fixed barrier slabs meet perimeter walls; no humans, group dynamics, forced waypoint, velocity publisher, or route around the outer ends.",
+  "criteria": [
+    "Each attempt preserved. No automatic retry or unreported tuning.",
+    "Actual goal status SUCCEEDED and world XY<=.2m / yaw<=.25rad (existing independent policy).",
+    "Recorded physical robot crosses gate x=-24 from left to right; bounding circle must fit gap.",
+    "Conservative continuous-segment lower-bound distance to every fixture box minus native enclosing radius .168062484748657 must remain positive.",
+    "Native uint8 costmaps and static TF/camera bytes audited against MCAP.",
+    "No native force-contact stream; geometric certificate is not contact-force truth."
+  ],
+  "simulation_budget_per_case_s": 90,
+  "treatment": "native_cost",
+  "changed_control_parameters": {
+    "FollowPath.CostCritic.cost_weight": {
+      "before": 16.0,
+      "after": 3.81
+    },
+    "FollowPath.CostCritic.near_collision_cost": {
+      "before": 140,
+      "after": 253
+    }
+  },
+  "controls": "Same geometry, map, native robot, radius/padding, inflation, cost scale, speeds, NavFn, goal and all other MPPI parameters; no waypoint or velocity publisher. Single fresh attempt per width; joint treatment, not parameter ablation. MPPI RNG is not fixed; the static plan seed placeholder does not seed MPPI."
+}

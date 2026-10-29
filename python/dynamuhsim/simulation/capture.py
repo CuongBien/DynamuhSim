@@ -49,7 +49,7 @@ def prepare_camera(runtime, repo):
                 off_topic="/camera/depth/image_rect_raw", on_topic="/proxy_check/on/depth")
 
 
-def apply_nav2_treatment(config, treatment, *, navigation=None):
+def apply_nav2_treatment(config, treatment, *, navigation=None, controller=None):
     result = copy.deepcopy(config)
     for name in ["local_costmap", "global_costmap"]:
         params = result[name][name]["ros__parameters"]
@@ -62,6 +62,7 @@ def apply_nav2_treatment(config, treatment, *, navigation=None):
     follow = result["controller_server"]["ros__parameters"]["FollowPath"]
     follow.update(treatment["speed"])
     follow["CostCritic"]["consider_footprint"] = False
+    if controller is not None:follow["CostCritic"].update(controller["cost_critic"])
     if navigation is not None:
         result["controller_server"]["ros__parameters"]["goal_checker"].update(navigation["goal_checker"])
         for critic in ["GoalCritic", "PathFollowCritic"]:
@@ -81,10 +82,12 @@ def config_changes(before, after, prefix=""):
     return changes
 
 
-def nav2_parameter_contract(treatment, navigation=None):
+def nav2_parameter_contract(treatment, navigation=None, *, controller=None):
     """Expected live values for the declared capture treatment and scan policy."""
     expected = {"/controller_server": {"FollowPath." + key: value for key, value in treatment["speed"].items()}}
     expected["/controller_server"]["FollowPath.CostCritic.consider_footprint"] = False
+    if controller is not None:
+        expected["/controller_server"].update({"FollowPath.CostCritic."+key:value for key,value in controller["cost_critic"].items()})
     if navigation is not None:
         expected["/controller_server"].update({"goal_checker." + key: value for key, value in navigation["goal_checker"].items()})
         for critic in ["GoalCritic", "PathFollowCritic"]:

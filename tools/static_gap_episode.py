@@ -13,9 +13,10 @@ def main():
  p=argparse.ArgumentParser(description=__doc__);sub=p.add_subparsers(dest='mode',required=True)
  for name in ['prepare','run','verify']:
   cmd=sub.add_parser(name);cmd.add_argument('--run-dir',type=Path,required=True)
-  if name=='prepare':cmd.add_argument('--case',choices=['wide','narrow'],required=True)
+  if name=='prepare':
+   cmd.add_argument('--case',choices=['wide','narrow'],required=True);cmd.add_argument('--treatment',choices=['baseline','native_cost'],default='baseline')
  a=p.parse_args()
- if a.mode=='prepare':prepare(ROOT,a.run_dir,a.case);print('Prepared',a.run_dir);return 0
+ if a.mode=='prepare':prepare(ROOT,a.run_dir,a.case,a.treatment);print('Prepared',a.run_dir);return 0
  verify_run(ROOT,a.run_dir)
  if a.mode=='verify':print('PASS: static gap freeze unchanged');return 0
  capture=StaticGapCapture(ROOT,a.run_dir);args=SimpleNamespace(condition='empty',gui=False,report_dir=capture.run_dir/'episode')

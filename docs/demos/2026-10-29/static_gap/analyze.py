@@ -28,10 +28,10 @@ def compute(run):
     return report,spec,data,points,result
 
 def main():
-    parser=argparse.ArgumentParser();parser.add_argument('--report-dir',type=Path,default=HERE);args=parser.parse_args()
+    parser=argparse.ArgumentParser();parser.add_argument('--report-dir',type=Path,default=HERE);parser.add_argument('--plan',type=Path,default=HERE/'plan.json');args=parser.parse_args()
     for n in ['results.json','static_gap_comparison.png']:
         if (args.report_dir/n).exists():raise FileExistsError(args.report_dir/n)
-    args.report_dir.mkdir(parents=True,exist_ok=True);plan=json.loads((HERE/'plan.json').read_text());all_data=[]
+    args.report_dir.mkdir(parents=True,exist_ok=True);plan=json.loads(args.plan.read_text());all_data=[]
     for case in plan['cases']:all_data.append(compute(ROOT/plan['runtime']/case['id']))
     fig,axes=plt.subplots(2,2,figsize=(15,11),layout='constrained')
     for col,(m,spec,data,pts,result) in enumerate(all_data):
