@@ -1,0 +1,216 @@
+{
+  "status": "PASS",
+  "checks": {
+    "wide80:unchanged:assets/mecanum_camera.sdf": true,
+    "wide80:unchanged:assets/mecanum_aligned.urdf": true,
+    "wide80:unchanged:assets/gap.pgm": true,
+    "wide80:unchanged:assets/gap.yaml": true,
+    "wide80:unchanged:assets/gap_fixture.json": true,
+    "wide80:unchanged:runtime/warehouse.sdf": true,
+    "wide80:only_two_cost_changes": true,
+    "wide80:only_time_steps_change": true,
+    "wide80:audit": true,
+    "wide80:native_gpu": true,
+    "wide80:no_scripted_robot_velocity_publisher": true,
+    "wide80:scene_humans_zero": true,
+    "wide80_cost:audit": true,
+    "wide80_cost:native_gpu": true,
+    "wide80_cost:no_scripted_robot_velocity_publisher": true,
+    "wide80_cost:scene_humans_zero": true,
+    "wide80_horizon:audit": true,
+    "wide80_horizon:native_gpu": true,
+    "wide80_horizon:no_scripted_robot_velocity_publisher": true,
+    "wide80_horizon:scene_humans_zero": true,
+    "narrow52:unchanged:assets/mecanum_camera.sdf": true,
+    "narrow52:unchanged:assets/mecanum_aligned.urdf": true,
+    "narrow52:unchanged:assets/gap.pgm": true,
+    "narrow52:unchanged:assets/gap.yaml": true,
+    "narrow52:unchanged:assets/gap_fixture.json": true,
+    "narrow52:unchanged:runtime/warehouse.sdf": true,
+    "narrow52:only_two_cost_changes": true,
+    "narrow52:only_time_steps_change": true,
+    "narrow52:audit": true,
+    "narrow52:native_gpu": true,
+    "narrow52:no_scripted_robot_velocity_publisher": true,
+    "narrow52:scene_humans_zero": true,
+    "narrow52_cost:audit": true,
+    "narrow52_cost:native_gpu": true,
+    "narrow52_cost:no_scripted_robot_velocity_publisher": true,
+    "narrow52_cost:scene_humans_zero": true,
+    "narrow52_horizon:audit": true,
+    "narrow52_horizon:native_gpu": true,
+    "narrow52_horizon:no_scripted_robot_velocity_publisher": true,
+    "narrow52_horizon:scene_humans_zero": true
+  },
+  "runs": {
+    "wide80": {
+      "runtime_commit": "d6a265bab1337085ebd408c8196739a8261a18aa",
+      "live_controller": {
+        "FollowPath.vx_max": 0.3,
+        "FollowPath.vx_min": -0.15,
+        "FollowPath.vy_max": 0.2,
+        "FollowPath.CostCritic.consider_footprint": false,
+        "goal_checker.stateful": false,
+        "goal_checker.xy_goal_tolerance": 0.05,
+        "goal_checker.yaw_goal_tolerance": 0.15,
+        "FollowPath.GoalCritic.threshold_to_consider": 0.45,
+        "FollowPath.PathFollowCritic.threshold_to_consider": 0.45
+      },
+      "raw_sha256": {
+        "capture_freeze.json": "8d5886de642d9bd46deb16ce6e323d85a804489332024a1c0dd9f9408f8f8224",
+        "plan.json": "cb47baa310691b90788c04716ee6d423500736a5cdb3865dc7a18d80086a271f",
+        "preflight.json": "4ed51dc55dec4c50aed531d8f3c6e35e83916901ac0a33b6c1d5307d610c0ba5",
+        "episode/result.json": "f917d63f6b61cbaf15eeb0e0817621fa198e4ea85114fbbfba73b6340bc02cd1",
+        "episode/gazebo_poses.jsonl": "6ec84ecabdc6738e64c0c5e978e7be0bab23d0554e178bbbbd2c54cfdf6368bb",
+        "episode/native_costmaps.jsonl": "0909549cdf36a5f19fe8eb2ac5c2d2867ff397471734d29713b995a90821aa16",
+        "episode/plans.jsonl": "f25f5c0acab6f5676ddded248e4caa46ebc48d3376ccff48544e0da5ca170737",
+        "episode/events.jsonl": "8a5433eabc44a8f764f281d11ffec3e4ef394ead198d9962a47496eac150ef08",
+        "episode/raw_bag/metadata.yaml": "0118a154180d05ecca15bac900b3b21f4de75c48bf5cf98da3db980d4be9ac5e",
+        "episode/camera_preview_4x.gif": "ffb513e2360d7cba19486fdbc1b1f9a019eeb7faf66933493dfa7a7509371add"
+      }
+    },
+    "wide80_cost": {
+      "runtime_commit": "64ff12f4a67ab154972dec24222b3262e2ac40ff",
+      "live_controller": {
+        "FollowPath.vx_max": 0.3,
+        "FollowPath.vx_min": -0.15,
+        "FollowPath.vy_max": 0.2,
+        "FollowPath.CostCritic.consider_footprint": false,
+        "FollowPath.CostCritic.cost_weight": 3.81,
+        "FollowPath.CostCritic.near_collision_cost": 253,
+        "goal_checker.stateful": false,
+        "goal_checker.xy_goal_tolerance": 0.05,
+        "goal_checker.yaw_goal_tolerance": 0.15,
+        "FollowPath.GoalCritic.threshold_to_consider": 0.45,
+        "FollowPath.PathFollowCritic.threshold_to_consider": 0.45
+      },
+      "raw_sha256": {
+        "capture_freeze.json": "326a4a2364848795a7ece6154bf26ccce2970b5b5b6f4c02af3ff2eaecabbc33",
+        "plan.json": "edbe549856da8dbc5fb463e416252fdfe15d595fa49cf2ff0495a877e1909030",
+        "preflight.json": "4ed51dc55dec4c50aed531d8f3c6e35e83916901ac0a33b6c1d5307d610c0ba5",
+        "episode/result.json": "8a665a202bc63f451247fe86de14f4c60483200123eb9c6202828edd037db3e7",
+        "episode/gazebo_poses.jsonl": "f7d669e33cc8a3141b9613f7bcf99fb1edbc43e896b82290701d3a021c2539f3",
+        "episode/native_costmaps.jsonl": "edc4ed35c15971eee1769051ccc7146331af4ae3a476ed53f54054ace18547ab",
+        "episode/plans.jsonl": "37735883c377400d3a2f6ed55152948170d6cb6a7c7cac6d99aaf057220da8a7",
+        "episode/events.jsonl": "28cfa26e627c8a19521fb695754e1a02ffbd0e88d94c4951a22a8f622bb546bf",
+        "episode/raw_bag/metadata.yaml": "e0b49b814ef62a0a83cb50540730ff52109a9ac5c3cf6742d8438f58dfad3f9e",
+        "episode/camera_preview_4x.gif": "38ba0b5d5db8b803b91c1063e9ca651aa64c272269f1a4949f9c3dfe4cdf42cb"
+      }
+    },
+    "wide80_horizon": {
+      "runtime_commit": "45e93efd0eea809034d9c5ced33bc6e09b4cfb21",
+      "live_controller": {
+        "FollowPath.vx_max": 0.3,
+        "FollowPath.vx_min": -0.15,
+        "FollowPath.vy_max": 0.2,
+        "FollowPath.CostCritic.consider_footprint": false,
+        "FollowPath.CostCritic.cost_weight": 3.81,
+        "FollowPath.CostCritic.near_collision_cost": 253,
+        "FollowPath.time_steps": 100,
+        "FollowPath.model_dt": 0.05,
+        "goal_checker.stateful": false,
+        "goal_checker.xy_goal_tolerance": 0.05,
+        "goal_checker.yaw_goal_tolerance": 0.15,
+        "FollowPath.GoalCritic.threshold_to_consider": 0.45,
+        "FollowPath.PathFollowCritic.threshold_to_consider": 0.45
+      },
+      "raw_sha256": {
+        "capture_freeze.json": "93e6ab82c702c2947c4b358c660e533e61f4d6a059abf9fe395407898ec62b7f",
+        "plan.json": "b6af6c68d3ca5507ed22bd2b19440cd3ba415fd018ede3cd7f0446f4718f7d8d",
+        "preflight.json": "4ed51dc55dec4c50aed531d8f3c6e35e83916901ac0a33b6c1d5307d610c0ba5",
+        "episode/result.json": "dbca014a3318714e6e2bfd6236dd7b7b8e4b5a8c51e2c3f792aadaf0ac3e3ebf",
+        "episode/gazebo_poses.jsonl": "c253d915ef3217913cd3e395cfc6709a4e77b95be5416ecb6115a2641a33e296",
+        "episode/native_costmaps.jsonl": "ed8ced2e6da3dc3bedb5762ab9ca0e34b62f73639ce673510f217c2570168a04",
+        "episode/plans.jsonl": "038508db00cd0f24fa65d0b04c853a731ca26f747f5c13480f521427bd85a864",
+        "episode/events.jsonl": "5f42613f17431195bbb1a0395f7c6075877a67e31c8aa9710ff289ef0e841d78",
+        "episode/raw_bag/metadata.yaml": "8975681938f88a7e8c0ffc32c761be19215246add0d1866a9d04830507f8bfc1",
+        "episode/camera_preview_4x.gif": "cc1c7455fdaefcd8204a9c8fd29510756f48ae9ed9d63d4bd61f8bbfc4407b5d"
+      }
+    },
+    "narrow52": {
+      "runtime_commit": "d6a265bab1337085ebd408c8196739a8261a18aa",
+      "live_controller": {
+        "FollowPath.vx_max": 0.3,
+        "FollowPath.vx_min": -0.15,
+        "FollowPath.vy_max": 0.2,
+        "FollowPath.CostCritic.consider_footprint": false,
+        "goal_checker.stateful": false,
+        "goal_checker.xy_goal_tolerance": 0.05,
+        "goal_checker.yaw_goal_tolerance": 0.15,
+        "FollowPath.GoalCritic.threshold_to_consider": 0.45,
+        "FollowPath.PathFollowCritic.threshold_to_consider": 0.45
+      },
+      "raw_sha256": {
+        "capture_freeze.json": "3b88a28728d0ffd97d59d82e12e17c684e2b073f0a8f79a446fc6842fc756cc6",
+        "plan.json": "2cad3d911b70b15b502fb4e6dd762b61db921793364362c677755cb8cfe6f2b7",
+        "preflight.json": "4ed51dc55dec4c50aed531d8f3c6e35e83916901ac0a33b6c1d5307d610c0ba5",
+        "episode/result.json": "4cf0751e1b6f0832dd630f890b439f531f5852f290d546fd6fc987649e9ea705",
+        "episode/gazebo_poses.jsonl": "c5efb84365411bff44ee31b980043155947d81994e9a38ed5b245372a45602a6",
+        "episode/native_costmaps.jsonl": "c6d8835b08950d3dad44d938e10e44af4a1d36ef52dda67e5a43b26da6cc7d7a",
+        "episode/plans.jsonl": "6d98cd26659dbbc9ea3a2815e5b12a0fcf9a7d0bbfa0eb70065b1627f3e36530",
+        "episode/events.jsonl": "16d732c6f8dd5f28ae997e25b91ee51f61aa975343fa4db4f45a33edad377c51",
+        "episode/raw_bag/metadata.yaml": "2bc621def589121204542a6dacf3efa2453ef56e8bcd72b045d6d4ec6676582f",
+        "episode/camera_preview_4x.gif": "739144b97a609decf280b1a0017d9b23dad644f56a88bf03fbe28ab1ac866f11"
+      }
+    },
+    "narrow52_cost": {
+      "runtime_commit": "64ff12f4a67ab154972dec24222b3262e2ac40ff",
+      "live_controller": {
+        "FollowPath.vx_max": 0.3,
+        "FollowPath.vx_min": -0.15,
+        "FollowPath.vy_max": 0.2,
+        "FollowPath.CostCritic.consider_footprint": false,
+        "FollowPath.CostCritic.cost_weight": 3.81,
+        "FollowPath.CostCritic.near_collision_cost": 253,
+        "goal_checker.stateful": false,
+        "goal_checker.xy_goal_tolerance": 0.05,
+        "goal_checker.yaw_goal_tolerance": 0.15,
+        "FollowPath.GoalCritic.threshold_to_consider": 0.45,
+        "FollowPath.PathFollowCritic.threshold_to_consider": 0.45
+      },
+      "raw_sha256": {
+        "capture_freeze.json": "5352b4b260dff800729475631ea00d807d556a654c4613f41483490207895577",
+        "plan.json": "58239db09cb52401f843d52f63506003cd5238999402f4c6ab142749d41b9ebd",
+        "preflight.json": "4ed51dc55dec4c50aed531d8f3c6e35e83916901ac0a33b6c1d5307d610c0ba5",
+        "episode/result.json": "1db6100bc6d5ca9d2d2a79a1f8b6252978329d76fd82b6c043c7f76164f73b18",
+        "episode/gazebo_poses.jsonl": "df2b661516e4254ecd4a58602d6d8c1e5a427988a67f339b4aa9d8f040b70aeb",
+        "episode/native_costmaps.jsonl": "02e5616ed0109932e2337938b8a7ae1bbbe36abcc13e9784e1ba34d457f8b12c",
+        "episode/plans.jsonl": "5d6396051d34156957027d073951547153fa85c57aecfbe7abfa5c46703c4611",
+        "episode/events.jsonl": "ba4797f1d8b7bccdb4f8ec685690d941d2969a15c299d4a42f916d3c1e914cce",
+        "episode/raw_bag/metadata.yaml": "7df1928c8db23c4827bc27c5c6b8b1a2979838526da3a4a79c052e08ca5e9e27",
+        "episode/camera_preview_4x.gif": "8e5f428fe7e473fde1b42d9422c22ad049b9588bfa0f9edc0b8d08d46e095713"
+      }
+    },
+    "narrow52_horizon": {
+      "runtime_commit": "45e93efd0eea809034d9c5ced33bc6e09b4cfb21",
+      "live_controller": {
+        "FollowPath.vx_max": 0.3,
+        "FollowPath.vx_min": -0.15,
+        "FollowPath.vy_max": 0.2,
+        "FollowPath.CostCritic.consider_footprint": false,
+        "FollowPath.CostCritic.cost_weight": 3.81,
+        "FollowPath.CostCritic.near_collision_cost": 253,
+        "FollowPath.time_steps": 100,
+        "FollowPath.model_dt": 0.05,
+        "goal_checker.stateful": false,
+        "goal_checker.xy_goal_tolerance": 0.05,
+        "goal_checker.yaw_goal_tolerance": 0.15,
+        "FollowPath.GoalCritic.threshold_to_consider": 0.45,
+        "FollowPath.PathFollowCritic.threshold_to_consider": 0.45
+      },
+      "raw_sha256": {
+        "capture_freeze.json": "56296034474376e1278a3968e2e47830b166fcc915f2f27db6ba1f1edec68777",
+        "plan.json": "790559d70ac3fc7d8ec5aee8b371207c5114c00ead2c247e642ca4cee8ff1552",
+        "preflight.json": "4ed51dc55dec4c50aed531d8f3c6e35e83916901ac0a33b6c1d5307d610c0ba5",
+        "episode/result.json": "bbf60adc25332945689272247db7073b9e1d7eb5fa27729c578f4d1aab14381e",
+        "episode/gazebo_poses.jsonl": "db108584efc218bf2e98c709c969e5de2a593988545a5de93b7c4bab6dd56b8b",
+        "episode/native_costmaps.jsonl": "c20ade1a36bf1d435a705cbd7cd14db83ce098765b8900e3214e43c83744c5c3",
+        "episode/plans.jsonl": "3d7ef302a003581a5789f49dc83044e322bbe288cb92ccdf7a99db8ef5f91881",
+        "episode/events.jsonl": "fdef56bf5b4815f7079f5f0701f545f57a7ec1df4e6683f2c448a216c6358c6a",
+        "episode/raw_bag/metadata.yaml": "631dd5883696201cce4f120dbb6b300f08cd6a3f9315b6a9566e48286ab589fb",
+        "episode/camera_preview_4x.gif": "c76f5f2c5f877ca35046d6f3e2f560bd4f4386609a1ebef1ed56958e9e9357bf"
+      }
+    }
+  },
+  "scope": "Exact control/config/geometry differences and capture integrity. Physical passage acceptance is separately reported. MPPI RNG not fixed, no single-parameter causal claim vs original joint treatment."
+}

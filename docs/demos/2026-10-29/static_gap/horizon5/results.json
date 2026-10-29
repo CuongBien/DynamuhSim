@@ -1,0 +1,79 @@
+{
+  "schema": "static_gap_acceptance/1",
+  "status": "PASS",
+  "cases": [
+    {
+      "case": "wide80_horizon",
+      "gap_width_m": 0.8,
+      "navigation_status": "SUCCEEDED",
+      "actual_goal_reached": true,
+      "world_goal_xy_error_m": 0.05050377719974391,
+      "active_sim_s": 43.6875,
+      "path_length_m": 8.068583287420513,
+      "gate_crossings": [
+        {
+          "time_sim_s": 23.49637139436486,
+          "y_m": 0.04386516139126598,
+          "yaw_rad": 0.6060564526756814,
+          "circle_fits_gap": true,
+          "center_plane_clearance_m": 0.18807235386007706
+        }
+      ],
+      "passed_gap_with_bounding_circle": true,
+      "minimum_continuous_static_gap_lower_bound_m": 0.18414217692186266,
+      "critical_clearance": {
+        "box": "gate_top",
+        "interval_sim_s": [
+          23.6275,
+          23.6475
+        ]
+      },
+      "capture_audit": "PASS",
+      "accepted": true,
+      "no_native_contact_force_stream": true,
+      "runtime_commit": "45e93efd0eea809034d9c5ced33bc6e09b4cfb21",
+      "run": "experiments/social_navigation/benchmark/generated/static_gap_20261029/wide80_horizon"
+    },
+    {
+      "case": "narrow52_horizon",
+      "gap_width_m": 0.5270765814495917,
+      "navigation_status": "SUCCEEDED",
+      "actual_goal_reached": true,
+      "world_goal_xy_error_m": 0.05653023656648228,
+      "active_sim_s": 46.480000000000004,
+      "path_length_m": 8.073993064209962,
+      "gate_crossings": [
+        {
+          "time_sim_s": 25.903895131083438,
+          "y_m": 0.008406457371716945,
+          "yaw_rad": 0.9325073391187998,
+          "circle_fits_gap": true,
+          "center_plane_clearance_m": 0.08706934860442186
+        }
+      ],
+      "passed_gap_with_bounding_circle": true,
+      "minimum_continuous_static_gap_lower_bound_m": 0.06548206263287373,
+      "critical_clearance": {
+        "box": "gate_top",
+        "interval_sim_s": [
+          26.6975,
+          26.715
+        ]
+      },
+      "capture_audit": "PASS",
+      "accepted": true,
+      "no_native_contact_force_stream": true,
+      "runtime_commit": "45e93efd0eea809034d9c5ced33bc6e09b4cfb21",
+      "run": "experiments/social_navigation/benchmark/generated/static_gap_20261029/narrow52_horizon"
+    }
+  ],
+  "criteria": [
+    "Each attempt preserved. No automatic retry or unreported tuning.",
+    "Actual goal status SUCCEEDED and world XY<=.2m / yaw<=.25rad (existing independent policy).",
+    "Recorded physical robot crosses gate x=-24 from left to right; bounding circle must fit gap.",
+    "Conservative continuous-segment lower-bound distance to every fixture box minus native enclosing radius .168062484748657 must remain positive.",
+    "Native uint8 costmaps and static TF/camera bytes audited against MCAP.",
+    "No native force-contact stream; geometric certificate is not contact-force truth."
+  ],
+  "scope": "Single attempt per width. Geometry/arrival and capture integrity only; no moving-people or social-policy claim. Contact-force truth unavailable."
+}
