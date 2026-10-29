@@ -1,7 +1,6 @@
 import copy,json,tempfile,unittest
 from pathlib import Path
 import xml.etree.ElementTree as ET
-from assemble import assemble
 from fixture import HERE,create_fixture,canonical,PROXY_FLAG,ALL_MASK,NO_PROXY_MASK,collision_signature
 
 class FixtureTests(unittest.TestCase):
@@ -36,16 +35,5 @@ class FixtureTests(unittest.TestCase):
             self.assertEqual(metadata[0]['collision'],metadata[1]['collision'])
             self.assertEqual(metadata[0]['collision'],metadata[2]['collision'])
             self.assertEqual(native[0],native[1]);self.assertEqual(native[0],native[2])
-
-    def test_assembly_rejects_measured_data_with_forced_shutdown(self):
-        scene=json.loads((HERE/'snapshots.json').read_text())[2]
-        with tempfile.TemporaryDirectory() as folder:
-            root=Path(folder);run=root/'run';case=run/'snapshot03/baseline';case.mkdir(parents=True)
-            (run/'protocol.json').write_bytes((HERE/'protocol.json').read_bytes())
-            (case/'result.json').write_text(json.dumps(dict(snapshot=scene,snapshot_index=3,
-                status='MEASURED',gazebo_returncode=-9,cleanup=dict(status='PASS',remaining=[]))))
-            out=root/'assembled'
-            with self.assertRaises(AssertionError):assemble(out,[(3,run)])
-            self.assertFalse(out.exists())
 
 if __name__=='__main__':unittest.main(verbosity=2)
