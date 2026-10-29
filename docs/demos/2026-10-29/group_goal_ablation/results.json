@@ -1,0 +1,545 @@
+{
+  "schema": "group_goal_ablation_result/1",
+  "cases": [
+    {
+      "run": "experiments/social_navigation/benchmark/generated/group_goal_ablation_20261029/head_on_goal",
+      "status": "SUCCEEDED",
+      "actual_goal_reached": true,
+      "xy_error_m": 0.07020047795882028,
+      "active_sim_s": 33.0175,
+      "path_length_m": 8.47193429940347,
+      "world_y_min_m": -0.6302806093574626,
+      "world_y_max_m": 0.02967838630536409,
+      "minimum_swept_robot_human_gap_m": 0.12321992002660831,
+      "minimum_static_gap_lower_bound_m": 1.6817396246990228,
+      "static_box_count": 42,
+      "global_plan_probe": {
+        "time_sim_s": 30.0025,
+        "nearest_point_to_initial_gate_x": [
+          -22.748175151325245,
+          -0.4121104319526078
+        ]
+      },
+      "native_contact_force_recorded": false,
+      "gate_A_crossings": [
+        {
+          "time_sim_s": 18.329939225141036,
+          "time_after_goal_s": 8.244939225141035,
+          "surface_opening_m": 1.2452442822479424,
+          "center_offset_m": -0.29090391244915254,
+          "conservative_disc_fits": true,
+          "pair_speed_m_s": 0.72239273274207,
+          "pair_shift_from_start_m": 5.877693921044003,
+          "original_stationary_pair": false
+        }
+      ],
+      "passes_original_narrow_gap_A": false,
+      "rendering": "D3D12 (NVIDIA GeForce RTX 4060 Laptop GPU)",
+      "id": "head_on_goal",
+      "kind": "social",
+      "encounter_profile": "head_on",
+      "human_motion_profile": "group_goal_v1",
+      "audit": "PASS",
+      "proximity": {
+        "center_threshold_m": 1.5,
+        "cumulative_duration_s": 18.58769746720409,
+        "minimum_center_distance_m": 0.6512824047752653,
+        "minimum_time_sim_s": 21.55470379643124,
+        "coverage": "EXERCISED",
+        "method": "Exact union of linear relative-motion circle intervals between consecutive native pose samples."
+      },
+      "native_human_first12": {
+        "duration_s": 11.9825,
+        "yaw_total_turns": [
+          0.5376890743272871,
+          0.5423383909429069,
+          0.5534381240592263,
+          0.5982734871781645,
+          0.6221245706618971,
+          0.5730744680603462
+        ],
+        "path_m": [
+          7.140225131274588,
+          7.259090528601578,
+          5.321403487506729,
+          7.098217664883405,
+          6.9023811003667,
+          7.2261253948365844
+        ]
+      },
+      "native_human_full": {
+        "duration_s": 33.01,
+        "yaw_total_turns": [
+          0.7903421173632212,
+          0.8040144526334874,
+          0.7906797790035595,
+          0.8540234034512193,
+          0.8645497304949687,
+          0.8139714065562192
+        ],
+        "path_m": [
+          18.675770041188844,
+          12.02865969732658,
+          21.801558405103037,
+          22.907026008814128,
+          21.737781838341867,
+          22.811479375877855
+        ]
+      },
+      "human_safety": {
+        "minimum_swept_human_human_gap_m": 0.04000888183643525,
+        "minimum_human_static_lower_bound_m": 0.032326237559319515
+      },
+      "worker": {
+        "worker_first12": {
+          "samples": 120,
+          "time_span_s": 11.900000000000002,
+          "yaw_total_rad": [
+            3.379470155414576,
+            3.4068958501199695,
+            3.4782249205788798,
+            3.7581174400552646,
+            3.9058501797926093,
+            3.595734782837165
+          ],
+          "yaw_total_turns": [
+            0.5378593802657655,
+            0.5422243151458581,
+            0.5535766892955438,
+            0.5981229673046551,
+            0.6216353630903619,
+            0.5722789647359977
+          ],
+          "path_m": [
+            7.150819288808017,
+            7.228673545319055,
+            5.315021861470723,
+            7.108921135320089,
+            6.8826124886135025,
+            7.198977817505909
+          ],
+          "yaw_rad_per_m": [
+            0.47259901543084665,
+            0.4713030445711735,
+            0.6544140384055576,
+            0.5286480702934468,
+            0.5674952913961657,
+            0.49947851958834205
+          ],
+          "moving_heading_error_median_deg": 7.936115031651161,
+          "moving_backwards_fraction": 0.011299435028248588,
+          "moving_group_member_radius_max_m": 2.1023224615907004,
+          "moving_group_member_radius_median_m": 1.2455241312316647,
+          "minimum_sampled_human_human_gap_m": 0.040060379489408215
+        },
+        "worker_full": {
+          "samples": 331,
+          "time_span_s": 33.0,
+          "yaw_total_rad": [
+            4.971192514111723,
+            5.0661283475084895,
+            4.972993254042065,
+            5.369999872017721,
+            5.432685060530822,
+            5.1208847548864735
+          ],
+          "yaw_total_turns": [
+            0.7911898616823074,
+            0.8062993688439515,
+            0.7914764583434444,
+            0.8546620240344657,
+            0.864638681644973,
+            0.8150141217441111
+          ],
+          "path_m": [
+            18.706824296777228,
+            12.019794572396798,
+            21.851434568853225,
+            22.979348862270072,
+            21.789276928056236,
+            22.844395822767424
+          ],
+          "yaw_rad_per_m": [
+            0.2657421930759327,
+            0.42148210745154874,
+            0.22758200329467204,
+            0.23368807811759867,
+            0.24932837736967794,
+            0.2241637202671319
+          ],
+          "moving_heading_error_median_deg": 8.3634141361082,
+          "moving_backwards_fraction": 0.005154639175257732,
+          "moving_group_member_radius_max_m": 6.776521231337647,
+          "moving_group_member_radius_median_m": 1.7941732054132893,
+          "minimum_sampled_human_human_gap_m": 0.04000943356503084
+        },
+        "initial_direction_union_duration_first12_s": 10.399999999999979,
+        "initial_intent_executed": true,
+        "per_group_initial_goal_progress_duration_first12_s": {
+          "1,2,3": 4.100000000000001,
+          "4,5,6": 9.299999999999983
+        },
+        "native_group_goal_changes": [
+          {
+            "time_after_goal_s": 4.1175,
+            "members": [
+              1,
+              2,
+              3
+            ],
+            "previous": [
+              -28.2,
+              0.35
+            ],
+            "goal": [
+              25.926829443235405,
+              16.473170304975064
+            ],
+            "reported_goal_ages_wall_s": {
+              "1": 0.09673500061035156,
+              "2": 0.09672379493713379,
+              "3": 0.09671854972839355,
+              "4": 24.621123790740967,
+              "5": 24.621124029159546,
+              "6": 24.621124267578125
+            }
+          },
+          {
+            "time_after_goal_s": 9.317499999999999,
+            "members": [
+              4,
+              5,
+              6
+            ],
+            "previous": [
+              -27.5,
+              -0.35
+            ],
+            "goal": [
+              21.686059669285996,
+              5.475207972477136
+            ],
+            "reported_goal_ages_wall_s": {
+              "1": 10.952278852462769,
+              "2": 10.95226764678955,
+              "3": 10.95226263999939,
+              "4": 0.09872579574584961,
+              "5": 0.09872078895568848,
+              "6": 0.09871864318847656
+            }
+          }
+        ],
+        "max_reported_native_goal_age_wall_s": 60.90877819061279,
+        "scope": "Native goals may complete or expire by host wall time; target-change logs alone do not identify which condition fired."
+      },
+      "progress_failure_count": 0,
+      "max_action_recoveries": 0,
+      "physical_pass": true,
+      "recovery_free": true,
+      "encounter_screen_pass": true,
+      "native_cohesion": {
+        "max_member_centroid_radius_m": 6.74559819150599,
+        "median_member_centroid_radius_m": 1.7939880887599555,
+        "group_samples": 3302,
+        "metadata_alignment_skips": 0,
+        "scope": "Actual native world poses; nearest native group membership/type metadata within.03s; radius excludes body radius."
+      },
+      "goal_proposal_audit": true,
+      "goal_proposal_counts": {
+        "active_steps": 370,
+        "group_proposals": 740
+      }
+    },
+    {
+      "run": "experiments/social_navigation/benchmark/generated/group_goal_ablation_20261029/crossing_goal",
+      "status": "SUCCEEDED",
+      "actual_goal_reached": true,
+      "xy_error_m": 0.04141360934000266,
+      "active_sim_s": 32.877500000000005,
+      "path_length_m": 8.21138517675055,
+      "world_y_min_m": -0.013236356665829974,
+      "world_y_max_m": 0.3202140647461177,
+      "minimum_swept_robot_human_gap_m": 0.12749629838167587,
+      "minimum_static_gap_lower_bound_m": 1.6818103635988606,
+      "static_box_count": 42,
+      "global_plan_probe": {
+        "time_sim_s": 31.7025,
+        "nearest_point_to_initial_gate_x": [
+          -22.599905390208722,
+          0.0037413232530322804
+        ]
+      },
+      "native_contact_force_recorded": false,
+      "gate_A_crossings": [
+        {
+          "time_sim_s": 19.40954148934147,
+          "time_after_goal_s": 7.884541489341471,
+          "surface_opening_m": 2.75930317548716,
+          "center_offset_m": -1.069806210253723,
+          "conservative_disc_fits": true,
+          "pair_speed_m_s": 0.8000000000000027,
+          "pair_shift_from_start_m": 6.083565642080176,
+          "original_stationary_pair": false
+        }
+      ],
+      "passes_original_narrow_gap_A": false,
+      "rendering": "D3D12 (NVIDIA GeForce RTX 4060 Laptop GPU)",
+      "id": "crossing_goal",
+      "kind": "social",
+      "encounter_profile": "crossing",
+      "human_motion_profile": "group_goal_v1",
+      "audit": "PASS",
+      "proximity": {
+        "center_threshold_m": 1.5,
+        "cumulative_duration_s": 6.4751306428399245,
+        "minimum_center_distance_m": 0.6555587831303329,
+        "minimum_time_sim_s": 19.546834307393894,
+        "coverage": "EXERCISED",
+        "method": "Exact union of linear relative-motion circle intervals between consecutive native pose samples."
+      },
+      "native_human_first12": {
+        "duration_s": 11.9825,
+        "yaw_total_turns": [
+          0.41048091313507473,
+          0.3836768922129344,
+          0.3931285334952463,
+          0.2083444408661733,
+          0.19353496592054928,
+          0.20777439561056527
+        ],
+        "path_m": [
+          7.475895634755275,
+          8.600855563191596,
+          8.296114877126945,
+          8.58553949789097,
+          7.61709586768754,
+          9.289463169298847
+        ]
+      },
+      "native_human_full": {
+        "duration_s": 32.865,
+        "yaw_total_turns": [
+          0.7025662958437849,
+          0.6645443530627023,
+          0.6412456791641753,
+          5.380592892350392,
+          5.36842647404745,
+          5.38227453147745
+        ],
+        "path_m": [
+          22.187153713842697,
+          22.719001292887974,
+          24.080252030823893,
+          11.810658901332442,
+          10.7646577933748,
+          12.881731808742778
+        ]
+      },
+      "human_safety": {
+        "minimum_swept_human_human_gap_m": 0.05124075126435923,
+        "minimum_human_static_lower_bound_m": 0.03510751842181459
+      },
+      "worker": {
+        "worker_first12": {
+          "samples": 120,
+          "time_span_s": 11.900000000000002,
+          "yaw_total_rad": [
+            2.60749312968707,
+            2.4500796922569377,
+            2.5065678818782016,
+            1.4299453050935766,
+            1.3434649147185802,
+            1.4310270468760864
+          ],
+          "yaw_total_turns": [
+            0.41499542066785367,
+            0.3899422939917614,
+            0.39893266859629783,
+            0.22758286365669111,
+            0.21381908204799366,
+            0.22775502820852658
+          ],
+          "path_m": [
+            7.487253912681474,
+            8.5841828248147,
+            8.339839753255447,
+            8.560634972064067,
+            7.611420656811812,
+            9.247299106975223
+          ],
+          "yaw_rad_per_m": [
+            0.34825760687381657,
+            0.28541792996001636,
+            0.3005534825653893,
+            0.1670372945184463,
+            0.17650645987043842,
+            0.1547508121367746
+          ],
+          "moving_heading_error_median_deg": 6.990494769202943,
+          "moving_backwards_fraction": 0.0,
+          "moving_group_member_radius_max_m": 2.4663828462229698,
+          "moving_group_member_radius_median_m": 1.455588037344639,
+          "minimum_sampled_human_human_gap_m": 0.05217784760574351
+        },
+        "worker_full": {
+          "samples": 329,
+          "time_span_s": 32.800000000000004,
+          "yaw_total_rad": [
+            4.416121085437731,
+            4.1767877178760475,
+            4.030436202135074,
+            33.955615780541635,
+            33.88574220482995,
+            33.97084527255369
+          ],
+          "yaw_total_turns": [
+            0.7028475000397612,
+            0.6647564115454898,
+            0.6414638443863225,
+            5.404204097202367,
+            5.393083372236347,
+            5.406627946136864
+          ],
+          "path_m": [
+            22.2366080368631,
+            22.73786903016215,
+            24.15073454590978,
+            11.79902218775439,
+            10.775842244986755,
+            12.846909661853964
+          ],
+          "yaw_rad_per_m": [
+            0.1985968848358902,
+            0.18369301504619764,
+            0.16688669218210908,
+            2.8778330305864204,
+            3.1446026616243956,
+            2.6442814783249036
+          ],
+          "moving_heading_error_median_deg": 7.404810836858144,
+          "moving_backwards_fraction": 0.0,
+          "moving_group_member_radius_max_m": 2.68655555739936,
+          "moving_group_member_radius_median_m": 1.5905755986966446,
+          "minimum_sampled_human_human_gap_m": 0.05217784760574351
+        },
+        "initial_direction_union_duration_first12_s": 11.999999999999973,
+        "initial_intent_executed": true,
+        "per_group_initial_goal_progress_duration_first12_s": {
+          "1,2,3": 10.499999999999979,
+          "4,5,6": 11.999999999999973
+        },
+        "native_group_goal_changes": [
+          {
+            "time_after_goal_s": 10.577499999999999,
+            "members": [
+              1,
+              2,
+              3
+            ],
+            "previous": [
+              -25.1,
+              4.5
+            ],
+            "goal": [
+              11.327971707858417,
+              -10.37192096164015
+            ],
+            "reported_goal_ages_wall_s": {
+              "1": 0.10258007049560547,
+              "2": 0.10256576538085938,
+              "3": 0.10255980491638184,
+              "4": 39.120692014694214,
+              "5": 39.12069225311279,
+              "6": 39.12069225311279
+            }
+          }
+        ],
+        "max_reported_native_goal_age_wall_s": 85.83451676368713,
+        "scope": "Native goals may complete or expire by host wall time; target-change logs alone do not identify which condition fired."
+      },
+      "progress_failure_count": 0,
+      "max_action_recoveries": 0,
+      "physical_pass": true,
+      "recovery_free": true,
+      "encounter_screen_pass": true,
+      "native_cohesion": {
+        "max_member_centroid_radius_m": 2.68101554883359,
+        "median_member_centroid_radius_m": 1.5881805504730735,
+        "group_samples": 3288,
+        "metadata_alignment_skips": 0,
+        "scope": "Actual native world poses; nearest native group membership/type metadata within.03s; radius excludes body radius."
+      },
+      "goal_proposal_audit": true,
+      "goal_proposal_counts": {
+        "active_steps": 367,
+        "group_proposals": 734
+      }
+    }
+  ],
+  "comparisons": [
+    {
+      "id": "head_on_goal",
+      "reference_id": "head_on_group_sim",
+      "mean_yaw_rate_before_turns_per_s": 0.1498170220537649,
+      "mean_yaw_rate_after_turns_per_s": 0.024828743257107322,
+      "yaw_rate_reduction_fraction": 0.8342728822349905,
+      "native_cohesion_before": {
+        "max_member_centroid_radius_m": 1.5943939879820748,
+        "median_member_centroid_radius_m": 1.3973879266477196,
+        "group_samples": 3372,
+        "metadata_alignment_skips": 0,
+        "scope": "Actual native world poses; nearest native group membership/type metadata within.03s; radius excludes body radius."
+      },
+      "native_cohesion_after": {
+        "max_member_centroid_radius_m": 6.74559819150599,
+        "median_member_centroid_radius_m": 1.7939880887599555,
+        "group_samples": 3302,
+        "metadata_alignment_skips": 0,
+        "scope": "Actual native world poses; nearest native group membership/type metadata within.03s; radius excludes body radius."
+      },
+      "cohesion_radius_change_m": 5.151204203523915,
+      "backward_fraction_change": 0.00034364261168384844,
+      "near_duration_change_s": -2.20401444358383,
+      "active_sim_change_s": -0.6899999999999977,
+      "yaw_screen_pass": true,
+      "cohesion_screen_pass": false,
+      "backward_screen_pass": true,
+      "motion_screen_pass": false,
+      "candidate_screen_pass": false
+    },
+    {
+      "id": "crossing_goal",
+      "reference_id": "crossing_group_sim",
+      "mean_yaw_rate_before_turns_per_s": 0.14513619044171433,
+      "mean_yaw_rate_after_turns_per_s": 0.09199072075635656,
+      "yaw_rate_reduction_fraction": 0.3661765513040707,
+      "native_cohesion_before": {
+        "max_member_centroid_radius_m": 1.5024163430343962,
+        "median_member_centroid_radius_m": 1.3361288734295584,
+        "group_samples": 3326,
+        "metadata_alignment_skips": 0,
+        "scope": "Actual native world poses; nearest native group membership/type metadata within.03s; radius excludes body radius."
+      },
+      "native_cohesion_after": {
+        "max_member_centroid_radius_m": 2.68101554883359,
+        "median_member_centroid_radius_m": 1.5881805504730735,
+        "group_samples": 3288,
+        "metadata_alignment_skips": 0,
+        "scope": "Actual native world poses; nearest native group membership/type metadata within.03s; radius excludes body radius."
+      },
+      "cohesion_radius_change_m": 1.1785992057991939,
+      "backward_fraction_change": -0.004370629370629371,
+      "near_duration_change_s": -4.749838527281411,
+      "active_sim_change_s": -0.37999999999999545,
+      "yaw_screen_pass": false,
+      "cohesion_screen_pass": false,
+      "backward_screen_pass": true,
+      "motion_screen_pass": false,
+      "candidate_screen_pass": false
+    }
+  ],
+  "failed_attempts": [],
+  "defaults_promoted": false,
+  "naturalness_accepted": false,
+  "training_ready": false
+}

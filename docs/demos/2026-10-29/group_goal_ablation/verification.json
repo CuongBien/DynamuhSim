@@ -1,0 +1,74 @@
+{
+  "schema": "group_goal_ablation_verification/1",
+  "status": "PASS",
+  "checks": {
+    "head_on_goal:same:assets/mecanum_camera.sdf": true,
+    "head_on_goal:same:assets/mecanum_aligned.urdf": true,
+    "head_on_goal:same:assets/encounter.json": true,
+    "head_on_goal:same:assets/human_goal_clock.json": true,
+    "head_on_goal:same:runtime/nav2_runtime.yaml": true,
+    "head_on_goal:same_initial_humans": true,
+    "head_on_goal:same_initial_groups": true,
+    "head_on_goal:same_world_except_socket": true,
+    "head_on_goal:same_person_guard_native_group_and_clock_sources": true,
+    "head_on_goal:declared_motion_profile": true,
+    "head_on_goal:clock_profile": true,
+    "head_on_goal:clock_trace": true,
+    "head_on_goal:direct_goal_trace": true,
+    "head_on_goal:capture_integrity": true,
+    "head_on_goal:native_gpu": true,
+    "head_on_goal:no_injected_cmd_vel": true,
+    "head_on_goal:clean_exit": true,
+    "crossing_goal:same:assets/mecanum_camera.sdf": true,
+    "crossing_goal:same:assets/mecanum_aligned.urdf": true,
+    "crossing_goal:same:assets/encounter.json": true,
+    "crossing_goal:same:assets/human_goal_clock.json": true,
+    "crossing_goal:same:runtime/nav2_runtime.yaml": true,
+    "crossing_goal:same_initial_humans": true,
+    "crossing_goal:same_initial_groups": true,
+    "crossing_goal:same_world_except_socket": true,
+    "crossing_goal:same_person_guard_native_group_and_clock_sources": true,
+    "crossing_goal:declared_motion_profile": true,
+    "crossing_goal:clock_profile": true,
+    "crossing_goal:clock_trace": true,
+    "crossing_goal:direct_goal_trace": true,
+    "crossing_goal:capture_integrity": true,
+    "crossing_goal:native_gpu": true,
+    "crossing_goal:no_injected_cmd_vel": true,
+    "crossing_goal:clean_exit": true
+  },
+  "runs": {
+    "head_on_goal": {
+      "runtime_commit": "e342baabf7fc6e972c79196f0ebc2ee35aed2b19",
+      "sha256": {
+        "capture_freeze.json": "b95420a7758ca3c5009c1caecea0ce7aee2a01ae5155a4cb98ff5431a936168b",
+        "plan.json": "12ea1a39defa058934ab806ded7432e055e9b20fb6fbc60ef4fcbfdc9e6f72b6",
+        "assets/human_motion.json": "fa7d73b8881a43d1a554284a423c89d1468ca6481ed784e1e227fdf79f70d728",
+        "runtime/nav2_runtime.yaml": "c060ecd317402ba2aae7474437bf3db4a6ea8481a12b77d35fd6097e93e557f2",
+        "runtime/warehouse.sdf": "e37fd321682fce89d406bf828c6cbf4b9fdc906131f94378ecaf10a4ee91c884",
+        "runtime/worker_trajectory.jsonl": "96dc431e4058d936603831e6cd3b135b26c7899c62bac362c834e800f9a5f789",
+        "episode/result.json": "496d5088457cd1295f66ce9fd07f0580304c625910885a546530bf3b3e0d15ff",
+        "episode/gazebo_poses.jsonl": "bd62dc8a98f66dcf373a8734c0ba2fe74cd713f8131b8c737c8813de897f38f2",
+        "episode/native_costmaps.jsonl": "3628b4cd1e594e7eb20c5b1547d3fd6d146a55a87cae5e31beee16501e5756e0",
+        "episode/events.jsonl": "7339b15bab9ef7a2d78973e3e1095d7ab0286757213b518a69479ac9c285f43a",
+        "episode/camera_preview_4x.gif": "743770e797398cb8b4594337e3a829343fa0c36e192dbca115178961491da48a"
+      }
+    },
+    "crossing_goal": {
+      "runtime_commit": "e342baabf7fc6e972c79196f0ebc2ee35aed2b19",
+      "sha256": {
+        "capture_freeze.json": "6b13826e56895c642a0a3d1f46e90cd0e1cd3ac802a3cc7e4cad5873936b1b4f",
+        "plan.json": "60ca56670bd2e000f2b842327dce0bf2bac0b3438a465df270060589dc2693f6",
+        "assets/human_motion.json": "fa7d73b8881a43d1a554284a423c89d1468ca6481ed784e1e227fdf79f70d728",
+        "runtime/nav2_runtime.yaml": "c060ecd317402ba2aae7474437bf3db4a6ea8481a12b77d35fd6097e93e557f2",
+        "runtime/warehouse.sdf": "ee59361971c3e1c16055ec2fb14d065a5fee27671e07966b2d84bef3ca57323d",
+        "runtime/worker_trajectory.jsonl": "d443fe26dda05cba2d89b872f88f5b9bcd8923886bacfcd809b5fe86b4bab2d1",
+        "episode/result.json": "e44f0d48ee5d52ac99eaaf8956dc76f68ad85d9bd21670e872cf093861b5469d",
+        "episode/gazebo_poses.jsonl": "b00820f41be782f457793d574f93bdc8f02effb88217be202131474bfd620862",
+        "episode/native_costmaps.jsonl": "bf7812c3a659fc7250cd6df909318d71a578863c70b3144682a7896bc6a681d6",
+        "episode/events.jsonl": "4e697220e69d0e5bfd3b895a85411131e08c5862c5ae85983173e57d28d2e3ba",
+        "episode/camera_preview_4x.gif": "6ccdfe7ed70d9d41629b827aeb51812a177d95b86d57de60eeefae72f3e22c00"
+      }
+    }
+  }
+}

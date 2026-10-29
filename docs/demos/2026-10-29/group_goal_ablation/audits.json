@@ -1,0 +1,256 @@
+{
+  "head_on_goal": {
+    "schema": "dynamuhsim_capture_audit/1",
+    "status": "PASS",
+    "policy": "capture_integrity_native_geometry_v4",
+    "checks": {
+      "measured": true,
+      "native_gpu": true,
+      "clean_exit": true,
+      "cleanup_empty": true,
+      "no_adapter_fault": true,
+      "recorder_closed": true,
+      "camera_bytes": true,
+      "friction_recognized": true,
+      "source_hashes": true,
+      "human_motion_profile": true,
+      "human_motion_bytes": true,
+      "human_motion_frozen": true,
+      "shared_group_goal_proposals": true,
+      "encounter_profile": true,
+      "encounter_bytes": true,
+      "encounter_frozen": true,
+      "encounter_initial_humans": true,
+      "encounter_initial_goals": true,
+      "human_goal_clock_profile": true,
+      "human_goal_clock_bytes": true,
+      "human_goal_clock_frozen": true,
+      "goal_clock_gate_matches_accepted_goal": true,
+      "goal_clock_trace": true,
+      "freeze_identity": true,
+      "pause_acknowledged": true,
+      "no_child_exit_errors": true,
+      "balanced_filter_teardown": true,
+      "event_order": true,
+      "label_tail_at_least3s": true,
+      "declared_navigation_recipe": true,
+      "live_navigation_parameters": true,
+      "live_moderate_parameters": true,
+      "result_pose_recorded": true,
+      "actual_goal_recomputed": true,
+      "paired_depth_present": true,
+      "paired_index_files_present": true,
+      "depth_shape_and_encoding": true,
+      "raw_topics_present": true,
+      "raw_events_match_jsonl": true,
+      "raw_depth_matches_float32_pairs": true,
+      "depth_frame_is_optical": true,
+      "future_depth_tail_recorded": true,
+      "camera_link_single_parent": true,
+      "optical_tf_parent": true,
+      "aligned_urdf_bytes": true,
+      "aligned_static_tf": true,
+      "native_costmap_sidecar_hash": true,
+      "native_costmaps_match_bag": true
+    },
+    "metrics": {
+      "shared_group_goal_proposals": {
+        "active_steps": 370,
+        "group_proposals": 740
+      },
+      "goal_clock_trace": {
+        "evaluations": 744,
+        "assignments": 6,
+        "expired_evaluations": 0,
+        "last_state_time_sim_s": 47.1025
+      },
+      "label_tail_s": 3.4025,
+      "max_actual_translation_m": 7.935920530659556,
+      "bag_message_counts": {
+        "/tf_static": 3,
+        "/clock": 18719,
+        "/tf": 20262,
+        "/camera/camera_info": 468,
+        "/camera/depth/image_rect_raw": 468,
+        "/scan": 234,
+        "/imu": 4680,
+        "/common/ground_truth": 2339,
+        "/odom": 1337,
+        "/dataset/scene_poses": 2781,
+        "/map": 1,
+        "/amcl_pose": 132,
+        "/global_costmap/costmap_raw": 32,
+        "/local_costmap/costmap_raw": 153,
+        "/dataset/events": 4,
+        "/navigate_to_pose/_action/status": 2,
+        "/plan": 68,
+        "/cmd_vel": 1392
+      },
+      "paired_stamps": 468,
+      "raw_depth_frames_bitwise_equal": 468,
+      "future_depth_frames": 36,
+      "tf_static_parents": {
+        "camera_imu_frame": [
+          "camera_link"
+        ],
+        "camera_optical_frame": [
+          "camera_link"
+        ],
+        "base_link": [
+          "base_footprint"
+        ],
+        "camera_link": [
+          "base_link"
+        ],
+        "imu_link": [
+          "base_link"
+        ],
+        "base_scan": [
+          "base_link"
+        ]
+      },
+      "bag_bytes": 28587471,
+      "navigation_status": "SUCCEEDED",
+      "actual_goal_reached": true,
+      "goal_xy_error_world_m": 0.07020047795882028,
+      "goal_yaw_error_world_rad": 0.0008471091352329948,
+      "active_sim_seconds": 33.0175,
+      "odom_world_error_max_m": 0.002764092947799847,
+      "descriptive_robot_human_gap_m": 0.12321992002660823
+    },
+    "missing_sources": [],
+    "runtime_commit": "e342baabf7fc6e972c79196f0ebc2ee35aed2b19",
+    "capture_freeze_sha256": "b95420a7758ca3c5009c1caecea0ce7aee2a01ae5155a4cb98ff5431a936168b",
+    "raw_result_sha256": "496d5088457cd1295f66ce9fd07f0580304c625910885a546530bf3b3e0d15ff",
+    "training_ready": false,
+    "scope": "Capture integrity and explicitly selected policy only; no WM eligibility or performance claim.",
+    "policy_sha256": "25c7dc5877b6bd17f4a63c0b9b12ead43168372b6d37213af037c593b46d65df"
+  },
+  "crossing_goal": {
+    "schema": "dynamuhsim_capture_audit/1",
+    "status": "PASS",
+    "policy": "capture_integrity_native_geometry_v4",
+    "checks": {
+      "measured": true,
+      "native_gpu": true,
+      "clean_exit": true,
+      "cleanup_empty": true,
+      "no_adapter_fault": true,
+      "recorder_closed": true,
+      "camera_bytes": true,
+      "friction_recognized": true,
+      "source_hashes": true,
+      "human_motion_profile": true,
+      "human_motion_bytes": true,
+      "human_motion_frozen": true,
+      "shared_group_goal_proposals": true,
+      "encounter_profile": true,
+      "encounter_bytes": true,
+      "encounter_frozen": true,
+      "encounter_initial_humans": true,
+      "encounter_initial_goals": true,
+      "human_goal_clock_profile": true,
+      "human_goal_clock_bytes": true,
+      "human_goal_clock_frozen": true,
+      "goal_clock_gate_matches_accepted_goal": true,
+      "goal_clock_trace": true,
+      "freeze_identity": true,
+      "pause_acknowledged": true,
+      "no_child_exit_errors": true,
+      "balanced_filter_teardown": true,
+      "event_order": true,
+      "label_tail_at_least3s": true,
+      "declared_navigation_recipe": true,
+      "live_navigation_parameters": true,
+      "live_moderate_parameters": true,
+      "result_pose_recorded": true,
+      "actual_goal_recomputed": true,
+      "paired_depth_present": true,
+      "paired_index_files_present": true,
+      "depth_shape_and_encoding": true,
+      "raw_topics_present": true,
+      "raw_events_match_jsonl": true,
+      "raw_depth_matches_float32_pairs": true,
+      "depth_frame_is_optical": true,
+      "future_depth_tail_recorded": true,
+      "camera_link_single_parent": true,
+      "optical_tf_parent": true,
+      "aligned_urdf_bytes": true,
+      "aligned_static_tf": true,
+      "native_costmap_sidecar_hash": true,
+      "native_costmaps_match_bag": true
+    },
+    "metrics": {
+      "shared_group_goal_proposals": {
+        "active_steps": 367,
+        "group_proposals": 734
+      },
+      "goal_clock_trace": {
+        "evaluations": 1013,
+        "assignments": 3,
+        "expired_evaluations": 0,
+        "last_state_time_sim_s": 48.3025
+      },
+      "label_tail_s": 3.385,
+      "max_actual_translation_m": 7.962255902663011,
+      "bag_message_counts": {
+        "/tf": 20781,
+        "/tf_static": 3,
+        "/clock": 19198,
+        "/dataset/scene_poses": 2852,
+        "/camera/camera_info": 481,
+        "/camera/depth/image_rect_raw": 481,
+        "/scan": 241,
+        "/imu": 4800,
+        "/common/ground_truth": 2399,
+        "/odom": 1371,
+        "/map": 1,
+        "/amcl_pose": 130,
+        "/global_costmap/costmap_raw": 32,
+        "/local_costmap/costmap_raw": 153,
+        "/dataset/events": 4,
+        "/navigate_to_pose/_action/status": 2,
+        "/plan": 68,
+        "/cmd_vel": 1385
+      },
+      "paired_stamps": 478,
+      "raw_depth_frames_bitwise_equal": 478,
+      "future_depth_frames": 36,
+      "tf_static_parents": {
+        "camera_imu_frame": [
+          "camera_link"
+        ],
+        "camera_optical_frame": [
+          "camera_link"
+        ],
+        "base_link": [
+          "base_footprint"
+        ],
+        "camera_link": [
+          "base_link"
+        ],
+        "imu_link": [
+          "base_link"
+        ],
+        "base_scan": [
+          "base_link"
+        ]
+      },
+      "bag_bytes": 24689900,
+      "navigation_status": "SUCCEEDED",
+      "actual_goal_reached": true,
+      "goal_xy_error_world_m": 0.04141360934000266,
+      "goal_yaw_error_world_rad": 0.007316725755100905,
+      "active_sim_seconds": 32.877500000000005,
+      "odom_world_error_max_m": 0.0023865827497232023,
+      "descriptive_robot_human_gap_m": 0.12749629838167578
+    },
+    "missing_sources": [],
+    "runtime_commit": "e342baabf7fc6e972c79196f0ebc2ee35aed2b19",
+    "capture_freeze_sha256": "6b13826e56895c642a0a3d1f46e90cd0e1cd3ac802a3cc7e4cad5873936b1b4f",
+    "raw_result_sha256": "e44f0d48ee5d52ac99eaaf8956dc76f68ad85d9bd21670e872cf093861b5469d",
+    "training_ready": false,
+    "scope": "Capture integrity and explicitly selected policy only; no WM eligibility or performance claim.",
+    "policy_sha256": "25c7dc5877b6bd17f4a63c0b9b12ead43168372b6d37213af037c593b46d65df"
+  }
+}
