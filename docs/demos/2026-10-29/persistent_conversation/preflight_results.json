@@ -1,0 +1,41 @@
+{
+  "status": "PASS",
+  "profiles": {
+    "native": {
+      "error": null,
+      "completed_steps": 120,
+      "minimum_guard_clearance_m": 0.24485128613042395,
+      "exact_poses": true,
+      "exact_groups": true,
+      "native_dispersal_exercised": true,
+      "clock_pass": true,
+      "clock_metrics": {
+        "evaluations": 178,
+        "assignments": 9,
+        "expired_evaluations": 0,
+        "last_state_time_sim_s": 23.302500000000002
+      }
+    },
+    "persistent_conversation_v1": {
+      "error": null,
+      "completed_steps": 120,
+      "minimum_guard_clearance_m": 0.24485128613042395,
+      "clock_pass": true,
+      "clock_metrics": {
+        "contract": "standing_snapshot_v1",
+        "active_steps": 120,
+        "human_age_snapshots": 720,
+        "evaluations": 0,
+        "assignments": 0,
+        "arrival_expiry_query_coverage": "NOT_EXERCISED",
+        "last_state_time_sim_s": 23.302500000000002
+      },
+      "lifecycle_pass": true,
+      "lifecycle_metrics": {
+        "samples": 120,
+        "native_non_dispersing": true
+      }
+    }
+  },
+  "scope": "120 measured ego inputs, not native closed-loop evidence."
+}
