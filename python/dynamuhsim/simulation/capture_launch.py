@@ -33,7 +33,7 @@ def generate_launch_description():
                                              MESA_D3D12_DEFAULT_ADAPTER_NAME="NVIDIA"))
     robot = simulation_nodes.RobotAssets("mecanum_robot", os.environ["DATASET_ROBOT_SDF"],
                                     str(share / "config/mecanum_bridge.yaml"),
-                                    str(share / "urdf/mecanum_robot.urdf"), "0.04")
+                                    os.environ.get("DATASET_ROBOT_URDF", str(share / "urdf/mecanum_robot.urdf")), "0.04")
     spawn = simulation_nodes.spawn_node(robot, "-28", "0", "0")
     bridge = simulation_nodes.bridge_node(robot.bridge)
     image = simulation_nodes.image_bridge_node()

@@ -1,0 +1,27 @@
+{
+  "schema": "geometry_ab_plan/1",
+  "scenario": "standing",
+  "seed": 45,
+  "baseline": "experiments/social_navigation/benchmark/generated/visual_demo_20261029T101053/capture",
+  "arms": [
+    {
+      "id": "B_aligned_080",
+      "config": "configs/capture/geometry_v4_inflation080.json",
+      "run": "experiments/social_navigation/benchmark/generated/geometry_ab_20261029/B_aligned_080"
+    },
+    {
+      "id": "C_aligned_045",
+      "config": "configs/capture/geometry_v4_inflation045.json",
+      "run": "experiments/social_navigation/benchmark/generated/geometry_ab_20261029/C_aligned_045"
+    }
+  ],
+  "controls": "Same physical SDF/camera/world/humans/start/goal, Nav2 weights and speed limits. Headless GPU capture for B and C; baseline had a GUI. No forced path, waypoint, or contact-based reward.",
+  "comparison_limits": "One seed, stochastic controller, baseline wall performance not comparable due to GUI; B vs C isolates inflation. A vs B changes URDF/TF plus footprint jointly.",
+  "criteria": [
+    "Preserve every attempt; no automatic retries or overwrite.",
+    "Audit live Nav2 parameters, frozen inputs, raw paired depth and actual static TF.",
+    "Goal success is separate from crossing the narrow H5-H6 opening.",
+    "Gate crossing evaluated against time-matched moving human positions; report stationary-pair qualification.",
+    "Conservative swept-disc clearance from recorded 50 Hz poses is descriptive; native contact force is unavailable."
+  ]
+}
