@@ -1,0 +1,58 @@
+{
+  "status": "PASS",
+  "split": "validation",
+  "model": "depth_linear",
+  "threshold": 0.5,
+  "model_sha256": "41f990bd581afd87d93bb93bd57ea758b51a914f31fd6bdb6f027ddd6e27f292",
+  "device": "NVIDIA GeForce RTX 4060 Laptop GPU",
+  "cuda": "12.8",
+  "numpy_max_logit_error": 1.430511474609375e-06,
+  "metrics": {
+    "overall": {
+      "samples": 30,
+      "tp": 11,
+      "fn": 1,
+      "fp": 0,
+      "tn": 18,
+      "recall": 0.9166666666666666,
+      "fpr": 0.0,
+      "precision": 1.0,
+      "balanced_accuracy": 0.9583333333333333,
+      "accuracy": 0.9666666666666667,
+      "f1": 0.9565217391304348
+    },
+    "by_scene": {
+      "p004": {
+        "samples": 5,
+        "tp": 2,
+        "fn": 0,
+        "fp": 0,
+        "tn": 3,
+        "recall": 1.0,
+        "fpr": 0.0,
+        "precision": 1.0,
+        "balanced_accuracy": 1.0,
+        "accuracy": 1.0,
+        "f1": 1.0
+      },
+      "p005": {
+        "samples": 25,
+        "tp": 9,
+        "fn": 1,
+        "fp": 0,
+        "tn": 15,
+        "recall": 0.9,
+        "fpr": 0.0,
+        "precision": 1.0,
+        "balanced_accuracy": 0.95,
+        "accuracy": 0.96,
+        "f1": 0.9473684210526316
+      }
+    },
+    "min_scene_balanced_accuracy": 0.95,
+    "macro_scene_balanced_accuracy": 0.975
+  },
+  "training_performed": false,
+  "test_split_read": false,
+  "source": "New inference on previously recorded depth validation proposals, not live Gazebo inference"
+}

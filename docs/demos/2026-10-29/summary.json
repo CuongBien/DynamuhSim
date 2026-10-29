@@ -1,0 +1,101 @@
+{
+  "date": "2026-10-29",
+  "source_revision": "46863865169214e776e92af5e65f72671b18dce7",
+  "new_physical_capture": true,
+  "scenario": "standing",
+  "seed": 45,
+  "recipe": "configs/capture/moderate_v3.json",
+  "navigation_status": "SUCCEEDED",
+  "actual_goal_reached": true,
+  "goal_xy_error_m": 0.07011792304226909,
+  "goal_yaw_error_rad": 0.04550917580257134,
+  "active_sim_seconds": 69.07,
+  "active_wall_seconds": 214.74101756899995,
+  "active_average_RTF": 0.32164325559185086,
+  "raw_depth_frames": 851,
+  "matched_depth_pairs": 850,
+  "capture_integrity": "PASS",
+  "renderer": "D3D12 (NVIDIA GeForce RTX 4060 Laptop GPU)",
+  "gui_user_confirmed_visible_and_interactive": true,
+  "gui_user_report": "C\u00f3 th\u1ea5y v\u00e0 thao t\u00e1c \u0111\u01b0\u1ee3c nh\u01b0ng ... c\u1ee1 30%",
+  "light_replay_RTF_observed": 1.0041092165578414,
+  "light_replay_is_new_physics": false,
+  "classifier_cuda_unit_tests": 10,
+  "classifier_validation": {
+    "status": "PASS",
+    "split": "validation",
+    "model": "depth_linear",
+    "threshold": 0.5,
+    "model_sha256": "41f990bd581afd87d93bb93bd57ea758b51a914f31fd6bdb6f027ddd6e27f292",
+    "device": "NVIDIA GeForce RTX 4060 Laptop GPU",
+    "cuda": "12.8",
+    "numpy_max_logit_error": 1.430511474609375e-06,
+    "metrics": {
+      "overall": {
+        "samples": 30,
+        "tp": 11,
+        "fn": 1,
+        "fp": 0,
+        "tn": 18,
+        "recall": 0.9166666666666666,
+        "fpr": 0.0,
+        "precision": 1.0,
+        "balanced_accuracy": 0.9583333333333333,
+        "accuracy": 0.9666666666666667,
+        "f1": 0.9565217391304348
+      },
+      "by_scene": {
+        "p004": {
+          "samples": 5,
+          "tp": 2,
+          "fn": 0,
+          "fp": 0,
+          "tn": 3,
+          "recall": 1.0,
+          "fpr": 0.0,
+          "precision": 1.0,
+          "balanced_accuracy": 1.0,
+          "accuracy": 1.0,
+          "f1": 1.0
+        },
+        "p005": {
+          "samples": 25,
+          "tp": 9,
+          "fn": 1,
+          "fp": 0,
+          "tn": 15,
+          "recall": 0.9,
+          "fpr": 0.0,
+          "precision": 1.0,
+          "balanced_accuracy": 0.95,
+          "accuracy": 0.96,
+          "f1": 0.9473684210526316
+        }
+      },
+      "min_scene_balanced_accuracy": 0.95,
+      "macro_scene_balanced_accuracy": 0.975
+    },
+    "training_performed": false,
+    "test_split_read": false,
+    "source": "New inference on previously recorded depth validation proposals, not live Gazebo inference"
+  },
+  "test_data_or_model_modified": false,
+  "classifier_is_live_ROS_component": false,
+  "dataset01_extended": false,
+  "local_evidence": "/home/cuongbien/DynamuhSim/experiments/social_navigation/benchmark/generated/visual_demo_20261029T101053",
+  "viewer_url": "http://localhost:35315/",
+  "temporary_viewer_url": true,
+  "limitations": [
+    "Validation inference rerun on an existing tiny same-avatar corpus, not new generalization evidence.",
+    "Classifier uses sensor geometry proposals, not full-image detection; one validation human missed.",
+    "New physical capture and lightweight recorded pose replay are separate modes.",
+    "Live capture is CPU-bound in aggregate; GPU rendering was verified, GPU utilization sampled at 24%, live GUI ownership/hardware details retained in local logs."
+  ],
+  "failed_audit_invocations_preserved": [
+    "No ROS environment: rosbag2_py import error",
+    "No explicit local source-root: source-only audit false; explicit root then PASS, no data or criteria changed"
+  ],
+  "depth_fixture_unit_tests": 2,
+  "replay_layout_tests": 8,
+  "capture_source_freeze_unchanged": true
+}

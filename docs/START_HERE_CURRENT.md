@@ -1,6 +1,6 @@
 # Bắt đầu ở đây — những phần đang dùng
 
-Cập nhật đường dẫn source ngày **28/10/2026**. Công việc hiện tại: **đọc bộ dữ liệu đầu tiên, xem lại dữ liệu và chuẩn bị train thử World Model dự báo BEV**. Các thử nghiệm trước được giữ để tra cứu, chưa cần chạy lại.
+Cập nhật ngày **29/10/2026**. Công việc hiện tại: **đọc bộ dữ liệu đầu tiên, xem lại dữ liệu và chuẩn bị train thử World Model dự báo BEV**. Các thử nghiệm trước được giữ để tra cứu, chưa cần chạy lại.
 
 ## 1. Hiện tại đã có gì?
 
@@ -12,7 +12,7 @@ Cập nhật đường dẫn source ngày **28/10/2026**. Công việc hiện t�
 | World Model | Đã có dữ liệu pilot; **chưa train WM** |
 | RL | Chưa có reward hợp lệ hoặc giao diện step/reset đã nghiệm thu |
 | Xem lại camera | Có bản ghi thật và trang phát video với nút dừng/tua |
-| Cửa sổ Gazebo trên Windows/WSLg | Render NVIDIA đã kiểm tra; **chưa nghiệm thu hiển thị cửa sổ trên màn hình người dùng** |
+| Cửa sổ Gazebo trên Windows/WSLg | Lượt 29/10 đã được người dùng xác nhận thấy cảnh và kéo/zoom được; capture khoảng0,32×, replay nhẹ khoảng1× |
 
 Đọc và train offline trên dữ liệu đã thu **không cần mở Gazebo hoặc chạy lại ROS/Nav2**. Bộ hiện tại cùng nhà xưởng, tuyến robot và mẫu người; chưa chứng minh khả năng tổng quát sang môi trường hoặc simulator khác. Test hiện chỉ có tình huống khởi tạo nhóm đứng.
 
@@ -85,7 +85,7 @@ Mở **http://localhost:8765/** trong trình duyệt Windows. Giữ terminal ch�
 
 Trang có dừng, tua, tốc độ 1×/2×/4× và toàn màn hình. Video là **90 frame camera Gazebo ghi thật**, mặc định phát nhanh 4×; camera ngoài chỉ dùng minh họa, không phải đầu vào WM.
 
-Gazebo pose replay và hướng dẫn build ở [README replay](../experiments/social_navigation/replay/wm_dataset_replay/README.md). Chỉ dùng khi cần kiểm tra 3D: nó nội suy XY/yaw đã ghi, không chạy lại Nav2/vật lý hay tái tạo cảm biến. Hiện ưu tiên trình duyệt để xem, vì lỗi hiển thị cửa sổ WSLg còn tồn tại.
+Gazebo pose replay và hướng dẫn build ở [README replay](../experiments/social_navigation/replay/wm_dataset_replay/README.md). Chỉ dùng khi cần kiểm tra 3D: nó nội suy XY/yaw đã ghi, không chạy lại Nav2/vật lý hay tái tạo cảm biến. Lượt 29/10 đã xem được GUI; chế độ capture còn chậm khoảng0,32×, replay nhẹ khoảng1×. Xem [kết quả demo mới](demos/2026-10-29/README.md).
 
 ## 5. Khôi phục dữ liệu từ Drive
 
