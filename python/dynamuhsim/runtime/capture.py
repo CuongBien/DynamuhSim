@@ -91,10 +91,12 @@ def prepare_run(repo, run_dir, config_path, scenario, seed, gui=False, *, planne
     config = validate_config(json.loads(config_path.read_text()))
     if scenario not in ["standing", "walking"] or type(seed) is not int or seed not in config["allowed_seeds"]:
         raise ValueError("Scenario/seed not allowed by capture config")
-    if human_motion_profile not in ["legacy", "group_orca_v1"]:
+    if human_motion_profile not in ["legacy", "group_orca_v1", "group_goal_v1"]:
         raise ValueError("Unsupported human motion profile")
     if human_goal_clock not in ["native_wall", "sim_v1"]:
         raise ValueError("Unsupported human goal clock")
+    if human_motion_profile == "group_goal_v1" and human_goal_clock != "sim_v1":
+        raise ValueError("Shared group goal profile requires declared sim_v1 clock")
     encounter = None
     if encounter_profile is not None:
         from dynamuhsim.simulation.encounters import fixture, initial_clearance
@@ -129,8 +131,8 @@ def prepare_run(repo, run_dir, config_path, scenario, seed, gui=False, *, planne
     dump(run_dir / "preflight.json", preflight)
     plan = dict(schema="dynamuhsim_capture_plan/1", config=config, scenario=scenario, seed=seed, gui=bool(gui))
     if human_motion_profile != "legacy":
-        from dynamuhsim.simulation.human_groups import PROFILE
-        dump(assets / "human_motion.json", PROFILE)
+        from dynamuhsim.simulation.human_motion_profiles import profile_config
+        dump(assets / "human_motion.json", profile_config(human_motion_profile))
         files.append(assets / "human_motion.json")
         plan["human_motion_profile"] = human_motion_profile
     if encounter is not None:
@@ -174,7 +176,7 @@ def verify_run(repo, run_dir):
     if plan.get("config", {}).get("schema") in ["dynamuhsim_capture_config/4", "dynamuhsim_capture_config/5", "dynamuhsim_capture_config/6", "dynamuhsim_capture_config/7"] and str((run_dir / "assets/mecanum_aligned.urdf").relative_to(repo)) not in manifest["source_sha256"]:
         raise RuntimeError("Aligned robot description missing from freeze")
     if "human_motion_profile" in plan:
-        from dynamuhsim.simulation.human_groups import validate_profile
+        from dynamuhsim.simulation.human_motion_profiles import validate_profile
         asset = run_dir / "assets/human_motion.json"
         if str(asset.relative_to(repo)) not in manifest["source_sha256"]:
             raise RuntimeError("Human motion profile missing from freeze")

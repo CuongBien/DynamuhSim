@@ -12,14 +12,14 @@ k=make_kernel(a.scenario,a.seed);dt=.1
 sys.path.insert(0,str(Path(__file__).resolve().parents[4]/'python'))
 from dynamuhsim.simulation.encounters import load_fixture,group_goals
 encounter=load_fixture(k,a.runtime)
-from dynamuhsim.simulation.human_groups import load_profile
+from dynamuhsim.simulation.human_motion_profiles import load_profile
 human_motion=load_profile(k,a.runtime)
 from dynamuhsim.simulation.goal_clock import load_goal_clock
 goal_clock=load_goal_clock(k,a.runtime)
 current=copy.deepcopy(k.humans());server=socket.socket(socket.AF_UNIX,socket.SOCK_STREAM);server.bind(a.socket);server.listen(1)
 (a.runtime/'ready.json').write_text(json.dumps(dict(humans=current,groups=k.groups(),obstacles=42,native_dt=dt,robot_radius=.25,human_radius=.36,epoch=0,scenario=a.scenario,seed=a.seed,response_variant='native_initial_groups_continuous_lifecycle_response_v2',reactive_standing=a.scenario=='standing',standing_speed_cap_mps=.2,activation_center_distance_m=1.4,requires_start_gate=True)))
 if human_motion is not None:
-    ready=json.loads((a.runtime/'ready.json').read_text());ready['human_motion_profile']='group_orca_v1';(a.runtime/'ready.json').write_text(json.dumps(ready))
+    ready=json.loads((a.runtime/'ready.json').read_text());ready['human_motion_profile']=human_motion.profile;(a.runtime/'ready.json').write_text(json.dumps(ready))
 if encounter is not None:
     ready=json.loads((a.runtime/'ready.json').read_text());ready['encounter']=encounter;(a.runtime/'ready.json').write_text(json.dumps(ready))
 if goal_clock is not None:
@@ -46,7 +46,7 @@ try:
                     if goal_clock is not None:goal_clock.end_step(t+dt)
                 previous=t;transport_step+=1
                 reply=dict(time=t,state_time=t+dt,step=transport_step,native_step=k.steps,active_phase=active,before=before,humans=current,groups_before=groups_before,groups=k.groups(),finish_events=k.motion.events[events:],motion_guard=k.motion.steps[-1] if active else None,compute_ms=1000*(time.monotonic()-start))
-                if human_motion is not None:reply["group_orca"]=human_motion.last
+                if human_motion is not None:reply["group_orca" if human_motion.profile=="group_orca_v1" else "group_intent"]=human_motion.last
                 if encounter is not None:
                     reply["encounter_goals"]=group_goals(k)
                     reply["encounter_goal_ages_wall_s"]={str(h.id):time.time()-h.initial_time for g in k.env.moving_interactions for h in g.humans}

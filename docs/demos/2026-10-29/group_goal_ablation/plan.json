@@ -1,0 +1,47 @@
+{
+  "schema": "group_goal_ablation_plan/1",
+  "raw_root": "experiments/social_navigation/benchmark/generated/group_goal_ablation_20261029",
+  "reference_root": "experiments/social_navigation/benchmark/generated/sim_goal_clock_20261029",
+  "cases": [
+    {
+      "id": "head_on_goal",
+      "reference_id": "head_on_group_sim",
+      "encounter_profile": "head_on",
+      "human_motion_profile": "group_goal_v1",
+      "human_goal_clock": "sim_v1",
+      "scenario": "walking",
+      "seed": 45,
+      "config": "configs/capture/geometry_v7_mppi_resample.json"
+    },
+    {
+      "id": "crossing_goal",
+      "reference_id": "crossing_group_sim",
+      "encounter_profile": "crossing",
+      "human_motion_profile": "group_goal_v1",
+      "human_goal_clock": "sim_v1",
+      "scenario": "walking",
+      "seed": 45,
+      "config": "configs/capture/geometry_v7_mppi_resample.json"
+    }
+  ],
+  "preflight": {
+    "steps": 120,
+    "dt_s": 0.1,
+    "profiles": [
+      "group_orca_v1",
+      "group_goal_v1"
+    ],
+    "ego_inputs": "Recorded robot inputs from each reference, unchanged; counterfactual test, not closed-loop avoidance."
+  },
+  "criteria": [
+    "Declare plan before component/native execution; one attempt per cell, no overwrite or automatic retry. Commit runtime before native capture.",
+    "Change only the upper moving-group velocity proposal: normalized native goal preference replaces rigid group-circle ORCA. Native per-person ORCA/swept projection, group smoothing/noise/RNG/turn/speed/goal/lifecycle logic, simulation clock and all Nav2/robot/camera parameters remain unchanged.",
+    "Component launch gate: old group_orca_v1 must exactly reproduce the120 reference worker human XY/yaw samples; candidate must finish120 same-ego steps without fault and every predicted per-person guard clearance must stay positive. Any failure is preserved and blocks this series pending diagnosis.",
+    "Component motion screen: flag aggregate yaw reduction<50% versus matched reference, maximum group member distance from centroid more than.25m over reference, or backward-moving fraction more than.05 over reference. These are diagnostics, not launch gating if safety/identity passes.",
+    "Native: camera/depth/TF/native costmap/GPU/clock/direct-group-intent source and trace integrity must PASS.",
+    "Native physical screen: SUCCEEDED with independent actual XY<=.2m/yaw<=.25rad, positive continuous swept robot/human and human/human/static clearance, zero progress failures/action recoveries.",
+    "Native encounter coverage: center distance<=1.5m for>=.5s union duration and initial intent>=1s first12s. Missing coverage is NOT_EXERCISED, not avoidance acceptance.",
+    "Native motion screen: mean full-episode yaw rate at least50% below its reference, moving-group maximum member-centroid radius no more than reference+.25m, and backward-moving fraction no more than reference+.05. Compare measured trajectories with unpinned MPPI RNG; no isolated causal or multi-seed naturalness claim.",
+    "No collision-guard weakening, forced robot commands/waypoints, controller tuning, goal/tolerance relaxation or timeout shortening. Preserve all failures; no default promotion or WM/RL dataset registration in this bounded series."
+  ]
+}

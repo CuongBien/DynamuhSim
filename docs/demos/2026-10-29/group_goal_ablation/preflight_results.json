@@ -1,0 +1,159 @@
+{
+  "schema": "group_goal_preflight/1",
+  "status": "PASS",
+  "cases": [
+    {
+      "id": "head_on_goal",
+      "profiles": {
+        "group_orca_v1": {
+          "error": null,
+          "completed_steps": 120,
+          "steps": 120,
+          "yaw_total_rad": [
+            3.9250547149064205,
+            3.7328790040090114,
+            4.515348127442894,
+            8.186599664698829,
+            8.110261678883731,
+            8.101442774627843
+          ],
+          "path_m": [
+            3.4849731960831827,
+            3.775712933724936,
+            4.196582001271813,
+            5.324658701703096,
+            5.273863438865765,
+            5.7601458561859396
+          ],
+          "max_member_centroid_radius_m": 1.4159424004393604,
+          "moving_backwards_fraction": 0.007587253414264037,
+          "minimum_guard_clearance_m": 0.042073701638003724,
+          "clock_trace_pass": true,
+          "clock_trace": {
+            "evaluations": 242,
+            "assignments": 3,
+            "expired_evaluations": 0,
+            "last_state_time_sim_s": 23.0025
+          },
+          "exact_reference_poses": true,
+          "max_reference_pose_difference": 0.0
+        },
+        "group_goal_v1": {
+          "error": null,
+          "completed_steps": 120,
+          "steps": 120,
+          "yaw_total_rad": [
+            3.349102516366197,
+            3.384072030580357,
+            3.4507824473522266,
+            3.595281238046593,
+            3.652475149115193,
+            3.476545642091226
+          ],
+          "path_m": [
+            7.433636294600555,
+            7.098344242056949,
+            6.808472872718518,
+            7.574643694068846,
+            7.3408557399524845,
+            7.5156660472843
+          ],
+          "max_member_centroid_radius_m": 1.5283882743130381,
+          "moving_backwards_fraction": 0.0,
+          "minimum_guard_clearance_m": 0.0401732785190948,
+          "clock_trace_pass": true,
+          "clock_trace": {
+            "evaluations": 244,
+            "assignments": 6,
+            "expired_evaluations": 0,
+            "last_state_time_sim_s": 23.0025
+          }
+        }
+      },
+      "launch_gate_pass": true,
+      "diagnostic_screen": {
+        "yaw_reduction_fraction": 0.4282922527940646,
+        "cohesion_radius_change_m": 0.11244587387367777,
+        "backward_fraction_change": -0.007587253414264037,
+        "motion_screen_pass": false
+      }
+    },
+    {
+      "id": "crossing_goal",
+      "profiles": {
+        "group_orca_v1": {
+          "error": null,
+          "completed_steps": 120,
+          "steps": 120,
+          "yaw_total_rad": [
+            6.330876125549315,
+            6.237406818268152,
+            6.252096071247507,
+            8.579704751389492,
+            8.088025397269192,
+            8.128378595934803
+          ],
+          "path_m": [
+            5.320319918361503,
+            5.948969855574832,
+            6.3702796986727455,
+            3.3936273998491204,
+            2.7962117421263213,
+            2.2243638928520024
+          ],
+          "max_member_centroid_radius_m": 1.5024163430343926,
+          "moving_backwards_fraction": 0.008726003490401396,
+          "minimum_guard_clearance_m": 0.04067253816375027,
+          "clock_trace_pass": true,
+          "clock_trace": {
+            "evaluations": 240,
+            "assignments": 0,
+            "expired_evaluations": 0,
+            "last_state_time_sim_s": 22.602500000000003
+          },
+          "exact_reference_poses": true,
+          "max_reference_pose_difference": 0.0
+        },
+        "group_goal_v1": {
+          "error": null,
+          "completed_steps": 120,
+          "steps": 120,
+          "yaw_total_rad": [
+            2.617221184723917,
+            2.4616601231565967,
+            2.518399875407788,
+            1.4270400429110115,
+            1.3266682357063417,
+            1.3675476357535437
+          ],
+          "path_m": [
+            7.475356911700023,
+            8.564163106495213,
+            8.339502222358892,
+            8.649743831091559,
+            7.346474274385468,
+            9.286216237198106
+          ],
+          "max_member_centroid_radius_m": 2.517669966775964,
+          "moving_backwards_fraction": 0.0,
+          "minimum_guard_clearance_m": 0.037480531695280206,
+          "clock_trace_pass": true,
+          "clock_trace": {
+            "evaluations": 273,
+            "assignments": 3,
+            "expired_evaluations": 0,
+            "last_state_time_sim_s": 22.602500000000003
+          }
+        }
+      },
+      "launch_gate_pass": true,
+      "diagnostic_screen": {
+        "yaw_reduction_fraction": 0.7313278143294737,
+        "cohesion_radius_change_m": 1.0152536237415712,
+        "backward_fraction_change": -0.008726003490401396,
+        "motion_screen_pass": false
+      }
+    }
+  ],
+  "scope": "Same measured ego inputs. Safety/identity gate separate from motion screen; no closed-loop/native-physics/naturalness claim."
+}

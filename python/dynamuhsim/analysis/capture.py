@@ -48,13 +48,16 @@ def audit_capture(run, policy, *, source_roots=(), git_repo=None, read_bag=bag_m
     _, missing = resolve_sources(r["source_sha256"], source_roots, git_repo=git_repo, commit=r["head"])
     checks["source_hashes"] = bool(r["source_sha256"]) and not missing
     if plan_path.is_file() and "human_motion_profile" in load_json(plan_path):
-        from dynamuhsim.simulation.human_groups import validate_profile
+        from dynamuhsim.simulation.human_motion_profiles import validate_profile
         declared = load_json(plan_path)["human_motion_profile"]
         asset, runtime = run / "assets/human_motion.json", run / "runtime/human_motion.json"
         checks["human_motion_profile"] = validate_profile(load_json(asset))["profile"] == declared == r.get("human_motion_profile") == load_json(run / "runtime/ready.json").get("human_motion_profile")
         checks["human_motion_bytes"] = sha256_file(asset) == sha256_file(runtime)
         freeze = load_json(run / "capture_freeze.json")["source_sha256"]
         checks["human_motion_frozen"] = any(name.endswith("/assets/human_motion.json") and digest == sha256_file(asset) for name, digest in freeze.items())
+    if plan_path.is_file() and load_json(plan_path).get("human_motion_profile") == "group_goal_v1":
+        from dynamuhsim.simulation.group_intent import verify_goal_intents
+        checks["shared_group_goal_proposals"], metrics["shared_group_goal_proposals"] = verify_goal_intents(jsonl_rows(run / "runtime/worker_trajectory.jsonl"))
     if plan_path.is_file() and "encounter_profile" in load_json(plan_path):
         from dynamuhsim.simulation.encounters import validate_fixture, initial_humans
         asset, runtime = run / "assets/encounter.json", run / "runtime/encounter.json"
