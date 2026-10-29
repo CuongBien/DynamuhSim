@@ -55,6 +55,19 @@ def audit_capture(run, policy, *, source_roots=(), git_repo=None, read_bag=bag_m
         checks["human_motion_bytes"] = sha256_file(asset) == sha256_file(runtime)
         freeze = load_json(run / "capture_freeze.json")["source_sha256"]
         checks["human_motion_frozen"] = any(name.endswith("/assets/human_motion.json") and digest == sha256_file(asset) for name, digest in freeze.items())
+    if plan_path.is_file() and "encounter_profile" in load_json(plan_path):
+        from dynamuhsim.simulation.encounters import validate_fixture, initial_humans
+        asset, runtime = run / "assets/encounter.json", run / "runtime/encounter.json"
+        spec = validate_fixture(load_json(asset))
+        declared = load_json(plan_path)["encounter_profile"]
+        ready = load_json(run / "runtime/ready.json")
+        checks["encounter_profile"] = spec["profile"] == declared == r.get("encounter_profile") == ready.get("encounter", {}).get("profile")
+        checks["encounter_bytes"] = sha256_file(asset) == sha256_file(runtime)
+        freeze = load_json(run / "capture_freeze.json")["source_sha256"]
+        checks["encounter_frozen"] = any(name.endswith("/assets/encounter.json") and digest == sha256_file(asset) for name, digest in freeze.items())
+        observed = {h["id"]:h for h in ready["humans"]}
+        checks["encounter_initial_humans"] = set(observed) == set(range(1,7)) and all(all(abs(h[key]-observed[h["id"]][key]) < 1e-10 for key in ["x","y","yaw"]) for h in initial_humans(spec))
+        checks["encounter_initial_goals"] = ready["encounter"]["initial_groups"] == [dict(members=g["members"],goal=g["goal"]) for g in spec["groups"]]
     checks["freeze_identity"] = sha256_file(run / "capture_freeze.json") == r["capture_freeze_sha256"]
     q = r["server_shutdown"]["quiesce"]
     checks["pause_acknowledged"] = q["pause_acknowledged"] and q["simulation_time_stable"]

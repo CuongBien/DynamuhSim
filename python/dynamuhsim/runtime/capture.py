@@ -85,7 +85,7 @@ def capture_sources(repo):
     return sorted(set(files))
 
 
-def prepare_run(repo, run_dir, config_path, scenario, seed, gui=False, *, planner_diagnostics=False, human_motion_profile="legacy"):
+def prepare_run(repo, run_dir, config_path, scenario, seed, gui=False, *, planner_diagnostics=False, human_motion_profile="legacy", encounter_profile=None):
     repo, run_dir, config_path = Path(repo).resolve(), Path(run_dir).resolve(), Path(config_path).resolve()
     run_dir.relative_to(repo)
     config = validate_config(json.loads(config_path.read_text()))
@@ -93,6 +93,13 @@ def prepare_run(repo, run_dir, config_path, scenario, seed, gui=False, *, planne
         raise ValueError("Scenario/seed not allowed by capture config")
     if human_motion_profile not in ["legacy", "group_orca_v1"]:
         raise ValueError("Unsupported human motion profile")
+    encounter = None
+    if encounter_profile is not None:
+        from dynamuhsim.simulation.encounters import fixture, initial_clearance
+        if scenario != "walking":
+            raise ValueError("Encounter profiles require walking scenario")
+        encounter = fixture(encounter_profile)
+        initial_clearance(encounter, json.loads((repo / "experiments/social_navigation/warehouse/layout.json").read_text())["obstacles"])
     files = capture_sources(repo) + [config_path]
     for path in files:
         path.relative_to(repo)
@@ -124,6 +131,10 @@ def prepare_run(repo, run_dir, config_path, scenario, seed, gui=False, *, planne
         dump(assets / "human_motion.json", PROFILE)
         files.append(assets / "human_motion.json")
         plan["human_motion_profile"] = human_motion_profile
+    if encounter is not None:
+        dump(assets / "encounter.json", encounter)
+        files.append(assets / "encounter.json")
+        plan["encounter_profile"] = encounter_profile
     if planner_diagnostics:plan["planner_diagnostics"] = True
     dump(run_dir / "plan.json", plan)
     files += [assets / "mecanum_camera.sdf", run_dir / "plan.json", run_dir / "preflight.json"]
@@ -162,6 +173,13 @@ def verify_run(repo, run_dir):
             raise RuntimeError("Human motion profile missing from freeze")
         if validate_profile(json.loads(asset.read_text()))["profile"] != plan["human_motion_profile"]:
             raise RuntimeError("Human motion profile differs from plan")
+    if "encounter_profile" in plan:
+        from dynamuhsim.simulation.encounters import validate_fixture
+        asset = run_dir / "assets/encounter.json"
+        if str(asset.relative_to(repo)) not in manifest["source_sha256"]:
+            raise RuntimeError("Encounter fixture missing from freeze")
+        if validate_fixture(json.loads(asset.read_text()))["profile"] != plan["encounter_profile"]:
+            raise RuntimeError("Encounter fixture differs from plan")
     return manifest
 
 
@@ -186,6 +204,9 @@ class CaptureContext:
         if "human_motion_profile" in self.plan:
             shutil.copyfile(self.run_dir / "assets/human_motion.json", runtime / "human_motion.json")
             result["human_motion_profile"] = self.plan["human_motion_profile"]
+        if "encounter_profile" in self.plan:
+            shutil.copyfile(self.run_dir / "assets/encounter.json", runtime / "encounter.json")
+            result["encounter_profile"] = self.plan["encounter_profile"]
         result.update(capture_schema="dynamuhsim_capture/2", capture_freeze_sha256=sha(self.run_dir / "capture_freeze.json"),
                       experiment="Versioned capture API; native camera and moderate Nav2 treatment",
                       capture_recipe_schema=self.config["schema"],

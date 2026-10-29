@@ -1,0 +1,67 @@
+{
+  "schema": "encounter_regression_plan/1",
+  "raw_root": "experiments/social_navigation/benchmark/generated/encounter_regression_20261029",
+  "social_cases": [
+    {
+      "id": "head_on_legacy",
+      "encounter_profile": "head_on",
+      "human_motion_profile": "legacy",
+      "seed": 45,
+      "scenario": "walking",
+      "config": "configs/capture/geometry_v7_mppi_resample.json"
+    },
+    {
+      "id": "head_on_group",
+      "encounter_profile": "head_on",
+      "human_motion_profile": "group_orca_v1",
+      "seed": 45,
+      "scenario": "walking",
+      "config": "configs/capture/geometry_v7_mppi_resample.json"
+    },
+    {
+      "id": "crossing_legacy",
+      "encounter_profile": "crossing",
+      "human_motion_profile": "legacy",
+      "seed": 45,
+      "scenario": "walking",
+      "config": "configs/capture/geometry_v7_mppi_resample.json"
+    },
+    {
+      "id": "crossing_group",
+      "encounter_profile": "crossing",
+      "human_motion_profile": "group_orca_v1",
+      "seed": 45,
+      "scenario": "walking",
+      "config": "configs/capture/geometry_v7_mppi_resample.json"
+    }
+  ],
+  "gap_cases": [
+    {
+      "id": "gap_wide_resample",
+      "case": "wide",
+      "treatment": "resample"
+    },
+    {
+      "id": "gap_narrow_resample",
+      "case": "narrow",
+      "treatment": "resample"
+    }
+  ],
+  "criteria": [
+    "Freeze source, config and encounter assets before the first native capture. One fresh attempt per declared cell; never retry/overwrite failures.",
+    "All runs: capture integrity audit (native NVIDIA GPU, raw paired depth, numeric TF, costmaps, cleanup) must PASS independently from behavior.",
+    "Robot physical screen: action SUCCEEDED with independent world XY<=.20m/yaw<=.25rad, positive swept robot/human and continuous static clearance; count all progress failures/recoveries.",
+    "Gap screen: actual bounding-circle passage across x=-24 inside the declared aperture, positive continuous static clearance, actual goal and no recovery. Compare v6 originals as reference; no promotion from social-only outcomes.",
+    "Social near-encounter coverage: at least one native robot/human center distance<=1.5m, with at least .5s cumulative active duration (union over humans). Separately measure minimum distance. If absent, mark NOT_EXERCISED instead of claiming avoidance PASS.",
+    "Initial-intent coverage: head-on native member vx<-.05m/s or crossing abs(vy)>.05m/s for at least1s during first12s; report changes of native group goals. Actual near encounters and coverage are outcomes, not guaranteed by the fixture name.",
+    "Human diagnostics: first12s and whole-run cumulative absolute yaw, yaw per metre, speed/facing alignment, centroid/member spread, human/human and human/static swept clearance; report native goal-wall-clock ages/changes. Compare legacy/adapter under matching initial conditions, not matching subsequent ego inputs.",
+    "No goal/progress tolerance loosening, forced robot cmd_vel or waypoint, robot model or default ROS changes. Seed45/one native attempt per cell cannot establish robustness; MPPI RNG not pinned.",
+    "Native human goal expiry uses host wall time, not sim time. Initial directions/goals are forced only at initialization; native retargeting/lifecycle then remain active. Results do not constitute naturalness or WM/RL training acceptance."
+  ],
+  "test_suite": {
+    "tests": 259,
+    "skipped": 2,
+    "status": "OK"
+  },
+  "unchanged": "Native robot/camera/aligned geometry, map/start/goal, tolerances/progress checker and velocities; per-person ORCA/projection; group_orca_v1 formula; native lifecycle/retargeting after explicit initial fixture."
+}
