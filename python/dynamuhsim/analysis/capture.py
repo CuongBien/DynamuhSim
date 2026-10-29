@@ -112,6 +112,10 @@ def audit_capture(run, policy, *, source_roots=(), git_repo=None, read_bag=bag_m
     bridge_stop = r["server_shutdown"].get("ground_truth_bridge_shutdown")
     if bridge_stop is not None:
         checks["ordered_ground_truth_bridge_exit"] = bridge_stop.get("status") == "OBSERVED" and bridge_stop.get("clean") is True
+    transport_stop = r["server_shutdown"].get("transport_bridge_shutdown")
+    if transport_stop is not None:
+        children = transport_stop.get("bridges", [])
+        checks["ordered_launch_transport_bridge_exit"] = transport_stop.get("status") == "OBSERVED" and transport_stop.get("clean") is True and len(children) == 4 and {v.get("role") for v in children} == {"ground_truth", "obstacle", "camera_image", "robot"} and all(v.get("status") == "OBSERVED" and v.get("clean") is True for v in children)
     match = re.search(r"teardown pre=(\d+) post=(\d+)", text)
     checks["balanced_filter_teardown"] = bool(match and match[1] == match[2] and int(match[1]) > 0)
     events = list(jsonl_rows(out / "events.jsonl"))

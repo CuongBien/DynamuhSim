@@ -26,7 +26,11 @@ def stop_paused(guard,original_stop,world='social_warehouse', *, before_stop=Non
     bridge = (before_stop() if acknowledged and settled else dict(status="NOT_QUIESCENT", clean=False)) if before_stop else None
     result=original_stop(guard)
     if bridge is not None:
-        result["ground_truth_bridge_shutdown"] = bridge
+        if "bridges" in bridge:
+            result["transport_bridge_shutdown"] = bridge
+            result["ground_truth_bridge_shutdown"] = next((v for v in bridge["bridges"] if v.get("role") == "ground_truth"), dict(status="NOT_OBSERVED",clean=False))
+        else:
+            result["ground_truth_bridge_shutdown"] = bridge
     result['quiesce']=dict(pause_acknowledged=acknowledged,simulation_time_stable=settled,
         settle_wall_s=QUIET_SECONDS,stats=stats,request_returncode=request.returncode,
         response=request.stdout.strip(),stderr=request.stderr.strip(),is_gpu_fence=False)

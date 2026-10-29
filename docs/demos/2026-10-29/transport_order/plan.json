@@ -1,0 +1,61 @@
+{
+  "schema": "transport_order_validation/1",
+  "raw_root": "experiments/social_navigation/benchmark/generated/transport_order_20261029",
+  "cases": [
+    {
+      "id": "conversation_s48_transport",
+      "scenario": "standing",
+      "seed": 48,
+      "human_motion_profile": "legacy",
+      "human_goal_clock": "sim_v1",
+      "human_lifecycle_profile": "persistent_conversation_v1",
+      "config": "configs/capture/geometry_v7_mppi_resample.json"
+    },
+    {
+      "id": "walking_s46_transport",
+      "scenario": "walking",
+      "seed": 46,
+      "encounter_profile": "head_on",
+      "human_motion_profile": "group_cohesion_v2",
+      "human_goal_clock": "sim_v1",
+      "human_lifecycle_profile": "native",
+      "config": "configs/capture/geometry_v7_mppi_resample.json"
+    }
+  ],
+  "walking_thresholds": {
+    "head_on": {
+      "max_mean_yaw_rate_turns_s": 0.07490851102688245,
+      "max_member_centroid_radius_m": 1.8443939879820748,
+      "max_moving_backwards_fraction": 0.05481099656357388,
+      "reference_id": "head_on_group_sim",
+      "reference_seed": 45
+    },
+    "crossing": {
+      "max_mean_yaw_rate_turns_s": 0.07256809522085717,
+      "max_member_centroid_radius_m": 1.7524163430343962,
+      "max_moving_backwards_fraction": 0.05437062937062937,
+      "reference_id": "crossing_group_sim",
+      "reference_seed": 45
+    }
+  },
+  "protected_sha256": {
+    "python/dynamuhsim/simulation/goal_clock.py": "0d7529f2c6ffc0bf7a5f8524514fb99c4c24c1ba37f36f9921fefe2354c4c334",
+    "python/dynamuhsim/simulation/group_cohesion_heading.py": "f754692e61ee3c36ac10b9b205e7c967d8f076c7056ed41e0022b7213ae0dc55",
+    "experiments/social_navigation/navigation/socnavgym_group_nav2/reactive_motion.py": "821380fc1f1d95d647a8b0576a9ca6f8573c2af66feec20a08f3f361e3981085",
+    "experiments/social_navigation/navigation/socnavgym_group_nav2/standing_projection.py": "be1d9f1546333aa57234c2d6b4cf622fc016ef4f1fd63251f28d8efbea194e40",
+    "experiments/social_navigation/navigation/socnavgym_group_nav2/fixture.py": "2f217fc7d87bbb5950567b119d68baafba1b62515229c8b416247484c5b93a02",
+    "experiments/social_navigation/navigation/socnavgym_group_nav2/config.yaml": "8d12dd63d9ab64ea5467ab35e23712bc89d019740ab99fcd5d98e2e18b944c4d",
+    "experiments/social_navigation/navigation/socnavgym_response_fix/responsive_motion.py": "7e94fb78bb1a6552c7c6b17654bf90ba2a937145837916b783ddeaa36b45a4c4",
+    "experiments/social_navigation/navigation/socnavgym_response_fix/projection.py": "260d0775a10bc6b510c217a26e02a877a4394ef3f3f56475740ea14d52c841d9",
+    "configs/capture/geometry_v7_mppi_resample.json": "c0362dc65aafbd278f2e6dc5c01d3c6210c2afb19ed2b5514abd0abd910c946e",
+    "experiments/social_navigation/vendor/SocNavGym/socnavgym/envs/socnavenv_v2.py": "9444d03f1d2c407c0a48578135faedd32a80431d5abb22cfe3582c473a826696",
+    "experiments/social_navigation/vendor/SocNavGym/socnavgym/envs/utils/human_human.py": "2648268352411745b8aaca5f9971cad6353fb8ee550be91a428277deafa54219"
+  },
+  "criteria": [
+    "Two fresh revised-runtime cells declared before execution, one attempt each. Preserve all original cohort FAIL/ERROR and conversation_s48 failed shutdown. Do not overwrite or relabel them.",
+    "Only capture teardown changes: four exact ROS-launch-startup bridge PIDs, current same-UID session token and executable/arguments validated; one pidfd SIGINT each in ground_truth/obstacle/camera_image/robot order, with clean launch terminal ACK before Gazebo stop. Original native transport process remains launch-owned/reaped. No process-name/global kill. Separate paired-depth ros2-run bridge excluded.",
+    "Both revised-runtime cells must pass original full capture integrity/no_child_exit_errors/clean_exit plus ordered_launch_transport_bridge_exit; require all4 bridge clean ACK records before Gazebo clean-exit log, no launch escalation/fallback, cleanup empty. Same robot/Nav2/camera/human/clock/safety/lifecycle parameters, source hashes protected.",
+    "Conversation body/membership/standing-snapshot gates from preceding plan still apply; query coverage NOT_EXERCISED. Walking must use original query clock verifier and unchanged native lifecycle. All goals succeed, zero recovery, positive swept geometric clearances and near encounters; original walking limits unchanged.",
+    "If both new captures PASS, combine revised teardown validation with preceding exact natural component control, all3 seed conversation body/clock contracts and prior full PASS46/47 to freeze a bounded factory pilot collection recipe. This is a NEW predeclared acceptance decision on unchanged behavior plus revised shutdown, not promotion of the original four-cell FAIL or universal bridge-race proof. No dataset registration/training/default changes."
+  ]
+}

@@ -1,0 +1,7 @@
+# Capture-owned Gazebo bridge stop ordering
+
+The preceding persistent-conversation cohort passes all three seeds' body/membership/snapshot-clock checks but full acceptance is3/4: obstacle_type_bridge aborts exit-11 after Gazebo has exited and ROS launch later escalates. Earlier mitigation stopped only ground_truth early. Original full FAIL stays preserved.
+
+New capture-only mitigation stops four exact supported bridges found in this launch's startup log and current same-UID ownership-token inventory, while Gazebo is stably paused and alive. It validates executable/arguments and pins PID identity across final ownership recheck and SIGINT with a pidfd. Order: ground_truth, obstacle/status, camera image, robot topics. ROS launch owns child reaping; every child terminal ACK, including failures/timeouts, is recorded. No broad kill, dropped bridge functionality, altered sensors or timeout increase. The separate paired-depth ros2-run process is excluded from this launch-owned selector.
+
+plan.json declares one conversation seed48 plus one natural-walking seed46 revised-runtime validation before execution. All old FAILs remain. New acceptance must include every original integrity/physics/motion gate plus all4 clean bridge ACKs before Gazebo, no launch escalation and empty cleanup. No universal upstream race/root-cause claim. Only if both PASS may a bounded factory pilot recipe be frozen using the existing three-seed conversation behavior evidence; no dataset/default/training promotion.
