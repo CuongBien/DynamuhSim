@@ -302,7 +302,8 @@ class CaptureContext:
                 raise RuntimeError("MCAP recorder did not close successfully")
 
     def stop_server(self, guard, original_stop):
-        return stop_paused(guard, original_stop)
+        from .shutdown import stop_ground_truth_bridge
+        return stop_paused(guard, original_stop, before_stop=lambda: stop_ground_truth_bridge(guard, self.run_dir / "episode/launch.log"))
 
 
 def capture_live_parameters(node, wait, treatment, navigation=None, *, additional=None, controller=None):

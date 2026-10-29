@@ -96,6 +96,9 @@ def audit_capture(run, policy, *, source_roots=(), git_repo=None, read_bag=bag_m
     checks["pause_acknowledged"] = q["pause_acknowledged"] and q["simulation_time_stable"]
     text = (out / "launch.log").read_text()
     checks["no_child_exit_errors"] = "process has died" not in text
+    bridge_stop = r["server_shutdown"].get("ground_truth_bridge_shutdown")
+    if bridge_stop is not None:
+        checks["ordered_ground_truth_bridge_exit"] = bridge_stop.get("status") == "OBSERVED" and bridge_stop.get("clean") is True
     match = re.search(r"teardown pre=(\d+) post=(\d+)", text)
     checks["balanced_filter_teardown"] = bool(match and match[1] == match[2] and int(match[1]) > 0)
     events = list(jsonl_rows(out / "events.jsonl"))

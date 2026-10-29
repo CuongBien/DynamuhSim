@@ -258,10 +258,20 @@ class QuiesceTests(unittest.TestCase):
                 modules = {"gz": NS(__path__=[]), "gz.transport13": NS(Node=Transport),
                            "gz.msgs10": NS(__path__=[]), "gz.msgs10.world_stats_pb2": NS(WorldStatistics=object)}
                 with patch.dict(sys.modules, modules), patch.object(shutdown.subprocess, "run", side_effect=request), patch("time.sleep", side_effect=settle):
-                    result = shutdown.stop_paused(guard, stop)
+                    def bridge_stop():
+                        events.append("bridge_stop")
+                        return dict(status="OBSERVED", clean=True)
+                    result = shutdown.stop_paused(guard, stop, before_stop=bridge_stop)
                 self.assertLess(events.index("pause_request"), events.index("unsubscribe"))
                 self.assertLess(events.index("unsubscribe"), events.index("stop"))
                 self.assertEqual(events.count("stop"), 1)
+                if mode == "stable":
+                    self.assertLess(events.index("unsubscribe"), events.index("bridge_stop"))
+                    self.assertLess(events.index("bridge_stop"), events.index("stop"))
+                    self.assertTrue(result["ground_truth_bridge_shutdown"]["clean"])
+                else:
+                    self.assertNotIn("bridge_stop", events)
+                    self.assertFalse(result["ground_truth_bridge_shutdown"]["clean"])
                 self.assertEqual(result["status"], "STOPPED")
                 self.assertEqual(result["quiesce"]["pause_acknowledged"], mode in ["stable", "advancing"])
                 self.assertEqual(result["quiesce"]["simulation_time_stable"], mode == "stable")
