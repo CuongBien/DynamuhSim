@@ -1,0 +1,31 @@
+{
+  "status": "PASS",
+  "python_syntax": "PASS",
+  "historical_standing_trace": {
+    "status": "PASS",
+    "active_steps": 358,
+    "bad_steps": [],
+    "max_step_speed_mps": 0.0,
+    "max_step_yaw_rate_rad_s": 2.220446049250321e-15,
+    "max_displacement_from_initial_m": 0.0,
+    "scope": "Independent before/after displacement and yaw plus near-robot set reconstruction. Total displacement is descriptive, not a gated limit."
+  },
+  "injected_invalid_step": {
+    "status": "FAIL",
+    "active_steps": 1,
+    "bad_steps": [
+      {
+        "time": 12.1025,
+        "reasons": [
+          "movement_outside_yielding_set",
+          "speed_cap"
+        ]
+      }
+    ],
+    "max_step_speed_mps": 0.3000000000000124,
+    "max_step_yaw_rate_rad_s": 0.0,
+    "max_displacement_from_initial_m": 0.030000000000001137,
+    "scope": "Independent before/after displacement and yaw plus near-robot set reconstruction. Total displacement is descriptive, not a gated limit."
+  },
+  "scope": "Analyzer checks only; no new simulator capture or runtime change. Rejects injected over-speed movement outside yielding set."
+}

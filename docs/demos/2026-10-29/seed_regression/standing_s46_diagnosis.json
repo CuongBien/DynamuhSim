@@ -1,0 +1,111 @@
+{
+  "schema": "standing_lifecycle_diagnosis/1",
+  "case": "standing_s46",
+  "capture_audit": "PASS",
+  "regression": "FAIL standing_trace",
+  "transitions": [
+    {
+      "time_sim_s": 18.3025,
+      "state_time_sim_s": 18.4025,
+      "before": [
+        {
+          "type": "standing",
+          "members": [
+            1,
+            2,
+            3
+          ]
+        },
+        {
+          "type": "standing",
+          "members": [
+            4,
+            5,
+            6
+          ]
+        }
+      ],
+      "after": [
+        {
+          "type": "standing",
+          "members": [
+            4,
+            5,
+            6
+          ]
+        }
+      ],
+      "finish_events": []
+    },
+    {
+      "time_sim_s": 18.5025,
+      "state_time_sim_s": 18.602500000000003,
+      "before": [
+        {
+          "type": "standing",
+          "members": [
+            4,
+            5,
+            6
+          ]
+        }
+      ],
+      "after": [],
+      "finish_events": []
+    },
+    {
+      "time_sim_s": 21.1025,
+      "state_time_sim_s": 21.2025,
+      "before": [],
+      "after": [
+        {
+          "type": "standing",
+          "members": [
+            1,
+            2,
+            3
+          ]
+        }
+      ],
+      "finish_events": [
+        {
+          "epoch": 0,
+          "step": 99,
+          "native_position_snap_removed_m": 0.0,
+          "native_yaw_snap_deferred_rad": 2.2810113938209473,
+          "approximate": true
+        }
+      ]
+    },
+    {
+      "time_sim_s": 23.7025,
+      "state_time_sim_s": 23.802500000000002,
+      "before": [
+        {
+          "type": "standing",
+          "members": [
+            1,
+            2,
+            3
+          ]
+        }
+      ],
+      "after": [],
+      "finish_events": []
+    }
+  ],
+  "max_speed_before_first_membership_change_mps": 0.0,
+  "local_source_evidence": {
+    "config": "crowd_dispersal_probability:0.01, crowd_formation_probability:0.03",
+    "constructor": "Human_Human_Interaction defaults can_disperse=True; fixture does not override it.",
+    "native_step": "socnavenv_v2.py:2049\u20132069 selects dispersable static/moving crowds; disperse_static_crowd:2123\u20132177 releases members and samples individual goals."
+  },
+  "interpretation": "The frozen continuous-standing contract fails because the native lifecycle permits groups to dissolve/reform. Downstream .8m/s individual walking after dissolution is not proof that an active standing member exceeded the .2m/s sidestep safety cap. Keep original strict contract/analysis failure; do not reinterpret it as a physics collision or shutdown fault.",
+  "future_fix_candidate": "Declare a separate explicit persistent-conversation fixture using native can_disperse=False for designated groups, with a separate validation cohort. Do not edit the running cohort or globally disable lifecycle. Not implemented in this series.",
+  "sha256": {
+    "experiments/social_navigation/navigation/socnavgym_group_nav2/config.yaml": "8d12dd63d9ab64ea5467ab35e23712bc89d019740ab99fcd5d98e2e18b944c4d",
+    "experiments/social_navigation/navigation/socnavgym_group_nav2/fixture.py": "2f217fc7d87bbb5950567b119d68baafba1b62515229c8b416247484c5b93a02",
+    "experiments/social_navigation/vendor/SocNavGym/socnavgym/envs/utils/human_human.py": "2648268352411745b8aaca5f9971cad6353fb8ee550be91a428277deafa54219",
+    "experiments/social_navigation/vendor/SocNavGym/socnavgym/envs/socnavenv_v2.py": "9444d03f1d2c407c0a48578135faedd32a80431d5abb22cfe3582c473a826696"
+  }
+}

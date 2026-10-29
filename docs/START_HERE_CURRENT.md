@@ -74,7 +74,7 @@ Khi chuẩn bị train:
 
 ## 4. Mở replay để xem ngay
 
-Kết quả kiểm chứng đóng bridge mới nhất đang xem tại [trang local35315](http://localhost:35315/bridge_shutdown/index.html): hai lượt mới PASS toàn bộ audit, robot tới đích không cần recovery. [Báo cáo shutdown](demos/2026-10-29/bridge_shutdown/README.md). Kết quả giảm quay của nhóm đi bộ và lỗi cũ giữ tại [báo cáo trước](http://localhost:35315/group_cohesion_heading/index.html). Profile thử được chạy bằng `tools/capture_episode.py` với `--human-motion-profile group_cohesion_v2 --human-goal-clock sim_v1`; xem đầy đủ lệnh prepare/run trong báo cáo hiện tại ở trên. Các lệnh bên dưới xem **dataset01 cũ**, không tự bật mô hình người mới.
+Kết quả mới nhất: [cohort seed46–48](http://localhost:35315/seed_regression/index.html) **5 PASS/3 FAIL/1 ERROR**, chưa chốt profile thu dữ liệu. Có8 lượt native tới đích/đóng bridge sạch; crossing48 lỗi công bố ready.json. Nhóm đứng46/47 tự tan, standing48 thiếu coverage truy vấn goal-clock. [Báo cáo](demos/2026-10-29/seed_regression/README.md). Vòng kiểm chứng shutdown trước đó có hai lượt mới PASS toàn bộ audit, robot tới đích không cần recovery. [Báo cáo shutdown](demos/2026-10-29/bridge_shutdown/README.md). Kết quả giảm quay của nhóm đi bộ và lỗi cũ giữ tại [báo cáo trước](http://localhost:35315/group_cohesion_heading/index.html). Profile thử được chạy bằng `tools/capture_episode.py` với `--human-motion-profile group_cohesion_v2 --human-goal-clock sim_v1`; xem đầy đủ lệnh prepare/run trong báo cáo hiện tại ở trên. Các lệnh bên dưới xem **dataset01 cũ**, không tự bật mô hình người mới.
 
 Trong terminal Ubuntu/WSL:
 
@@ -112,7 +112,7 @@ Xem [báo cáo hiện tại/cách chạy đúng profile](demos/2026-10-29/group_
 
 ## 6. Việc tiếp theo, theo thứ tự
 
-1. Khai báo và chạy cohort seed46–48 cho nhóm đi bộ cùng hồi quy nhóm đứng trò chuyện; giữ nguyên mô hình và tiêu chí kiểm tra. Mitigation shutdown đã qua hai lượt seed45; tiếp tục theo dõi receipt bridge trong cohort mới trước khi chốt profile thu dữ liệu.
+1. Cohort seed46–48 đã xong và chưa đạt. Sửa công bố ready.json nguyên khối; sau đó khai báo riêng fixture trò chuyện giữ nhóm và contract goal-clock cho cảnh đứng yên. Giữ nguyên lỗi/audit cohort cũ, kiểm chứng trong lượt mới trước khi chốt thu dữ liệu.
 2. Đóng băng cấu hình đã nghiệm thu và thu pilot mới khi cần mở rộng dữ liệu. Không trộn kết quả thử nghiệm với các mẫu train đã chấp nhận.
 3. Với `dataset01` có sẵn, bước WM vẫn là baseline nhỏ dự báo BEV có điều kiện hành động: train trên train, chọn bằng validation, cố định rồi mới đánh giá test. Chưa thực hiện trainer trong vòng sửa mô phỏng này.
 4. Chuẩn bị RL sau khi có reward và step/reset hợp lệ.

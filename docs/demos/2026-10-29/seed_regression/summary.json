@@ -1,0 +1,34 @@
+{
+  "status": "FAIL",
+  "attempts": 9,
+  "native_episodes": 8,
+  "actual_goals_succeeded": 8,
+  "native_bridge_clean_exits": 8,
+  "all_attempts_scoped_cleanup_empty": true,
+  "full_capture_audit": {
+    "PASS": 7,
+    "FAIL": 1,
+    "ERROR": 1
+  },
+  "integrated": {
+    "PASS": 5,
+    "FAIL": 3,
+    "ERROR": 1
+  },
+  "walking": {
+    "PASS": 5,
+    "startup_ERROR": 1
+  },
+  "standing": {
+    "continuous_membership_FAIL": [
+      "standing_s46",
+      "standing_s47"
+    ],
+    "clock_query_coverage_FAIL": [
+      "standing_s48"
+    ]
+  },
+  "profile_collection_eligible": false,
+  "training_ready": false,
+  "decision": "Preserve all failures. Fix single-publication atomic readiness; separately declare persistent conversation vs native dispersal, and a standing-aware clock coverage contract. No dataset/default promotion."
+}

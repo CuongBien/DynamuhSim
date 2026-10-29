@@ -1,0 +1,425 @@
+{
+  "schema": "native_lifecycle_observations/1",
+  "scope": "Descriptive diagnosis only; does not alter any frozen PASS/FAIL, initial continuous-standing contract or raw audit. Standing cap is conditional on actual stationary status at integration; dynamic individuals may use existing .8m/s bound.",
+  "cases": [
+    {
+      "id": "head_on_s46",
+      "grouped_member_min": 6,
+      "grouped_member_max": 6,
+      "fraction_steps_all_six_grouped": 1.0,
+      "membership_type_transitions": []
+    },
+    {
+      "id": "crossing_s46",
+      "grouped_member_min": 6,
+      "grouped_member_max": 6,
+      "fraction_steps_all_six_grouped": 1.0,
+      "membership_type_transitions": []
+    },
+    {
+      "id": "standing_s46",
+      "grouped_member_min": 0,
+      "grouped_member_max": 6,
+      "fraction_steps_all_six_grouped": 0.19830028328611898,
+      "membership_type_transitions": [
+        {
+          "time_sim_s": 18.4025,
+          "after_start_s": 7.1,
+          "before": [
+            [
+              "standing",
+              [
+                1,
+                2,
+                3
+              ]
+            ],
+            [
+              "standing",
+              [
+                4,
+                5,
+                6
+              ]
+            ]
+          ],
+          "after": [
+            [
+              "standing",
+              [
+                4,
+                5,
+                6
+              ]
+            ]
+          ],
+          "finish_events": []
+        },
+        {
+          "time_sim_s": 18.602500000000003,
+          "after_start_s": 7.3000000000000025,
+          "before": [
+            [
+              "standing",
+              [
+                4,
+                5,
+                6
+              ]
+            ]
+          ],
+          "after": [],
+          "finish_events": []
+        },
+        {
+          "time_sim_s": 21.2025,
+          "after_start_s": 9.9,
+          "before": [],
+          "after": [
+            [
+              "standing",
+              [
+                1,
+                2,
+                3
+              ]
+            ]
+          ],
+          "finish_events": [
+            {
+              "epoch": 0,
+              "step": 99,
+              "native_position_snap_removed_m": 0.0,
+              "native_yaw_snap_deferred_rad": 2.2810113938209473,
+              "approximate": true
+            }
+          ]
+        },
+        {
+          "time_sim_s": 23.802500000000002,
+          "after_start_s": 12.500000000000002,
+          "before": [
+            [
+              "standing",
+              [
+                1,
+                2,
+                3
+              ]
+            ]
+          ],
+          "after": [],
+          "finish_events": []
+        }
+      ],
+      "conditional_guard_diagnostic": {
+        "status": "PASS",
+        "actual_stationary_speed_max_mps": 0.0,
+        "actual_dynamic_speed_max_mps": 0.7999999999999927,
+        "bad_steps": [],
+        "scope": "Categories from original integration guard trace; positions/speeds independently recomputed. Does NOT cure continuous-standing membership failure."
+      }
+    },
+    {
+      "id": "head_on_s47",
+      "grouped_member_min": 0,
+      "grouped_member_max": 6,
+      "fraction_steps_all_six_grouped": 0.18662952646239556,
+      "membership_type_transitions": [
+        {
+          "time_sim_s": 18.5025,
+          "after_start_s": 6.800000000000001,
+          "before": [
+            [
+              "moving",
+              [
+                1,
+                2,
+                3
+              ]
+            ],
+            [
+              "moving",
+              [
+                4,
+                5,
+                6
+              ]
+            ]
+          ],
+          "after": [
+            [
+              "moving",
+              [
+                4,
+                5,
+                6
+              ]
+            ]
+          ],
+          "finish_events": []
+        },
+        {
+          "time_sim_s": 26.5025,
+          "after_start_s": 14.8,
+          "before": [
+            [
+              "moving",
+              [
+                4,
+                5,
+                6
+              ]
+            ]
+          ],
+          "after": [],
+          "finish_events": []
+        }
+      ]
+    },
+    {
+      "id": "crossing_s47",
+      "grouped_member_min": 0,
+      "grouped_member_max": 6,
+      "fraction_steps_all_six_grouped": 0.18873239436619718,
+      "membership_type_transitions": [
+        {
+          "time_sim_s": 17.602500000000003,
+          "after_start_s": 6.8000000000000025,
+          "before": [
+            [
+              "moving",
+              [
+                1,
+                2,
+                3
+              ]
+            ],
+            [
+              "moving",
+              [
+                4,
+                5,
+                6
+              ]
+            ]
+          ],
+          "after": [
+            [
+              "moving",
+              [
+                4,
+                5,
+                6
+              ]
+            ]
+          ],
+          "finish_events": []
+        },
+        {
+          "time_sim_s": 25.602500000000003,
+          "after_start_s": 14.800000000000002,
+          "before": [
+            [
+              "moving",
+              [
+                4,
+                5,
+                6
+              ]
+            ]
+          ],
+          "after": [],
+          "finish_events": []
+        }
+      ]
+    },
+    {
+      "id": "standing_s47",
+      "grouped_member_min": 2,
+      "grouped_member_max": 6,
+      "fraction_steps_all_six_grouped": 0.09971509971509972,
+      "membership_type_transitions": [
+        {
+          "time_sim_s": 14.702499999999999,
+          "after_start_s": 3.5999999999999996,
+          "before": [
+            [
+              "standing",
+              [
+                1,
+                2,
+                3
+              ]
+            ],
+            [
+              "standing",
+              [
+                4,
+                5,
+                6
+              ]
+            ]
+          ],
+          "after": [
+            [
+              "standing",
+              [
+                1,
+                2,
+                3
+              ]
+            ]
+          ],
+          "finish_events": []
+        },
+        {
+          "time_sim_s": 18.302500000000002,
+          "after_start_s": 7.200000000000003,
+          "before": [
+            [
+              "standing",
+              [
+                1,
+                2,
+                3
+              ]
+            ]
+          ],
+          "after": [
+            [
+              "standing",
+              [
+                1,
+                3
+              ]
+            ]
+          ],
+          "finish_events": []
+        }
+      ],
+      "conditional_guard_diagnostic": {
+        "status": "PASS",
+        "actual_stationary_speed_max_mps": 0.0,
+        "actual_dynamic_speed_max_mps": 0.8000000000000045,
+        "bad_steps": [],
+        "scope": "Categories from original integration guard trace; positions/speeds independently recomputed. Does NOT cure continuous-standing membership failure."
+      }
+    },
+    {
+      "id": "head_on_s48",
+      "grouped_member_min": 0,
+      "grouped_member_max": 6,
+      "fraction_steps_all_six_grouped": 0.03526448362720403,
+      "membership_type_transitions": [
+        {
+          "time_sim_s": 12.702499999999999,
+          "after_start_s": 1.4999999999999982,
+          "before": [
+            [
+              "moving",
+              [
+                1,
+                2,
+                3
+              ]
+            ],
+            [
+              "moving",
+              [
+                4,
+                5,
+                6
+              ]
+            ]
+          ],
+          "after": [
+            [
+              "moving",
+              [
+                1,
+                2,
+                3
+              ]
+            ],
+            [
+              "standing",
+              [
+                4,
+                5
+              ]
+            ]
+          ],
+          "finish_events": []
+        },
+        {
+          "time_sim_s": 14.5025,
+          "after_start_s": 3.299999999999999,
+          "before": [
+            [
+              "moving",
+              [
+                1,
+                2,
+                3
+              ]
+            ],
+            [
+              "standing",
+              [
+                4,
+                5
+              ]
+            ]
+          ],
+          "after": [
+            [
+              "moving",
+              [
+                1,
+                2,
+                3
+              ]
+            ]
+          ],
+          "finish_events": []
+        },
+        {
+          "time_sim_s": 14.8025,
+          "after_start_s": 3.5999999999999996,
+          "before": [
+            [
+              "moving",
+              [
+                1,
+                2,
+                3
+              ]
+            ]
+          ],
+          "after": [],
+          "finish_events": []
+        }
+      ]
+    },
+    {
+      "id": "crossing_s48",
+      "status": "NO_NATIVE_DATA",
+      "reason": "Preserved startup error before Gazebo/worker trajectory."
+    },
+    {
+      "id": "standing_s48",
+      "grouped_member_min": 6,
+      "grouped_member_max": 6,
+      "fraction_steps_all_six_grouped": 1.0,
+      "membership_type_transitions": [],
+      "conditional_guard_diagnostic": {
+        "status": "PASS",
+        "actual_stationary_speed_max_mps": 0.0,
+        "actual_dynamic_speed_max_mps": 0.0,
+        "bad_steps": [],
+        "scope": "Categories from original integration guard trace; positions/speeds independently recomputed. Does NOT cure continuous-standing membership failure."
+      }
+    }
+  ]
+}
