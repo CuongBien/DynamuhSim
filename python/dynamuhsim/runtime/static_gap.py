@@ -10,8 +10,9 @@ from dynamuhsim.simulation.static_gap import fixture,write_assets,configure_worl
 
 def prepare(repo,run,case,treatment="baseline"):
     repo=Path(repo).resolve();run=Path(run).resolve();run.relative_to(repo)
-    if treatment not in ['baseline','native_cost']:raise ValueError('Unknown static-gap treatment')
-    config_path=repo/('configs/capture/geometry_v4_inflation045.json' if treatment=='baseline' else 'configs/capture/geometry_v5_mppi_native_cost.json');config=validate_config(json.loads(config_path.read_text()));spec=fixture(case)
+    recipes={'baseline':'geometry_v4_inflation045.json','native_cost':'geometry_v5_mppi_native_cost.json','long_horizon':'geometry_v6_mppi_horizon5.json'}
+    if treatment not in recipes:raise ValueError('Unknown static-gap treatment')
+    config_path=repo/'configs/capture'/recipes[treatment];config=validate_config(json.loads(config_path.read_text()));spec=fixture(case)
     files=capture_sources(repo)+[config_path,repo/'tools/static_gap_episode.py',repo/'configs/audit/static_gap.json']
     if any(not p.is_file() for p in files):raise FileNotFoundError('Prepare shared native dependencies first')
     run.mkdir(parents=True,exist_ok=False);assets=run/'assets';assets.mkdir();camera=prepare_camera(assets,repo)

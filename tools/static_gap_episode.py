@@ -14,7 +14,7 @@ def main():
  for name in ['prepare','run','verify']:
   cmd=sub.add_parser(name);cmd.add_argument('--run-dir',type=Path,required=True)
   if name=='prepare':
-   cmd.add_argument('--case',choices=['wide','narrow'],required=True);cmd.add_argument('--treatment',choices=['baseline','native_cost'],default='baseline')
+   cmd.add_argument('--case',choices=['wide','narrow'],required=True);cmd.add_argument('--treatment',choices=['baseline','native_cost','long_horizon'],default='baseline')
  a=p.parse_args()
  if a.mode=='prepare':prepare(ROOT,a.run_dir,a.case,a.treatment);print('Prepared',a.run_dir);return 0
  verify_run(ROOT,a.run_dir)

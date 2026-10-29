@@ -31,4 +31,16 @@ class StaticGapCostTests(unittest.TestCase):
   with patch.dict(sys.modules,{'rclpy.parameter_client':NS(AsyncParameterClient=Client)}):
    observed=capture_live_parameters(None,lambda predicate,seconds:predicate(),config['nav2'],config['navigation'],controller=config['controller'])
   self.assertEqual(observed,expected);self.assertEqual(observed['/controller_server']['FollowPath.CostCritic.near_collision_cost'],253)
+ def test_horizon_recipe_changes_only_prediction_steps_after_native_cost(self):
+  old=self.config();new=json.loads((ROOT/'configs/capture/geometry_v6_mppi_horizon5.json').read_text());self.assertEqual(validate_config(new),new)
+  base=yaml.safe_load((ROOT/'experiments/social_navigation/warehouse/nav2_warehouse.yaml').read_text());make=lambda c:apply_nav2_treatment(base,c['nav2'],navigation=c['navigation'],controller=c['controller']);a,b=make(old),make(new)
+  self.assertEqual({c['path'] for c in config_changes(a,b)},{'/controller_server/ros__parameters/FollowPath/time_steps'})
+  self.assertEqual(b['controller_server']['ros__parameters']['FollowPath']['model_dt'],.05)
+  self.assertEqual(nav2_parameter_contract(new['nav2'],new['navigation'],controller=new['controller'])['/controller_server']['FollowPath.time_steps'],100)
+  self.assertEqual(nav2_parameter_contract(new['nav2'],new['navigation'],controller=new['controller'])['/controller_server']['FollowPath.model_dt'],.05)
+ def test_horizon_tuning_cannot_leak_into_older_recipe(self):
+  config=json.loads((ROOT/'configs/capture/geometry_v6_mppi_horizon5.json').read_text());config['schema']='dynamuhsim_capture_config/5'
+  with self.assertRaises(ValueError):validate_config(config)
+  config['schema']='dynamuhsim_capture_config/6';config['controller']['time_steps']=101
+  with self.assertRaises(ValueError):validate_config(config)
 if __name__=='__main__':unittest.main()

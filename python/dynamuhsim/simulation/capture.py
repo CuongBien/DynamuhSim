@@ -62,7 +62,9 @@ def apply_nav2_treatment(config, treatment, *, navigation=None, controller=None)
     follow = result["controller_server"]["ros__parameters"]["FollowPath"]
     follow.update(treatment["speed"])
     follow["CostCritic"]["consider_footprint"] = False
-    if controller is not None:follow["CostCritic"].update(controller["cost_critic"])
+    if controller is not None:
+        follow["CostCritic"].update(controller["cost_critic"])
+        if "time_steps" in controller:follow["time_steps"] = controller["time_steps"]
     if navigation is not None:
         result["controller_server"]["ros__parameters"]["goal_checker"].update(navigation["goal_checker"])
         for critic in ["GoalCritic", "PathFollowCritic"]:
@@ -88,6 +90,9 @@ def nav2_parameter_contract(treatment, navigation=None, *, controller=None):
     expected["/controller_server"]["FollowPath.CostCritic.consider_footprint"] = False
     if controller is not None:
         expected["/controller_server"].update({"FollowPath.CostCritic."+key:value for key,value in controller["cost_critic"].items()})
+        if "time_steps" in controller:
+            expected["/controller_server"]["FollowPath.time_steps"] = controller["time_steps"]
+            expected["/controller_server"]["FollowPath.model_dt"] = .05
     if navigation is not None:
         expected["/controller_server"].update({"goal_checker." + key: value for key, value in navigation["goal_checker"].items()})
         for critic in ["GoalCritic", "PathFollowCritic"]:

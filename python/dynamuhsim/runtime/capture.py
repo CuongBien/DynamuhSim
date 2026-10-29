@@ -28,15 +28,17 @@ def dump(path, value):
 def validate_config(config):
     expected = {"schema", "allowed_seeds", "sim_budget_s", "label_tail_s", "tail_wall_budget_s", "camera_sha256", "nav2"}
     version = config.get("schema")
-    if version in ["dynamuhsim_capture_config/2", "dynamuhsim_capture_config/3", "dynamuhsim_capture_config/4", "dynamuhsim_capture_config/5"]:
+    if version in ["dynamuhsim_capture_config/2", "dynamuhsim_capture_config/3", "dynamuhsim_capture_config/4", "dynamuhsim_capture_config/5", "dynamuhsim_capture_config/6"]:
         expected.add("navigation")
-    if version in ["dynamuhsim_capture_config/4", "dynamuhsim_capture_config/5"]:
+    if version in ["dynamuhsim_capture_config/4", "dynamuhsim_capture_config/5", "dynamuhsim_capture_config/6"]:
         expected.add("geometry_profile")
         if config.get("geometry_profile") != "native_sdf_urdf_v1":raise ValueError("Unknown geometry profile")
-    if version == "dynamuhsim_capture_config/5":
+    if version in ["dynamuhsim_capture_config/5", "dynamuhsim_capture_config/6"]:
         expected.add("controller")
-        if config.get("controller") != {"cost_critic": {"cost_weight": 3.81, "near_collision_cost": 253}}:raise ValueError("Undeclared MPPI cost treatment")
-    if set(config) != expected or version not in ["dynamuhsim_capture_config/1", "dynamuhsim_capture_config/2", "dynamuhsim_capture_config/3", "dynamuhsim_capture_config/4", "dynamuhsim_capture_config/5"]:
+        declared_controller = {"cost_critic": {"cost_weight": 3.81, "near_collision_cost": 253}}
+        if version == "dynamuhsim_capture_config/6":declared_controller["time_steps"] = 100
+        if config.get("controller") != declared_controller:raise ValueError("Undeclared MPPI cost/horizon treatment")
+    if set(config) != expected or version not in ["dynamuhsim_capture_config/1", "dynamuhsim_capture_config/2", "dynamuhsim_capture_config/3", "dynamuhsim_capture_config/4", "dynamuhsim_capture_config/5", "dynamuhsim_capture_config/6"]:
         raise ValueError("Unsupported capture config schema or keys")
     if config["camera_sha256"] != CAMERA_SHA256:
         raise ValueError("Native camera/friction contract cannot change in config version1")
@@ -51,16 +53,16 @@ def validate_config(config):
     nav = config["nav2"]
     if set(nav) != {"robot_radius", "footprint_padding", "inflation_radius", "cost_scaling_factor", "speed"}:
         raise ValueError("Unknown Nav2 treatment")
-    wanted_radius = .17 if version in ["dynamuhsim_capture_config/4", "dynamuhsim_capture_config/5"] else .25
-    wanted_inflation = nav.get("inflation_radius") if version in ["dynamuhsim_capture_config/4", "dynamuhsim_capture_config/5"] else .8
-    if version in ["dynamuhsim_capture_config/4", "dynamuhsim_capture_config/5"] and wanted_inflation not in [.8,.45]:raise ValueError("Undeclared geometry experiment inflation")
+    wanted_radius = .17 if version in ["dynamuhsim_capture_config/4", "dynamuhsim_capture_config/5", "dynamuhsim_capture_config/6"] else .25
+    wanted_inflation = nav.get("inflation_radius") if version in ["dynamuhsim_capture_config/4", "dynamuhsim_capture_config/5", "dynamuhsim_capture_config/6"] else .8
+    if version in ["dynamuhsim_capture_config/4", "dynamuhsim_capture_config/5", "dynamuhsim_capture_config/6"] and wanted_inflation not in [.8,.45]:raise ValueError("Undeclared geometry experiment inflation")
     if nav != dict(robot_radius=wanted_radius, footprint_padding=.01, inflation_radius=wanted_inflation, cost_scaling_factor=3.,
                    speed=dict(vx_max=.30, vx_min=-.15, vy_max=.20)):
         raise ValueError("Capture version1 retains the accepted moderate Nav2 treatment")
-    if version in ["dynamuhsim_capture_config/2", "dynamuhsim_capture_config/3", "dynamuhsim_capture_config/4", "dynamuhsim_capture_config/5"]:
+    if version in ["dynamuhsim_capture_config/2", "dynamuhsim_capture_config/3", "dynamuhsim_capture_config/4", "dynamuhsim_capture_config/5", "dynamuhsim_capture_config/6"]:
         navigation = dict(goal_checker=dict(stateful=False, xy_goal_tolerance=.05, yaw_goal_tolerance=.15),
                           goal_critic_distance_m=.45)
-        if version in ["dynamuhsim_capture_config/3", "dynamuhsim_capture_config/4", "dynamuhsim_capture_config/5"]:
+        if version in ["dynamuhsim_capture_config/3", "dynamuhsim_capture_config/4", "dynamuhsim_capture_config/5", "dynamuhsim_capture_config/6"]:
             navigation["scan"] = dict(inf_is_valid=True, obstacle_max_range=3.0, raytrace_max_range=3.5)
             if type(config["navigation"].get("scan", {}).get("inf_is_valid")) is not bool:
                 raise ValueError("Capture version3 requires declared no-return scan clearing")
@@ -104,7 +106,7 @@ def prepare_run(repo, run_dir, config_path, scenario, seed, gui=False, *, planne
     if friction["recognized_gz_base_link_frames"] != 4:
         raise RuntimeError("Native SDFormat friction frames were not recognized")
     geometry = None
-    if config["schema"] in ["dynamuhsim_capture_config/4", "dynamuhsim_capture_config/5"]:
+    if config["schema"] in ["dynamuhsim_capture_config/4", "dynamuhsim_capture_config/5", "dynamuhsim_capture_config/6"]:
         from dynamuhsim.simulation.robot_geometry import aligned_urdf
         geometry = aligned_urdf(repo / "src/custom_corridor/models/mecanum_robot/model.sdf", repo / "src/custom_corridor/urdf/mecanum_robot.urdf", assets / "mecanum_aligned.urdf")
         files.append(assets / "mecanum_aligned.urdf")
@@ -141,7 +143,7 @@ def verify_run(repo, run_dir):
         if str((run_dir / name).relative_to(repo)) not in manifest["source_sha256"]:
             raise RuntimeError("Required run input missing from freeze: " + name)
     plan = json.loads((run_dir / "plan.json").read_text())
-    if plan.get("config", {}).get("schema") in ["dynamuhsim_capture_config/4", "dynamuhsim_capture_config/5"] and str((run_dir / "assets/mecanum_aligned.urdf").relative_to(repo)) not in manifest["source_sha256"]:
+    if plan.get("config", {}).get("schema") in ["dynamuhsim_capture_config/4", "dynamuhsim_capture_config/5", "dynamuhsim_capture_config/6"] and str((run_dir / "assets/mecanum_aligned.urdf").relative_to(repo)) not in manifest["source_sha256"]:
         raise RuntimeError("Aligned robot description missing from freeze")
     return manifest
 
@@ -161,7 +163,7 @@ class CaptureContext:
     def prepare(self, runtime, result):
         verify_run(self.repo, self.run_dir)
         shutil.copyfile(self.run_dir / "assets/mecanum_camera.sdf", runtime / "mecanum_camera.sdf")
-        if self.config["schema"] in ["dynamuhsim_capture_config/4", "dynamuhsim_capture_config/5"]:
+        if self.config["schema"] in ["dynamuhsim_capture_config/4", "dynamuhsim_capture_config/5", "dynamuhsim_capture_config/6"]:
             shutil.copyfile(self.run_dir / "assets/mecanum_aligned.urdf", runtime / "mecanum_aligned.urdf")
             result["robot_geometry_alignment"] = json.loads((self.run_dir / "preflight.json").read_text())["geometry"]
         result.update(capture_schema="dynamuhsim_capture/2", capture_freeze_sha256=sha(self.run_dir / "capture_freeze.json"),
@@ -192,7 +194,7 @@ class CaptureContext:
 
     def start_bridge(self, runtime, output, env, processes, files):
         env.pop("DYNAMUHSIM_CAPTURE_MAP", None)
-        if self.config["schema"] in ["dynamuhsim_capture_config/4", "dynamuhsim_capture_config/5"]:env["DATASET_ROBOT_URDF"] = str(runtime / "mecanum_aligned.urdf")
+        if self.config["schema"] in ["dynamuhsim_capture_config/4", "dynamuhsim_capture_config/5", "dynamuhsim_capture_config/6"]:env["DATASET_ROBOT_URDF"] = str(runtime / "mecanum_aligned.urdf")
         else:env.pop("DATASET_ROBOT_URDF", None)
         log = (output / "pair_bridge.log").open("w")
         files.append(log)

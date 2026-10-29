@@ -1,0 +1,59 @@
+{
+  "schema": "static_gap_horizon_followup_plan/1",
+  "runtime": "experiments/social_navigation/benchmark/generated/static_gap_20261029",
+  "cases": [
+    {
+      "id": "wide80_horizon",
+      "fixture": "wide",
+      "gap_m": 0.8
+    },
+    {
+      "id": "narrow52_horizon",
+      "fixture": "narrow",
+      "gap_m": 0.5270765814495917
+    }
+  ],
+  "config": "configs/capture/geometry_v6_mppi_horizon5.json",
+  "start": [
+    -28.0,
+    0.0,
+    0.0
+  ],
+  "goal": [
+    -20.0,
+    0.0,
+    0.0
+  ],
+  "scope": "Two fixed barrier slabs meet perimeter walls; no humans, group dynamics, forced waypoint, velocity publisher, or route around the outer ends.",
+  "criteria": [
+    "Each attempt preserved. No automatic retry or unreported tuning.",
+    "Actual goal status SUCCEEDED and world XY<=.2m / yaw<=.25rad (existing independent policy).",
+    "Recorded physical robot crosses gate x=-24 from left to right; bounding circle must fit gap.",
+    "Conservative continuous-segment lower-bound distance to every fixture box minus native enclosing radius .168062484748657 must remain positive.",
+    "Native uint8 costmaps and static TF/camera bytes audited against MCAP.",
+    "No native force-contact stream; geometric certificate is not contact-force truth."
+  ],
+  "simulation_budget_per_case_s": 90,
+  "treatment": "long_horizon",
+  "controls": "Same native-cost treatment, change only time_steps30->100, model_dt .05s unchanged. Horizon1.5s->5s, max kinematic distance .45m->1.5m. Prune distance3m retained. No goal, speed, footprint, map, inflation, collision-cost or human-policy changes. Preserve failed outcomes, single attempt per width; no further automatic tuning in this series.",
+  "changed_control_parameters_vs_native_cost": {
+    "FollowPath.time_steps": {
+      "before": 30,
+      "after": 100
+    }
+  },
+  "changed_control_parameters_vs_original": {
+    "FollowPath.CostCritic.cost_weight": {
+      "before": 16.0,
+      "after": 3.81
+    },
+    "FollowPath.CostCritic.near_collision_cost": {
+      "before": 140,
+      "after": 253
+    },
+    "FollowPath.time_steps": {
+      "before": 30,
+      "after": 100
+    }
+  }
+}

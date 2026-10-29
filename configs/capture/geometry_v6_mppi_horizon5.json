@@ -1,0 +1,46 @@
+{
+  "schema": "dynamuhsim_capture_config/6",
+  "allowed_seeds": [
+    45,
+    46,
+    47,
+    48,
+    49
+  ],
+  "sim_budget_s": 90.0,
+  "label_tail_s": 3.2,
+  "tail_wall_budget_s": 45.0,
+  "camera_sha256": "14c15412664eb37dd2f0fb2d61a79b09f98722f204f97d97212f0ec814ad3d9f",
+  "nav2": {
+    "robot_radius": 0.17,
+    "footprint_padding": 0.01,
+    "inflation_radius": 0.45,
+    "cost_scaling_factor": 3.0,
+    "speed": {
+      "vx_max": 0.3,
+      "vx_min": -0.15,
+      "vy_max": 0.2
+    }
+  },
+  "navigation": {
+    "goal_checker": {
+      "stateful": false,
+      "xy_goal_tolerance": 0.05,
+      "yaw_goal_tolerance": 0.15
+    },
+    "goal_critic_distance_m": 0.45,
+    "scan": {
+      "inf_is_valid": true,
+      "obstacle_max_range": 3.0,
+      "raytrace_max_range": 3.5
+    }
+  },
+  "geometry_profile": "native_sdf_urdf_v1",
+  "controller": {
+    "cost_critic": {
+      "cost_weight": 3.81,
+      "near_collision_cost": 253
+    },
+    "time_steps": 100
+  }
+}
