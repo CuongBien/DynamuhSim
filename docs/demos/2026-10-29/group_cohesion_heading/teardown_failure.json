@@ -1,0 +1,23 @@
+{
+  "schema": "group_cohesion_heading_teardown/1",
+  "id": "crossing_cohesion_heading",
+  "audit_status": "FAIL",
+  "failed_checks": [
+    "no_child_exit_errors"
+  ],
+  "events": [
+    {
+      "line": 477,
+      "text": "[parameter_bridge-9] Fatal glibc error: pthread_mutex_lock.c:94 (___pthread_mutex_lock): assertion failed: mutex->__data.__owner == 0"
+    },
+    {
+      "line": 520,
+      "text": "[ERROR] [parameter_bridge-9]: process has died [pid 22425, exit code -6, cmd '/opt/ros/jazzy/lib/ros_gz_bridge/parameter_bridge /common/ground_truth@std_msgs/msg/String[gz.msgs.StringMsg --ros-args -r __node:=nav2_pilot_ground_truth_bridge']."
+    }
+  ],
+  "location": "After action end and future-label observation completion, while ROS launch sends SIGINT to its children. parameter_bridge-9 ground truth aborts (exit -6), glibc mutex assertion.",
+  "raw_preserved": true,
+  "policy_waiver": false,
+  "no_retry_in_series": true,
+  "scope": "Other capture/clock/proposal/source/GPU/numeric TF/raw depth/costmap checks pass, but full acceptance remains FAIL. Root cause of upstream bridge mutex abort is not established; do not infer the human model caused or cured it."
+}

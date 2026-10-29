@@ -1,0 +1,78 @@
+{
+  "schema": "group_cohesion_heading_verification/1",
+  "status": "FAIL",
+  "checks": {
+    "head_on_cohesion_heading:same:assets/mecanum_camera.sdf": true,
+    "head_on_cohesion_heading:same:assets/mecanum_aligned.urdf": true,
+    "head_on_cohesion_heading:same:assets/encounter.json": true,
+    "head_on_cohesion_heading:same:assets/human_goal_clock.json": true,
+    "head_on_cohesion_heading:same:runtime/nav2_runtime.yaml": true,
+    "head_on_cohesion_heading:same_initial_humans": true,
+    "head_on_cohesion_heading:same_initial_groups": true,
+    "head_on_cohesion_heading:same_world_except_socket": true,
+    "head_on_cohesion_heading:same_person_guard_native_group_and_clock_sources": true,
+    "head_on_cohesion_heading:declared_motion_profile": true,
+    "head_on_cohesion_heading:clock_profile": true,
+    "head_on_cohesion_heading:clock_trace": true,
+    "head_on_cohesion_heading:direct_goal_trace": true,
+    "head_on_cohesion_heading:cohesion_heading_trace": true,
+    "head_on_cohesion_heading:capture_integrity": true,
+    "head_on_cohesion_heading:native_gpu": true,
+    "head_on_cohesion_heading:no_injected_cmd_vel": true,
+    "head_on_cohesion_heading:clean_exit": true,
+    "head_on_cohesion_heading:same_shared_goal_code_as_phase1": true,
+    "crossing_cohesion_heading:same:assets/mecanum_camera.sdf": true,
+    "crossing_cohesion_heading:same:assets/mecanum_aligned.urdf": true,
+    "crossing_cohesion_heading:same:assets/encounter.json": true,
+    "crossing_cohesion_heading:same:assets/human_goal_clock.json": true,
+    "crossing_cohesion_heading:same:runtime/nav2_runtime.yaml": true,
+    "crossing_cohesion_heading:same_initial_humans": true,
+    "crossing_cohesion_heading:same_initial_groups": true,
+    "crossing_cohesion_heading:same_world_except_socket": true,
+    "crossing_cohesion_heading:same_person_guard_native_group_and_clock_sources": true,
+    "crossing_cohesion_heading:declared_motion_profile": true,
+    "crossing_cohesion_heading:clock_profile": true,
+    "crossing_cohesion_heading:clock_trace": true,
+    "crossing_cohesion_heading:direct_goal_trace": true,
+    "crossing_cohesion_heading:cohesion_heading_trace": true,
+    "crossing_cohesion_heading:capture_integrity": false,
+    "crossing_cohesion_heading:native_gpu": true,
+    "crossing_cohesion_heading:no_injected_cmd_vel": true,
+    "crossing_cohesion_heading:clean_exit": true,
+    "crossing_cohesion_heading:same_shared_goal_code_as_phase1": true
+  },
+  "runs": {
+    "head_on_cohesion_heading": {
+      "runtime_commit": "18adcee4683f2183b3eb2449b273ae5fa39033e8",
+      "sha256": {
+        "capture_freeze.json": "4ffef0c89264f225f7da15d35623b1d59f6e8e457b87840a3635ae030d76d0c6",
+        "plan.json": "1a1874763531255fd08ce7ddf7a6b39df508900b4c96e7798fc786b7401984e5",
+        "assets/human_motion.json": "b632691690f50aee48f73613e776adabf528bfdb0f87e1ff1ff22a7a67bc0d74",
+        "runtime/nav2_runtime.yaml": "c060ecd317402ba2aae7474437bf3db4a6ea8481a12b77d35fd6097e93e557f2",
+        "runtime/warehouse.sdf": "18812351a724371c579eaaef069a862334cfb5bc136c63caf6699f4ac0349cdf",
+        "runtime/worker_trajectory.jsonl": "73a417bd50ded6b7e2b319f892b04a90df6c4b3f7e232f77ccacc9f31ccb4b37",
+        "episode/result.json": "eda767d2b148041f7aca4b91ad2eacf57907d938d8023971b19e65372879746e",
+        "episode/gazebo_poses.jsonl": "09031cbdd849d3bc55e78e90c0e5484ebaab96eda2fc6eb21076fd7511a22a4f",
+        "episode/native_costmaps.jsonl": "7858d54cacc8b182d96e7d3f86710a6f490e67cd166f6a6108dc1dc5ca33ffc0",
+        "episode/events.jsonl": "2f88ec3e7b1c22a0be40a13bdafc15340a2239bccf0166261910dd2cc731dd58",
+        "episode/camera_preview_4x.gif": "2ea2ffd564811c61c23eea5c0bc4c5b925dabb99d4b2bad5a41aae14fa96d2f9"
+      }
+    },
+    "crossing_cohesion_heading": {
+      "runtime_commit": "18adcee4683f2183b3eb2449b273ae5fa39033e8",
+      "sha256": {
+        "capture_freeze.json": "07b0868e4381120a5d3202e2b15c087e8e95776d1d19ed644193ede2e8d02944",
+        "plan.json": "21d97903709ef742b90f41fba1b439b5699acb6ad0f1ccf72deb55de0806bce3",
+        "assets/human_motion.json": "b632691690f50aee48f73613e776adabf528bfdb0f87e1ff1ff22a7a67bc0d74",
+        "runtime/nav2_runtime.yaml": "c060ecd317402ba2aae7474437bf3db4a6ea8481a12b77d35fd6097e93e557f2",
+        "runtime/warehouse.sdf": "385e5129290c3bd17800ca79523fecd40bbde170e7e6edc80acd26e7725af1f0",
+        "runtime/worker_trajectory.jsonl": "3c0fa770a9485928200d36f8602342cf77266228a94bcdfbf49c4968c8f1ce19",
+        "episode/result.json": "a13f7d4b6f740bb1e8e8d64633ed729d12f6faf1bb25b231b68b2aa1d5efd074",
+        "episode/gazebo_poses.jsonl": "11ff04e54d9a02431c468769ccaaed02b3febd184b300170c63ab02f1614462a",
+        "episode/native_costmaps.jsonl": "ecbf11956118fbf19595c2ea9fb9c9ae4d106ae6772cbd5c9b95fc37c5b5340d",
+        "episode/events.jsonl": "1c11a14d90e37de64f09fc692f62523d61d2103bc19cd1189ca30ea0936a75c1",
+        "episode/camera_preview_4x.gif": "723ecaf7b3a91a966279fb1e87d25aa3376001d6be3d6517a28554322728826b"
+      }
+    }
+  }
+}

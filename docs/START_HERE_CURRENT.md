@@ -74,6 +74,8 @@ Khi chuẩn bị train:
 
 ## 4. Mở replay để xem ngay
 
+Kết quả nhóm đi bộ mới nhất đang xem tại [trang local35315](http://localhost:35315/group_cohesion_heading/index.html). Profile thử được chạy bằng `tools/capture_episode.py` với `--human-motion-profile group_cohesion_v2 --human-goal-clock sim_v1`; xem đầy đủ lệnh prepare/run trong báo cáo hiện tại ở trên. Các lệnh bên dưới xem **dataset01 cũ**, không tự bật mô hình người mới.
+
 Trong terminal Ubuntu/WSL:
 
 ```bash
@@ -100,17 +102,17 @@ Gazebo pose replay và hướng dẫn build ở [README replay](../experiments/s
 
 Các capture mới dùng geometry profile riêng: collision robot bao24×28cm, Nav2 radius17cm + padding1cm, URDF/TF dựng khớp SDF và camera x12cm. Model/cấu hình ROS mặc định vẫn giữ nguyên; dữ liệu cũ không bị sửa. Cấu hình MPPI horizon5s đã qua cả khe80cm và52,7cm trong fixture tĩnh, nhưng lượt nhà xưởng cũ cần recovery gần đích.
 
-Resampling MPPI đã qua vòng6 lượt GPU: tới đích, audit PASS, không recovery, gồm4 lượt gặp người gần và2 khe80/52,7cm. Biên hở bảo thủ khe hẹp8,3cm. Profile vẫn thử riêng, chưa thay mặc định ROS.
+Robot/Nav2 đã qua khe80cm và52,7cm bằng profile riêng, giữ model/TF khớp SDF và MPPI horizon5s/resampling. Đồng hồ mục tiêu người đã có `sim_v1`, tính50s theo Gazebo từ lúc nhận goal, không tính thời gian chờ máy.
 
-**Lỗi đồng hồ mục tiêu đã được sửa trong profile `sim_v1`:**50s theo thời gian Gazebo, bắt đầu ở mốc Nav2 nhận goal; tuổi mục tiêu không tăng vì chờ hoặc máy chạy chậm. 266 unit tests đạt (2 skip), bốn cặp thử backend6s trùng khớp vị trí/hướng dù lịch đồng hồ máy khác nhau, và4/4 lượt Gazebo mới đạt audit clock/tới đích/không recovery.
+**Ứng viên người đang dùng để kiểm chứng: `group_cohesion_v2` + `sim_v1`.** Hai cảnh ngược chiều/cắt ngang seed45 giảm tốc độ quay78%/88%, giữ bán kính thành viên–tâm nhóm dưới1,23m/1,14m. Robot đều tới đích, không recovery; kiểm tra chuyển động đã công bố PASS cả2. Vẫn giữ per-person ORCA và kiểm tra va chạm liên tục. Đây là adapter tùy chỉnh, chưa phải nghiệm thu mọi hành vi tự nhiên.
 
-**Hành vi nhóm vẫn chưa đạt.** Trong bốn lượt dùng clock mới, tốc độ quay toàn lượt tăng67–213% so với tham chiếu. Các vòng bao ảo của nhóm chồng nhau thường xuyên dù thân người vẫn có khoảng hở dương. Cần kiểm tra riêng lớp tránh nhau của nhóm; chưa thu/register dataset train mới. Không quay lại đồng hồ máy hoặc giảm timeout để làm video đẹp hơn.
+**Audit đầy đủ chỉ1/2 PASS:** bridge ground_truth abort khi đóng lượt cắt ngang sau khi đã ghi xong goal/label tail. Lỗi gốc và audit FAIL được giữ nguyên. Chưa nâng mặc định ROS, chưa thay dataset01 hay đăng ký dữ liệu train mới. Các bản thử giảm quay nhưng tách nhóm và bản cohesion đầu tăng quay đều được lưu để đối chiếu.
 
-Xem [báo cáo clock mới nhất](demos/2026-10-29/sim_goal_clock/README.md), [bốn video và đồ thị](demos/2026-10-29/sim_goal_clock/index.html), [vòng gặp gần trước](demos/2026-10-29/encounter_regression/README.md) và [khe hẹp ban đầu](demos/2026-10-29/static_gap/README.md).
+Xem [báo cáo hiện tại/cách chạy đúng profile](demos/2026-10-29/group_cohesion_heading/README.md), [hai video và đồ thị](demos/2026-10-29/group_cohesion_heading/index.html), [lỗi đóng bridge](demos/2026-10-29/group_cohesion_heading/teardown_failure.json). Các nhóm đứng trò chuyện vẫn dùng pipeline cũ đã có; profile mới dành cho nhóm đi bộ.
 
 ## 6. Việc tiếp theo, theo thứ tự
 
-1. Kiểm tra riêng ảnh hưởng của lớp tránh nhau/vòng bao nhóm cứng, giữ `sim_v1`, per-person ORCA/projection và robot/Nav2. Chạy lại cùng hai cảnh để xác định có giảm quay mà không đánh đổi va chạm hay phá đội hình; chưa mở rộng seed khi hành vi cơ bản chưa đạt.
+1. Cô lập và sửa/kiểm chứng lỗi đóng bridge ground_truth; giữ nguyên audit nghiêm ngặt và bản ghi lỗi hiện tại. Sau đó chạy cohort seed46–48 đã định trước và hồi quy nhóm đứng trước khi chốt profile thu mới.
 2. Đóng băng cấu hình đã nghiệm thu và thu pilot mới khi cần mở rộng dữ liệu. Không trộn kết quả thử nghiệm với các mẫu train đã chấp nhận.
 3. Với `dataset01` có sẵn, bước WM vẫn là baseline nhỏ dự báo BEV có điều kiện hành động: train trên train, chọn bằng validation, cố định rồi mới đánh giá test. Chưa thực hiện trainer trong vòng sửa mô phỏng này.
 4. Chuẩn bị RL sau khi có reward và step/reset hợp lệ.

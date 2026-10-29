@@ -1,0 +1,34 @@
+{
+  "schema": "group_cohesion_heading_validation/1",
+  "runtime_commit": "18adcee",
+  "shared_unittest": {
+    "tests": 276,
+    "skipped": 2,
+    "status": "OK"
+  },
+  "component_gate": "PASS: exact recorded goal-only control reproduction in120 steps each scene; positive guard clearance, clock and heading/cohesion reconstruction.",
+  "native_capture_integrity": {
+    "head_on_cohesion_heading": "PASS",
+    "crossing_cohesion_heading": "FAIL"
+  },
+  "failed_check": {
+    "crossing_cohesion_heading": [
+      "no_child_exit_errors"
+    ]
+  },
+  "behavior_screen": {
+    "head_on_cohesion_heading": "PASS",
+    "crossing_cohesion_heading": "PASS"
+  },
+  "input_source_equivalence": "PASS (full original verification remains FAIL because capture integrity is included)",
+  "goal_recovery_geometry": "Both actual goals reached, no progress failure/recovery, positive native swept geometry and near coverage.",
+  "frozen_inputs_unchanged": true,
+  "historical_retries_or_policy_waiver": false,
+  "failed_candidates": "Goal-only native motion failures and cohesion_v1 component failure/NOT_RUN native disposition preserved separately.",
+  "report_js": "Syntax and DOM-stub smoke PASS: two clips, motion/integrated status distinction, simulation-time playback. Not browser visual QA.",
+  "report_http": "index/results/two WebMs/plots/teardown receipt HTTP200",
+  "media": "Original native RGB GIF holds and decoded WebM frame counts verified; scientific yaw/cohesion figure and native RGB contact sheet inspected.",
+  "defaults_promoted": false,
+  "training_ready": false,
+  "gui": "No new Windows native GUI or browser screenshot confirmation."
+}
