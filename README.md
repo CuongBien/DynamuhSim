@@ -1,6 +1,23 @@
 # DynamuhSim 🤖
 
-**Refactor/clean:** [checklist và trạng thái hiện hành](docs/REFACTOR_STATUS.md). Source social-navigation còn [navigation (12)](experiments/social_navigation/navigation/README.md), [perception (10)](experiments/social_navigation/perception/README.md), [datasets (3)](experiments/social_navigation/datasets/README.md) và [replay (1)](experiments/social_navigation/replay/README.md). Ba chuỗi cohort cũ cùng writer/shim/helper dư đã gỡ; normalizer, auditor portable, parser SDF và lệnh worker dùng implementation chung.
+## Bắt đầu ở đây — bàn giao MuJoCo
+
+**Baseline code/data đã chốt: `121a727`.** [Hướng dẫn bàn giao](docs/HANDOFF_START.md) · [Setup ba mức](docs/HANDOFF_SETUP.md) · [Ranh giới backend](docs/BACKEND_BOUNDARY.md) · [Schema và checklist MuJoCo](docs/HANDOFF_MUJOCO.md).
+
+Pilot portable hai episode đã PASS:517window,910depth bitwise,2068BEV replay;chỉ Python+NumPy để đọc. [Mẫu và ZIP receipt](docs/demos/2026-10-29/handoff_pilot/README.md). Full data/raw không đi kèm Git;chưa train WM/RL hoặc port MuJoCo.
+
+```bash
+python3 tools/handoff.py baseline
+python3 tools/handoff.py doctor --scope data
+python3 tools/handoff.py smoke-data --archive /path/handoff_data_pilot01.zip --work-dir /path/NEW_RESTORE_DIR
+python3 tools/handoff.py smoke-contract
+```
+
+Các lệnh trên không mở simulator. `reference-command` in recipe Gazebo v7 đã chốt khi cần đối chiếu; xem hướng dẫn bàn giao.
+
+## Các benchmark và biên bản trước mốc bàn giao
+
+**Refactor/clean:** [checklist và trạng thái hiện hành](docs/REFACTOR_STATUS.md). Source social-navigation còn [navigation (12)](experiments/social_navigation/navigation/README.md), [perception (10)](experiments/social_navigation/perception/README.md), [datasets (4)](experiments/social_navigation/datasets/README.md) và [replay (1)](experiments/social_navigation/replay/README.md). Ba chuỗi cohort cũ cùng writer/shim/helper dư đã gỡ; normalizer, auditor portable, parser SDF và lệnh worker dùng implementation chung.
 
 **Generated và lịch sử:** 1.505 generated output cùng hai experiment chỉ còn báo cáo đã externalize sau kiểm archive/restore. [Input chuẩn](experiments/gazebo_benchmark/configs/fixtures/README.md) · [khôi phục payload](docs/history/closed_experiment_payloads.md) · [phạm vi clean và phần giữ lại](docs/CLEANUP_SCOPE.md).
 

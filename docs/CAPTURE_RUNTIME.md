@@ -1,5 +1,8 @@
 # Capture cho lượt chạy mới
 
+**Bàn giao hiện tại:** [HANDOFF_START](HANDOFF_START.md),[setup](HANDOFF_SETUP.md),[recipe factory_social_pilot_v1/v7](demos/2026-10-29/transport_order/README.md). CLI capture vẫn có default v3 để giữ giao diện cũ;hãy chọn rõ v7 khi chạy recipe hiện hành. Phần v3 dưới đây là mô tả API/biên bản trước các đợt recipe mới.
+
+
 **Recipe mặc định v3:** `configs/capture/moderate_v3.json` giữ camera, footprint,
 speed, budget 90s và tail 3,2s của v1. Goal checker kiểm XY/yaw đồng thời với
 tolerance nội bộ 0,05m/0,15rad; GoalCritic và PathFollowCritic chuyển ở 0,45m.

@@ -1,5 +1,8 @@
 # Trạng thái refactor/clean
 
+**Ghi chú bàn giao sau pilot:** xem [HANDOFF_START](HANDOFF_START.md). Biên bản/counts dưới đây thuộc đợt refactor trước;vòng chuẩn bị mới thêm entrypoint/check/docs và bảo vệ source đã nghiệm thu,không thay kết luận lịch sử.
+
+
 **Phạm vi:** source project hiện hành trên nhánh `codex/shared-navigation-runtime`.
 **Trạng thái ngày 29/10/2026:** hoàn tất checklist refactor/clean đã rà trên source hiện hành.
 Bản source sạch đã qua các kiểm tra ghi trong biên bản. Không tính xử lý lỗi goal,

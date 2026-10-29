@@ -1,5 +1,8 @@
 # Bắt đầu ở đây — những phần đang dùng
 
+**Người tiếp nhận bắt đầu tại [HANDOFF_START.md](HANDOFF_START.md)**: setup theo mức,baseline guard,portable smoke và boundary MuJoCo. Phần bên dưới giữ hướng dẫn dataset/recipe đang có.
+
+
 Cập nhật ngày **29/10/2026**. Công việc hiện tại: **đã hoàn thành pilot dữ liệu nhỏ và đủ mốc bàn giao backend MuJoCo**. `dataset01` là bộ pilot đã có, chưa thay đổi hoặc gán nhãn lại; World Model chưa train.
 
 **Pilot bàn giao mới đã PASS:**2episode/517window,910depth bitwise và2068BEV replay;loader NumPy-only và LABEL independence đạt. [Mẫu/ZIP/report local](http://localhost:35315/handoff_pilot/index.html),[tài liệu bàn giao MuJoCo](HANDOFF_MUJOCO.md). Bộ này pilot_only,không train/val/test;dataset01 cũ vẫn giữ nguyên. Đã đủ mốc tạm dừng phase Gazebo; migration chưa bắt đầu.

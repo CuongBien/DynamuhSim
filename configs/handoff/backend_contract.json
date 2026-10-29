@@ -1,0 +1,82 @@
+{
+  "schema": "dynamuhsim_backend_boundary/1",
+  "status": "Existing Gazebo boundary documented; MuJoCo adapter not implemented",
+  "robot_command": {
+    "channels": [
+      "vx",
+      "vy",
+      "wz"
+    ],
+    "frame": "body planar axes:base_link aligned base_footprint",
+    "units": [
+      "m/s",
+      "m/s",
+      "rad/s"
+    ]
+  },
+  "human_step_request": {
+    "required": [
+      "frame",
+      "epoch",
+      "time",
+      "dt",
+      "robot"
+    ],
+    "frame": "world",
+    "epoch": 0,
+    "dt_s": 0.1,
+    "time": "interval start, simulator seconds",
+    "robot_fields": [
+      "x",
+      "y",
+      "yaw",
+      "vx",
+      "vy",
+      "omega"
+    ],
+    "pose_frame": "world",
+    "velocity_frame": "world",
+    "velocity_source": "Measured world pose finite difference between consecutive native ticks; not commanded body velocity"
+  },
+  "human_step_reply": {
+    "required": [
+      "time",
+      "state_time",
+      "before",
+      "humans",
+      "groups_before",
+      "groups"
+    ],
+    "time": "request.time",
+    "state_time": "request.time+0.1",
+    "population": 6,
+    "human_ids": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "pose_fields": [
+      "x",
+      "y",
+      "yaw",
+      "speed"
+    ],
+    "interpolation": "Apply before->humans over [time,state_time], wrapped shortest yaw; publish actual applied poses as scene LABEL, not immediate future proposal",
+    "group_timing": "groups_before belongs to current interval; update at following step"
+  },
+  "clock": {
+    "reset": "Fresh episode/worker session; current worker accepts epoch0 only",
+    "pause": "No stepping/no active-age advance",
+    "discontinuity": "Fatal/restart_required; no extrapolation or hidden retry",
+    "start_gate": "Accepted navigation goal simulation stamp; freeze human lifecycle until gate"
+  },
+  "data_contract": "docs/HANDOFF_MUJOCO.md",
+  "authority": [
+    "experiments/social_navigation/navigation/socnavgym_response_fix/adapter.cc",
+    "experiments/social_navigation/navigation/socnavgym_group_nav2/worker.py",
+    "python/dynamuhsim/datasets/normalization_contract.json"
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "schema": "handoff_setup_acceptance/1",
+  "baseline_commit": "121a727",
+  "protected_files": 116,
+  "expected_new_simulator_runs": 0,
+  "checks": [
+    "11 new handoff boundary tests",
+    "full unit suite including existing tests",
+    "baseline hashes before and after",
+    "doctor data (no ROS/GPU imports)",
+    "doctor export under sourced Jazzy",
+    "doctor gazebo prerequisite imports/files/venv/GPU query, not actual rendering",
+    "existing contract smoke tests, no simulation",
+    "approved ZIP SHA/CRC restore into NEW directory, full inventory hashes and isolated unchanged inspector",
+    "reference command generation chooses exact v7/mode flags and creates no run directory",
+    "dataset01 metadata/inventory unchanged"
+  ],
+  "not_performed": [
+    "MuJoCo installation/adapter",
+    "new Gazebo capture",
+    "training/model evaluation",
+    "moving/deleting frozen source or historical data"
+  ],
+  "implementation_sha256": {
+    "tools/handoff.py": "8f9d7b7e897baa7f2435e8bf5f3a391e79b482efef4905aa74d244492659b078",
+    "configs/handoff/baseline.json": "06e8296c8cdfdfcc14fa7867f32e83e82a4f97f582fbc2c41b956729d7a0c2b9",
+    "configs/handoff/dependencies.json": "629a5477fe5abfc61005e0de9aa56b7b48117ba0e1f2f7b605300d1be7fd97f8",
+    "configs/handoff/backend_contract.json": "51326f9f6288953fa4be822b171e6b2702f4e66f9c594cf225c66f44c4690988"
+  }
+}

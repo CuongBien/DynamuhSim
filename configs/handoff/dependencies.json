@@ -1,0 +1,63 @@
+{
+  "schema": "dynamuhsim_handoff_dependencies/1",
+  "validated_python": "3.12.3",
+  "profiles": {
+    "data": {
+      "modules": [
+        "numpy"
+      ],
+      "tools": [],
+      "paths": [],
+      "scope": "NumPy reader and portable package checks only"
+    },
+    "export": {
+      "modules": [
+        "numpy",
+        "scipy",
+        "matplotlib",
+        "PIL",
+        "yaml",
+        "rclpy",
+        "rosbag2_py",
+        "rosidl_runtime_py"
+      ],
+      "tools": [],
+      "paths": [],
+      "scope": "ROS Jazzy MCAP reader and existing target math; no simulator startup"
+    },
+    "gazebo": {
+      "modules": [
+        "numpy",
+        "scipy",
+        "matplotlib",
+        "PIL",
+        "yaml",
+        "rclpy",
+        "rosbag2_py",
+        "rosidl_runtime_py",
+        "gz.transport13",
+        "gz.msgs10"
+      ],
+      "tools": [
+        "ros2",
+        "gz"
+      ],
+      "paths": [
+        "install/setup.bash",
+        "experiments/social_navigation/navigation/socnavgym_response_fix/build/libresponse_adapter.so",
+        "experiments/social_navigation/perception/depth_proxy_ablation/generated/build_jazzy/libdepth_proxy_filter.so",
+        "python/dynamuhsim/runtime/native/generated/check_friction",
+        "/usr/lib/wsl/lib/libd3d12core.so"
+      ],
+      "scope": "Current WSL/NVIDIA Gazebo reference prerequisites only; import/file availability is not native-run acceptance"
+    }
+  },
+  "socnav_venv": "experiments/social_navigation/.venv-socnavgym/bin/python",
+  "socnav_modules": [
+    "numpy",
+    "gymnasium",
+    "rvo2",
+    "socnavgym"
+  ],
+  "reference_driver_query": "/usr/lib/wsl/lib/nvidia-smi"
+}
