@@ -1,0 +1,169 @@
+{
+  "schema": "group_cohesion_heading_preflight/1",
+  "status": "PASS",
+  "cases": [
+    {
+      "id": "head_on_cohesion_heading",
+      "profiles": {
+        "group_goal_v1": {
+          "error": null,
+          "completed_steps": 120,
+          "steps": 120,
+          "yaw_total_rad": [
+            3.379470155414576,
+            3.4068958501199695,
+            3.4782249205788798,
+            3.7581174400552646,
+            3.9058501797926093,
+            3.595734782837165
+          ],
+          "path_m": [
+            7.150819288808017,
+            7.228673545319055,
+            5.315021861470723,
+            7.108921135320089,
+            6.8826124886135025,
+            7.198977817505909
+          ],
+          "max_member_centroid_radius_m": 2.1023224615907004,
+          "moving_backwards_fraction": 0.011299435028248588,
+          "minimum_guard_clearance_m": 0.04005427396708172,
+          "clock_trace_pass": true,
+          "clock_trace": {
+            "evaluations": 244,
+            "assignments": 6,
+            "expired_evaluations": 0,
+            "last_state_time_sim_s": 22.102500000000003
+          },
+          "exact_reference_poses": true,
+          "max_reference_pose_difference": 0.0
+        },
+        "group_cohesion_v2": {
+          "error": null,
+          "completed_steps": 120,
+          "steps": 120,
+          "yaw_total_rad": [
+            3.367551821690453,
+            4.579948249306329,
+            7.215150631969094,
+            0.6504248745459136,
+            2.2227945852812248,
+            2.2087958482590153
+          ],
+          "path_m": [
+            3.749656092225143,
+            3.8356733285224944,
+            3.3236683374149956,
+            5.123333559581115,
+            4.605101247698238,
+            5.428478809693278
+          ],
+          "max_member_centroid_radius_m": 1.1704452886038952,
+          "moving_backwards_fraction": 0.02170767004341534,
+          "minimum_guard_clearance_m": 0.04080658550655236,
+          "clock_trace_pass": true,
+          "clock_trace": {
+            "evaluations": 242,
+            "assignments": 3,
+            "expired_evaluations": 0,
+            "last_state_time_sim_s": 22.102500000000003
+          },
+          "cohesion_trace_pass": true,
+          "cohesion_trace": {
+            "active_steps": 120,
+            "group_proposals": 240
+          }
+        }
+      },
+      "launch_gate_pass": true,
+      "diagnostic_screen": {
+        "yaw_reduction_fraction": 0.05945037535956432,
+        "cohesion_radius_change_m": -0.9318771729868052,
+        "backward_fraction_change": 0.010408235015166752,
+        "motion_screen_pass": false
+      }
+    },
+    {
+      "id": "crossing_cohesion_heading",
+      "profiles": {
+        "group_goal_v1": {
+          "error": null,
+          "completed_steps": 120,
+          "steps": 120,
+          "yaw_total_rad": [
+            2.60749312968707,
+            2.4500796922569377,
+            2.5065678818782016,
+            1.4299453050935766,
+            1.3434649147185802,
+            1.4310270468760864
+          ],
+          "path_m": [
+            7.487253912681474,
+            8.5841828248147,
+            8.339839753255447,
+            8.560634972064067,
+            7.611420656811812,
+            9.247299106975223
+          ],
+          "max_member_centroid_radius_m": 2.4663828462229698,
+          "moving_backwards_fraction": 0.0,
+          "minimum_guard_clearance_m": 0.044213471451623576,
+          "clock_trace_pass": true,
+          "clock_trace": {
+            "evaluations": 272,
+            "assignments": 3,
+            "expired_evaluations": 0,
+            "last_state_time_sim_s": 23.602500000000003
+          },
+          "exact_reference_poses": true,
+          "max_reference_pose_difference": 0.0
+        },
+        "group_cohesion_v2": {
+          "error": null,
+          "completed_steps": 120,
+          "steps": 120,
+          "yaw_total_rad": [
+            1.6460428082032146,
+            1.6899106844650182,
+            0.5082092379256289,
+            1.4349488236287866,
+            1.3398320984981802,
+            1.0295445708646696
+          ],
+          "path_m": [
+            6.78291930674759,
+            7.5042956723868315,
+            7.951860214125229,
+            6.875522625076434,
+            6.648738504288824,
+            6.8792160794581685
+          ],
+          "max_member_centroid_radius_m": 1.1350575612298521,
+          "moving_backwards_fraction": 0.0,
+          "minimum_guard_clearance_m": 0.04609643102690808,
+          "clock_trace_pass": true,
+          "clock_trace": {
+            "evaluations": 242,
+            "assignments": 3,
+            "expired_evaluations": 0,
+            "last_state_time_sim_s": 23.602500000000003
+          },
+          "cohesion_trace_pass": true,
+          "cohesion_trace": {
+            "active_steps": 120,
+            "group_proposals": 240
+          }
+        }
+      },
+      "launch_gate_pass": true,
+      "diagnostic_screen": {
+        "yaw_reduction_fraction": 0.3500924034534182,
+        "cohesion_radius_change_m": -1.3313252849931176,
+        "backward_fraction_change": 0.0,
+        "motion_screen_pass": false
+      }
+    }
+  ],
+  "scope": "Same measured ego inputs. Safety/identity gate separate from motion screen; no closed-loop/native-physics/naturalness claim."
+}

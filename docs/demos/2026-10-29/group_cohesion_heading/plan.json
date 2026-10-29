@@ -1,0 +1,62 @@
+{
+  "schema": "group_cohesion_heading_plan/1",
+  "raw_root": "experiments/social_navigation/benchmark/generated/group_cohesion_heading_20261029",
+  "reference_root": "experiments/social_navigation/benchmark/generated/sim_goal_clock_20261029",
+  "component_reference_root": "experiments/social_navigation/benchmark/generated/group_goal_ablation_20261029",
+  "cases": [
+    {
+      "id": "head_on_cohesion_heading",
+      "reference_id": "head_on_group_sim",
+      "component_reference_id": "head_on_goal",
+      "encounter_profile": "head_on",
+      "human_motion_profile": "group_cohesion_v2",
+      "human_goal_clock": "sim_v1",
+      "scenario": "walking",
+      "seed": 45,
+      "config": "configs/capture/geometry_v7_mppi_resample.json"
+    },
+    {
+      "id": "crossing_cohesion_heading",
+      "reference_id": "crossing_group_sim",
+      "component_reference_id": "crossing_goal",
+      "encounter_profile": "crossing",
+      "human_motion_profile": "group_cohesion_v2",
+      "human_goal_clock": "sim_v1",
+      "scenario": "walking",
+      "seed": 45,
+      "config": "configs/capture/geometry_v7_mppi_resample.json"
+    }
+  ],
+  "preflight": {
+    "steps": 120,
+    "dt_s": 0.1,
+    "profiles": [
+      "group_goal_v1",
+      "group_cohesion_v2"
+    ],
+    "baseline_profile": "group_goal_v1",
+    "candidate_profile": "group_cohesion_v2"
+  },
+  "parameters": {
+    "free_radius_m": 0.9,
+    "slow_radius_m": 1.0,
+    "stop_radius_m": 1.6,
+    "attraction_gain_per_s": 0.8,
+    "max_attraction_mps": 0.4
+  },
+  "criteria": [
+    "Phase1 group_goal_v1 failed the frozen cohesion screen; preserve its source/results/videos. This is a NEW profile/cohort, never a replacement or retry.",
+    "Soft cohesion adjusts tentative moving-human velocities BEFORE unchanged per-person ORCA/swept projection. Native integration/RNG runs exactly once; no coordinates are changed after the guard. Forward proposal slows from spread1.0m to1.6m; beyond.9m add bounded centroid attraction(.8/s, cap.4m/s). Existing.8m/s final cap and1.57rad/s guard yaw bound remain.",
+    "This NEW version fixes proposal/heading inconsistency found in cohesion_v1 component tests. Same cohesion constants. When regrouping is active, use native smoothed shared goal direction plus attraction; yaw advances by at most existing rotation_rate*dt and translation is braked by max(0,cos(heading error)). At desired speed<=.05m/s hold position/yaw proposal. Compact/no-force native proposals stay unchanged. All changes are before existing per-person safety processing.",
+    "Freeze all constants/source/config before native capture; no tuning/retry/overwrite in this series. Same sim_v1/robot/Nav2/geometry/clock/initial scenes.",
+    "Component launch gate: group_goal_v1 exactly reproduces120 recorded phase1 worker XY/yaw steps under the same ego inputs; candidate completes120 steps without fault, keeps all guard clearances positive and passes clock/proposal reconstruction. No counterfactual is called closed-loop evidence.",
+    "Native: full capture/GPU/camera/depth/numeric TF/native costmap/clock/direct-goal/cohesion proposal integrity audits PASS.",
+    "Native physical/coverage screen: actual goal SUCCEEDED within world XY.2m/yaw.25rad, no recoveries/progress failures, positive native continuous robot/human,human/human,static clearances; center<=1.5m for>=.5s union and initial intent>=1s.",
+    "Native motion target remains the original group_orca_v1/sim_v1 reference: at least50% lower mean full-run yaw rate; maximum actual member-centroid radius<=original reference+.25m; backward fraction<=original+.05. Do not weaken these after seeing outcomes. Compare phase1 separately to assess regrouping cost.",
+    "One seed45 and unpinned MPPI cannot establish general naturalness. No default promotion, labels H1\u2013H5 or WM/RL dataset registration."
+  ],
+  "heading_controller": {
+    "model": "bounded_heading_cosine_speed",
+    "low_speed_deadband_mps": 0.05
+  }
+}

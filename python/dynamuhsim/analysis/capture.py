@@ -55,12 +55,15 @@ def audit_capture(run, policy, *, source_roots=(), git_repo=None, read_bag=bag_m
         checks["human_motion_bytes"] = sha256_file(asset) == sha256_file(runtime)
         freeze = load_json(run / "capture_freeze.json")["source_sha256"]
         checks["human_motion_frozen"] = any(name.endswith("/assets/human_motion.json") and digest == sha256_file(asset) for name, digest in freeze.items())
-    if plan_path.is_file() and load_json(plan_path).get("human_motion_profile") in ["group_goal_v1", "group_cohesion_v1"]:
+    if plan_path.is_file() and load_json(plan_path).get("human_motion_profile") in ["group_goal_v1", "group_cohesion_v1", "group_cohesion_v2"]:
         from dynamuhsim.simulation.group_intent import verify_goal_intents
         checks["shared_group_goal_proposals"], metrics["shared_group_goal_proposals"] = verify_goal_intents(jsonl_rows(run / "runtime/worker_trajectory.jsonl"))
     if plan_path.is_file() and load_json(plan_path).get("human_motion_profile") == "group_cohesion_v1":
         from dynamuhsim.simulation.group_cohesion import verify_cohesion_trace
         checks["group_cohesion_proposals"], metrics["group_cohesion_proposals"] = verify_cohesion_trace(jsonl_rows(run / "runtime/worker_trajectory.jsonl"))
+    if plan_path.is_file() and load_json(plan_path).get("human_motion_profile") == "group_cohesion_v2":
+        from dynamuhsim.simulation.group_cohesion_heading import verify_trace as verify_heading_cohesion
+        checks["group_cohesion_heading_proposals"], metrics["group_cohesion_heading_proposals"] = verify_heading_cohesion(jsonl_rows(run / "runtime/worker_trajectory.jsonl"))
     if plan_path.is_file() and "encounter_profile" in load_json(plan_path):
         from dynamuhsim.simulation.encounters import validate_fixture, initial_humans
         asset, runtime = run / "assets/encounter.json", run / "runtime/encounter.json"
