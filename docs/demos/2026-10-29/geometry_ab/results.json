@@ -1,0 +1,83 @@
+{
+  "schema": "geometry_ab_result/1",
+  "arms": [
+    {
+      "run": "experiments/social_navigation/benchmark/generated/visual_demo_20261029T101053/capture",
+      "status": "SUCCEEDED",
+      "actual_goal_reached": true,
+      "xy_error_m": 0.07011792304226909,
+      "active_sim_s": 69.07,
+      "path_length_m": 10.754446665167144,
+      "world_y_min_m": -0.06063787746670423,
+      "world_y_max_m": 1.8660460622138528,
+      "minimum_swept_robot_human_gap_m": 0.5448060511832788,
+      "minimum_static_gap_lower_bound_m": 0.598279418804437,
+      "static_box_count": 42,
+      "global_plan_probe": {
+        "time_sim_s": 32.4225,
+        "nearest_point_to_initial_gate_x": [
+          -22.85792062764857,
+          1.7440716453691116
+        ]
+      },
+      "native_contact_force_recorded": false,
+      "gate_A_crossings": [],
+      "passes_original_narrow_gap_A": false,
+      "rendering": "D3D12 (NVIDIA GeForce RTX 4060 Laptop GPU)",
+      "arm": "A old radius .25 / inflation .80"
+    },
+    {
+      "run": "experiments/social_navigation/benchmark/generated/geometry_ab_20261029/B_aligned_080",
+      "status": "SUCCEEDED",
+      "actual_goal_reached": true,
+      "xy_error_m": 0.09494016576061608,
+      "active_sim_s": 68.4975,
+      "path_length_m": 10.883736144935348,
+      "world_y_min_m": -0.03962330047979186,
+      "world_y_max_m": 1.8603357320467802,
+      "minimum_swept_robot_human_gap_m": 0.5340230423448278,
+      "minimum_static_gap_lower_bound_m": 0.6012244395134829,
+      "static_box_count": 42,
+      "global_plan_probe": {
+        "time_sim_s": 33.2025,
+        "nearest_point_to_initial_gate_x": [
+          -22.86476378445431,
+          1.7607490701331203
+        ]
+      },
+      "native_contact_force_recorded": false,
+      "gate_A_crossings": [],
+      "passes_original_narrow_gap_A": false,
+      "rendering": "D3D12 (NVIDIA GeForce RTX 4060 Laptop GPU)",
+      "arm": "B_aligned_080"
+    },
+    {
+      "run": "experiments/social_navigation/benchmark/generated/geometry_ab_20261029/C_aligned_045",
+      "status": "SUCCEEDED",
+      "actual_goal_reached": true,
+      "xy_error_m": 0.06739945259763534,
+      "active_sim_s": 30.89,
+      "path_length_m": 9.053523536110239,
+      "world_y_min_m": -0.10624591351318532,
+      "world_y_max_m": 1.5142221339185555,
+      "minimum_swept_robot_human_gap_m": 0.339257417595064,
+      "minimum_static_gap_lower_bound_m": 0.9376491120770393,
+      "static_box_count": 42,
+      "global_plan_probe": {
+        "time_sim_s": 30.0025,
+        "nearest_point_to_initial_gate_x": [
+          -22.447063661309897,
+          1.3962428558437772
+        ]
+      },
+      "native_contact_force_recorded": false,
+      "gate_A_crossings": [],
+      "passes_original_narrow_gap_A": false,
+      "rendering": "D3D12 (NVIDIA GeForce RTX 4060 Laptop GPU)",
+      "arm": "C_aligned_045"
+    }
+  ],
+  "limitations": "One seed, stochastic controller, baseline wall performance not comparable due to GUI; B vs C isolates inflation. A vs B changes URDF/TF plus footprint jointly.",
+  "contact_scope": "Swept conservative circular envelopes against recorded human proxy cylinders, linearly interpolated between samples. Static clearance is a conservative continuous segment lower bound against all upright native obstacle boxes, excluding the supporting floor. Neither metric establishes native contact-force truth.",
+  "gap_A_definition": "Cross H5-H6 moving connecting segment within free surface opening; original stationary pair requires speed<0.05m/s and <0.1m shift from goal start."
+}
