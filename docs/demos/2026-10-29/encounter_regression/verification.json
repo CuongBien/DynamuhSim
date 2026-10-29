@@ -1,0 +1,144 @@
+{
+  "schema": "encounter_regression_verification/1",
+  "status": "PASS",
+  "checks": {
+    "head_on:same:assets/mecanum_camera.sdf": true,
+    "head_on:same:assets/mecanum_aligned.urdf": true,
+    "head_on:same:assets/encounter.json": true,
+    "head_on:same_initial_humans": true,
+    "head_on:same_initial_groups": true,
+    "head_on:same_nav_config": true,
+    "head_on:world_same_except_socket": true,
+    "head_on:same_runtime_sources": true,
+    "crossing:same:assets/mecanum_camera.sdf": true,
+    "crossing:same:assets/mecanum_aligned.urdf": true,
+    "crossing:same:assets/encounter.json": true,
+    "crossing:same_initial_humans": true,
+    "crossing:same_initial_groups": true,
+    "crossing:same_nav_config": true,
+    "crossing:world_same_except_socket": true,
+    "crossing:same_runtime_sources": true,
+    "gap_wide_resample:only_noise_control_change": true,
+    "gap_wide_resample:same_old_fixture:assets/mecanum_camera.sdf": true,
+    "gap_wide_resample:same_old_fixture:assets/mecanum_aligned.urdf": true,
+    "gap_wide_resample:same_old_fixture:assets/gap_fixture.json": true,
+    "gap_wide_resample:same_old_fixture:assets/gap.pgm": true,
+    "gap_wide_resample:same_old_fixture:assets/gap.yaml": true,
+    "gap_narrow_resample:only_noise_control_change": true,
+    "gap_narrow_resample:same_old_fixture:assets/mecanum_camera.sdf": true,
+    "gap_narrow_resample:same_old_fixture:assets/mecanum_aligned.urdf": true,
+    "gap_narrow_resample:same_old_fixture:assets/gap_fixture.json": true,
+    "gap_narrow_resample:same_old_fixture:assets/gap.pgm": true,
+    "gap_narrow_resample:same_old_fixture:assets/gap.yaml": true,
+    "head_on_legacy:integrity": true,
+    "head_on_legacy:native_gpu": true,
+    "head_on_legacy:no_injected_velocity": true,
+    "head_on_legacy:cleanup": true,
+    "head_on_group:integrity": true,
+    "head_on_group:native_gpu": true,
+    "head_on_group:no_injected_velocity": true,
+    "head_on_group:cleanup": true,
+    "crossing_legacy:integrity": true,
+    "crossing_legacy:native_gpu": true,
+    "crossing_legacy:no_injected_velocity": true,
+    "crossing_legacy:cleanup": true,
+    "crossing_group:integrity": true,
+    "crossing_group:native_gpu": true,
+    "crossing_group:no_injected_velocity": true,
+    "crossing_group:cleanup": true,
+    "gap_wide_resample:integrity": true,
+    "gap_wide_resample:native_gpu": true,
+    "gap_wide_resample:no_injected_velocity": true,
+    "gap_wide_resample:cleanup": true,
+    "gap_narrow_resample:integrity": true,
+    "gap_narrow_resample:native_gpu": true,
+    "gap_narrow_resample:no_injected_velocity": true,
+    "gap_narrow_resample:cleanup": true
+  },
+  "evidence": {
+    "head_on_legacy": {
+      "runtime_commit": "1ca8652857375d64123c97b6e7698323cffca139",
+      "file_sha256": {
+        "capture_freeze.json": "c6dc40fed06dc9f19d1fd34c324470c2d33652fca2f65846bbb5cfa71725365d",
+        "plan.json": "c4ca3e30c6ac931108b67ed74d444f3fbdd945d62174fc0b1a5ae8ad7f591e4f",
+        "runtime/nav2_runtime.yaml": "c060ecd317402ba2aae7474437bf3db4a6ea8481a12b77d35fd6097e93e557f2",
+        "runtime/warehouse.sdf": "91d5231b047c2045439a4bd98e9d282d8aa6ff004c0dbbf08ff5310da5ca567e",
+        "episode/result.json": "3957121d1c33e552d7be675107d9f2b3bf0874b7342542fcc8ec7d8ea8af12e5",
+        "episode/gazebo_poses.jsonl": "55d0f1db003d4217046dd37976306f0f108c35cdae75528630e5d34bba925bc3",
+        "episode/native_costmaps.jsonl": "663e630fefaaa91211cc7b95dabc9fbaaa49e0c642890e2c5bfc00e0108307bc",
+        "episode/events.jsonl": "1638d0c3c94b8d28c69e407c987b6baf8c6aaf5ad4fda9a605a30a2c436ab09a",
+        "episode/camera_preview_4x.gif": "760ff4d8595b043b87d3c33fb3e81e3572a60def0359d1209d54be53c09de3de"
+      }
+    },
+    "head_on_group": {
+      "runtime_commit": "1ca8652857375d64123c97b6e7698323cffca139",
+      "file_sha256": {
+        "capture_freeze.json": "92fe6bf2f028937ef95617ffcaca35b3eacdbfd54215e5f1ec7b59633fa38c0a",
+        "plan.json": "17f5df592b61d95e06c2bc38f83f0e4846b50f59777103099ec5cd7b208c904a",
+        "runtime/nav2_runtime.yaml": "c060ecd317402ba2aae7474437bf3db4a6ea8481a12b77d35fd6097e93e557f2",
+        "runtime/warehouse.sdf": "892b2859df1a651f82605ede5bda9db046ebe2dbd04a9eec7cd6875ae81bc9bc",
+        "episode/result.json": "4660545a0b7ddec2e5f4f8c893f5cda1a4ae1519a307f4e31a14dea7d4093c3c",
+        "episode/gazebo_poses.jsonl": "3ca6e512ec433a49ef13bd2e098ff6b8921bf1ce6ff786672ed55e7ccfc50d29",
+        "episode/native_costmaps.jsonl": "1fcbdb8413768b9b02e87420196d4630e62a18bc31938bfe181d37f18682a1b2",
+        "episode/events.jsonl": "3aabefba9a748a4fdedac1e995ed55975039f5a2029b9bfe3d952c0ff4e28e94",
+        "episode/camera_preview_4x.gif": "4ad5ecb9a7e18a3650cafdbfea9669b352a1239368f2855073dc859f2cb6d9a4"
+      }
+    },
+    "crossing_legacy": {
+      "runtime_commit": "1ca8652857375d64123c97b6e7698323cffca139",
+      "file_sha256": {
+        "capture_freeze.json": "59e52a725c31c3a9c354e120ac04101a04e8d0766677dde46252826dc67ad389",
+        "plan.json": "90015aeaa06a2df98993db8405e39b2252c21b02ba1acc3bd432f4c5427602f6",
+        "runtime/nav2_runtime.yaml": "c060ecd317402ba2aae7474437bf3db4a6ea8481a12b77d35fd6097e93e557f2",
+        "runtime/warehouse.sdf": "575c9d525da4813b9efe06323978b600ecdb7648a7c167b8e1984f34eaa9c747",
+        "episode/result.json": "c489c738da946ff97f352733cf2306b2776a90447c022d6cd7285ba93f680c1f",
+        "episode/gazebo_poses.jsonl": "c7c5c38edbb34f4e2e49ad6f140e98989d2287757bfb8c1dd5f17c945e1dce8d",
+        "episode/native_costmaps.jsonl": "fbf47d72114be7ef7a990c0a5f0eb9a0f713b3d3da0f171164968e3ffadb3272",
+        "episode/events.jsonl": "50a97a23face87122c8ad2ee17214477bf4a584356a5c54ec7c0a9769569987b",
+        "episode/camera_preview_4x.gif": "6c9fa4117882c4423e88b73a65cbc273a0c473cb2d455a26be412b0d94f2d229"
+      }
+    },
+    "crossing_group": {
+      "runtime_commit": "1ca8652857375d64123c97b6e7698323cffca139",
+      "file_sha256": {
+        "capture_freeze.json": "58191846e494b01ffdda512da4d574f174c24a80e9b498d774328af747499162",
+        "plan.json": "a958fdfcb38abdd611e532cba7129540dc9d15ced9d12c0af62f74e9929d3358",
+        "runtime/nav2_runtime.yaml": "c060ecd317402ba2aae7474437bf3db4a6ea8481a12b77d35fd6097e93e557f2",
+        "runtime/warehouse.sdf": "32121761ed6be1e60ddf71196190b7d2814be268bf3570db63aaaededce899d6",
+        "episode/result.json": "20fcad6b20e4958ce60ed1d531df3544b2a67cce988d2678bd75ea268388bc3a",
+        "episode/gazebo_poses.jsonl": "83c6a06703c55288f0ad173c5f8a635fe64a9de97dd1beccad1411b9ff05505b",
+        "episode/native_costmaps.jsonl": "87def73a5d3fe4f1e8e6eeb30b730ce2e5a127639e3f52f78fb5f5dacf474644",
+        "episode/events.jsonl": "341ffb04c9b6150b0c2cf3bd5bea7724596e3cda703d4d8648a10db4efd4ce5b",
+        "episode/camera_preview_4x.gif": "0f6ed87a28cd4d64a21a70cb4d5774f6f2826bce4f4ce48528d4668db6803265"
+      }
+    },
+    "gap_wide_resample": {
+      "runtime_commit": "1ca8652857375d64123c97b6e7698323cffca139",
+      "file_sha256": {
+        "capture_freeze.json": "bd92df4334f2ac18d334c1cf8e60a335d60f533e3263ccdb7fed9654e9929ef0",
+        "plan.json": "696539cd84a384bf6b840b2810b0be873419b733831aff7fdad6eaa25cab8608",
+        "runtime/nav2_runtime.yaml": "c060ecd317402ba2aae7474437bf3db4a6ea8481a12b77d35fd6097e93e557f2",
+        "runtime/warehouse.sdf": "6f32d9bcac113746b8c91cd5c3d6429eec65202d65245a670570c62003b260df",
+        "episode/result.json": "14af6679341af90718693c2303153ff01a984bf3c3e711f96371071745552771",
+        "episode/gazebo_poses.jsonl": "c03e3104555fd81041c910d9a274b7c1825f6065c45e6ca7ebcbaa9539f7300a",
+        "episode/native_costmaps.jsonl": "073507964fd84f31f280730f8e654b8372f84369be4814bad4ac67e2f4dd936e",
+        "episode/events.jsonl": "171d13b6fd28d0766690df9b1c929a992a9dd4ba07c076e73372d5c31f521e04",
+        "episode/camera_preview_4x.gif": "9361c9f2a6911a62b84f1706b010b538350109fcf1880c5962bb6bd44071dfc6"
+      }
+    },
+    "gap_narrow_resample": {
+      "runtime_commit": "1ca8652857375d64123c97b6e7698323cffca139",
+      "file_sha256": {
+        "capture_freeze.json": "fec87cd43b468de8420856b3338f0433c8c6074c2af8cd166097ada110b05a28",
+        "plan.json": "eac6149d5d28a429464e3c93cbffbdd1fcd820bbf1cb9caad6fcdd73cabe5087",
+        "runtime/nav2_runtime.yaml": "c060ecd317402ba2aae7474437bf3db4a6ea8481a12b77d35fd6097e93e557f2",
+        "runtime/warehouse.sdf": "71426d69bfbdf5c86d47af40164a636123fee05071e2916cce3e71642304874b",
+        "episode/result.json": "828b8d1f01cf8fed0d0f55d300d31a72311bac8f7bb21fc3c1bb4a868a34d7af",
+        "episode/gazebo_poses.jsonl": "b80576674f3854164cf106ea3171c5ea669bd646162e5589ae63473bb4bec9ab",
+        "episode/native_costmaps.jsonl": "6d8391d0cacb480518c41e7117758acee769b8dbd8ee4c0fe6c18969e27d2fb1",
+        "episode/events.jsonl": "8ffdd79b9f72158a31ee629db6b044b1b99ecbe59e0caacb44e9f7f757669cc4",
+        "episode/camera_preview_4x.gif": "28ba34e4468752a7ab6d76936eba8aca14531046dd09aba95f47715e2594eb7d"
+      }
+    }
+  }
+}

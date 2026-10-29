@@ -1,0 +1,426 @@
+{
+  "schema": "encounter_goal_clock/1",
+  "native_timeout_wall_s": 50,
+  "human_goal_acceptance_radius_m": 1.8,
+  "radius_basis": "Fixture human.width/2 .36 + interaction_goal_radius1.44; source calls group.has_reached_goal() with default offset.",
+  "source_sha256": "a723ec4ac74e75af08080e0133744f52ebf413fd9b214799233c5d2a35a4aae9",
+  "cases": [
+    {
+      "id": "head_on_legacy",
+      "changes": [
+        {
+          "time_after_goal_s": 5.909999999999998,
+          "members": [
+            1,
+            2,
+            3
+          ],
+          "old_target": [
+            -28.2,
+            0.35
+          ],
+          "new_target": [
+            11.327971707858417,
+            -10.37192096164015
+          ],
+          "previous_goal_ages_wall_s": [
+            30.938056230545044,
+            30.938056468963623,
+            30.938056707382202
+          ],
+          "previous_member_goal_distance_m": [
+            1.7846922023339105,
+            0.8319001780689068,
+            1.2558740941976625
+          ],
+          "near_50s_while_target_far": false,
+          "scope": "Diagnostic consistent with native wall-time expiry, not attribution of all heading changes or all lifecycle events."
+        },
+        {
+          "time_after_goal_s": 12.109999999999998,
+          "members": [
+            4,
+            5,
+            6
+          ],
+          "old_target": [
+            -27.5,
+            -0.35
+          ],
+          "new_target": [
+            18.462797174468108,
+            17.138073699765776
+          ],
+          "previous_goal_ages_wall_s": [
+            49.97013735771179,
+            49.97013759613037,
+            49.97013783454895
+          ],
+          "previous_member_goal_distance_m": [
+            3.3800442409053137,
+            2.467165693149965,
+            2.0957100376811297
+          ],
+          "near_50s_while_target_far": true,
+          "scope": "Diagnostic consistent with native wall-time expiry, not attribution of all heading changes or all lifecycle events."
+        },
+        {
+          "time_after_goal_s": 25.809999999999995,
+          "members": [
+            1,
+            2,
+            3
+          ],
+          "old_target": [
+            11.327971707858417,
+            -10.37192096164015
+          ],
+          "new_target": [
+            24.11166173140682,
+            -10.561176278311198
+          ],
+          "previous_goal_ages_wall_s": [
+            50.08568453788757,
+            50.085684299468994,
+            50.085684061050415
+          ],
+          "previous_member_goal_distance_m": [
+            32.51240057166051,
+            34.10363311201034,
+            32.557432540879226
+          ],
+          "near_50s_while_target_far": true,
+          "scope": "Diagnostic consistent with native wall-time expiry, not attribution of all heading changes or all lifecycle events."
+        },
+        {
+          "time_after_goal_s": 34.21,
+          "members": [
+            4,
+            5,
+            6
+          ],
+          "old_target": [
+            18.462797174468108,
+            17.138073699765776
+          ],
+          "new_target": [
+            7.154597196332212,
+            -5.0575169381757785
+          ],
+          "previous_goal_ages_wall_s": [
+            50.03873801231384,
+            50.03873634338379,
+            50.03873538970947
+          ],
+          "previous_member_goal_distance_m": [
+            35.141577201198444,
+            36.37522129636797,
+            36.2564596168485
+          ],
+          "near_50s_while_target_far": true,
+          "scope": "Diagnostic consistent with native wall-time expiry, not attribution of all heading changes or all lifecycle events."
+        }
+      ],
+      "near_50s_far_target_count": 3
+    },
+    {
+      "id": "head_on_group",
+      "changes": [
+        {
+          "time_after_goal_s": 5.824999999999999,
+          "members": [
+            1,
+            2,
+            3
+          ],
+          "old_target": [
+            -28.2,
+            0.35
+          ],
+          "new_target": [
+            11.327971707858417,
+            -10.37192096164015
+          ],
+          "previous_goal_ages_wall_s": [
+            31.5746111869812,
+            31.5746111869812,
+            31.5746111869812
+          ],
+          "previous_member_goal_distance_m": [
+            1.7917771604561863,
+            0.9671576295542094,
+            1.1731222908433372
+          ],
+          "near_50s_while_target_far": false,
+          "scope": "Diagnostic consistent with native wall-time expiry, not attribution of all heading changes or all lifecycle events."
+        },
+        {
+          "time_after_goal_s": 13.425,
+          "members": [
+            4,
+            5,
+            6
+          ],
+          "old_target": [
+            -27.5,
+            -0.35
+          ],
+          "new_target": [
+            22.786680056962794,
+            -11.084116110919258
+          ],
+          "previous_goal_ages_wall_s": [
+            49.99787926673889,
+            49.99787926673889,
+            49.99787950515747
+          ],
+          "previous_member_goal_distance_m": [
+            2.639152355680563,
+            2.0368042083295,
+            1.291850307345952
+          ],
+          "near_50s_while_target_far": true,
+          "scope": "Diagnostic consistent with native wall-time expiry, not attribution of all heading changes or all lifecycle events."
+        },
+        {
+          "time_after_goal_s": 27.725,
+          "members": [
+            1,
+            2,
+            3
+          ],
+          "old_target": [
+            11.327971707858417,
+            -10.37192096164015
+          ],
+          "new_target": [
+            -15.977164113342582,
+            -10.702914078439749
+          ],
+          "previous_goal_ages_wall_s": [
+            50.126094341278076,
+            50.12609386444092,
+            50.12609362602234
+          ],
+          "previous_member_goal_distance_m": [
+            33.29648405383982,
+            35.106324157191985,
+            34.009909954692304
+          ],
+          "near_50s_while_target_far": true,
+          "scope": "Diagnostic consistent with native wall-time expiry, not attribution of all heading changes or all lifecycle events."
+        },
+        {
+          "time_after_goal_s": 35.825,
+          "members": [
+            4,
+            5,
+            6
+          ],
+          "old_target": [
+            22.786680056962794,
+            -11.084116110919258
+          ],
+          "new_target": [
+            17.88298799136105,
+            13.20158652234516
+          ],
+          "previous_goal_ages_wall_s": [
+            49.91434168815613,
+            49.91434097290039,
+            49.91434025764465
+          ],
+          "previous_member_goal_distance_m": [
+            33.99204376758345,
+            36.841956940855646,
+            35.437720942883345
+          ],
+          "near_50s_while_target_far": true,
+          "scope": "Diagnostic consistent with native wall-time expiry, not attribution of all heading changes or all lifecycle events."
+        }
+      ],
+      "near_50s_far_target_count": 3
+    },
+    {
+      "id": "crossing_legacy",
+      "changes": [
+        {
+          "time_after_goal_s": 14.577499999999999,
+          "members": [
+            1,
+            2,
+            3
+          ],
+          "old_target": [
+            -25.1,
+            4.5
+          ],
+          "new_target": [
+            25.926829443235405,
+            16.473170304975064
+          ],
+          "previous_goal_ages_wall_s": [
+            49.95429563522339,
+            49.954296350479126,
+            49.954296588897705
+          ],
+          "previous_member_goal_distance_m": [
+            5.302497327014099,
+            3.612387989300531,
+            4.769965482232391
+          ],
+          "near_50s_while_target_far": true,
+          "scope": "Diagnostic consistent with native wall-time expiry, not attribution of all heading changes or all lifecycle events."
+        },
+        {
+          "time_after_goal_s": 14.577499999999999,
+          "members": [
+            4,
+            5,
+            6
+          ],
+          "old_target": [
+            -24.6,
+            -3.5
+          ],
+          "new_target": [
+            -5.150163599569627,
+            -18.198912502565587
+          ],
+          "previous_goal_ages_wall_s": [
+            49.9542920589447,
+            49.95429253578186,
+            49.95429253578186
+          ],
+          "previous_member_goal_distance_m": [
+            6.7351726415294175,
+            7.287058540863075,
+            5.744672243902114
+          ],
+          "near_50s_while_target_far": true,
+          "scope": "Diagnostic consistent with native wall-time expiry, not attribution of all heading changes or all lifecycle events."
+        }
+      ],
+      "near_50s_far_target_count": 2
+    },
+    {
+      "id": "crossing_group",
+      "changes": [
+        {
+          "time_after_goal_s": 15.005,
+          "members": [
+            1,
+            2,
+            3
+          ],
+          "old_target": [
+            -25.1,
+            4.5
+          ],
+          "new_target": [
+            25.926829443235405,
+            16.473170304975064
+          ],
+          "previous_goal_ages_wall_s": [
+            49.97603511810303,
+            49.976035594940186,
+            49.976035833358765
+          ],
+          "previous_member_goal_distance_m": [
+            6.038200916514139,
+            3.925302757425357,
+            5.276856256160953
+          ],
+          "near_50s_while_target_far": true,
+          "scope": "Diagnostic consistent with native wall-time expiry, not attribution of all heading changes or all lifecycle events."
+        },
+        {
+          "time_after_goal_s": 15.005,
+          "members": [
+            4,
+            5,
+            6
+          ],
+          "old_target": [
+            -24.6,
+            -3.5
+          ],
+          "new_target": [
+            -5.150163599569627,
+            -18.198912502565587
+          ],
+          "previous_goal_ages_wall_s": [
+            49.9760320186615,
+            49.97603225708008,
+            49.976032733917236
+          ],
+          "previous_member_goal_distance_m": [
+            5.094506230292303,
+            6.435345200176372,
+            5.53201944383226
+          ],
+          "near_50s_while_target_far": true,
+          "scope": "Diagnostic consistent with native wall-time expiry, not attribution of all heading changes or all lifecycle events."
+        },
+        {
+          "time_after_goal_s": 34.305,
+          "members": [
+            1,
+            2,
+            3
+          ],
+          "old_target": [
+            25.926829443235405,
+            16.473170304975064
+          ],
+          "new_target": [
+            1.551763999995817,
+            7.524588792471082
+          ],
+          "previous_goal_ages_wall_s": [
+            50.000428438186646,
+            50.00042796134949,
+            50.00042772293091
+          ],
+          "previous_member_goal_distance_m": [
+            43.21199332512906,
+            42.51310070205598,
+            43.73813097558424
+          ],
+          "near_50s_while_target_far": true,
+          "scope": "Diagnostic consistent with native wall-time expiry, not attribution of all heading changes or all lifecycle events."
+        },
+        {
+          "time_after_goal_s": 34.305,
+          "members": [
+            4,
+            5,
+            6
+          ],
+          "old_target": [
+            -5.150163599569627,
+            -18.198912502565587
+          ],
+          "new_target": [
+            -26.93272711537417,
+            -9.902610544492763
+          ],
+          "previous_goal_ages_wall_s": [
+            49.99502515792847,
+            49.99502491950989,
+            49.99502491950989
+          ],
+          "previous_member_goal_distance_m": [
+            22.883194905692537,
+            25.038094789054558,
+            23.263163227297575
+          ],
+          "near_50s_while_target_far": true,
+          "scope": "Diagnostic consistent with native wall-time expiry, not attribution of all heading changes or all lifecycle events."
+        }
+      ],
+      "near_50s_far_target_count": 4
+    }
+  ],
+  "scope": "Read-only diagnostic. Source accepts geometric arrival OR host-time expiry; future fixed-clock comparisons are required. Raw inputs and clocks remain unchanged."
+}

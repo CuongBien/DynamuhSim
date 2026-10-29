@@ -100,13 +100,15 @@ Gazebo pose replay và hướng dẫn build ở [README replay](../experiments/s
 
 Các capture mới dùng geometry profile riêng: collision robot bao24×28cm, Nav2 radius17cm + padding1cm, URDF/TF dựng khớp SDF và camera x12cm. Model/cấu hình ROS mặc định vẫn giữ nguyên; dữ liệu cũ không bị sửa. Cấu hình MPPI horizon5s đã qua cả khe80cm và52,7cm trong fixture tĩnh, nhưng lượt nhà xưởng cũ cần recovery gần đích.
 
-Đợt mới đã thử resampling MPPI và adapter nhóm người riêng biệt: **4/4 lượt Gazebo GPU tới đích, audit PASS, không recovery**. Cùng12 giây đầu vào robot, adapter giảm tổng góc quay73%; kiểm tra pose Gazebo trong các lượt tương tác cũng giảm quay rõ rệt. Chưa nghiệm thu hoàn toàn tính tự nhiên: cần thêm gặp ngược chiều/cắt ngang và nhiều seed. Chưa nâng lên mặc định hoặc đăng ký thành dataset train mới.
+Resampling MPPI đã qua vòng mới: **6/6 lượt GPU tới đích, audit PASS, không recovery**, gồm4 lượt gặp người gần và2 khe80/52,7cm. Biên hở bảo thủ của khe hẹp8,3cm. Cấu hình này vẫn là profile thử riêng, không thay mặc định.
 
-Xem [báo cáo hiện tại và video](demos/2026-10-29/endpoint_humans/README.md), [trang xem trực quan](demos/2026-10-29/endpoint_humans/index.html) và [khe hẹp](demos/2026-10-29/static_gap/README.md).
+Adapter nhóm người **chưa được chốt**. Phép thử cũ cùng12s đầu vào robot giảm quay73%, nhưng cảnh gặp gần mới chỉ giảm25%/9% trong12s đầu; cả lượt ngược chiều lại tăng tốc độ quay trung bình11% và thời gian ở gần robot. Native SocNavGym còn đổi mục tiêu theo50s đồng hồ máy, có log cho thấy đích vẫn xa khi gần hết hạn. Chưa thu/register dataset train mới từ các thử nghiệm này.
+
+Xem [báo cáo mới nhất](demos/2026-10-29/encounter_regression/README.md), [video và costmap](demos/2026-10-29/encounter_regression/index.html), [lượt sửa quay trước](demos/2026-10-29/endpoint_humans/README.md) và [khe hẹp ban đầu](demos/2026-10-29/static_gap/README.md).
 
 ## 6. Việc tiếp theo, theo thứ tự
 
-1. Kiểm tra nhóm người trong tình huống ngược chiều/cắt ngang và nhiều seed; kiểm tra recipe7 trên hai khe tĩnh trước khi chốt cấu hình thu mới.
+1. Cô lập thời hạn mục tiêu người theo đồng hồ mô phỏng từ lúc bắt đầu chạy; giữ nguyên ORCA/Nav2 và chạy lại hai tình huống gặp gần. Sau đó kiểm tra một cohort seed cố định trước khi chốt mô hình người.
 2. Đóng băng cấu hình đã nghiệm thu và thu pilot mới khi cần mở rộng dữ liệu. Không trộn kết quả thử nghiệm với các mẫu train đã chấp nhận.
 3. Với `dataset01` có sẵn, bước WM vẫn là baseline nhỏ dự báo BEV có điều kiện hành động: train trên train, chọn bằng validation, cố định rồi mới đánh giá test. Chưa thực hiện trainer trong vòng sửa mô phỏng này.
 4. Chuẩn bị RL sau khi có reward và step/reset hợp lệ.
