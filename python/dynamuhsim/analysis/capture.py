@@ -90,7 +90,20 @@ def audit_capture(run, policy, *, source_roots=(), git_repo=None, read_bag=bag_m
         gate = float((run / "runtime/start_gate").read_text())
         events_for_clock = list(jsonl_rows(out / "events.jsonl"))
         checks["goal_clock_gate_matches_accepted_goal"] = abs(gate-next(v["stamp_ns"]/1e9 for v in events_for_clock if v["event"]=="goal_accepted")) < 1e-8
-        checks["goal_clock_trace"], metrics["goal_clock_trace"] = verify_trace(jsonl_rows(run / "runtime/worker_trajectory.jsonl"), gate, ready)
+        if load_json(plan_path).get("goal_clock_validation") == "standing_snapshot_v1":
+            from dynamuhsim.simulation.conversation import validate_profile as validate_conversation, verify_conversation
+            from .standing_clock import verify_snapshots
+            lifecycle_asset, lifecycle_runtime = run / "assets/human_lifecycle.json", run / "runtime/human_lifecycle.json"
+            lifecycle = validate_conversation(load_json(lifecycle_asset))
+            lifecycle_plan = load_json(plan_path)
+            checks["declared_standing_clock_contract"] = lifecycle_plan.get("scenario") == "standing" and lifecycle_plan.get("human_motion_profile", "legacy") == "legacy" and lifecycle_plan.get("human_lifecycle_profile") == lifecycle["profile"] == r.get("human_lifecycle_profile") == load_json(run / "runtime/ready.json").get("human_lifecycle", {}).get("profile") and r.get("goal_clock_validation") == lifecycle["clock_validation"]
+            checks["human_lifecycle_bytes"] = sha256_file(lifecycle_asset) == sha256_file(lifecycle_runtime)
+            checks["human_lifecycle_frozen"] = any(name.endswith("/assets/human_lifecycle.json") and digest == sha256_file(lifecycle_asset) for name, digest in freeze.items())
+            trace = list(jsonl_rows(run / "runtime/worker_trajectory.jsonl"))
+            checks["persistent_conversation_trace"], metrics["persistent_conversation_trace"] = verify_conversation(trace)
+            checks["goal_clock_snapshot_trace"], metrics["goal_clock_snapshot_trace"] = verify_snapshots(trace, gate, ready)
+        else:
+            checks["goal_clock_trace"], metrics["goal_clock_trace"] = verify_trace(jsonl_rows(run / "runtime/worker_trajectory.jsonl"), gate, ready)
     checks["freeze_identity"] = sha256_file(run / "capture_freeze.json") == r["capture_freeze_sha256"]
     q = r["server_shutdown"]["quiesce"]
     checks["pause_acknowledged"] = q["pause_acknowledged"] and q["simulation_time_stable"]

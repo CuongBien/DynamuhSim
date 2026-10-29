@@ -85,7 +85,7 @@ def capture_sources(repo):
     return sorted(set(files))
 
 
-def prepare_run(repo, run_dir, config_path, scenario, seed, gui=False, *, planner_diagnostics=False, human_motion_profile="legacy", encounter_profile=None, human_goal_clock="native_wall"):
+def prepare_run(repo, run_dir, config_path, scenario, seed, gui=False, *, planner_diagnostics=False, human_motion_profile="legacy", encounter_profile=None, human_goal_clock="native_wall", human_lifecycle_profile="native"):
     repo, run_dir, config_path = Path(repo).resolve(), Path(run_dir).resolve(), Path(config_path).resolve()
     run_dir.relative_to(repo)
     config = validate_config(json.loads(config_path.read_text()))
@@ -97,6 +97,10 @@ def prepare_run(repo, run_dir, config_path, scenario, seed, gui=False, *, planne
         raise ValueError("Unsupported human goal clock")
     if human_motion_profile in ["group_goal_v1", "group_cohesion_v1", "group_cohesion_v2"] and human_goal_clock != "sim_v1":
         raise ValueError("Shared group goal profile requires declared sim_v1 clock")
+    if human_lifecycle_profile not in ["native", "persistent_conversation_v1"]:
+        raise ValueError("Unsupported human lifecycle profile")
+    if human_lifecycle_profile != "native" and (scenario != "standing" or human_motion_profile != "legacy" or human_goal_clock != "sim_v1"):
+        raise ValueError("Persistent conversation requires standing, legacy motion and sim_v1 clock")
     encounter = None
     if encounter_profile is not None:
         from dynamuhsim.simulation.encounters import fixture, initial_clearance
@@ -144,6 +148,12 @@ def prepare_run(repo, run_dir, config_path, scenario, seed, gui=False, *, planne
         dump(assets / "human_goal_clock.json", PROFILE)
         files.append(assets / "human_goal_clock.json")
         plan["human_goal_clock"] = human_goal_clock
+    if human_lifecycle_profile != "native":
+        from dynamuhsim.simulation.conversation import PROFILE
+        dump(assets / "human_lifecycle.json", PROFILE)
+        files.append(assets / "human_lifecycle.json")
+        plan["human_lifecycle_profile"] = human_lifecycle_profile
+        plan["goal_clock_validation"] = PROFILE["clock_validation"]
     if planner_diagnostics:plan["planner_diagnostics"] = True
     dump(run_dir / "plan.json", plan)
     files += [assets / "mecanum_camera.sdf", run_dir / "plan.json", run_dir / "preflight.json"]
@@ -196,6 +206,16 @@ def verify_run(repo, run_dir):
             raise RuntimeError("Human goal clock missing from freeze")
         if validate_profile(json.loads(asset.read_text()))["profile"] != plan["human_goal_clock"]:
             raise RuntimeError("Human goal clock differs from plan")
+    if "human_lifecycle_profile" in plan:
+        from dynamuhsim.simulation.conversation import validate_profile
+        asset = run_dir / "assets/human_lifecycle.json"
+        if str(asset.relative_to(repo)) not in manifest["source_sha256"]:
+            raise RuntimeError("Human lifecycle missing from freeze")
+        selected = validate_profile(json.loads(asset.read_text()))
+        if selected["profile"] != plan["human_lifecycle_profile"] or plan.get("scenario") != "standing" or plan.get("human_motion_profile", "legacy") != "legacy" or plan.get("human_goal_clock") != "sim_v1" or plan.get("goal_clock_validation") != selected["clock_validation"]:
+            raise RuntimeError("Conversation lifecycle/clock contract differs from plan")
+    elif "goal_clock_validation" in plan:
+        raise RuntimeError("Clock snapshot contract requires frozen conversation lifecycle")
     return manifest
 
 
@@ -226,6 +246,10 @@ class CaptureContext:
         if "human_goal_clock" in self.plan:
             shutil.copyfile(self.run_dir / "assets/human_goal_clock.json", runtime / "human_goal_clock.json")
             result["human_goal_clock"] = self.plan["human_goal_clock"]
+        if "human_lifecycle_profile" in self.plan:
+            shutil.copyfile(self.run_dir / "assets/human_lifecycle.json", runtime / "human_lifecycle.json")
+            result["human_lifecycle_profile"] = self.plan["human_lifecycle_profile"]
+            result["goal_clock_validation"] = self.plan["goal_clock_validation"]
         result.update(capture_schema="dynamuhsim_capture/2", capture_freeze_sha256=sha(self.run_dir / "capture_freeze.json"),
                       experiment="Versioned capture API; native camera and moderate Nav2 treatment",
                       capture_recipe_schema=self.config["schema"],

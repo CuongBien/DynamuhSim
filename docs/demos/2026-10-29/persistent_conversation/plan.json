@@ -1,0 +1,85 @@
+{
+  "schema": "persistent_conversation_validation/1",
+  "raw_root": "experiments/social_navigation/benchmark/generated/persistent_conversation_20261029",
+  "preflight_root": "experiments/social_navigation/benchmark/generated/persistent_conversation_preflight_20261029",
+  "component_reference": "experiments/social_navigation/benchmark/generated/seed_regression_20261029/standing_s46",
+  "component_steps": 120,
+  "cases": [
+    {
+      "id": "conversation_s46",
+      "scenario": "standing",
+      "seed": 46,
+      "human_motion_profile": "legacy",
+      "human_goal_clock": "sim_v1",
+      "human_lifecycle_profile": "persistent_conversation_v1",
+      "config": "configs/capture/geometry_v7_mppi_resample.json"
+    },
+    {
+      "id": "conversation_s47",
+      "scenario": "standing",
+      "seed": 47,
+      "human_motion_profile": "legacy",
+      "human_goal_clock": "sim_v1",
+      "human_lifecycle_profile": "persistent_conversation_v1",
+      "config": "configs/capture/geometry_v7_mppi_resample.json"
+    },
+    {
+      "id": "conversation_s48",
+      "scenario": "standing",
+      "seed": 48,
+      "human_motion_profile": "legacy",
+      "human_goal_clock": "sim_v1",
+      "human_lifecycle_profile": "persistent_conversation_v1",
+      "config": "configs/capture/geometry_v7_mppi_resample.json"
+    },
+    {
+      "id": "walking_native_s46",
+      "scenario": "walking",
+      "seed": 46,
+      "encounter_profile": "head_on",
+      "human_motion_profile": "group_cohesion_v2",
+      "human_goal_clock": "sim_v1",
+      "human_lifecycle_profile": "native",
+      "config": "configs/capture/geometry_v7_mppi_resample.json"
+    }
+  ],
+  "walking_thresholds": {
+    "head_on": {
+      "max_mean_yaw_rate_turns_s": 0.07490851102688245,
+      "max_member_centroid_radius_m": 1.8443939879820748,
+      "max_moving_backwards_fraction": 0.05481099656357388,
+      "reference_id": "head_on_group_sim",
+      "reference_seed": 45
+    },
+    "crossing": {
+      "max_mean_yaw_rate_turns_s": 0.07256809522085717,
+      "max_member_centroid_radius_m": 1.7524163430343962,
+      "max_moving_backwards_fraction": 0.05437062937062937,
+      "reference_id": "crossing_group_sim",
+      "reference_seed": 45
+    }
+  },
+  "criteria": [
+    "Four declared native cells, each one attempt, no overwrite/retry/tuning/waiver during series. Preserve original cohort and standing48 clock FAIL. GPU + CPU thread caps1, sequential.",
+    "Component launch gate on same120 recorded standing46 robot inputs: native mode reproduces old XY/yaw and group states exactly; persistent candidate retains both triplets, has positive guard clearances and passes NEW explicit snapshot contract. Native mode must actually disperse in this interval. This is a counterfactual, not native closed-loop evidence.",
+    "Only opt-in persistent profile sets native can_disperse=False on designated standing triplets. No change to native probabilities, RNG calls, integrated motion/safety/Nav2/camera/goal clock runtime or historical query verifier. Default natural mode remains available.",
+    "Conversation: frozen lifecycle asset/plan/runtime/ready agree; all before/after and native GT groups keep both original standing triplets throughout. Independent before/after per-step standing speed<=.2m/s, no movement outside yielding set, yaw<=1.57rad/s. Report actual sidestep activation/displacement; do not claim active yielding tested if everyone stays still.",
+    "NEW standing_snapshot_v1 contract only with frozen persistent standing/legacy/sim_v1 profile. Independently reconstruct every six-human age snapshot from accepted gate; unchanged goals, contiguous.1s active steps, one activation and zero assignments/queries. Report arrival/expiry queries NOT_EXERCISED, never PASS expiry coverage. Legacy/walking audits retain original query verifier; old standing48 audit still fails.",
+    "All native cells: full source-root capture/GPU/sensor/numericTF/rawdepth/costmap audit, source freeze verified, native goal SUCCEEDED worldXY<=.2m/yaw<=.25rad, zero recovery/progress failures, near coverage>=.5s within1.5m, positive continuous geometric clearance robot/person,robot/static,person/person,person/static. Clean bridge terminal record before clean Gazebo exit, empty cleanup. Geometry not contact-force truth.",
+    "Walking native-mode regression: original query verifier used, snapshot-only contract absent, original motion thresholds/initial intent pass. Natural grouping may dissolve; passing does not imply persistent walking groups.",
+    "If all four pass and protected inputs match, freeze only a bounded factory collection profile with explicit conversation vs natural-walking modes. No universal naturalness/cross-simulator/generalization claim, no default robot change, dataset01 relabel, new dataset registration, WM/RL training or label H1\u2013H5 promotion."
+  ],
+  "protected_sha256": {
+    "python/dynamuhsim/simulation/goal_clock.py": "0d7529f2c6ffc0bf7a5f8524514fb99c4c24c1ba37f36f9921fefe2354c4c334",
+    "python/dynamuhsim/simulation/group_cohesion_heading.py": "f754692e61ee3c36ac10b9b205e7c967d8f076c7056ed41e0022b7213ae0dc55",
+    "experiments/social_navigation/navigation/socnavgym_group_nav2/reactive_motion.py": "821380fc1f1d95d647a8b0576a9ca6f8573c2af66feec20a08f3f361e3981085",
+    "experiments/social_navigation/navigation/socnavgym_group_nav2/standing_projection.py": "be1d9f1546333aa57234c2d6b4cf622fc016ef4f1fd63251f28d8efbea194e40",
+    "experiments/social_navigation/navigation/socnavgym_group_nav2/fixture.py": "2f217fc7d87bbb5950567b119d68baafba1b62515229c8b416247484c5b93a02",
+    "experiments/social_navigation/navigation/socnavgym_group_nav2/config.yaml": "8d12dd63d9ab64ea5467ab35e23712bc89d019740ab99fcd5d98e2e18b944c4d",
+    "experiments/social_navigation/navigation/socnavgym_response_fix/responsive_motion.py": "7e94fb78bb1a6552c7c6b17654bf90ba2a937145837916b783ddeaa36b45a4c4",
+    "experiments/social_navigation/navigation/socnavgym_response_fix/projection.py": "260d0775a10bc6b510c217a26e02a877a4394ef3f3f56475740ea14d52c841d9",
+    "configs/capture/geometry_v7_mppi_resample.json": "c0362dc65aafbd278f2e6dc5c01d3c6210c2afb19ed2b5514abd0abd910c946e",
+    "experiments/social_navigation/vendor/SocNavGym/socnavgym/envs/socnavenv_v2.py": "9444d03f1d2c407c0a48578135faedd32a80431d5abb22cfe3582c473a826696",
+    "experiments/social_navigation/vendor/SocNavGym/socnavgym/envs/utils/human_human.py": "2648268352411745b8aaca5f9971cad6353fb8ee550be91a428277deafa54219"
+  }
+}

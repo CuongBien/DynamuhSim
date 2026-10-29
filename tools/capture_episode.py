@@ -24,12 +24,13 @@ def main(argv=None):
     prepare.add_argument("--human-motion-profile", choices=["legacy", "group_orca_v1", "group_goal_v1", "group_cohesion_v1", "group_cohesion_v2"], default="legacy")
     prepare.add_argument("--encounter-profile", choices=["head_on", "crossing"], help="Opt-in walking initial conditions; native motion continues after start")
     prepare.add_argument("--human-goal-clock", choices=["native_wall", "sim_v1"], default="native_wall", help="Opt-in Gazebo goal expiry from the accepted navigation gate")
+    prepare.add_argument("--human-lifecycle-profile", choices=["native", "persistent_conversation_v1"], default="native", help="Opt-in designated persistent standing groups; native lifecycle remains default")
     for name in ["verify", "run"]:
         cmd = commands.add_parser(name)
         cmd.add_argument("--run-dir", type=Path, required=True)
     args = parser.parse_args(argv)
     if args.mode == "prepare":
-        prepare_run(ROOT, args.run_dir, args.config, args.scenario, args.seed, args.gui, planner_diagnostics=args.planner_diagnostics, human_motion_profile=args.human_motion_profile, encounter_profile=args.encounter_profile, human_goal_clock=args.human_goal_clock)
+        prepare_run(ROOT, args.run_dir, args.config, args.scenario, args.seed, args.gui, planner_diagnostics=args.planner_diagnostics, human_motion_profile=args.human_motion_profile, encounter_profile=args.encounter_profile, human_goal_clock=args.human_goal_clock, human_lifecycle_profile=args.human_lifecycle_profile)
         print("Prepared new capture freeze:", args.run_dir.resolve())
         return 0
     verify_run(ROOT, args.run_dir)

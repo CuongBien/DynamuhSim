@@ -12,6 +12,8 @@ k=make_kernel(a.scenario,a.seed);dt=.1
 sys.path.insert(0,str(Path(__file__).resolve().parents[4]/'python'))
 from dynamuhsim.simulation.encounters import load_fixture,group_goals
 encounter=load_fixture(k,a.runtime)
+from dynamuhsim.simulation.conversation import load_conversation
+conversation=load_conversation(k,a.runtime)
 from dynamuhsim.simulation.human_motion_profiles import load_profile
 human_motion=load_profile(k,a.runtime)
 from dynamuhsim.simulation.goal_clock import load_goal_clock
@@ -22,6 +24,7 @@ ready=dict(humans=current,groups=k.groups(),obstacles=42,native_dt=dt,robot_radi
 if human_motion is not None:ready['human_motion_profile']=human_motion.profile
 if encounter is not None:ready['encounter']=encounter
 if goal_clock is not None:ready['goal_clock']=goal_clock.snapshot()
+if conversation is not None:ready['human_lifecycle']=conversation.snapshot()
 publish_ready(a.runtime,ready)
 try:
     conn,_=server.accept()
@@ -51,6 +54,7 @@ try:
                     reply["encounter_goals"]=group_goals(k)
                     reply["encounter_goal_ages_wall_s"]={str(h.id):time.time()-h.initial_time for g in k.env.moving_interactions for h in g.humans}
                 if goal_clock is not None:reply["goal_clock"]=goal_clock.snapshot()
+                if conversation is not None:reply["human_lifecycle"]=conversation.snapshot()
                 log.write(json.dumps(dict(**reply,robot_input=robot),allow_nan=False)+'\n')
             except Exception as error:
                 reply=dict(error=str(error),fatal=True,restart_required=True,step=k.steps);safe_request=json.loads(json.dumps(request),parse_constant=lambda value:value);log.write(json.dumps(dict(**reply,request=safe_request,last_safe_humans=current),allow_nan=False)+'\n')
