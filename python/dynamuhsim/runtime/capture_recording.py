@@ -54,7 +54,7 @@ class Recording:
             value.update(k=list(msg.k), width=msg.width, height=msg.height,
                          distortion_model=msg.distortion_model)
 
-    def ready(self):
+    def ready(self, *, required_topics=None):
         if self.process.poll() is not None:
             raise RuntimeError('Recorder exited; see recorder.log')
         if not all(self.observed.get(t, {}).get('count', 0) >= 5
@@ -62,7 +62,7 @@ class Recording:
             return False
         return all(any(e.node_name == 'dataset_pilot_recorder'
                        for e in self.node.get_subscriptions_info_by_topic(t))
-                   for t in TOPICS[:12])
+                   for t in (TOPICS[:12] if required_topics is None else required_topics))
 
     def event(self, name, stamp_ns, **details):
         self.seq += 1

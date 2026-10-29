@@ -1,0 +1,46 @@
+{
+  "schema": "dynamuhsim_audit_policy/1",
+  "name": "static_gap_capture_integrity_v1",
+  "camera_sha256": "14c15412664eb37dd2f0fb2d61a79b09f98722f204f97d97212f0ec814ad3d9f",
+  "minimum_paired_frames_exclusive": 50,
+  "minimum_tail_s": 3.0,
+  "minimum_future_depth_frames": 20,
+  "goal": [
+    -20.0,
+    0.0,
+    0.0
+  ],
+  "goal_xy_tolerance_m": 0.2,
+  "goal_yaw_tolerance_rad": 0.25,
+  "required_topics": [
+    "/clock",
+    "/scan",
+    "/imu",
+    "/odom",
+    "/tf",
+    "/tf_static",
+    "/cmd_vel",
+    "/camera/depth/image_rect_raw",
+    "/camera/camera_info",
+    "/dataset/scene_poses",
+    "/dataset/events",
+    "/plan",
+    "/amcl_pose",
+    "/map",
+    "/navigate_to_pose/_action/status",
+    "/global_costmap/costmap_raw",
+    "/local_costmap/costmap_raw"
+  ],
+  "require_actual_goal": false,
+  "descriptive_geometry": {
+    "robot_radius_m": 0.168062484748657,
+    "human_radius_m": 0.36,
+    "scope": "Signed linear swept-disc gaps from recorded poses; descriptive only, not a safety or contact-truth gate."
+  },
+  "depth_shape": [
+    240,
+    424
+  ],
+  "capture_schema": "dynamuhsim_static_gap_capture/1",
+  "scene_human_count": 0
+}

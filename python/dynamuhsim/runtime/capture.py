@@ -188,6 +188,7 @@ class CaptureContext:
         telemetry.scene_sink = self.recorder.scene
 
     def start_bridge(self, runtime, output, env, processes, files):
+        env.pop("DYNAMUHSIM_CAPTURE_MAP", None)
         if self.config["schema"] == "dynamuhsim_capture_config/4":env["DATASET_ROBOT_URDF"] = str(runtime / "mecanum_aligned.urdf")
         else:env.pop("DATASET_ROBOT_URDF", None)
         log = (output / "pair_bridge.log").open("w")

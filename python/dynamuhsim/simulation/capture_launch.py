@@ -44,7 +44,7 @@ def generate_launch_description():
     truth = Node(package="ros_gz_bridge", executable="parameter_bridge", name="nav2_pilot_ground_truth_bridge",
                  arguments=["/common/ground_truth@std_msgs/msg/String[gz.msgs.StringMsg"], output="screen")
     nav = IncludeLaunchDescription(PythonLaunchDescriptionSource(str(share / "launch/nav2_corridor.launch.py")),
-             launch_arguments=dict(map=str(repo / "experiments/social_navigation/warehouse/warehouse.yaml"),
+             launch_arguments=dict(map=os.environ.get("DYNAMUHSIM_CAPTURE_MAP", str(repo / "experiments/social_navigation/warehouse/warehouse.yaml")),
                                    params_file=os.environ["NAV2_PILOT_PARAMS"], robot_model="mecanum",
                                    controller="mppi", episode_initial_pose="true").items())
     return LaunchDescription([DeclareLaunchArgument("gui", default_value="false"), sim, spawn, bridge, image,

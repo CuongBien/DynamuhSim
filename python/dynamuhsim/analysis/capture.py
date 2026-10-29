@@ -33,7 +33,8 @@ def audit_capture(run, policy, *, source_roots=(), git_repo=None, read_bag=bag_m
     plan_path = run / "plan.json"
     diagnostics_selected = plan_path.is_file() and load_json(plan_path).get("planner_diagnostics", False)
     r = load_json(out / "result.json")
-    if r.get("capture_schema") != "dynamuhsim_capture/2" or policy.get("schema") != "dynamuhsim_audit_policy/1":
+    expected_schema = policy.get("capture_schema", "dynamuhsim_capture/2")
+    if expected_schema not in ["dynamuhsim_capture/2", "dynamuhsim_static_gap_capture/1"] or r.get("capture_schema") != expected_schema or policy.get("schema") != "dynamuhsim_audit_policy/1":
         raise ValueError("This auditor accepts capture/2 and explicit audit_policy/1 only")
     checks, metrics = {}, {}
     checks["measured"] = r["status"] == "MEASURED"
@@ -112,7 +113,7 @@ def audit_capture(run, policy, *, source_roots=(), git_repo=None, read_bag=bag_m
             raw_events.append(json.loads(msg.data))
         elif topic == "/dataset/scene_poses":
             scene = json.loads(msg.data)
-            if scene["schema"] != "social_scene/1" or scene["persona_valid"] is not False or len(scene["humans"]) != 6:
+            if scene["schema"] != "social_scene/1" or scene["persona_valid"] is not False or len(scene["humans"]) != policy.get("scene_human_count", 6):
                 raise ValueError("Scene-label schema failed")
         elif topic in ["/global_costmap/costmap_raw", "/local_costmap/costmap_raw"]:
             from dynamuhsim.runtime.planner_diagnostics import costmap_row, identity
