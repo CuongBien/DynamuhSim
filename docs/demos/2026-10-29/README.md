@@ -16,3 +16,7 @@ Người dùng xác nhận nhìn thấy Gazebo và kéo/zoom được; báo ch�
 Code tạo ảnh classifier: classifier_visual.py; chạy từ môi trường CUDA có Torch/Matplotlib, truyền --output /đường/dẫn/mới. Script tự tìm root repo và từ chối ghi đè output đã có. JSON summary chứa đường dẫn raw, audit và scope. Raw MCAP/cặp ảnh/script trước audit được giữ trong local_evidence (ignored). Audit đầu thiếu ROS/source-root được giữ nguyên; lệnh đúng môi trường và source-root đã PASS, không sửa dữ liệu/threshold để đổi kết quả.
 
 Giao diện Windows được xác nhận ở **lượt này**; không suy rộng rằng mọi cấu hình WSLg đã hết lỗi. GUI capture30% vẫn là vấn đề hiệu năng của chế độ thu, chưa thay timing/tham số Nav2 để làm đẹp phép đo.
+
+## Bổ sung theo câu hỏi về chuyển động và đường đi
+
+Đã sửa animation replay và thêm [video camera/costmap đồng bộ, đo khe hở, thuật toán và giới hạn phân tích](navigation/README.md). Gait chỉ là dựng lại phần hiển thị; controller/recipe/raw không thay đổi.

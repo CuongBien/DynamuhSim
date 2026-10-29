@@ -20,7 +20,7 @@
 using json=nlohmann::json;
 namespace wm_recorded {
 class Replay: public gz::sim::System,public gz::sim::ISystemConfigure,public gz::sim::ISystemPreUpdate {
- struct Pose {double x,y,yaw;};
+ struct Pose {double x,y,yaw;double distance{0};};
  struct Row {double t;std::map<std::string,Pose> poses;};
  std::vector<Row> rows; std::map<std::string,gz::sim::Entity> entities;
  gz::transport::Node node; gz::transport::Node::Publisher status;
@@ -30,7 +30,9 @@ class Replay: public gz::sim::System,public gz::sim::ISystemConfigure,public gz:
   std::ifstream in(sdf->Get<std::string>("poses"));std::string line;
   while(std::getline(in,line)) {auto j=json::parse(line);if(j.at("phase")!="active")continue;Row r;r.t=j.at("time");
    for(auto it=j.at("poses").begin();it!=j.at("poses").end();++it) r.poses[it.key()]={it.value().at("x"),it.value().at("y"),it.value().at("yaw")};
-   if(!rows.empty()&&r.t<=rows.back().t)throw std::runtime_error("Nonmonotonic recorded times");rows.push_back(r);
+   if(!rows.empty()&&r.t<=rows.back().t)throw std::runtime_error("Nonmonotonic recorded times");
+   if(!rows.empty())for(auto &[name,p]:r.poses){const auto &q=rows.back().poses.at(name);p.distance=q.distance+std::hypot(p.x-q.x,p.y-q.y);}
+   rows.push_back(r);
   }
   if(rows.size()<2)throw std::runtime_error("No usable recorded poses");
   begin=rows.front().t;end=rows.back().t;duration=end-begin;
@@ -53,8 +55,9 @@ class Replay: public gz::sim::System,public gz::sim::ISystemConfigure,public gz:
     if(!entities.count(visual))entities[visual]=ecm.EntityByComponents(gz::sim::components::Name(visual));
     auto actor=entities[visual];if(actor==gz::sim::kNullEntity)throw std::runtime_error("Missing actor");
     gz::sim::Actor ac(actor);ac.SetTrajectoryPose(ecm,gz::math::Pose3d(x,y,1,0,0,yaw));ac.SetAnimationName(ecm,"walk");
-    // No skeletal animation was recorded. Freeze the standing avatar pose rather than claim exact limb replay.
-    ac.SetAnimationTime(ecm,std::chrono::steady_clock::duration::zero());
+    // Reconstructed visual gait from recorded travel; original skeletal state was not logged.
+    double animationSeconds=(p.distance+a*(q.distance-p.distance))*4.1534;
+    ac.SetAnimationTime(ecm,std::chrono::duration_cast<std::chrono::steady_clock::duration>(std::chrono::duration<double>(animationSeconds)));
     ecm.SetChanged(actor,gz::sim::components::TrajectoryPose::typeId,gz::sim::ComponentState::OneTimeChange);
     ecm.SetChanged(actor,gz::sim::components::AnimationTime::typeId,gz::sim::ComponentState::OneTimeChange);
    }

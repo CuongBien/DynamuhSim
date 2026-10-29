@@ -1,3 +1,5 @@
+> Cập nhật 29/10/2026: đã sửa replay cố định animation frame0. Người dùng xác nhận tay/chân chuyển động; gait dựng từ quãng đường ghi được, không tái tạo chính xác bộ xương. Cửa sổ mới đã xem và thao tác được; các giới hạn GUI bên dưới mô tả lượt trước. [Costmap và giải thích điều hướng mới](../../../../docs/demos/2026-10-29/navigation/README.md).
+
 # Phát lại batch WM đã ghi
 
 Backup hoàn tất: [Google Drive](https://drive.google.com/drive/folders/1I3kfKbTm5X6Bj32RyPVck5kFSjmVgqnl), 14 ZIP độc lập và hướng dẫn. Xem stage wm_episode_batch/reports/BACKUP_DRIVE.md.
@@ -5,7 +7,7 @@ Backup hoàn tất: [Google Drive](https://drive.google.com/drive/folders/1I3kfK
 Có hai cách xem, nguồn đều là **train wm_standing_45**, không đọc hình test:
 
 1. **Camera đã ghi:** video WebM từ 90 frame camera Gazebo thật, 640×480, không tổng hợp hình; mặc định 4×, nút 1× đặt playbackRate=0.25. Có dừng/tua/toàn màn hình. Phục vụ file cục bộ, không publish mạng ngoài. Đã kiểm tra decode đủ 90 frame và HTTP từ Windows trả 200; lệnh mở trình duyệt đã được gửi. Chưa có xác nhận người dùng nhìn thấy trang này.
-2. **Gazebo pose replay:** scene nhà xưởng copy riêng, robot + 6 người dùng XY/yaw từ gazebo_poses.jsonl, nội suy theo timestamp, phát 1× và lặp sau khoảng 95.14 giây. Không chạy Physics/Nav2/human policy, không tạo lại cảm biến. Chiều cao/roll/pitch và tư thế tay chân không có trong log, hiển thị cố định. Đây là xem lại quỹ đạo trong 3D, không phải RGB gốc hay tái thực thi vật lý.
+2. **Gazebo pose replay:** scene nhà xưởng copy riêng, robot + 6 người dùng XY/yaw từ gazebo_poses.jsonl, nội suy theo timestamp, phát 1× và lặp sau khoảng 95.14 giây. Không chạy Physics/Nav2/human policy, không tạo lại cảm biến. Chiều cao/roll/pitch và trạng thái bộ xương không có trong log; pha bước chân hiện được dựng lại từ quãng đường XY đã ghi, không phải trạng thái bộ xương gốc. Đây là xem lại quỹ đạo trong 3D, không phải RGB gốc hay tái thực thi vật lý.
 
 **GUI Gazebo chưa nghiệm thu trên màn hình Windows.** Đã render được scene thật bằng D3D12 NVIDIA RTX4060 và lấy ảnh qua service Gazebo, kiểm chứng độc lập 3.206 model poses với sai số ≤4.45e−16. Tuy nhiên người dùng chỉ thấy taskbar, kể cả sau di chuyển/raise cửa sổ Linux. Computer Use helpers không khởi động được. Thử Wayland sau cùng lỗi segfault Qt MinimalScene; runner đã dừng server của phiên đó. Không tuyên bố cửa sổ đã thao tác được. Ảnh reports/native_gazebo_scene.png là ảnh nội bộ render, không phải bằng chứng cửa sổ Windows hiện ra.
 
@@ -21,8 +23,8 @@ Mở URL localhost vừa in trong trình duyệt. Server chỉ chia sẻ hai fil
 
 ```bash
 source /opt/ros/jazzy/setup.bash
-cmake -S experiments/social_navigation/replay/wm_dataset_replay -B experiments/social_navigation/replay/wm_dataset_replay/generated/build
-cmake --build experiments/social_navigation/replay/wm_dataset_replay/generated/build -j 2
+cmake -S experiments/social_navigation/replay/wm_dataset_replay -B experiments/social_navigation/replay/wm_dataset_replay/generated/build_gait
+cmake --build experiments/social_navigation/replay/wm_dataset_replay/generated/build_gait -j 2
 # Local raw đã thu trước refactor; đổi BATCH_DATA nếu restore ở chỗ khác.
 BATCH_DATA="$PWD/experiments/social_navigation/benchmark/wm_episode_batch"
 python3 experiments/social_navigation/replay/wm_dataset_replay/run.py --seconds 1800 \

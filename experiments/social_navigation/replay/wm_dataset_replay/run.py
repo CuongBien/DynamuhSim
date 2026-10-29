@@ -25,7 +25,7 @@ def make_world(out, raw=None, runtime=None):
  physics=world.find('physics');physics.find('real_time_factor').text='1.0'
  gui=world.find('gui');minimal=next(x for x in gui.findall('plugin') if x.get('filename')=='MinimalScene')
  minimal.find('camera_pose').text='-29 -7 8 0 0.75 0.8'
- plugin=E.SubElement(world,'plugin',{'filename':str(HERE/'generated/build/libwm_recorded_replay.so'),'name':'wm_recorded::Replay'})
+ plugin=E.SubElement(world,'plugin',{'filename':str(HERE/'generated/build_gait/libwm_recorded_replay.so'),'name':'wm_recorded::Replay'})
  E.SubElement(plugin,'poses').text=str(raw/'gazebo_poses.jsonl')
  E.indent(root);E.ElementTree(root).write(out/'replay.sdf',encoding='unicode',xml_declaration=True)
  (out/'gui.config').write_text('<window><width>1200</width><height>850</height><dialog_on_exit>false</dialog_on_exit></window>\n'+'\n'.join(E.tostring(x,encoding='unicode') for x in gui.findall('plugin')))
@@ -45,7 +45,7 @@ def main():
  resources=[str(HERE.parents[3]/'src/custom_corridor/models'),env.get('GZ_SIM_RESOURCE_PATH','')];env['GZ_SIM_RESOURCE_PATH']=':'.join(resources)
  cmd=['gz','sim','-s','-r','-v','3',str(out/'replay.sdf')]
  log=(out/'server.log').open('w');server=subprocess.Popen(cmd,env=env,stdout=log,stderr=subprocess.STDOUT,start_new_session=True)
- session={'mode':'recorded_xy_yaw_visualization','episode':raw.name if raw.name!='episode' else raw.parent.parent.name,'source':str(raw/'gazebo_poses.jsonl'),'partition':env['GZ_PARTITION'],'server_pid':server.pid,'gui_pid':None,'gui_platform':args.gui_platform,'output':str(out),'gpu_requested':'NVIDIA D3D12','physics':False,'live_nav2':False,'sensors_regenerated':False,'limitations':'Logged XY/yaw interpolated in a copied factory scene. Robot height/roll/pitch and skeletal animation were not recorded; fixed for display. This is not exact RGB replay or physics re-execution. Sensor MCAP replay is separate.'}
+ session={'mode':'recorded_xy_yaw_visualization','episode':raw.name if raw.name!='episode' else raw.parent.parent.name,'source':str(raw/'gazebo_poses.jsonl'),'partition':env['GZ_PARTITION'],'server_pid':server.pid,'gui_pid':None,'gui_platform':args.gui_platform,'output':str(out),'gpu_requested':'NVIDIA D3D12','animation':'reconstructed_gait_from_recorded_distance_not_logged_skeleton','physics':False,'live_nav2':False,'sensors_regenerated':False,'limitations':'Logged XY/yaw interpolated in a copied factory scene. Robot height/roll/pitch and skeletal animation were not recorded; gait is reconstructed from logged travel for display. This is not exact RGB replay or physics re-execution. Sensor MCAP replay is separate.'}
  gui=None
  try:
   time.sleep(3)

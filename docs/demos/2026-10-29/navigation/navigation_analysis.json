@@ -1,0 +1,110 @@
+{
+  "source": "Actual logged local OccupancyGrid, odom, TF and /plan; no new Nav2 run or invented critic scores",
+  "video_clock": "Encoded4fps from recorded1Hz camera: frame20 at video5s corresponds to sim33s. PlaybackRate changes wall playback speed, not this timecode mapping.",
+  "video_to_sim": [
+    {
+      "video_s": 1.0,
+      "sim_s": 17.0,
+      "costmap_stamp_s": 16.7825,
+      "plan_stamp_s": 16.6175,
+      "tf_stamp_s": 16.6,
+      "robot_odom": {
+        "time": 16.765,
+        "x": 0.820306755450144,
+        "y": 0.8274620718668826,
+        "yaw": 0.17209321223801344
+      },
+      "command": {
+        "time": 17.0025,
+        "observed_sim": 17.0025,
+        "vx": 0.17920465767383575,
+        "vy": 0.19925446808338165,
+        "wz": 0.014542393386363983,
+        "phase": "active"
+      }
+    },
+    {
+      "video_s": 5.0,
+      "sim_s": 33.0,
+      "costmap_stamp_s": 32.9025,
+      "plan_stamp_s": 32.8075,
+      "tf_stamp_s": 32.8025,
+      "robot_odom": {
+        "time": 32.9,
+        "x": 4.725175273139831,
+        "y": 1.7793047662242565,
+        "yaw": -1.454433680564802
+      },
+      "command": {
+        "time": 33.0025,
+        "observed_sim": 33.0025,
+        "vx": 0.008157122880220413,
+        "vy": -0.007249863818287849,
+        "wz": -0.2509174942970276,
+        "phase": "active"
+      }
+    },
+    {
+      "video_s": 10.0,
+      "sim_s": 53.0,
+      "costmap_stamp_s": 52.8425,
+      "plan_stamp_s": 52.8025,
+      "tf_stamp_s": 52.6925,
+      "robot_odom": {
+        "time": 52.85,
+        "x": 4.618494964054559,
+        "y": 1.751409214418432,
+        "yaw": -1.541073053180291
+      },
+      "command": {
+        "time": 53.0025,
+        "observed_sim": 53.0025,
+        "vx": 0.0016286959871649742,
+        "vy": 0.04391847178339958,
+        "wz": 0.24672114849090576,
+        "phase": "active"
+      }
+    }
+  ],
+  "gaps_at_sim33s": [
+    {
+      "label": "A",
+      "humans": [
+        5,
+        6
+      ],
+      "proxy_surface_gap_m": 0.5270765814495915,
+      "nominal_nav2_diameter_m": 0.52,
+      "remaining_geometric_width_m": 0.007076581449591446,
+      "recorded_midpoint_cost": 99
+    },
+    {
+      "label": "B",
+      "humans": [
+        1,
+        5
+      ],
+      "proxy_surface_gap_m": 1.2987124609512886,
+      "nominal_nav2_diameter_m": 0.52,
+      "remaining_geometric_width_m": 0.7787124609512885,
+      "recorded_midpoint_cost": 31
+    }
+  ],
+  "footprint": "Nav2 robot_radius0.25 + padding0.01; nominal circle0.26 drawn (padding details/grid discretization retained as approximation)",
+  "inflation_radius_m": 0.8,
+  "cost_scaling_factor": 3.0,
+  "chassis_size_m": [
+    0.24,
+    0.2
+  ],
+  "human_proxy_radius_m": 0.36,
+  "no_global_costmap_array_recorded": true,
+  "counterfactual_shortcut_tested": false,
+  "mppi_critic_scores_recorded": false,
+  "live_controller_inputs": "LiDAR costmap and estimated TF/odom; GT only used to draw geometry overlays",
+  "algorithm": {
+    "global": "nav2_navfn_planner::NavfnPlanner, use_astar:false (Dijkstra)",
+    "local": "nav2_mppi_controller::MPPIController, Omni,20Hz,280samples,30steps x0.05s",
+    "localization": "AMCL OmniMotionModel"
+  }
+}
