@@ -77,7 +77,7 @@ def capture_sources(repo):
     return sorted(set(files))
 
 
-def prepare_run(repo, run_dir, config_path, scenario, seed, gui=False):
+def prepare_run(repo, run_dir, config_path, scenario, seed, gui=False, *, planner_diagnostics=False):
     repo, run_dir, config_path = Path(repo).resolve(), Path(run_dir).resolve(), Path(config_path).resolve()
     run_dir.relative_to(repo)
     config = validate_config(json.loads(config_path.read_text()))
@@ -108,7 +108,9 @@ def prepare_run(repo, run_dir, config_path, scenario, seed, gui=False):
     preflight = dict(camera=camera, native_friction=friction)
     if geometry is not None:preflight["geometry"] = geometry
     dump(run_dir / "preflight.json", preflight)
-    dump(run_dir / "plan.json", dict(schema="dynamuhsim_capture_plan/1", config=config, scenario=scenario, seed=seed, gui=bool(gui)))
+    plan = dict(schema="dynamuhsim_capture_plan/1", config=config, scenario=scenario, seed=seed, gui=bool(gui))
+    if planner_diagnostics:plan["planner_diagnostics"] = True
+    dump(run_dir / "plan.json", plan)
     files += [assets / "mecanum_camera.sdf", run_dir / "plan.json", run_dir / "preflight.json"]
     manifest = dict(schema="dynamuhsim_capture_freeze/2", git_head=subprocess.check_output(["git", "-C", str(repo), "rev-parse", "HEAD"], text=True).strip(),
                     created_utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),
@@ -148,7 +150,7 @@ class CaptureContext:
         self.plan = json.loads((self.run_dir / "plan.json").read_text())
         self.config = validate_config(self.plan["config"])
         self.runtime_dir = self.run_dir / "runtime"
-        self.recorder = self.pairs = None
+        self.recorder = self.pairs = self.diagnostics = None
 
     def source_paths(self):
         return [self.repo / path for path in self.manifest["source_sha256"]] + [self.run_dir / "capture_freeze.json"]
@@ -176,7 +178,12 @@ class CaptureContext:
 
     def attach(self, node, output, telemetry):
         from .capture_recording import Recording, Pairs
-        self.recorder = Recording(node, output)
+        extra_topics = ()
+        if self.plan.get("planner_diagnostics"):
+            from .planner_diagnostics import NativeCostmaps, TOPICS
+            self.diagnostics = NativeCostmaps(node, output, telemetry)
+            extra_topics = TOPICS
+        self.recorder = Recording(node, output, extra_topics=extra_topics)
         self.pairs = Pairs(node, output, lambda: telemetry.phase)
         telemetry.scene_sink = self.recorder.scene
 
@@ -191,7 +198,12 @@ class CaptureContext:
     def ready(self, node, wait, output, result, telemetry):
         if not wait(lambda: self.recorder.ready() and self.pairs.ready(), 30):
             raise RuntimeError("Full recorder/paired depth/calibration not ready")
-        result["live_parameters"] = capture_live_parameters(node, wait, self.config["nav2"], self.config.get("navigation"))
+        additional = None
+        if self.diagnostics is not None:
+            if not wait(self.diagnostics.ready, 15):raise RuntimeError("Native global/local costmaps missing")
+            from .planner_diagnostics import PLANNER_PARAMETERS
+            additional = PLANNER_PARAMETERS
+        result["live_parameters"] = capture_live_parameters(node, wait, self.config["nav2"], self.config.get("navigation"), additional=additional)
         dump(output / "live_parameters.json", result["live_parameters"])
         self.recorder.event("ready", round(telemetry.simtime() * 1e9), scenario=self.plan["scenario"], seed=self.plan["seed"])
 
@@ -214,6 +226,8 @@ class CaptureContext:
         telemetry.phase = "finished"
 
     def close(self, result):
+        if getattr(self, "diagnostics", None) is not None:
+            result["planner_diagnostics"] = self.diagnostics.close()
         if self.pairs is not None:
             result["depth_pairs"] = self.pairs.close()
         if self.recorder is not None:
@@ -225,9 +239,10 @@ class CaptureContext:
         return stop_paused(guard, original_stop)
 
 
-def capture_live_parameters(node, wait, treatment, navigation=None):
+def capture_live_parameters(node, wait, treatment, navigation=None, *, additional=None):
     from rclpy.parameter_client import AsyncParameterClient
     expected = nav2_parameter_contract(treatment, navigation)
+    expected.update(additional or {})
     observed = {}
     for remote, parameters in expected.items():
         client = AsyncParameterClient(node, remote)
@@ -237,7 +252,7 @@ def capture_live_parameters(node, wait, treatment, navigation=None):
         if not wait(future.done, 10):
             raise RuntimeError("Parameter request timed out: " + remote)
         values = future.result().values
-        observed[remote] = {name: (value.bool_value if isinstance(wanted, bool) else value.double_value)
+        observed[remote] = {name: (value.bool_value if isinstance(wanted, bool) else value.string_value if isinstance(wanted, str) else value.double_value)
                             for (name, wanted), value in zip(parameters.items(), values)}
         if observed[remote] != parameters:
             raise RuntimeError("Live Nav2 parameters differ: " + remote)

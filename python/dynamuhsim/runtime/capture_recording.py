@@ -15,7 +15,7 @@ TOPICS = [
 ]
 
 class Recording:
-    def __init__(self, node, output, *, config_dir=None):
+    def __init__(self, node, output, *, config_dir=None, extra_topics=()):
         from std_msgs.msg import String
         from rclpy.qos import QoSProfile, ReliabilityPolicy
         self.message_type = String
@@ -32,12 +32,13 @@ class Recording:
             node.create_subscription(kind, topic, lambda msg, t=topic: self.witness(t, msg), qos)
         config_dir = HERE if config_dir is None else Path(config_dir)
         self.log = (self.output / 'recorder.log').open('w')
+        self.topics = [*TOPICS, *extra_topics]
         cmd = ['ros2', 'bag', 'record', '--storage', 'mcap', '--use-sim-time',
                '--disable-keyboard-controls', '--node-name', 'dataset_pilot_recorder',
                '--storage-config-file', str(config_dir / 'storage.yaml'),
                '--qos-profile-overrides-path', str(config_dir / 'qos.yaml'),
                '--max-cache-size', '33554432', '--include-hidden-topics',
-               '--output', str(self.output / 'raw_bag'), '--topics', *TOPICS]
+               '--output', str(self.output / 'raw_bag'), '--topics', *self.topics]
         self.process = subprocess.Popen(cmd, stdout=self.log, stderr=subprocess.STDOUT,
                                         start_new_session=True)
         self.command = cmd
@@ -96,7 +97,7 @@ class Recording:
         return dict(returncode=self.process.returncode, command=self.command,
                     observed=self.observed,
                     metadata_present=(self.output / 'raw_bag/metadata.yaml').exists(),
-                    topics=TOPICS)
+                    topics=getattr(self, "topics", TOPICS))
 
 
 # ON/OFF sidecars retain the original float32 payload and duplicate-stamp policy.

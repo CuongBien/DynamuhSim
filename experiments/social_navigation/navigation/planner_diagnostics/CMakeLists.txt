@@ -1,0 +1,6 @@
+cmake_minimum_required(VERSION 3.16)
+project(dynamuhsim_navfn_probe)
+find_package(ament_cmake REQUIRED)
+find_package(nav2_navfn_planner REQUIRED)
+add_executable(navfn_probe navfn_probe.cc)
+ament_target_dependencies(navfn_probe nav2_navfn_planner)

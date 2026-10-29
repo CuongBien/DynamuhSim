@@ -1,0 +1,22 @@
+{
+  "schema": "planner_review_plan/1",
+  "run": "experiments/social_navigation/benchmark/generated/planner_review_20261029/D_capture",
+  "capture_config": "configs/capture/geometry_v4_inflation045.json",
+  "scenario": "standing",
+  "seed": 45,
+  "capture_flags": [
+    "--planner-diagnostics"
+  ],
+  "changed_control_parameters": [],
+  "snapshot_offsets_after_goal_s": [
+    5,
+    10,
+    15
+  ],
+  "offline_comparison": [
+    "Installed native NavFn free endpoint-to-endpoint path",
+    "Installed native NavFn two-leg path constrained through time-matched H5-H6 midpoint; computation only",
+    "A diagnostic copy with traversable soft costs flattened to zero while keeping native 253/254/255 unchanged; never applied to live costmaps"
+  ],
+  "notes": "Preserve all attempts. No online waypoint, force command, reduced radius or relaxed lethal threshold. Native costmap bytes checked against MCAP. Diagnostic snapshots are asynchronous to planner calls; do not claim exact original path replay."
+}

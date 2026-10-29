@@ -20,12 +20,13 @@ def main(argv=None):
     prepare.add_argument("--scenario", choices=["standing", "walking"], required=True)
     prepare.add_argument("--seed", type=int, required=True)
     prepare.add_argument("--gui", action="store_true")
+    prepare.add_argument("--planner-diagnostics", action="store_true", help="Record exact native costmaps without changing navigation")
     for name in ["verify", "run"]:
         cmd = commands.add_parser(name)
         cmd.add_argument("--run-dir", type=Path, required=True)
     args = parser.parse_args(argv)
     if args.mode == "prepare":
-        prepare_run(ROOT, args.run_dir, args.config, args.scenario, args.seed, args.gui)
+        prepare_run(ROOT, args.run_dir, args.config, args.scenario, args.seed, args.gui, planner_diagnostics=args.planner_diagnostics)
         print("Prepared new capture freeze:", args.run_dir.resolve())
         return 0
     verify_run(ROOT, args.run_dir)

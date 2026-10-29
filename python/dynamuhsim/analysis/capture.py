@@ -18,7 +18,7 @@ def bag_messages(path):
     reader = rosbag2_py.SequentialReader()
     reader.open(rosbag2_py.StorageOptions(uri=str(path), storage_id="mcap"), rosbag2_py.ConverterOptions("", ""))
     classes = {row.name: get_message(row.type) for row in reader.get_all_topics_and_types()}
-    selected = {"/camera/depth/image_rect_raw", "/dataset/events", "/dataset/scene_poses", "/tf_static"}
+    selected = {"/camera/depth/image_rect_raw", "/dataset/events", "/dataset/scene_poses", "/tf_static", "/global_costmap/costmap_raw", "/local_costmap/costmap_raw"}
     while reader.has_next():
         topic, data, stamp = reader.read_next()
         yield topic, deserialize_message(data, classes[topic]) if topic in selected else None
@@ -30,6 +30,8 @@ def audit_capture(run, policy, *, source_roots=(), git_repo=None, read_bag=bag_m
     if (run / "artifact_ref.json").exists():
         raise FileNotFoundError("Raw payload was archived; restore the referenced artifact into a new directory first")
     out = run / "episode"
+    plan_path = run / "plan.json"
+    diagnostics_selected = plan_path.is_file() and load_json(plan_path).get("planner_diagnostics", False)
     r = load_json(out / "result.json")
     if r.get("capture_schema") != "dynamuhsim_capture/2" or policy.get("schema") != "dynamuhsim_audit_policy/1":
         raise ValueError("This auditor accepts capture/2 and explicit audit_policy/1 only")
@@ -64,6 +66,9 @@ def audit_capture(run, policy, *, source_roots=(), git_repo=None, read_bag=bag_m
         checks["declared_navigation_recipe"] = config["schema"] == recipe_schema
         from dynamuhsim.simulation.capture import nav2_parameter_contract
         expected_live = nav2_parameter_contract(config["nav2"], config["navigation"])
+        if diagnostics_selected:
+            from dynamuhsim.runtime.planner_diagnostics import PLANNER_PARAMETERS
+            expected_live.update(PLANNER_PARAMETERS)
         expected_controller = expected_live["/controller_server"]
         if recipe_schema in ["dynamuhsim_capture_config/3", "dynamuhsim_capture_config/4"]:
             checks["live_navigation_parameters"] = r["live_parameters"] == expected_live
@@ -87,6 +92,7 @@ def audit_capture(run, policy, *, source_roots=(), git_repo=None, read_bag=bag_m
     checks["paired_index_files_present"] = all((out / "paired_depth" / side / (str(stamp) + ".npy")).is_file() for side in ["on", "off"] for stamp in index[side])
     checks["depth_shape_and_encoding"] = True
     counts, matched, raw_events, frames, tf_static, tail_depth = Counter(), 0, [], set(), defaultdict(set), 0
+    native_bag_counts = Counter()
     numeric_tf = defaultdict(list)
     for topic, msg in read_bag(out / "raw_bag"):
         counts[topic] += 1
@@ -108,6 +114,9 @@ def audit_capture(run, policy, *, source_roots=(), git_repo=None, read_bag=bag_m
             scene = json.loads(msg.data)
             if scene["schema"] != "social_scene/1" or scene["persona_valid"] is not False or len(scene["humans"]) != 6:
                 raise ValueError("Scene-label schema failed")
+        elif topic in ["/global_costmap/costmap_raw", "/local_costmap/costmap_raw"]:
+            from dynamuhsim.runtime.planner_diagnostics import costmap_row, identity
+            native_bag_counts[identity(topic, costmap_row(msg))] += 1
         elif topic == "/tf_static":
             for transform in msg.transforms:
                 tf_static[transform.child_frame_id].add(transform.header.frame_id)
@@ -123,6 +132,12 @@ def audit_capture(run, policy, *, source_roots=(), git_repo=None, read_bag=bag_m
         receipt = load_json(run / "preflight.json")["geometry"]
         checks["aligned_urdf_bytes"] = sha256_file(run / "runtime/mecanum_aligned.urdf") == receipt["urdf_sha256"] == sha256_file(run / "assets/mecanum_aligned.urdf")
         checks["aligned_static_tf"] = aligned_static_tf(numeric_tf, receipt["joints"])
+    if diagnostics_selected:
+        from dynamuhsim.runtime.planner_diagnostics import verify_rows
+        diagnostic = r.get("planner_diagnostics", {})
+        sidecar = out / "native_costmaps.jsonl"
+        checks["native_costmap_sidecar_hash"] = sha256_file(sidecar) == diagnostic.get("sidecar_sha256")
+        checks["native_costmaps_match_bag"] = verify_rows(sidecar, native_bag_counts)
     metrics.update(bag_message_counts=dict(counts), paired_stamps=len(paired), raw_depth_frames_bitwise_equal=matched,
                    future_depth_frames=tail_depth, tf_static_parents={key: sorted(value) for key, value in tf_static.items()},
                    bag_bytes=sum(path.stat().st_size for path in (out / "raw_bag").iterdir() if path.is_file()),
