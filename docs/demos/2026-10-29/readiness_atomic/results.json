@@ -1,0 +1,257 @@
+{
+  "schema": "atomic_ready_probe/1",
+  "status": "PASS",
+  "checks": {
+    "full_capture_audit": true,
+    "same_complete_initial_handshake": true,
+    "staging_cleaned": true,
+    "only_expected_common_source_changed": true,
+    "only_expected_non_run_source_added": true,
+    "original_error_preserved": true,
+    "scoped_cleanup_empty": true,
+    "bridge_clean_before_gazebo": true
+  },
+  "case": {
+    "id": "crossing_s48_atomic_ready",
+    "scenario": "walking",
+    "seed": 48,
+    "status": "PASS",
+    "checks": {
+      "full_capture_audit": true,
+      "ordered_bridge": true,
+      "actual_goal": true,
+      "zero_recoveries": true,
+      "robot_person_clearance": true,
+      "robot_static_clearance": true,
+      "human_clearances": true,
+      "near_coverage": true,
+      "same_frozen_protected_sources": true,
+      "same_robot_nav:assets/mecanum_camera.sdf": true,
+      "same_robot_nav:assets/mecanum_aligned.urdf": true,
+      "same_robot_nav:runtime/nav2_runtime.yaml": true,
+      "bridge_clean_before_gazebo": true,
+      "initial_intent": true,
+      "yaw_rate_limit": true,
+      "cohesion_limit": true,
+      "backwards_limit": true
+    },
+    "metric": {
+      "run": "experiments/social_navigation/benchmark/generated/readiness_atomic_20261029/crossing_s48_atomic_ready",
+      "status": "SUCCEEDED",
+      "actual_goal_reached": true,
+      "xy_error_m": 0.057485982012185,
+      "active_sim_s": 30.252499999999998,
+      "path_length_m": 8.203350117149458,
+      "world_y_min_m": -0.009870496549858809,
+      "world_y_max_m": 0.7087427330115998,
+      "minimum_swept_robot_human_gap_m": 0.3572730918262699,
+      "minimum_static_gap_lower_bound_m": 1.6817557303269277,
+      "static_box_count": 42,
+      "global_plan_probe": {
+        "time_sim_s": 32.2025,
+        "nearest_point_to_initial_gate_x": [
+          -21.885637618849298,
+          0.5177869694507652
+        ]
+      },
+      "native_contact_force_recorded": false,
+      "gate_A_crossings": [],
+      "passes_original_narrow_gap_A": false,
+      "rendering": "D3D12 (NVIDIA GeForce RTX 4060 Laptop GPU)",
+      "id": "crossing_s48_atomic_ready",
+      "kind": "social",
+      "encounter_profile": "crossing",
+      "human_motion_profile": "group_cohesion_v2",
+      "audit": "PASS",
+      "proximity": {
+        "center_threshold_m": 1.5,
+        "cumulative_duration_s": 8.65719428145604,
+        "minimum_center_distance_m": 0.8853355765749269,
+        "minimum_time_sim_s": 20.9025,
+        "coverage": "EXERCISED",
+        "method": "Exact union of linear relative-motion circle intervals between consecutive native pose samples."
+      },
+      "native_human_first12": {
+        "duration_s": 11.975,
+        "yaw_total_turns": [
+          0.40035976425125375,
+          0.031356480848654965,
+          0.5734006226252105,
+          0.32231676928857356,
+          0.440345345071043,
+          0.7442578883000683
+        ],
+        "path_m": [
+          8.147463926685461,
+          2.72001762591484,
+          6.484210124151705,
+          0.8567738992779799,
+          4.558492929738343,
+          6.011087592904294
+        ]
+      },
+      "native_human_full": {
+        "duration_s": 30.237499999999997,
+        "yaw_total_turns": [
+          0.6913290452279588,
+          0.031356480848654965,
+          0.8376183393946794,
+          0.32231676928857356,
+          0.7871294036635677,
+          0.9361108166991267
+        ],
+        "path_m": [
+          19.208295753147,
+          2.72001762591484,
+          18.5467925605958,
+          0.8567738992779799,
+          16.68582582058651,
+          10.640062844678148
+        ]
+      },
+      "human_safety": {
+        "minimum_swept_human_human_gap_m": 0.040929952257333424,
+        "minimum_human_static_lower_bound_m": 0.09932843314371753
+      },
+      "worker": {
+        "worker_first12": {
+          "samples": 120,
+          "time_span_s": 11.899999999999999,
+          "yaw_total_rad": [
+            2.5080121386164804,
+            0.1957324817522288,
+            3.6009356710131644,
+            2.0216884831722868,
+            2.761882790095307,
+            4.673926834495147
+          ],
+          "yaw_total_turns": [
+            0.39916252919528866,
+            0.031151791994511416,
+            0.5731067117976761,
+            0.32176171548882554,
+            0.4395672982841037,
+            0.7438785593597576
+          ],
+          "path_m": [
+            8.164243519679589,
+            2.64931497962595,
+            6.525778638604648,
+            0.8271513686630446,
+            4.572199433717976,
+            5.996625017872104
+          ],
+          "yaw_rad_per_m": [
+            0.30719467548597923,
+            0.07388041182625395,
+            0.5518016884163147,
+            2.4441578165312317,
+            0.6040600000357873,
+            0.7794262306822854
+          ],
+          "moving_heading_error_median_deg": 7.388682321877016,
+          "moving_backwards_fraction": 0.0,
+          "moving_group_member_radius_max_m": 0.9157313143961333,
+          "moving_group_member_radius_median_m": 0.7911438249629987,
+          "minimum_sampled_human_human_gap_m": 0.04117211328640569
+        },
+        "worker_full": {
+          "samples": 303,
+          "time_span_s": 30.2,
+          "yaw_total_rad": [
+            4.34545624130351,
+            0.1957324817522288,
+            5.26598191188539,
+            2.0216884831722868,
+            4.981459026910435,
+            5.881222563106261
+          ],
+          "yaw_total_turns": [
+            0.6916008407929816,
+            0.031151791994511416,
+            0.8381070515090695,
+            0.32176171548882554,
+            0.7928238279425386,
+            0.9360256423419478
+          ],
+          "path_m": [
+            19.220223174838655,
+            2.64931497962595,
+            18.59984304746889,
+            0.8271513686630446,
+            16.756389754257746,
+            10.589880348355713
+          ],
+          "yaw_rad_per_m": [
+            0.22608770989673943,
+            0.07388041182625395,
+            0.28311969614184446,
+            2.4441578165312317,
+            0.297287130459869,
+            0.5553625130447708
+          ],
+          "moving_heading_error_median_deg": 6.841303933061788,
+          "moving_backwards_fraction": 0.0,
+          "moving_group_member_radius_max_m": 0.9157313143961333,
+          "moving_group_member_radius_median_m": 0.7911438249629987,
+          "minimum_sampled_human_human_gap_m": 0.04117211328640569
+        },
+        "initial_direction_union_duration_first12_s": 11.999999999999973,
+        "initial_intent_executed": true,
+        "per_group_initial_goal_progress_duration_first12_s": {
+          "1,2,3": 3.5000000000000018,
+          "4,5,6": 1.4000000000000001
+        },
+        "native_group_goal_changes": [],
+        "max_reported_native_goal_age_wall_s": 27.088459491729736,
+        "scope": "Native goals may complete or expire by host wall time; target-change logs alone do not identify which condition fired."
+      },
+      "progress_failure_count": 0,
+      "max_action_recoveries": 0,
+      "physical_pass": true,
+      "recovery_free": true,
+      "encounter_screen_pass": true
+    },
+    "bridge": {
+      "status": "OBSERVED",
+      "clean": true,
+      "initial": {
+        "pid": 13207,
+        "command": "/opt/ros/jazzy/lib/ros_gz_bridge/parameter_bridge /common/ground_truth@std_msgs/msg/String[gz.msgs.StringMsg --ros-args -r __node:=nav2_pilot_ground_truth_bridge "
+      },
+      "signal": "SIGINT",
+      "record": "[INFO] [parameter_bridge-9]: process has finished cleanly [pid 13207]"
+    },
+    "runtime_commit": "2553efe5a58c498216c8aa0f3864d4b47c5b29ee",
+    "native_spread": {
+      "max_member_centroid_radius_m": 0.9157313143961372,
+      "group_samples": 347,
+      "alignment_skips": 0
+    },
+    "walking_motion": {
+      "mean_yaw_rate_turns_s": 0.01987521485529867,
+      "moving_backwards_fraction": 0.0,
+      "limits": {
+        "max_mean_yaw_rate_turns_s": 0.07256809522085717,
+        "max_member_centroid_radius_m": 1.7524163430343962,
+        "max_moving_backwards_fraction": 0.05437062937062937,
+        "reference_id": "crossing_group_sim",
+        "reference_seed": 45
+      },
+      "scope": "Fixed historical seed45 absolute limits, not matched-seed improvement."
+    }
+  },
+  "original_runtime_status": "ERROR",
+  "original_runtime_error": "Expecting value: line 1 column 1 (char 0)",
+  "changed_common_sources": [
+    "experiments/social_navigation/navigation/socnavgym_group_nav2/worker.py"
+  ],
+  "added_non_run_sources": [
+    "python/dynamuhsim/runtime/worker_readiness.py"
+  ],
+  "runtime_commit": "2553efe5a58c498216c8aa0f3864d4b47c5b29ee",
+  "training_ready": false,
+  "defaults_promoted": false,
+  "cohort_original_status": "FAIL",
+  "scope": "One revised-runtime readiness capture probe plus producer/consumer tests. Does not replace failed original cell or cure standing/lifecycle/clock coverage contracts. Motion limits separately visible in case.status."
+}

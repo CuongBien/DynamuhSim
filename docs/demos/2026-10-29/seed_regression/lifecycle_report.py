@@ -12,7 +12,8 @@ def main():
  for case in plan['cases']:
   run=raw/case['id']
   if not (run/'runtime/worker_trajectory.jsonl').exists():
-   result['cases'].append(dict(id=case['id'],status='NO_NATIVE_DATA',reason='Preserved startup error before Gazebo/worker trajectory.'));continue
+   result['cases'].append(dict(id=case['id'],status='NO_NATIVE_DATA',reason='Preserved startup error before Gazebo/worker trajectory.'))
+   ax=axes[case['seed']-46,['head_on','crossing','standing'].index(case.get('encounter_profile','standing'))];ax.set_axis_off();ax.text(.5,.5,case['id']+'\nNO NATIVE DATA\nstartup ERROR',ha='center',va='center',transform=ax.transAxes);continue
   data=[json.loads(x) for x in (run/'runtime/worker_trajectory.jsonl').read_text().splitlines() if x.strip()];data=[v for v in data if v.get('active_phase')];events=[];counts=[];times=[];last=None;cap_bad=[];max_stationary_speed=max_dynamic_speed=0.
   for v in data:
    signature=sorted((g['type'],tuple(g['members'])) for g in v['groups']);counts.append(len({i for g in v['groups'] for i in g['members']}));times.append(v['state_time']-data[0]['time'])
