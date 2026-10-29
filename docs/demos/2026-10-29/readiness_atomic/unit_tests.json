@@ -1,0 +1,12 @@
+{
+  "status": "PASS",
+  "tests": 282,
+  "conditional_skips": 2,
+  "command": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1 PYTHONPATH=python python3 -m unittest discover -s tests",
+  "specific_checks": [
+    "No final ready path while closed complete payload waits for publication",
+    "Final JSON includes every optional metadata field",
+    "A second publisher cannot replace the existing handshake",
+    "Invalid serialization never becomes visible"
+  ]
+}

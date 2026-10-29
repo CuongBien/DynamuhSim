@@ -17,13 +17,12 @@ human_motion=load_profile(k,a.runtime)
 from dynamuhsim.simulation.goal_clock import load_goal_clock
 goal_clock=load_goal_clock(k,a.runtime)
 current=copy.deepcopy(k.humans());server=socket.socket(socket.AF_UNIX,socket.SOCK_STREAM);server.bind(a.socket);server.listen(1)
-(a.runtime/'ready.json').write_text(json.dumps(dict(humans=current,groups=k.groups(),obstacles=42,native_dt=dt,robot_radius=.25,human_radius=.36,epoch=0,scenario=a.scenario,seed=a.seed,response_variant='native_initial_groups_continuous_lifecycle_response_v2',reactive_standing=a.scenario=='standing',standing_speed_cap_mps=.2,activation_center_distance_m=1.4,requires_start_gate=True)))
-if human_motion is not None:
-    ready=json.loads((a.runtime/'ready.json').read_text());ready['human_motion_profile']=human_motion.profile;(a.runtime/'ready.json').write_text(json.dumps(ready))
-if encounter is not None:
-    ready=json.loads((a.runtime/'ready.json').read_text());ready['encounter']=encounter;(a.runtime/'ready.json').write_text(json.dumps(ready))
-if goal_clock is not None:
-    ready=json.loads((a.runtime/'ready.json').read_text());ready['goal_clock']=goal_clock.snapshot();(a.runtime/'ready.json').write_text(json.dumps(ready))
+from dynamuhsim.runtime.worker_readiness import publish_ready
+ready=dict(humans=current,groups=k.groups(),obstacles=42,native_dt=dt,robot_radius=.25,human_radius=.36,epoch=0,scenario=a.scenario,seed=a.seed,response_variant='native_initial_groups_continuous_lifecycle_response_v2',reactive_standing=a.scenario=='standing',standing_speed_cap_mps=.2,activation_center_distance_m=1.4,requires_start_gate=True)
+if human_motion is not None:ready['human_motion_profile']=human_motion.profile
+if encounter is not None:ready['encounter']=encounter
+if goal_clock is not None:ready['goal_clock']=goal_clock.snapshot()
+publish_ready(a.runtime,ready)
 try:
     conn,_=server.accept()
     with conn,conn.makefile('rb') as stream,(a.runtime/'worker_trajectory.jsonl').open('w',buffering=1) as log:
