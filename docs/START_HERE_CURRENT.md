@@ -74,7 +74,7 @@ Khi chuẩn bị train:
 
 ## 4. Mở replay để xem ngay
 
-Kết quả nhóm đi bộ mới nhất đang xem tại [trang local35315](http://localhost:35315/group_cohesion_heading/index.html). Profile thử được chạy bằng `tools/capture_episode.py` với `--human-motion-profile group_cohesion_v2 --human-goal-clock sim_v1`; xem đầy đủ lệnh prepare/run trong báo cáo hiện tại ở trên. Các lệnh bên dưới xem **dataset01 cũ**, không tự bật mô hình người mới.
+Kết quả kiểm chứng đóng bridge mới nhất đang xem tại [trang local35315](http://localhost:35315/bridge_shutdown/index.html): hai lượt mới PASS toàn bộ audit, robot tới đích không cần recovery. [Báo cáo shutdown](demos/2026-10-29/bridge_shutdown/README.md). Kết quả giảm quay của nhóm đi bộ và lỗi cũ giữ tại [báo cáo trước](http://localhost:35315/group_cohesion_heading/index.html). Profile thử được chạy bằng `tools/capture_episode.py` với `--human-motion-profile group_cohesion_v2 --human-goal-clock sim_v1`; xem đầy đủ lệnh prepare/run trong báo cáo hiện tại ở trên. Các lệnh bên dưới xem **dataset01 cũ**, không tự bật mô hình người mới.
 
 Trong terminal Ubuntu/WSL:
 
@@ -106,13 +106,13 @@ Robot/Nav2 đã qua khe80cm và52,7cm bằng profile riêng, giữ model/TF kh�
 
 **Ứng viên người đang dùng để kiểm chứng: `group_cohesion_v2` + `sim_v1`.** Hai cảnh ngược chiều/cắt ngang seed45 giảm tốc độ quay78%/88%, giữ bán kính thành viên–tâm nhóm dưới1,23m/1,14m. Robot đều tới đích, không recovery; kiểm tra chuyển động đã công bố PASS cả2. Vẫn giữ per-person ORCA và kiểm tra va chạm liên tục. Đây là adapter tùy chỉnh, chưa phải nghiệm thu mọi hành vi tự nhiên.
 
-**Audit đầy đủ chỉ1/2 PASS:** bridge ground_truth abort khi đóng lượt cắt ngang sau khi đã ghi xong goal/label tail. Lỗi gốc và audit FAIL được giữ nguyên. Chưa nâng mặc định ROS, chưa thay dataset01 hay đăng ký dữ liệu train mới. Các bản thử giảm quay nhưng tách nhóm và bản cohesion đầu tăng quay đều được lưu để đối chiếu.
+**Vòng hành vi trước có audit1/2 PASS:** bridge ground_truth abort khi đóng lượt cắt ngang; lỗi gốc và audit FAIL vẫn giữ nguyên. **Vòng kiểm chứng shutdown mới đạt2/2 PASS**, sau khi dừng bridge đúng phiên lúc Gazebo đang pause, trước khi đóng server. Robot tới đích cả hai lượt, không recovery; nguồn người/guard, robot và Nav2 không đổi. Đây là bằng chứng giới hạn trên hai lượt seed45, chưa chứng minh hết race condition. Xem [báo cáo mới](demos/2026-10-29/bridge_shutdown/README.md). Chưa nâng mặc định ROS, chưa thay dataset01 hay đăng ký dữ liệu train mới. Các bản thử giảm quay nhưng tách nhóm và bản cohesion đầu tăng quay đều được lưu để đối chiếu.
 
 Xem [báo cáo hiện tại/cách chạy đúng profile](demos/2026-10-29/group_cohesion_heading/README.md), [hai video và đồ thị](demos/2026-10-29/group_cohesion_heading/index.html), [lỗi đóng bridge](demos/2026-10-29/group_cohesion_heading/teardown_failure.json). Các nhóm đứng trò chuyện vẫn dùng pipeline cũ đã có; profile mới dành cho nhóm đi bộ.
 
 ## 6. Việc tiếp theo, theo thứ tự
 
-1. Cô lập và sửa/kiểm chứng lỗi đóng bridge ground_truth; giữ nguyên audit nghiêm ngặt và bản ghi lỗi hiện tại. Sau đó chạy cohort seed46–48 đã định trước và hồi quy nhóm đứng trước khi chốt profile thu mới.
+1. Khai báo và chạy cohort seed46–48 cho nhóm đi bộ cùng hồi quy nhóm đứng trò chuyện; giữ nguyên mô hình và tiêu chí kiểm tra. Mitigation shutdown đã qua hai lượt seed45; tiếp tục theo dõi receipt bridge trong cohort mới trước khi chốt profile thu dữ liệu.
 2. Đóng băng cấu hình đã nghiệm thu và thu pilot mới khi cần mở rộng dữ liệu. Không trộn kết quả thử nghiệm với các mẫu train đã chấp nhận.
 3. Với `dataset01` có sẵn, bước WM vẫn là baseline nhỏ dự báo BEV có điều kiện hành động: train trên train, chọn bằng validation, cố định rồi mới đánh giá test. Chưa thực hiện trainer trong vòng sửa mô phỏng này.
 4. Chuẩn bị RL sau khi có reward và step/reset hợp lệ.

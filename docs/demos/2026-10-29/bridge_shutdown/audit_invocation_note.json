@@ -1,0 +1,6 @@
+{
+  "schema": "bridge_audit_invocation/1",
+  "initial_issue": "Initial audit CLI omitted --source-root, so ignored vendor/build/generated assets could not resolve from Git. Preserve both initial audit files without modification.",
+  "correction": "Run the same auditor read-only with --source-root /home/cuongbien/DynamuhSim and distinct *_source_verified_audit.json output. No simulation rerun, raw edit, policy waiver, or missing source exemption. All hashes must actually match.",
+  "report_semantics": "Historical analyzer first reads initial audit filename. New report retains that receipt explicitly and recomputes the same physical/coverage conjunction using the fully resolved audit. No failure record is overwritten."
+}

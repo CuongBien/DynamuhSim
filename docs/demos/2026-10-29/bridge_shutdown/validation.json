@@ -1,0 +1,52 @@
+{
+  "status": "PASS",
+  "checks": {
+    "http:index.html": true,
+    "http:results.json": true,
+    "http:audits.json": true,
+    "http:media_evidence.json": true,
+    "http:head_on_bridge_order.webm": true,
+    "http:crossing_bridge_order.webm": true,
+    "http:native_contact_sheet.jpg": true,
+    "integrated_report": true,
+    "protected_plan_sources_unchanged": true,
+    "original_crossing_still_failed": true
+  },
+  "http": {
+    "index.html": {
+      "status": 200,
+      "bytes": 1870
+    },
+    "results.json": {
+      "status": 200,
+      "bytes": 28608
+    },
+    "audits.json": {
+      "status": 200,
+      "bytes": 8897
+    },
+    "media_evidence.json": {
+      "status": 200,
+      "bytes": 1175
+    },
+    "head_on_bridge_order.webm": {
+      "status": 200,
+      "bytes": 250643
+    },
+    "crossing_bridge_order.webm": {
+      "status": 200,
+      "bytes": 233287
+    },
+    "native_contact_sheet.jpg": {
+      "status": 200,
+      "bytes": 31162
+    }
+  },
+  "original_crossing_audit_sha256": "3e65fa4f95a07e99fa8dac0ee7afa6a50bcf487a7757eeb1264aac11ebbc0bba",
+  "visual_scope": "Native RGB contact sheet inspected. No browser visual QA or new Windows GUI confirmation.",
+  "unit_tests": {
+    "tests": 279,
+    "skips": 2,
+    "status": "PASS"
+  }
+}
