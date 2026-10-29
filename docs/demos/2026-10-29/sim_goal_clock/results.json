@@ -1,0 +1,1003 @@
+{
+  "schema": "sim_goal_clock_result/1",
+  "cases": [
+    {
+      "run": "experiments/social_navigation/benchmark/generated/sim_goal_clock_20261029/head_on_legacy_sim",
+      "status": "SUCCEEDED",
+      "actual_goal_reached": true,
+      "xy_error_m": 0.10201803594024564,
+      "active_sim_s": 36.015,
+      "path_length_m": 9.14218569503875,
+      "world_y_min_m": -1.107904975940811,
+      "world_y_max_m": 0.06345415418606022,
+      "minimum_swept_robot_human_gap_m": 0.12512904361169908,
+      "minimum_static_gap_lower_bound_m": 1.3647500179765493,
+      "static_box_count": 42,
+      "global_plan_probe": {
+        "time_sim_s": 33.4675,
+        "nearest_point_to_initial_gate_x": [
+          -22.86437278467027,
+          -1.0772203490024843
+        ]
+      },
+      "native_contact_force_recorded": false,
+      "gate_A_crossings": [
+        {
+          "time_sim_s": 26.881284414424265,
+          "time_after_goal_s": 13.416284414424265,
+          "surface_opening_m": 1.1674338649005795,
+          "center_offset_m": 0.09722349334148915,
+          "conservative_disc_fits": true,
+          "pair_speed_m_s": 0.07694083998623513,
+          "pair_shift_from_start_m": 4.775548290429897,
+          "original_stationary_pair": false
+        }
+      ],
+      "passes_original_narrow_gap_A": false,
+      "rendering": "D3D12 (NVIDIA GeForce RTX 4060 Laptop GPU)",
+      "id": "head_on_legacy_sim",
+      "kind": "social",
+      "encounter_profile": "head_on",
+      "human_motion_profile": "legacy",
+      "audit": "PASS",
+      "proximity": {
+        "center_threshold_m": 1.5,
+        "cumulative_duration_s": 25.26756795753322,
+        "minimum_center_distance_m": 0.6531915283603561,
+        "minimum_time_sim_s": 17.663993257206002,
+        "coverage": "EXERCISED",
+        "method": "Exact union of linear relative-motion circle intervals between consecutive native pose samples."
+      },
+      "native_human_first12": {
+        "duration_s": 11.984999999999998,
+        "yaw_total_turns": [
+          1.266274693188426,
+          1.2169229029105142,
+          1.2437172560609886,
+          1.477548167759627,
+          1.4874686795772447,
+          1.4629287033087934
+        ],
+        "path_m": [
+          3.5381367029947572,
+          3.7457317056148467,
+          4.16666278399175,
+          4.785809188887794,
+          4.7666232020837205,
+          5.362340960067259
+        ]
+      },
+      "native_human_full": {
+        "duration_s": 36.005,
+        "yaw_total_turns": [
+          6.119853801396415,
+          6.0998140417532625,
+          6.079965518270358,
+          6.5207881773403065,
+          6.539438897649556,
+          6.525057894524754
+        ],
+        "path_m": [
+          6.644471116583613,
+          6.927738303188526,
+          7.639083943127084,
+          9.03788563150195,
+          8.591390171418395,
+          9.711311256053586
+        ]
+      },
+      "human_safety": {
+        "minimum_swept_human_human_gap_m": 0.5236557355659173,
+        "minimum_human_static_lower_bound_m": 0.5194937221291303
+      },
+      "worker": {
+        "worker_first12": {
+          "samples": 120,
+          "time_span_s": 11.9,
+          "yaw_total_rad": [
+            7.873813547094857,
+            7.563727103537676,
+            7.732080989568116,
+            9.201283938317415,
+            9.26361635240958,
+            9.109427134081109
+          ],
+          "yaw_total_turns": [
+            1.2531563470040765,
+            1.2038045567261653,
+            1.2305989098766394,
+            1.464429821575279,
+            1.4743503333928978,
+            1.4498103571244463
+          ],
+          "path_m": [
+            3.538930933479163,
+            3.7279002584946315,
+            4.149057486987354,
+            4.783779898867493,
+            4.74579654402576,
+            5.342347931363475
+          ],
+          "yaw_rad_per_m": [
+            2.2249130302619444,
+            2.028951039208328,
+            1.8635752851866143,
+            1.9234337977162612,
+            1.9519623874460172,
+            1.705135504298051
+          ],
+          "moving_heading_error_median_deg": 7.2847063869695265,
+          "moving_backwards_fraction": 0.0048543689320388345,
+          "moving_group_member_radius_max_m": 1.3392265276213169,
+          "moving_group_member_radius_median_m": 1.0234424394647703,
+          "minimum_sampled_human_human_gap_m": 0.5360141554178395
+        },
+        "worker_full": {
+          "samples": 360,
+          "time_span_s": 35.900000000000006,
+          "yaw_total_rad": [
+            38.3383504870212,
+            38.21243696367182,
+            38.087725012555055,
+            40.85749546709512,
+            40.974681398910406,
+            40.8843228913742
+          ],
+          "yaw_total_turns": [
+            6.101737989998997,
+            6.081698230355826,
+            6.061849706872959,
+            6.502672365942896,
+            6.521323086252128,
+            6.506942083127334
+          ],
+          "path_m": [
+            6.642915061110482,
+            6.908752957906543,
+            7.618661508958903,
+            9.035855442823783,
+            8.574440383860448,
+            9.691094798225162
+          ],
+          "yaw_rad_per_m": [
+            5.771314270065687,
+            5.531017999411976,
+            4.999267255510316,
+            4.521707515755343,
+            4.778700365803054,
+            4.218751724403913
+          ],
+          "moving_heading_error_median_deg": 7.669845752126888,
+          "moving_backwards_fraction": 0.005592841163310962,
+          "moving_group_member_radius_max_m": 1.3969812513001025,
+          "moving_group_member_radius_median_m": 1.2488967875210437,
+          "minimum_sampled_human_human_gap_m": 0.523655735565917
+        },
+        "initial_direction_union_duration_first12_s": 9.99999999999998,
+        "initial_intent_executed": true,
+        "per_group_initial_goal_progress_duration_first12_s": {
+          "1,2,3": 5.799999999999995,
+          "4,5,6": 7.699999999999989
+        },
+        "native_group_goal_changes": [
+          {
+            "time_after_goal_s": 5.837499999999999,
+            "members": [
+              1,
+              2,
+              3
+            ],
+            "previous": [
+              -28.2,
+              0.35
+            ],
+            "goal": [
+              11.327971707858417,
+              -10.37192096164015
+            ],
+            "reported_goal_ages_wall_s": {
+              "1": 0.10161042213439941,
+              "2": 0.10159945487976074,
+              "3": 0.1015939712524414,
+              "4": 34.171157360076904,
+              "5": 34.17115807533264,
+              "6": 34.17115831375122
+            }
+          }
+        ],
+        "max_reported_native_goal_age_wall_s": 107.35701298713684,
+        "scope": "Native goals may complete or expire by host wall time; target-change logs alone do not identify which condition fired."
+      },
+      "progress_failure_count": 0,
+      "max_action_recoveries": 0,
+      "physical_pass": true,
+      "recovery_free": true,
+      "encounter_screen_pass": true,
+      "clock": {
+        "profile": "sim_v1",
+        "gate_start_sim_s": 13.465,
+        "first_active_tick_after_gate_s": 0.037499999999999645,
+        "max_goal_age_sim_s": 36.03750000000001,
+        "checked_goal_count": 722,
+        "expired_evaluations": 0,
+        "timeout_only_evaluations": 0,
+        "assignment_count": 3,
+        "native_wall_age_over50_while_sim_age_not_over50": 1005,
+        "assignments": [
+          {
+            "event": "assigned",
+            "id": 1,
+            "time_sim_s": 19.3025,
+            "previous": [
+              -28.2,
+              0.35
+            ],
+            "goal": [
+              11.327971707858417,
+              -10.37192096164015
+            ]
+          },
+          {
+            "event": "assigned",
+            "id": 2,
+            "time_sim_s": 19.3025,
+            "previous": [
+              -28.2,
+              0.35
+            ],
+            "goal": [
+              11.327971707858417,
+              -10.37192096164015
+            ]
+          },
+          {
+            "event": "assigned",
+            "id": 3,
+            "time_sim_s": 19.3025,
+            "previous": [
+              -28.2,
+              0.35
+            ],
+            "goal": [
+              11.327971707858417,
+              -10.37192096164015
+            ]
+          }
+        ],
+        "scope": "Counts native human-level checks/assignments, not unique group goals. Native wall ages are retained as diagnostic telemetry and are not used by sim_v1 behavior."
+      },
+      "clock_integrity": true,
+      "clock_audit": {
+        "evaluations": 800,
+        "assignments": 3,
+        "expired_evaluations": 0,
+        "last_state_time_sim_s": 53.4025
+      }
+    },
+    {
+      "run": "experiments/social_navigation/benchmark/generated/sim_goal_clock_20261029/head_on_group_sim",
+      "status": "SUCCEEDED",
+      "actual_goal_reached": true,
+      "xy_error_m": 0.04446404622910444,
+      "active_sim_s": 33.707499999999996,
+      "path_length_m": 8.611912286529675,
+      "world_y_min_m": -0.5703206487408591,
+      "world_y_max_m": 0.34643935620809874,
+      "minimum_swept_robot_human_gap_m": 0.12540718716095434,
+      "minimum_static_gap_lower_bound_m": 1.6818465940239775,
+      "static_box_count": 42,
+      "global_plan_probe": {
+        "time_sim_s": 30.7175,
+        "nearest_point_to_initial_gate_x": [
+          -22.8479015542078,
+          0.3469246899945409
+        ]
+      },
+      "native_contact_force_recorded": false,
+      "gate_A_crossings": [
+        {
+          "time_sim_s": 22.073773526541554,
+          "time_after_goal_s": 11.178773526541555,
+          "surface_opening_m": 1.079588418118306,
+          "center_offset_m": 0.012718183366905042,
+          "conservative_disc_fits": true,
+          "pair_speed_m_s": 0.12226128243651341,
+          "pair_shift_from_start_m": 5.291653174889147,
+          "original_stationary_pair": false
+        }
+      ],
+      "passes_original_narrow_gap_A": false,
+      "rendering": "D3D12 (NVIDIA GeForce RTX 4060 Laptop GPU)",
+      "id": "head_on_group_sim",
+      "kind": "social",
+      "encounter_profile": "head_on",
+      "human_motion_profile": "group_orca_v1",
+      "audit": "PASS",
+      "proximity": {
+        "center_threshold_m": 1.5,
+        "cumulative_duration_s": 20.79171191078792,
+        "minimum_center_distance_m": 0.6534696719096114,
+        "minimum_time_sim_s": 14.853380321513123,
+        "coverage": "EXERCISED",
+        "method": "Exact union of linear relative-motion circle intervals between consecutive native pose samples."
+      },
+      "native_human_first12": {
+        "duration_s": 11.9925,
+        "yaw_total_turns": [
+          0.6402971700477254,
+          0.5861525622697504,
+          0.7264701319223295,
+          1.2903499880843146,
+          1.2776347208882168,
+          1.275872144412088
+        ],
+        "path_m": [
+          3.484155666860698,
+          3.811531006016376,
+          4.222526749956434,
+          5.311256852110205,
+          5.291680419302979,
+          5.782715819963424
+        ]
+      },
+      "native_human_full": {
+        "duration_s": 33.707499999999996,
+        "yaw_total_turns": [
+          4.9003568204580485,
+          4.5815975476998405,
+          4.720684737805253,
+          5.359279218439207,
+          5.348593176547523,
+          5.3892321243138035
+        ],
+        "path_m": [
+          5.06437522898204,
+          5.410593583584967,
+          6.08064090169912,
+          9.862550508505652,
+          9.196958084678158,
+          10.435663914822875
+        ]
+      },
+      "human_safety": {
+        "minimum_swept_human_human_gap_m": 0.42750257311241646,
+        "minimum_human_static_lower_bound_m": 0.7427633744925278
+      },
+      "worker": {
+        "worker_first12": {
+          "samples": 120,
+          "time_span_s": 11.9,
+          "yaw_total_rad": [
+            3.9250547149064205,
+            3.7328790040090114,
+            4.515348127442894,
+            8.186599664698829,
+            8.110261678883731,
+            8.101442774627843
+          ],
+          "yaw_total_turns": [
+            0.6246918597835068,
+            0.5941061454519851,
+            0.71863997426327,
+            1.3029378037512716,
+            1.2907882359631198,
+            1.289384663758141
+          ],
+          "path_m": [
+            3.4849731960831827,
+            3.775712933724936,
+            4.196582001271813,
+            5.324658701703096,
+            5.273863438865765,
+            5.7601458561859396
+          ],
+          "yaw_rad_per_m": [
+            1.1262797427876496,
+            0.9886554061530132,
+            1.0759585124452413,
+            1.5374881515091923,
+            1.537821707538939,
+            1.4064648668449145
+          ],
+          "moving_heading_error_median_deg": 7.032675532788442,
+          "moving_backwards_fraction": 0.007587253414264037,
+          "moving_group_member_radius_max_m": 1.4159424004393604,
+          "moving_group_member_radius_median_m": 1.0063403626477518,
+          "minimum_sampled_human_human_gap_m": 0.42750257311241646
+        },
+        "worker_full": {
+          "samples": 337,
+          "time_span_s": 33.6,
+          "yaw_total_rad": [
+            30.841209237788057,
+            28.841833690403803,
+            29.713433619001947,
+            33.72888602081844,
+            33.665298033620985,
+            33.92289576348689
+          ],
+          "yaw_total_turns": [
+            4.9085309011253955,
+            4.590320399662127,
+            4.729039836697065,
+            5.368118935196383,
+            5.357998592712644,
+            5.398996544750054
+          ],
+          "path_m": [
+            5.061045519835595,
+            5.371759095092584,
+            6.050178144816062,
+            9.875818826181893,
+            9.19320792495782,
+            10.408641764478823
+          ],
+          "yaw_rad_per_m": [
+            6.093841503087274,
+            5.369159930636596,
+            4.911166730596376,
+            3.4153002008703743,
+            3.6619750481468034,
+            3.2591087800960037
+          ],
+          "moving_heading_error_median_deg": 7.288413460719913,
+          "moving_backwards_fraction": 0.004810996563573883,
+          "moving_group_member_radius_max_m": 1.5949798102254444,
+          "moving_group_member_radius_median_m": 1.3974696322737812,
+          "minimum_sampled_human_human_gap_m": 0.42750257311241646
+        },
+        "initial_direction_union_duration_first12_s": 11.199999999999976,
+        "initial_intent_executed": true,
+        "per_group_initial_goal_progress_duration_first12_s": {
+          "1,2,3": 6.099999999999994,
+          "4,5,6": 8.499999999999986
+        },
+        "native_group_goal_changes": [
+          {
+            "time_after_goal_s": 6.2075,
+            "members": [
+              1,
+              2,
+              3
+            ],
+            "previous": [
+              -28.2,
+              0.35
+            ],
+            "goal": [
+              11.327971707858417,
+              -10.37192096164015
+            ],
+            "reported_goal_ages_wall_s": {
+              "1": 0.10443902015686035,
+              "2": 0.1044304370880127,
+              "3": 0.10442638397216797,
+              "4": 31.578004360198975,
+              "5": 31.578004598617554,
+              "6": 31.578004598617554
+            }
+          }
+        ],
+        "max_reported_native_goal_age_wall_s": 96.53037977218628,
+        "scope": "Native goals may complete or expire by host wall time; target-change logs alone do not identify which condition fired."
+      },
+      "progress_failure_count": 0,
+      "max_action_recoveries": 0,
+      "physical_pass": true,
+      "recovery_free": true,
+      "encounter_screen_pass": true,
+      "clock": {
+        "profile": "sim_v1",
+        "gate_start_sim_s": 10.895,
+        "first_active_tick_after_gate_s": 0.10749999999999993,
+        "max_goal_age_sim_s": 33.807500000000005,
+        "checked_goal_count": 676,
+        "expired_evaluations": 0,
+        "timeout_only_evaluations": 0,
+        "assignment_count": 3,
+        "native_wall_age_over50_while_sim_age_not_over50": 789,
+        "assignments": [
+          {
+            "event": "assigned",
+            "id": 1,
+            "time_sim_s": 17.1025,
+            "previous": [
+              -28.2,
+              0.35
+            ],
+            "goal": [
+              11.327971707858417,
+              -10.37192096164015
+            ]
+          },
+          {
+            "event": "assigned",
+            "id": 2,
+            "time_sim_s": 17.1025,
+            "previous": [
+              -28.2,
+              0.35
+            ],
+            "goal": [
+              11.327971707858417,
+              -10.37192096164015
+            ]
+          },
+          {
+            "event": "assigned",
+            "id": 3,
+            "time_sim_s": 17.1025,
+            "previous": [
+              -28.2,
+              0.35
+            ],
+            "goal": [
+              11.327971707858417,
+              -10.37192096164015
+            ]
+          }
+        ],
+        "scope": "Counts native human-level checks/assignments, not unique group goals. Native wall ages are retained as diagnostic telemetry and are not used by sim_v1 behavior."
+      },
+      "clock_integrity": true,
+      "clock_audit": {
+        "evaluations": 752,
+        "assignments": 3,
+        "expired_evaluations": 0,
+        "last_state_time_sim_s": 48.502500000000005
+      }
+    },
+    {
+      "run": "experiments/social_navigation/benchmark/generated/sim_goal_clock_20261029/crossing_legacy_sim",
+      "status": "SUCCEEDED",
+      "actual_goal_reached": true,
+      "xy_error_m": 0.11947493623967502,
+      "active_sim_s": 36.7225,
+      "path_length_m": 9.487777742257496,
+      "world_y_min_m": -1.442279001671584,
+      "world_y_max_m": 0.3541027894348155,
+      "minimum_swept_robot_human_gap_m": 0.24854801422627715,
+      "minimum_static_gap_lower_bound_m": 1.1329879590631395,
+      "static_box_count": 42,
+      "global_plan_probe": {
+        "time_sim_s": 30.9025,
+        "nearest_point_to_initial_gate_x": [
+          -22.86896149205225,
+          -1.0268242776099366
+        ]
+      },
+      "native_contact_force_recorded": false,
+      "gate_A_crossings": [],
+      "passes_original_narrow_gap_A": false,
+      "rendering": "D3D12 (NVIDIA GeForce RTX 4060 Laptop GPU)",
+      "id": "crossing_legacy_sim",
+      "kind": "social",
+      "encounter_profile": "crossing",
+      "human_motion_profile": "legacy",
+      "audit": "PASS",
+      "proximity": {
+        "center_threshold_m": 1.5,
+        "cumulative_duration_s": 20.28374016342566,
+        "minimum_center_distance_m": 0.7766104989749342,
+        "minimum_time_sim_s": 30.2025,
+        "coverage": "EXERCISED",
+        "method": "Exact union of linear relative-motion circle intervals between consecutive native pose samples."
+      },
+      "native_human_first12": {
+        "duration_s": 11.9925,
+        "yaw_total_turns": [
+          1.1680486528063185,
+          1.1624790601990214,
+          1.1239761705645381,
+          1.2999370413670799,
+          1.294446829008676,
+          1.3278377053830381
+        ],
+        "path_m": [
+          3.773890652090878,
+          4.543591235695696,
+          4.922836660789702,
+          3.1811961033365206,
+          3.212270649108499,
+          3.606034432820779
+        ]
+      },
+      "native_human_full": {
+        "duration_s": 36.72,
+        "yaw_total_turns": [
+          6.093382375559922,
+          6.184061623473406,
+          6.120438975400167,
+          6.115415207043435,
+          6.093551249340357,
+          6.132163078567875
+        ],
+        "path_m": [
+          6.466843677133601,
+          7.320864749932436,
+          8.05668192077672,
+          7.635334348461104,
+          7.944489152817582,
+          8.37187090757594
+        ]
+      },
+      "human_safety": {
+        "minimum_swept_human_human_gap_m": 0.1077130525982577,
+        "minimum_human_static_lower_bound_m": 0.03781636059283888
+      },
+      "worker": {
+        "worker_first12": {
+          "samples": 120,
+          "time_span_s": 11.9,
+          "yaw_total_rad": [
+            7.454011763598576,
+            7.439259848141409,
+            7.186374054361792,
+            8.210920318576154,
+            8.176424296952517,
+            8.386225360781754
+          ],
+          "yaw_total_turns": [
+            1.1863428180418498,
+            1.183994977776768,
+            1.1437469536590243,
+            1.3068085560350748,
+            1.3013183436766682,
+            1.3347092200510295
+          ],
+          "path_m": [
+            3.748355794405825,
+            4.510904783844517,
+            4.920809362710234,
+            3.1760318791009907,
+            3.2078277050762414,
+            3.59905454794768
+          ],
+          "yaw_rad_per_m": [
+            1.9886083852347207,
+            1.6491724398139784,
+            1.4604048896549315,
+            2.585276417597024,
+            2.548897586991252,
+            2.330118993490639
+          ],
+          "moving_heading_error_median_deg": 8.687764244893291,
+          "moving_backwards_fraction": 0.0,
+          "moving_group_member_radius_max_m": 1.1585885757574383,
+          "moving_group_member_radius_median_m": 1.016803416990462,
+          "minimum_sampled_human_human_gap_m": 0.18714954716622767
+        },
+        "worker_full": {
+          "samples": 367,
+          "time_span_s": 36.6,
+          "yaw_total_rad": [
+            38.35762124336016,
+            38.9476186284962,
+            38.53690073757433,
+            38.42428697619795,
+            38.28691167840111,
+            38.52951695648687
+          ],
+          "yaw_total_turns": [
+            6.104805026127462,
+            6.198706026383156,
+            6.133338243826662,
+            6.11541520704344,
+            6.093551249340352,
+            6.132163078567885
+          ],
+          "path_m": [
+            6.448632630519567,
+            7.297471488473859,
+            8.062425690868428,
+            7.636017748605304,
+            7.9590700615261865,
+            8.382059486470014
+          ],
+          "yaw_rad_per_m": [
+            5.948179008030991,
+            5.337138855562891,
+            4.779814687932138,
+            5.0319797885771065,
+            4.810475518173718,
+            4.5966647002063965
+          ],
+          "moving_heading_error_median_deg": 8.545745555308809,
+          "moving_backwards_fraction": 0.0,
+          "moving_group_member_radius_max_m": 1.315137048411329,
+          "moving_group_member_radius_median_m": 1.0646894455808664,
+          "minimum_sampled_human_human_gap_m": 0.1077130525982557
+        },
+        "initial_direction_union_duration_first12_s": 11.199999999999976,
+        "initial_intent_executed": true,
+        "per_group_initial_goal_progress_duration_first12_s": {
+          "1,2,3": 8.199999999999987,
+          "4,5,6": 8.099999999999987
+        },
+        "native_group_goal_changes": [],
+        "max_reported_native_goal_age_wall_s": 101.70979022979736,
+        "scope": "Native goals may complete or expire by host wall time; target-change logs alone do not identify which condition fired."
+      },
+      "progress_failure_count": 0,
+      "max_action_recoveries": 0,
+      "physical_pass": true,
+      "recovery_free": true,
+      "encounter_screen_pass": true,
+      "clock": {
+        "profile": "sim_v1",
+        "gate_start_sim_s": 10.88,
+        "first_active_tick_after_gate_s": 0.12249999999999872,
+        "max_goal_age_sim_s": 36.8225,
+        "checked_goal_count": 734,
+        "expired_evaluations": 0,
+        "timeout_only_evaluations": 0,
+        "assignment_count": 0,
+        "native_wall_age_over50_while_sim_age_not_over50": 1344,
+        "assignments": [],
+        "scope": "Counts native human-level checks/assignments, not unique group goals. Native wall ages are retained as diagnostic telemetry and are not used by sim_v1 behavior."
+      },
+      "clock_integrity": true,
+      "clock_audit": {
+        "evaluations": 810,
+        "assignments": 0,
+        "expired_evaluations": 0,
+        "last_state_time_sim_s": 51.502500000000005
+      }
+    },
+    {
+      "run": "experiments/social_navigation/benchmark/generated/sim_goal_clock_20261029/crossing_group_sim",
+      "status": "SUCCEEDED",
+      "actual_goal_reached": true,
+      "xy_error_m": 0.05014781429797087,
+      "active_sim_s": 33.2575,
+      "path_length_m": 8.629915997819403,
+      "world_y_min_m": -0.9756828042187695,
+      "world_y_max_m": 0.228997225863561,
+      "minimum_swept_robot_human_gap_m": 0.12231791713185847,
+      "minimum_static_gap_lower_bound_m": 1.681710072212721,
+      "static_box_count": 42,
+      "global_plan_probe": {
+        "time_sim_s": 30.7025,
+        "nearest_point_to_initial_gate_x": [
+          -22.745906657463593,
+          -0.5659810138622021
+        ]
+      },
+      "native_contact_force_recorded": false,
+      "gate_A_crossings": [],
+      "passes_original_narrow_gap_A": false,
+      "rendering": "D3D12 (NVIDIA GeForce RTX 4060 Laptop GPU)",
+      "id": "crossing_group_sim",
+      "kind": "social",
+      "encounter_profile": "crossing",
+      "human_motion_profile": "group_orca_v1",
+      "audit": "PASS",
+      "proximity": {
+        "center_threshold_m": 1.5,
+        "cumulative_duration_s": 11.224969170121335,
+        "minimum_center_distance_m": 0.6503804018805155,
+        "minimum_time_sim_s": 21.960859346235782,
+        "coverage": "EXERCISED",
+        "method": "Exact union of linear relative-motion circle intervals between consecutive native pose samples."
+      },
+      "native_human_first12": {
+        "duration_s": 11.992500000000001,
+        "yaw_total_turns": [
+          0.999761637583222,
+          0.9831426126131905,
+          0.9864228449596213,
+          1.3742479855755558,
+          1.2959947859510803,
+          1.3024171969882847
+        ],
+        "path_m": [
+          5.337727567868571,
+          5.997164331871636,
+          6.362271454086964,
+          3.4059423459978007,
+          2.8011589561543757,
+          2.2397761350821535
+        ]
+      },
+      "native_human_full": {
+        "duration_s": 33.2575,
+        "yaw_total_turns": [
+          4.401938271197514,
+          4.351989407942742,
+          4.330808760053093,
+          5.359899578746008,
+          5.282374178305353,
+          5.234190925447171
+        ],
+        "path_m": [
+          8.85151421183886,
+          9.635549732438967,
+          10.505989893968799,
+          3.7812605169377957,
+          3.198585592165685,
+          2.63101585213024
+        ]
+      },
+      "human_safety": {
+        "minimum_swept_human_human_gap_m": 0.04211029548028489,
+        "minimum_human_static_lower_bound_m": 0.058921109264288285
+      },
+      "worker": {
+        "worker_first12": {
+          "samples": 120,
+          "time_span_s": 11.900000000000002,
+          "yaw_total_rad": [
+            6.330876125549315,
+            6.237406818268152,
+            6.252096071247507,
+            8.579704751389492,
+            8.088025397269192,
+            8.128378595934803
+          ],
+          "yaw_total_turns": [
+            1.00759022948364,
+            0.9927141272024677,
+            0.9950519944244595,
+            1.3655024214526588,
+            1.2872492218281824,
+            1.293671632865384
+          ],
+          "path_m": [
+            5.320319918361503,
+            5.948969855574832,
+            6.3702796986727455,
+            3.3936273998491204,
+            2.7962117421263213,
+            2.2243638928520024
+          ],
+          "yaw_rad_per_m": [
+            1.1899427520702615,
+            1.04848519486496,
+            0.9814476548887073,
+            2.5281811290688374,
+            2.892493896445346,
+            3.6542485795850954
+          ],
+          "moving_heading_error_median_deg": 9.526374760715418,
+          "moving_backwards_fraction": 0.008726003490401396,
+          "moving_group_member_radius_max_m": 1.5024163430343926,
+          "moving_group_member_radius_median_m": 1.1941857392545645,
+          "minimum_sampled_human_human_gap_m": 0.042110295480291104
+        },
+        "worker_full": {
+          "samples": 333,
+          "time_span_s": 33.2,
+          "yaw_total_rad": [
+            27.605651415161372,
+            27.368082007754325,
+            27.19776422666007,
+            33.67724228113515,
+            33.19013582415319,
+            32.887391517742444
+          ],
+          "yaw_total_turns": [
+            4.393575879994708,
+            4.355765534478464,
+            4.32865861772087,
+            5.359899578746036,
+            5.2823741783053775,
+            5.23419092544718
+          ],
+          "path_m": [
+            8.840736290481518,
+            9.593942899595534,
+            10.521448267760771,
+            3.7692151995202847,
+            3.1941046106010202,
+            2.6156326614427208
+          ],
+          "yaw_rad_per_m": [
+            3.122551166341577,
+            2.8526417442934875,
+            2.584982935286383,
+            8.934815471778135,
+            10.391060992178321,
+            12.573398398994811
+          ],
+          "moving_heading_error_median_deg": 8.866528246602838,
+          "moving_backwards_fraction": 0.004370629370629371,
+          "moving_group_member_radius_max_m": 1.5024163430343926,
+          "moving_group_member_radius_median_m": 1.3362970354690855,
+          "minimum_sampled_human_human_gap_m": 0.042110295480291104
+        },
+        "initial_direction_union_duration_first12_s": 11.199999999999976,
+        "initial_intent_executed": true,
+        "per_group_initial_goal_progress_duration_first12_s": {
+          "1,2,3": 6.699999999999992,
+          "4,5,6": 5.899999999999995
+        },
+        "native_group_goal_changes": [],
+        "max_reported_native_goal_age_wall_s": 94.1216676235199,
+        "scope": "Native goals may complete or expire by host wall time; target-change logs alone do not identify which condition fired."
+      },
+      "progress_failure_count": 0,
+      "max_action_recoveries": 0,
+      "physical_pass": true,
+      "recovery_free": true,
+      "encounter_screen_pass": true,
+      "clock": {
+        "profile": "sim_v1",
+        "gate_start_sim_s": 10.545,
+        "first_active_tick_after_gate_s": 0.05749999999999922,
+        "max_goal_age_sim_s": 33.3575,
+        "checked_goal_count": 666,
+        "expired_evaluations": 0,
+        "timeout_only_evaluations": 0,
+        "assignment_count": 0,
+        "native_wall_age_over50_while_sim_age_not_over50": 1152,
+        "assignments": [],
+        "scope": "Counts native human-level checks/assignments, not unique group goals. Native wall ages are retained as diagnostic telemetry and are not used by sim_v1 behavior."
+      },
+      "clock_integrity": true,
+      "clock_audit": {
+        "evaluations": 742,
+        "assignments": 0,
+        "expired_evaluations": 0,
+        "last_state_time_sim_s": 47.7025
+      }
+    }
+  ],
+  "comparisons": [
+    {
+      "id": "head_on_legacy_sim",
+      "reference_id": "head_on_legacy",
+      "active_sim_change_s": -2.894999999999996,
+      "near_duration_change_s": 4.117266416410249,
+      "first12_mean_turns_before": 1.2827958826301045,
+      "first12_mean_turns_after": 1.359143400467599,
+      "whole_turn_rate_change_fraction": 2.132046662076339,
+      "progress_failure_count": 0,
+      "physical_pass": true,
+      "encounter_screen_pass": true
+    },
+    {
+      "id": "head_on_group_sim",
+      "reference_id": "head_on_group",
+      "active_sim_change_s": -3.1700000000000017,
+      "near_duration_change_s": -14.277080153697991,
+      "first12_mean_turns_before": 0.956828480496075,
+      "first12_mean_turns_after": 0.966129452937404,
+      "whole_turn_rate_change_fraction": 1.4084222101823305,
+      "progress_failure_count": 0,
+      "physical_pass": true,
+      "encounter_screen_pass": true
+    },
+    {
+      "id": "crossing_legacy_sim",
+      "reference_id": "crossing_legacy",
+      "active_sim_change_s": 0.08749999999999858,
+      "near_duration_change_s": -9.420727831320967,
+      "first12_mean_turns_before": 1.3001961482140822,
+      "first12_mean_turns_after": 1.2294542432214453,
+      "whole_turn_rate_change_fraction": 0.6950608888013983,
+      "progress_failure_count": 0,
+      "physical_pass": true,
+      "encounter_screen_pass": true
+    },
+    {
+      "id": "crossing_group_sim",
+      "reference_id": "crossing_group",
+      "active_sim_change_s": -6.947499999999998,
+      "near_duration_change_s": -14.188439340628657,
+      "first12_mean_turns_before": 1.181270687440097,
+      "first12_mean_turns_after": 1.1569978439451591,
+      "whole_turn_rate_change_fraction": 0.6722343643847366,
+      "progress_failure_count": 0,
+      "physical_pass": true,
+      "encounter_screen_pass": true
+    }
+  ],
+  "failed_attempts": [],
+  "defaults_promoted": false,
+  "naturalness_accepted": false,
+  "training_ready": false,
+  "clock_contract_accepted": true,
+  "presentation_status": "4/4 l\u01b0\u1ee3t t\u1edbi \u0111\u00edch, audit PASS, kh\u00f4ng recovery; h\u1ee3p \u0111\u1ed3ng \u0111\u1ed3ng h\u1ed3 m\u00f4 ph\u1ecfng PASS.",
+  "presentation_decision": "L\u1ed7i d\u00f9ng \u0111\u1ed3ng h\u1ed3 m\u00e1y \u0111\u00e3 \u0111\u01b0\u1ee3c s\u1eeda trong profile ri\u00eang. H\u00e0nh vi ng\u01b0\u1eddi ch\u01b0a \u0111\u1ea1t: c\u1ea3 b\u1ed1n l\u01b0\u1ee3t quay nhi\u1ec1u h\u01a1n tham chi\u1ebfu, t\u1ed1c \u0111\u1ed9 quay to\u00e0n l\u01b0\u1ee3t t\u0103ng67\u2013213%. Ch\u01b0a n\u00e2ng m\u1eb7c \u0111\u1ecbnh ho\u1eb7c d\u00f9ng c\u00e1c l\u01b0\u1ee3t n\u00e0y l\u00e0m dataset train m\u1edbi.",
+  "raw_analysis_sha256": "df420371a1b2cc6452bc86a6cc75f538a4cf5a0c6b61a5fb2a4820bc80513fcc"
+}

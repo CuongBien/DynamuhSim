@@ -1,0 +1,80 @@
+{
+  "schema": "sim_clock_group_diagnostic/1",
+  "cases": [
+    {
+      "id": "head_on_group",
+      "clock": "native_wall",
+      "group_radius_min_m": 1.0799999999999996,
+      "group_radius_max_m": 2.0368436714244122,
+      "paired_group_samples": 369,
+      "virtual_overlap_samples": 104,
+      "virtual_overlap_fraction": 0.28184281842818426,
+      "minimum_virtual_group_disc_gap_m": -0.49355607437604876,
+      "minimum_sampled_actual_member_disc_gap_m": 0.4435547593495117,
+      "raw_orca_intent_flips_over90deg_with_same_goal": {
+        "4,5,6": 5
+      },
+      "eligible_same_goal_consecutive_samples": {
+        "1,2,3": 327,
+        "4,5,6": 366
+      }
+    },
+    {
+      "id": "head_on_group_sim",
+      "clock": "sim_v1",
+      "group_radius_min_m": 1.0799999999999996,
+      "group_radius_max_m": 1.9543939879820762,
+      "paired_group_samples": 337,
+      "virtual_overlap_samples": 208,
+      "virtual_overlap_fraction": 0.6172106824925816,
+      "minimum_virtual_group_disc_gap_m": -0.5583156217051737,
+      "minimum_sampled_actual_member_disc_gap_m": 0.42750257311241646,
+      "raw_orca_intent_flips_over90deg_with_same_goal": {
+        "4,5,6": 8,
+        "1,2,3": 3
+      },
+      "eligible_same_goal_consecutive_samples": {
+        "1,2,3": 248,
+        "4,5,6": 328
+      }
+    },
+    {
+      "id": "crossing_group",
+      "clock": "native_wall",
+      "group_radius_min_m": 1.0799999999999996,
+      "group_radius_max_m": 2.043279536342645,
+      "paired_group_samples": 402,
+      "virtual_overlap_samples": 155,
+      "virtual_overlap_fraction": 0.3855721393034826,
+      "minimum_virtual_group_disc_gap_m": -1.4665468102290116,
+      "minimum_sampled_actual_member_disc_gap_m": 0.0674554826744519,
+      "raw_orca_intent_flips_over90deg_with_same_goal": {
+        "1,2,3": 3,
+        "4,5,6": 1
+      },
+      "eligible_same_goal_consecutive_samples": {
+        "1,2,3": 393,
+        "4,5,6": 243
+      }
+    },
+    {
+      "id": "crossing_group_sim",
+      "clock": "sim_v1",
+      "group_radius_min_m": 1.0799999999999996,
+      "group_radius_max_m": 1.8624163430343925,
+      "paired_group_samples": 333,
+      "virtual_overlap_samples": 231,
+      "virtual_overlap_fraction": 0.6936936936936937,
+      "minimum_virtual_group_disc_gap_m": -1.454648460078738,
+      "minimum_sampled_actual_member_disc_gap_m": 0.042110295480291104,
+      "raw_orca_intent_flips_over90deg_with_same_goal": {
+        "1,2,3": 7
+      },
+      "eligible_same_goal_consecutive_samples": {
+        "1,2,3": 320,
+        "4,5,6": 150
+      }
+    }
+  ],
+  "scope": "Additional local-motion diagnostic. Group circles are virtual planning envelopes, not actual body collisions. Same-target raw intent flips can motivate further investigation but do not establish a unique cause or naturalness acceptance."
+}

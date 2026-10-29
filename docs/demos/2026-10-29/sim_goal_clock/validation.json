@@ -1,0 +1,43 @@
+{
+  "schema": "sim_goal_clock_validation/1",
+  "runtime_commit": "732bd47",
+  "shared_unittest": {
+    "tests": 266,
+    "status": "OK",
+    "skipped": 2
+  },
+  "final_focused_tests": {
+    "tests": 7,
+    "status": "OK"
+  },
+  "native_component_preflight": {
+    "cells": 4,
+    "steps_per_cell_per_host_schedule": 60,
+    "host_schedules": 2,
+    "status": "PASS",
+    "exact_human_xy_yaw": true,
+    "scope": "6s component test; not a closed-loop naturalness or long-horizon proof"
+  },
+  "capture_integrity": {
+    "head_on_legacy_sim": "PASS",
+    "head_on_group_sim": "PASS",
+    "crossing_legacy_sim": "PASS",
+    "crossing_group_sim": "PASS"
+  },
+  "clock_trace_integrity": {
+    "head_on_legacy_sim": "PASS",
+    "head_on_group_sim": "PASS",
+    "crossing_legacy_sim": "PASS",
+    "crossing_group_sim": "PASS"
+  },
+  "frozen_inputs_unchanged": true,
+  "exact_input_verification": "PASS",
+  "navigation": "4/4 SUCCEEDED with independent world goal reached, no progress failure or action recovery, positive swept geometry and near-encounter coverage.",
+  "naturalness_accepted": false,
+  "defaults_promoted": false,
+  "training_ready": false,
+  "media": "Native observer RGB GIF hold durations and decoded WebM frame counts checked; native contact sheet and goal-age/yaw plots inspected. Costmap annotations disclose asynchronous alignment.",
+  "report_http": "index/results, two native WebM clips and all three plot assets HTTP200.",
+  "report_javascript": "Syntax and DOM-stub smoke PASS: four clock/result cards and native clips, playbackRate.25 and negative behavior warning. Not browser visual QA.",
+  "gui": "Headless native captures; no new Windows desktop GUI or report screenshot claim."
+}

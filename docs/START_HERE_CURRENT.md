@@ -100,15 +100,17 @@ Gazebo pose replay và hướng dẫn build ở [README replay](../experiments/s
 
 Các capture mới dùng geometry profile riêng: collision robot bao24×28cm, Nav2 radius17cm + padding1cm, URDF/TF dựng khớp SDF và camera x12cm. Model/cấu hình ROS mặc định vẫn giữ nguyên; dữ liệu cũ không bị sửa. Cấu hình MPPI horizon5s đã qua cả khe80cm và52,7cm trong fixture tĩnh, nhưng lượt nhà xưởng cũ cần recovery gần đích.
 
-Resampling MPPI đã qua vòng mới: **6/6 lượt GPU tới đích, audit PASS, không recovery**, gồm4 lượt gặp người gần và2 khe80/52,7cm. Biên hở bảo thủ của khe hẹp8,3cm. Cấu hình này vẫn là profile thử riêng, không thay mặc định.
+Resampling MPPI đã qua vòng6 lượt GPU: tới đích, audit PASS, không recovery, gồm4 lượt gặp người gần và2 khe80/52,7cm. Biên hở bảo thủ khe hẹp8,3cm. Profile vẫn thử riêng, chưa thay mặc định ROS.
 
-Adapter nhóm người **chưa được chốt**. Phép thử cũ cùng12s đầu vào robot giảm quay73%, nhưng cảnh gặp gần mới chỉ giảm25%/9% trong12s đầu; cả lượt ngược chiều lại tăng tốc độ quay trung bình11% và thời gian ở gần robot. Native SocNavGym còn đổi mục tiêu theo50s đồng hồ máy, có log cho thấy đích vẫn xa khi gần hết hạn. Chưa thu/register dataset train mới từ các thử nghiệm này.
+**Lỗi đồng hồ mục tiêu đã được sửa trong profile `sim_v1`:**50s theo thời gian Gazebo, bắt đầu ở mốc Nav2 nhận goal; tuổi mục tiêu không tăng vì chờ hoặc máy chạy chậm. 266 unit tests đạt (2 skip), bốn cặp thử backend6s trùng khớp vị trí/hướng dù lịch đồng hồ máy khác nhau, và4/4 lượt Gazebo mới đạt audit clock/tới đích/không recovery.
 
-Xem [báo cáo mới nhất](demos/2026-10-29/encounter_regression/README.md), [video và costmap](demos/2026-10-29/encounter_regression/index.html), [lượt sửa quay trước](demos/2026-10-29/endpoint_humans/README.md) và [khe hẹp ban đầu](demos/2026-10-29/static_gap/README.md).
+**Hành vi nhóm vẫn chưa đạt.** Trong bốn lượt dùng clock mới, tốc độ quay toàn lượt tăng67–213% so với tham chiếu. Các vòng bao ảo của nhóm chồng nhau thường xuyên dù thân người vẫn có khoảng hở dương. Cần kiểm tra riêng lớp tránh nhau của nhóm; chưa thu/register dataset train mới. Không quay lại đồng hồ máy hoặc giảm timeout để làm video đẹp hơn.
+
+Xem [báo cáo clock mới nhất](demos/2026-10-29/sim_goal_clock/README.md), [bốn video và đồ thị](demos/2026-10-29/sim_goal_clock/index.html), [vòng gặp gần trước](demos/2026-10-29/encounter_regression/README.md) và [khe hẹp ban đầu](demos/2026-10-29/static_gap/README.md).
 
 ## 6. Việc tiếp theo, theo thứ tự
 
-1. Cô lập thời hạn mục tiêu người theo đồng hồ mô phỏng từ lúc bắt đầu chạy; giữ nguyên ORCA/Nav2 và chạy lại hai tình huống gặp gần. Sau đó kiểm tra một cohort seed cố định trước khi chốt mô hình người.
+1. Kiểm tra riêng ảnh hưởng của lớp tránh nhau/vòng bao nhóm cứng, giữ `sim_v1`, per-person ORCA/projection và robot/Nav2. Chạy lại cùng hai cảnh để xác định có giảm quay mà không đánh đổi va chạm hay phá đội hình; chưa mở rộng seed khi hành vi cơ bản chưa đạt.
 2. Đóng băng cấu hình đã nghiệm thu và thu pilot mới khi cần mở rộng dữ liệu. Không trộn kết quả thử nghiệm với các mẫu train đã chấp nhận.
 3. Với `dataset01` có sẵn, bước WM vẫn là baseline nhỏ dự báo BEV có điều kiện hành động: train trên train, chọn bằng validation, cố định rồi mới đánh giá test. Chưa thực hiện trainer trong vòng sửa mô phỏng này.
 4. Chuẩn bị RL sau khi có reward và step/reset hợp lệ.
