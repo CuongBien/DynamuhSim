@@ -1,0 +1,181 @@
+{
+  "schema": "factory_regression_result/1",
+  "candidate_physical_screen": "PASS",
+  "capture_integrity": "PASS",
+  "review_flags": [],
+  "cases": [
+    {
+      "run": "experiments/social_navigation/benchmark/generated/factory_regression_20261029/standing_base",
+      "status": "SUCCEEDED",
+      "actual_goal_reached": true,
+      "xy_error_m": 0.09763302860273085,
+      "active_sim_s": 30.5325,
+      "path_length_m": 9.031095184681988,
+      "world_y_min_m": -0.10916384669068163,
+      "world_y_max_m": 1.5163044630902525,
+      "minimum_swept_robot_human_gap_m": 0.34428325736504095,
+      "minimum_static_gap_lower_bound_m": 0.9129733248487096,
+      "static_box_count": 42,
+      "global_plan_probe": {
+        "time_sim_s": 29.1425,
+        "nearest_point_to_initial_gate_x": [
+          -22.602904932127398,
+          1.4557763135658837
+        ]
+      },
+      "native_contact_force_recorded": false,
+      "gate_A_crossings": [],
+      "passes_original_narrow_gap_A": false,
+      "rendering": "D3D12 (NVIDIA GeForce RTX 4060 Laptop GPU)",
+      "id": "standing_base",
+      "scenario": "standing",
+      "treatment": "baseline",
+      "capture_integrity": "PASS",
+      "social_diagnostic": {
+        "standing_trio_samples": 3052,
+        "nondegenerate_triangle_tests": 3052,
+        "robot_center_entry_samples": 0,
+        "speed_qualified_entry_samples": 0,
+        "any_entry_duration_approx_s": 0.0,
+        "speed_qualified_entry_duration_approx_s": 0.0,
+        "max_standing_member_shift_from_initial_m": 3.972054645195637e-15,
+        "max_pose_to_group_metadata_alignment_s": 0.009999999999999787,
+        "skipped_metadata_alignment": 0,
+        "entries": [],
+        "scope": "Actual proxy triangles plus nearest native group membership/type. Robot center only, not full footprint or validated O-space/social label. Duration approximated at group-message rate; no contact-force evidence."
+      },
+      "physical_screen_pass": true
+    },
+    {
+      "run": "experiments/social_navigation/benchmark/generated/factory_regression_20261029/standing_h5",
+      "status": "SUCCEEDED",
+      "actual_goal_reached": true,
+      "xy_error_m": 0.05477953298760807,
+      "active_sim_s": 47.627500000000005,
+      "path_length_m": 9.088336145213924,
+      "world_y_min_m": -0.06551945110191112,
+      "world_y_max_m": 1.5927042038627102,
+      "minimum_swept_robot_human_gap_m": 0.320260148647181,
+      "minimum_static_gap_lower_bound_m": 0.8365739764229744,
+      "static_box_count": 42,
+      "global_plan_probe": {
+        "time_sim_s": 30.6025,
+        "nearest_point_to_initial_gate_x": [
+          -22.136530287482916,
+          1.3476559133191193
+        ]
+      },
+      "native_contact_force_recorded": false,
+      "gate_A_crossings": [],
+      "passes_original_narrow_gap_A": false,
+      "rendering": "D3D12 (NVIDIA GeForce RTX 4060 Laptop GPU)",
+      "id": "standing_h5",
+      "scenario": "standing",
+      "treatment": "horizon5",
+      "capture_integrity": "PASS",
+      "social_diagnostic": {
+        "standing_trio_samples": 4177,
+        "nondegenerate_triangle_tests": 4177,
+        "robot_center_entry_samples": 0,
+        "speed_qualified_entry_samples": 0,
+        "any_entry_duration_approx_s": 0.0,
+        "speed_qualified_entry_duration_approx_s": 0.0,
+        "max_standing_member_shift_from_initial_m": 3.972054645195637e-15,
+        "max_pose_to_group_metadata_alignment_s": 0.00999999999999801,
+        "skipped_metadata_alignment": 0,
+        "entries": [],
+        "scope": "Actual proxy triangles plus nearest native group membership/type. Robot center only, not full footprint or validated O-space/social label. Duration approximated at group-message rate; no contact-force evidence."
+      },
+      "physical_screen_pass": true,
+      "human_gap_change_vs_baseline_m": -0.024023108717859953
+    },
+    {
+      "run": "experiments/social_navigation/benchmark/generated/factory_regression_20261029/walking_base",
+      "status": "SUCCEEDED",
+      "actual_goal_reached": true,
+      "xy_error_m": 0.1071892403241229,
+      "active_sim_s": 31.6225,
+      "path_length_m": 9.013242264790739,
+      "world_y_min_m": -0.4731759989937331,
+      "world_y_max_m": 1.3686152731169172,
+      "minimum_swept_robot_human_gap_m": 0.12658970556633398,
+      "minimum_static_gap_lower_bound_m": 1.0609414118180338,
+      "static_box_count": 42,
+      "global_plan_probe": {
+        "time_sim_s": 30.845,
+        "nearest_point_to_initial_gate_x": [
+          -22.38461018767863,
+          0.8501522173682676
+        ]
+      },
+      "native_contact_force_recorded": false,
+      "gate_A_crossings": [],
+      "passes_original_narrow_gap_A": false,
+      "rendering": "D3D12 (NVIDIA GeForce RTX 4060 Laptop GPU)",
+      "id": "walking_base",
+      "scenario": "walking",
+      "treatment": "baseline",
+      "capture_integrity": "PASS",
+      "social_diagnostic": {
+        "standing_trio_samples": 0,
+        "nondegenerate_triangle_tests": 0,
+        "robot_center_entry_samples": 0,
+        "speed_qualified_entry_samples": 0,
+        "any_entry_duration_approx_s": 0.0,
+        "speed_qualified_entry_duration_approx_s": 0.0,
+        "max_standing_member_shift_from_initial_m": 0.0,
+        "max_pose_to_group_metadata_alignment_s": 0.009999999999999787,
+        "skipped_metadata_alignment": 0,
+        "entries": [],
+        "scope": "Actual proxy triangles plus nearest native group membership/type. Robot center only, not full footprint or validated O-space/social label. Duration approximated at group-message rate; no contact-force evidence."
+      },
+      "physical_screen_pass": true
+    },
+    {
+      "run": "experiments/social_navigation/benchmark/generated/factory_regression_20261029/walking_h5",
+      "status": "SUCCEEDED",
+      "actual_goal_reached": true,
+      "xy_error_m": 0.05301323422384305,
+      "active_sim_s": 51.067499999999995,
+      "path_length_m": 9.251513540478644,
+      "world_y_min_m": -0.07873270448085125,
+      "world_y_max_m": 1.4745751233990296,
+      "minimum_swept_robot_human_gap_m": 0.14407916073222693,
+      "minimum_static_gap_lower_bound_m": 1.0045174753575536,
+      "static_box_count": 42,
+      "global_plan_probe": {
+        "time_sim_s": 31.7025,
+        "nearest_point_to_initial_gate_x": [
+          -22.474245077603584,
+          1.137510152203765
+        ]
+      },
+      "native_contact_force_recorded": false,
+      "gate_A_crossings": [],
+      "passes_original_narrow_gap_A": false,
+      "rendering": "D3D12 (NVIDIA GeForce RTX 4060 Laptop GPU)",
+      "id": "walking_h5",
+      "scenario": "walking",
+      "treatment": "horizon5",
+      "capture_integrity": "PASS",
+      "social_diagnostic": {
+        "standing_trio_samples": 0,
+        "nondegenerate_triangle_tests": 0,
+        "robot_center_entry_samples": 0,
+        "speed_qualified_entry_samples": 0,
+        "any_entry_duration_approx_s": 0.0,
+        "speed_qualified_entry_duration_approx_s": 0.0,
+        "max_standing_member_shift_from_initial_m": 0.0,
+        "max_pose_to_group_metadata_alignment_s": 0.009999999999999787,
+        "skipped_metadata_alignment": 0,
+        "entries": [],
+        "scope": "Actual proxy triangles plus nearest native group membership/type. Robot center only, not full footprint or validated O-space/social label. Duration approximated at group-message rate; no contact-force evidence."
+      },
+      "physical_screen_pass": true,
+      "human_gap_change_vs_baseline_m": 0.017489455165892953
+    }
+  ],
+  "defaults_promoted": false,
+  "training_ready": false,
+  "scope": "Two scenarios, one attempt per treatment at backend seed45. MPPI RNG not fixed; interacting people react to robot. Descriptive geometry, not native contact truth or social-navigation acceptance."
+}

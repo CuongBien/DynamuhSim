@@ -1,0 +1,530 @@
+{
+  "schema": "factory_regression_verification/1",
+  "status": "PASS",
+  "checks": {
+    "standing:identical:assets/mecanum_camera.sdf": true,
+    "standing:identical:assets/mecanum_aligned.urdf": true,
+    "standing:world_same_except_socket": true,
+    "standing:initial_native_humans_same": true,
+    "standing:only_three_declared_control_changes": true,
+    "standing:same_backend_map_sources": true,
+    "standing_base:capture_integrity": true,
+    "standing_base:native_nvidia": true,
+    "standing_base:no_injected_velocity": true,
+    "standing_base:cleanup": true,
+    "standing_h5:capture_integrity": true,
+    "standing_h5:native_nvidia": true,
+    "standing_h5:no_injected_velocity": true,
+    "standing_h5:cleanup": true,
+    "walking:identical:assets/mecanum_camera.sdf": true,
+    "walking:identical:assets/mecanum_aligned.urdf": true,
+    "walking:world_same_except_socket": true,
+    "walking:initial_native_humans_same": true,
+    "walking:only_three_declared_control_changes": true,
+    "walking:same_backend_map_sources": true,
+    "walking_base:capture_integrity": true,
+    "walking_base:native_nvidia": true,
+    "walking_base:no_injected_velocity": true,
+    "walking_base:cleanup": true,
+    "walking_h5:capture_integrity": true,
+    "walking_h5:native_nvidia": true,
+    "walking_h5:no_injected_velocity": true,
+    "walking_h5:cleanup": true
+  },
+  "runs": {
+    "standing_base": {
+      "runtime_commit": "9b91b423fc50c5ace3c98a7fc2696bcd4aabac50",
+      "initial_native_humans": [
+        {
+          "id": 1,
+          "x": -24.78,
+          "y": 0.0,
+          "yaw": 3.141592653589793,
+          "speed": 0.0,
+          "radius": 0.36,
+          "vx": 0.0,
+          "vy": 0.0
+        },
+        {
+          "id": 2,
+          "x": -25.86,
+          "y": 0.6235382907247958,
+          "yaw": -1.0471975511965985,
+          "speed": 0.0,
+          "radius": 0.36,
+          "vx": 0.0,
+          "vy": 0.0
+        },
+        {
+          "id": 3,
+          "x": -25.86,
+          "y": -0.6235382907247956,
+          "yaw": 1.0471975511965983,
+          "speed": 0.0,
+          "radius": 0.36,
+          "vx": 0.0,
+          "vy": 0.0
+        },
+        {
+          "id": 4,
+          "x": -21.78,
+          "y": 0.0,
+          "yaw": 3.141592653589793,
+          "speed": 0.0,
+          "radius": 0.36,
+          "vx": 0.0,
+          "vy": 0.0
+        },
+        {
+          "id": 5,
+          "x": -22.86,
+          "y": 0.6235382907247958,
+          "yaw": -1.0471975511965985,
+          "speed": 0.0,
+          "radius": 0.36,
+          "vx": 0.0,
+          "vy": 0.0
+        },
+        {
+          "id": 6,
+          "x": -22.86,
+          "y": -0.6235382907247956,
+          "yaw": 1.0471975511965983,
+          "speed": 0.0,
+          "radius": 0.36,
+          "vx": 0.0,
+          "vy": 0.0
+        }
+      ],
+      "live_parameters": {
+        "/controller_server": {
+          "FollowPath.vx_max": 0.3,
+          "FollowPath.vx_min": -0.15,
+          "FollowPath.vy_max": 0.2,
+          "FollowPath.CostCritic.consider_footprint": false,
+          "goal_checker.stateful": false,
+          "goal_checker.xy_goal_tolerance": 0.05,
+          "goal_checker.yaw_goal_tolerance": 0.15,
+          "FollowPath.GoalCritic.threshold_to_consider": 0.45,
+          "FollowPath.PathFollowCritic.threshold_to_consider": 0.45
+        },
+        "/local_costmap/local_costmap": {
+          "robot_radius": 0.17,
+          "footprint_padding": 0.01,
+          "inflation_layer.inflation_radius": 0.45,
+          "inflation_layer.cost_scaling_factor": 3.0,
+          "obstacle_layer.scan.inf_is_valid": true,
+          "obstacle_layer.scan.obstacle_max_range": 3.0,
+          "obstacle_layer.scan.raytrace_max_range": 3.5
+        },
+        "/global_costmap/global_costmap": {
+          "robot_radius": 0.17,
+          "footprint_padding": 0.01,
+          "inflation_layer.inflation_radius": 0.45,
+          "inflation_layer.cost_scaling_factor": 3.0,
+          "obstacle_layer.scan.inf_is_valid": true,
+          "obstacle_layer.scan.obstacle_max_range": 3.0,
+          "obstacle_layer.scan.raytrace_max_range": 3.5
+        },
+        "/planner_server": {
+          "GridBased.plugin": "nav2_navfn_planner::NavfnPlanner",
+          "GridBased.use_astar": false,
+          "GridBased.allow_unknown": true,
+          "GridBased.tolerance": 0.5
+        }
+      },
+      "source_sha256": {
+        "capture_freeze.json": "92b9fda2eb0c092b56072e124a92aad91b135cb7aa2e0d767fd9203b2719efe4",
+        "plan.json": "3aabbcee84b836bdc1daaf922d67e50e2120a9fd2277f9dfb549b1fdcad69e76",
+        "preflight.json": "4ed51dc55dec4c50aed531d8f3c6e35e83916901ac0a33b6c1d5307d610c0ba5",
+        "runtime/nav2_runtime.yaml": "d3104cf742dce77432de854ee531af01550da734b1bd985670d1fcca0236478b",
+        "runtime/warehouse.sdf": "2d556f077f8178586062537f48298c0234ee50e5d8e6c5c5f1b1cff85792845c",
+        "episode/result.json": "658673d85220852238e223077923ec546c07765bbccb530f905131738e1a3e62",
+        "episode/gazebo_poses.jsonl": "67649f8d04dc8ba24769eb252a32fba5c49c6200247a7a8d7652849aa7e238e1",
+        "episode/native_costmaps.jsonl": "88bcc7ecd0544cd2aeb705d518e8fa15fbcec43f042f216f5db32dbde37ab536",
+        "episode/ground_truth.jsonl": "c58b6c7ce142a8e2c1b84c7b7e4d73a12e6d220abd885d7263caef79f1453414",
+        "episode/commands.jsonl": "1d604bdefbf8950d498dd8ae189c2f07428854e6dfce14ddc048d225bad67f83",
+        "episode/plans.jsonl": "9842cb7bb1d0c565736fb4ba2e7b4c82d22e60f846db25c9ac2009c3ea7ea62f",
+        "episode/events.jsonl": "36a754e78ba4dca94309440530a14b2a6726ad9e1d0b5b7c34c9bdfc20ec2dab",
+        "episode/raw_bag/metadata.yaml": "51459288c2278b56273eb7b76c7704c6989b5ba8d2eb9b2c7941bec55a5d2777",
+        "episode/camera_preview_4x.gif": "cd74dd9d7a709d2f57454530e337f5851fb51685eccabfc371501fed1c12c823"
+      },
+      "controller_loop_rate_warning_count": 0,
+      "controller_loop_rate_warning_examples": []
+    },
+    "standing_h5": {
+      "runtime_commit": "9b91b423fc50c5ace3c98a7fc2696bcd4aabac50",
+      "initial_native_humans": [
+        {
+          "id": 1,
+          "x": -24.78,
+          "y": 0.0,
+          "yaw": 3.141592653589793,
+          "speed": 0.0,
+          "radius": 0.36,
+          "vx": 0.0,
+          "vy": 0.0
+        },
+        {
+          "id": 2,
+          "x": -25.86,
+          "y": 0.6235382907247958,
+          "yaw": -1.0471975511965985,
+          "speed": 0.0,
+          "radius": 0.36,
+          "vx": 0.0,
+          "vy": 0.0
+        },
+        {
+          "id": 3,
+          "x": -25.86,
+          "y": -0.6235382907247956,
+          "yaw": 1.0471975511965983,
+          "speed": 0.0,
+          "radius": 0.36,
+          "vx": 0.0,
+          "vy": 0.0
+        },
+        {
+          "id": 4,
+          "x": -21.78,
+          "y": 0.0,
+          "yaw": 3.141592653589793,
+          "speed": 0.0,
+          "radius": 0.36,
+          "vx": 0.0,
+          "vy": 0.0
+        },
+        {
+          "id": 5,
+          "x": -22.86,
+          "y": 0.6235382907247958,
+          "yaw": -1.0471975511965985,
+          "speed": 0.0,
+          "radius": 0.36,
+          "vx": 0.0,
+          "vy": 0.0
+        },
+        {
+          "id": 6,
+          "x": -22.86,
+          "y": -0.6235382907247956,
+          "yaw": 1.0471975511965983,
+          "speed": 0.0,
+          "radius": 0.36,
+          "vx": 0.0,
+          "vy": 0.0
+        }
+      ],
+      "live_parameters": {
+        "/controller_server": {
+          "FollowPath.vx_max": 0.3,
+          "FollowPath.vx_min": -0.15,
+          "FollowPath.vy_max": 0.2,
+          "FollowPath.CostCritic.consider_footprint": false,
+          "FollowPath.CostCritic.cost_weight": 3.81,
+          "FollowPath.CostCritic.near_collision_cost": 253,
+          "FollowPath.time_steps": 100,
+          "FollowPath.model_dt": 0.05,
+          "goal_checker.stateful": false,
+          "goal_checker.xy_goal_tolerance": 0.05,
+          "goal_checker.yaw_goal_tolerance": 0.15,
+          "FollowPath.GoalCritic.threshold_to_consider": 0.45,
+          "FollowPath.PathFollowCritic.threshold_to_consider": 0.45
+        },
+        "/local_costmap/local_costmap": {
+          "robot_radius": 0.17,
+          "footprint_padding": 0.01,
+          "inflation_layer.inflation_radius": 0.45,
+          "inflation_layer.cost_scaling_factor": 3.0,
+          "obstacle_layer.scan.inf_is_valid": true,
+          "obstacle_layer.scan.obstacle_max_range": 3.0,
+          "obstacle_layer.scan.raytrace_max_range": 3.5
+        },
+        "/global_costmap/global_costmap": {
+          "robot_radius": 0.17,
+          "footprint_padding": 0.01,
+          "inflation_layer.inflation_radius": 0.45,
+          "inflation_layer.cost_scaling_factor": 3.0,
+          "obstacle_layer.scan.inf_is_valid": true,
+          "obstacle_layer.scan.obstacle_max_range": 3.0,
+          "obstacle_layer.scan.raytrace_max_range": 3.5
+        },
+        "/planner_server": {
+          "GridBased.plugin": "nav2_navfn_planner::NavfnPlanner",
+          "GridBased.use_astar": false,
+          "GridBased.allow_unknown": true,
+          "GridBased.tolerance": 0.5
+        }
+      },
+      "source_sha256": {
+        "capture_freeze.json": "517f89e875a13d85971b2b121a393a35dcd0e99459172689939cb5b646951472",
+        "plan.json": "fd95cf5263a373276bf0f43f28de92e4baf4613cfa98ca6c799f987fc06e637f",
+        "preflight.json": "4ed51dc55dec4c50aed531d8f3c6e35e83916901ac0a33b6c1d5307d610c0ba5",
+        "runtime/nav2_runtime.yaml": "042135207faaed24104fd0c5fea56dfc99b6ccd896377d0f19dc0d864eb3571a",
+        "runtime/warehouse.sdf": "4d174392c4d7ed386db1d45e58ba1d487684804aadec90588e9568126fdd3688",
+        "episode/result.json": "fec6a07104d939dcbb3bf50c4bf29319ef5600591f020e3db868ddd3db146ed1",
+        "episode/gazebo_poses.jsonl": "dfccc0e1535d15b9db9cf9899c2c288bc1421ca7f2ff2c31bd59393830e0027b",
+        "episode/native_costmaps.jsonl": "cf2dfaa6d1eb58cbbd14185e10ca62149312ee74e771f0f3b9a25a44bcf3deab",
+        "episode/ground_truth.jsonl": "3bb848c6ab0653338a1ada527fcaca1256c7f3f7494dcea96e81abeda4a55502",
+        "episode/commands.jsonl": "9eaeecbbdeb0da4a4ef14fefb665b4400ebedecb891bc53a805504564090aba0",
+        "episode/plans.jsonl": "23dee810a4a115cf1035953c487068b74ee3e2040fe650606f5d8a2631e2bbaf",
+        "episode/events.jsonl": "08117c0b97ad0af6fb21937968f80ccc79cd5abf5b3802a53e2128664273f0a6",
+        "episode/raw_bag/metadata.yaml": "a4f3fb2e0cd05514a7ae4aaeab3b4e89afed11720db04661f9aba93c8b3215cd",
+        "episode/camera_preview_4x.gif": "b891a5f288bdc69250e95f1ec1145fb470c978a4e3b24bc4c0d55e69d76c7f92"
+      },
+      "controller_loop_rate_warning_count": 1,
+      "controller_loop_rate_warning_examples": [
+        "[controller_server-13] [WARN] [1793256062.168724906] [controller_server]: Control loop missed its desired rate of 20.0000 Hz. Current loop rate is 26.6667 Hz."
+      ]
+    },
+    "walking_base": {
+      "runtime_commit": "9b91b423fc50c5ace3c98a7fc2696bcd4aabac50",
+      "initial_native_humans": [
+        {
+          "id": 1,
+          "x": -24.78,
+          "y": 0.0,
+          "yaw": 0.0,
+          "speed": 0.0,
+          "radius": 0.36,
+          "vx": 0.0,
+          "vy": 0.0
+        },
+        {
+          "id": 2,
+          "x": -25.86,
+          "y": 0.6235382907247958,
+          "yaw": 0.0,
+          "speed": 0.0,
+          "radius": 0.36,
+          "vx": 0.0,
+          "vy": 0.0
+        },
+        {
+          "id": 3,
+          "x": -25.86,
+          "y": -0.6235382907247956,
+          "yaw": 0.0,
+          "speed": 0.0,
+          "radius": 0.36,
+          "vx": 0.0,
+          "vy": 0.0
+        },
+        {
+          "id": 4,
+          "x": -21.78,
+          "y": 0.0,
+          "yaw": 0.0,
+          "speed": 0.0,
+          "radius": 0.36,
+          "vx": 0.0,
+          "vy": 0.0
+        },
+        {
+          "id": 5,
+          "x": -22.86,
+          "y": 0.6235382907247958,
+          "yaw": 0.0,
+          "speed": 0.0,
+          "radius": 0.36,
+          "vx": 0.0,
+          "vy": 0.0
+        },
+        {
+          "id": 6,
+          "x": -22.86,
+          "y": -0.6235382907247956,
+          "yaw": 0.0,
+          "speed": 0.0,
+          "radius": 0.36,
+          "vx": 0.0,
+          "vy": 0.0
+        }
+      ],
+      "live_parameters": {
+        "/controller_server": {
+          "FollowPath.vx_max": 0.3,
+          "FollowPath.vx_min": -0.15,
+          "FollowPath.vy_max": 0.2,
+          "FollowPath.CostCritic.consider_footprint": false,
+          "goal_checker.stateful": false,
+          "goal_checker.xy_goal_tolerance": 0.05,
+          "goal_checker.yaw_goal_tolerance": 0.15,
+          "FollowPath.GoalCritic.threshold_to_consider": 0.45,
+          "FollowPath.PathFollowCritic.threshold_to_consider": 0.45
+        },
+        "/local_costmap/local_costmap": {
+          "robot_radius": 0.17,
+          "footprint_padding": 0.01,
+          "inflation_layer.inflation_radius": 0.45,
+          "inflation_layer.cost_scaling_factor": 3.0,
+          "obstacle_layer.scan.inf_is_valid": true,
+          "obstacle_layer.scan.obstacle_max_range": 3.0,
+          "obstacle_layer.scan.raytrace_max_range": 3.5
+        },
+        "/global_costmap/global_costmap": {
+          "robot_radius": 0.17,
+          "footprint_padding": 0.01,
+          "inflation_layer.inflation_radius": 0.45,
+          "inflation_layer.cost_scaling_factor": 3.0,
+          "obstacle_layer.scan.inf_is_valid": true,
+          "obstacle_layer.scan.obstacle_max_range": 3.0,
+          "obstacle_layer.scan.raytrace_max_range": 3.5
+        },
+        "/planner_server": {
+          "GridBased.plugin": "nav2_navfn_planner::NavfnPlanner",
+          "GridBased.use_astar": false,
+          "GridBased.allow_unknown": true,
+          "GridBased.tolerance": 0.5
+        }
+      },
+      "source_sha256": {
+        "capture_freeze.json": "d5a760b8824154c4138388f2133f6b9dcc7a9079f7d7a3c91ccd7ad7dc5f49f8",
+        "plan.json": "84884d1a7eb0fc751363b0a2d6347483e6318240c2278b1bd00e1efe80f2bd03",
+        "preflight.json": "4ed51dc55dec4c50aed531d8f3c6e35e83916901ac0a33b6c1d5307d610c0ba5",
+        "runtime/nav2_runtime.yaml": "d3104cf742dce77432de854ee531af01550da734b1bd985670d1fcca0236478b",
+        "runtime/warehouse.sdf": "f06162681773735718e684dfc443a32eb9349d94dc7073bee4cf9af41a3221c2",
+        "episode/result.json": "54a3a0c78b2a527beb68ee4565f882d830e9a1df84347c411c9cae87387ddcab",
+        "episode/gazebo_poses.jsonl": "77728ba1cb9e562770a531c9b0d3a2d9dc2492443a5701380e09dba677cc7b7b",
+        "episode/native_costmaps.jsonl": "b9e9e7ef6819146010d739a25b5282536f3b6bc166146744363a7eebc1062c9e",
+        "episode/ground_truth.jsonl": "5d88e4724d134afd56a97d71c5241caa70b1ee158621321a4e31d2a5455f1ca0",
+        "episode/commands.jsonl": "3bbcbd5760706a350cb18906ab8fe6a3f014a34db56d20345a2590cbf702e52e",
+        "episode/plans.jsonl": "9807fccbc02eb362cb2d6032673bfd743e3813b77e8981ba110d4c07b99064b8",
+        "episode/events.jsonl": "f90b2d53cf62ed9510131748baf58aea6be67161c14629f2745e2376e77ca683",
+        "episode/raw_bag/metadata.yaml": "02ec5fca9e1728b95b04a4533ebbf8bd35d77bf020da2dcdff88a8fb16853991",
+        "episode/camera_preview_4x.gif": "5a7b88634f93642cd68598eda04cce8425294572fd610af4125abd5e7b51c866"
+      },
+      "controller_loop_rate_warning_count": 0,
+      "controller_loop_rate_warning_examples": []
+    },
+    "walking_h5": {
+      "runtime_commit": "9b91b423fc50c5ace3c98a7fc2696bcd4aabac50",
+      "initial_native_humans": [
+        {
+          "id": 1,
+          "x": -24.78,
+          "y": 0.0,
+          "yaw": 0.0,
+          "speed": 0.0,
+          "radius": 0.36,
+          "vx": 0.0,
+          "vy": 0.0
+        },
+        {
+          "id": 2,
+          "x": -25.86,
+          "y": 0.6235382907247958,
+          "yaw": 0.0,
+          "speed": 0.0,
+          "radius": 0.36,
+          "vx": 0.0,
+          "vy": 0.0
+        },
+        {
+          "id": 3,
+          "x": -25.86,
+          "y": -0.6235382907247956,
+          "yaw": 0.0,
+          "speed": 0.0,
+          "radius": 0.36,
+          "vx": 0.0,
+          "vy": 0.0
+        },
+        {
+          "id": 4,
+          "x": -21.78,
+          "y": 0.0,
+          "yaw": 0.0,
+          "speed": 0.0,
+          "radius": 0.36,
+          "vx": 0.0,
+          "vy": 0.0
+        },
+        {
+          "id": 5,
+          "x": -22.86,
+          "y": 0.6235382907247958,
+          "yaw": 0.0,
+          "speed": 0.0,
+          "radius": 0.36,
+          "vx": 0.0,
+          "vy": 0.0
+        },
+        {
+          "id": 6,
+          "x": -22.86,
+          "y": -0.6235382907247956,
+          "yaw": 0.0,
+          "speed": 0.0,
+          "radius": 0.36,
+          "vx": 0.0,
+          "vy": 0.0
+        }
+      ],
+      "live_parameters": {
+        "/controller_server": {
+          "FollowPath.vx_max": 0.3,
+          "FollowPath.vx_min": -0.15,
+          "FollowPath.vy_max": 0.2,
+          "FollowPath.CostCritic.consider_footprint": false,
+          "FollowPath.CostCritic.cost_weight": 3.81,
+          "FollowPath.CostCritic.near_collision_cost": 253,
+          "FollowPath.time_steps": 100,
+          "FollowPath.model_dt": 0.05,
+          "goal_checker.stateful": false,
+          "goal_checker.xy_goal_tolerance": 0.05,
+          "goal_checker.yaw_goal_tolerance": 0.15,
+          "FollowPath.GoalCritic.threshold_to_consider": 0.45,
+          "FollowPath.PathFollowCritic.threshold_to_consider": 0.45
+        },
+        "/local_costmap/local_costmap": {
+          "robot_radius": 0.17,
+          "footprint_padding": 0.01,
+          "inflation_layer.inflation_radius": 0.45,
+          "inflation_layer.cost_scaling_factor": 3.0,
+          "obstacle_layer.scan.inf_is_valid": true,
+          "obstacle_layer.scan.obstacle_max_range": 3.0,
+          "obstacle_layer.scan.raytrace_max_range": 3.5
+        },
+        "/global_costmap/global_costmap": {
+          "robot_radius": 0.17,
+          "footprint_padding": 0.01,
+          "inflation_layer.inflation_radius": 0.45,
+          "inflation_layer.cost_scaling_factor": 3.0,
+          "obstacle_layer.scan.inf_is_valid": true,
+          "obstacle_layer.scan.obstacle_max_range": 3.0,
+          "obstacle_layer.scan.raytrace_max_range": 3.5
+        },
+        "/planner_server": {
+          "GridBased.plugin": "nav2_navfn_planner::NavfnPlanner",
+          "GridBased.use_astar": false,
+          "GridBased.allow_unknown": true,
+          "GridBased.tolerance": 0.5
+        }
+      },
+      "source_sha256": {
+        "capture_freeze.json": "68248cb4c1434d58e1a135a8c598e5054fa69c72aaf4781c3f53b677ecab668c",
+        "plan.json": "e4c7c647a15851f82c8a57c55e3e86bcb4e3d6b59c829ea781c0b9a3e47a2ddd",
+        "preflight.json": "4ed51dc55dec4c50aed531d8f3c6e35e83916901ac0a33b6c1d5307d610c0ba5",
+        "runtime/nav2_runtime.yaml": "042135207faaed24104fd0c5fea56dfc99b6ccd896377d0f19dc0d864eb3571a",
+        "runtime/warehouse.sdf": "8c86d153fd571edb8a8417a9af92d094e4da8c2abd1591088c6c2cf67796461c",
+        "episode/result.json": "42ad5132cd1c3bd0d7971632b24b18ced8118db515ec00b632bc613d008d46be",
+        "episode/gazebo_poses.jsonl": "0a5874a5a66d0bcad663c12ea5e301060f99a3403ea2690f4ff6ebf6363bb240",
+        "episode/native_costmaps.jsonl": "d106b606e4b9876468a3d5f93d55b1f48c961620967b303c5cd0f57704b41b95",
+        "episode/ground_truth.jsonl": "c0a4fe8c21f5e11c706ab755fff1c0ad163d3530a6ba0450f123677021837383",
+        "episode/commands.jsonl": "dfe5d906af38312e162c837efc955d441936ef9c0be4a1636cfb2a0ae0b537a0",
+        "episode/plans.jsonl": "f3d7775316dbd6cc7f8551fe57f1670137235f10ca54bdc803dd70c6d7e8c3a2",
+        "episode/events.jsonl": "85b822dc13a144e982d1929178a2a71043130eb7ce442436b150642d9c111b10",
+        "episode/raw_bag/metadata.yaml": "00fbfeae8f1e1a17fe16224b1f59126bb2e981bcd537e681f663f64d423ebbb2",
+        "episode/camera_preview_4x.gif": "caf1c113dc5f85cae0d72cca933b4a90386a6124b3562852cf9f57b49808f4f9"
+      },
+      "controller_loop_rate_warning_count": 1,
+      "controller_loop_rate_warning_examples": [
+        "[controller_server-13] [WARN] [1793256305.090567214] [controller_server]: Control loop missed its desired rate of 20.0000 Hz. Current loop rate is inf Hz."
+      ]
+    }
+  },
+  "world_comparison": "Read-only XML comparison normalizes only the expected run-local worker socket; raw worlds stay untouched.",
+  "scope": "Integrity and exact input/control differences, independent from goal/geometry/social outcomes. Backend seed45; MPPI RNG not fixed."
+}

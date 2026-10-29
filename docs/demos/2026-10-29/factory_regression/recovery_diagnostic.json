@@ -1,0 +1,98 @@
+{
+  "schema": "factory_recovery_diagnostic/1",
+  "candidate_recovery_free": false,
+  "cases": [
+    {
+      "id": "standing_base",
+      "progress_failure_count": 0,
+      "max_action_recoveries": 0,
+      "events": [],
+      "seconds_from_last_progress_failure_to_action_end": null,
+      "progress_checker": {
+        "plugin": "nav2_controller::SimpleProgressChecker",
+        "required_movement_radius": 0.1,
+        "movement_time_allowance": 15.0
+      },
+      "native_log_context": []
+    },
+    {
+      "id": "standing_h5",
+      "progress_failure_count": 1,
+      "max_action_recoveries": 1,
+      "events": [
+        {
+          "time_sim_s": 57.4325,
+          "time_after_goal_s": 46.6575,
+          "node": "controller_server",
+          "text": "Failed to make progress"
+        }
+      ],
+      "seconds_from_last_progress_failure_to_action_end": 0.970000000000006,
+      "progress_checker": {
+        "plugin": "nav2_controller::SimpleProgressChecker",
+        "required_movement_radius": 0.1,
+        "movement_time_allowance": 15.0
+      },
+      "native_log_context": [
+        [
+          "[controller_server-13] [INFO] [1793256062.070916023] [controller_server]: Passing new path to controller.",
+          "[controller_server-13] [ERROR] [1793256062.073512509] [controller_server]: Failed to make progress",
+          "[controller_server-13] [INFO] [1793256062.075900784] [controller_server]: Optimizer reset",
+          "[controller_server-13] [WARN] [1793256062.076072781] [controller_server]: [follow_path] [ActionServer] Aborting handle.",
+          "[controller_server-13] [INFO] [1793256062.109528807] [local_costmap.local_costmap]: Received request to clear entirely the local_costmap",
+          "[controller_server-13] [INFO] [1793256062.111706330] [controller_server]: Received a goal, begin computing control effort.",
+          "[controller_server-13] [WARN] [1793256062.168724906] [controller_server]: Control loop missed its desired rate of 20.0000 Hz. Current loop rate is 26.6667 Hz.",
+          "[controller_server-13] [INFO] [1793256063.119259965] [controller_server]: Passing new path to controller.",
+          "[controller_server-13] [INFO] [1793256064.119192597] [controller_server]: Passing new path to controller."
+        ]
+      ]
+    },
+    {
+      "id": "walking_base",
+      "progress_failure_count": 0,
+      "max_action_recoveries": 0,
+      "events": [],
+      "seconds_from_last_progress_failure_to_action_end": null,
+      "progress_checker": {
+        "plugin": "nav2_controller::SimpleProgressChecker",
+        "required_movement_radius": 0.1,
+        "movement_time_allowance": 15.0
+      },
+      "native_log_context": []
+    },
+    {
+      "id": "walking_h5",
+      "progress_failure_count": 1,
+      "max_action_recoveries": 1,
+      "events": [
+        {
+          "time_sim_s": 61.7025,
+          "time_after_goal_s": 50.167500000000004,
+          "node": "controller_server",
+          "text": "Failed to make progress"
+        }
+      ],
+      "seconds_from_last_progress_failure_to_action_end": 0.8999999999999986,
+      "progress_checker": {
+        "plugin": "nav2_controller::SimpleProgressChecker",
+        "required_movement_radius": 0.1,
+        "movement_time_allowance": 15.0
+      },
+      "native_log_context": [
+        [
+          "[controller_server-13] [INFO] [1793256304.936051583] [controller_server]: Passing new path to controller.",
+          "[controller_server-13] [ERROR] [1793256304.986197155] [controller_server]: Failed to make progress",
+          "[controller_server-13] [INFO] [1793256304.987940769] [controller_server]: Optimizer reset",
+          "[controller_server-13] [WARN] [1793256304.988055873] [controller_server]: [follow_path] [ActionServer] Aborting handle.",
+          "[controller_server-13] [INFO] [1793256305.000970489] [local_costmap.local_costmap]: Received request to clear entirely the local_costmap",
+          "[controller_server-13] [INFO] [1793256305.001922699] [controller_server]: Received a goal, begin computing control effort.",
+          "[controller_server-13] [WARN] [1793256305.090567214] [controller_server]: Control loop missed its desired rate of 20.0000 Hz. Current loop rate is inf Hz.",
+          "[controller_server-13] [INFO] [1793256305.941456395] [controller_server]: Passing new path to controller.",
+          "[controller_server-13] [INFO] [1793256306.940864978] [controller_server]: Passing new path to controller."
+        ]
+      ]
+    }
+  ],
+  "scope": "Post-run diagnostic additional to the predeclared physical screen. Both navigation status and physical screen may pass while navigation depends on a recovery. Logs show reset/clear/retry; no individual critic scoring or sole inner-optimizer cause is inferred.",
+  "defaults_promoted": false
+}
