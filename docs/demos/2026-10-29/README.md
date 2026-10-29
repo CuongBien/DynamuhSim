@@ -20,3 +20,5 @@ Giao diện Windows được xác nhận ở **lượt này**; không suy rộng
 ## Bổ sung theo câu hỏi về chuyển động và đường đi
 
 Đã sửa animation replay và thêm [video camera/costmap đồng bộ, đo khe hở, thuật toán và giới hạn phân tích](navigation/README.md). Gait chỉ là dựng lại phần hiển thị; controller/recipe/raw không thay đổi.
+
+[Kiểm tra SDF/URDF/TF, footprint và inflation](footprint_review/README.md): phát hiện model không đồng nhất; các candidate là phân tích offline, chưa áp dụng.

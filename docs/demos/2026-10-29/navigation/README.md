@@ -31,3 +31,7 @@ Heatmap là **local OccupancyGrid thật** đã ghi, chuẩn hóa0–100; không
 Không có global costmap array hoặc trajectory critic breakdown trong bag. Do đó kết luận về việc chọn đường rộng hơn là suy luận phù hợp cấu hình/log, không chứng minh đường vòng là phương án tối ưu hoặc mọi khe đều cấm. Không giảm footprint/inflation hoặc sửa recipe để tạo đoạn robot lách qua trong lần này.
 
 Code draw_costmap.py và make_overlay_video.py đọc raw demo tại đường dẫn máy gốc ghi trong script; output đồ thị nằm cạnh script, cần full raw khi tái lập. 69 frame video overlay được decode/đếm, từng frame camera giữ từ nguồn gốc cùng timestamp. Script vẽ lại chỉ ghi output phân tích, không đổi raw capture/model/nhãn.
+
+## Kiểm tra bổ sung
+
+Đã đo collision toàn robot (24×28cm), native footprint52cm và lệch URDF/SDF/TF. [Xem phân tích footprint/inflation](../footprint_review/README.md). Vùng52cm là cấu hình bảo thủ đang dùng, không phải kích thước thật của chassis.

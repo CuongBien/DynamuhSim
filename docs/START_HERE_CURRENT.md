@@ -96,6 +96,10 @@ Gazebo pose replay và hướng dẫn build ở [README replay](../experiments/s
 
 `replay_and_backup_tools.zip` là gói công cụ bổ sung, không phải part thứ 15 của dữ liệu. Bản sao dữ liệu đã được giải nén thử và đối chiếu SHA256 từng file tại máy; metadata Drive đã đối chiếu tên/dung lượng. Chi tiết và phạm vi những file được sao lưu ở [báo cáo backup](../experiments/archive/social_navigation/reports/wm_episode_batch/BACKUP_DRIVE.md).
 
+## Chú ý kích thước trước khi thu dữ liệu mới
+
+Kiểm tra29/10 xác nhận SDF collision bao24×28cm nhưng footprint Nav2 ngang52cm; URDF thân28×22cm cũng khác SDF24×20cm. Camera mount TF x14cm khác SDF12cm. Cần thống nhất model/TF và footprint trước capture mới; chưa sửa hoặc relabel dữ liệu cũ. [Phép đo và phân tích inflation](demos/2026-10-29/footprint_review/README.md). Các hình candidate chỉ là tính offline, chưa phải episode robot lách qua đã nghiệm thu.
+
 ## 6. Việc tiếp theo, theo thứ tự
 
 1. Viết baseline WM nhỏ cho nhiệm vụ **dự báo BEV có điều kiện hành động**, dùng reader và masks hiện có.

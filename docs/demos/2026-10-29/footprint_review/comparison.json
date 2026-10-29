@@ -1,0 +1,417 @@
+{
+  "geometry": {
+    "source": "Actual saved runtime SDF, not only source model",
+    "collision_entries": [
+      {
+        "link": "base_link",
+        "name": "chassis_collision",
+        "shape": "box",
+        "shape_values": [
+          0.24,
+          0.2,
+          0.08
+        ],
+        "center": [
+          0.0,
+          0.0,
+          0.04
+        ],
+        "min_xy": [
+          -0.12,
+          -0.1
+        ],
+        "max_xy": [
+          0.12,
+          0.1
+        ]
+      },
+      {
+        "link": "base_scan",
+        "name": "lidar_collision",
+        "shape": "cylinder",
+        "shape_values": 0.035,
+        "center": [
+          0.0,
+          0.0,
+          0.12
+        ],
+        "min_xy": [
+          -0.035,
+          -0.035
+        ],
+        "max_xy": [
+          0.035,
+          0.035
+        ]
+      },
+      {
+        "link": "front_left_wheel",
+        "name": "collision",
+        "shape": "sphere",
+        "shape_values": 0.04,
+        "center": [
+          0.08,
+          0.1,
+          0.0
+        ],
+        "min_xy": [
+          0.04,
+          0.060000000000000005
+        ],
+        "max_xy": [
+          0.12,
+          0.14
+        ]
+      },
+      {
+        "link": "front_right_wheel",
+        "name": "collision",
+        "shape": "sphere",
+        "shape_values": 0.04,
+        "center": [
+          0.08,
+          -0.1,
+          0.0
+        ],
+        "min_xy": [
+          0.04,
+          -0.14
+        ],
+        "max_xy": [
+          0.12,
+          -0.060000000000000005
+        ]
+      },
+      {
+        "link": "rear_left_wheel",
+        "name": "collision",
+        "shape": "sphere",
+        "shape_values": 0.04,
+        "center": [
+          -0.08,
+          0.1,
+          0.0
+        ],
+        "min_xy": [
+          -0.12,
+          0.060000000000000005
+        ],
+        "max_xy": [
+          -0.04,
+          0.14
+        ]
+      },
+      {
+        "link": "rear_right_wheel",
+        "name": "collision",
+        "shape": "sphere",
+        "shape_values": 0.04,
+        "center": [
+          -0.08,
+          -0.1,
+          0.0
+        ],
+        "min_xy": [
+          -0.12,
+          -0.14
+        ],
+        "max_xy": [
+          -0.04,
+          -0.060000000000000005
+        ]
+      }
+    ],
+    "aabb_min_xy": [
+      -0.12,
+      -0.14
+    ],
+    "aabb_max_xy": [
+      0.12,
+      0.14
+    ],
+    "collision_aabb_size_m": [
+      0.24,
+      0.28
+    ],
+    "sdf_chassis_xy_m": [
+      0.24,
+      0.2
+    ],
+    "sdf_circumscribed_collision_radius_m": 0.16806248474865698,
+    "urdf_chassis_xy_m": [
+      0.28,
+      0.22
+    ],
+    "sdf_camera_mount_xy": [
+      0.12,
+      0.0
+    ],
+    "urdf_camera_mount_xy": [
+      0.14,
+      0.0
+    ],
+    "human_proxies": [
+      {
+        "name": "common_1_proxy",
+        "radius": 0.36
+      },
+      {
+        "name": "common_2_proxy",
+        "radius": 0.36
+      },
+      {
+        "name": "common_3_proxy",
+        "radius": 0.36
+      },
+      {
+        "name": "common_4_proxy",
+        "radius": 0.36
+      },
+      {
+        "name": "common_5_proxy",
+        "radius": 0.36
+      },
+      {
+        "name": "common_6_proxy",
+        "radius": 0.36
+      }
+    ],
+    "notes": "Collision sphere wheel link poses have roll only; LiDAR collision cylinder has vertical axis. Ground-plane envelope here does not assume URDF equals SDF."
+  },
+  "installed_nav2_library_probe": [
+    {
+      "circumscribed_radius": 0.26414213562373096,
+      "inscribed_radius": 0.2549278141963876,
+      "padding": 0.01,
+      "points": [
+        [
+          0.26,
+          0.0
+        ],
+        [
+          0.2409698831278217,
+          0.10567085809127244
+        ],
+        [
+          0.1867766952966369,
+          0.18677669529663687
+        ],
+        [
+          0.10567085809127245,
+          0.2409698831278217
+        ],
+        [
+          0.010000000000000016,
+          0.26
+        ],
+        [
+          -0.10567085809127243,
+          0.2409698831278217
+        ],
+        [
+          -0.18677669529663687,
+          0.1867766952966369
+        ],
+        [
+          -0.2409698831278217,
+          0.10567085809127247
+        ],
+        [
+          -0.26,
+          0.010000000000000031
+        ],
+        [
+          -0.24096988312782172,
+          -0.10567085809127241
+        ],
+        [
+          -0.18677669529663693,
+          -0.18677669529663687
+        ],
+        [
+          -0.10567085809127258,
+          -0.24096988312782164
+        ],
+        [
+          -0.010000000000000045,
+          -0.26
+        ],
+        [
+          0.1056708580912725,
+          -0.24096988312782167
+        ],
+        [
+          0.18677669529663685,
+          -0.18677669529663693
+        ],
+        [
+          0.24096988312782164,
+          -0.1056708580912726
+        ]
+      ],
+      "robot_radius": 0.25,
+      "width_x": 0.52,
+      "width_y": 0.52
+    },
+    {
+      "circumscribed_radius": 0.18414213562373097,
+      "inscribed_radius": 0.17644818243903393,
+      "padding": 0.01,
+      "points": [
+        [
+          0.18000000000000002,
+          0.0
+        ],
+        [
+          0.16705952052691878,
+          0.07505618350206526
+        ],
+        [
+          0.1302081528017131,
+          0.13020815280171308
+        ],
+        [
+          0.07505618350206528,
+          0.16705952052691878
+        ],
+        [
+          0.01000000000000001,
+          0.18000000000000002
+        ],
+        [
+          -0.07505618350206525,
+          0.16705952052691878
+        ],
+        [
+          -0.13020815280171308,
+          0.1302081528017131
+        ],
+        [
+          -0.16705952052691878,
+          0.07505618350206528
+        ],
+        [
+          -0.18000000000000002,
+          0.010000000000000021
+        ],
+        [
+          -0.16705952052691878,
+          -0.07505618350206525
+        ],
+        [
+          -0.1302081528017131,
+          -0.13020815280171308
+        ],
+        [
+          -0.07505618350206536,
+          -0.16705952052691872
+        ],
+        [
+          -0.010000000000000031,
+          -0.18000000000000002
+        ],
+        [
+          0.0750561835020653,
+          -0.16705952052691875
+        ],
+        [
+          0.13020815280171305,
+          -0.1302081528017131
+        ],
+        [
+          0.16705952052691872,
+          -0.07505618350206536
+        ]
+      ],
+      "robot_radius": 0.17,
+      "width_x": 0.36000000000000004,
+      "width_y": 0.36000000000000004
+    }
+  ],
+  "comparison_time_sim_s": 33.0,
+  "costmap_stamp_s": 32.9025,
+  "baseline_reconstruction": {
+    "matching_cells_fraction": 0.9998611111111111,
+    "mismatched_cells": 2,
+    "max_abs_cost_difference": 2,
+    "method": "Distance transform of recorded lethal cells, Jazzy inflation computeCost with installed-library inscribed radius, translated to OccupancyGrid. Diagnostic approximation; recorded marking layer held fixed."
+  },
+  "variants": [
+    {
+      "name": "Recorded current",
+      "recorded": true,
+      "robot_radius": 0.25,
+      "padding": 0.01,
+      "inscribed_radius": 0.2549278141963876,
+      "inflation_radius": 0.8,
+      "midpoint_cost": 99,
+      "inscribed_or_lethal_cells": 2516,
+      "soft_cost_cells": 5302
+    },
+    {
+      "name": "ONLY reduce inflation to0.45m",
+      "recorded": false,
+      "robot_radius": 0.25,
+      "padding": 0.01,
+      "inscribed_radius": 0.2549278141963876,
+      "inflation_radius": 0.45,
+      "midpoint_cost": 99,
+      "inscribed_or_lethal_cells": 2517,
+      "soft_cost_cells": 2024
+    },
+    {
+      "name": "ONLY fit circular radius to0.17m",
+      "recorded": false,
+      "robot_radius": 0.17,
+      "padding": 0.01,
+      "inscribed_radius": 0.17644818243903393,
+      "inflation_radius": 0.8,
+      "midpoint_cost": 78,
+      "inscribed_or_lethal_cells": 1569,
+      "soft_cost_cells": 6249
+    },
+    {
+      "name": "Fit radius0.17m + inflation0.45m",
+      "recorded": false,
+      "robot_radius": 0.17,
+      "padding": 0.01,
+      "inscribed_radius": 0.17644818243903393,
+      "inflation_radius": 0.45,
+      "midpoint_cost": 78,
+      "inscribed_or_lethal_cells": 1569,
+      "soft_cost_cells": 2972
+    }
+  ],
+  "controller_rerun_performed": false,
+  "candidate_applied_to_runtime": false,
+  "candidate_validated_for_real_robot": false,
+  "current_recipe_unchanged": true,
+  "urdf_tf_static": {
+    "camera_optical_frame": {
+      "parent": "camera_link",
+      "translation": [
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    "base_link": {
+      "parent": "base_footprint",
+      "translation": [
+        0.0,
+        0.0,
+        0.04
+      ]
+    },
+    "camera_link": {
+      "parent": "base_link",
+      "translation": [
+        0.14,
+        0.0,
+        0.08
+      ]
+    }
+  },
+  "known_model_mismatch": "SDF chassis24x20cm, URDF28x22cm; saved TF camera_link x0.14m versus SDF mount0.12m. No geometry or TF fix applied in this inspection.",
+  "scope": "Parameter/geometry diagnosis, not proof a shortcut is safe or a full social navigation acceptance."
+}
