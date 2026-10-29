@@ -20,3 +20,27 @@ python3 experiments/social_navigation/navigation/planner_diagnostics/validate_pr
 ```
 
 Capture uses a NEW run directory with `tools/capture_episode.py prepare --config configs/capture/geometry_v4_inflation045.json --scenario standing --seed 45 --planner-diagnostics`. Existing runs refuse overwrite. Policy: `configs/audit/capture_native_geometry.json`.
+
+## Measured outcome
+
+Run D completed on native RTX4060 rendering: goal SUCCEEDED, actual world XY error .05823m, active31.355s, path9.15186m. Conservative actual swept human gap .34361m; static box clearance lower bound .92874m. No force-contact stream exists. Native YAML and camera SDF match C byte for byte. Audit PASS, including all33 global and152 local native sidecar snapshots matched against MCAP.
+
+The unconstrained native paths closely match recorded /plan (descriptive maximum nearest-point distances: 0.000000353m, .05648m, .01275m; asynchronous snapshots). At the three predeclared offsets the gate-center native costs are0,117,173. None is a hard253/254 barrier. Yet the returned route via the midpoint has potential sums1.011x,1.083x,1.549x the free route, and is longer from the robot's current position. Flattening soft costs still selects an upper path, so inflation is not the only explanation; the robot has already moved above the groups.
+
+**Offline reachability is not physical acceptance.** Every via-midpoint path overlaps H4's snapshot collision proxy. At early times H4 is beyond the3m obstacle-marking range; at the last snapshot its cylinder is fully angularly occluded by H5 while its costmap-center cell stays0. These are geometric/observability diagnostics from recorded poses, not a detector output. The free global path at the earliest snapshot also overlaps still-unobserved H5; live navigation replans as sensing progresses. Do not interpret a one-time global path as an executed trajectory or a safe future rollout.
+
+The result supports investigating global route choice rather than attributing the missed gap solely to MPPI. No MPPI rollout/critic score breakdown was captured, and the experiment does not prove MPPI can execute the narrow passage. Suggested next isolated test: two fixed obstacles, start facing the gap, and separately measure planner path and actual controller clearance. Do not make a conversation group the pass/fail target for geometry tuning.
+
+Native cost conversion and wrapper behavior are documented in the primary Nav2 links above. Runtime commit `9a7005c`. Tests241, OK,2 conditional skips; the first validation caught an old-v1 fixture without plan.json, which was corrected before capture. Earlier analysis artifacts were preserved under the ignored run parent, not substituted into raw evidence.
+
+Recompute into NEW directories after restoring the raw run:
+
+```bash
+source /opt/ros/jazzy/setup.bash
+source install/setup.bash
+python3 docs/demos/2026-10-29/planner_review/analyze.py --output-root experiments/social_navigation/benchmark/generated/NEW_PROBE --report-dir experiments/social_navigation/benchmark/generated/NEW_PROBE_REPORT
+```
+
+`verify.py` saves immutable verification.json and refuses overwrite. Reports record the installed native package version, library/probe hashes, source raw paths and byte-level capture provenance. `physical_run.json` is generated with the existing geometry-ab read-only pose comparison helper.
+
+Camera encoding is reproducible with `python3 docs/demos/2026-10-29/planner_review/render_camera.py --output NEW.webm`; it keeps the recorded source-frame sequence and uses lossy VP8, refusing to replace existing media.

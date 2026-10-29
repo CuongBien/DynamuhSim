@@ -1,0 +1,48 @@
+{
+  "status": "PASS",
+  "checks": {
+    "nav2_runtime.yaml": true,
+    "mecanum_camera.sdf": true,
+    "capture_integrity": true,
+    "native_bytes_equal_mcap": true,
+    "no_scripted_robot_velocity_publisher": true
+  },
+  "snapshot_vs_live_path": [
+    {
+      "snapshot_sim_s": 16.5025,
+      "live_plan_stamp_s": 16.5025,
+      "median_nearest_path_point_distance_m": 1.9660715580793287e-09,
+      "max_nearest_path_point_distance_m": 3.5325496170311264e-07,
+      "scope": "Descriptive point-to-point distances, async clocks; no exact replay claim."
+    },
+    {
+      "snapshot_sim_s": 20.93,
+      "live_plan_stamp_s": 21.0625,
+      "median_nearest_path_point_distance_m": 0.03071003354021166,
+      "max_nearest_path_point_distance_m": 0.056477755263942504,
+      "scope": "Descriptive point-to-point distances, async clocks; no exact replay claim."
+    },
+    {
+      "snapshot_sim_s": 26.645,
+      "live_plan_stamp_s": 26.8025,
+      "median_nearest_path_point_distance_m": 0.005587151285086771,
+      "max_nearest_path_point_distance_m": 0.01275076274009074,
+      "scope": "Descriptive point-to-point distances, async clocks; no exact replay claim."
+    }
+  ],
+  "source_hashes": {
+    "capture_freeze.json": "83043590436a9ce04658dc5b6fa1be954e2d3383ef2a88bcaf9b256076cfb466",
+    "plan.json": "3aabbcee84b836bdc1daaf922d67e50e2120a9fd2277f9dfb549b1fdcad69e76",
+    "preflight.json": "4ed51dc55dec4c50aed531d8f3c6e35e83916901ac0a33b6c1d5307d610c0ba5",
+    "runtime/warehouse.sdf": "45bc61503451315c0deab7ebc82f68eea8afaa5e25e5a8ca9261259503ea0213",
+    "runtime/nav2_runtime.yaml": "d3104cf742dce77432de854ee531af01550da734b1bd985670d1fcca0236478b",
+    "episode/result.json": "03a30c6bae84c29867e73d789627af32ddeb9fa1f44cc0534758a9aa5ca9790c",
+    "episode/native_costmaps.jsonl": "8c74b42df6777cafb6dfd55a7a003cb6720c8f0b41988d9e6ae4e284f76e1470",
+    "episode/plans.jsonl": "11897774f8891b104df03696ab61691901f6c70b930665fe5810515dded0e883",
+    "episode/tf.jsonl": "5a5293af58e7fefbc226d88812301a78e85f6034bfc4b824ede4b97a4f5f9e55",
+    "episode/gazebo_poses.jsonl": "7ea066e66b0562da4762ed286b130823874adf03c0f2d3853fa719dc4de2358a",
+    "episode/events.jsonl": "6d51ea24e1e82b70186cbe2d7001998e647ce4165ec13f2aebc8c2148cb2beaa",
+    "episode/raw_bag/metadata.yaml": "2749cba512e7f6f2b41b94519562c11abf5ddf811d709a38e352a23a2113c545"
+  },
+  "runtime_commit": "9a7005c16919b78d8a90066a973a17c5b2907725"
+}
