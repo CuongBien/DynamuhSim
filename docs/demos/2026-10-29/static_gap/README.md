@@ -26,3 +26,9 @@ Both baseline runs TIMEOUT at90s despite global plans passing through the openin
 In the wide local costmap, samples .4m ahead of the stopped robot have native cost149. The configured CostCritic near_collision_cost140 treats those traversable cells as near-collision and adds critical_cost300 per evaluated point before averaging/weighting. CostCritic weight16 is also much higher than the Jazzy source default3.81; source default near_collision_cost is253. The rollout critic breakdown itself was not recorded, so this is an inspected-configuration/source diagnosis, not a claim to have logged each critic's score.
 
 Primary source: [Jazzy CostCritic](https://raw.githubusercontent.com/ros-navigation/navigation2/jazzy/nav2_mppi_controller/src/critics/cost_critic.cpp). Subsequent treatments, if run, will be separately declared and captured, never replacing these failures.
+
+## Native-cost-only treatment: measured failure retained
+
+Both `wide80_cost` and `narrow52_cost` also TIMEOUT at90s with the declared3.81/253 live parameters verified. Changing CostCritic alone was insufficient; this falsifies a simple two-field fix claim. The prediction horizon is still30 steps x .05s=1.5s, at most .45m at the velocity cap, shorter than the .4m slab plus inflation approach/exit regions (.45m on each side).
+
+A separate horizon treatment may therefore be compared with the native-cost treatment by changing only time_steps to100 (.05s model_dt unchanged). Five seconds permits a kinematic upper bound1.5m, covering that1.3m cost region; acceleration limits reduce the achievable distance somewhat. This is a testable hypothesis, not a logged native critic-score explanation. No velocities or waypoint commands are injected.
