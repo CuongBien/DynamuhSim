@@ -47,6 +47,7 @@ try:
                 previous=t;transport_step+=1
                 reply=dict(time=t,state_time=t+dt,step=transport_step,native_step=k.steps,active_phase=active,before=before,humans=current,groups_before=groups_before,groups=k.groups(),finish_events=k.motion.events[events:],motion_guard=k.motion.steps[-1] if active else None,compute_ms=1000*(time.monotonic()-start))
                 if human_motion is not None:reply["group_orca" if human_motion.profile=="group_orca_v1" else "group_intent"]=human_motion.last
+                if human_motion is not None and hasattr(human_motion,"cohesion_last"):reply["group_cohesion"]=human_motion.cohesion_last
                 if encounter is not None:
                     reply["encounter_goals"]=group_goals(k)
                     reply["encounter_goal_ages_wall_s"]={str(h.id):time.time()-h.initial_time for g in k.env.moving_interactions for h in g.humans}

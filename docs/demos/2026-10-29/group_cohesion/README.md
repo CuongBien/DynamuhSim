@@ -1,0 +1,9 @@
+# Soft regrouping after the rigid-circle ablation
+
+Phase1 removed group-disc avoidance and reduced turning but failed cohesion badly (max member-centroid radius6.75m/2.68m). Its failures remain unchanged. This separate profile adds soft centroid attraction and a forward-speed gate to tentative native moving-group proposals, before the exact same per-person ORCA and swept projection. Native integration/noise/RNG is called once; no post-guard position correction or teleport is applied. Robot/Nav2, sim_v1, goals/lifecycle and speed/yaw safety limits stay fixed.
+
+Constants and two new cells are predeclared in plan.json before execution. Within.9m attraction is zero; group forward speed scales down between1.0m and1.6m spread; attraction gain.8/s is capped.4m/s. Existing.8m/s cap and final yaw rate bound remain. These define one custom experiment, not an upstream SocNavGym result. The new proposal trace is recomputed by the auditor.
+
+The physical/clock integrity gate is independent from motion quality. Native motion criteria remain anchored to the original group_orca_v1/sim_v1 outcomes; phase1 is an additional control. No default promotion, persona labels or dataset training acceptance is implied.
+
+273 shared tests OK (2 skips). Component identity/safety/reconstruction PASS, but cohesion_v1 keeps radius near1.15m while increasing yaw substantially versus direct-goal proposals. No native capture was run for this candidate after component review; the two declared cells are explicitly NOT_RUN in native_disposition.json. This is an adaptive development decision, not a physical acceptance or threshold change. Source, constants and every component result are retained. A new profile will address compatibility between desired velocity and bounded body heading, with the same cohesion constants.

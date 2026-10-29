@@ -91,11 +91,11 @@ def prepare_run(repo, run_dir, config_path, scenario, seed, gui=False, *, planne
     config = validate_config(json.loads(config_path.read_text()))
     if scenario not in ["standing", "walking"] or type(seed) is not int or seed not in config["allowed_seeds"]:
         raise ValueError("Scenario/seed not allowed by capture config")
-    if human_motion_profile not in ["legacy", "group_orca_v1", "group_goal_v1"]:
+    if human_motion_profile not in ["legacy", "group_orca_v1", "group_goal_v1", "group_cohesion_v1"]:
         raise ValueError("Unsupported human motion profile")
     if human_goal_clock not in ["native_wall", "sim_v1"]:
         raise ValueError("Unsupported human goal clock")
-    if human_motion_profile == "group_goal_v1" and human_goal_clock != "sim_v1":
+    if human_motion_profile in ["group_goal_v1", "group_cohesion_v1"] and human_goal_clock != "sim_v1":
         raise ValueError("Shared group goal profile requires declared sim_v1 clock")
     encounter = None
     if encounter_profile is not None:

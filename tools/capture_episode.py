@@ -21,7 +21,7 @@ def main(argv=None):
     prepare.add_argument("--seed", type=int, required=True)
     prepare.add_argument("--gui", action="store_true")
     prepare.add_argument("--planner-diagnostics", action="store_true", help="Record exact native costmaps without changing navigation")
-    prepare.add_argument("--human-motion-profile", choices=["legacy", "group_orca_v1", "group_goal_v1"], default="legacy")
+    prepare.add_argument("--human-motion-profile", choices=["legacy", "group_orca_v1", "group_goal_v1", "group_cohesion_v1"], default="legacy")
     prepare.add_argument("--encounter-profile", choices=["head_on", "crossing"], help="Opt-in walking initial conditions; native motion continues after start")
     prepare.add_argument("--human-goal-clock", choices=["native_wall", "sim_v1"], default="native_wall", help="Opt-in Gazebo goal expiry from the accepted navigation gate")
     for name in ["verify", "run"]:
