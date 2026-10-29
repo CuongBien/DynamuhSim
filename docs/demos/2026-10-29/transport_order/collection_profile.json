@@ -1,0 +1,82 @@
+{
+  "schema": "dynamuhsim_bounded_collection_recipe/1",
+  "id": "factory_social_pilot_v1",
+  "status": "ACCEPTED_FOR_BOUNDED_PILOT",
+  "capture_config": "configs/capture/geometry_v7_mppi_resample.json",
+  "capture_config_sha256": "c0362dc65aafbd278f2e6dc5c01d3c6210c2afb19ed2b5514abd0abd910c946e",
+  "validated_runtime_commits": [
+    "e0b5dd6b41d4d39eca6441c75f5f49fbabbf5b0b"
+  ],
+  "modes": {
+    "conversation": {
+      "scenario": "standing",
+      "human_motion_profile": "legacy",
+      "human_goal_clock": "sim_v1",
+      "human_lifecycle_profile": "persistent_conversation_v1",
+      "clock_validation": "standing_snapshot_v1",
+      "arrival_expiry_query_coverage": "NOT_EXERCISED",
+      "validated_seeds": [
+        46,
+        47,
+        48
+      ]
+    },
+    "natural_group_walking": {
+      "scenario": "walking",
+      "encounter_profile": "head_on",
+      "human_motion_profile": "group_cohesion_v2",
+      "human_goal_clock": "sim_v1",
+      "human_lifecycle_profile": "native",
+      "clock_validation": "original_query_verifier",
+      "revised_runtime_control_seed": 46,
+      "group_persistence_guaranteed": false
+    }
+  },
+  "evidence": {
+    "revised_teardown_result_sha256": "1d6a407c3dc499e79bb5227de3b87614e668250640057ab4988385785a0741a6",
+    "revised_audits_sha256": "5e82e715e3ea1dacf69558350cdb4e6fc33a49950aa410977d8a0725ffc83ba9",
+    "new_acceptance_plan_sha256": "217c012614517c31438713a73499afc8cea29ded411b570f151129ff2cc265ef",
+    "original_conversation_cohort_status": "FAIL",
+    "original_conversation_result_sha256": "7867fc34514584f8677f97af53abd8e2dd983315273dd2f65001cc0f0eed730d",
+    "three_seed_behavior_contracts": "PASS; seed48 original full audit still FAIL teardown",
+    "component_control": "Exact120-step native pose/group reproduction; persistent counterfactual PASS",
+    "unit_tests": {
+      "tests": 295,
+      "conditional_skips": 2
+    }
+  },
+  "capture_freeze_sha256": {
+    "conversation_s48_transport": "76dca963f3192a195c6aac264deefc0cf18f12bdc7c53c7f8884e3fd2d66c28b",
+    "walking_s46_transport": "694bbc14de65b4da159fb1e1248d6187853ff2499382a1d8120b16af9b3366e4"
+  },
+  "critical_selected_source_sha256": {
+    "python/dynamuhsim/simulation/conversation.py": "bef4f913564aa3bdcf7b89cad5bc13dec8cfec536ff948b9b3d6b0735390ab1e",
+    "python/dynamuhsim/analysis/standing_clock.py": "d58714f87d4792e7485e358af95903c423e58da565c90ea48d71e3efb85a7755",
+    "python/dynamuhsim/runtime/transport_shutdown.py": "cb065dd32a172b901dee65f227bff8a5e6a944ac5eff3c3b03c6a2edf2c4614b",
+    "python/dynamuhsim/runtime/worker_readiness.py": "2ecf6dad51cc358c98ea49cf54ff1b53f4c4ebc266f6a7cd9f16364f07744df6"
+  },
+  "protected_behavior_sha256": {
+    "python/dynamuhsim/simulation/goal_clock.py": "0d7529f2c6ffc0bf7a5f8524514fb99c4c24c1ba37f36f9921fefe2354c4c334",
+    "python/dynamuhsim/simulation/group_cohesion_heading.py": "f754692e61ee3c36ac10b9b205e7c967d8f076c7056ed41e0022b7213ae0dc55",
+    "experiments/social_navigation/navigation/socnavgym_group_nav2/reactive_motion.py": "821380fc1f1d95d647a8b0576a9ca6f8573c2af66feec20a08f3f361e3981085",
+    "experiments/social_navigation/navigation/socnavgym_group_nav2/standing_projection.py": "be1d9f1546333aa57234c2d6b4cf622fc016ef4f1fd63251f28d8efbea194e40",
+    "experiments/social_navigation/navigation/socnavgym_group_nav2/fixture.py": "2f217fc7d87bbb5950567b119d68baafba1b62515229c8b416247484c5b93a02",
+    "experiments/social_navigation/navigation/socnavgym_group_nav2/config.yaml": "8d12dd63d9ab64ea5467ab35e23712bc89d019740ab99fcd5d98e2e18b944c4d",
+    "experiments/social_navigation/navigation/socnavgym_response_fix/responsive_motion.py": "7e94fb78bb1a6552c7c6b17654bf90ba2a937145837916b783ddeaa36b45a4c4",
+    "experiments/social_navigation/navigation/socnavgym_response_fix/projection.py": "260d0775a10bc6b510c217a26e02a877a4394ef3f3f56475740ea14d52c841d9",
+    "configs/capture/geometry_v7_mppi_resample.json": "c0362dc65aafbd278f2e6dc5c01d3c6210c2afb19ed2b5514abd0abd910c946e",
+    "experiments/social_navigation/vendor/SocNavGym/socnavgym/envs/socnavenv_v2.py": "9444d03f1d2c407c0a48578135faedd32a80431d5abb22cfe3582c473a826696",
+    "experiments/social_navigation/vendor/SocNavGym/socnavgym/envs/utils/human_human.py": "2648268352411745b8aaca5f9971cad6353fb8ee550be91a428277deafa54219"
+  },
+  "limits": [
+    "One factory, one initial arrangement per mode, same avatars, same robot route, RTX4060 WSL machine. No universal naturalness or cross-simulator/generalization claim.",
+    "Actual standing displacement was zero in the original three-seed conversation captures. Active yielding correction not proven by this series.",
+    "Natural walking may dissolve/reform groups. Store actual per-frame membership; do not label all frames by initial group state.",
+    "This JSON is a recipe/acceptance manifest, not the --config capture schema. Use capture_config plus explicit mode CLI flags and a fresh run directory.",
+    "Validation seeds are simulator checks, not a train/validation/test split. Declare collection seeds, variation and splits before data generation.",
+    "Every new episode requires unchanged full source/GPU/sensor/TF/depth/costmap/clock/shutdown audit. Isolate any failure. No H1\u2013H5 semantic labels, identity tracking or RL reward promoted."
+  ],
+  "registered_training_dataset": false,
+  "training_ready": false,
+  "robot_defaults_changed": false
+}

@@ -1,6 +1,6 @@
 # Bắt đầu ở đây — những phần đang dùng
 
-Cập nhật ngày **29/10/2026**. Công việc hiện tại: **kiểm tra điều hướng và sửa chuyển động nhóm người trước đợt thu dữ liệu mới**. `dataset01` là bộ pilot đã có, chưa thay đổi hoặc gán nhãn lại; World Model chưa train.
+Cập nhật ngày **29/10/2026**. Công việc hiện tại: **đã chốt cấu hình pilot nhà xưởng với hai chế độ người; chuẩn bị thu dữ liệu mới**. `dataset01` là bộ pilot đã có, chưa thay đổi hoặc gán nhãn lại; World Model chưa train.
 
 ## 1. Hiện tại đã có gì?
 
@@ -74,7 +74,11 @@ Khi chuẩn bị train:
 
 ## 4. Mở replay để xem ngay
 
-Kết quả mới nhất: [cohort seed46–48](http://localhost:35315/seed_regression/index.html) **5 PASS/3 FAIL/1 ERROR**, chưa chốt profile thu dữ liệu. Có8 lượt native tới đích/đóng bridge sạch; crossing48 lỗi công bố ready.json. Nhóm đứng46/47 tự tan, standing48 thiếu coverage truy vấn goal-clock. Lỗi ready đã có [bản sửa/probe mới PASS](http://localhost:35315/readiness_atomic/index.html), không thay kết quả cohort gốc. [Báo cáo](demos/2026-10-29/seed_regression/README.md). Vòng kiểm chứng shutdown trước đó có hai lượt mới PASS toàn bộ audit, robot tới đích không cần recovery. [Báo cáo shutdown](demos/2026-10-29/bridge_shutdown/README.md). Kết quả giảm quay của nhóm đi bộ và lỗi cũ giữ tại [báo cáo trước](http://localhost:35315/group_cohesion_heading/index.html). Profile thử được chạy bằng `tools/capture_episode.py` với `--human-motion-profile group_cohesion_v2 --human-goal-clock sim_v1`; xem đầy đủ lệnh prepare/run trong báo cáo hiện tại ở trên. Các lệnh bên dưới xem **dataset01 cũ**, không tự bật mô hình người mới.
+Kết quả mới nhất: [hai lượt bản sửa đầy đủ PASS](http://localhost:35315/transport_order/index.html). Đã đóng băng **factory_social_pilot_v1** cho thu pilot trong nhà xưởng hiện tại: nhóm trò chuyện giữ nguyên thành viên và nhóm đi bộ theo lifecycle tự nhiên. [Recipe và lệnh prepare/run/audit](demos/2026-10-29/transport_order/README.md), [manifest cấu hình](demos/2026-10-29/transport_order/collection_profile.json). Manifest là hồ sơ recipe; lệnh --config vẫn dùng geometry_v7_mppi_resample.json.
+
+Nhóm trò chuyện đã giữ đủ hai nhóm trên seed46–48; kiểm chứng snapshot tuổi mục tiêu với truy vấn đến đích/hết hạn NOT_EXERCISED. Người không dịch chuyển trong các lượt này, nên chưa chứng minh active sidestep. Lượt walking vẫn dùng query verifier gốc, nhóm được phép tan/lập lại và cần metadata theo từng frame. Cả4 bridge ROS launch được dừng đúng phiên trước Gazebo; hai lượt mới full audit PASS, không recovery/escalation. Lỗi các cohort cũ vẫn giữ nguyên ở [báo cáo seed46–48](demos/2026-10-29/seed_regression/README.md) và [ba seed trò chuyện](demos/2026-10-29/persistent_conversation/README.md).
+
+Các lệnh replay bên dưới xem **dataset01 cũ**, không tự bật profile người mới. dataset01 chưa bị sửa hay đăng ký thêm dữ liệu từ các lượt kiểm chứng này.
 
 Trong terminal Ubuntu/WSL:
 
@@ -112,8 +116,8 @@ Xem [báo cáo hiện tại/cách chạy đúng profile](demos/2026-10-29/group_
 
 ## 6. Việc tiếp theo, theo thứ tự
 
-1. Cohort seed46–48 đã xong và chưa đạt. Lỗi ready.json đã sửa bằng công bố nguyên khối (282 test OK, probe crossing48 mới PASS); [báo cáo bản sửa](demos/2026-10-29/readiness_atomic/README.md). Tiếp theo khai báo riêng fixture trò chuyện giữ nhóm và contract goal-clock cho cảnh đứng yên. Giữ nguyên lỗi/audit cohort cũ, kiểm chứng trong lượt mới trước khi chốt thu dữ liệu.
-2. Đóng băng cấu hình đã nghiệm thu và thu pilot mới khi cần mở rộng dữ liệu. Không trộn kết quả thử nghiệm với các mẫu train đã chấp nhận.
+1. Bộ recipe **factory_social_pilot_v1 đã chốt cho phạm vi thử nhà xưởng hiện tại**: conversation persistent và natural walking;295 test OK (2 skip), component control tái hiện đúng native, ba seed đạt hợp đồng nhóm/clock và hai lượt teardown mới full PASS. Không có cam kết hết mọi race condition; mọi episode mới vẫn phải audit.
+2. Khai báo một pilot dữ liệu nhỏ mới với variation/seed/split trước khi chạy; thu bằng recipe đã chốt, cách ly mọi FAIL rồi kiểm tra xuất depth/BEV/timestamps/mask. Các seed dùng kiểm chứng simulator không tự trở thành split train/validation/test. Không trộn raw thử nghiệm với dataset đã chấp nhận.
 3. Với `dataset01` có sẵn, bước WM vẫn là baseline nhỏ dự báo BEV có điều kiện hành động: train trên train, chọn bằng validation, cố định rồi mới đánh giá test. Chưa thực hiện trainer trong vòng sửa mô phỏng này.
 4. Chuẩn bị RL sau khi có reward và step/reset hợp lệ.
 

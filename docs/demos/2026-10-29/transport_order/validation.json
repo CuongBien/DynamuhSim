@@ -1,0 +1,45 @@
+{
+  "status": "PASS",
+  "checks": {
+    "http:index.html": true,
+    "http:results.json": true,
+    "http:audits.json": true,
+    "http:collection_profile.json": true,
+    "http:conversation_s48_transport.webm": true,
+    "http:walking_s46_transport.webm": true,
+    "original_four_results_unchanged": true,
+    "original_four_audits_unchanged": true,
+    "original_nine_results_unchanged": true,
+    "original_nine_audits_unchanged": true,
+    "new_acceptance_pass": true,
+    "bounded_profile_frozen": true
+  },
+  "http": {
+    "index.html": {
+      "status": 200,
+      "bytes": 1717
+    },
+    "results.json": {
+      "status": 200,
+      "bytes": 21344
+    },
+    "audits.json": {
+      "status": 200,
+      "bytes": 8872
+    },
+    "collection_profile.json": {
+      "status": 200,
+      "bytes": 5398
+    },
+    "conversation_s48_transport.webm": {
+      "status": 200,
+      "bytes": 92290
+    },
+    "walking_s46_transport.webm": {
+      "status": 200,
+      "bytes": 179622
+    }
+  },
+  "scope": "New declared acceptance and preservation/HTTP byte checks only; old cohorts remain FAIL. Membership scientific plot inspected, no browser/Windows GUI visual confirmation.",
+  "registered_training_dataset": false
+}
