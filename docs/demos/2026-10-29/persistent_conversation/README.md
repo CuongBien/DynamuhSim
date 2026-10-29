@@ -12,3 +12,13 @@ python3 tools/capture_episode.py run --run-dir experiments/social_navigation/ben
 ```
 
 Use ROS Jazzy environment and OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1. Always use a fresh path. Omit human-lifecycle-profile to retain native lifecycle.
+
+RNG scope clarification: there are no extra RNG hooks/draws and no edited vendor RNG call sites. Selecting native non-dispersing groups naturally changes which later lifecycle branches execute, and therefore can change downstream RNG consumption relative to dispersing mode. Exact random-stream/trajectory reproduction is required only for the untouched natural control, not between natural and persistent modes.
+
+## Preserved four-cell outcome
+
+**Full acceptance3/4 PASS.** Conversation membership and standing snapshot-clock contracts PASS on all three seeds46–48. Each robot goal SUCCEEDED with zero progress failure/recovery, positive swept geometric clearances, six people retained in two triplets, zero actual standing displacement. Active sidestep correction was NOT_EXERCISED; near-robot yielding was eligible but no displacement needed. Walking native-mode control also passes original query verifier and motion limits, with no conversation asset/override.
+
+conversation_s48 remains full audit FAIL clean_exit/no_child_exit_errors: after Gazebo clean exit and clean early ground_truth bridge exit, the separately launched obstacle_type_bridge parameter_bridge-8 aborts exit-11 at ROS shutdown; launch subsequently escalates. The new conversation/clock contracts are not the failing gates. Original raw result/audit/logs and derived report remain preserved. No collection profile is frozen yet. See teardown_failure.json.
+
+Next isolate stop ordering for the other ROS-launch-owned Gazebo bridges while the paused server remains alive, then validate on a separately declared revised-runtime cohort. No source tuning or retry occurred within this four-cell cohort.

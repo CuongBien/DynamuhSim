@@ -1,0 +1,683 @@
+{
+  "schema": "persistent_conversation_result/1",
+  "cases": [
+    {
+      "id": "conversation_s46",
+      "scenario": "standing",
+      "seed": 46,
+      "status": "PASS",
+      "checks": {
+        "full_capture_audit": true,
+        "ordered_bridge": true,
+        "actual_goal": true,
+        "zero_recoveries": true,
+        "robot_person_clearance": true,
+        "robot_static_clearance": true,
+        "human_clearances": true,
+        "near_coverage": true,
+        "same_frozen_protected_sources": true,
+        "same_robot_nav:assets/mecanum_camera.sdf": true,
+        "same_robot_nav:assets/mecanum_aligned.urdf": true,
+        "same_robot_nav:runtime/nav2_runtime.yaml": true,
+        "bridge_clean_before_gazebo": true,
+        "standing_trace": true,
+        "persistent_lifecycle_audit": true,
+        "snapshot_clock_audit": true,
+        "explicit_snapshot_contract": true,
+        "query_verifier_not_misreported": true,
+        "native_gt_groups_persist": true
+      },
+      "metric": {
+        "run": "experiments/social_navigation/benchmark/generated/persistent_conversation_20261029/conversation_s46",
+        "status": "SUCCEEDED",
+        "actual_goal_reached": true,
+        "xy_error_m": 0.11117648587658294,
+        "active_sim_s": 31.647499999999997,
+        "path_length_m": 8.837940472585075,
+        "world_y_min_m": -0.026638601902983682,
+        "world_y_max_m": 1.553470073415907,
+        "minimum_swept_robot_human_gap_m": 0.3278524550155576,
+        "minimum_static_gap_lower_bound_m": 0.8950561011710402,
+        "static_box_count": 42,
+        "global_plan_probe": {
+          "time_sim_s": 31.75,
+          "nearest_point_to_initial_gate_x": [
+            -22.145665935566296,
+            1.2420612227958194
+          ]
+        },
+        "native_contact_force_recorded": false,
+        "gate_A_crossings": [],
+        "passes_original_narrow_gap_A": false,
+        "rendering": "D3D12 (NVIDIA GeForce RTX 4060 Laptop GPU)",
+        "audit": "PASS",
+        "proximity": {
+          "center_threshold_m": 1.5,
+          "cumulative_duration_s": 25.11301703874603,
+          "minimum_center_distance_m": 0.8559149397642146,
+          "minimum_time_sim_s": 18.727473525469286,
+          "coverage": "EXERCISED",
+          "method": "Exact union of linear relative-motion circle intervals between consecutive native pose samples."
+        },
+        "human_safety": {
+          "minimum_swept_human_human_gap_m": 0.5270765814495868,
+          "minimum_human_static_lower_bound_m": 1.6164617092752032
+        },
+        "native_human_full": {
+          "duration_s": 31.644999999999996,
+          "yaw_total_turns": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "path_m": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        "progress_failure_count": 0,
+        "max_action_recoveries": 0
+      },
+      "bridge": {
+        "status": "OBSERVED",
+        "clean": true,
+        "initial": {
+          "pid": 16535,
+          "command": "/opt/ros/jazzy/lib/ros_gz_bridge/parameter_bridge /common/ground_truth@std_msgs/msg/String[gz.msgs.StringMsg --ros-args -r __node:=nav2_pilot_ground_truth_bridge "
+        },
+        "signal": "SIGINT",
+        "record": "[INFO] [parameter_bridge-9]: process has finished cleanly [pid 16535]"
+      },
+      "runtime_commit": "542d116a6706c241b6184b711f9fbf36b96061b2",
+      "native_spread": {
+        "max_member_centroid_radius_m": 0.7200000000000004,
+        "group_samples": 3166,
+        "alignment_skips": 0
+      },
+      "standing_trace": {
+        "status": "PASS",
+        "active_steps": 355,
+        "bad_steps": [],
+        "max_step_speed_mps": 0.0,
+        "max_step_yaw_rate_rad_s": 2.220446049250321e-15,
+        "max_displacement_from_initial_m": 0.0,
+        "scope": "Independent before/after displacement and yaw plus near-robot set reconstruction. Total displacement is descriptive, not a gated limit."
+      },
+      "native_lifecycle": {
+        "grouped_member_min": 6,
+        "grouped_member_max": 6
+      },
+      "clock_coverage": {
+        "contract": "standing_snapshot_v1",
+        "active_steps": 355,
+        "human_age_snapshots": 2130,
+        "evaluations": 0,
+        "assignments": 0,
+        "arrival_expiry_query_coverage": "NOT_EXERCISED",
+        "last_state_time_sim_s": 47.4025
+      },
+      "yielding_observation": {
+        "steps_with_near_yielding_enabled": 232,
+        "max_actual_displacement_from_start_m": 0.0,
+        "active_sidestep_correction_exercised": false,
+        "scope": "Near-robot eligibility is not proof that displacement correction was exercised."
+      }
+    },
+    {
+      "id": "conversation_s47",
+      "scenario": "standing",
+      "seed": 47,
+      "status": "PASS",
+      "checks": {
+        "full_capture_audit": true,
+        "ordered_bridge": true,
+        "actual_goal": true,
+        "zero_recoveries": true,
+        "robot_person_clearance": true,
+        "robot_static_clearance": true,
+        "human_clearances": true,
+        "near_coverage": true,
+        "same_frozen_protected_sources": true,
+        "same_robot_nav:assets/mecanum_camera.sdf": true,
+        "same_robot_nav:assets/mecanum_aligned.urdf": true,
+        "same_robot_nav:runtime/nav2_runtime.yaml": true,
+        "bridge_clean_before_gazebo": true,
+        "standing_trace": true,
+        "persistent_lifecycle_audit": true,
+        "snapshot_clock_audit": true,
+        "explicit_snapshot_contract": true,
+        "query_verifier_not_misreported": true,
+        "native_gt_groups_persist": true
+      },
+      "metric": {
+        "run": "experiments/social_navigation/benchmark/generated/persistent_conversation_20261029/conversation_s47",
+        "status": "SUCCEEDED",
+        "actual_goal_reached": true,
+        "xy_error_m": 0.08003195139151402,
+        "active_sim_s": 31.755000000000003,
+        "path_length_m": 8.876946401739655,
+        "world_y_min_m": -0.04033736236164772,
+        "world_y_max_m": 1.5222831653686921,
+        "minimum_swept_robot_human_gap_m": 0.3298565604225129,
+        "minimum_static_gap_lower_bound_m": 0.9108380086738669,
+        "static_box_count": 42,
+        "global_plan_probe": {
+          "time_sim_s": 31.43,
+          "nearest_point_to_initial_gate_x": [
+            -22.208392401320275,
+            1.2799830818623954
+          ]
+        },
+        "native_contact_force_recorded": false,
+        "gate_A_crossings": [],
+        "passes_original_narrow_gap_A": false,
+        "rendering": "D3D12 (NVIDIA GeForce RTX 4060 Laptop GPU)",
+        "audit": "PASS",
+        "proximity": {
+          "center_threshold_m": 1.5,
+          "cumulative_duration_s": 25.364476942593143,
+          "minimum_center_distance_m": 0.8579190451711699,
+          "minimum_time_sim_s": 18.386575249887073,
+          "coverage": "EXERCISED",
+          "method": "Exact union of linear relative-motion circle intervals between consecutive native pose samples."
+        },
+        "human_safety": {
+          "minimum_swept_human_human_gap_m": 0.5270765814495868,
+          "minimum_human_static_lower_bound_m": 1.6164617092752032
+        },
+        "native_human_full": {
+          "duration_s": 31.740000000000002,
+          "yaw_total_turns": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "path_m": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        "progress_failure_count": 0,
+        "max_action_recoveries": 0
+      },
+      "bridge": {
+        "status": "OBSERVED",
+        "clean": true,
+        "initial": {
+          "pid": 17132,
+          "command": "/opt/ros/jazzy/lib/ros_gz_bridge/parameter_bridge /common/ground_truth@std_msgs/msg/String[gz.msgs.StringMsg --ros-args -r __node:=nav2_pilot_ground_truth_bridge "
+        },
+        "signal": "SIGINT",
+        "record": "[INFO] [parameter_bridge-9]: process has finished cleanly [pid 17132]"
+      },
+      "runtime_commit": "542d116a6706c241b6184b711f9fbf36b96061b2",
+      "native_spread": {
+        "max_member_centroid_radius_m": 0.7200000000000004,
+        "group_samples": 3176,
+        "alignment_skips": 0
+      },
+      "standing_trace": {
+        "status": "PASS",
+        "active_steps": 356,
+        "bad_steps": [],
+        "max_step_speed_mps": 0.0,
+        "max_step_yaw_rate_rad_s": 2.220446049250321e-15,
+        "max_displacement_from_initial_m": 0.0,
+        "scope": "Independent before/after displacement and yaw plus near-robot set reconstruction. Total displacement is descriptive, not a gated limit."
+      },
+      "native_lifecycle": {
+        "grouped_member_min": 6,
+        "grouped_member_max": 6
+      },
+      "clock_coverage": {
+        "contract": "standing_snapshot_v1",
+        "active_steps": 356,
+        "human_age_snapshots": 2136,
+        "evaluations": 0,
+        "assignments": 0,
+        "arrival_expiry_query_coverage": "NOT_EXERCISED",
+        "last_state_time_sim_s": 47.3025
+      },
+      "yielding_observation": {
+        "steps_with_near_yielding_enabled": 235,
+        "max_actual_displacement_from_start_m": 0.0,
+        "active_sidestep_correction_exercised": false,
+        "scope": "Near-robot eligibility is not proof that displacement correction was exercised."
+      }
+    },
+    {
+      "id": "conversation_s48",
+      "scenario": "standing",
+      "seed": 48,
+      "status": "FAIL",
+      "checks": {
+        "full_capture_audit": false,
+        "ordered_bridge": true,
+        "actual_goal": true,
+        "zero_recoveries": true,
+        "robot_person_clearance": true,
+        "robot_static_clearance": true,
+        "human_clearances": true,
+        "near_coverage": true,
+        "same_frozen_protected_sources": true,
+        "same_robot_nav:assets/mecanum_camera.sdf": true,
+        "same_robot_nav:assets/mecanum_aligned.urdf": true,
+        "same_robot_nav:runtime/nav2_runtime.yaml": true,
+        "bridge_clean_before_gazebo": true,
+        "standing_trace": true,
+        "persistent_lifecycle_audit": true,
+        "snapshot_clock_audit": true,
+        "explicit_snapshot_contract": true,
+        "query_verifier_not_misreported": true,
+        "native_gt_groups_persist": true
+      },
+      "metric": {
+        "run": "experiments/social_navigation/benchmark/generated/persistent_conversation_20261029/conversation_s48",
+        "status": "SUCCEEDED",
+        "actual_goal_reached": true,
+        "xy_error_m": 0.08025564381864603,
+        "active_sim_s": 32.05,
+        "path_length_m": 8.898323542259615,
+        "world_y_min_m": -0.053662523072780875,
+        "world_y_max_m": 1.5442486285345363,
+        "minimum_swept_robot_human_gap_m": 0.33020740893313905,
+        "minimum_static_gap_lower_bound_m": 0.8930883490628642,
+        "static_box_count": 42,
+        "global_plan_probe": {
+          "time_sim_s": 30.8025,
+          "nearest_point_to_initial_gate_x": [
+            -22.214647040045328,
+            1.285783842098845
+          ]
+        },
+        "native_contact_force_recorded": false,
+        "gate_A_crossings": [],
+        "passes_original_narrow_gap_A": false,
+        "rendering": "D3D12 (NVIDIA GeForce RTX 4060 Laptop GPU)",
+        "audit": "FAIL",
+        "proximity": {
+          "center_threshold_m": 1.5,
+          "cumulative_duration_s": 25.356577738676982,
+          "minimum_center_distance_m": 0.8582698936817961,
+          "minimum_time_sim_s": 18.2692403584659,
+          "coverage": "EXERCISED",
+          "method": "Exact union of linear relative-motion circle intervals between consecutive native pose samples."
+        },
+        "human_safety": {
+          "minimum_swept_human_human_gap_m": 0.5270765814495868,
+          "minimum_human_static_lower_bound_m": 1.6164617092752032
+        },
+        "native_human_full": {
+          "duration_s": 32.05,
+          "yaw_total_turns": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "path_m": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        "progress_failure_count": 0,
+        "max_action_recoveries": 0
+      },
+      "bridge": {
+        "status": "OBSERVED",
+        "clean": true,
+        "initial": {
+          "pid": 17724,
+          "command": "/opt/ros/jazzy/lib/ros_gz_bridge/parameter_bridge /common/ground_truth@std_msgs/msg/String[gz.msgs.StringMsg --ros-args -r __node:=nav2_pilot_ground_truth_bridge "
+        },
+        "signal": "SIGINT",
+        "record": "[INFO] [parameter_bridge-9]: process has finished cleanly [pid 17724]"
+      },
+      "runtime_commit": "542d116a6706c241b6184b711f9fbf36b96061b2",
+      "native_spread": {
+        "max_member_centroid_radius_m": 0.7200000000000004,
+        "group_samples": 3206,
+        "alignment_skips": 0
+      },
+      "standing_trace": {
+        "status": "PASS",
+        "active_steps": 359,
+        "bad_steps": [],
+        "max_step_speed_mps": 0.0,
+        "max_step_yaw_rate_rad_s": 2.220446049250321e-15,
+        "max_displacement_from_initial_m": 0.0,
+        "scope": "Independent before/after displacement and yaw plus near-robot set reconstruction. Total displacement is descriptive, not a gated limit."
+      },
+      "native_lifecycle": {
+        "grouped_member_min": 6,
+        "grouped_member_max": 6
+      },
+      "clock_coverage": {
+        "contract": "standing_snapshot_v1",
+        "active_steps": 359,
+        "human_age_snapshots": 2154,
+        "evaluations": 0,
+        "assignments": 0,
+        "arrival_expiry_query_coverage": "NOT_EXERCISED",
+        "last_state_time_sim_s": 46.9025
+      },
+      "yielding_observation": {
+        "steps_with_near_yielding_enabled": 234,
+        "max_actual_displacement_from_start_m": 0.0,
+        "active_sidestep_correction_exercised": false,
+        "scope": "Near-robot eligibility is not proof that displacement correction was exercised."
+      }
+    },
+    {
+      "id": "walking_native_s46",
+      "scenario": "walking",
+      "seed": 46,
+      "status": "PASS",
+      "checks": {
+        "full_capture_audit": true,
+        "ordered_bridge": true,
+        "actual_goal": true,
+        "zero_recoveries": true,
+        "robot_person_clearance": true,
+        "robot_static_clearance": true,
+        "human_clearances": true,
+        "near_coverage": true,
+        "same_frozen_protected_sources": true,
+        "same_robot_nav:assets/mecanum_camera.sdf": true,
+        "same_robot_nav:assets/mecanum_aligned.urdf": true,
+        "same_robot_nav:runtime/nav2_runtime.yaml": true,
+        "bridge_clean_before_gazebo": true,
+        "initial_intent": true,
+        "yaw_rate_limit": true,
+        "cohesion_limit": true,
+        "backwards_limit": true,
+        "original_query_verifier_used": true,
+        "natural_lifecycle_not_overridden": true
+      },
+      "metric": {
+        "run": "experiments/social_navigation/benchmark/generated/persistent_conversation_20261029/walking_native_s46",
+        "status": "SUCCEEDED",
+        "actual_goal_reached": true,
+        "xy_error_m": 0.05346386497266001,
+        "active_sim_s": 31.09,
+        "path_length_m": 8.419584843120717,
+        "world_y_min_m": -1.2349448170837836,
+        "world_y_max_m": 0.026564152016849845,
+        "minimum_swept_robot_human_gap_m": 0.1244191977193766,
+        "minimum_static_gap_lower_bound_m": 1.6096433322785055,
+        "static_box_count": 42,
+        "global_plan_probe": {
+          "time_sim_s": 31.4025,
+          "nearest_point_to_initial_gate_x": [
+            -22.117046282615362,
+            -0.4299195898902563
+          ]
+        },
+        "native_contact_force_recorded": false,
+        "gate_A_crossings": [],
+        "passes_original_narrow_gap_A": false,
+        "rendering": "D3D12 (NVIDIA GeForce RTX 4060 Laptop GPU)",
+        "id": "walking_native_s46",
+        "kind": "social",
+        "encounter_profile": "head_on",
+        "human_motion_profile": "group_cohesion_v2",
+        "audit": "PASS",
+        "proximity": {
+          "center_threshold_m": 1.5,
+          "cumulative_duration_s": 11.064305618905463,
+          "minimum_center_distance_m": 0.6524816824680336,
+          "minimum_time_sim_s": 15.24290048348091,
+          "coverage": "EXERCISED",
+          "method": "Exact union of linear relative-motion circle intervals between consecutive native pose samples."
+        },
+        "native_human_first12": {
+          "duration_s": 11.992500000000001,
+          "yaw_total_turns": [
+            0.9164180501694013,
+            0.4402145421054324,
+            0.5579326723362734,
+            0.5278448478199528,
+            0.435483021490653,
+            0.38019268911566395
+          ],
+          "path_m": [
+            4.10269748778142,
+            3.61938623578418,
+            3.286589250834691,
+            6.867192675378775,
+            7.24329880520464,
+            6.566378927071646
+          ]
+        },
+        "native_human_full": {
+          "duration_s": 31.074999999999996,
+          "yaw_total_turns": [
+            1.7452096750338113,
+            0.4999886398202782,
+            0.7519531201573328,
+            1.271240545861649,
+            0.8748859528936729,
+            0.525863838746992
+          ],
+          "path_m": [
+            13.713661681074047,
+            12.67526962000673,
+            13.661162505134747,
+            14.739979539642976,
+            16.93582073448011,
+            15.799465792982659
+          ]
+        },
+        "human_safety": {
+          "minimum_swept_human_human_gap_m": 0.040057005221804554,
+          "minimum_human_static_lower_bound_m": 0.03687558155680121
+        },
+        "worker": {
+          "worker_first12": {
+            "samples": 120,
+            "time_span_s": 11.899999999999999,
+            "yaw_total_rad": [
+              5.748363444556986,
+              2.7601312580189727,
+              3.5056933510671335,
+              3.379971048834412,
+              2.7459183954444324,
+              2.387844863427829
+            ],
+            "yaw_total_turns": [
+              0.9148804568899986,
+              0.4392885332961711,
+              0.5579484257867255,
+              0.5379390999294946,
+              0.4370264859619472,
+              0.3800373133511307
+            ],
+            "path_m": [
+              4.101353639334244,
+              3.5978241660302293,
+              3.2734335139511073,
+              6.883810647442217,
+              7.217356111932184,
+              6.566790848340518
+            ],
+            "yaw_rad_per_m": [
+              1.4015771255194895,
+              0.7671668015573004,
+              1.070952972200643,
+              0.49100290840950006,
+              0.3804604280097401,
+              0.3636243210077655
+            ],
+            "moving_heading_error_median_deg": 8.16173960764466,
+            "moving_backwards_fraction": 0.07951070336391437,
+            "moving_group_member_radius_max_m": 1.6101625509852027,
+            "moving_group_member_radius_median_m": 0.9506638555906788,
+            "minimum_sampled_human_human_gap_m": 0.04013990084596786
+          },
+          "worker_full": {
+            "samples": 311,
+            "time_span_s": 31.000000000000004,
+            "yaw_total_rad": [
+              10.954504455540814,
+              3.1464218364273018,
+              4.72495581685256,
+              7.980993789759755,
+              5.492959868573699,
+              3.2988530117733728
+            ],
+            "yaw_total_turns": [
+              1.7434635332215123,
+              0.5007685883196841,
+              0.752000074142889,
+              1.2702146124259839,
+              0.874231715288912,
+              0.5250287633573187
+            ],
+            "path_m": [
+              13.741048054663565,
+              12.689751861136653,
+              13.677265379624634,
+              14.767689241944032,
+              16.935499929292217,
+              15.816319758609596
+            ],
+            "yaw_rad_per_m": [
+              0.797210257322619,
+              0.24794983155371714,
+              0.3454605643531232,
+              0.5404361954673099,
+              0.3243458942167328,
+              0.20857273133831564
+            ],
+            "moving_heading_error_median_deg": 9.187449954972417,
+            "moving_backwards_fraction": 0.04360298336201951,
+            "moving_group_member_radius_max_m": 1.6101625509852027,
+            "moving_group_member_radius_median_m": 1.0043711819544932,
+            "minimum_sampled_human_human_gap_m": 0.040061586782680014
+          },
+          "initial_direction_union_duration_first12_s": 11.999999999999973,
+          "initial_intent_executed": true,
+          "per_group_initial_goal_progress_duration_first12_s": {
+            "1,2,3": 4.699999999999999,
+            "4,5,6": 9.89999999999998
+          },
+          "native_group_goal_changes": [
+            {
+              "time_after_goal_s": 4.739999999999998,
+              "members": [
+                1,
+                2,
+                3
+              ],
+              "previous": [
+                -28.2,
+                0.35
+              ],
+              "goal": [
+                -15.265221318727475,
+                15.55385282684746
+              ],
+              "reported_goal_ages_wall_s": {
+                "1": 0.15613985061645508,
+                "2": 0.1561272144317627,
+                "3": 0.15612173080444336,
+                "4": 30.61871576309204,
+                "5": 30.61871576309204,
+                "6": 30.61871600151062
+              }
+            },
+            {
+              "time_after_goal_s": 9.939999999999998,
+              "members": [
+                4,
+                5,
+                6
+              ],
+              "previous": [
+                -27.5,
+                -0.35
+              ],
+              "goal": [
+                -13.435479222011587,
+                -17.288195150155587
+              ],
+              "reported_goal_ages_wall_s": {
+                "1": 12.51015019416809,
+                "2": 12.510137796401978,
+                "3": 12.5101318359375,
+                "4": 0.11526012420654297,
+                "5": 0.11525416374206543,
+                "6": 0.11525154113769531
+              }
+            }
+          ],
+          "max_reported_native_goal_age_wall_s": 66.0059335231781,
+          "scope": "Native goals may complete or expire by host wall time; target-change logs alone do not identify which condition fired."
+        },
+        "progress_failure_count": 0,
+        "max_action_recoveries": 0,
+        "physical_pass": true,
+        "recovery_free": true,
+        "encounter_screen_pass": true
+      },
+      "bridge": {
+        "status": "OBSERVED",
+        "clean": true,
+        "initial": {
+          "pid": 18320,
+          "command": "/opt/ros/jazzy/lib/ros_gz_bridge/parameter_bridge /common/ground_truth@std_msgs/msg/String[gz.msgs.StringMsg --ros-args -r __node:=nav2_pilot_ground_truth_bridge "
+        },
+        "signal": "SIGINT",
+        "record": "[INFO] [parameter_bridge-9]: process has finished cleanly [pid 18320]"
+      },
+      "runtime_commit": "542d116a6706c241b6184b711f9fbf36b96061b2",
+      "native_spread": {
+        "max_member_centroid_radius_m": 1.6101625509852018,
+        "group_samples": 3106,
+        "alignment_skips": 0
+      },
+      "walking_motion": {
+        "mean_yaw_rate_turns_s": 0.030405694676930745,
+        "moving_backwards_fraction": 0.04360298336201951,
+        "limits": {
+          "max_mean_yaw_rate_turns_s": 0.07490851102688245,
+          "max_member_centroid_radius_m": 1.8443939879820748,
+          "max_moving_backwards_fraction": 0.05481099656357388,
+          "reference_id": "head_on_group_sim",
+          "reference_seed": 45
+        },
+        "scope": "Fixed historical seed45 absolute limits, not matched-seed improvement."
+      },
+      "native_lifecycle": {
+        "grouped_member_min": 6,
+        "grouped_member_max": 6
+      }
+    }
+  ],
+  "errors": [],
+  "training_ready": false,
+  "defaults_promoted": false,
+  "status": "FAIL",
+  "bounded_collection_profile_eligible": false,
+  "protected_sources_unchanged": true
+}

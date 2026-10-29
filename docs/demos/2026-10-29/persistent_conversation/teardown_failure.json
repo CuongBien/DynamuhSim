@@ -1,0 +1,34 @@
+{
+  "id": "conversation_s48",
+  "audit": "FAIL",
+  "failed_checks": [
+    "clean_exit",
+    "no_child_exit_errors"
+  ],
+  "events": [
+    "[ERROR] [parameter_bridge-8]: process has died [pid 17723, exit code -11, cmd '/opt/ros/jazzy/lib/ros_gz_bridge/parameter_bridge /obstacle_type@std_msgs/msg/String]gz.msgs.StringMsg /obstacle_type/status@std_msgs/msg/String[gz.msgs.StringMsg --ros-args -r __node:=obstacle_type_bridge'].",
+    "[ERROR] [gz-1]: process[gz-1] failed to terminate '5' seconds after receiving 'SIGINT', escalating to 'SIGTERM'",
+    "[ERROR] [gz-1]: process[gz-1] failed to terminate '10.0' seconds after receiving 'SIGTERM', escalating to 'SIGKILL'"
+  ],
+  "ros_launch_shutdown": {
+    "status": "ESCALATED",
+    "returncode": -15,
+    "signal_scope": "process group fallback after launch grace period",
+    "gazebo_exit": {
+      "status": "OBSERVED",
+      "clean": true,
+      "record": "[INFO] [gz-1]: process has finished cleanly [pid 17716]"
+    }
+  },
+  "ground_truth_shutdown": {
+    "status": "OBSERVED",
+    "clean": true,
+    "initial": {
+      "pid": 17724,
+      "command": "/opt/ros/jazzy/lib/ros_gz_bridge/parameter_bridge /common/ground_truth@std_msgs/msg/String[gz.msgs.StringMsg --ros-args -r __node:=nav2_pilot_ground_truth_bridge "
+    },
+    "signal": "SIGINT",
+    "record": "[INFO] [parameter_bridge-9]: process has finished cleanly [pid 17724]"
+  },
+  "scope": "Conversation membership and snapshot clock both PASS. Separate obstacle_type_bridge abort during later teardown makes full acceptance FAIL. Original remains FAIL; no profile promotion."
+}
