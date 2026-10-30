@@ -1,0 +1,127 @@
+{
+  "schema": "depth_detector_branch_review/1",
+  "review_date": "2026-10-30",
+  "current_branch": "test/gazebo-harmonic-benchmark",
+  "current_commit": "4d0a4b34edbe85ff88ef291b52d2f1eff790c000",
+  "reviewed_branch": "origin/feat/depth-person-detector",
+  "reviewed_commit": "70bcda0e26ff86b3389a49295feda3ef72958b1d",
+  "merge_base": "9833565fa546d55cb0e553f8388bf4a703c59583",
+  "execution": "isolated git archive snapshot in /tmp; system Python3; CPU thread caps=1; no installs, simulator, training, checkout or actual merge",
+  "tests": {
+    "test_integrated_pipeline.py": {
+      "exit_code": 0,
+      "log": "test_integrated_pipeline.log"
+    },
+    "benchmark_scenarios.py": {
+      "exit_code": 0,
+      "log": "benchmark_scenarios.log"
+    },
+    "evaluate_multi_environments.py": {
+      "exit_code": 0,
+      "log": "evaluate_multi_environments.log"
+    }
+  },
+  "merge_tree_exit_code": 1,
+  "merge_status": "CONFLICT; analysis only",
+  "model_weights_changed": false,
+  "identity_guard_changed": false,
+  "world_assets_changed": false,
+  "targeted_reproductions": {
+    "inference_exception": {
+      "injected": "classifier.predict raises RuntimeError",
+      "output_score": 0.575,
+      "output_is_person": true,
+      "status": "FAIL_OPEN_REPRODUCED"
+    },
+    "16UC1": {
+      "input_mm": 2000,
+      "cv_bridge_passthrough_pipeline_value": 2000.0,
+      "fallback_pipeline_value": 2.0,
+      "expected_meters": 2.0,
+      "method": "actual on_depth AST with stub bridge/pipeline; no ROS node started"
+    },
+    "current_layout_pipeline_import": {
+      "status": "PASS",
+      "method": "tracked current canonical perception directories + three proposed files overlaid in isolated /tmp; import integrated_pipeline"
+    },
+    "recorded_frame_smoke": {
+      "calibration": "recorded CameraInfo + optical_to_base_link",
+      "odom": "zero pose for independent per-frame smoke only; not a tracking evaluation",
+      "ground_truth_evaluation": false,
+      "frames": [
+        {
+          "episode": "pilot_conversation",
+          "frame": 0,
+          "tracks": 0,
+          "latency_ms": 10.011
+        },
+        {
+          "episode": "pilot_conversation",
+          "frame": 232,
+          "tracks": 1,
+          "latency_ms": 33.291
+        },
+        {
+          "episode": "pilot_conversation",
+          "frame": 463,
+          "tracks": 0,
+          "latency_ms": 5.256
+        },
+        {
+          "episode": "pilot_walking",
+          "frame": 0,
+          "tracks": 0,
+          "latency_ms": 8.998
+        },
+        {
+          "episode": "pilot_walking",
+          "frame": 223,
+          "tracks": 0,
+          "latency_ms": 11.418
+        },
+        {
+          "episode": "pilot_walking",
+          "frame": 445,
+          "tracks": 0,
+          "latency_ms": 6.909
+        }
+      ]
+    }
+  },
+  "calibration_comparison": {
+    "node": {
+      "width_assumed": 640,
+      "height_assumed": 480,
+      "fx": 386.0,
+      "fy": 386.0,
+      "cx": 320.0,
+      "cy": 240.0,
+      "camera_translation_base_m": [
+        0.08,
+        0.0,
+        0.28
+      ]
+    },
+    "current_pilot": {
+      "width": 424,
+      "height": 240,
+      "fx": 223.40148705705286,
+      "fy": 223.40148705705283,
+      "cx": 212.0,
+      "cy": 120.0,
+      "camera_translation_base_m": [
+        0.12,
+        0.0,
+        0.08
+      ]
+    }
+  },
+  "decision": "NEEDS_CHANGES_BEFORE_CURRENT_RUNTIME_INTEGRATION",
+  "merged": false,
+  "limitations": [
+    "Synthetic benchmark scores count-only, not spatial object detection or realistic sensor validation",
+    "No original classifier held-out test was reopened",
+    "Six existing pilot frames are execution smoke only, no recall estimate",
+    "No GUI/RViz/Gazebo or installed ROS-node validation performed"
+  ]
+}
