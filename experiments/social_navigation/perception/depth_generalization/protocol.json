@@ -1,0 +1,68 @@
+{
+  "schema": "depth_generalization_ablation/1",
+  "date": "2026-10-30",
+  "reviewed_commit": "70bcda0e26ff86b3389a49295feda3ef72958b1d",
+  "scope": "existing pilot only; no held-out test tuning; no new capture",
+  "episodes": [
+    "pilot_conversation",
+    "pilot_walking"
+  ],
+  "stride": 4,
+  "odom_max_age_ns": 150000000,
+  "variants": [
+    "legacy_2d_classifier",
+    "generalized_3d_classifier",
+    "three_d_no_prior_045",
+    "three_d_no_prior_050"
+  ],
+  "legacy_2d_classifier_threshold": 0.5,
+  "generalized_3d_classifier_threshold": 0.45,
+  "pair_gate_m": 0.6,
+  "pair_ambiguity_margin_m": 0.15,
+  "gt_max_bracket_ns": 100000000,
+  "sensor_supported_gt_proxy": {
+    "xy_radius_m": 0.4,
+    "min_depth_points": 18,
+    "z_range_m": [
+      0.06,
+      1.95
+    ]
+  },
+  "latency": "per-frame point projection + detection + tracking, not ROS/display; thread caps 1",
+  "promotion_gate": {
+    "paired_retention_min": 0.95,
+    "unpaired_must_not_increase": true,
+    "id_switches_must_not_increase": true,
+    "latency_p95_max_ms": 50
+  },
+  "metric_limit": "Geometric pairing only; cylinder support is an approximate visibility proxy, not pixel-instance semantic truth",
+  "training_authorized": false,
+  "new_detector_default": false,
+  "branch": "feat/depth-detector-generalization",
+  "base_commit": "dd7a2b03d9fe40841052c0db6c7dc52619e13e67",
+  "variant_policy": {
+    "legacy_2d_classifier": "Frozen 2D proposals + original classifier at 0.50",
+    "generalized_3d_classifier": "Frozen 3D proposals + original score prior at 0.45",
+    "three_d_no_prior_045": "Exactly same 3D proposals/classifier; base score >=0.45, no multiplicative prior",
+    "three_d_no_prior_050": "Same no-prior branch, fixed 0.50 score-matched control; not tuned"
+  },
+  "roles": {
+    "pilot_conversation": "opened development/regression only",
+    "pilot_walking": "opened development/regression only"
+  },
+  "no_new_capture": true,
+  "old_classifier_test_reopened": false,
+  "train_performed": false,
+  "stop_rule": "One fixed run of four variants; report all outcomes, no confidence sweep or per-scene fitting",
+  "stage_policy": "3D pre-planar proposals include envelope/density/size/torso cropping. Stage GT set losses/gains are reported; no claim of pure clustering attribution.",
+  "local_candidate_gate": {
+    "paired_retention_min": 0.95,
+    "unpaired_not_increased": true,
+    "id_switches_not_increased": true,
+    "fragmentation_not_increased": true
+  },
+  "training_candidate_rule": "Keep 3D proposal provider only if no_prior_050 satisfies local gate on both episodes; otherwise use high-recall legacy 2D proposals for a learned point encoder candidate. Neither condition authorizes training or deployment.",
+  "generalization_gate": "Local same-avatar results cannot pass generalization. Fresh scene+asset-family splits and proper labels required.",
+  "future_classifier": "One small PointNet-style binary head on observed XYZ patches; baseline depth_linear remains comparator. No pre-trained person weights or accuracy claim.",
+  "promotion_to_default": false
+}
