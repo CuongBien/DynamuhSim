@@ -1,3 +1,5 @@
+> **Bàn giao detector hiện tại:** [context và công việc tiếp theo](docs/DETECTOR_HANDOVER.md) · [báo cáo localhost và cách mở lại](docs/LOCAL_REPORTS.md).
+
 > Nhánh thử nghiệm **feat/depth-detector-generalization**: [kết quả ablation, benchmark contract và ứng viên train](docs/DEPTH_GENERALIZATION.md). [Báo cáo localhost](http://localhost:35315/depth_generalization_v1/index.html). Nhánh này không sửa workspace MuJoCo và chưa chứng nhận generalization.
 
 # DynamuhSim 🤖
