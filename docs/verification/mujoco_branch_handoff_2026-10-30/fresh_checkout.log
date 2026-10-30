@@ -1,0 +1,149 @@
+{
+  "schema": "mujoco_receiver_preflight/1",
+  "status": "PASS",
+  "scope": "CODE_AND_DATA_CHECKS",
+  "branch": "feat/mujoco-backend",
+  "head": "04e38dab651dbc17e6d5ce5a58642d55c5dd015d",
+  "checks": {
+    "reference_ancestry": {
+      "status": "PASS",
+      "reference_commit": "dd7a2b03d9fe40841052c0db6c7dc52619e13e67",
+      "note": "A shallow clone may need additional Git history"
+    },
+    "protected_baseline": {
+      "status": "PASS",
+      "reference_commit": "121a727",
+      "protected_files": 116,
+      "failures": [],
+      "scope": "Protected accepted source/evidence bytes only; not a new simulator run",
+      "exit_code": 0
+    },
+    "data_dependencies": {
+      "status": "PASS",
+      "scope": "data",
+      "checks": [
+        {
+          "name": "python>=3.10",
+          "status": "PASS",
+          "value": "3.12.3 (main, Aug 31 2026, 10:18:26) [GCC 13.3.0]"
+        },
+        {
+          "name": "numpy",
+          "status": "PASS",
+          "version": "1.26.4"
+        }
+      ],
+      "validated_reference_python": "3.12.3",
+      "actual_rendering_test": "NOT_RUN",
+      "new_simulator_runs": 0,
+      "meaning": "NumPy reader and portable package checks only",
+      "auto_install": false,
+      "exit_code": 0
+    },
+    "contract_smoke": {
+      "status": "PASS",
+      "modules": [
+        "test_dataset_normalization",
+        "test_goal_clock",
+        "test_persistent_conversation",
+        "test_worker_readiness",
+        "test_transport_shutdown",
+        "test_handoff_pilot",
+        "test_portable_reader"
+      ],
+      "output": "......................................\n----------------------------------------------------------------------\nRan 38 tests in 0.054s\n\nOK\n",
+      "new_simulator_runs": 0,
+      "exit_code": 0
+    },
+    "portable_data": {
+      "status": "PASS",
+      "dataset": "/tmp/mujoco-receiver-checkout-yl1n6gwk/received_data/handoff_data_pilot01",
+      "integrity": {
+        "status": "PASS",
+        "files": 41,
+        "inventory_sha256": "16973133d9c4b66883462b93f5c137f7340d1f6a532022a35ba76a1d7fd04406"
+      },
+      "inspector": {
+        "status": "PASS",
+        "ROS_imported": false,
+        "episodes": [
+          {
+            "episode": "pilot_conversation",
+            "split": "pilot_only",
+            "windows": 264,
+            "example_index": 132,
+            "depth_history": [
+              20,
+              240,
+              424
+            ],
+            "scan_history": [
+              20,
+              360
+            ],
+            "imu_history": [
+              20,
+              10
+            ],
+            "odom_history": [
+              20,
+              9
+            ],
+            "action_condition": [
+              30,
+              3
+            ],
+            "future_bev": [
+              3,
+              64,
+              64
+            ],
+            "wm_target_valid": true,
+            "training_authorized": false
+          },
+          {
+            "episode": "pilot_walking",
+            "split": "pilot_only",
+            "windows": 253,
+            "example_index": 126,
+            "depth_history": [
+              20,
+              240,
+              424
+            ],
+            "scan_history": [
+              20,
+              360
+            ],
+            "imu_history": [
+              20,
+              10
+            ],
+            "odom_history": [
+              20,
+              9
+            ],
+            "action_condition": [
+              30,
+              3
+            ],
+            "future_bev": [
+              3,
+              64,
+              64
+            ],
+            "wm_target_valid": true,
+            "training_authorized": false
+          }
+        ]
+      },
+      "new_simulator_runs": 0,
+      "training_ready": false,
+      "exit_code": 0
+    }
+  },
+  "mujoco_backend": "NOT_IMPLEMENTED",
+  "simulator_started": false,
+  "software_installed": false,
+  "training_authorized": false
+}

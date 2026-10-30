@@ -177,3 +177,7 @@ Sau M6 mới chốt variation/seeds/train-validation-test split để thu batch.
 - Current limitations: một nhà xưởng/cùng avatar, chưa chứng minh tổng quát; detector3D FAIL, H1–H5/association/reward masked; conversation active sidestep và arrival/expiry query chưa được exercise. Bằng chứng Gazebo cũ không tự trở thành MuJoCo PASS.
 
 [Trang vào gốc](../README.md) · [Ranh giới backend](BACKEND_BOUNDARY.md) · [Data contract đã đóng băng](HANDOFF_MUJOCO.md) · [Setup chi tiết](HANDOFF_SETUP.md).
+
+## Biên bản chuẩn bị nhánh
+
+[Xác minh bằng checkout sạch và NumPy-only](verification/mujoco_branch_handoff_2026-10-30/README.md). Đây là nghiệm thu setup/code/data handoff, không phải nghiệm thu backend MuJoCo.

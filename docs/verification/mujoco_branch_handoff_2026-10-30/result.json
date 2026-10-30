@@ -1,0 +1,26 @@
+{
+  "schema": "mujoco_branch_handoff_acceptance/1",
+  "date": "2026-10-30",
+  "status": "PASS",
+  "branch": "feat/mujoco-backend",
+  "implementation_commit": "04e38dab651dbc17e6d5ce5a58642d55c5dd015d",
+  "reference_commit": "dd7a2b03d9fe40841052c0db6c7dc52619e13e67",
+  "reference_local_branch_unchanged": true,
+  "reference_github_branch_unchanged": true,
+  "protected_baseline": {
+    "status": "PASS",
+    "reference_commit": "121a727",
+    "protected_files": 116,
+    "failures": [],
+    "scope": "Protected accepted source/evidence bytes only; not a new simulator run"
+  },
+  "unexpected_original_file_changes": [],
+  "missing_local_links": [],
+  "new_workspace": "Scaffold only; M1-M6 NOT_STARTED; no MuJoCo implementation or pinned runtime yet",
+  "minimal_environment": "Python3.12.3 + NumPy1.26.4 in an isolated /tmp venv; 38 contract tests PASS",
+  "fresh_checkout": "PASS; ignored vendor/venv/install/build/raw absent; separate ZIP restored and 517windows/41files verified without ROS import",
+  "python_venv_note": "Reference machine lacks ensurepip; --without-pip plus pip --python fallback tested; normal venv command requires python3.12-venv",
+  "new_simulator_runs": 0,
+  "training_performed": false,
+  "scope_limit": "Local clean clone borrowing Git objects, same host; not a fresh-OS installation, native Gazebo rerun, or MuJoCo acceptance"
+}
