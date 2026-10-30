@@ -54,3 +54,7 @@ Người tiếp nhận bắt đầu MuJoCo ở boundary đã ghi,giữ contract 
 ## Nghiệm thu vòng chuẩn bị
 
 [Biên bản setup](verification/handoff_setup_2026-10-29/README.md):310unit tests OK (2skip),38contract smoke tests,doctor đủ3scope,fresh ZIP restore+loader PASS;116protected hashes và2capture freezes cũ giữ nguyên. Không mở simulator/cài software trong vòng này.
+
+## Detector depth thử nghiệm bổ sung
+
+Xem [DEPTH_PERSON_EXPERIMENT.md](DEPTH_PERSON_EXPERIMENT.md) cho phần merge detector của nhánh feat/depth-person-detector. ROS interface đã kiểm, nhưng detector mới không đạt gate hình học trên pilot hiện tại; giữ opt-in, không dùng để train hoặc thay default. Baseline/data package ở trên vẫn nguyên vẹn.

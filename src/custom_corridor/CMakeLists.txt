@@ -72,7 +72,29 @@ install(
     scripts/goal_pose_bridge.py
     scripts/hospital_auto_route.py
     scripts/d435i_viewer.py
+    scripts/depth_person_tracker_node.py
   DESTINATION lib/${PROJECT_NAME}
 )
+
+# Opt-in perception resources; preserve original frozen model/tracker bytes.
+set(_perception_root "${CMAKE_CURRENT_SOURCE_DIR}/../../experiments/social_navigation/perception")
+foreach(_group depth_identity_guard depth_identity_guard/parent depth_identity_guard/parent/snapshots
+                depth_person_classifier depth_person_classifier/artifacts)
+  if(_group STREQUAL "depth_identity_guard")
+    set(_files integrated_pipeline.py ros_support.py guard_tracker.py config.json)
+  elseif(_group STREQUAL "depth_identity_guard/parent")
+    set(_files refinement.py config.json)
+  elseif(_group STREQUAL "depth_identity_guard/parent/snapshots")
+    set(_files sensor.py)
+  elseif(_group STREQUAL "depth_person_classifier")
+    set(_files generalized_detector.py frozen_classifier.py)
+  else()
+    set(_files features.py inference.py selected_frozen.json selected_model.npz)
+  endif()
+  foreach(_file IN LISTS _files)
+    install(FILES "${_perception_root}/${_group}/${_file}"
+      DESTINATION share/${PROJECT_NAME}/perception/${_group})
+  endforeach()
+endforeach()
 
 ament_package()
