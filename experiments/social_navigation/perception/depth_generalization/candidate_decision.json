@@ -1,0 +1,24 @@
+{
+  "schema": "depth_generalization_candidate_decision/1",
+  "decision": "Do not prioritize the current density/torso/planar 3D proposal stack or multiplicative prior for retraining",
+  "proposal_provider": "legacy_2D_high_recall_geometry",
+  "classifier": "PointPatchClassifier, PointNet-style observed XYZ head",
+  "proof": "Predeclared 0.50 no-prior control fails paired-retention gate on both opened pilot episodes",
+  "retained_components": [
+    "calibrated depth->XYZ",
+    "causal odometry",
+    "IdentityGuard diagnostics",
+    "source/input freezes and masks"
+  ],
+  "not_retained_for_candidate": [
+    "multiplicative biometric prior",
+    "density/size/torso proposal rejection as default person gate"
+  ],
+  "cuda_probe": "PASS, 18881 parameters, RTX4060, no optimizer steps",
+  "training_data_status": "NOT_READY: independent morphology/layout captures and verified instance ownership absent",
+  "training_performed": false,
+  "semantic_quality_evaluated": false,
+  "promotion_to_default": false,
+  "generalization_claim": false,
+  "next_bounded_work": "Supply independent mesh families and collect/label planned train/validation cases; seal unseen test before one training/validation cycle"
+}

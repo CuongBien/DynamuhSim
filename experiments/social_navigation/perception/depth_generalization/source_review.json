@@ -1,0 +1,52 @@
+{
+  "review_date": "2026-10-30",
+  "policy": "Primary author/dataset documentation only; compatibility review is not an accuracy experiment",
+  "sources": [
+    {
+      "name": "DR-SPAAM / DROW3",
+      "url": "https://github.com/RWTHVision/2D_lidar_person_detection",
+      "facts": "2D LiDAR person detectors with pretrained checkpoints and temporal inference; original ROS wrapper is ROS1.",
+      "local_status": "Existing pinned JRDB checkpoint ran on CUDA but local quality gate FAIL; not rerun or promoted.",
+      "decision": "Keep separate LiDAR comparator; current collision cylinders and scan profile are a domain mismatch."
+    },
+    {
+      "name": "FROG / LFE-PPN",
+      "url": "https://www.frontiersin.org/journals/robotics-and-ai/articles/10.3389/frobt.2025.1671673/full",
+      "facts": "Real 2D range dataset; paper table records 35 cm mounting, 720 points, 180-degree FoV.",
+      "decision": "Useful independent LiDAR dataset track; cannot substitute for missing depth or 12 cm articulated-leg observations."
+    },
+    {
+      "name": "LFE ROS2 deployment",
+      "url": "https://github.com/robotics-upo/upo_laser_people_detector",
+      "facts": "Author-tested environment lists Ubuntu22.04/ROS2Humble, CUDA12.1, ONNX Runtime1.16.3.",
+      "decision": "No verified Jazzy binary compatibility; no .deb/system changes. Standalone engine/container would need separate testing."
+    },
+    {
+      "name": "SDT depth dataset",
+      "url": "https://cvl.tuwien.ac.at/research/cvl-databases/sdt-icip/",
+      "facts": "40k synthetic + 8k real depth/thermal images, person boxes and poses, elevated camera.",
+      "decision": "Depth-only subset potentially useful; calibration/units/partial-view and box-to-patch label purity must be checked. Not downloaded or declared ready."
+    },
+    {
+      "name": "Synthetic depth robot person detection",
+      "url": "https://timmlinder.com/wp-content/uploads/2019/06/linder_cvpr2019ws.pdf",
+      "facts": "Authors train modality-specific detectors on randomized synthetic scenes and evaluate real warehouse observations.",
+      "decision": "Supports diverse depth training strategy; not a verified plug-in pretrained checkpoint for this robot."
+    },
+    {
+      "name": "PointNet architecture reference",
+      "url": "https://github.com/charlesq34/pointnet",
+      "facts": "Learns point-set features with permutation invariance. Original implementation tested Python2.7/TensorFlow1.0.1.",
+      "decision": "Use a small independently written Torch-style candidate head, not legacy installation or generic object weights as person weights."
+    }
+  ],
+  "data_status": "No external dataset downloaded, no new independent real-data metrics",
+  "candidate": "high-recall 2D proposal provider + small learned XYZ point encoder; 3D coordinates retained, current 3D clustering not selected",
+  "candidate_limits": [
+    "Not a pretrained person detector",
+    "Cannot recover people absent/merged in 2D proposals",
+    "Generalization requires new scene/morphology and verified labels",
+    "LiDAR evidence remains optional/unknown when unsupported"
+  ],
+  "training_performed": false
+}
