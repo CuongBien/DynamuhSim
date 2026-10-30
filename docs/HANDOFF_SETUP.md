@@ -1,5 +1,7 @@
 # Setup bàn giao theo nhu cầu
 
+Nhánh port: feat/mujoco-backend. [Runbook người nhận](MUJOCO_HANDOVER.md), [setup tối thiểu và fallback khi thiếu ensurepip](MUJOCO_HANDOVER.md#setup-tối-thiểu), preflight một lệnh: `python3 tools/mujoco_handoff.py check`.
+
 Reference đã chạy:Ubuntu24.04/WSL2,Python3.12.3,ROS2Jazzy,GazeboHarmonic,NVIDIA RTX4060. Phiên bản thực tế và vendor commits nằm ở `configs/handoff/reference_environment.json`;đây là inventory đã dùng,không phải tuyên bố mọi hệ điều hành/version đều đã kiểm chứng.
 
 ## 1. Chỉ đọc dữ liệu / chuẩn bị MuJoCo contract

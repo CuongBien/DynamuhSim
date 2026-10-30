@@ -1,5 +1,7 @@
 # Bắt đầu bàn giao MuJoCo
 
+**Nhánh port hiện tại: feat/mujoco-backend.** Người nhận bắt đầu từ [MUJOCO_HANDOVER.md](MUJOCO_HANDOVER.md); [preflight một lệnh](../tools/mujoco_handoff.py) và [workspace mới](../experiments/social_navigation/mujoco_backend/README.md) đã chuẩn bị. MuJoCo hiện NOT_IMPLEMENTED, Gazebo reference giữ ở dd7a2b0.
+
 Đây là trang vào hiện hành. Baseline Gazebo/data đã chốt ở **121a727**, nhánh `test/gazebo-harmonic-benchmark`. Vòng chuẩn bị bàn giao chỉ thêm entrypoint/check/setup/docs;116 file runtime,math,reader và bằng chứng được guard bằng SHA256 trong `configs/handoff/baseline.json`.
 
 ## Chạy bốn kiểm tra đầu tiên

@@ -1,0 +1,93 @@
+{
+  "schema": "dynamuhsim_mujoco_handoff/1",
+  "branch": "feat/mujoco-backend",
+  "status": "SCAFFOLD_ONLY_BACKEND_NOT_IMPLEMENTED",
+  "base_commit": "dd7a2b03d9fe40841052c0db6c7dc52619e13e67",
+  "gazebo_reference_branch": "test/gazebo-harmonic-benchmark",
+  "data_baseline_commit": "121a727",
+  "protected_manifest": "configs/handoff/baseline.json",
+  "backend_directory": "experiments/social_navigation/mujoco_backend",
+  "mujoco_version": null,
+  "version_policy": "Choose and pin during implementation; no MuJoCo runtime or dependency installed by this handoff",
+  "reference_stack": {
+    "os": "Ubuntu24.04/WSL2",
+    "python": "3.12.3",
+    "ros": "Jazzy",
+    "gazebo": "Harmonic8",
+    "robot": "Mecanum",
+    "navigation": "AMCL + NavFn/Dijkstra + MPPI Omni"
+  },
+  "portable_pilot": {
+    "archive": "handoff_data_pilot01.zip",
+    "delivery": "separate artifact; excluded from Git",
+    "bytes": 31706091,
+    "sha256": "b64bdb394f4a2ddabc6d97f2e9ccd3704dd9c6b0855e5d52fb11c6eeaea23ee2",
+    "episodes": 2,
+    "windows": 517,
+    "raw_mcap_in_archive": false,
+    "training_authorized": false
+  },
+  "recorded_ros_topic_types": {
+    "/cmd_vel": "geometry_msgs/msg/TwistStamped",
+    "/scan": "sensor_msgs/msg/LaserScan",
+    "/imu": "sensor_msgs/msg/Imu",
+    "/odom": "nav_msgs/msg/Odometry",
+    "/clock": "rosgraph_msgs/msg/Clock",
+    "/camera/depth/image_rect_raw": "sensor_msgs/msg/Image",
+    "/camera/camera_info": "sensor_msgs/msg/CameraInfo",
+    "/tf": "tf2_msgs/msg/TFMessage",
+    "/tf_static": "tf2_msgs/msg/TFMessage",
+    "/dataset/events": "std_msgs/msg/String",
+    "/dataset/scene_poses": "std_msgs/msg/String",
+    "/common/ground_truth": "std_msgs/msg/String"
+  },
+  "topic_type_authority": "Accepted conversation_s48_transport raw_bag/metadata.yaml; raw remains outside Git",
+  "preservation_rules": [
+    "Keep the Gazebo reference branch and existing run/source freezes intact",
+    "Add MuJoCo implementation in its own directory and explicit opt-in launch/entrypoint",
+    "Keep command/body velocity distinct from measured world velocity into the human worker",
+    "Do not rewrite existing data/report/audit outcomes or checksums",
+    "Keep GT/LABEL separate from sensor observations; do not promote H1-H5, association or rewards",
+    "New modules under python/dynamuhsim change Gazebo capture source closure; use explicit versioning and baseline checkout"
+  ],
+  "work_items": [
+    {
+      "id": "M1",
+      "task": "Robot/world assets + physical motion vx/vy/wz and collision checks",
+      "status": "NOT_STARTED"
+    },
+    {
+      "id": "M2",
+      "task": "Metric optical-Z depth + CameraInfo/TF, scan/IMU/odom with masks and timestamp validation",
+      "status": "NOT_STARTED"
+    },
+    {
+      "id": "M3",
+      "task": "Clock/pause/reset/start gate/tail; fresh human worker session on reset",
+      "status": "NOT_STARTED"
+    },
+    {
+      "id": "M4",
+      "task": "Human worker adapter + interpolation + actual applied pose/group labels",
+      "status": "NOT_STARTED"
+    },
+    {
+      "id": "M5",
+      "task": "ROS2 bridge and isolated launch; actual Nav2 goal/footprint/clearance validation",
+      "status": "NOT_STARTED"
+    },
+    {
+      "id": "M6",
+      "task": "Two new pilot episodes + raw/export/causality/loader/label-independence audit",
+      "status": "NOT_STARTED"
+    }
+  ],
+  "out_of_scope": [
+    "WM/RL training",
+    "large batch collection",
+    "making experimental 3D detector the default",
+    "changing robot architecture"
+  ],
+  "acceptance_document": "docs/HANDOFF_MUJOCO.md",
+  "receiver_runbook": "docs/MUJOCO_HANDOVER.md"
+}

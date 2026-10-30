@@ -1,5 +1,7 @@
 # Bắt đầu ở đây — những phần đang dùng
 
+**Người nhận port MuJoCo:** xem [MUJOCO_HANDOVER.md](MUJOCO_HANDOVER.md) và nhánh feat/mujoco-backend. Luồng Gazebo/data phía dưới là baseline tham chiếu được giữ nguyên.
+
 **Người tiếp nhận bắt đầu tại [HANDOFF_START.md](HANDOFF_START.md)**: setup theo mức,baseline guard,portable smoke và boundary MuJoCo. Phần bên dưới giữ hướng dẫn dataset/recipe đang có.
 
 
