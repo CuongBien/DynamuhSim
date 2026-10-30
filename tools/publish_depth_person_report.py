@@ -12,6 +12,7 @@ def main():
     parser.add_argument('--run-dir', type=Path, required=True)
     parser.add_argument('--media-dir', type=Path, required=True)
     parser.add_argument('--output', type=Path, required=True)
+    parser.add_argument('--detector-overlays', type=Path)
     args = parser.parse_args()
     run, media, output = args.run_dir, args.media_dir, args.output
     output.mkdir(parents=True, exist_ok=False)
@@ -59,6 +60,54 @@ def main():
     contents = contents.replace('__TABLE__', ''.join(table))
     for key, obj in [('__FRAMES__',frames),('__DIAG__',diagnosis),('__ROS__',ros)]:
         contents = contents.replace(key,json.dumps(obj).replace('<',r'\u003c'))
+    if args.detector_overlays:
+        overlays = json.loads((args.detector_overlays/'detector_overlays.json').read_text())
+        for source in args.detector_overlays.iterdir():
+            if source.is_file():
+                if (output/source.name).exists():
+                    raise FileExistsError('Overlay would replace existing report asset: '+source.name)
+                shutil.copyfile(source, output/source.name)
+        section = r"""
+<section id="detector" class="card" style="margin:24px 0;padding:20px">
+<h2 style="margin-top:0">Đây là khung người do detector dự đoán</h2>
+<p>Ảnh bên trái là <b style="color:#7bbaff">bản cũ 2D + classifier</b>; bên phải là <b style="color:#ffbd73">bản mới 3D + prior</b>. Mỗi khung liền có <b>NGƯỜI + ID + điểm</b>. Nếu bản mới không có khung và ghi <b>0 phát hiện</b>, đó là kết quả nó bỏ sót ở frame đó.</p>
+<p class="small">Depth camera → gom cụm điểm → classifier chấm điểm → bản mới áp thêm prior hình dạng → giữ các cụm vượt ngưỡng → tracker gán ID. Ngưỡng bản cũ 0,50; bản mới 0,45. Điểm sau prior chưa phải xác suất đã calibration.</p>
+<p class="small">Mở mặc định một frame có phát hiện để nhìn rõ khung. Bấm “Ví dụ bản mới bỏ sót” để thấy lỗi; các ví dụ minh họa này không được dùng thay cho thống kê toàn bộ recordings.</p><div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap"><select id="det-episode" aria-label="Chọn episode detector"><option value="pilot_walking" selected>Nhóm đi bộ</option><option value="pilot_conversation">Nhóm trò chuyện</option></select><button id="det-positive">Ví dụ bản mới bắt được người</button><button id="det-miss">Ví dụ bản mới bỏ sót</button></div>
+<div style="margin:12px 0"><button id="det-prev">←</button> <input id="det-frame" type="range" min="0" max="10" value="0" aria-label="Chọn frame có khung người"> <button id="det-next">→</button> <span id="det-position"></span></div>
+<div id="det-summary" style="font-size:19px;font-weight:700;color:#e6f1ff;margin-bottom:12px"></div>
+<label style="display:block;margin:8px 0"><input id="det-rejected" type="checkbox"> Xem cả ứng viên bị loại và điểm trước/sau prior (khung nét đứt đỏ)</label>
+<figure><a id="det-open" target="_blank" rel="noopener"><img id="det-image" alt="Khung dự đoán người trực tiếp trên ảnh depth, so sánh hai detector"></a><figcaption id="det-caption"></figcaption></figure>
+<p class="small">Bấm ảnh để mở lớn. Khung được chiếu từ đúng cụm điểm detector đã dùng: có thể chỉ ôm phần người camera nhìn thấy. Chưa có bounding-box head dự đoán toàn thân bị khuất. ID được gán riêng bởi từng tracker, không phải ID GT.</p>
+<div class="scroll"><table><thead><tr><th>Bản</th><th>ID / ứng viên</th><th>Kết quả</th><th>Điểm gốc</th><th>Điểm cuối</th><th>Ngưỡng</th></tr></thead><tbody id="det-scores"></tbody></table></div>
+<details style="margin-top:18px"><summary>Đối chiếu GT riêng: camera đang nhìn thấy người ở đâu?</summary><p class="small">Nét đứt xanh là vùng điểm depth quanh vị trí người GT, chỉ là tham chiếu hình học. Đây không phải khung detector, không phải instance mask chuẩn và không dùng để tạo các khung dự đoán ở trên.</p><img id="det-reference" alt="GT tham chiếu tách riêng với kết quả detector"></details>
+<details style="margin-top:14px"><summary>GIF có khung người: xem thay đổi qua các frame</summary><p class="small">Slideshow các frame đã ghi, có thêm ví dụ phát hiện/bỏ sót để minh họa; không phải video realtime và không thay thế số liệu toàn bộ 910 frame.</p><div class="two"><img src="pilot_walking_detector.gif" loading="lazy" alt="GIF khung người nhóm đi bộ"><img src="pilot_conversation_detector.gif" loading="lazy" alt="GIF khung người nhóm trò chuyện"></div></details>
+<p class="small"><a href="detector_overlays.json">Tọa độ khung, điểm số và đối chiếu với output đã seal</a>. Overlay khớp chính xác số proposal, vị trí và số điểm của các detection đã ghi; GT không được dùng để tạo khung detector.</p>
+</section>
+"""
+        contents = contents.replace('</header>', '</header>'+section)
+        contents = contents.replace('Đã sửa tích hợp ROS.<br>Detector 3D chưa đạt để thay bản cũ.', 'Xem detector khoanh người<br>trực tiếp trên ảnh depth.')
+        contents = contents.replace('<h2>Xem frame depth thật và phát hiện cũ/mới</h2>', '<details><summary>BEV và ảnh không có khung — báo cáo tham khảo cũ</summary><h2>Ảnh depth và BEV</h2>')
+        contents = contents.replace('<details><summary>GIF tổng quan hai episode</summary>', '</details><details><summary>GIF tổng quan hai episode (BEV)</summary>')
+        javascript = r"""<script>
+const detectorMedia=__DETECTOR_JSON__;
+const de=document.getElementById('det-episode'),dr=document.getElementById('det-frame'),dj=document.getElementById('det-rejected');
+function setDetectorExample(kind){const target=detectorMedia.examples[de.value][kind];dr.value=detectorMedia.episodes[de.value].findIndex(f=>f.depth_index===target);updateDetector();}
+function updateDetector(){const list=detectorMedia.episodes[de.value];dr.max=list.length-1;const i=Math.min(Math.max(0,+dr.value),list.length-1),f=list[i];
+const file=dj.checked?f.files.candidates:f.files.detections;document.getElementById('det-image').src=file;document.getElementById('det-open').href=file;document.getElementById('det-reference').src=f.files.reference;
+document.getElementById('det-position').textContent=(i+1)+' / '+list.length;
+document.getElementById('det-summary').textContent='Bản cũ: '+f.counts.old+' phát hiện   |   Bản mới: '+f.counts.new+' phát hiện';
+document.getElementById('det-caption').textContent=de.options[de.selectedIndex].text+' · frame '+f.depth_index+' · '+(f.stamp_ns/1e9).toFixed(2)+' giây mô phỏng · '+(dj.checked?'Khung nét đứt đỏ = ứng viên bị loại, không phải phát hiện cuối.':'Khung liền = dự đoán người của detector.');
+const body=document.getElementById('det-scores');body.replaceChildren();
+for(const key of ['old','new']){for(const d of f.detections[key]){if(!d.accepted&&!dj.checked)continue;const row=document.createElement('tr');const values=[key==='old'?'Cũ (2D)':'Mới (3D)',d.accepted?(d.track_id>0?'ID '+d.track_id:'ID chưa rõ'):'Ứng viên '+d.candidate_index,d.accepted?'DỰ ĐOÁN NGƯỜI':'BỊ LOẠI',d.base_score.toFixed(3),d.score.toFixed(3),(key==='old'?detectorMedia.old_threshold:detectorMedia.new_threshold).toFixed(2)];for(const value of values){const td=document.createElement('td');td.textContent=value;row.appendChild(td);}body.appendChild(row);}}
+if(!f.counts.old&&!f.counts.new&&!dj.checked){const row=document.createElement('tr'),td=document.createElement('td');td.colSpan=6;td.textContent='Cả hai detector không xuất detection ở frame này.';row.appendChild(td);body.appendChild(row);}}
+de.addEventListener('change',()=>setDetectorExample('positive'));dr.addEventListener('input',updateDetector);dj.addEventListener('change',updateDetector);
+document.getElementById('det-positive').onclick=()=>setDetectorExample('positive');document.getElementById('det-miss').onclick=()=>setDetectorExample('miss');
+document.getElementById('det-prev').onclick=()=>{dr.value=Math.max(0,+dr.value-1);updateDetector();};document.getElementById('det-next').onclick=()=>{dr.value=Math.min(+dr.max,+dr.value+1);updateDetector();};
+setDetectorExample('positive');
+</script>"""
+        javascript = javascript.replace('__DETECTOR_JSON__', json.dumps(overlays).replace('<', r'\u003c'))
+        contents = contents.replace('</html>',javascript+'</html>')
+
     (output/'index.html').write_text(contents)
     print(output/'index.html')
 
