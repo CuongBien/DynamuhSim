@@ -1,0 +1,23 @@
+{
+  "status": "MATCH",
+  "original_commit": "70bcda0e26ff86b3389a49295feda3ef72958b1d",
+  "episodes": {
+    "pilot_conversation": {
+      "frames": 464,
+      "original_detection_rows": 173,
+      "merged_detection_rows": 173,
+      "mismatched_frames": [],
+      "max_xy_difference_m": 0.0
+    },
+    "pilot_walking": {
+      "frames": 446,
+      "original_detection_rows": 144,
+      "merged_detection_rows": 144,
+      "mismatched_frames": [],
+      "max_xy_difference_m": 0.0
+    }
+  },
+  "calibration_policy": "Same recorded CameraInfo/TF and causal odom on both pipelines; compares detector API, not original hardcoded ROS wrapper",
+  "scope": "Full native-depth replay, no classifier retraining/test reopening or simulator launch",
+  "claim": "No detection/track difference for these 910 frames under identical inputs"
+}
