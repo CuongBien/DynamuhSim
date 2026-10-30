@@ -1,0 +1,74 @@
+{
+  "protocol": {
+    "schema": "depth_detector_comparison/1",
+    "date": "2026-10-30",
+    "reviewed_commit": "70bcda0e26ff86b3389a49295feda3ef72958b1d",
+    "scope": "existing pilot only; no held-out test tuning; no new capture",
+    "episodes": [
+      "pilot_conversation",
+      "pilot_walking"
+    ],
+    "stride": 4,
+    "odom_max_age_ns": 150000000,
+    "variants": [
+      "legacy_geometry",
+      "legacy_2d_classifier",
+      "generalized_3d_classifier"
+    ],
+    "legacy_2d_classifier_threshold": 0.5,
+    "generalized_3d_classifier_threshold": 0.45,
+    "pair_gate_m": 0.6,
+    "pair_ambiguity_margin_m": 0.15,
+    "gt_max_bracket_ns": 100000000,
+    "sensor_supported_gt_proxy": {
+      "xy_radius_m": 0.4,
+      "min_depth_points": 18,
+      "z_range_m": [
+        0.06,
+        1.95
+      ]
+    },
+    "latency": "per-frame point projection + detection + tracking, not ROS/display; thread caps 1",
+    "promotion_gate": {
+      "paired_retention_min": 0.95,
+      "unpaired_must_not_increase": true,
+      "id_switches_must_not_increase": true,
+      "latency_p95_max_ms": 50
+    },
+    "metric_limit": "Geometric pairing only; cylinder support is an approximate visibility proxy, not pixel-instance semantic truth",
+    "training_authorized": false,
+    "new_detector_default": false
+  },
+  "source_sha256": {
+    "/home/cuongbien/DynamuhSim/experiments/social_navigation/perception/depth_identity_guard/compare_recordings.py": "212fd8df6943e9c33562991422c5bfd0b7d7da38fca66d21daa6cef1d7a98957",
+    "/home/cuongbien/DynamuhSim/experiments/social_navigation/perception/depth_identity_guard/comparison_protocol.json": "d3efd240cd31d3d2bf653a9aaff74b52217fc2f8290355fc5bbe4cfa994facef",
+    "/home/cuongbien/DynamuhSim/experiments/social_navigation/perception/depth_identity_guard/integrated_pipeline.py": "421aa894bade52759a67df3744d282b1b535c409afb8488ad962323a742db24d",
+    "/home/cuongbien/DynamuhSim/experiments/social_navigation/perception/depth_identity_guard/ros_support.py": "6af00766697951163de5a6a1624b1390a290f83c9f2cf2e7bc668330ff688cd8",
+    "/home/cuongbien/DynamuhSim/experiments/social_navigation/perception/depth_identity_guard/guard_tracker.py": "43e34e41126bf9b8c2ea89e4d394cb12832dcbbbf04b49880846553592af7263",
+    "/home/cuongbien/DynamuhSim/experiments/social_navigation/perception/depth_identity_guard/config.json": "acfca77ddb5e7d29db74bf2f62c62cbbdc05cccbf757ff48a55fbe411902f234",
+    "/home/cuongbien/DynamuhSim/experiments/social_navigation/perception/depth_identity_guard/parent/refinement.py": "4988dfcbb9e8754c5cb63b801479430d7bb2e59e5d2f7e7601e34634d38758db",
+    "/home/cuongbien/DynamuhSim/experiments/social_navigation/perception/depth_identity_guard/parent/config.json": "3728358ab3dd0005d485ecb218e76b5bfef47d90e74a2dfce702e53ad3a3e1c2",
+    "/home/cuongbien/DynamuhSim/experiments/social_navigation/perception/depth_identity_guard/parent/snapshots/sensor.py": "0fe703e72335c3f768584d051351b8e16f8aa1eb48ecd51b7f8dd6dd767bc7d1",
+    "/home/cuongbien/DynamuhSim/experiments/social_navigation/perception/depth_identity_guard/parent/snapshots/association.py": "13ea3e6615704604c4721a2d85e0d361f2d89ffca5e2cd8f8b64ccb4685d176e",
+    "/home/cuongbien/DynamuhSim/experiments/social_navigation/perception/depth_person_classifier/generalized_detector.py": "52f892876ad5d9ea1c391e664fa0af7d48050bd7afaa50173cfe1698324e8e4a",
+    "/home/cuongbien/DynamuhSim/experiments/social_navigation/perception/depth_person_classifier/frozen_classifier.py": "198f2ff4da37715e466d5bcd20e362fbece69195656a6ad9c8af38f84b27fab4",
+    "/home/cuongbien/DynamuhSim/experiments/social_navigation/perception/depth_person_classifier/artifacts/features.py": "237868f375ee6fe0c34d0a13cfcf1995f5daa133c67599656b2be726c9e099f6",
+    "/home/cuongbien/DynamuhSim/experiments/social_navigation/perception/depth_person_classifier/artifacts/inference.py": "5e92b561b53a22c8087eef4d7535d68fd1b69062085b3d9cccd34e0c52af6fc1",
+    "/home/cuongbien/DynamuhSim/experiments/social_navigation/perception/depth_person_classifier/artifacts/selected_model.npz": "41f990bd581afd87d93bb93bd57ea758b51a914f31fd6bdb6f027ddd6e27f292",
+    "/home/cuongbien/DynamuhSim/experiments/social_navigation/perception/depth_person_classifier/artifacts/selected_frozen.json": "f7446aa4710c6928a7f11024055e907da0b12337f4b07fb1ace7c445806ccb69"
+  },
+  "input_sha256": {
+    "pilot_conversation": {
+      "observations.npz": "cbf3c2d56b1cda12ec984394eccfcdee8873a01582668c7d277f28a78eaf78e0",
+      "depth.npy": "e817579a4f58078fc1b3145e5322a0f8170dd0f0c8367fff2c61e472962e23a4",
+      "calibration.json": "fe6bce92ff8ebe180a8c410a99eb67e06e65a637c3f3c7812453d937de5e0cd9",
+      "human_states.jsonl": "c032934c89160ecbf61f5d0dbaa64a86b384591ad380f8d349f2632431afb5bb"
+    },
+    "pilot_walking": {
+      "observations.npz": "db2d3424c3ab261bfad8ea604a214b0b765d68577095a2fcca12efd2a0f3c10b",
+      "depth.npy": "f27d9beebe4990623beb28e6ffaec53d6eabccd08776ef0271ce81ab95749ca2",
+      "calibration.json": "def413a381d6dde6fcb3a461d48163d91e64466f2e44781e5f0a5f096cb982d8",
+      "human_states.jsonl": "fd75356405a67e3bfa22d0488298dcdf5327c0bc361120411a88ac7e60eb3318"
+    }
+  }
+}

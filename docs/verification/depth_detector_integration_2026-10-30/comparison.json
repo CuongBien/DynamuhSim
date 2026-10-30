@@ -1,0 +1,133 @@
+{
+  "schema": "depth_detector_replay_comparison/1",
+  "episodes": {
+    "pilot_conversation": {
+      "variants": {
+        "legacy_geometry": {
+          "evaluated_frames": 462,
+          "skipped_odom_or_gt_frames": 2,
+          "proposals": 1399,
+          "paired": 1252,
+          "unpaired": 147,
+          "supported_gt_proxy": 1134,
+          "matched_supported_gt_proxy": 1122,
+          "id_switches_500ms": 2,
+          "pairing_fraction": 0.8949249463902788,
+          "supported_gt_proxy_coverage": 0.9894179894179894,
+          "fragmentation_proxy": 1,
+          "latency_p50_ms": 3.7763365,
+          "latency_p95_ms": 7.69206935,
+          "distance_p95_m": 0.28186905698797016
+        },
+        "legacy_2d_classifier": {
+          "evaluated_frames": 462,
+          "skipped_odom_or_gt_frames": 2,
+          "proposals": 1149,
+          "paired": 1059,
+          "unpaired": 90,
+          "supported_gt_proxy": 1134,
+          "matched_supported_gt_proxy": 937,
+          "id_switches_500ms": 0,
+          "pairing_fraction": 0.9216710182767625,
+          "supported_gt_proxy_coverage": 0.826278659611993,
+          "fragmentation_proxy": 2,
+          "latency_p50_ms": 6.7202905,
+          "latency_p95_ms": 15.363426399999998,
+          "distance_p95_m": 0.24240105657849423
+        },
+        "generalized_3d_classifier": {
+          "evaluated_frames": 462,
+          "skipped_odom_or_gt_frames": 2,
+          "proposals": 173,
+          "paired": 93,
+          "unpaired": 80,
+          "supported_gt_proxy": 1134,
+          "matched_supported_gt_proxy": 93,
+          "id_switches_500ms": 0,
+          "pairing_fraction": 0.5375722543352601,
+          "supported_gt_proxy_coverage": 0.082010582010582,
+          "fragmentation_proxy": 4,
+          "latency_p50_ms": 15.654432499999999,
+          "latency_p95_ms": 27.906925899999994,
+          "distance_p95_m": 0.17900487551495434
+        }
+      },
+      "promotion_conditions": {
+        "paired_retention": false,
+        "unpaired_not_increased": true,
+        "identity_switches_not_increased": true,
+        "latency_budget": true
+      },
+      "geometric_nonregression_pass": false,
+      "semantic_validated": false,
+      "training_authorized": false,
+      "metric_scope": "Geometric pairing only; cylinder support is an approximate visibility proxy, not pixel-instance semantic truth"
+    },
+    "pilot_walking": {
+      "variants": {
+        "legacy_geometry": {
+          "evaluated_frames": 443,
+          "skipped_odom_or_gt_frames": 3,
+          "proposals": 723,
+          "paired": 535,
+          "unpaired": 188,
+          "supported_gt_proxy": 536,
+          "matched_supported_gt_proxy": 531,
+          "id_switches_500ms": 3,
+          "pairing_fraction": 0.739972337482711,
+          "supported_gt_proxy_coverage": 0.9906716417910447,
+          "fragmentation_proxy": 3,
+          "latency_p50_ms": 2.3306769999999997,
+          "latency_p95_ms": 4.1112568000000005,
+          "distance_p95_m": 0.24406324839096555
+        },
+        "legacy_2d_classifier": {
+          "evaluated_frames": 443,
+          "skipped_odom_or_gt_frames": 3,
+          "proposals": 648,
+          "paired": 488,
+          "unpaired": 160,
+          "supported_gt_proxy": 536,
+          "matched_supported_gt_proxy": 486,
+          "id_switches_500ms": 1,
+          "pairing_fraction": 0.7530864197530864,
+          "supported_gt_proxy_coverage": 0.9067164179104478,
+          "fragmentation_proxy": 2,
+          "latency_p50_ms": 3.248473,
+          "latency_p95_ms": 7.620940999999998,
+          "distance_p95_m": 0.18766890327855373
+        },
+        "generalized_3d_classifier": {
+          "evaluated_frames": 443,
+          "skipped_odom_or_gt_frames": 3,
+          "proposals": 144,
+          "paired": 41,
+          "unpaired": 103,
+          "supported_gt_proxy": 536,
+          "matched_supported_gt_proxy": 41,
+          "id_switches_500ms": 0,
+          "pairing_fraction": 0.2847222222222222,
+          "supported_gt_proxy_coverage": 0.07649253731343283,
+          "fragmentation_proxy": 2,
+          "latency_p50_ms": 6.746373,
+          "latency_p95_ms": 18.140020599999993,
+          "distance_p95_m": 0.18825472490563916
+        }
+      },
+      "promotion_conditions": {
+        "paired_retention": false,
+        "unpaired_not_increased": true,
+        "identity_switches_not_increased": true,
+        "latency_budget": true
+      },
+      "geometric_nonregression_pass": false,
+      "semantic_validated": false,
+      "training_authorized": false,
+      "metric_scope": "Geometric pairing only; cylinder support is an approximate visibility proxy, not pixel-instance semantic truth"
+    }
+  },
+  "sensor_outputs_sealed_before_gt": true,
+  "plan_sha256": "d78661eb5ba76c8134a740aa45359bf65138159dcabb67d72174c77d4604bf93",
+  "promotion_to_default": false,
+  "training_authorized": false
+}

@@ -1,0 +1,197 @@
+{
+  "schema": "depth_person_integration_acceptance/1",
+  "date": "2026-10-30",
+  "implementation_commit": "b94375a40bc039936ad29737d0b103d601cf4e2e",
+  "reviewed_branch_commit": "70bcda0e26ff86b3389a49295feda3ef72958b1d",
+  "branch_merged": true,
+  "software_status": "PASS",
+  "detector_quality_status": "FAIL_NONREGRESSION_ON_BOTH_PILOTS",
+  "promotion_to_default": false,
+  "checks": {
+    "root_suite_tests": 323,
+    "root_suite_skipped": 2,
+    "original_pipeline_tests": 5,
+    "unchanged_guard_tests": 14,
+    "installed_ros_checks": 8,
+    "synthetic_multi_scenes": 30,
+    "synthetic_multi_all_spatial_matching_pass": true,
+    "replay_depth_frames": 910,
+    "evaluated_frames": 905,
+    "integrity_sensor_rows": 2730,
+    "capture_freezes_unchanged": 2,
+    "protected_baseline": {
+      "status": "PASS",
+      "reference_commit": "121a727",
+      "protected_files": 116,
+      "failures": [],
+      "scope": "Protected accepted source/evidence bytes only; not a new simulator run"
+    },
+    "pilot_zip_sha256": "b64bdb394f4a2ddabc6d97f2e9ccd3704dd9c6b0855e5d52fb11c6eeaea23ee2",
+    "pilot_zip_matches_original": true
+  },
+  "web": {
+    "url": "http://localhost:35315/depth_person_detector_v1/index.html",
+    "local_assets": [
+      {
+        "path": "comparison.json",
+        "status": 200,
+        "bytes": 4888
+      },
+      {
+        "path": "evaluate_multi_environments.log",
+        "status": 200,
+        "bytes": 9522
+      },
+      {
+        "path": "media_provenance.json",
+        "status": 200,
+        "bytes": 2620
+      },
+      {
+        "path": "pilot_conversation.gif",
+        "status": 200,
+        "bytes": 357170
+      },
+      {
+        "path": "pilot_conversation_0040.png",
+        "status": 200,
+        "bytes": 94996
+      },
+      {
+        "path": "pilot_conversation_0082.png",
+        "status": 200,
+        "bytes": 95328
+      },
+      {
+        "path": "pilot_conversation_0125.png",
+        "status": 200,
+        "bytes": 98987
+      },
+      {
+        "path": "pilot_conversation_0168.png",
+        "status": 200,
+        "bytes": 95598
+      },
+      {
+        "path": "pilot_conversation_0210.png",
+        "status": 200,
+        "bytes": 94184
+      },
+      {
+        "path": "pilot_conversation_0253.png",
+        "status": 200,
+        "bytes": 89623
+      },
+      {
+        "path": "pilot_conversation_0296.png",
+        "status": 200,
+        "bytes": 80766
+      },
+      {
+        "path": "pilot_conversation_0338.png",
+        "status": 200,
+        "bytes": 75383
+      },
+      {
+        "path": "pilot_conversation_0381.png",
+        "status": 200,
+        "bytes": 66186
+      },
+      {
+        "path": "pilot_conversation_0424.png",
+        "status": 200,
+        "bytes": 62926
+      },
+      {
+        "path": "pilot_walking.gif",
+        "status": 200,
+        "bytes": 294319
+      },
+      {
+        "path": "pilot_walking_0040.png",
+        "status": 200,
+        "bytes": 85276
+      },
+      {
+        "path": "pilot_walking_0080.png",
+        "status": 200,
+        "bytes": 85644
+      },
+      {
+        "path": "pilot_walking_0121.png",
+        "status": 200,
+        "bytes": 88375
+      },
+      {
+        "path": "pilot_walking_0162.png",
+        "status": 200,
+        "bytes": 90276
+      },
+      {
+        "path": "pilot_walking_0202.png",
+        "status": 200,
+        "bytes": 69838
+      },
+      {
+        "path": "pilot_walking_0243.png",
+        "status": 200,
+        "bytes": 64201
+      },
+      {
+        "path": "pilot_walking_0284.png",
+        "status": 200,
+        "bytes": 67078
+      },
+      {
+        "path": "pilot_walking_0324.png",
+        "status": 200,
+        "bytes": 66838
+      },
+      {
+        "path": "pilot_walking_0365.png",
+        "status": 200,
+        "bytes": 65250
+      },
+      {
+        "path": "pilot_walking_0406.png",
+        "status": 200,
+        "bytes": 63460
+      },
+      {
+        "path": "plan.json",
+        "status": 200,
+        "bytes": 5168
+      },
+      {
+        "path": "replay_integrity.json",
+        "status": 200,
+        "bytes": 407
+      },
+      {
+        "path": "ros_smoke.json",
+        "status": 200,
+        "bytes": 752
+      },
+      {
+        "path": "sensor_seal.json",
+        "status": 200,
+        "bytes": 742
+      },
+      {
+        "path": "unit_tests.log",
+        "status": 200,
+        "bytes": 54547
+      }
+    ],
+    "windows_http_status": 200,
+    "javascript_syntax": {
+      "exit_code": 0,
+      "method": "Windows node --check, script read from served HTML via HTTP",
+      "script_characters": 4167
+    },
+    "qa": "Recorded plot PNGs visually inspected; HTTP assets checked. Browser automation unavailable (CUA Windows helper failed), so slider clicks were not independently UI-automated."
+  },
+  "scope": "Optional installed ROS interface + offline sensor replay, not a new live Gazebo/navigation or semantic/training acceptance",
+  "no_new_training": true,
+  "generated_ai_images": false
+}

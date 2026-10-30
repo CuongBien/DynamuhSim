@@ -1,0 +1,44 @@
+===========================================================================
+BENCHMARK ĐÁNH GIÁ ĐỘ CHÍNH XÁC & HIỆU NĂNG - PERCEPTION V2 (DIRECTION 2)
+===========================================================================
+
+--- KẾT QUẢ ĐÁNH GIÁ TỪNG TRƯỜNG HỢP ---
+[01] Case 1. Người đứng tự do ở cự ly 1.2m                      | Kỳ vọng: 1 người | Phát hiện: 1 người | Thời gian:  6.03 ms | PASSED (Chính xác)
+[02] Case 1. Người đứng tự do ở cự ly 2.5m                      | Kỳ vọng: 1 người | Phát hiện: 1 người | Thời gian:  5.37 ms | PASSED (Chính xác)
+[03] Case 1. Người đứng tự do ở cự ly 4.0m                      | Kỳ vọng: 1 người | Phát hiện: 1 người | Thời gian:  9.03 ms | PASSED (Chính xác)
+[04] Case 2. Người đứng sát tường hành lang (cách 15cm)         | Kỳ vọng: 1 người | Phát hiện: 1 người | Thời gian: 21.34 ms | PASSED (Chính xác)
+[05] Case 3A. Người bị che khuất 40% phần thân dưới (bởi giường) | Kỳ vọng: 1 người | Phát hiện: 1 người | Thời gian: 12.84 ms | PASSED (Chính xác)
+[06] Case 3B. Người bị che khuất một bên sườn (bởi góc tường)   | Kỳ vọng: 1 người | Phát hiện: 1 người | Thời gian: 16.03 ms | PASSED (Chính xác)
+[07] Case 4A. Vật cản: Giường bệnh nhân độc lập (Bè ngang)      | Kỳ vọng: 0 người | Phát hiện: 0 người | Thời gian:  6.95 ms | PASSED (Chính xác)
+[08] Case 4B. Vật cản: Cọc truyền dịch y tế (Cực mảnh, r=3cm)   | Kỳ vọng: 0 người | Phát hiện: 0 người | Thời gian:  2.43 ms | PASSED (Chính xác)
+[09] Case 4C. Vật cản: Xe đẩy y tế / Hộp carton                 | Kỳ vọng: 0 người | Phát hiện: 0 người | Thời gian:  5.46 ms | PASSED (Chính xác)
+[10] Case 4D. Vật cản: Tường hành lang phẳng trải dài           | Kỳ vọng: 0 người | Phát hiện: 0 người | Thời gian:  4.93 ms | PASSED (Chính xác)
+[11] Case 5. Hành lang có 2 người đi ở 2 cự ly khác nhau        | Kỳ vọng: 2 người | Phát hiện: 2 người | Thời gian: 15.35 ms | PASSED (Chính xác)
+[12] Case 6. Người trong điều kiện cảm biến nhiễu nặng (sigma=2.5cm) | Kỳ vọng: 1 người | Phát hiện: 1 người | Thời gian:  6.93 ms | PASSED (Chính xác)
+
+--- KIỂM TRA DUY TRÌ DANH TÍNH (TRACKING & ID RETENTION - 8 FRAMES) ---
+  Frame 1/8: Vị trí x=3.50m | Track ID= 1 | Confirmed=False | Vận tốc ước lượng vx= 0.00 m/s | (7.21 ms)
+  Frame 2/8: Vị trí x=3.30m | Track ID= 1 | Confirmed=False | Vận tốc ước lượng vx=-0.75 m/s | (7.28 ms)
+  Frame 3/8: Vị trí x=3.10m | Track ID= 1 | Confirmed=True | Vận tốc ước lượng vx=-1.12 m/s | (7.16 ms)
+  Frame 4/8: Vị trí x=2.90m | Track ID= 1 | Confirmed=True | Vận tốc ước lượng vx=-1.31 m/s | (5.61 ms)
+  Frame 5/8: Vị trí x=2.70m | Track ID= 1 | Confirmed=True | Vận tốc ước lượng vx=-1.41 m/s | (5.35 ms)
+  Frame 6/8: Vị trí x=2.50m | Track ID= 1 | Confirmed=True | Vận tốc ước lượng vx=-1.45 m/s | (4.87 ms)
+  Frame 7/8: Vị trí x=2.30m | Track ID= 1 | Confirmed=True | Vận tốc ước lượng vx=-1.48 m/s | (6.32 ms)
+  Frame 8/8: Vị trí x=2.10m | Track ID= 1 | Confirmed=True | Vận tốc ước lượng vx=-1.49 m/s | (5.32 ms)
+  => Tổng số lần đổi ID (ID Switches): 0 | Kết quả: HOÀN HẢO (Giữ nguyên 1 ID)
+
+===========================================================================
+TỔNG KẾT CHỈ SỐ TOÀN CỤC (GLOBAL METRICS)
+===========================================================================
+• True Positives  (TP) : 9  (Phát hiện đúng người)
+• True Negatives  (TN) : 4  (Loại bỏ đúng đồ vật/môi trường)
+• False Positives (FP) : 0  (Nhận nhầm đồ vật là người)
+• False Negatives (FN) : 0  (Bỏ sót người)
+---------------------------------------------------------------------------
+★ Độ chính xác tổng thể (Accuracy) : 100.00%
+★ Độ chuẩn xác (Precision)          : 100.00%
+★ Độ nhạy (Recall)                  : 100.00%
+★ Điểm F1-Score                     : 100.00%
+★ Tỷ lệ đổi ID (ID Switch Rate)     : 0 lần (chuỗi 8 frame, một người)
+★ Độ trễ xử lý trung bình (Latency) : 8.09 ms / frame (Tương đương 123.6 FPS)
+===========================================================================
