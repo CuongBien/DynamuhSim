@@ -62,7 +62,8 @@ def run_evaluation():
     cases = manifest["cases"]
 
     # Models initialization
-    legacy_clf = Classifier(CLASSIFIER_DIR / "artifacts")
+    legacy_clf = Classifier(CLASSIFIER_DIR / "artifacts_legacy")
+    retrained_clf = Classifier(CLASSIFIER_DIR / "artifacts")
     gen_detector_prior = GeneralizedPersonDetector(min_person_score=0.45)
     gen_detector_no_prior = GeneralizedPersonDetector(min_person_score=0.0)  # we apply manual threshold
 
@@ -79,7 +80,8 @@ def run_evaluation():
         "generalized_3d_prior_045",
         "generalized_3d_no_prior_045",
         "generalized_3d_no_prior_050",
-        "candidate_pointnet_frozen_065"
+        "candidate_pointnet_frozen_065",
+        "retrained_robust_detector_085"
     ]
 
     # Metrics containers
@@ -222,12 +224,24 @@ def run_evaluation():
             latency_cand = (time_props_2d + (time.perf_counter() - t0)) * 1000.0
             timing_records["candidate_pointnet_frozen_065"].append(latency_cand)
 
+            # Evaluate Variant 6: Retrained Robust Detector (0.85)
+            t0 = time.perf_counter()
+            retrained_dets = []
+            for p in props_2d:
+                sample = {"points_xyz": p["raw_points"], "scan_valid": False, "scan_ranges": []}
+                score = retrained_clf.predict(sample)["score"]
+                if score >= 0.85:
+                    retrained_dets.append({"xy": p["xy"], "score": float(score), "raw_points": p["raw_points"]})
+            latency_retrained = (time_props_2d + (time.perf_counter() - t0)) * 1000.0
+            timing_records["retrained_robust_detector_085"].append(latency_retrained)
+
             detections_by_variant = {
                 "legacy_2d_classifier_050": legacy_dets,
                 "generalized_3d_prior_045": dets_prior_045,
                 "generalized_3d_no_prior_045": dets_noprior_045,
                 "generalized_3d_no_prior_050": dets_noprior_050,
-                "candidate_pointnet_frozen_065": cand_dets
+                "candidate_pointnet_frozen_065": cand_dets,
+                "retrained_robust_detector_085": retrained_dets
             }
 
             # Match detections against GT
