@@ -1,9 +1,9 @@
 {
   "schema": "depth_person_selected_model/1",
-  "candidate": "retrained_depth_robust_linear",
+  "candidate": "depth_linear",
   "hidden": 0,
   "modality": "depth",
-  "threshold": 0.85,
+  "threshold": 0.5,
   "feature_names": {
     "depth": [
       "log_points",
@@ -48,10 +48,10 @@
       "mean_ray_step"
     ]
   },
-  "model_sha256": "0fe66506e828f3dea32b58a49a79afe2f597a28a49c9f345bdfa5ba34f9522a2",
-  "training_sha256": "d3bb2ee86aa49a2c52bbf9c60af4d5dbb5c26d6203eb8a96415f6f31fbd6e515",
-  "source_freeze_sha256": "cc9773c99d34e8b6aeeb8f872068eb429354002402a54b9f67ec9a99e83386c6",
-  "torch_weights_sha256": "0fe66506e828f3dea32b58a49a79afe2f597a28a49c9f345bdfa5ba34f9522a2",
-  "test_policy": "Retrained and validated on multi-domain benchmark (Factory A1, Hospital A2, School B1, Narrow C1).",
+  "source_freeze_sha256": "e0ba48beaf2de36e5f55ce7a65bc9cb844c1bdfa813acf18304b17c0e1d2a88c",
+  "training_sha256": "ebad3415f52c54f2763818c6e0720e184dec4704912cd29f66a96530e4d08e27",
+  "model_sha256": "41f990bd581afd87d93bb93bd57ea758b51a914f31fd6bdb6f027ddd6e27f292",
+  "torch_weights_sha256": "8e9fb441858228878cb8280319a4e091888d06eada29b33ab332130d17c16eeb",
+  "test_policy": "This stage authorizes one evaluation of the validation-selected frozen model on both test scenes; no test tuning or candidate comparison. The old corpus protocol describes its earlier collection milestone.",
   "validation_gate": true
 }

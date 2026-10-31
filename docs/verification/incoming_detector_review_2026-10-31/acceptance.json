@@ -1,0 +1,50 @@
+{
+  "incoming_commit": "2ffd7c75218778f328d692724f382f623aab7139",
+  "premerge_commit": "879aaf41229250de8eb4288d3105f12322f15dda",
+  "merge_method": "fast-forward; imported commits preserved",
+  "incoming_suite": {
+    "tests": 338,
+    "skips": 2,
+    "status": "PASS"
+  },
+  "integrated_suite": {
+    "tests": 344,
+    "skips": 2,
+    "status": "PASS"
+  },
+  "protected_baseline": {
+    "status": "PASS",
+    "reference_commit": "121a727",
+    "protected_files": 116,
+    "failures": [],
+    "scope": "Protected accepted source/evidence bytes only; not a new simulator run"
+  },
+  "restored_byte_identical_to_premerge": [
+    "src/custom_corridor/worlds/arena_dataset/arena_dataset.sdf",
+    "src/custom_corridor/worlds/arena_dataset/arena_dataset_bu.sdf",
+    "src/custom_corridor/worlds/school_arena/demo_1/school_floor.world",
+    "src/custom_corridor/worlds/school_arena/school_arena_hunav.sdf",
+    "src/custom_corridor/worlds/school_arena/school_arena_hunav_ENTITY384_FIXED.sdf",
+    "experiments/social_navigation/perception/depth_person_classifier/artifacts/selected_model.npz",
+    "experiments/social_navigation/perception/depth_person_classifier/artifacts/selected_frozen.json",
+    "experiments/social_navigation/perception/depth_generalization/training_recipe.json"
+  ],
+  "new_model_exact_incoming_weights": true,
+  "recorded_replay": {
+    "frames": 910,
+    "evaluated_frames": 905,
+    "variants": 4,
+    "baseline_reference_rows": 910,
+    "integrity": "PASS",
+    "all_sensor_outputs_sealed_before_gt": true
+  },
+  "rendered_overlay_frames": 8,
+  "new_training_performed": false,
+  "new_Gazebo_run": false,
+  "generalization_accepted": false,
+  "promotion_to_default": false,
+  "PointNet_reproduction": "UNAVAILABLE: checkpoint and freeze/curation/test receipts absent",
+  "MuJoCo_merge": false,
+  "main_worktree_head": "b777e646621c25ec3312f20164f9a0be63a0586a",
+  "whitespace_note": "Restored arena world files retain pre-existing baseline whitespace to preserve byte identity. Diff check passes for all non-world changes; world identity checked independently."
+}

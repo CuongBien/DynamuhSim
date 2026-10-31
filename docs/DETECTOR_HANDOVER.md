@@ -1,3 +1,5 @@
+> Cập nhật31/10/2026: đã nhận trainer và weights linear mới, kiểm910frame và giữ experimental; chưa nghiệm thu generalization. Đọc [review mới nhất](INCOMING_DETECTOR_REVIEW_2026-10-31.md) trước; phần bên dưới là context bàn giao30/10.
+
 # Bàn giao công việc detector người — 30/10/2026
 
 ## 1. Đọc phần này trước

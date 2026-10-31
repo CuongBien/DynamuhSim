@@ -3,10 +3,11 @@
 - Extracts 30 geometric features from 3D points of 2D candidate proposals.
 - Trains a regularized model with positive class weighting on the multi-domain benchmark.
 - Evaluates on Train (A1, A2), Validation (B1), and Test (C1).
-- Deploys the trained weights to depth_person_classifier/artifacts/selected_model.npz and selected_frozen.json.
+- Writes only to a NEW explicit experimental --output-dir; frozen defaults are never overwritten.
 - Verifies that all interfaces (Classifier, GeneralizedPersonDetector, Tracker) function seamlessly.
 """
 
+import argparse
 import hashlib
 import json
 from pathlib import Path
@@ -26,10 +27,12 @@ sys.path.insert(0, str(STAGE))
 sys.path.insert(0, str(CLASSIFIER_DIR))
 sys.path.insert(0, str(GUARD_DIR))
 
+from integration_guard import new_artifact_dir
 from train_candidate import extract_split_patches
 from features import extract, DEPTH_NAMES, LIDAR_NAMES
 from qa_mini_benchmark import project_depth
 from compare_recordings import old_proposals
+from spatial_metrics import match_positions
 
 
 def sha256_file(p: Path) -> str:
@@ -52,6 +55,17 @@ def get_features(samples):
 
 
 def main():
+    parser = argparse.ArgumentParser(description="Experimental retraining only; never deploy the frozen default")
+    parser.add_argument('--output-dir', type=Path, required=True, help='NEW experimental artifacts directory')
+    args = parser.parse_args()
+    global ARTIFACTS_DIR
+    try:
+        target = new_artifact_dir(args.output_dir, CLASSIFIER_DIR)
+    except (ValueError, FileExistsError) as error:
+        parser.error(str(error))
+    ARTIFACTS_DIR = target
+    for name in ['features.py', 'inference.py']:
+        (target / name).write_bytes((CLASSIFIER_DIR / 'artifacts' / name).read_bytes())
     print("=== RETRAINING PERSON DETECTOR ON MULTI-DOMAIN BENCHMARK ===")
     manifest_path = STAGE / "benchmark_manifest_collected.json"
     manifest = json.loads(manifest_path.read_text())
@@ -126,7 +140,9 @@ def main():
         "source_freeze_sha256": sha256_file(Path(__file__)),
         "torch_weights_sha256": npz_sha,
         "test_policy": "Retrained and validated on multi-domain benchmark (Factory A1, Hospital A2, School B1, Narrow C1).",
-        "validation_gate": True
+        "validation_gate": False,
+        "promotion_to_default": False,
+        "quality_scope": "procedural same-mesh smoke only"
     }
     config_path.write_text(json.dumps(config, indent=2) + "\n")
 
@@ -181,27 +197,12 @@ def main():
                     dets.append({"xy": p["xy"], "score": float(score)})
             latencies.append((time.perf_counter() - t0) * 1000.0)
 
-            if is_visible_person:
-                matched = False
-                for d in dets:
-                    dist = np.linalg.norm(np.array(d["xy"]) - gt_median)
-                    if dist <= 0.60:
-                        matched = True
-                        c_tp += 1
-                        total_tp += 1
-                    else:
-                        c_fp += 1
-                        total_fp += 1
-                if not matched:
-                    c_fn += 1
-                    total_fn += 1
-            else:
-                if len(dets) == 0:
-                    c_tn += 1
-                    total_tn += 1
-                else:
-                    c_fp += len(dets)
-                    total_fp += len(dets)
+            matched_counts = match_positions([d['xy'] for d in dets], [gt_median] if is_visible_person else [])
+            c_tp += matched_counts['tp']; total_tp += matched_counts['tp']
+            c_fp += matched_counts['fp']; total_fp += matched_counts['fp']
+            c_fn += matched_counts['fn']; total_fn += matched_counts['fn']
+            if not is_visible_person and not dets:
+                c_tn += 1; total_tn += 1
 
         case_summaries[cid] = {
             "split": split,
@@ -218,9 +219,9 @@ def main():
     receipt = {
         "schema": "depth_person_detector_retrained_receipt/1",
         "date": "2026-10-31",
-        "status": "RETRAINED_AND_DEPLOYED",
+        "status": "EXPERIMENTAL_RETRAINED_NOT_DEPLOYED",
         "threshold": tau,
-        "model_file": "depth_person_classifier/artifacts/selected_model.npz",
+        "model_file": str(npz_path),
         "model_sha256": npz_sha,
         "metrics_summary": {
             "total_frames": 80,
@@ -231,12 +232,13 @@ def main():
             "overall_recall": float(rec),
             "overall_precision": float(prec),
             "overall_f1": float(f1),
-            "mean_latency_ms": float(np.mean(latencies))
+            "mean_latency_ms": float(np.mean(latencies)),
+            "latency_scope": "proposal + classifier only; excludes depth projection, ROS and display"
         },
         "cases": case_summaries
     }
 
-    out_receipt = STAGE / "generated/retrained_detector_receipt.json"
+    out_receipt = ARTIFACTS_DIR / "retrained_detector_receipt.json"
     out_receipt.write_text(json.dumps(receipt, indent=2) + "\n")
 
     print("\n" + "=" * 80)
@@ -245,8 +247,8 @@ def main():
     print(f"Recall toàn bộ:    {rec * 100:.1f}% ({total_tp}/40 người được phát hiện)")
     print(f"Precision toàn bộ: {prec * 100:.1f}%")
     print(f"F1-Score:          {f1:.3f}")
-    print(f"Báo nhầm Clutter:  {total_fp} (Triệt tiêu 100% báo nhầm)")
-    print(f"Độ trễ trung bình: {np.mean(latencies):.2f} ms/frame (Thời gian thực CPU siêu tốc)")
+    print(f"Báo nhầm Clutter:  {total_fp} (chỉ trên smoke hiện tại)")
+    print(f"Độ trễ trung bình: {np.mean(latencies):.2f} ms/frame (chưa gồm projection/ROS)")
     print(f"Biên bản lưu tại:  {out_receipt}")
     print("=" * 80 + "\n")
 

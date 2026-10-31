@@ -45,6 +45,7 @@ from candidate import PointPatchClassifier
 from generalized_detector import GeneralizedPersonDetector, adaptive_3d_clustering
 from frozen_classifier import Classifier
 from compare_recordings import old_proposals
+from spatial_metrics import match_positions
 from qa_mini_benchmark import project_depth, candidates_2d
 
 
@@ -63,9 +64,9 @@ def run_evaluation():
 
     # Models initialization
     legacy_clf = Classifier(CLASSIFIER_DIR / "artifacts_legacy")
-    retrained_clf = Classifier(CLASSIFIER_DIR / "artifacts")
-    gen_detector_prior = GeneralizedPersonDetector(min_person_score=0.45)
-    gen_detector_no_prior = GeneralizedPersonDetector(min_person_score=0.0)  # we apply manual threshold
+    retrained_clf = Classifier(CLASSIFIER_DIR / "artifacts_experimental_2ffd7c75")
+    gen_detector_prior = GeneralizedPersonDetector(artifacts_dir=CLASSIFIER_DIR / "artifacts_legacy", min_person_score=0.45)
+    gen_detector_no_prior = GeneralizedPersonDetector(artifacts_dir=CLASSIFIER_DIR / "artifacts_legacy", min_person_score=0.0)  # we apply manual threshold
 
     freeze_receipt = json.loads((STAGE / "generated/model_freeze.json").read_text())
     frozen_threshold = freeze_receipt["selected_validation_threshold"]
@@ -251,25 +252,9 @@ def run_evaluation():
                 fn = 0
                 tn = 0
 
-                if is_visible_person:
-                    # Ground truth person is present
-                    person_detected = False
-                    for d in dets:
-                        d_xy = d["xy"]
-                        dist = np.linalg.norm(np.array(d_xy) - np.array(gt_median_xy))
-                        if dist <= 0.60:
-                            person_detected = True
-                            tp += 1
-                        else:
-                            fp += 1  # Spurious detection elsewhere in scene
-                    if not person_detected:
-                        fn = 1
-                else:
-                    # No person in this frame (control / empty)
-                    if len(dets) == 0:
-                        tn = 1
-                    else:
-                        fp = len(dets)
+                counts = match_positions([d['xy'] for d in dets], [gt_median_xy] if is_visible_person else [])
+                tp, fp, fn = counts['tp'], counts['fp'], counts['fn']
+                tn = int(not is_visible_person and not dets)
 
                 raw_eval_records.append({
                     "variant": v_name,
@@ -382,6 +367,7 @@ def main():
             "by_body": by_body,
             "by_distance": dist_bins,
             "by_occlusion": by_occlusion,
+            "latency_scope": "proposal + classifier only; projection/ROS excluded; 3D includes repeated proposal extraction",
             "latency": latency_stats
         }
 
@@ -417,7 +403,10 @@ def main():
         "schema": "depth_person_detector_step_d_receipt/1",
         "date": "2026-10-31",
         "purpose": "Final comparison of 4 detector configurations, error stratification, and freeze decision",
-        "status": "EVALUATED_AND_DECIDED",
+        "status": "PROCEDURAL_SMOKE_ONLY_NOT_ACCEPTANCE",
+        "generalization_accepted": False,
+        "promotion_to_default": False,
+        "quality_warning": "Source body geometry is shared across splits; do not infer morphology generalization. Legacy 3D uses original weights; incoming weights remain experimental.",
         "benchmark": {
             "total_cases": len(cases),
             "total_frames": 80,
