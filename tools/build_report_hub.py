@@ -18,6 +18,7 @@ GROUPS = [
 ]
 # Descriptions are navigation aids, not new acceptance or quality claims.
 INFO = {
+ 'depth_generalization_v2': ('detector', 'Báo cáo Bước D — Đối chiếu 4 cấu hình và quyết định dừng head', 'So sánh cùng input, kiểm tra semantic test trên 8 ca benchmark, phân tầng lỗi và quyết định dừng head.'),
  'detector_handoff': ('handoff', 'Bàn giao công việc detector tiếp theo', 'Context đầy đủ, nhánh code, dữ liệu cần chuyển, kế hoạch và điểm dừng; có file tải xuống.'),
  'source_report_audit_v1': ('detector', 'Vì sao báo cáo gốc tốt nhưng replay kém?', 'Đối chiếu bài test tổng hợp, recordings và code trước/sau merge.'),
  'depth_generalization_v1': ('detector', 'So sánh detector cũ, 3D có prior và bỏ prior', 'Khung người trên depth, số liệu bỏ sót và chuẩn bị benchmark tổng quát hóa. Chưa train.'),

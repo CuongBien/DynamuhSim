@@ -1,0 +1,105 @@
+{
+  "schema": "social_calibration/1",
+  "depth_topic": "/camera/depth/image_rect_raw",
+  "frame_id": "camera_optical_frame",
+  "width": 424,
+  "height": 240,
+  "k": [
+    223.40148705705286,
+    0.0,
+    212.0,
+    0.0,
+    223.40148705705283,
+    120.0,
+    0.0,
+    0.0,
+    1.0
+  ],
+  "p": [
+    223.40148705705286,
+    0.0,
+    212.0,
+    0.0,
+    0.0,
+    223.40148705705283,
+    120.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0
+  ],
+  "d": [
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0
+  ],
+  "distortion_model": "plumb_bob",
+  "optical_to_base_link": [
+    [
+      0.0,
+      0.0,
+      1.0,
+      0.12
+    ],
+    [
+      -1.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    [
+      0.0,
+      -1.0,
+      0.0,
+      0.08
+    ],
+    [
+      0.0,
+      0.0,
+      0.0,
+      1.0
+    ]
+  ],
+  "depth_unit": "m",
+  "valid_depth_range_m": [
+    0.28,
+    5.0
+  ],
+  "lidar_height_reference_m": 0.12,
+  "lidar_unique_rays": 359,
+  "tf_static": {
+    "camera_optical_frame": [
+      "camera_link",
+      0.0,
+      0.0,
+      0.0,
+      -0.5,
+      0.5,
+      -0.5,
+      0.5
+    ],
+    "camera_link": [
+      "base_link",
+      0.12,
+      0.0,
+      0.08,
+      0.0,
+      0.0,
+      0.0,
+      1.0
+    ],
+    "base_scan": [
+      "base_link",
+      0.0,
+      0.0,
+      0.12,
+      0.0,
+      0.0,
+      0.0,
+      1.0
+    ]
+  }
+}

@@ -1,0 +1,10 @@
+--- accepted moderate driver
++++ WM cohort driver
+@@ -35,2 +35,2 @@
+-p=argparse.ArgumentParser();p.add_argument('--scenario',choices=['walking','standing'],required=True);p.add_argument('--seed',type=int,choices=[42,43],required=True);p.add_argument('--report-dir',type=Path,required=True);p.add_argument('--gui',action='store_true');a=p.parse_args();a.condition='people'
+-plan=json.loads((BASE/'protocol.json').read_text());plan['sim_budget']=90.;out=a.report_dir.resolve();out.mkdir(parents=True,exist_ok=False);runtime=HERE/'generated'/out.name;runtime.mkdir(exist_ok=False)
++p=argparse.ArgumentParser();p.add_argument('--scenario',choices=['walking','standing'],required=True);p.add_argument('--seed',type=int,choices=[45,46,47,48,49],required=True);p.add_argument('--report-dir',type=Path,required=True);p.add_argument('--gui',action='store_true');a=p.parse_args();a.condition='people'
++plan=json.loads((BASE/'protocol.json').read_text());plan['sim_budget']=90.;out=a.report_dir.resolve();out.mkdir(parents=True,exist_ok=False);runtime=Path('/home/cuongbien/DynamuhSim/experiments/social_navigation/benchmark/wm_episode_batch/generated/runtime')/out.name;runtime.mkdir(exist_ok=False)
+@@ -151 +151 @@
+-    result['counts']=dict(counts);result['experiment']='Conservative Nav2 footprint/inflation/speed pilot; native sensors/standingv3 unchanged';result['cmd_vel_publishers_after_goal']=[dict(node=e.node_name,namespace=e.node_namespace) for e in node.get_publishers_info_by_topic('/cmd_vel')];result['status']='MEASURED';result['amcl_final_pose']=endpoint(latest['amcl'].pose.pose)
++    result['counts']=dict(counts);result['experiment']='WM data cohort; same moderate Nav2/native sensors and group policies';result['cmd_vel_publishers_after_goal']=[dict(node=e.node_name,namespace=e.node_namespace) for e in node.get_publishers_info_by_topic('/cmd_vel')];result['status']='MEASURED';result['amcl_final_pose']=endpoint(latest['amcl'].pose.pose)

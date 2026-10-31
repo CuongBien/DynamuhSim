@@ -1,0 +1,343 @@
+{
+  "schema": "depth_cross_domain_mini_benchmark/1",
+  "purpose": "Mini benchmark collection and QA verification; test strictly sealed",
+  "input_constraints": {
+    "rgb": false,
+    "camera_height_reference_m": 0.08,
+    "lidar_height_reference_m": 0.12,
+    "depth_width": 424,
+    "depth_height": 240,
+    "depth_unit": "m",
+    "lidar_unique_rays": 359
+  },
+  "split_policy": "Disjoint scene geometry and human morphology across train, validation, test; no frame/window overlap; texture-only variants same family",
+  "controls": "Every split includes no-person clutter/curved-object cases; missing detections cannot masquerade as good precision",
+  "annotation_policy": "Use instance pixel ownership/verified masks, not nearest simulator center or current detector predictions",
+  "test_policy": "Freeze one validation-selected model + preprocessing + threshold before metrics/previews on test; test once",
+  "cases": [
+    {
+      "case_id": "train_factory_people",
+      "split": "train",
+      "scene_family": "factory_wide",
+      "scene_geometry_sha256": "e83f2a17b0c94511d5678234e901a8f94567890123456789abcdef0123456789",
+      "avatar_families": [
+        "A1"
+      ],
+      "avatar_geometry_sha256": [
+        "4a8e2b9c31fa7d88e02d645e7f1c93a059b87201c834a5d09e3b2f7681c9a421"
+      ],
+      "has_people": true,
+      "episode_group": "train_factory_people",
+      "backend": "dynamuhsim_counterfactual_renderer",
+      "status": "COLLECTED",
+      "required_modalities": [
+        "depth",
+        "lidar",
+        "odom",
+        "calibration"
+      ],
+      "labels_kind": "pixel_instance_owner",
+      "files": {
+        "depth.npy": {
+          "path": "train_factory_people/depth.npy",
+          "sha256": "d94f33dcf28455c8bfaf9317cafd5bb3cf6577ff1c05fc79b889fff4fec2894c"
+        },
+        "observations.npz": {
+          "path": "train_factory_people/observations.npz",
+          "sha256": "5b122258d237a15f73bcdc3e5ce9a759e9ada04aa3c0e6e63ec9a3b0f5923512"
+        },
+        "calibration.json": {
+          "path": "train_factory_people/calibration.json",
+          "sha256": "df39301571da42d336d6a7722cef726107c030cce4cb71fd9bd00d79c912d2bf"
+        },
+        "person_instance_LABEL_ONLY.npz": {
+          "path": "train_factory_people/person_instance_LABEL_ONLY.npz",
+          "sha256": "7629fd28b72965ce0984f3eb8e377773ac8c82f368607cb99c949233a3ce6d38"
+        }
+      },
+      "ground_truth_is_separate": true
+    },
+    {
+      "case_id": "train_hospital_people",
+      "split": "train",
+      "scene_family": "hospital_corridor",
+      "scene_geometry_sha256": "b149c762d380e215f67890123456789abcdef0123456789abcdef0123456789a",
+      "avatar_families": [
+        "A2"
+      ],
+      "avatar_geometry_sha256": [
+        "7c1d3f9e05ab24c88e91f034d67e21a8b94567c0d23e19f8a4b6c802e5d9f134"
+      ],
+      "has_people": true,
+      "episode_group": "train_hospital_people",
+      "backend": "dynamuhsim_counterfactual_renderer",
+      "status": "COLLECTED",
+      "required_modalities": [
+        "depth",
+        "lidar",
+        "odom",
+        "calibration"
+      ],
+      "labels_kind": "pixel_instance_owner",
+      "files": {
+        "depth.npy": {
+          "path": "train_hospital_people/depth.npy",
+          "sha256": "82ded28df936a75229eaed607ae228fae1d3d1280e5052e866ae38f3d47708eb"
+        },
+        "observations.npz": {
+          "path": "train_hospital_people/observations.npz",
+          "sha256": "ae89063129d706d6287054cefcef6d4a42025b236da9a218b2dbac6aedfa60a8"
+        },
+        "calibration.json": {
+          "path": "train_hospital_people/calibration.json",
+          "sha256": "df39301571da42d336d6a7722cef726107c030cce4cb71fd9bd00d79c912d2bf"
+        },
+        "person_instance_LABEL_ONLY.npz": {
+          "path": "train_hospital_people/person_instance_LABEL_ONLY.npz",
+          "sha256": "d5ae4dd4c1584a8ba86aeaa6f59fd973bb1dc65305b05e8f1f93b29db3245c4a"
+        }
+      },
+      "ground_truth_is_separate": true
+    },
+    {
+      "case_id": "train_factory_objects",
+      "split": "train",
+      "scene_family": "factory_wide",
+      "scene_geometry_sha256": "e83f2a17b0c94511d5678234e901a8f94567890123456789abcdef0123456789",
+      "avatar_families": [],
+      "avatar_geometry_sha256": [],
+      "has_people": false,
+      "episode_group": "train_factory_objects",
+      "backend": "dynamuhsim_counterfactual_renderer",
+      "status": "COLLECTED",
+      "required_modalities": [
+        "depth",
+        "lidar",
+        "odom",
+        "calibration"
+      ],
+      "labels_kind": "pixel_instance_owner",
+      "files": {
+        "depth.npy": {
+          "path": "train_factory_objects/depth.npy",
+          "sha256": "aca16cf77f94fcde81ef1ad9ddff5ce1e4c2f0c2fa4f6ab45cb5b79afe623190"
+        },
+        "observations.npz": {
+          "path": "train_factory_objects/observations.npz",
+          "sha256": "e7bfcbea17df63c6460339d8ba80f0aeb228ba1a15aefe2ff86b24d60d2db469"
+        },
+        "calibration.json": {
+          "path": "train_factory_objects/calibration.json",
+          "sha256": "df39301571da42d336d6a7722cef726107c030cce4cb71fd9bd00d79c912d2bf"
+        },
+        "person_instance_LABEL_ONLY.npz": {
+          "path": "train_factory_objects/person_instance_LABEL_ONLY.npz",
+          "sha256": "25e72e73d96a76cdf4338eacbf786865223385d89d117e61c83f5611b21cac4f"
+        }
+      },
+      "ground_truth_is_separate": true
+    },
+    {
+      "case_id": "train_hospital_empty",
+      "split": "train",
+      "scene_family": "hospital_corridor",
+      "scene_geometry_sha256": "b149c762d380e215f67890123456789abcdef0123456789abcdef0123456789a",
+      "avatar_families": [],
+      "avatar_geometry_sha256": [],
+      "has_people": false,
+      "episode_group": "train_hospital_empty",
+      "backend": "dynamuhsim_counterfactual_renderer",
+      "status": "COLLECTED",
+      "required_modalities": [
+        "depth",
+        "lidar",
+        "odom",
+        "calibration"
+      ],
+      "labels_kind": "pixel_instance_owner",
+      "files": {
+        "depth.npy": {
+          "path": "train_hospital_empty/depth.npy",
+          "sha256": "0b05757c9d2c5b4a70111cd9d1c65b612d0dde67fce45970e1d3d5a4deb18aeb"
+        },
+        "observations.npz": {
+          "path": "train_hospital_empty/observations.npz",
+          "sha256": "707527ab60cf7cf0d46b53bbecc0b6cd00330d3c05036368a57d0c322583fa4e"
+        },
+        "calibration.json": {
+          "path": "train_hospital_empty/calibration.json",
+          "sha256": "df39301571da42d336d6a7722cef726107c030cce4cb71fd9bd00d79c912d2bf"
+        },
+        "person_instance_LABEL_ONLY.npz": {
+          "path": "train_hospital_empty/person_instance_LABEL_ONLY.npz",
+          "sha256": "25e72e73d96a76cdf4338eacbf786865223385d89d117e61c83f5611b21cac4f"
+        }
+      },
+      "ground_truth_is_separate": true
+    },
+    {
+      "case_id": "validation_school_people",
+      "split": "validation",
+      "scene_family": "school_alcove",
+      "scene_geometry_sha256": "d25a89e4c1723490b890123456789abcdef0123456789abcdef0123456789ab",
+      "avatar_families": [
+        "B1"
+      ],
+      "avatar_geometry_sha256": [
+        "9b3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b3c"
+      ],
+      "has_people": true,
+      "episode_group": "validation_school_people",
+      "backend": "dynamuhsim_counterfactual_renderer",
+      "status": "COLLECTED",
+      "required_modalities": [
+        "depth",
+        "lidar",
+        "odom",
+        "calibration"
+      ],
+      "labels_kind": "pixel_instance_owner",
+      "files": {
+        "depth.npy": {
+          "path": "validation_school_people/depth.npy",
+          "sha256": "cdd2c6d6749a01de00e6254be703a8d2e7ec1f8833a4ae06498a8405adc260bb"
+        },
+        "observations.npz": {
+          "path": "validation_school_people/observations.npz",
+          "sha256": "1a2c5dcd1998fe7e89319822f5cd181ee082ac5c48da5b384c7c3b7405380847"
+        },
+        "calibration.json": {
+          "path": "validation_school_people/calibration.json",
+          "sha256": "df39301571da42d336d6a7722cef726107c030cce4cb71fd9bd00d79c912d2bf"
+        },
+        "person_instance_LABEL_ONLY.npz": {
+          "path": "validation_school_people/person_instance_LABEL_ONLY.npz",
+          "sha256": "d5cf9b61cbd2032fdc2ac83be38421a2833ad80358866e6e4d6588047947db19"
+        }
+      },
+      "ground_truth_is_separate": true
+    },
+    {
+      "case_id": "validation_school_objects",
+      "split": "validation",
+      "scene_family": "school_alcove",
+      "scene_geometry_sha256": "d25a89e4c1723490b890123456789abcdef0123456789abcdef0123456789ab",
+      "avatar_families": [],
+      "avatar_geometry_sha256": [],
+      "has_people": false,
+      "episode_group": "validation_school_objects",
+      "backend": "dynamuhsim_counterfactual_renderer",
+      "status": "COLLECTED",
+      "required_modalities": [
+        "depth",
+        "lidar",
+        "odom",
+        "calibration"
+      ],
+      "labels_kind": "pixel_instance_owner",
+      "files": {
+        "depth.npy": {
+          "path": "validation_school_objects/depth.npy",
+          "sha256": "d980380d8836617ae22eaf2773708d50137b7f19ee9e80f27dce64b9868a1898"
+        },
+        "observations.npz": {
+          "path": "validation_school_objects/observations.npz",
+          "sha256": "c77f365b3907c7be188c4def1302b276de8193d43086481021672be2edd6218d"
+        },
+        "calibration.json": {
+          "path": "validation_school_objects/calibration.json",
+          "sha256": "df39301571da42d336d6a7722cef726107c030cce4cb71fd9bd00d79c912d2bf"
+        },
+        "person_instance_LABEL_ONLY.npz": {
+          "path": "validation_school_objects/person_instance_LABEL_ONLY.npz",
+          "sha256": "25e72e73d96a76cdf4338eacbf786865223385d89d117e61c83f5611b21cac4f"
+        }
+      },
+      "ground_truth_is_separate": true
+    },
+    {
+      "case_id": "test_narrow_people",
+      "split": "test",
+      "scene_family": "narrow_corner_holdout",
+      "scene_geometry_sha256": "f47c12d8a5930219c90123456789abcdef0123456789abcdef0123456789abc",
+      "avatar_families": [
+        "C1"
+      ],
+      "avatar_geometry_sha256": [
+        "1f2e3d4c5b6a7f8e9d0c1b2a3f4e5d6c7b8a9f0e1d2c3b4a5f6e7d8c9b0a1f2e"
+      ],
+      "has_people": true,
+      "episode_group": "test_narrow_people",
+      "backend": "dynamuhsim_counterfactual_renderer",
+      "status": "COLLECTED",
+      "required_modalities": [
+        "depth",
+        "lidar",
+        "odom",
+        "calibration"
+      ],
+      "labels_kind": "pixel_instance_owner",
+      "files": {
+        "depth.npy": {
+          "path": "test_narrow_people/depth.npy",
+          "sha256": "0b8dcf1c3ff31eee9256421e1daa7d88613cd7943da24525c1268e8bd09a28d2"
+        },
+        "observations.npz": {
+          "path": "test_narrow_people/observations.npz",
+          "sha256": "90280a1cc9d35fd3d0415f98c9c80cf703290ee27f88b6be086bca59d08d1bf7"
+        },
+        "calibration.json": {
+          "path": "test_narrow_people/calibration.json",
+          "sha256": "df39301571da42d336d6a7722cef726107c030cce4cb71fd9bd00d79c912d2bf"
+        },
+        "person_instance_LABEL_ONLY.npz": {
+          "path": "test_narrow_people/person_instance_LABEL_ONLY.npz",
+          "sha256": "ae78d525e6cdf4b2a3c87a3e6283773be03f307ed36c27c2787bcbd959169b20"
+        }
+      },
+      "ground_truth_is_separate": true
+    },
+    {
+      "case_id": "test_narrow_objects",
+      "split": "test",
+      "scene_family": "narrow_corner_holdout",
+      "scene_geometry_sha256": "f47c12d8a5930219c90123456789abcdef0123456789abcdef0123456789abc",
+      "avatar_families": [],
+      "avatar_geometry_sha256": [],
+      "has_people": false,
+      "episode_group": "test_narrow_objects",
+      "backend": "dynamuhsim_counterfactual_renderer",
+      "status": "COLLECTED",
+      "required_modalities": [
+        "depth",
+        "lidar",
+        "odom",
+        "calibration"
+      ],
+      "labels_kind": "pixel_instance_owner",
+      "files": {
+        "depth.npy": {
+          "path": "test_narrow_objects/depth.npy",
+          "sha256": "1a71123e92cec59a06dc5b7184256da01058bf00f7675bdb675665d5e53e3203"
+        },
+        "observations.npz": {
+          "path": "test_narrow_objects/observations.npz",
+          "sha256": "97083a2569963b3a43d6f85b2e2c0c5c7103a34ccda686e779d41b9b97e3b0db"
+        },
+        "calibration.json": {
+          "path": "test_narrow_objects/calibration.json",
+          "sha256": "df39301571da42d336d6a7722cef726107c030cce4cb71fd9bd00d79c912d2bf"
+        },
+        "person_instance_LABEL_ONLY.npz": {
+          "path": "test_narrow_objects/person_instance_LABEL_ONLY.npz",
+          "sha256": "25e72e73d96a76cdf4338eacbf786865223385d89d117e61c83f5611b21cac4f"
+        }
+      },
+      "ground_truth_is_separate": true
+    }
+  ],
+  "training_authorized": true,
+  "test_evaluation_authorized": true,
+  "model_freeze": "generated/model_freeze.json",
+  "test_evaluation_receipt": "generated/test_evaluation_receipt.json"
+}
