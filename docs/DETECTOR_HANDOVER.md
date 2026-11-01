@@ -1,3 +1,5 @@
+> Cập nhật01/11: nhánh cũ feat/mujoco-backend đổi tên thành mcp-setup và đã có commit MCP; công việc port mới dùng nhánh mujoco từ test sau merge. Xem [nhánh hiện tại](BRANCH_WORKFLOW.md).
+
 > Cập nhật31/10/2026: đã nhận trainer và weights linear mới, kiểm910frame và giữ experimental; chưa nghiệm thu generalization. Đọc [review mới nhất](INCOMING_DETECTOR_REVIEW_2026-10-31.md) trước; phần bên dưới là context bàn giao30/10.
 
 # Bàn giao công việc detector người — 30/10/2026
@@ -206,7 +208,7 @@ NOT_READY/exit2 là kết quả dự kiến khi chưa thu dữ liệu; không s�
 
 localhost là máy đang chạy server, không phải link public: người nhận ở máy khác phải có bản sao viewer và mở server ở máy họ. Ảnh/overlay từ depth Gazebo đã ghi, không phải ảnh AI; GIF là slideshow, không phải video realtime.
 
-MuJoCo chưa triển khai backend trong các mốc trên. Người làm port dùng nhánh feat/mujoco-backend, đọc docs/MUJOCO_HANDOVER.md và docs/HANDOFF_START.md **trên nhánh đó**. Detector nên nhận depth/XYZ + calibration + causal odom qua contract chung; không phụ thuộc tên model/world để dự đoán người. Sau khi adapter MuJoCo đạt contract mới cân nhắc bổ sung backend test, không bắt detector chờ port hoặc giả định có thể copy Gazebo sensor plugin sang MuJoCo.
+MuJoCo chưa triển khai backend trong các mốc trên. Người làm port dùng nhánh mujoco, đọc docs/MUJOCO_HANDOVER.md và docs/HANDOFF_START.md **trên nhánh đó**. Detector nên nhận depth/XYZ + calibration + causal odom qua contract chung; không phụ thuộc tên model/world để dự đoán người. Sau khi adapter MuJoCo đạt contract mới cân nhắc bổ sung backend test, không bắt detector chờ port hoặc giả định có thể copy Gazebo sensor plugin sang MuJoCo.
 
 ## 10. Tin nhắn giao việc có thể gửi ngay
 

@@ -1,3 +1,5 @@
+> **MCP đã tích hợp:** [server ROS 2 và cách dùng](tools/mcp_server/README.md), nguồn nhánh `mcp-setup`. [Sơ đồ nhánh hiện tại](docs/BRANCH_WORKFLOW.md). **Port MuJoCo tiếp theo:** nhánh `mujoco`, tách từ nhánh test sau merge; [runbook](docs/MUJOCO_HANDOVER.md).
+
 > **Nhánh tích hợp hiện tại: `test/gazebo-harmonic-benchmark`.** Đã merge detector từ `feat/depth-detector-generalization` tại `47fce50f` ngày01/11/2026. [Biên bản merge và kiểm tra](docs/verification/test_branch_merge_2026-11-01/README.md). Model mới vẫn experimental.
 
 > **Review cập nhật31/10:** [kết quả nhập code mới và replay910frame](docs/INCOMING_DETECTOR_REVIEW_2026-10-31.md). Model/world mới giữ thử nghiệm, chưa promote defaults.

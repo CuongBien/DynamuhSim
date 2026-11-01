@@ -1,0 +1,33 @@
+{
+  "date": "2026-11-01",
+  "renamed_branch": {
+    "old": "feat/mujoco-backend",
+    "new": "mcp-setup",
+    "source_commit": "6c40f78ac462645f7b518efc48d17d29283b9e27"
+  },
+  "merge_target": "test/gazebo-harmonic-benchmark",
+  "test_before": "6df01c8347bfe229b506040ec1ecd874ad682a85",
+  "source": "6c40f78ac462645f7b518efc48d17d29283b9e27",
+  "mcp_files_committed": [
+    "tools/mcp_server/README.md",
+    "tools/mcp_server/run_server.sh",
+    "tools/mcp_server/server.py"
+  ],
+  "README_conflict": "Resolved: preserve test navigation, add MCP + new MuJoCo links",
+  "tests": {
+    "tests": 344,
+    "skips": 2,
+    "status": "OK"
+  },
+  "mujoco_preflight": "PASS CODE_CHECKS_ONLY",
+  "MCP_validation": [
+    "Python syntax",
+    "bash -n",
+    "real SDK import + CLI --help"
+  ],
+  "server_started": false,
+  "network_settings_changed": false,
+  "untracked_cuong_note_committed": false,
+  "next_branch": "mujoco from merged test HEAD",
+  "mujoco_backend": "NOT_IMPLEMENTED"
+}
