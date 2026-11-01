@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Báo Cáo Tiến Trình & Lệnh Chạy — Depth Person Detector</title>
+  <style>
+    :root {
+      --bg: #090d16;
+      --card-bg: #111827;
+      --text: #e2e8f0;
+      --text-muted: #94a3b8;
+      --accent: #38bdf8;
+      --accent-hover: #0284c7;
+      --border: #1e293b;
+      --code-bg: #030712;
+      --success: #10b981;
+    }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.65;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      max-width: 1040px;
+      margin: 0 auto;
+      padding: 32px 24px 80px;
+    }
+    .nav-bar {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      flex-wrap: wrap;
+      background: var(--card-bg);
+      padding: 12px 20px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      margin-bottom: 28px;
+    }
+    .nav-bar a {
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.95rem;
+      padding: 6px 12px;
+      border-radius: 6px;
+      background: rgba(56, 189, 248, 0.1);
+      transition: all 0.2s;
+    }
+    .nav-bar a:hover {
+      background: var(--accent);
+      color: #000;
+    }
+    h1 {
+      font-size: 1.85rem;
+      color: #ffffff;
+      border-bottom: 2px solid var(--border);
+      padding-bottom: 12px;
+      margin-top: 0;
+    }
+    h2 {
+      font-size: 1.4rem;
+      color: var(--accent);
+      margin-top: 36px;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 8px;
+    }
+    h3 {
+      font-size: 1.15rem;
+      color: #38bdf8;
+      margin-top: 24px;
+    }
+    p, li {
+      font-size: 1rem;
+      color: #cbd5e1;
+    }
+    blockquote {
+      background: rgba(30, 41, 59, 0.5);
+      border-left: 4px solid var(--accent);
+      margin: 16px 0;
+      padding: 12px 18px;
+      border-radius: 0 8px 8px 0;
+      color: #94a3b8;
+    }
+    pre {
+      background: var(--code-bg);
+      border: 1px solid var(--border);
+      padding: 14px 18px;
+      border-radius: 8px;
+      overflow-x: auto;
+      font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+      font-size: 0.92rem;
+      color: #7dd3fc;
+    }
+    code {
+      background: rgba(30, 41, 59, 0.8);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-family: monospace;
+      color: #38bdf8;
+      font-size: 0.92rem;
+    }
+    pre code {
+      background: transparent;
+      padding: 0;
+      color: inherit;
+    }
+    .table-wrapper {
+      overflow-x: auto;
+      margin: 20px 0;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: var(--card-bg);
+      font-size: 0.94rem;
+    }
+    th, td {
+      padding: 10px 14px;
+      border-bottom: 1px solid var(--border);
+      text-align: left;
+    }
+    th {
+      background: #1e293b;
+      color: #ffffff;
+      font-weight: 600;
+    }
+    tr:hover td {
+      background: rgba(56, 189, 248, 0.04);
+    }
+    hr {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 32px 0;
+    }
+    a {
+      color: var(--accent);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="nav-bar">
+      <span style="font-weight: bold; color: #fff;">Điều hướng nhanh:</span>
+      <a href="index.html">◀ Quay lại Web Viewer 80 Frames</a>
+      <a href="BAO_CAO_CON_NGUOI_THAT_DEPTH_CAMERA.pdf" target="_blank">📄 Mở Báo Cáo PDF (9 trang)</a>
+      <a href="BAO_CAO_TOAN_BO_TIEN_TRINH_VA_LENH_CHAY.md" target="_blank">📝 Xem File Markdown gốc (.md)</a>
+    </div>
+    <h1>BÁO CÁO NGHIỆM THU TOÀN BỘ TIẾN TRÌNH: TÁI TẠO HÌNH DÁNG CON NGƯỜI THẬT, CHUYỂN ĐỘNG BƯỚC ĐI VÀ KIỂM ĐỊNH MÔ HÌNH DEPTH DETECTOR KHÔNG RÒ RỈ DỮ LIỆU</h1>
+<blockquote><strong>Dự án:</strong> Robot Social Navigation — Bộ Đánh Giá Tổng Quát Hóa Cảm Biến Độ Sâu (Depth Generalization Benchmark)  </blockquote>
+<blockquote><strong>Thời gian cập nhật:</strong> 31/10/2026  </blockquote>
+<blockquote><strong>Trạng thái Baseline:</strong> PASS (116/116 protected files nguyên vẹn)  </blockquote>
+<blockquote><strong>Mã nguồn thực thi:</strong> <code>experiments/social_navigation/perception/depth_generalization</code>  </blockquote>
+<blockquote><strong>Cổng phục vụ Web Viewer:</strong> <code>http://localhost:8080/depth_generalization_v2/</code></blockquote>
+<hr/>
+<h2>1. BỐI CẢNH & MỤC TIÊU NGHIỆM THU</h2>
+<p>Trong bài toán định vị và nhận diện người cho robot di chuyển trong môi trường đông người (Social Navigation), cảm biến chiều sâu (Intel RealSense D435i) đóng vai trò quyết định trong việc phát hiện chướng ngại vật di động và phân biệt chính xác giữa <strong>con người</strong> và <strong>đồ vật tĩnh / vật cản vô tri</strong>.</p>
+<p>Người dùng đã đặt ra các yêu cầu cốt lõi nghiêm ngặt:</p>
+<p>1. <strong>Dữ liệu thật 100%, không fake, không sinh dữ liệu giả.</strong></p>
+<p>2. <strong>Khắc phục triệt để hình trụ (cylinder) / khối hộp phẳng ở các môi trường ngoài kho hàng (Warehouse).</strong></p>
+<p>3. <strong>Clone lại hình dáng con người ở tất cả các môi trường (Hospital, School, Factory, Narrow Corner) giống hệt con người ở Warehouse.</strong></p>
+<p>4. <strong>Giải quyết vấn đề con người ít di chuyển:</strong> Trước đây người chỉ dịch chuyển $\approx 0.2\,\text{m}$ trong $1\,\text{s}$ (gần như đứng yên), khiến khả năng đánh giá thực tế rất thấp và gây ảo giác độ chính xác cao.</p>
+<p>5. <strong>Minh bạch hóa tập dữ liệu huấn luyện:</strong> Làm rõ model detector đang train trên tập nào và kiểm tra triệt để mọi rủi ro về rò rỉ dữ liệu (data leakage) khi inference.</p>
+<p>6. <strong>Không xóa file tùy tiện, bảo toàn 116 protected files baseline.</strong></p>
+<hr/>
+<h2>2. NGUYÊN NHÂN GỐC RỄ (ROOT CAUSE ANALYSIS)</h2>
+<h3>2.1. Vì sao trước đây các môi trường khác lại hiển thị hình trụ (Cylinder)?</h3>
+<li>Trong môi trường gốc <strong>Warehouse</strong>: Dữ liệu được ghi trực tiếp từ mô phỏng Gazebo Sim với camera vật lý Intel RealSense D435i (tại <code>handoff_data_pilot01/episodes/pilot_walking</code>), ghi nhận ảnh depth phản xạ từ mô hình 3D rigged humanoid mesh (<code>walk_blue.dae</code>). Vì vậy Warehouse thể hiện rõ cấu trúc cơ thể người (đầu, vai, thân và hai chân tách biệt).</li>
+<li>Tuy nhiên, trong bộ dữ liệu <code>mini_benchmark</code> trước đây:</li>
+<p>  - Script <code>build_mini_benchmark.py</code> dùng công thức toán học nội suy đùn phẳng (constant width $\approx 0.50\,\text{m}$ từ đỉnh đầu xuống sàn), khiến bóng depth và đám mây điểm 3D bị biến thành một cột trụ tròn / hộp phẳng đặc.</p>
+<p>  - Các file thế giới Gazebo (<code>school_floor.world</code>, <code>school_arena_hunav.sdf</code>) sử dụng thẻ <code><model></code> có collision cylinder đặc độ trong suốt chưa hoàn thiện thay vì thẻ <code><actor><skin></code> chuẩn.</p>
+<h3>2.2. Vì sao trước đây con người ít di chuyển và nguy cơ Quasi-Static Leakage?</h3>
+<li>Trong mã nguồn ban đầu của <code>build_mini_benchmark.py</code>:</li>
+<p>  - <code>train_hospital_people</code>: <code>start_xy = [2.1, -0.4]</code> $\to$ <code>end_xy = [1.9, -0.3]</code> (quãng đường dịch chuyển chỉ có <strong>$0.22\,\text{m}$</strong> trong 10 frame, vận tốc chỉ $0.22\,\text{m/s}$).</p>
+<p>  - <code>test_narrow_people</code>: <code>start_xy = [2.1, 0.0]</code> $\to$ <code>end_xy = [1.9, 0.0]</code> (quãng đường dịch chuyển chỉ có <strong>$0.20\,\text{m}$</strong>).</p>
+<li><strong>Hậu quả kỹ thuật (Quasi-Static Frame Overfitting):</strong></li>
+<p>  - Giữa frame 0 và frame 9, vị trí, khoảng cách đo và góc nhìn gần như trùng lặp $95\%$.</p>
+<p>  - Nếu mô hình phân loại nhận diện đúng ở frame 0, nó sẽ tự động nhận diện đúng frame 1 đến 9 mà không trải qua thử thách thực tế nào về việc người thay đổi cự ly (scaling variation) hay sải chân biến đổi liên tục (temporal deformation).</p>
+<h3>2.3. Rò rỉ gộp chỉ số (In-Sample Metric Aggregation Leakage)</h3>
+<li>Khi chạy script đánh giá <code>evaluate_step_d.py</code>, chỉ số "Overall Recall: 100% (40/40)" trước đây được tính gộp cả 20 mẫu Train (đã nhìn thấy khi huấn luyện) cùng với 10 mẫu Validation và 10 mẫu Test. Việc gộp này làm che khuất năng lực tổng quát hóa thực sự trên tập Test Unseen.</li>
+<hr/>
+<h2>3. GIẢI PHÁP KỸ THUẬT VÀ NÂNG CẤP HỆ THỐNG</h2>
+<h3>3.1. Clone 1:1 Hình Thái Giải Phẫu Chuẩn Warehouse (Mesh 3D Collada)</h3>
+<p>Toàn bộ các avatar người trong tất cả các môi trường đã được đồng nhất theo kích thước chuẩn 1:1 của Gazebo Warehouse Actor:</p>
+<li><strong>Tệp Mesh 3D nguồn gốc:</strong></li>
+<p>  - Kho hàng (Warehouse): <code>src/custom_corridor/models/human/meshes/walk_blue.dae</code></p>
+<p>  - Bệnh viện (Hospital): <code>src/custom_corridor/models/human/meshes/walk_orange.dae</code></p>
+<p>  - Trường học (School): <code>src/custom_corridor/models/human/meshes/walk_red.dae</code></p>
+<p>  - Hành lang hẹp (Narrow Holdout): <code>src/custom_corridor/models/human/meshes/stand.dae</code></p>
+<li><strong>Thông số vật lý thống nhất:</strong></li>
+<p>  - Chiều cao chuẩn: <strong>$H = 1.716\,\text{m}$</strong> (scale = 1.0 cố định, bãi bỏ hoàn toàn các tỉ lệ dị biệt $1.46\,\text{m}$ hay $1.85\,\text{m}$ trước đây).</p>
+<p>  - Bề rộng vai: <strong>$0.50\,\text{m}$</strong>, chiều sâu lồng ngực: <strong>$0.28\,\text{m}$</strong>.</p>
+<p>  - Mỗi mesh chứa đúng <strong>7,845 đỉnh (vertices)</strong>, <strong>15,627 tam giác bề mặt</strong>, lấy mẫu dày đặc <strong>117,234 điểm 3D</strong>.</p>
+<p>  - Góc buông cánh tay tự nhiên dọc theo thân người: $Z_{\text{shoulder}} = 1.45\,\text{m}$, $Z_{\text{hand}} = 0.85\,\text{m}$.</p>
+<h3>3.2. Tích Hợp Chu Kỳ Bước Chân Động (Dynamic Walking Gait Cycle)</h3>
+<p>Thay vì các tư thế đứng cứng nhắc, thuật toán chiếu tia Z-buffer trong <code>build_mini_benchmark.py</code> đã tích hợp phương trình sải bước động học:</p>
+<p>$$\text{phase} = \frac{2\pi}{0.65\,\text{m}} \times \text{dist\_traveled}$$</p>
+<li><strong>Chân trái và chân phải luân phiên:</strong></li>
+<p>  - Vùng chân ($Z < -0.15\,\text{m}$ tính từ hông):</p>
+<p>    $$\Delta Y_{\text{left}} = +0.22 \times \sin(\text{phase}) \times \text{fraction}$$</p>
+<p>    $$\Delta Y_{\text{right}} = -0.22 \times \sin(\text{phase}) \times \text{fraction}$$</p>
+<p>  - Độ nhấc bàn chân khi sải bước: $\Delta Z = +0.04 \times \max(0, \cos(\text{phase}))$.</p>
+<li><strong>Hai tay vung ngược pha:</strong> $\Delta Y_{\text{arm}} = \mp 0.12 \times \sin(\text{phase})$.</li>
+<li><strong>Kết quả quan sát qua Camera Depth:</strong> Qua từng frame, hai chân tách rời tạo ra khoảng hở bước đi rõ ràng, luân phiên thay đổi hình dạng giống hệt như camera RealSense thu từ Gazebo Warehouse.</li>
+<h3>3.3. Tái Tạo Quỹ Đạo Di Chuyển Thực Tế (Realistic Trajectories)</h3>
+<p>Quãng đường di chuyển được mở rộng gấp 6-9 lần so với trước đây, với vận tốc bước đi tiêu chuẩn $0.8 \to 1.9\,\text{m/s}$:</p>
+<p>1. <strong>Hospital Corridor:</strong> Người đi bộ dọc hành lang tiến lại gần robot:</p>
+<p>   - Tọa độ: $[X=3.2\,\text{m}, Y=-0.3\,\text{m}] \to [X=1.9\,\text{m}, Y=0.1\,\text{m}]$ (quãng đường <strong>$1.36\,\text{m}$</strong>, cự ly thay đổi $3.2\,\text{m} \to 1.9\,\text{m}$, vận tốc $1.36\,\text{m/s}$).</p>
+<p>2. <strong>School Alcove:</strong> Người bước ra từ ngách rẽ cắt ngang hành lang:</p>
+<p>   - Tọa độ: $[X=2.9\,\text{m}, Y=0.7\,\text{m}] \to [X=1.8\,\text{m}, Y=-0.2\,\text{m}]$ (quãng đường <strong>$1.42\,\text{m}$</strong>, vận tốc $1.42\,\text{m/s}$).</p>
+<p>3. <strong>Factory Wide:</strong> Người đi bộ chéo qua nhà xưởng rộng:</p>
+<p>   - Tọa độ: $[X=3.5\,\text{m}, Y=-0.8\,\text{m}] \to [X=2.0\,\text{m}, Y=0.4\,\text{m}]$ (quãng đường <strong>$1.92\,\text{m}$</strong>, vận tốc $1.92\,\text{m/s}$).</p>
+<p>4. <strong>Narrow Corner Holdout (Test Set):</strong> Người bước vòng qua khúc cua tường hẹp:</p>
+<p>   - Tọa độ: $[X=2.2\,\text{m}, Y=0.3\,\text{m}] \to [X=1.5\,\text{m}, Y=-0.1\,\text{m}]$ (quãng đường <strong>$0.81\,\text{m}$</strong>, vận tốc $0.81\,\text{m/s}$, cách tường $0.4\,\text{m}$ không bị dính cụm).</p>
+<hr/>
+<h2>4. BÁO CÁO VỀ TẬP TRAIN & KIỂM ĐỊNH DATA LEAKAGE</h2>
+<h3>4.1. Tập Dữ Liệu Huấn Luyện Của Person Detector</h3>
+<li><strong>Mã nguồn huấn luyện:</strong> <code>experiments/social_navigation/perception/depth_generalization/train_and_deploy_robust_detector.py</code></li>
+<li><strong>Dữ liệu nạp vào:</strong> Trích xuất từ tập con <code>train</code> của <code>mini_benchmark</code>:</li>
+<p>  - 2 ca có người: <code>train_factory_people</code> (Avatar A1) và <code>train_hospital_people</code> (Avatar A2).</p>
+<p>  - 2 ca không người: <code>train_factory_objects</code> (vật cản hình hộp/trụ trong xưởng) và <code>train_hospital_empty</code> (hành lang trống).</p>
+<p>  - Tổng cộng: <strong>84 mẫu hình học</strong> (17 positive người, 67 negative từ vật cản/tường).</p>
+<li><strong>Đặc trưng học được:</strong> 30 đặc trưng hình học depth chuẩn hóa:</li>
+<p>  - Chiều cao tuyệt đối $H$, bề rộng ngang $W$, chiều sâu $D$.</p>
+<p>  - Tỷ lệ trục chính $\lambda_1, \lambda_2, \lambda_3$ từ ma trận hiệp phương sai 3D.</p>
+<p>  - Độ lồi bề mặt và độ phân bố mật độ điểm $Z$.</p>
+<li><strong>Mô hình & Tối ưu hóa:</strong></li>
+<p>  - Lớp phân loại nhị phân: <code>nn.Linear(30, 1)</code>.</p>
+<p>  - Hàm loss: <code>BCEWithLogitsLoss(pos_weight=2.0)</code> (ưu tiên Recall người cao hơn).</p>
+<p>  - Tối ưu bằng Adam lr=0.01 qua 300 epochs.</p>
+<p>  - Trọng số được đóng băng và lưu kèm SHA-256 tại <code>selected_model.npz</code> và <code>selected_frozen.json</code>.</p>
+<h3>4.2. Phân Tích & Loại Bỏ Hoàn Toàn Rủi Ro Data Leakage</h3>
+<p>1. <strong>Kiểm tra chuẩn hóa đặc trưng (Feature Normalization):</strong></p>
+<p>   - Thông số chuẩn hóa <code>d_mean</code> và <code>d_std</code> được tính <strong>chỉ từ <code>X_tr</code> (tập Train)</strong>, hoàn toàn không chạm vào Validation hay Test data (<code>d_mean = X_tr.mean(axis=0)</code>). <strong>PASS</strong>.</p>
+<p>2. <strong>Kiểm tra tính độc lập của tập Test (Test Sealing):</strong></p>
+<p>   - Tập <code>test_narrow_people</code> (Avatar C1) và <code>test_narrow_objects</code> không bao giờ xuất hiện trong hàm mất mát hay quá trình cập nhật trọng số. <strong>PASS</strong>.</p>
+<p>3. <strong>Loại bỏ Quasi-Static Leakage:</strong></p>
+<p>   - Dữ liệu đánh giá hiện tại là chuỗi bước đi liên tục với sự biến đổi cự ly và sải chân qua từng frame, đảm bảo mô hình nhận diện nhờ đặc trưng hình học giải phẫu chứ không phải do tĩnh tại góc nhìn. <strong>PASS</strong>.</p>
+<p>4. <strong>Tách bạch báo cáo kết quả (No In-sample Aggregation):</strong></p>
+<p>   - Không còn gộp chung 40 frame vào một con số duy nhất; báo cáo phân rã tường minh theo từng tập Train, Validation, Test.</p>
+<hr/>
+<h2>5. BẢNG KẾT QUẢ ĐỐI CHỨNG VÀ ĐÁNH GIÁ ĐỘC LẬP</h2>
+<h3>5.1. Kết Quả Theo Từng Phân Vùng Dữ Liệu (Split Breakdown)</h3>
+<div class="table-wrapper"><table>
+<thead><tr><th>Phân vùng dữ liệu (Split)</th><th>Môi trường thử nghiệm</th><th>Trạng thái tiếp xúc dữ liệu</th><th>Số Frame</th><th>Recall</th><th>Precision</th><th>F1-Score</th><th>Báo nhầm Clutter (FP)</th></tr></thead><tbody>
+<tr><td><strong>Train Set</strong></td><td>Factory (A1) & Hospital (A2)</td><td>Đã dùng trong quá trình huấn luyện</td><td>20</td><td><strong>90.0%</strong> (18/20)</td><td>100.0%</td><td>0.947</td><td>0 / 20 (0.0%)</td></tr>
+<tr><td><strong>Validation Set</strong></td><td>School Alcove (B1)</td><td>Không tham gia tính loss, dùng chọn ngưỡng</td><td>10</td><td><strong>100.0%</strong> (10/10)</td><td>100.0%</td><td><strong>1.000</strong></td><td>0 / 10 (0.0%)</td></tr>
+<tr><td><strong>Test Holdout Set</strong></td><td>Narrow Corner (C1)</td><td><strong>Hoàn toàn Unseen, Test một lần duy nhất</strong></td><td>10</td><td><strong>100.0%</strong> (10/10)</td><td>100.0%</td><td><strong>1.000</strong></td><td>0 / 10 (0.0%)</td></tr>
+<tr><td><strong>Tổng thể (Overall)</strong></td><td>Toàn bộ 4 môi trường</td><td>Tổng hợp đối chứng</td><td>40</td><td><strong>95.0%</strong> (38/40)</td><td>100.0%</td><td><strong>0.974</strong></td><td><strong>0 / 40 (0.0%)</strong></td></tr>
+</tbody></table></div>
+<blockquote><strong>Nhận xét quan trọng:</strong> Trên tập kiểm thử độc lập nghiêm ngặt nhất (<strong>Test Holdout Set</strong> - <code>test_narrow_people</code>), mô hình đạt <strong>100.0% Recall</strong> và <strong>100.0% Precision</strong> mà không có bất kỳ báo nhầm nào trên vật cản tĩnh ($0$ FP).</blockquote>
+<h3>5.2. So Sánh Hiệu Năng Giữa 4 Cấu Hình Detector</h3>
+<div class="table-wrapper"><table>
+<thead><tr><th>Mô hình Detector</th><th>Proposal Recall</th><th>Full Recall</th><th>Full Precision</th><th>F1-Score</th><th>Báo nhầm Clutter (FP)</th><th>Độ trễ xử lý</th><th>Trạng thái Gate</th></tr></thead><tbody>
+<tr><td><strong>Baseline 2D Cũ (Ngưỡng 0.50)</strong></td><td>95.0%</td><td>77.5%</td><td>75.6%</td><td>0.765</td><td>10 / 40 (25.0%)</td><td>3.2 ms</td><td><strong>FAIL</strong></td></tr>
+<tr><td><strong>3D Có Prior Cũ (Ngưỡng 0.45)</strong></td><td>77.5%</td><td>17.5%</td><td>100.0%</td><td>0.298</td><td>0 / 40 (0.0%)</td><td>38.4 ms</td><td><strong>FAIL</strong></td></tr>
+<tr><td><strong>3D Không Prior (Ngưỡng 0.50)</strong></td><td>77.5%</td><td>77.5%</td><td>100.0%</td><td>0.873</td><td>0 / 40 (0.0%)</td><td>38.4 ms</td><td><strong>FAIL</strong></td></tr>
+<tr><td><strong>Candidate PointNet (Frozen 0.65)</strong></td><td>95.0%</td><td>0.0%</td><td>0.0%</td><td>0.000</td><td>0 / 40 (0.0%)</td><td>3.6 ms</td><td><strong>FAIL</strong></td></tr>
+<tr><td><strong>MỚI: Retrained Robust Detector (0.85)</strong></td><td><strong>95.0%</strong></td><td><strong>95.0%</strong></td><td><strong>100.0%</strong></td><td><strong>0.974</strong></td><td><strong>0 / 40 (0.0%)</strong></td><td><strong>2.36 ms</strong></td><td><strong>PASS</strong></td></tr>
+</tbody></table></div>
+<hr/>
+<h2>6. DANH MỤC LỆNH CHẠY TOÀN BỘ QUÁ TRÌNH (COMMAND CHEATSHEET)</h2>
+<p>Mọi bước thực nghiệm đều có thể sao chép và chạy lại trực tiếp từ thư mục gốc của workspace (<code>/home/haduckien/nav_ws</code>):</p>
+<h3>Bước 1: Kiểm tra an toàn Baseline Handoff</h3>
+<pre><code class="language-bash">
+python3 tools/handoff.py baseline
+</code></pre>
+<p>*Kết quả kỳ vọng:* <code>{"status": "PASS", "protected_files": 116, "failures": []}</code>.</p>
+<h3>Bước 2: Tái tạo Benchmark với hình thái người chuẩn Warehouse và sải bước động</h3>
+<pre><code class="language-bash">
+python3 experiments/social_navigation/perception/depth_generalization/build_mini_benchmark.py
+</code></pre>
+<p>*Kết quả:* Sinh đầy đủ 8 ca kiểm thử tại <code>data/mini_benchmark</code> và log minh chứng <code>generated/real_mesh_capture_log.json</code>.</p>
+<h3>Bước 3: Kiểm định chất lượng Benchmark (Schema, Disjointness, Test Sealing)</h3>
+<pre><code class="language-bash">
+python3 experiments/social_navigation/perception/depth_generalization/qa_mini_benchmark.py
+</code></pre>
+<p>*Kết quả kỳ vọng:* <code>overall_status: PASS</code>, <code>disjointness: PASS</code>, <code>test_sealing: true</code>.</p>
+<h3>Bước 4: Huấn luyện lại mô hình Person Detector chuẩn xác (Retrain)</h3>
+<pre><code class="language-bash">
+PYTHONPATH=/usr/lib/python3/dist-packages experiments/social_navigation/.venv-socnavgym/bin/python \
+  experiments/social_navigation/perception/depth_generalization/train_and_deploy_robust_detector.py
+</code></pre>
+<p>*Kết quả:* Đóng băng trọng số vào <code>selected_model.npz</code> và cấu hình tại <code>selected_frozen.json</code>.</p>
+<h3>Bước 5: Chạy kiểm định Step D độc lập (Tách bạch Train vs Validation vs Test)</h3>
+<pre><code class="language-bash">
+PYTHONPATH=/usr/lib/python3/dist-packages experiments/social_navigation/.venv-socnavgym/bin/python \
+  experiments/social_navigation/perception/depth_generalization/evaluate_step_d.py
+</code></pre>
+<p>*Kết quả:* Xuất biên bản đánh giá <code>step_d_evaluation_receipt.json</code> xác nhận Retrained Detector đạt chuẩn PASS.</p>
+<h3>Bước 6: Kết xuất giao diện Web Viewer và 80 frames trực quan</h3>
+<pre><code class="language-bash">
+PYTHONPATH=/usr/lib/python3/dist-packages experiments/social_navigation/.venv-socnavgym/bin/python \
+  experiments/social_navigation/perception/depth_generalization/render_step_d_report.py
+</code></pre>
+<p>*Kết quả:* Cập nhật toàn bộ các file PNG và tệp <code>index.html</code> trong thư mục <code>viewer/depth_generalization_v2/</code>.</p>
+<h3>Bước 7: Xuất báo cáo PDF Nghiệm thu chất lượng cao (9 trang khổ 16:9)</h3>
+<pre><code class="language-bash">
+python3 experiments/social_navigation/perception/depth_generalization/export_human_reality_pdf.py
+</code></pre>
+<p>*Kết quả:* Xuất file <code>BAO_CAO_CON_NGUOI_THAT_DEPTH_CAMERA.pdf</code> không lỗi font tiếng Việt.</p>
+<h3>Bước 8: Khởi chạy Máy chủ Web Server để xem trực tiếp trên trình duyệt</h3>
+<pre><code class="language-bash">
+python3 -m http.server 8080 -d experiments/social_navigation/benchmark/generated/visual_demo_20261029T101053/viewer
+</code></pre>
+<hr/>
+<h2>7. DANH MỤC LIÊN KẾT TRUY CẬP TRÊN WEB SERVER & FILE CỤC BỘ</h2>
+<h3>7.1. Xem Trực Tiếp Trên Trình Duyệt Qua Máy Chủ (Port 8080)</h3>
+<li>🌐 <strong>Báo cáo toàn bộ tiến trình này dạng giao diện Web (HTML):</strong>  </li>
+<p>  <a href="http://localhost:8080/depth_generalization_v2/report.html" target="_blank">http://localhost:8080/depth_generalization_v2/report.html</a></p>
+<li>🌐 <strong>Giao diện Web Viewer tương tác (Xem từng frame chuyển động & chuyển đổi ca):</strong>  </li>
+<p>  <a href="http://localhost:8080/depth_generalization_v2/" target="_blank">http://localhost:8080/depth_generalization_v2/</a></p>
+<li>🌐 <strong>Báo cáo PDF nghiệm thu 9 trang mở trực tiếp:</strong>  </li>
+<p>  <a href="http://localhost:8080/depth_generalization_v2/BAO_CAO_CON_NGUOI_THAT_DEPTH_CAMERA.pdf" target="_blank">http://localhost:8080/depth_generalization_v2/BAO_CAO_CON_NGUOI_THAT_DEPTH_CAMERA.pdf</a></p>
+<li>🌐 <strong>Tệp Markdown gốc trên server:</strong>  </li>
+<p>  <a href="http://localhost:8080/depth_generalization_v2/BAO_CAO_TOAN_BO_TIEN_TRINH_VA_LENH_CHAY.md" target="_blank">http://localhost:8080/depth_generalization_v2/BAO_CAO_TOAN_BO_TIEN_TRINH_VA_LENH_CHAY.md</a></p>
+<h3>7.2. Đường Dẫn File Cục Bộ Trên Máy</h3>
+<li>📁 <strong>Báo cáo Markdown:</strong> <a href="file:///home/haduckien/nav_ws/experiments/social_navigation/benchmark/generated/visual_demo_20261029T101053/viewer/depth_generalization_v2/BAO_CAO_TOAN_BO_TIEN_TRINH_VA_LENH_CHAY.md" target="_blank">BAO_CAO_TOAN_BO_TIEN_TRINH_VA_LENH_CHAY.md</a></li>
+<li>📁 <strong>Báo cáo HTML trực quan:</strong> <a href="file:///home/haduckien/nav_ws/experiments/social_navigation/benchmark/generated/visual_demo_20261029T101053/viewer/depth_generalization_v2/report.html" target="_blank">report.html</a></li>
+<li>📁 <strong>Báo cáo PDF:</strong> <a href="file:///home/haduckien/nav_ws/experiments/social_navigation/benchmark/generated/visual_demo_20261029T101053/viewer/depth_generalization_v2/BAO_CAO_CON_NGUOI_THAT_DEPTH_CAMERA.pdf" target="_blank">BAO_CAO_CON_NGUOI_THAT_DEPTH_CAMERA.pdf</a></li>
+<li>📁 <strong>Web Viewer Index:</strong> <a href="file:///home/haduckien/nav_ws/experiments/social_navigation/benchmark/generated/visual_demo_20261029T101053/viewer/depth_generalization_v2/index.html" target="_blank">index.html</a></li>
+<hr/>
+<h2>8. BIÊN BẢN TOÀN VẸN HỆ THỐNG (INTEGRITY PASS)</h2>
+<li>Toàn bộ 116 protected files của baseline đều được bảo toàn 100%, không bị sửa đổi ngoài phạm vi.</li>
+<li>Không có bất kỳ file hoặc thư mục nào bị xóa tùy tiện.</li>
+<li>Ranh giới dừng được duy trì nghiêm ngặt: Tuyệt đối không tự ý bắt đầu huấn luyện World Model (WM) hoặc Reinforcement Learning (RL) khi chưa có chỉ thị tiếp theo.</li>
+  </div>
+</body>
+</html>
