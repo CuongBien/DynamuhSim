@@ -1,0 +1,57 @@
+{
+  "gazebo": {
+    "command": [
+      "gz",
+      "sim",
+      "--versions"
+    ],
+    "exit_code": 0,
+    "stdout": "8.15.0\n",
+    "stderr": ""
+  },
+  "ros_packages": {
+    "command": [
+      "dpkg-query",
+      "-W",
+      "ros-jazzy-ros2cli",
+      "ros-jazzy-navigation2",
+      "ros-jazzy-ros-gz-bridge"
+    ],
+    "exit_code": 0,
+    "stdout": "ros-jazzy-navigation2\t1.3.13-1noble.20260905.072714\nros-jazzy-ros-gz-bridge\t1.0.24-1noble.20260905.070149\nros-jazzy-ros2cli\t0.32.12-1noble.20260902.102710\n",
+    "stderr": ""
+  },
+  "python": {
+    "command": [
+      "python3",
+      "--version"
+    ],
+    "exit_code": 0,
+    "stdout": "Python 3.12.3\n",
+    "stderr": ""
+  },
+  "vendor_commit": {
+    "command": [
+      "git",
+      "-C",
+      "experiments/social_navigation/vendor/SocNavGym",
+      "rev-parse",
+      "HEAD"
+    ],
+    "exit_code": 0,
+    "stdout": "95fbc9cebe4357201145a7d0a28c7736c0efe6cf\n",
+    "stderr": ""
+  },
+  "vendor_status": {
+    "command": [
+      "git",
+      "-C",
+      "experiments/social_navigation/vendor/SocNavGym",
+      "status",
+      "--short"
+    ],
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": ""
+  }
+}

@@ -1,6 +1,7 @@
 """Explicit motion profile dispatch; omitted input preserves the legacy backend."""
 import json
 from pathlib import Path
+from .social_diversity import PROFILE as SOCIAL_PROFILE,SocialDiversity
 from .human_groups import PROFILE as ORCA_PROFILE,enable_profile as enable_orca
 from .group_intent import PROFILE as GOAL_PROFILE,GroupGoal
 from .group_cohesion import PROFILE as COHESION_PROFILE,GroupCohesion
@@ -8,6 +9,7 @@ from .group_cohesion_heading import PROFILE as HEADING_PROFILE,GroupCohesionHead
 
 
 def profile_config(name):
+    if name==SOCIAL_PROFILE["profile"]:return dict(SOCIAL_PROFILE)
     if name==ORCA_PROFILE["profile"]:return dict(ORCA_PROFILE)
     if name==GOAL_PROFILE["profile"]:return dict(GOAL_PROFILE)
     if name==COHESION_PROFILE["profile"]:return json.loads(json.dumps(COHESION_PROFILE))
@@ -24,7 +26,10 @@ def validate_profile(value):
 
 def enable_profile(kernel,value):
     config=validate_profile(value)
-    if config["profile"]=="group_orca_v1":adapter=enable_orca(kernel,config)
+    if config["profile"]=="social_diversity_v1":
+        adapter=SocialDiversity(kernel,config.get("seed",getattr(kernel,"seed",42)))
+        kernel.env.compute_orca_interaction_velocities=adapter.velocities
+    elif config["profile"]=="group_orca_v1":adapter=enable_orca(kernel,config)
     else:
         adapter=GroupCohesionHeading(kernel) if config["profile"]=="group_cohesion_v2" else GroupCohesion(kernel) if config["profile"]=="group_cohesion_v1" else GroupGoal(kernel)
         kernel.env.compute_orca_interaction_velocities=adapter.velocities

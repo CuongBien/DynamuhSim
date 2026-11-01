@@ -1,0 +1,71 @@
+{
+  "branch": "feat/depth-detector-generalization",
+  "head": "51fc28d2f8dc46890c3dec806cfec1398c7f8018",
+  "hashes": {
+    "experiments/social_navigation/navigation/socnavgym_response_fix/adapter.cc": "ffbcda748dc1dba4e06beb79c6e8fa93c77da25fbe2348b10f92062c36279abb",
+    "experiments/social_navigation/navigation/socnavgym_response_fix/build/libresponse_adapter.so": "524fe8e945daad94319d7ac1a5f6377a5f36cbf6c505bb580e50e2e73102e984",
+    "experiments/social_navigation/warehouse/layout.json": "31d1cd9841e133766c36f9e44e5b4e4148a61500abcf6e2682166a98d0e4cb06",
+    "experiments/social_navigation/warehouse/nav2_warehouse.yaml": "ff73d68dcdc64c29427522c9b87fc9f3850b02326a3a9b1c467e6b9b3d5297a7",
+    "python/dynamuhsim/simulation/social_diversity.py": "096c77adbab01b8ec6f371475fcbd88e2accd384530f56332de32d58be2f2e14",
+    "experiments/social_navigation/navigation/socnavgym_response_fix/responsive_motion.py": "3335ec38b4ad33eab026ed1f0b06435053b0d8e2287bc897549cf4ab29d9cb7e"
+  },
+  "capture_freeze": "native/capture_freeze.json",
+  "revision": "2: turn_at_rest_and_012m_robot_buffer",
+  "versions": {
+    "gazebo": {
+      "command": [
+        "gz",
+        "sim",
+        "--versions"
+      ],
+      "exit_code": 0,
+      "stdout": "8.15.0\n",
+      "stderr": ""
+    },
+    "ros_packages": {
+      "command": [
+        "dpkg-query",
+        "-W",
+        "ros-jazzy-ros2cli",
+        "ros-jazzy-navigation2",
+        "ros-jazzy-ros-gz-bridge"
+      ],
+      "exit_code": 0,
+      "stdout": "ros-jazzy-navigation2\t1.3.13-1noble.20260905.072714\nros-jazzy-ros-gz-bridge\t1.0.24-1noble.20260905.070149\nros-jazzy-ros2cli\t0.32.12-1noble.20260902.102710\n",
+      "stderr": ""
+    },
+    "python": {
+      "command": [
+        "python3",
+        "--version"
+      ],
+      "exit_code": 0,
+      "stdout": "Python 3.12.3\n",
+      "stderr": ""
+    },
+    "vendor_commit": {
+      "command": [
+        "git",
+        "-C",
+        "experiments/social_navigation/vendor/SocNavGym",
+        "rev-parse",
+        "HEAD"
+      ],
+      "exit_code": 0,
+      "stdout": "95fbc9cebe4357201145a7d0a28c7736c0efe6cf\n",
+      "stderr": ""
+    },
+    "vendor_status": {
+      "command": [
+        "git",
+        "-C",
+        "experiments/social_navigation/vendor/SocNavGym",
+        "status",
+        "--short"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    }
+  }
+}

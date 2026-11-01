@@ -85,17 +85,17 @@ def capture_sources(repo):
     return sorted(set(files))
 
 
-def prepare_run(repo, run_dir, config_path, scenario, seed, gui=False, *, planner_diagnostics=False, human_motion_profile="legacy", encounter_profile=None, human_goal_clock="native_wall", human_lifecycle_profile="native"):
+def prepare_run(repo, run_dir, config_path, scenario, seed, gui=False, *, planner_diagnostics=False, human_motion_profile="legacy", encounter_profile=None, human_goal_clock="sim_v1", human_lifecycle_profile="native"):
     repo, run_dir, config_path = Path(repo).resolve(), Path(run_dir).resolve(), Path(config_path).resolve()
     run_dir.relative_to(repo)
     config = validate_config(json.loads(config_path.read_text()))
     if scenario not in ["standing", "walking"] or type(seed) is not int or seed not in config["allowed_seeds"]:
         raise ValueError("Scenario/seed not allowed by capture config")
-    if human_motion_profile not in ["legacy", "group_orca_v1", "group_goal_v1", "group_cohesion_v1", "group_cohesion_v2"]:
+    if human_motion_profile not in ["legacy", "group_orca_v1", "group_goal_v1", "group_cohesion_v1", "group_cohesion_v2", "social_diversity_v1"]:
         raise ValueError("Unsupported human motion profile")
     if human_goal_clock not in ["native_wall", "sim_v1"]:
         raise ValueError("Unsupported human goal clock")
-    if human_motion_profile in ["group_goal_v1", "group_cohesion_v1", "group_cohesion_v2"] and human_goal_clock != "sim_v1":
+    if human_motion_profile in ["group_goal_v1", "group_cohesion_v1", "group_cohesion_v2", "social_diversity_v1"] and human_goal_clock != "sim_v1":
         raise ValueError("Shared group goal profile requires declared sim_v1 clock")
     if human_lifecycle_profile not in ["native", "persistent_conversation_v1"]:
         raise ValueError("Unsupported human lifecycle profile")

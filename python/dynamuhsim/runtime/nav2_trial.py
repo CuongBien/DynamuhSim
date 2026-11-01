@@ -94,7 +94,7 @@ def source_files(repo, profile, entrypoint):
     fix = benchmark / "socnavgym_response_fix"
     common = benchmark / "common_response"
     files = [entrypoint, benchmark / "common_gazebo/worker.py", stage / "worker.py", stage / "warehouse.launch.py", stage / "protocol.json",
-             fix / "projection.py", fix / "responsive_motion.py", fix / "adapter.cc", fix / "build/libresponse_adapter.so",
+             fix / "projection.py", fix / "responsive_motion.py", fix / "motion_contract.py", fix / "adapter.cc", fix / "build/libresponse_adapter.so",
              common / "model_worker.py", common / "inputs/crossing_near.json",
              social / "warehouse/nav2_warehouse.yaml", social / "warehouse/warehouse.yaml",
              social / "warehouse/warehouse.pgm", social / "warehouse/warehouse.sdf",
@@ -104,7 +104,7 @@ def source_files(repo, profile, entrypoint):
              repo / "src/custom_corridor/launch/_dynamuhsim_simulation.py",
              repo / "src/custom_corridor/launch/publish_episode_initial_pose.py"]
     if profile.groups:
-        files += [stage / name for name in ["fixture.py", "reactive_motion.py", "standing_projection.py", "config.yaml"]]
+        files += [stage / name for name in ["fixture.py", "reactive_motion.py", "standing_projection.py", "config.yaml", "motion_constraints.json"]]
         files += [benchmark / "socnavgym_warehouse_lifecycle" / name for name in ["kernel.py", "motion.py", "geometry.py", "config.yaml"]]
         files += [benchmark / "socnavgym_lifecycle_fix/continuous_groups.py",
                   social / "vendor/SocNavGym/socnavgym/envs/socnavenv_v2.py",

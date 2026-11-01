@@ -1,0 +1,46 @@
+{
+  "runtime_status": "ERROR",
+  "process": {
+    "command": [
+      "timeout",
+      "--signal=INT",
+      "--kill-after=20s",
+      "100s",
+      "env",
+      "PYTHONDONTWRITEBYTECODE=1",
+      "DYNAMUHSIM_GROUP_DIAGNOSTICS=1",
+      "python3",
+      "tools/capture_episode.py",
+      "run",
+      "--run-dir",
+      "/home/cuongbien/DynamuhSim/experiments/social_navigation/benchmark/depth_identity_guard/generated/generalization_worktree/experiments/social_navigation/benchmark/generated/human_behavior_diversity_20261101T073539_924830Z/baseline/native"
+    ],
+    "start_utc": "2026-11-01T07:35:59.288742+00:00",
+    "end_utc": "2026-11-01T07:37:55.371942+00:00",
+    "exit_code": 124
+  },
+  "saved_native_result": "/home/cuongbien/DynamuhSim/experiments/social_navigation/benchmark/depth_identity_guard/generated/generalization_worktree/experiments/social_navigation/benchmark/generated/human_behavior_diversity_20261101T073539_924830Z/baseline/native/episode/result.json",
+  "human_count": 6,
+  "human_samples": 10926,
+  "active_pose_frames": 1821,
+  "active_pose_window_s": [
+    15.3075,
+    45.2075
+  ],
+  "active_pose_duration_s": 29.900000000000006,
+  "full_executed_worker_intervals": 299,
+  "worker_steps": 300,
+  "observed_proximity_events": 14,
+  "cleanup": {
+    "session": "d1fa8739b4ab4c7d90a7b556396ef647",
+    "reaped_members": [],
+    "signals": [],
+    "remaining": [],
+    "status": "PASS",
+    "ogre_log_sha256": "54a5a068185f5d4d7d1b3a6180f6cd2b9d8ed08749f426d92c9ed5a83d524214",
+    "ogre_renderer_lines": [
+      "14:36:13: GL_RENDERER = D3D12 (NVIDIA GeForce RTX 4060 Laptop GPU)"
+    ]
+  },
+  "gazebo_clean_exit": true
+}

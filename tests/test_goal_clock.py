@@ -62,4 +62,37 @@ class ClockTests(unittest.TestCase):
    with patch('dynamuhsim.runtime.capture.capture_sources',return_value=[]):
     verify_run(root,run);del freeze['source_sha256']['run/assets/human_goal_clock.json'];dump(run/'capture_freeze.json',freeze)
     with self.assertRaisesRegex(RuntimeError,'clock missing'):verify_run(root,run)
+class CaptureClockRegressions(unittest.TestCase):
+ def test_host_schedule_pause_gate_and_group_expiry_are_sim_only(self):
+  def run(schedule):
+   hs=[Human() for _ in range(3)]
+   for i,h in enumerate(hs):h.id=i+1
+   k=kernel(hs[0]);k.env.dynamic_humans=[];k.env.moving_interactions=[NS(humans=hs)]
+   clock=GoalClock(k);result=[]
+   for h in hs:h.wall=schedule[0]
+   # Pre-navigation waiting and repeated paused observations do not age goals.
+   for _ in range(5):self.assertTrue(all(not h.has_reached_goal() for h in hs))
+   for i in range(502):
+    t=round(100.+i*.1,1)
+    # Sim pause changes host scheduling only; no lifecycle step is performed.
+    for h in hs:h.wall=schedule[min(i,2)]
+    clock.begin_step(t,100.)
+    reached=[h.has_reached_goal() for h in hs]
+    if i in [0,500,501]:result.append(reached)
+    clock.end_step(round(t+.1,1))
+   return result
+  self.assertEqual(run([0.,1.,2.]),[[False]*3,[False]*3,[True]*3])
+  self.assertEqual(run([10000.,90000.,100000.]),run([0.,1.,2.]))
+
+ def test_new_cli_and_api_default_to_sim_and_native_wall_is_explicit(self):
+  import importlib.util,inspect
+  from dynamuhsim.runtime.capture import prepare_run
+  spec=importlib.util.spec_from_file_location('_capture_cli_clock_test',ROOT/'tools/capture_episode.py')
+  cli=importlib.util.module_from_spec(spec);spec.loader.exec_module(cli)
+  self.assertEqual(inspect.signature(prepare_run).parameters['human_goal_clock'].default,'sim_v1')
+  for flags,expected in [([], 'sim_v1'),(['--human-goal-clock','native_wall'],'native_wall')]:
+   with patch.object(cli,'prepare_run') as prepare:
+    cli.main(['prepare','--run-dir','unused','--scenario','walking','--seed','45',*flags])
+    self.assertEqual(prepare.call_args.kwargs['human_goal_clock'],expected)
+
 if __name__=='__main__':unittest.main()

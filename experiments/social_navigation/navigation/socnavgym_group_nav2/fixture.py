@@ -7,6 +7,7 @@ from kernel import Kernel
 from motion import people
 sys.path.insert(0,str(BENCH/'socnavgym_response_fix'))
 from responsive_motion import ResponsiveMotion
+from motion_contract import validate_limits
 from reactive_motion import ReactiveStandingMotion
 from socnavgym.envs.utils.human_human import Human_Human_Interaction
 from socnavgym.envs.utils.plant import Plant
@@ -16,7 +17,9 @@ class FullFactoryKernel(Kernel):
 
 def make_kernel(scenario,seed):
     plan=json.loads((HERE/'protocol.json').read_text());layout=json.loads((BENCH.parent/'warehouse/layout.json').read_text());k=FullFactoryKernel(HERE/'config.yaml',layout,seed=seed);e=k.env
+    k.seed=seed
     motion=k.motion;motion.__class__=ReactiveStandingMotion if scenario=='standing' else ResponsiveMotion;e.handle_collision_and_update=motion.integrate
+    motion.motion_limits=validate_limits(json.loads((HERE/'motion_constraints.json').read_text()))
     hs=people(e);assert [int(h.id) for h in hs]==list(range(1,7));e.dynamic_humans=[];e.static_humans=[];e.moving_interactions=[];e.static_interactions=[];e.goals={}
     for ids,center in zip(plan['initial_members'],plan['initial_group_centers']):
         x,y=center[0]-k.origin[0],center[1]-k.origin[1]

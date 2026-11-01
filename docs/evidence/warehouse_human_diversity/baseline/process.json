@@ -1,0 +1,19 @@
+{
+  "command": [
+    "timeout",
+    "--signal=INT",
+    "--kill-after=20s",
+    "100s",
+    "env",
+    "PYTHONDONTWRITEBYTECODE=1",
+    "DYNAMUHSIM_GROUP_DIAGNOSTICS=1",
+    "python3",
+    "tools/capture_episode.py",
+    "run",
+    "--run-dir",
+    "/home/cuongbien/DynamuhSim/experiments/social_navigation/benchmark/depth_identity_guard/generated/generalization_worktree/experiments/social_navigation/benchmark/generated/human_behavior_diversity_20261101T073539_924830Z/baseline/native"
+  ],
+  "start_utc": "2026-11-01T07:35:59.288742+00:00",
+  "end_utc": "2026-11-01T07:37:55.371942+00:00",
+  "exit_code": 124
+}

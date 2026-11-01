@@ -18,6 +18,11 @@ from dynamuhsim.simulation.human_motion_profiles import load_profile
 human_motion=load_profile(k,a.runtime)
 from dynamuhsim.simulation.goal_clock import load_goal_clock
 goal_clock=load_goal_clock(k,a.runtime)
+group_diagnostics=None
+if os.environ.get('DYNAMUHSIM_GROUP_DIAGNOSTICS')=='1':
+    if human_motion is not None:raise ValueError('Native group diagnostics require legacy motion profile')
+    from dynamuhsim.simulation.group_diagnostics import GroupDiagnostics
+    group_diagnostics=GroupDiagnostics(k)
 current=copy.deepcopy(k.humans());server=socket.socket(socket.AF_UNIX,socket.SOCK_STREAM);server.bind(a.socket);server.listen(1)
 from dynamuhsim.runtime.worker_readiness import publish_ready
 ready=dict(humans=current,groups=k.groups(),obstacles=42,native_dt=dt,robot_radius=.25,human_radius=.36,epoch=0,scenario=a.scenario,seed=a.seed,response_variant='native_initial_groups_continuous_lifecycle_response_v2',reactive_standing=a.scenario=='standing',standing_speed_cap_mps=.2,activation_center_distance_m=1.4,requires_start_gate=True)
@@ -48,6 +53,8 @@ try:
                     if goal_clock is not None:goal_clock.end_step(t+dt)
                 previous=t;transport_step+=1
                 reply=dict(time=t,state_time=t+dt,step=transport_step,native_step=k.steps,active_phase=active,before=before,humans=current,groups_before=groups_before,groups=k.groups(),finish_events=k.motion.events[events:],motion_guard=k.motion.steps[-1] if active else None,compute_ms=1000*(time.monotonic()-start))
+                if human_motion is not None and hasattr(human_motion,"snapshot"):reply["behavior"]=human_motion.snapshot()
+                if group_diagnostics is not None:reply["native_group_intent"]=group_diagnostics.last if active else []
                 if human_motion is not None:reply["group_orca" if human_motion.profile=="group_orca_v1" else "group_intent"]=human_motion.last
                 if human_motion is not None and hasattr(human_motion,"cohesion_last"):reply["group_cohesion"]=human_motion.cohesion_last
                 if encounter is not None:

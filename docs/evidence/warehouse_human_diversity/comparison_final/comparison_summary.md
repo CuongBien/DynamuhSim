@@ -1,0 +1,5 @@
+# Saved comparison summary
+
+Status PARTIAL. Authoritative matched metrics: metrics_before_after.csv/json. Full300-step crossing seed45 shared-input window; six humans. Goal progress, yaw and group spread improve. HH surface gap decreases0.355261→0.029478m, so the opt-in profile is not accepted as default. Robot physical gap improves0.077559→0.128264m against aligned recorded robot segments. Three native episodes retain ERROR/exit124. Final native recorded36.71s with13224 human pose samples and seven behavior states; no nominal-disc linear-sample collision observed. Native windows are unmatched and not causal A/B.
+
+Live pose media and plots: ../comparison_v2/; matched trajectory/event overlay: controller_trajectories_events.png. GIFs are2D observed-Gazebo-pose playback, decoded and verified, not camera footage. Full report: docs/WAREHOUSE_HUMAN_BEHAVIOR_DIVERSITY_IMPLEMENTATION.md. Earlier analyzer corrections are preserved in ../comparison/ANALYSIS_CORRECTION.md and ../comparison_v2/CLEARANCE_UNITS.md. No raw data was rewritten or deleted.
