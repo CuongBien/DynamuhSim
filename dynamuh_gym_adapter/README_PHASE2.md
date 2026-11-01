@@ -20,6 +20,12 @@ python3 -c 'import rclpy,gymnasium,stable_baselines3; print("imports OK")'
 
 **One worker:** Do not launch `corridor_tb3` or Nav2 yourself. Each env reset starts/stops its one Gazebo process. No separate EvalCallback. Use an isolated `ROS_DOMAIN_ID`/GZ partition as managed by backend. Cross-validate `ros2 topic info /cmd_vel --verbose` and that only the adapter publishes.
 
+ROS domains are now leased automatically when `--domain` is omitted. Explicit
+domains fail fast if another cooperating worker owns them. The lease remains
+held across episode resets and is released on final close. Use separate domains
+for concurrent runs and fresh output directories. See
+[domain ownership and its local/remote limits](docs/ROS_DOMAIN_OWNERSHIP.md).
+
 ## Phase 1: finish real acceptance
 
 ```bash

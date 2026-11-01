@@ -15,7 +15,7 @@ def main():
     ap.add_argument('--episodes', type=int, default=100)
     ap.add_argument('--steps', type=int, default=3)
     ap.add_argument('--scenario', choices=['empty', 'human'], default='empty')
-    ap.add_argument('--domain', type=int, default=61)
+    ap.add_argument('--domain', type=int, default=None, help='Exclusive ROS domain; omitted = automatic')
     ap.add_argument('--output', default='gazebo_acceptance.jsonl')
     args = ap.parse_args()
     from real_backend import GazeboROSBackend

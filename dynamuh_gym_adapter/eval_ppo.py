@@ -15,7 +15,7 @@ def parse_args():
     p.add_argument('--scenario', choices=['empty','human'], default='empty')
     p.add_argument('--episodes', type=int, default=30)
     p.add_argument('--seed-base', type=int, default=20000)
-    p.add_argument('--domain', type=int, default=61)
+    p.add_argument('--domain', type=int, default=None, help='Exclusive ROS domain; omitted = automatic')
     p.add_argument('--start', nargs=3, type=float, default=(-13.,0.,0.))
     p.add_argument('--goal', nargs=2, type=float, default=(-7.,0.))
     p.add_argument('--max-sim-seconds', type=float, default=90.)

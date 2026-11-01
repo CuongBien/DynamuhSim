@@ -48,7 +48,7 @@ def args_parse():
     p = argparse.ArgumentParser()
     p.add_argument('--scenario', choices=['empty', 'human'], default='empty')
     p.add_argument('--timesteps', type=int, default=2048)
-    p.add_argument('--domain', type=int, default=61)
+    p.add_argument('--domain', type=int, default=None, help='Exclusive ROS domain; omitted = automatic')
     p.add_argument('--seed', type=int, default=11)
     p.add_argument('--start', nargs=3, type=float, default=(-13., 0., 0.))
     p.add_argument('--goal', nargs=2, type=float, default=(-7., 0.))
@@ -69,6 +69,7 @@ def main():
                    shield=not args.no_shield)
     env = Monitor(env, filename=str(out / 'monitor.csv'))
     manifest = vars(args).copy()
+    manifest['domain'] = env.unwrapped.backend.domain_id
     manifest['collision_truth_valid'] = False
     manifest['social_reward_valid'] = False
     manifest['model'] = 'SB3 PPO MultiInputPolicy, direct Box(vx,vy,wz)'

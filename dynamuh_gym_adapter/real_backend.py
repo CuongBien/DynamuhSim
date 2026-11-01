@@ -16,14 +16,17 @@ import time
 import uuid
 import numpy as np
 from core import Backend, PHYSICS_DT, Scenario, SensorSnapshot, SimulatorFault
+from ros_domain import DomainLease
 
 WORLD = 'corridor_0.90'
 CONTROL = f'/world/{WORLD}/control'
 
 
 class GazeboROSBackend:
-    def __init__(self, *, ros_domain_id=61, startup_timeout=90., step_timeout=20.):
-        self.domain_id = int(ros_domain_id)
+    def __init__(self, *, ros_domain_id=None, startup_timeout=90., step_timeout=20.):
+        self._domain_lease = DomainLease.acquire(ros_domain_id)
+        self._closed = False
+        self._domain_checked = False
         self.startup_timeout = startup_timeout
         self.step_timeout = step_timeout
         self.epoch = None
@@ -38,6 +41,39 @@ class GazeboROSBackend:
         self.samples = {}
         self.lock = threading.Lock()
 
+    @property
+    def domain_id(self):
+        return self._domain_lease.domain_id
+
+    def _require_open(self):
+        self._domain_lease.assert_owner()
+        if self._closed:
+            raise SimulatorFault('Backend is closed; create a new worker')
+
+    def _assert_domain_clear(self):
+        """Bounded best-effort check for pre-existing, non-cooperating publishers.
+
+        The local lease remains authoritative for cooperating workers. This
+        discovery check cannot stop an unrelated/remote participant joining later.
+        """
+        if self._domain_checked:
+            return
+        deadline = time.monotonic() + 1.
+        while True:
+            occupied = []
+            for topic in ('/clock', '/imu', '/scan', '/odom', '/cmd_vel'):
+                publishers = self.node.get_publishers_info_by_topic(topic)
+                if publishers:
+                    names = ', '.join(p.node_namespace + '/' + p.node_name for p in publishers)
+                    occupied.append(f'{topic}: {names}')
+            if time.monotonic() >= deadline:
+                if occupied:
+                    raise SimulatorFault(f'ROS domain {self.domain_id} is not isolated; '
+                                         'existing publisher(s): ' + '; '.join(occupied))
+                break
+            time.sleep(.05)
+        self._domain_checked = True
+
     def _ros_callbacks(self):
         import rclpy
         from rclpy.context import Context
@@ -51,6 +87,7 @@ class GazeboROSBackend:
         self.context = Context()
         rclpy.init(context=self.context, domain_id=self.domain_id)
         self.node = rclpy.create_node('dynamuh_gym_adapter', context=self.context)
+        self._assert_domain_clear()
         self.node.set_parameters([rclpy.parameter.Parameter('use_sim_time', value=True)])
         self.executor = SingleThreadedExecutor(context=self.context)
         self.executor.add_node(self.node)
@@ -176,7 +213,8 @@ class GazeboROSBackend:
         time.sleep(.04)
 
     def reset(self, scenario: Scenario, epoch: int) -> SensorSnapshot:
-        self.close()
+        self._require_open()
+        self._stop_episode()
         self.epoch = epoch
         with self.lock:
             self.clock = None
@@ -189,9 +227,6 @@ class GazeboROSBackend:
         # semantics must be audited before claiming deterministic reset.
         env['DYNAMUH_GYM_SEED'] = str(scenario.seed)
         self.gz_env = env
-        self._ros_callbacks()
-        self.log_handle = tempfile.NamedTemporaryFile(prefix='dynamuh_gym_', suffix='.log', delete=False)
-        self.last_log = self.log_handle.name
         cmd = ['ros2', 'launch', 'custom_corridor', 'corridor_tb3.launch.py',
                'width:=0.90', 'robot_model:=mecanum',
                'obstacle:=' + ('none' if scenario.kind == 'empty' else 'human'),
@@ -199,7 +234,11 @@ class GazeboROSBackend:
                f'x:={scenario.start[0]}', f'y:={scenario.start[1]}',
                f'yaw:={scenario.start[2]}']
         try:
+            self._ros_callbacks()
+            self.log_handle = tempfile.NamedTemporaryFile(prefix='dynamuh_gym_', suffix='.log', delete=False)
+            self.last_log = self.log_handle.name
             self.process = subprocess.Popen(cmd, env=env, start_new_session=True,
+                                            pass_fds=(self._domain_lease.fileno(),),
                                             stdout=self.log_handle, stderr=subprocess.STDOUT)
             self._wait_service()
             # Still paused after startup; bootstrap 0.2 s at a time until
@@ -213,7 +252,7 @@ class GazeboROSBackend:
                 except SimulatorFault:
                     continue
             raise SimulatorFault('Simulation bootstrap failed; check ' + self.last_log)
-        except Exception:
+        except BaseException:
             self.close()
             raise
 
@@ -234,25 +273,59 @@ class GazeboROSBackend:
         return result
 
     def close(self):
+        if self._closed:
+            return
+        self._domain_lease.assert_owner()
+        self._stop_episode()
+        self._domain_lease.close()
+        self._closed = True
+
+    @staticmethod
+    def _live_group(pgid):
+        for path in Path('/proc').iterdir():
+            if not path.name.isdecimal():
+                continue
+            try:
+                text = (path / 'stat').read_text()
+                fields = text[text.rfind(')') + 2:].split()
+                if int(fields[2]) == pgid and fields[0] != 'Z':
+                    return True
+            except (FileNotFoundError, ProcessLookupError):
+                continue
+        return False
+
+    def _stop_episode(self):
+        """Tear down ROS/Gazebo while retaining the worker's domain lease."""
         if self.node is not None and self.process is not None and self.process.poll() is None:
             try:
                 self._publish(np.zeros(3, dtype=np.float32))
             except Exception:
                 pass
         if self.process is not None:
+            pgid = self.process.pid  # Popen uses start_new_session=True.
             try:
-                os.killpg(self.process.pid, signal.SIGTERM)
-                self.process.wait(timeout=5)
-            except (ProcessLookupError, subprocess.TimeoutExpired):
-                try: os.killpg(self.process.pid, signal.SIGKILL)
+                os.killpg(pgid, signal.SIGTERM)
+            except ProcessLookupError:
+                pass
+            deadline = time.monotonic() + 5
+            while self._live_group(pgid) and time.monotonic() < deadline:
+                self.process.poll()
+                time.sleep(.02)
+            if self._live_group(pgid):
+                try: os.killpg(pgid, signal.SIGKILL)
                 except ProcessLookupError: pass
-                try: self.process.wait(timeout=3)
-                except subprocess.TimeoutExpired: pass
+            self.process.wait(timeout=3)
+            deadline = time.monotonic() + 3
+            while self._live_group(pgid) and time.monotonic() < deadline:
+                time.sleep(.02)
+            if self._live_group(pgid):
+                # Do not release/reuse the domain when cleanup cannot be proven.
+                raise SimulatorFault(f'Owned process group {pgid} did not stop; domain lease retained')
             self.process = None
         if self.executor is not None:
             try: self.executor.shutdown(timeout_sec=2)
             except Exception: pass
-        if self.thread is not None:
+        if self.thread is not None and self.thread.ident is not None:
             self.thread.join(timeout=2)
         if self.node is not None:
             try: self.node.destroy_node()
@@ -262,6 +335,12 @@ class GazeboROSBackend:
                 import rclpy
                 if self.context.ok(): rclpy.shutdown(context=self.context)
             except Exception: pass
+        if self.thread is not None and self.thread.is_alive():
+            self.thread.join(timeout=2)
+            if self.thread.is_alive():
+                raise SimulatorFault('ROS executor did not stop; domain lease retained')
+        if self.context is not None and self.context.ok():
+            raise SimulatorFault('ROS context did not shut down; domain lease retained')
         if self.log_handle is not None:
             self.log_handle.close()
         self.node = self.executor = self.context = self.thread = None

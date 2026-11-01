@@ -21,7 +21,7 @@ def odom_of(env):
 def main():
     parser=argparse.ArgumentParser()
     parser.add_argument('--episodes',type=int,default=10)
-    parser.add_argument('--domain',type=int,default=61)
+    parser.add_argument('--domain',type=int,default=None,help='Exclusive ROS domain; omitted = automatic')
     parser.add_argument('--steps',type=int,default=20)
     parser.add_argument('--output',default='motion_probe.jsonl')
     args=parser.parse_args()

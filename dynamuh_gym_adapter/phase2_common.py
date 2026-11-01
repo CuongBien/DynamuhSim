@@ -110,7 +110,7 @@ class LidarSafetyShield(gym.Wrapper):
         return obs, reward, term, trunc, info
 
 
-def make_env(*, scenario='empty', domain=61, start=(-13., 0., 0.), goal=(-7., 0.),
+def make_env(*, scenario='empty', domain=None, start=(-13., 0., 0.), goal=(-7., 0.),
              max_sim_seconds=90., shield=True):
     from env import DynamuhGazeboEnv
     from real_backend import GazeboROSBackend
