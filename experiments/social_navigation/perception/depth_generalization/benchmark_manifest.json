@@ -1,0 +1,208 @@
+{
+  "schema": "depth_cross_domain_mini_benchmark/1",
+  "purpose": "Prepare data contract; not a claimed cross-domain experiment",
+  "input_constraints": {
+    "rgb": false,
+    "camera_height_reference_m": 0.08,
+    "lidar_height_reference_m": 0.12,
+    "depth_width": 424,
+    "depth_height": 240,
+    "depth_unit": "m",
+    "lidar_unique_rays": 359
+  },
+  "split_policy": "Disjoint scene geometry and human morphology across train, validation, test; no frame/window overlap; texture-only variants same family",
+  "controls": "Every split includes no-person clutter/curved-object cases; missing detections cannot masquerade as good precision",
+  "annotation_policy": "Use instance pixel ownership/verified masks, not nearest simulator center or current detector predictions",
+  "sensor_variation": [
+    "measured dropout/noise",
+    "distance and partial visibility",
+    "calibration profiles recorded, no hidden coordinate fitting"
+  ],
+  "test_policy": "Freeze one validation-selected model + preprocessing + threshold before metrics/previews on test; test once",
+  "external_test_tracks": [
+    "Real depth: SDT compatibility review only; not downloaded, elevated camera mismatch needs verification",
+    "Real 2D LiDAR: DROW/JRDB development and FROG cross-dataset track only for LiDAR-specific models; not substitute for depth test"
+  ],
+  "optional_backend_test": "Repeat held-out C1/narrow layout in MuJoCo after its adapter passes; do not call this collected now",
+  "local_recordings_role": "Both old pilot episodes and old same-avatar corpus are opened development/regression only",
+  "cases": [
+    {
+      "case_id": "train_factory_people",
+      "split": "train",
+      "scene_family": "factory_wide",
+      "scene_geometry_sha256": null,
+      "avatar_families": [
+        "A1"
+      ],
+      "avatar_geometry_sha256": [],
+      "has_people": true,
+      "episode_group": "train_factory_people",
+      "backend": "pending_backend",
+      "status": "NOT_COLLECTED",
+      "required_modalities": [
+        "depth",
+        "lidar",
+        "odom",
+        "calibration"
+      ],
+      "labels_kind": "pixel_instance_owner",
+      "files": {},
+      "ground_truth_is_separate": true
+    },
+    {
+      "case_id": "train_hospital_people",
+      "split": "train",
+      "scene_family": "hospital_corridor",
+      "scene_geometry_sha256": null,
+      "avatar_families": [
+        "A2"
+      ],
+      "avatar_geometry_sha256": [],
+      "has_people": true,
+      "episode_group": "train_hospital_people",
+      "backend": "pending_backend",
+      "status": "NOT_COLLECTED",
+      "required_modalities": [
+        "depth",
+        "lidar",
+        "odom",
+        "calibration"
+      ],
+      "labels_kind": "pixel_instance_owner",
+      "files": {},
+      "ground_truth_is_separate": true
+    },
+    {
+      "case_id": "train_factory_objects",
+      "split": "train",
+      "scene_family": "factory_wide",
+      "scene_geometry_sha256": null,
+      "avatar_families": [],
+      "avatar_geometry_sha256": [],
+      "has_people": false,
+      "episode_group": "train_factory_objects",
+      "backend": "pending_backend",
+      "status": "NOT_COLLECTED",
+      "required_modalities": [
+        "depth",
+        "lidar",
+        "odom",
+        "calibration"
+      ],
+      "labels_kind": "pixel_instance_owner",
+      "files": {},
+      "ground_truth_is_separate": true
+    },
+    {
+      "case_id": "train_hospital_empty",
+      "split": "train",
+      "scene_family": "hospital_corridor",
+      "scene_geometry_sha256": null,
+      "avatar_families": [],
+      "avatar_geometry_sha256": [],
+      "has_people": false,
+      "episode_group": "train_hospital_empty",
+      "backend": "pending_backend",
+      "status": "NOT_COLLECTED",
+      "required_modalities": [
+        "depth",
+        "lidar",
+        "odom",
+        "calibration"
+      ],
+      "labels_kind": "pixel_instance_owner",
+      "files": {},
+      "ground_truth_is_separate": true
+    },
+    {
+      "case_id": "validation_school_people",
+      "split": "validation",
+      "scene_family": "school_alcove",
+      "scene_geometry_sha256": null,
+      "avatar_families": [
+        "B1"
+      ],
+      "avatar_geometry_sha256": [],
+      "has_people": true,
+      "episode_group": "validation_school_people",
+      "backend": "pending_backend",
+      "status": "NOT_COLLECTED",
+      "required_modalities": [
+        "depth",
+        "lidar",
+        "odom",
+        "calibration"
+      ],
+      "labels_kind": "pixel_instance_owner",
+      "files": {},
+      "ground_truth_is_separate": true
+    },
+    {
+      "case_id": "validation_school_objects",
+      "split": "validation",
+      "scene_family": "school_alcove",
+      "scene_geometry_sha256": null,
+      "avatar_families": [],
+      "avatar_geometry_sha256": [],
+      "has_people": false,
+      "episode_group": "validation_school_objects",
+      "backend": "pending_backend",
+      "status": "NOT_COLLECTED",
+      "required_modalities": [
+        "depth",
+        "lidar",
+        "odom",
+        "calibration"
+      ],
+      "labels_kind": "pixel_instance_owner",
+      "files": {},
+      "ground_truth_is_separate": true
+    },
+    {
+      "case_id": "test_narrow_people",
+      "split": "test",
+      "scene_family": "narrow_corner_holdout",
+      "scene_geometry_sha256": null,
+      "avatar_families": [
+        "C1"
+      ],
+      "avatar_geometry_sha256": [],
+      "has_people": true,
+      "episode_group": "test_narrow_people",
+      "backend": "pending_backend",
+      "status": "NOT_COLLECTED",
+      "required_modalities": [
+        "depth",
+        "lidar",
+        "odom",
+        "calibration"
+      ],
+      "labels_kind": "pixel_instance_owner",
+      "files": {},
+      "ground_truth_is_separate": true
+    },
+    {
+      "case_id": "test_narrow_objects",
+      "split": "test",
+      "scene_family": "narrow_corner_holdout",
+      "scene_geometry_sha256": null,
+      "avatar_families": [],
+      "avatar_geometry_sha256": [],
+      "has_people": false,
+      "episode_group": "test_narrow_objects",
+      "backend": "pending_backend",
+      "status": "NOT_COLLECTED",
+      "required_modalities": [
+        "depth",
+        "lidar",
+        "odom",
+        "calibration"
+      ],
+      "labels_kind": "pixel_instance_owner",
+      "files": {},
+      "ground_truth_is_separate": true
+    }
+  ],
+  "training_authorized": false,
+  "model_freeze": null
+}

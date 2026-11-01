@@ -1,0 +1,142 @@
+{
+  "schema": "wm_episode_batch/1",
+  "goal": "First small sensor/action rollout corpus for action-conditioned observed-depth WM, not RL environment training",
+  "episodes": [
+    {
+      "episode_id": "wm_standing_45",
+      "scenario": "standing",
+      "seed": 45,
+      "split": "train",
+      "family": "seed_45",
+      "order": 1
+    },
+    {
+      "episode_id": "wm_walking_45",
+      "scenario": "walking",
+      "seed": 45,
+      "split": "train",
+      "family": "seed_45",
+      "order": 2
+    },
+    {
+      "episode_id": "wm_standing_46",
+      "scenario": "standing",
+      "seed": 46,
+      "split": "train",
+      "family": "seed_46",
+      "order": 3
+    },
+    {
+      "episode_id": "wm_walking_46",
+      "scenario": "walking",
+      "seed": 46,
+      "split": "train",
+      "family": "seed_46",
+      "order": 4
+    },
+    {
+      "episode_id": "wm_standing_47",
+      "scenario": "standing",
+      "seed": 47,
+      "split": "train",
+      "family": "seed_47",
+      "order": 5
+    },
+    {
+      "episode_id": "wm_walking_47",
+      "scenario": "walking",
+      "seed": 47,
+      "split": "train",
+      "family": "seed_47",
+      "order": 6
+    },
+    {
+      "episode_id": "wm_standing_48",
+      "scenario": "standing",
+      "seed": 48,
+      "split": "validation",
+      "family": "seed_48",
+      "order": 7
+    },
+    {
+      "episode_id": "wm_walking_48",
+      "scenario": "walking",
+      "seed": 48,
+      "split": "validation",
+      "family": "seed_48",
+      "order": 8
+    },
+    {
+      "episode_id": "wm_standing_49",
+      "scenario": "standing",
+      "seed": 49,
+      "split": "test",
+      "family": "seed_49",
+      "order": 9
+    },
+    {
+      "episode_id": "wm_walking_49",
+      "scenario": "walking",
+      "seed": 49,
+      "split": "test",
+      "family": "seed_49",
+      "order": 10
+    }
+  ],
+  "backend": "SocNavGym initial native group fixtures with native lifecycle + existing reactive projection",
+  "robot_controller": "Unchanged experimental moderate Nav2 profile; no manual velocity or oracle input",
+  "start": [
+    -28.0,
+    0.0,
+    0.0
+  ],
+  "goal_pose": [
+    -20.0,
+    0.0,
+    0.0
+  ],
+  "sim_budget_s": 90.0,
+  "history_s": 2.0,
+  "sample_hz": 10,
+  "future_s": [
+    0.5,
+    1.0,
+    3.0
+  ],
+  "max_future_depth_delta_ns": 50000000,
+  "target_frame": "True robot SE2 axes frozen at anchor; GT ego used only in LABEL",
+  "input_frame": "Depth input is at its measured sensor time with causal odometry available; no GT correction; timing retained",
+  "input_modalities": [
+    "native_lidar",
+    "depth",
+    "imu",
+    "odom",
+    "executed_action_history",
+    "amcl_goal_with_staleness_mask"
+  ],
+  "rgb": false,
+  "split_rule": "Entire paired-seed family; no overlapping windows split; same warehouse/avatar across splits, not environment generalization",
+  "outcomes": "Keep navigation success/timeout/abort; data acceptance independent of reaching goal; no automatic retries or success filtering",
+  "capture_gate": {
+    "nvidia_renderer": true,
+    "clean_gazebo_exit": true,
+    "cleanup_empty": true,
+    "worker_faults": 0,
+    "raw_bag_closed": true,
+    "minimum_actual_robot_translation_from_start_m": 0.3,
+    "minimum_active_s": 6.0,
+    "future_tail_s": 3.0
+  },
+  "infrastructure_failure": "Stop cohort, preserve failed attempt and review; do not overwrite or replace silently",
+  "supervision": {
+    "observed_future_bev": "Per-cell future actually observed occupancy only; unknown masked",
+    "human_GT": "Diagnostic/future label only; sensor association not validated",
+    "H1_H5": "Unknown, maskfalse",
+    "RL_reward": "Not validated; reward_validfalse",
+    "RL_episode_end": "Success may terminate; time-limit truncation distinct; no synthetic reward/contact truth"
+  },
+  "training_scope": "May expose per-window WM observed-BEV eligibility after integrity/causal/geometry QA; no blanket dataset/semantic/RL eligibility",
+  "held_out": "HuNavSim untouched; this first batch uses only SocNavGym. CrowdSimPlus external diversity remains later work",
+  "scene_limit": "Two initial group modes/five new seeds, one fixed warehouse route and avatar; frames are correlated",
+  "source_driver": "early_avoidance_pilot/reports/drivers/avoidance_moderate01/driver.py"
+}

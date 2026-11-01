@@ -1,0 +1,53 @@
+{
+  "schema": "depth_point_head_training_recipe/1",
+  "status": "PREPARED_NOT_RUN",
+  "model": "candidate.PointPatchClassifier",
+  "seed": 17,
+  "device": "CUDA",
+  "max_points": 512,
+  "batch_size": 32,
+  "input": "Observed base_link XYZ patch + point-valid mask; XY centered within patch, absolute ground-relative Z retained",
+  "prohibited_inputs": [
+    "GT/persona ID",
+    "scene/backend ID",
+    "future frames",
+    "test-derived normalization or thresholds"
+  ],
+  "source_proposals": "Legacy high-recall 2D geometry, freeze provider and use same provider on all splits",
+  "labels": "Verified instance ownership: positive purity>=0.90 with >=5 person points; negative only if all owned points are nonperson; ambiguous ignored",
+  "optimizer": {
+    "name": "AdamW",
+    "lr": 0.001,
+    "weight_decay": 0.0001,
+    "max_epochs": 30,
+    "early_stop_validation_patience": 5
+  },
+  "sampling": "Equal scene/family weights and class balance within train; repeated static frame copies excluded",
+  "augment_train_only": {
+    "yaw_rotation_rad": [
+      -3.14159,
+      3.14159
+    ],
+    "point_dropout_max": 0.15,
+    "xyz_jitter_std_m": 0.005,
+    "vertical_flip": false
+  },
+  "selection": "One candidate/seed. Select epoch and threshold maximizing whole-scene macro F1 on validation, ties lower false-positive rate then threshold closest0.5.",
+  "validation_threshold_grid": [
+    0.25,
+    0.35,
+    0.5,
+    0.65,
+    0.75
+  ],
+  "test_policy": "After selection freeze weights/provider/calibration/preprocessing/threshold hashes; evaluate new held-out scenes+mesh families once, all failures retained",
+  "required_before_fit": [
+    "Independent train/validation cases collected",
+    "Pixel ownership/label QA verified",
+    "No scene/avatar/episode leakage",
+    "Artifact/schema hashes sealed"
+  ],
+  "limits": "This recipe does not establish deployment/generalization acceptance; report detector-level missed proposals as well as patch classification",
+  "training_performed": false,
+  "training_authorized": false
+}

@@ -1,0 +1,55 @@
+{
+  "schema": "depth_generalization_round_result/1",
+  "date": "2026-10-30",
+  "branch": "feat/depth-detector-generalization",
+  "implementation_commit": "43153c75c8067de48eacfd413afc4e84038b989a",
+  "base_commit": "dd7a2b03d9fe40841052c0db6c7dc52619e13e67",
+  "status": "BOUNDED_ABLATION_AND_PREPARATION_COMPLETE",
+  "checks": {
+    "unit_suite": {
+      "tests": 338,
+      "skipped": 2,
+      "status": "PASS"
+    },
+    "contract_smoke": {
+      "tests": 38,
+      "status": "PASS"
+    },
+    "cuda_candidate_checks": {
+      "checks": 5,
+      "status": "PASS",
+      "training_performed": false
+    },
+    "baseline_files_116": "PASS",
+    "ablation_frames": 910,
+    "evaluated_frames": 905,
+    "reference_rows": 1820,
+    "sensor_integrity_rows": 3640,
+    "web_http_assets": 22,
+    "windows_http_status": 200,
+    "javascript_syntax_exit_code": 0
+  },
+  "decision": {
+    "current_3d_stack": "NOT_SELECTED_FOR_RETRAINING",
+    "proposal": "legacy 2D high-recall",
+    "head": "PointNet-style random-weight candidate",
+    "local_generalization": "NOT_MEASURED",
+    "new_domains": "NOT_COLLECTED, manifest NOT_READY",
+    "train": "PREPARED_NOT_RUN",
+    "promotion_to_default": false
+  },
+  "main_workspace": {
+    "branch": "feat/mujoco-backend",
+    "head": "b777e646621c25ec3312f20164f9a0be63a0586a",
+    "clean": true,
+    "head_matches_before": true
+  },
+  "web": {
+    "url": "http://localhost:35315/depth_generalization_v1/index.html",
+    "qa": "PNG boxes/stage figure visually inspected; all assets HTTP200; JS syntax checked on Windows; no automated browser clicks"
+  },
+  "source_claims": "Primary author pages linked in source_review.json; no new checkpoint/dataset download or cross-domain quality claim",
+  "training_performed": false,
+  "new_simulator_runs": 0,
+  "generated_ai_images": false
+}

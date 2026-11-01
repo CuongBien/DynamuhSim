@@ -1,0 +1,28 @@
+{
+  "status": "PASS",
+  "samples": 802,
+  "independent_episodes": 1,
+  "depth_frames_bitwise_equal": 1040,
+  "human_future_max_abs_error_m": 7.993605777301127e-15,
+  "raw_future_actions_exact": true,
+  "no_gt_or_future_fields_in_observations": true,
+  "future_action_interval_alignment": true,
+  "persona_supervision_masked": true,
+  "manifest_files_verified": 27,
+  "negative_bag_vs_header_lags": {
+    "/imu": 5,
+    "/cmd_vel": 1
+  },
+  "negative_lag_handling": "Availability=max(header,bag latest-clock reception); no wall-clock latency claim",
+  "sensor_valid_history_counts": {
+    "scan": 16040,
+    "imu": 16040,
+    "odom": 16040,
+    "action": 16040,
+    "depth": 16040
+  },
+  "goal_valid_samples": 599,
+  "gpu": "NVIDIA RTX 4060 (D3D12)",
+  "cleanup": "PASS",
+  "scope": "Integrity of one recorded episode; not all-persona, perception, future-BEV or multi-source acceptance"
+}

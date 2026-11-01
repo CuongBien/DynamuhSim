@@ -1,0 +1,185 @@
+{
+  "incoming_commit": "2ffd7c75218778f328d692724f382f623aab7139",
+  "baseline_commit": "879aaf41229250de8eb4288d3105f12322f15dda",
+  "episodes": {
+    "pilot_conversation": {
+      "variants": {
+        "legacy_2d_classifier": {
+          "evaluated_frames": 462,
+          "skipped_odom_or_gt_frames": 2,
+          "proposals": 1149,
+          "paired": 1059,
+          "unpaired": 90,
+          "supported_gt_proxy": 1134,
+          "matched_supported_gt_proxy": 937,
+          "id_switches_500ms": 0,
+          "pairing_fraction": 0.9216710182767625,
+          "supported_gt_proxy_coverage": 0.826278659611993,
+          "fragmentation_proxy": 2,
+          "distance_p95_m": 0.24240105657849423
+        },
+        "incoming_2d_050": {
+          "evaluated_frames": 462,
+          "skipped_odom_or_gt_frames": 2,
+          "proposals": 851,
+          "paired": 801,
+          "unpaired": 50,
+          "supported_gt_proxy": 1134,
+          "matched_supported_gt_proxy": 800,
+          "id_switches_500ms": 0,
+          "pairing_fraction": 0.9412455934195064,
+          "supported_gt_proxy_coverage": 0.7054673721340388,
+          "fragmentation_proxy": 4,
+          "distance_p95_m": 0.2139246397501867
+        },
+        "incoming_2d_085": {
+          "evaluated_frames": 462,
+          "skipped_odom_or_gt_frames": 2,
+          "proposals": 784,
+          "paired": 741,
+          "unpaired": 43,
+          "supported_gt_proxy": 1134,
+          "matched_supported_gt_proxy": 740,
+          "id_switches_500ms": 0,
+          "pairing_fraction": 0.9451530612244898,
+          "supported_gt_proxy_coverage": 0.6525573192239859,
+          "fragmentation_proxy": 7,
+          "distance_p95_m": 0.19249194330362804
+        },
+        "generalized_3d_classifier": {
+          "evaluated_frames": 462,
+          "skipped_odom_or_gt_frames": 2,
+          "proposals": 124,
+          "paired": 55,
+          "unpaired": 69,
+          "supported_gt_proxy": 1134,
+          "matched_supported_gt_proxy": 55,
+          "id_switches_500ms": 0,
+          "pairing_fraction": 0.4435483870967742,
+          "supported_gt_proxy_coverage": 0.048500881834215165,
+          "fragmentation_proxy": 1,
+          "distance_p95_m": 0.28604195544560973
+        }
+      },
+      "semantic_validated": false,
+      "training_authorized": false,
+      "metric_scope": "Geometric pairing only; cylinder support is an approximate visibility proxy, not pixel-instance semantic truth",
+      "local_nonregression": {
+        "incoming_2d_050": {
+          "paired_retention": false,
+          "unpaired_not_increased": true,
+          "id_switches_not_increased": true,
+          "fragmentation_not_increased": false,
+          "passed": false
+        },
+        "incoming_2d_085": {
+          "paired_retention": false,
+          "unpaired_not_increased": true,
+          "id_switches_not_increased": true,
+          "fragmentation_not_increased": false,
+          "passed": false
+        },
+        "generalized_3d_classifier": {
+          "paired_retention": false,
+          "unpaired_not_increased": true,
+          "id_switches_not_increased": true,
+          "fragmentation_not_increased": true,
+          "passed": false
+        }
+      }
+    },
+    "pilot_walking": {
+      "variants": {
+        "legacy_2d_classifier": {
+          "evaluated_frames": 443,
+          "skipped_odom_or_gt_frames": 3,
+          "proposals": 648,
+          "paired": 488,
+          "unpaired": 160,
+          "supported_gt_proxy": 536,
+          "matched_supported_gt_proxy": 486,
+          "id_switches_500ms": 1,
+          "pairing_fraction": 0.7530864197530864,
+          "supported_gt_proxy_coverage": 0.9067164179104478,
+          "fragmentation_proxy": 2,
+          "distance_p95_m": 0.18766890327855373
+        },
+        "incoming_2d_050": {
+          "evaluated_frames": 443,
+          "skipped_odom_or_gt_frames": 3,
+          "proposals": 623,
+          "paired": 490,
+          "unpaired": 133,
+          "supported_gt_proxy": 536,
+          "matched_supported_gt_proxy": 490,
+          "id_switches_500ms": 0,
+          "pairing_fraction": 0.7865168539325843,
+          "supported_gt_proxy_coverage": 0.914179104477612,
+          "fragmentation_proxy": 0,
+          "distance_p95_m": 0.17530520926290824
+        },
+        "incoming_2d_085": {
+          "evaluated_frames": 443,
+          "skipped_odom_or_gt_frames": 3,
+          "proposals": 594,
+          "paired": 478,
+          "unpaired": 116,
+          "supported_gt_proxy": 536,
+          "matched_supported_gt_proxy": 478,
+          "id_switches_500ms": 0,
+          "pairing_fraction": 0.8047138047138047,
+          "supported_gt_proxy_coverage": 0.8917910447761194,
+          "fragmentation_proxy": 0,
+          "distance_p95_m": 0.16788946929438575
+        },
+        "generalized_3d_classifier": {
+          "evaluated_frames": 443,
+          "skipped_odom_or_gt_frames": 3,
+          "proposals": 126,
+          "paired": 34,
+          "unpaired": 92,
+          "supported_gt_proxy": 536,
+          "matched_supported_gt_proxy": 34,
+          "id_switches_500ms": 0,
+          "pairing_fraction": 0.2698412698412698,
+          "supported_gt_proxy_coverage": 0.06343283582089553,
+          "fragmentation_proxy": 1,
+          "distance_p95_m": 0.1810661961465683
+        }
+      },
+      "semantic_validated": false,
+      "training_authorized": false,
+      "metric_scope": "Geometric pairing only; cylinder support is an approximate visibility proxy, not pixel-instance semantic truth",
+      "local_nonregression": {
+        "incoming_2d_050": {
+          "paired_retention": true,
+          "unpaired_not_increased": true,
+          "id_switches_not_increased": true,
+          "fragmentation_not_increased": true,
+          "passed": true
+        },
+        "incoming_2d_085": {
+          "paired_retention": true,
+          "unpaired_not_increased": true,
+          "id_switches_not_increased": true,
+          "fragmentation_not_increased": true,
+          "passed": true
+        },
+        "generalized_3d_classifier": {
+          "paired_retention": false,
+          "unpaired_not_increased": true,
+          "id_switches_not_increased": true,
+          "fragmentation_not_increased": true,
+          "passed": false
+        }
+      }
+    }
+  },
+  "baseline_reference_rows_checked": 910,
+  "sensor_sealed_before_gt": true,
+  "input_source_seal_integrity": true,
+  "semantic_quality_accepted": false,
+  "generalization_accepted": false,
+  "promotion_to_default": false,
+  "new_training_performed": false
+}

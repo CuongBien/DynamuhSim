@@ -1,3 +1,11 @@
+> **Nhánh tích hợp hiện tại: `test/gazebo-harmonic-benchmark`.** Đã merge detector từ `feat/depth-detector-generalization` tại `47fce50f` ngày01/11/2026. [Biên bản merge và kiểm tra](docs/verification/test_branch_merge_2026-11-01/README.md). Model mới vẫn experimental.
+
+> **Review cập nhật31/10:** [kết quả nhập code mới và replay910frame](docs/INCOMING_DETECTOR_REVIEW_2026-10-31.md). Model/world mới giữ thử nghiệm, chưa promote defaults.
+
+> **Bàn giao detector hiện tại:** [context và công việc tiếp theo](docs/DETECTOR_HANDOVER.md) · [báo cáo localhost và cách mở lại](docs/LOCAL_REPORTS.md).
+
+> Nhánh thử nghiệm **feat/depth-detector-generalization**: [kết quả ablation, benchmark contract và ứng viên train](docs/DEPTH_GENERALIZATION.md). [Báo cáo localhost](http://localhost:35315/depth_generalization_v1/index.html). Nhánh này không sửa workspace MuJoCo và chưa chứng nhận generalization.
+
 # DynamuhSim 🤖
 
 ## Bắt đầu ở đây — bàn giao MuJoCo

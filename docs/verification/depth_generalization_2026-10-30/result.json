@@ -1,0 +1,209 @@
+{
+  "schema": "depth_ablation_result/1",
+  "episodes": {
+    "pilot_conversation": {
+      "variants": {
+        "legacy_2d_classifier": {
+          "evaluated_frames": 462,
+          "skipped_odom_or_gt_frames": 2,
+          "proposals": 1149,
+          "paired": 1059,
+          "unpaired": 90,
+          "supported_gt_proxy": 1134,
+          "matched_supported_gt_proxy": 937,
+          "id_switches_500ms": 0,
+          "pairing_fraction": 0.9216710182767625,
+          "supported_gt_proxy_coverage": 0.826278659611993,
+          "fragmentation_proxy": 2,
+          "distance_p95_m": 0.24240105657849423
+        },
+        "generalized_3d_classifier": {
+          "evaluated_frames": 462,
+          "skipped_odom_or_gt_frames": 2,
+          "proposals": 173,
+          "paired": 93,
+          "unpaired": 80,
+          "supported_gt_proxy": 1134,
+          "matched_supported_gt_proxy": 93,
+          "id_switches_500ms": 0,
+          "pairing_fraction": 0.5375722543352601,
+          "supported_gt_proxy_coverage": 0.082010582010582,
+          "fragmentation_proxy": 4,
+          "distance_p95_m": 0.17900487551495434
+        },
+        "three_d_no_prior_045": {
+          "evaluated_frames": 462,
+          "skipped_odom_or_gt_frames": 2,
+          "proposals": 716,
+          "paired": 636,
+          "unpaired": 80,
+          "supported_gt_proxy": 1134,
+          "matched_supported_gt_proxy": 636,
+          "id_switches_500ms": 0,
+          "pairing_fraction": 0.888268156424581,
+          "supported_gt_proxy_coverage": 0.5608465608465608,
+          "fragmentation_proxy": 5,
+          "distance_p95_m": 0.17496135262262985
+        },
+        "three_d_no_prior_050": {
+          "evaluated_frames": 462,
+          "skipped_odom_or_gt_frames": 2,
+          "proposals": 712,
+          "paired": 632,
+          "unpaired": 80,
+          "supported_gt_proxy": 1134,
+          "matched_supported_gt_proxy": 632,
+          "id_switches_500ms": 0,
+          "pairing_fraction": 0.8876404494382022,
+          "supported_gt_proxy_coverage": 0.5573192239858906,
+          "fragmentation_proxy": 5,
+          "distance_p95_m": 0.17496294142595137
+        }
+      },
+      "semantic_validated": false,
+      "training_authorized": false,
+      "metric_scope": "Geometric pairing only; cylinder support is an approximate visibility proxy, not pixel-instance semantic truth",
+      "timing_policy": "Instrumented shared preprocessing, no comparative timing claim",
+      "stage_attribution": {
+        "supported": 1134,
+        "proposal_3d": 802,
+        "planar_kept": 713,
+        "legacy_2d_classifier": 937,
+        "generalized_3d_classifier": 93,
+        "three_d_no_prior_045": 636,
+        "three_d_no_prior_050": 632,
+        "proposal_geometry_lost": 332,
+        "proposal_geometry_gained": 0,
+        "planar_filter_lost": 113,
+        "planar_filter_gained": 24,
+        "classifier_045_lost": 80,
+        "classifier_045_gained": 3,
+        "multiplicative_prior_lost": 543,
+        "multiplicative_prior_gained": 0,
+        "scope": "One-to-one geometric association with cylinder-support visibility proxy. Stage matching may lose AND gain pairs; not semantic error attribution."
+      },
+      "local_gates": {
+        "three_d_no_prior_045": {
+          "paired_retention": false,
+          "unpaired_not_increased": true,
+          "id_switches_not_increased": true,
+          "fragmentation_not_increased": false,
+          "pass": false
+        },
+        "three_d_no_prior_050": {
+          "paired_retention": false,
+          "unpaired_not_increased": true,
+          "id_switches_not_increased": true,
+          "fragmentation_not_increased": false,
+          "pass": false
+        }
+      }
+    },
+    "pilot_walking": {
+      "variants": {
+        "legacy_2d_classifier": {
+          "evaluated_frames": 443,
+          "skipped_odom_or_gt_frames": 3,
+          "proposals": 648,
+          "paired": 488,
+          "unpaired": 160,
+          "supported_gt_proxy": 536,
+          "matched_supported_gt_proxy": 486,
+          "id_switches_500ms": 1,
+          "pairing_fraction": 0.7530864197530864,
+          "supported_gt_proxy_coverage": 0.9067164179104478,
+          "fragmentation_proxy": 2,
+          "distance_p95_m": 0.18766890327855373
+        },
+        "generalized_3d_classifier": {
+          "evaluated_frames": 443,
+          "skipped_odom_or_gt_frames": 3,
+          "proposals": 144,
+          "paired": 41,
+          "unpaired": 103,
+          "supported_gt_proxy": 536,
+          "matched_supported_gt_proxy": 41,
+          "id_switches_500ms": 0,
+          "pairing_fraction": 0.2847222222222222,
+          "supported_gt_proxy_coverage": 0.07649253731343283,
+          "fragmentation_proxy": 2,
+          "distance_p95_m": 0.18825472490563916
+        },
+        "three_d_no_prior_045": {
+          "evaluated_frames": 443,
+          "skipped_odom_or_gt_frames": 3,
+          "proposals": 432,
+          "paired": 329,
+          "unpaired": 103,
+          "supported_gt_proxy": 536,
+          "matched_supported_gt_proxy": 329,
+          "id_switches_500ms": 0,
+          "pairing_fraction": 0.7615740740740741,
+          "supported_gt_proxy_coverage": 0.6138059701492538,
+          "fragmentation_proxy": 0,
+          "distance_p95_m": 0.17669092276242662
+        },
+        "three_d_no_prior_050": {
+          "evaluated_frames": 443,
+          "skipped_odom_or_gt_frames": 3,
+          "proposals": 431,
+          "paired": 328,
+          "unpaired": 103,
+          "supported_gt_proxy": 536,
+          "matched_supported_gt_proxy": 328,
+          "id_switches_500ms": 0,
+          "pairing_fraction": 0.7610208816705336,
+          "supported_gt_proxy_coverage": 0.6119402985074627,
+          "fragmentation_proxy": 0,
+          "distance_p95_m": 0.17550911885849008
+        }
+      },
+      "semantic_validated": false,
+      "training_authorized": false,
+      "metric_scope": "Geometric pairing only; cylinder support is an approximate visibility proxy, not pixel-instance semantic truth",
+      "timing_policy": "Instrumented shared preprocessing, no comparative timing claim",
+      "stage_attribution": {
+        "supported": 536,
+        "proposal_3d": 497,
+        "planar_kept": 363,
+        "legacy_2d_classifier": 486,
+        "generalized_3d_classifier": 41,
+        "three_d_no_prior_045": 329,
+        "three_d_no_prior_050": 328,
+        "proposal_geometry_lost": 39,
+        "proposal_geometry_gained": 0,
+        "planar_filter_lost": 138,
+        "planar_filter_gained": 4,
+        "classifier_045_lost": 35,
+        "classifier_045_gained": 1,
+        "multiplicative_prior_lost": 288,
+        "multiplicative_prior_gained": 0,
+        "scope": "One-to-one geometric association with cylinder-support visibility proxy. Stage matching may lose AND gain pairs; not semantic error attribution."
+      },
+      "local_gates": {
+        "three_d_no_prior_045": {
+          "paired_retention": false,
+          "unpaired_not_increased": true,
+          "id_switches_not_increased": true,
+          "fragmentation_not_increased": true,
+          "pass": false
+        },
+        "three_d_no_prior_050": {
+          "paired_retention": false,
+          "unpaired_not_increased": true,
+          "id_switches_not_increased": true,
+          "fragmentation_not_increased": true,
+          "pass": false
+        }
+      }
+    }
+  },
+  "reference_reproduced_rows": 1820,
+  "candidate_proposal_provider": "legacy_2D_high_recall_geometry",
+  "classifier_candidate": "small_pointnet_style_head",
+  "generalization_test_status": "NOT_RUN_REQUIRES_FRESH_DOMAINS",
+  "training_authorized": false,
+  "sensor_sealed_before_gt": true,
+  "promotion_to_default": false,
+  "training_performed": false
+}

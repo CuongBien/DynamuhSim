@@ -1,0 +1,9 @@
+{
+  "schema": "wm_batch_integrity_audit/1",
+  "source": "Before final dataset inspection; no WM models evaluated",
+  "full_checks": ["raw-to-normalized all-depth bitwise and actions/human labels via preserved auditor", "all input timestamps/availability causal", "all source/corpus/inventory hashes", "whole-seed-family splits", "all target time/ego-pose/mask consistency", "test API default sealed", "no label/GT keys in observation payload"],
+  "geometry_replay": "First/midpoint/last window per episode, all3future horizons plus input BEV, independent pose/projection plus frozen raster",
+  "cross_split_duplicates": "Hash complete history of millimetre-quantized full depth frames plus millimetre/milliradian-quantized action/odom history; require no identical cross-split window fingerprints; same-scene similarity still reported as limitation",
+  "portable_checks": "Copied metadata/labels with read-only hardlinked input arrays, remove/replace LABEL data and confirm unchanged observations on train/validation; no model test/tuning/preview",
+  "acceptance_scope": "WM observed-depth pilot only, not all social tasks or RL readiness"
+}
