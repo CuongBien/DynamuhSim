@@ -1,0 +1,163 @@
+{
+  "name": "socnavgym_standing_s42",
+  "backend": "socnavgym",
+  "goal_layout": null,
+  "human_policy": null,
+  "condition": "standing",
+  "seed": 42,
+  "geometry": "native",
+  "robot_avoidance": false,
+  "robot_visible": true,
+  "status": "ERROR",
+  "protocol_valid": false,
+  "runtime": "generated/socnavgym_standing_s42_l7_6oz8o",
+  "metrics_clock": "simulation",
+  "commit": "9833565fa546d55cb0e553f8388bf4a703c59583",
+  "rendering": {
+    "vendor": "Intel",
+    "renderer": "Mesa Intel(R) Iris(R) Xe Graphics (RPL-U)",
+    "version": "4.6 (Compatibility Profile) Mesa 25.2.8-0ubuntu0.24.04.2",
+    "direct": true,
+    "environment_before": {
+      "DISPLAY": ":0",
+      "WAYLAND_DISPLAY": "wayland-0",
+      "GALLIUM_DRIVER": "d3d12",
+      "MESA_D3D12_DEFAULT_ADAPTER_NAME": "NVIDIA"
+    },
+    "environment_used": {
+      "DISPLAY": ":0",
+      "WAYLAND_DISPLAY": "wayland-0",
+      "GALLIUM_DRIVER": "d3d12",
+      "MESA_D3D12_DEFAULT_ADAPTER_NAME": "NVIDIA"
+    },
+    "probe_source_sha256": "9a9f5478053290b51f18beed987563a7e3a2349f143e8fccd0ce41bf57ec5bab",
+    "probe_binary_sha256": "37f8608ee330e5c179dcd1975c9053e0b66f055f21a68e41bbaf13ed20d26520",
+    "hardware_verified": true
+  },
+  "contact_geometry": {
+    "policy": "native",
+    "modified_native_behavior": false,
+    "human_contact_shape": "axis_aligned_ellipse",
+    "human_contact_radius": null,
+    "native_ellipse_semiaxes": [
+      0.12,
+      0.36
+    ],
+    "human_proxy_radius": 0.36,
+    "original_reset_robot_radius": 0.2455005863673824,
+    "effective_robot_radius": 0.2455005863673824,
+    "native_robot_radius_fixed_after_reset": false,
+    "robot_radius_is_nominal_proxy_metric_not_full_robot_collision_body": true,
+    "contact_timing": "native pre-update; no swept collision test",
+    "contact_response": "native stop the entire moving group if any member speed is zero",
+    "human_pair_separation_guard": false,
+    "robot_in_group_orca": false,
+    "factory_contacts": "native ellipse predicate",
+    "native_wall_response_unchanged": true
+  },
+  "group_behavior": {
+    "policy": "native",
+    "modified_group_solver": false,
+    "robot_in_group_orca": false,
+    "applies_to": "native modes",
+    "robot_state_source": "measured Gazebo pose and finite-difference world velocity",
+    "robot_radius": 0.2455005863673824,
+    "group_orca_radius": 1.44,
+    "group_neighbor_distance": 2.88,
+    "time_horizon": 4.861735698828816,
+    "time_horizon_obstacles": 5.6476885381006925,
+    "group_current_velocity": "native zero initialization per solver call",
+    "group_smoothing": "native 0.9 previous + 0.1 new",
+    "responsibility": "RVO2 reciprocal; solved robot velocity is discarded, actual robot controlled by Nav2",
+    "new_swept_guard": false,
+    "new_human_pair_separation": false,
+    "stationary_group_reaction_changed": false
+  },
+  "robot_start": [
+    -27.0,
+    0.0,
+    0.0
+  ],
+  "robot_goal": [
+    -14.0,
+    0.0,
+    0.0
+  ],
+  "localization_profile": "baseline",
+  "runtime_nav_params_sha256": "ff73d68dcdc64c29427522c9b87fc9f3850b02326a3a9b1c467e6b9b3d5297a7",
+  "scene": {
+    "condition": "standing",
+    "seed": 42,
+    "initial": [
+      {
+        "id": 1,
+        "x": -22.78300745138496,
+        "y": -0.10775765993264637,
+        "yaw": -3.3589745259109676,
+        "speed": 0.0,
+        "radius": 0.36,
+        "group_id": 1,
+        "vx": 0.0,
+        "vy": 0.0
+      },
+      {
+        "id": 2,
+        "x": -23.838355933840273,
+        "y": 0.6398219663048469,
+        "yaw": -1.1398798416516307,
+        "speed": 0.0,
+        "radius": 0.36,
+        "group_id": 1,
+        "vx": 0.0,
+        "vy": 0.0
+      },
+      {
+        "id": 3,
+        "x": -23.98637945956686,
+        "y": -0.5693422464822693,
+        "yaw": -5.141137709390063,
+        "speed": 0.0,
+        "radius": 0.36,
+        "group_id": 1,
+        "vx": 0.0,
+        "vy": 0.0
+      }
+    ],
+    "robot_spawn": [
+      -27.0,
+      0.0,
+      0.0
+    ],
+    "robot_goal": [
+      -14.0,
+      0.0,
+      0.0
+    ],
+    "robot_radius": 0.25,
+    "human_radius": 0.36,
+    "group_route": [
+      [
+        -28.0,
+        0.0
+      ],
+      [
+        -21.0,
+        0.0
+      ]
+    ],
+    "preferred_human_speed": 0.8
+  },
+  "scene_sha256": "acc31d920f786f6b67037f64220ffc40c57b06e51bcd0cac2c27d541ed6085d8",
+  "map_sha256": "6538c7c14e4ece9f8e20a57619a49ea4e80bee6cc886499f5e1d21c3b550667b",
+  "nav_params_sha256": "ff73d68dcdc64c29427522c9b87fc9f3850b02326a3a9b1c467e6b9b3d5297a7",
+  "error": "[Errno 2] No such file or directory: '/usr/share/gz/gz-sim8/gui/gui.config'",
+  "process_cleanup": {
+    "session": "26ddd92bfec24f12b41becbfd0745ba4",
+    "reaped_members": [],
+    "signals": [],
+    "remaining": [],
+    "status": "PASS"
+  },
+  "samples": 0,
+  "observer_frames": 0
+}

@@ -1,0 +1,42 @@
+{
+  "schema": "wm_observed_bev_export/1",
+  "history_queries": 20,
+  "history_hz": 10,
+  "future_offsets_ns": [
+    500000000,
+    1000000000,
+    3000000000
+  ],
+  "nearest_future_depth_tolerance_ns": 50000000,
+  "input_bev": "Captured current depth warped to estimated anchor by causal odometry only; retain exact source and odom stamps",
+  "target_bev": "Captured future depth, SE2 warp to true ego anchor; simulator ego pose is LABEL ONLY",
+  "unknown_value": -1,
+  "grid": {
+    "shape": [
+      64,
+      64
+    ],
+    "x_range_m": [
+      0,
+      6.4
+    ],
+    "y_range_m": [
+      -3.2,
+      3.2
+    ],
+    "cell_m": 0.1,
+    "height_m": [
+      0.03,
+      1.8
+    ]
+  },
+  "wm_window_eligibility": "Moving capture accepted, all3target frames temporally supported and observed cells nonempty, causal input BEV valid, original history complete per legacy masks; no semantic/persona prerequisite",
+  "human_track_association_valid": false,
+  "H1_H5_valid": false,
+  "RL_reward_valid": false,
+  "action_condition": "Explicit separate accessor for executed future command sequence; not a future sensor input or counterfactual rollout",
+  "episode_end": "Physical task goal reached terminates; time-limit/controller stop truncates; RL reward/contact semantics not validated",
+  "raw_authority": "Closed original MCAP; auxiliary NPY may miss warmup frames; compare all exported depth against MCAP",
+  "test_policy": "Whole seed49 family held for future WM evaluation; this collection stage runs integrity/label QA only, no WM fitting, model evaluation or test preview",
+  "recovery": "No overwrites; preserve failures; capture and normalization/target export have separate frozen source manifests"
+}

@@ -1,0 +1,645 @@
+file,role,key,shape,dtype,fortran_order,description
+episodes/wm_standing_45/inputs/bev_anchor_estimated_SENSOR_ONLY.npz,OBSERVATION_INPUT,anchor_ns,[851],int64,False,"Thoi diem neo cua cua so, nanosecond simulation."
+episodes/wm_standing_45/inputs/bev_anchor_estimated_SENSOR_ONLY.npz,OBSERVATION_INPUT,depth_index,[851],int32,False,"[N,20] indices tro vao depth_SENSOR_ONLY.npy; khong phai mang pixel."
+episodes/wm_standing_45/inputs/bev_anchor_estimated_SENSOR_ONLY.npz,OBSERVATION_INPUT,depth_stamp_ns,[851],int64,False,Timestamp Depth frame da su dung.
+episodes/wm_standing_45/inputs/bev_anchor_estimated_SENSOR_ONLY.npz,OBSERVATION_INPUT,source_odom_stamp_ns,[851],int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_standing_45/inputs/bev_anchor_estimated_SENSOR_ONLY.npz,OBSERVATION_INPUT,source_odom_available_ns,[851],int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_standing_45/inputs/bev_anchor_estimated_SENSOR_ONLY.npz,OBSERVATION_INPUT,anchor_odom_stamp_ns,[851],int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_standing_45/inputs/bev_anchor_estimated_SENSOR_ONLY.npz,OBSERVATION_INPUT,anchor_odom_available_ns,[851],int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_standing_45/inputs/bev_anchor_estimated_SENSOR_ONLY.npz,OBSERVATION_INPUT,occupancy,"[851, 64, 64]",int8,False,"BEV -1 unknown, 0 observed free, 1 observed occupied; vai tro input/label phu thuoc file."
+episodes/wm_standing_45/inputs/bev_anchor_estimated_SENSOR_ONLY.npz,OBSERVATION_INPUT,frame_valid,[851],bool,False,Mask bo du lieu BEV o muc frame/horizon.
+episodes/wm_standing_45/inputs/observations_SENSOR_ONLY.npz,OBSERVATION_INPUT,scan__stamp_ns,[519],int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_standing_45/inputs/observations_SENSOR_ONLY.npz,OBSERVATION_INPUT,scan__available_ns,[519],int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_standing_45/inputs/observations_SENSOR_ONLY.npz,OBSERVATION_INPUT,scan__values,"[519, 360]",float32,False,Undocumented by this script; inspect source or protocol.
+episodes/wm_standing_45/inputs/observations_SENSOR_ONLY.npz,OBSERVATION_INPUT,scan__received_ns,[519],int64,False,Undocumented by this script; inspect source or protocol.
+episodes/wm_standing_45/inputs/observations_SENSOR_ONLY.npz,OBSERVATION_INPUT,scan__valid,"[519, 360]",bool,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_standing_45/inputs/observations_SENSOR_ONLY.npz,OBSERVATION_INPUT,imu__stamp_ns,[10370],int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_standing_45/inputs/observations_SENSOR_ONLY.npz,OBSERVATION_INPUT,imu__available_ns,[10370],int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_standing_45/inputs/observations_SENSOR_ONLY.npz,OBSERVATION_INPUT,imu__values,"[10370, 10]",float32,False,Undocumented by this script; inspect source or protocol.
+episodes/wm_standing_45/inputs/observations_SENSOR_ONLY.npz,OBSERVATION_INPUT,imu__received_ns,[10370],int64,False,Undocumented by this script; inspect source or protocol.
+episodes/wm_standing_45/inputs/observations_SENSOR_ONLY.npz,OBSERVATION_INPUT,odom__stamp_ns,[2962],int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_standing_45/inputs/observations_SENSOR_ONLY.npz,OBSERVATION_INPUT,odom__available_ns,[2962],int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_standing_45/inputs/observations_SENSOR_ONLY.npz,OBSERVATION_INPUT,odom__values,"[2962, 9]",float32,False,Undocumented by this script; inspect source or protocol.
+episodes/wm_standing_45/inputs/observations_SENSOR_ONLY.npz,OBSERVATION_INPUT,odom__received_ns,[2962],int64,False,Undocumented by this script; inspect source or protocol.
+episodes/wm_standing_45/inputs/observations_SENSOR_ONLY.npz,OBSERVATION_INPUT,action__stamp_ns,[4015],int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_standing_45/inputs/observations_SENSOR_ONLY.npz,OBSERVATION_INPUT,action__available_ns,[4015],int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_standing_45/inputs/observations_SENSOR_ONLY.npz,OBSERVATION_INPUT,action__values,"[4015, 3]",float32,False,Undocumented by this script; inspect source or protocol.
+episodes/wm_standing_45/inputs/observations_SENSOR_ONLY.npz,OBSERVATION_INPUT,action__received_ns,[4015],int64,False,Undocumented by this script; inspect source or protocol.
+episodes/wm_standing_45/inputs/observations_SENSOR_ONLY.npz,OBSERVATION_INPUT,depth__stamp_ns,[1038],int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_standing_45/inputs/observations_SENSOR_ONLY.npz,OBSERVATION_INPUT,depth__available_ns,[1038],int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_standing_45/inputs/observations_SENSOR_ONLY.npz,OBSERVATION_INPUT,depth__values,"[1038, 1]",float32,False,Undocumented by this script; inspect source or protocol.
+episodes/wm_standing_45/inputs/observations_SENSOR_ONLY.npz,OBSERVATION_INPUT,depth__received_ns,[1038],int64,False,Undocumented by this script; inspect source or protocol.
+episodes/wm_standing_45/inputs/observations_SENSOR_ONLY.npz,OBSERVATION_INPUT,amcl__stamp_ns,[185],int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_standing_45/inputs/observations_SENSOR_ONLY.npz,OBSERVATION_INPUT,amcl__available_ns,[185],int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_standing_45/inputs/observations_SENSOR_ONLY.npz,OBSERVATION_INPUT,amcl__values,"[185, 3]",float32,False,Undocumented by this script; inspect source or protocol.
+episodes/wm_standing_45/inputs/observations_SENSOR_ONLY.npz,OBSERVATION_INPUT,amcl__received_ns,[185],int64,False,Undocumented by this script; inspect source or protocol.
+episodes/wm_standing_45/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,anchor_ns,[851],int64,False,"Thoi diem neo cua cua so, nanosecond simulation."
+episodes/wm_standing_45/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,history_query_ns,"[851, 20]",int64,False,"20 query tu t-1.9s toi t, 10Hz; timestamp cua observation history."
+episodes/wm_standing_45/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,scan_stamp_ns,"[851, 20]",int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_standing_45/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,scan_available_ns,"[851, 20]",int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_standing_45/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,scan_valid,"[851, 20]",bool,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_standing_45/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,scan_ranges_m,"[851, 20, 360]",float32,False,"[N,20,360] LiDAR range (m) co mask; invalid ray da duoc ghi 0."
+episodes/wm_standing_45/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,scan_ray_valid,"[851, 20, 360]",bool,False,Mask cho moi ray LiDAR; khong lay value=0 lam khoang cach that.
+episodes/wm_standing_45/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,imu_stamp_ns,"[851, 20]",int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_standing_45/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,imu_available_ns,"[851, 20]",int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_standing_45/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,imu_valid,"[851, 20]",bool,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_standing_45/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,imu,"[851, 20, 10]",float32,False,"[N,20,10]: quaternion xyzw + angular velocity xyz + linear acceleration xyz."
+episodes/wm_standing_45/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,odom_stamp_ns,"[851, 20]",int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_standing_45/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,odom_available_ns,"[851, 20]",int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_standing_45/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,odom_valid,"[851, 20]",bool,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_standing_45/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,odom_local_pose_and_twist,"[851, 20, 9]",float32,False,"[N,20,9]: local XY/yaw + linear xyz + angular xyz; estimated, khong phai simulator GT."
+episodes/wm_standing_45/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,action_stamp_ns,"[851, 20]",int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_standing_45/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,action_available_ns,"[851, 20]",int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_standing_45/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,action_valid,"[851, 20]",bool,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_standing_45/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,action,"[851, 20, 3]",float32,False,"[N,20,3]: lenh da thuc hien trong history, vx/vy/wz (base axes)."
+episodes/wm_standing_45/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,depth_stamp_ns,"[851, 20]",int64,False,Timestamp Depth frame da su dung.
+episodes/wm_standing_45/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,depth_available_ns,"[851, 20]",int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_standing_45/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,depth_valid,"[851, 20]",bool,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_standing_45/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,depth_index,"[851, 20]",int32,False,"[N,20] indices tro vao depth_SENSOR_ONLY.npy; khong phai mang pixel."
+episodes/wm_standing_45/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,goal_xy_from_amcl,"[851, 2]",float64,False,"[N,2] goal trong he robot tinh theo AMCL nhan qua, co goal_valid."
+episodes/wm_standing_45/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,goal_valid,[851],bool,False,Mask goal con hop le; stale >1 giay -> zero + false.
+episodes/wm_standing_45/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,goal_stamp_ns,[851],int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_standing_45/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,goal_available_ns,[851],int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_standing_45/labels/future_observed_bev_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,anchor_ns,[851],int64,False,"Thoi diem neo cua cua so, nanosecond simulation."
+episodes/wm_standing_45/labels/future_observed_bev_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,offset_ns,[3],int64,False,[3] horizon +0.5/+1/+3 giay cho future observed BEV.
+episodes/wm_standing_45/labels/future_observed_bev_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,query_ns,"[851, 3]",int64,False,Moc thoi gian can lay nhan Depth tuong lai.
+episodes/wm_standing_45/labels/future_observed_bev_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,depth_index,"[851, 3]",int64,False,"[N,20] indices tro vao depth_SENSOR_ONLY.npy; khong phai mang pixel."
+episodes/wm_standing_45/labels/future_observed_bev_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,depth_stamp_ns,"[851, 3]",int64,False,Timestamp Depth frame da su dung.
+episodes/wm_standing_45/labels/future_observed_bev_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,depth_time_error_ns,"[851, 3]",int64,False,Sai so thoi gian cua target Depth frame.
+episodes/wm_standing_45/labels/future_observed_bev_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,anchor_pose_world_gt,"[851, 3]",float64,False,"Simulator ground-truth robot pose tai anchor, CHI nhan/evaluation."
+episodes/wm_standing_45/labels/future_observed_bev_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,future_pose_world_gt,"[851, 3, 3]",float64,False,"Simulator ground-truth robot poses cho future depth target, CHI nhan/evaluation."
+episodes/wm_standing_45/labels/future_observed_bev_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,occupancy,"[851, 3, 64, 64]",int8,False,"BEV -1 unknown, 0 observed free, 1 observed occupied; vai tro input/label phu thuoc file."
+episodes/wm_standing_45/labels/future_observed_bev_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,frame_valid,"[851, 3]",bool,False,Mask bo du lieu BEV o muc frame/horizon.
+episodes/wm_standing_45/labels/future_observed_bev_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,cell_loss_valid,"[851, 3, 64, 64]",bool,False,Mask cell observed va frame supported; chi tinh loss tai mask true.
+episodes/wm_standing_45/labels/future_trajectories_actions_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,future_stamp_ns,"[851, 30]",int64,False,"[N,30] moc thoi gian nhan quy dao nguoi tu t+0.1..t+3.0s."
+episodes/wm_standing_45/labels/future_trajectories_actions_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,human_xy_future_m,"[851, 30, 6, 2]",float64,False,"[N,30,6,2] quy dao 6 nguoi trong he robot that tai anchor, LABEL GT."
+episodes/wm_standing_45/labels/future_trajectories_actions_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,human_xy_at_anchor_m,"[851, 6, 2]",float64,False,"[N,6,2] vi tri nguoi tai anchor, LABEL GT."
+episodes/wm_standing_45/labels/future_trajectories_actions_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,human_valid,"[851, 30, 6]",bool,False,"Support noi suy GT, KHONG phai nhan da detect duoc nguoi."
+episodes/wm_standing_45/labels/future_trajectories_actions_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,executed_action_query_ns,"[851, 30]",int64,False,"[N,30] moc hoi cua 30 lenh tuong lai."
+episodes/wm_standing_45/labels/future_trajectories_actions_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,executed_action_future,"[851, 30, 3]",float32,False,"[N,30,3] lenh robot da thuc hien t..t+2.9s; action condition tren mot trajectory, khong phai counterfactual."
+episodes/wm_standing_45/labels/future_trajectories_actions_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,executed_action_stamp_ns,"[851, 30]",int64,False,Timestamp cua lenh tuong lai da ghi.
+episodes/wm_standing_45/labels/future_trajectories_actions_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,executed_action_available_ns,"[851, 30]",int64,False,Timestamp availability cua lenh da ghi.
+episodes/wm_standing_45/labels/future_trajectories_actions_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,group_id_future,"[851, 30, 6]",int32,False,Nhom nguoi tuong lai (LABEL simulator); khong phai observation.
+episodes/wm_standing_45/labels/future_trajectories_actions_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,group_mode_future,"[851, 30, 6]",int8,False,"Nhom 0:none, 1:walking, 2:standing (LABEL)."
+episodes/wm_standing_45/labels/future_trajectories_actions_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,persona_index,"[851, 6]",int8,False,"Danh muc persona; hien tai -1/unavailable, KHONG phai H1-H5 ground truth."
+episodes/wm_standing_45/labels/future_trajectories_actions_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,persona_valid,"[851, 6]",bool,False,"Mask persona; hien tai tat ca false, khong train head H1-H5."
+episodes/wm_standing_45/labels/future_trajectories_actions_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,human_ids,[6],int32,False,Danh sach ID con nguoi chi on dinh trong episode.
+episodes/wm_standing_45/labels/task_masks_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,wm_observed_bev_train_valid,[851],bool,False,"Mask ho tro task WM observed future BEV, KHONG phai quyen train test."
+episodes/wm_standing_45/labels/task_masks_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,executed_action_condition_valid,[851],bool,False,Mask action condition hop le.
+episodes/wm_standing_45/labels/task_masks_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,m1_track_aligned_valid,"[851, 30, 6]",bool,False,Mask lien ket tracker-sensor voi ground truth ID; hien tai false.
+episodes/wm_standing_45/labels/task_masks_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,persona_valid,"[851, 6]",bool,False,"Mask persona; hien tai tat ca false, khong train head H1-H5."
+episodes/wm_standing_45/labels/task_masks_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,rl_reward_valid,[851],bool,False,Mask reward RL; hien tai false.
+episodes/wm_standing_45/labels/task_masks_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,rl_reward,[851],float32,False,Reward RL; hien tai NaN/unavailable; KHONG doi NaN thanh zero.
+episodes/wm_standing_46/inputs/bev_anchor_estimated_SENSOR_ONLY.npz,OBSERVATION_INPUT,anchor_ns,[259],int64,False,"Thoi diem neo cua cua so, nanosecond simulation."
+episodes/wm_standing_46/inputs/bev_anchor_estimated_SENSOR_ONLY.npz,OBSERVATION_INPUT,depth_index,[259],int32,False,"[N,20] indices tro vao depth_SENSOR_ONLY.npy; khong phai mang pixel."
+episodes/wm_standing_46/inputs/bev_anchor_estimated_SENSOR_ONLY.npz,OBSERVATION_INPUT,depth_stamp_ns,[259],int64,False,Timestamp Depth frame da su dung.
+episodes/wm_standing_46/inputs/bev_anchor_estimated_SENSOR_ONLY.npz,OBSERVATION_INPUT,source_odom_stamp_ns,[259],int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_standing_46/inputs/bev_anchor_estimated_SENSOR_ONLY.npz,OBSERVATION_INPUT,source_odom_available_ns,[259],int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_standing_46/inputs/bev_anchor_estimated_SENSOR_ONLY.npz,OBSERVATION_INPUT,anchor_odom_stamp_ns,[259],int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_standing_46/inputs/bev_anchor_estimated_SENSOR_ONLY.npz,OBSERVATION_INPUT,anchor_odom_available_ns,[259],int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_standing_46/inputs/bev_anchor_estimated_SENSOR_ONLY.npz,OBSERVATION_INPUT,occupancy,"[259, 64, 64]",int8,False,"BEV -1 unknown, 0 observed free, 1 observed occupied; vai tro input/label phu thuoc file."
+episodes/wm_standing_46/inputs/bev_anchor_estimated_SENSOR_ONLY.npz,OBSERVATION_INPUT,frame_valid,[259],bool,False,Mask bo du lieu BEV o muc frame/horizon.
+episodes/wm_standing_46/inputs/observations_SENSOR_ONLY.npz,OBSERVATION_INPUT,scan__stamp_ns,[224],int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_standing_46/inputs/observations_SENSOR_ONLY.npz,OBSERVATION_INPUT,scan__available_ns,[224],int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_standing_46/inputs/observations_SENSOR_ONLY.npz,OBSERVATION_INPUT,scan__values,"[224, 360]",float32,False,Undocumented by this script; inspect source or protocol.
+episodes/wm_standing_46/inputs/observations_SENSOR_ONLY.npz,OBSERVATION_INPUT,scan__received_ns,[224],int64,False,Undocumented by this script; inspect source or protocol.
+episodes/wm_standing_46/inputs/observations_SENSOR_ONLY.npz,OBSERVATION_INPUT,scan__valid,"[224, 360]",bool,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_standing_46/inputs/observations_SENSOR_ONLY.npz,OBSERVATION_INPUT,imu__stamp_ns,[4477],int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_standing_46/inputs/observations_SENSOR_ONLY.npz,OBSERVATION_INPUT,imu__available_ns,[4477],int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_standing_46/inputs/observations_SENSOR_ONLY.npz,OBSERVATION_INPUT,imu__values,"[4477, 10]",float32,False,Undocumented by this script; inspect source or protocol.
+episodes/wm_standing_46/inputs/observations_SENSOR_ONLY.npz,OBSERVATION_INPUT,imu__received_ns,[4477],int64,False,Undocumented by this script; inspect source or protocol.
+episodes/wm_standing_46/inputs/observations_SENSOR_ONLY.npz,OBSERVATION_INPUT,odom__stamp_ns,[1279],int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_standing_46/inputs/observations_SENSOR_ONLY.npz,OBSERVATION_INPUT,odom__available_ns,[1279],int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_standing_46/inputs/observations_SENSOR_ONLY.npz,OBSERVATION_INPUT,odom__values,"[1279, 9]",float32,False,Undocumented by this script; inspect source or protocol.
+episodes/wm_standing_46/inputs/observations_SENSOR_ONLY.npz,OBSERVATION_INPUT,odom__received_ns,[1279],int64,False,Undocumented by this script; inspect source or protocol.
+episodes/wm_standing_46/inputs/observations_SENSOR_ONLY.npz,OBSERVATION_INPUT,action__stamp_ns,[1575],int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_standing_46/inputs/observations_SENSOR_ONLY.npz,OBSERVATION_INPUT,action__available_ns,[1575],int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_standing_46/inputs/observations_SENSOR_ONLY.npz,OBSERVATION_INPUT,action__values,"[1575, 3]",float32,False,Undocumented by this script; inspect source or protocol.
+episodes/wm_standing_46/inputs/observations_SENSOR_ONLY.npz,OBSERVATION_INPUT,action__received_ns,[1575],int64,False,Undocumented by this script; inspect source or protocol.
+episodes/wm_standing_46/inputs/observations_SENSOR_ONLY.npz,OBSERVATION_INPUT,depth__stamp_ns,[448],int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_standing_46/inputs/observations_SENSOR_ONLY.npz,OBSERVATION_INPUT,depth__available_ns,[448],int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_standing_46/inputs/observations_SENSOR_ONLY.npz,OBSERVATION_INPUT,depth__values,"[448, 1]",float32,False,Undocumented by this script; inspect source or protocol.
+episodes/wm_standing_46/inputs/observations_SENSOR_ONLY.npz,OBSERVATION_INPUT,depth__received_ns,[448],int64,False,Undocumented by this script; inspect source or protocol.
+episodes/wm_standing_46/inputs/observations_SENSOR_ONLY.npz,OBSERVATION_INPUT,amcl__stamp_ns,[126],int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_standing_46/inputs/observations_SENSOR_ONLY.npz,OBSERVATION_INPUT,amcl__available_ns,[126],int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_standing_46/inputs/observations_SENSOR_ONLY.npz,OBSERVATION_INPUT,amcl__values,"[126, 3]",float32,False,Undocumented by this script; inspect source or protocol.
+episodes/wm_standing_46/inputs/observations_SENSOR_ONLY.npz,OBSERVATION_INPUT,amcl__received_ns,[126],int64,False,Undocumented by this script; inspect source or protocol.
+episodes/wm_standing_46/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,anchor_ns,[259],int64,False,"Thoi diem neo cua cua so, nanosecond simulation."
+episodes/wm_standing_46/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,history_query_ns,"[259, 20]",int64,False,"20 query tu t-1.9s toi t, 10Hz; timestamp cua observation history."
+episodes/wm_standing_46/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,scan_stamp_ns,"[259, 20]",int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_standing_46/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,scan_available_ns,"[259, 20]",int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_standing_46/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,scan_valid,"[259, 20]",bool,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_standing_46/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,scan_ranges_m,"[259, 20, 360]",float32,False,"[N,20,360] LiDAR range (m) co mask; invalid ray da duoc ghi 0."
+episodes/wm_standing_46/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,scan_ray_valid,"[259, 20, 360]",bool,False,Mask cho moi ray LiDAR; khong lay value=0 lam khoang cach that.
+episodes/wm_standing_46/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,imu_stamp_ns,"[259, 20]",int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_standing_46/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,imu_available_ns,"[259, 20]",int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_standing_46/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,imu_valid,"[259, 20]",bool,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_standing_46/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,imu,"[259, 20, 10]",float32,False,"[N,20,10]: quaternion xyzw + angular velocity xyz + linear acceleration xyz."
+episodes/wm_standing_46/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,odom_stamp_ns,"[259, 20]",int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_standing_46/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,odom_available_ns,"[259, 20]",int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_standing_46/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,odom_valid,"[259, 20]",bool,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_standing_46/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,odom_local_pose_and_twist,"[259, 20, 9]",float32,False,"[N,20,9]: local XY/yaw + linear xyz + angular xyz; estimated, khong phai simulator GT."
+episodes/wm_standing_46/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,action_stamp_ns,"[259, 20]",int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_standing_46/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,action_available_ns,"[259, 20]",int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_standing_46/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,action_valid,"[259, 20]",bool,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_standing_46/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,action,"[259, 20, 3]",float32,False,"[N,20,3]: lenh da thuc hien trong history, vx/vy/wz (base axes)."
+episodes/wm_standing_46/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,depth_stamp_ns,"[259, 20]",int64,False,Timestamp Depth frame da su dung.
+episodes/wm_standing_46/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,depth_available_ns,"[259, 20]",int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_standing_46/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,depth_valid,"[259, 20]",bool,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_standing_46/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,depth_index,"[259, 20]",int32,False,"[N,20] indices tro vao depth_SENSOR_ONLY.npy; khong phai mang pixel."
+episodes/wm_standing_46/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,goal_xy_from_amcl,"[259, 2]",float64,False,"[N,2] goal trong he robot tinh theo AMCL nhan qua, co goal_valid."
+episodes/wm_standing_46/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,goal_valid,[259],bool,False,Mask goal con hop le; stale >1 giay -> zero + false.
+episodes/wm_standing_46/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,goal_stamp_ns,[259],int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_standing_46/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,goal_available_ns,[259],int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_standing_46/labels/future_observed_bev_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,anchor_ns,[259],int64,False,"Thoi diem neo cua cua so, nanosecond simulation."
+episodes/wm_standing_46/labels/future_observed_bev_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,offset_ns,[3],int64,False,[3] horizon +0.5/+1/+3 giay cho future observed BEV.
+episodes/wm_standing_46/labels/future_observed_bev_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,query_ns,"[259, 3]",int64,False,Moc thoi gian can lay nhan Depth tuong lai.
+episodes/wm_standing_46/labels/future_observed_bev_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,depth_index,"[259, 3]",int64,False,"[N,20] indices tro vao depth_SENSOR_ONLY.npy; khong phai mang pixel."
+episodes/wm_standing_46/labels/future_observed_bev_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,depth_stamp_ns,"[259, 3]",int64,False,Timestamp Depth frame da su dung.
+episodes/wm_standing_46/labels/future_observed_bev_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,depth_time_error_ns,"[259, 3]",int64,False,Sai so thoi gian cua target Depth frame.
+episodes/wm_standing_46/labels/future_observed_bev_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,anchor_pose_world_gt,"[259, 3]",float64,False,"Simulator ground-truth robot pose tai anchor, CHI nhan/evaluation."
+episodes/wm_standing_46/labels/future_observed_bev_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,future_pose_world_gt,"[259, 3, 3]",float64,False,"Simulator ground-truth robot poses cho future depth target, CHI nhan/evaluation."
+episodes/wm_standing_46/labels/future_observed_bev_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,occupancy,"[259, 3, 64, 64]",int8,False,"BEV -1 unknown, 0 observed free, 1 observed occupied; vai tro input/label phu thuoc file."
+episodes/wm_standing_46/labels/future_observed_bev_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,frame_valid,"[259, 3]",bool,False,Mask bo du lieu BEV o muc frame/horizon.
+episodes/wm_standing_46/labels/future_observed_bev_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,cell_loss_valid,"[259, 3, 64, 64]",bool,False,Mask cell observed va frame supported; chi tinh loss tai mask true.
+episodes/wm_standing_46/labels/future_trajectories_actions_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,future_stamp_ns,"[259, 30]",int64,False,"[N,30] moc thoi gian nhan quy dao nguoi tu t+0.1..t+3.0s."
+episodes/wm_standing_46/labels/future_trajectories_actions_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,human_xy_future_m,"[259, 30, 6, 2]",float64,False,"[N,30,6,2] quy dao 6 nguoi trong he robot that tai anchor, LABEL GT."
+episodes/wm_standing_46/labels/future_trajectories_actions_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,human_xy_at_anchor_m,"[259, 6, 2]",float64,False,"[N,6,2] vi tri nguoi tai anchor, LABEL GT."
+episodes/wm_standing_46/labels/future_trajectories_actions_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,human_valid,"[259, 30, 6]",bool,False,"Support noi suy GT, KHONG phai nhan da detect duoc nguoi."
+episodes/wm_standing_46/labels/future_trajectories_actions_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,executed_action_query_ns,"[259, 30]",int64,False,"[N,30] moc hoi cua 30 lenh tuong lai."
+episodes/wm_standing_46/labels/future_trajectories_actions_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,executed_action_future,"[259, 30, 3]",float32,False,"[N,30,3] lenh robot da thuc hien t..t+2.9s; action condition tren mot trajectory, khong phai counterfactual."
+episodes/wm_standing_46/labels/future_trajectories_actions_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,executed_action_stamp_ns,"[259, 30]",int64,False,Timestamp cua lenh tuong lai da ghi.
+episodes/wm_standing_46/labels/future_trajectories_actions_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,executed_action_available_ns,"[259, 30]",int64,False,Timestamp availability cua lenh da ghi.
+episodes/wm_standing_46/labels/future_trajectories_actions_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,group_id_future,"[259, 30, 6]",int32,False,Nhom nguoi tuong lai (LABEL simulator); khong phai observation.
+episodes/wm_standing_46/labels/future_trajectories_actions_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,group_mode_future,"[259, 30, 6]",int8,False,"Nhom 0:none, 1:walking, 2:standing (LABEL)."
+episodes/wm_standing_46/labels/future_trajectories_actions_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,persona_index,"[259, 6]",int8,False,"Danh muc persona; hien tai -1/unavailable, KHONG phai H1-H5 ground truth."
+episodes/wm_standing_46/labels/future_trajectories_actions_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,persona_valid,"[259, 6]",bool,False,"Mask persona; hien tai tat ca false, khong train head H1-H5."
+episodes/wm_standing_46/labels/future_trajectories_actions_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,human_ids,[6],int32,False,Danh sach ID con nguoi chi on dinh trong episode.
+episodes/wm_standing_46/labels/task_masks_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,wm_observed_bev_train_valid,[259],bool,False,"Mask ho tro task WM observed future BEV, KHONG phai quyen train test."
+episodes/wm_standing_46/labels/task_masks_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,executed_action_condition_valid,[259],bool,False,Mask action condition hop le.
+episodes/wm_standing_46/labels/task_masks_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,m1_track_aligned_valid,"[259, 30, 6]",bool,False,Mask lien ket tracker-sensor voi ground truth ID; hien tai false.
+episodes/wm_standing_46/labels/task_masks_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,persona_valid,"[259, 6]",bool,False,"Mask persona; hien tai tat ca false, khong train head H1-H5."
+episodes/wm_standing_46/labels/task_masks_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,rl_reward_valid,[259],bool,False,Mask reward RL; hien tai false.
+episodes/wm_standing_46/labels/task_masks_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,rl_reward,[259],float32,False,Reward RL; hien tai NaN/unavailable; KHONG doi NaN thanh zero.
+episodes/wm_standing_48/inputs/bev_anchor_estimated_SENSOR_ONLY.npz,OBSERVATION_INPUT,anchor_ns,[802],int64,False,"Thoi diem neo cua cua so, nanosecond simulation."
+episodes/wm_standing_48/inputs/bev_anchor_estimated_SENSOR_ONLY.npz,OBSERVATION_INPUT,depth_index,[802],int32,False,"[N,20] indices tro vao depth_SENSOR_ONLY.npy; khong phai mang pixel."
+episodes/wm_standing_48/inputs/bev_anchor_estimated_SENSOR_ONLY.npz,OBSERVATION_INPUT,depth_stamp_ns,[802],int64,False,Timestamp Depth frame da su dung.
+episodes/wm_standing_48/inputs/bev_anchor_estimated_SENSOR_ONLY.npz,OBSERVATION_INPUT,source_odom_stamp_ns,[802],int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_standing_48/inputs/bev_anchor_estimated_SENSOR_ONLY.npz,OBSERVATION_INPUT,source_odom_available_ns,[802],int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_standing_48/inputs/bev_anchor_estimated_SENSOR_ONLY.npz,OBSERVATION_INPUT,anchor_odom_stamp_ns,[802],int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_standing_48/inputs/bev_anchor_estimated_SENSOR_ONLY.npz,OBSERVATION_INPUT,anchor_odom_available_ns,[802],int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_standing_48/inputs/bev_anchor_estimated_SENSOR_ONLY.npz,OBSERVATION_INPUT,occupancy,"[802, 64, 64]",int8,False,"BEV -1 unknown, 0 observed free, 1 observed occupied; vai tro input/label phu thuoc file."
+episodes/wm_standing_48/inputs/bev_anchor_estimated_SENSOR_ONLY.npz,OBSERVATION_INPUT,frame_valid,[802],bool,False,Mask bo du lieu BEV o muc frame/horizon.
+episodes/wm_standing_48/inputs/observations_SENSOR_ONLY.npz,OBSERVATION_INPUT,scan__stamp_ns,[520],int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_standing_48/inputs/observations_SENSOR_ONLY.npz,OBSERVATION_INPUT,scan__available_ns,[520],int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_standing_48/inputs/observations_SENSOR_ONLY.npz,OBSERVATION_INPUT,scan__values,"[520, 360]",float32,False,Undocumented by this script; inspect source or protocol.
+episodes/wm_standing_48/inputs/observations_SENSOR_ONLY.npz,OBSERVATION_INPUT,scan__received_ns,[520],int64,False,Undocumented by this script; inspect source or protocol.
+episodes/wm_standing_48/inputs/observations_SENSOR_ONLY.npz,OBSERVATION_INPUT,scan__valid,"[520, 360]",bool,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_standing_48/inputs/observations_SENSOR_ONLY.npz,OBSERVATION_INPUT,imu__stamp_ns,[10400],int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_standing_48/inputs/observations_SENSOR_ONLY.npz,OBSERVATION_INPUT,imu__available_ns,[10400],int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_standing_48/inputs/observations_SENSOR_ONLY.npz,OBSERVATION_INPUT,imu__values,"[10400, 10]",float32,False,Undocumented by this script; inspect source or protocol.
+episodes/wm_standing_48/inputs/observations_SENSOR_ONLY.npz,OBSERVATION_INPUT,imu__received_ns,[10400],int64,False,Undocumented by this script; inspect source or protocol.
+episodes/wm_standing_48/inputs/observations_SENSOR_ONLY.npz,OBSERVATION_INPUT,odom__stamp_ns,[2971],int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_standing_48/inputs/observations_SENSOR_ONLY.npz,OBSERVATION_INPUT,odom__available_ns,[2971],int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_standing_48/inputs/observations_SENSOR_ONLY.npz,OBSERVATION_INPUT,odom__values,"[2971, 9]",float32,False,Undocumented by this script; inspect source or protocol.
+episodes/wm_standing_48/inputs/observations_SENSOR_ONLY.npz,OBSERVATION_INPUT,odom__received_ns,[2971],int64,False,Undocumented by this script; inspect source or protocol.
+episodes/wm_standing_48/inputs/observations_SENSOR_ONLY.npz,OBSERVATION_INPUT,action__stamp_ns,[3901],int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_standing_48/inputs/observations_SENSOR_ONLY.npz,OBSERVATION_INPUT,action__available_ns,[3901],int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_standing_48/inputs/observations_SENSOR_ONLY.npz,OBSERVATION_INPUT,action__values,"[3901, 3]",float32,False,Undocumented by this script; inspect source or protocol.
+episodes/wm_standing_48/inputs/observations_SENSOR_ONLY.npz,OBSERVATION_INPUT,action__received_ns,[3901],int64,False,Undocumented by this script; inspect source or protocol.
+episodes/wm_standing_48/inputs/observations_SENSOR_ONLY.npz,OBSERVATION_INPUT,depth__stamp_ns,[1040],int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_standing_48/inputs/observations_SENSOR_ONLY.npz,OBSERVATION_INPUT,depth__available_ns,[1040],int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_standing_48/inputs/observations_SENSOR_ONLY.npz,OBSERVATION_INPUT,depth__values,"[1040, 1]",float32,False,Undocumented by this script; inspect source or protocol.
+episodes/wm_standing_48/inputs/observations_SENSOR_ONLY.npz,OBSERVATION_INPUT,depth__received_ns,[1040],int64,False,Undocumented by this script; inspect source or protocol.
+episodes/wm_standing_48/inputs/observations_SENSOR_ONLY.npz,OBSERVATION_INPUT,amcl__stamp_ns,[185],int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_standing_48/inputs/observations_SENSOR_ONLY.npz,OBSERVATION_INPUT,amcl__available_ns,[185],int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_standing_48/inputs/observations_SENSOR_ONLY.npz,OBSERVATION_INPUT,amcl__values,"[185, 3]",float32,False,Undocumented by this script; inspect source or protocol.
+episodes/wm_standing_48/inputs/observations_SENSOR_ONLY.npz,OBSERVATION_INPUT,amcl__received_ns,[185],int64,False,Undocumented by this script; inspect source or protocol.
+episodes/wm_standing_48/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,anchor_ns,[802],int64,False,"Thoi diem neo cua cua so, nanosecond simulation."
+episodes/wm_standing_48/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,history_query_ns,"[802, 20]",int64,False,"20 query tu t-1.9s toi t, 10Hz; timestamp cua observation history."
+episodes/wm_standing_48/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,scan_stamp_ns,"[802, 20]",int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_standing_48/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,scan_available_ns,"[802, 20]",int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_standing_48/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,scan_valid,"[802, 20]",bool,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_standing_48/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,scan_ranges_m,"[802, 20, 360]",float32,False,"[N,20,360] LiDAR range (m) co mask; invalid ray da duoc ghi 0."
+episodes/wm_standing_48/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,scan_ray_valid,"[802, 20, 360]",bool,False,Mask cho moi ray LiDAR; khong lay value=0 lam khoang cach that.
+episodes/wm_standing_48/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,imu_stamp_ns,"[802, 20]",int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_standing_48/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,imu_available_ns,"[802, 20]",int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_standing_48/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,imu_valid,"[802, 20]",bool,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_standing_48/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,imu,"[802, 20, 10]",float32,False,"[N,20,10]: quaternion xyzw + angular velocity xyz + linear acceleration xyz."
+episodes/wm_standing_48/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,odom_stamp_ns,"[802, 20]",int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_standing_48/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,odom_available_ns,"[802, 20]",int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_standing_48/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,odom_valid,"[802, 20]",bool,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_standing_48/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,odom_local_pose_and_twist,"[802, 20, 9]",float32,False,"[N,20,9]: local XY/yaw + linear xyz + angular xyz; estimated, khong phai simulator GT."
+episodes/wm_standing_48/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,action_stamp_ns,"[802, 20]",int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_standing_48/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,action_available_ns,"[802, 20]",int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_standing_48/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,action_valid,"[802, 20]",bool,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_standing_48/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,action,"[802, 20, 3]",float32,False,"[N,20,3]: lenh da thuc hien trong history, vx/vy/wz (base axes)."
+episodes/wm_standing_48/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,depth_stamp_ns,"[802, 20]",int64,False,Timestamp Depth frame da su dung.
+episodes/wm_standing_48/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,depth_available_ns,"[802, 20]",int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_standing_48/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,depth_valid,"[802, 20]",bool,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_standing_48/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,depth_index,"[802, 20]",int32,False,"[N,20] indices tro vao depth_SENSOR_ONLY.npy; khong phai mang pixel."
+episodes/wm_standing_48/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,goal_xy_from_amcl,"[802, 2]",float64,False,"[N,2] goal trong he robot tinh theo AMCL nhan qua, co goal_valid."
+episodes/wm_standing_48/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,goal_valid,[802],bool,False,Mask goal con hop le; stale >1 giay -> zero + false.
+episodes/wm_standing_48/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,goal_stamp_ns,[802],int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_standing_48/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,goal_available_ns,[802],int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_standing_48/labels/future_observed_bev_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,anchor_ns,[802],int64,False,"Thoi diem neo cua cua so, nanosecond simulation."
+episodes/wm_standing_48/labels/future_observed_bev_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,offset_ns,[3],int64,False,[3] horizon +0.5/+1/+3 giay cho future observed BEV.
+episodes/wm_standing_48/labels/future_observed_bev_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,query_ns,"[802, 3]",int64,False,Moc thoi gian can lay nhan Depth tuong lai.
+episodes/wm_standing_48/labels/future_observed_bev_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,depth_index,"[802, 3]",int64,False,"[N,20] indices tro vao depth_SENSOR_ONLY.npy; khong phai mang pixel."
+episodes/wm_standing_48/labels/future_observed_bev_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,depth_stamp_ns,"[802, 3]",int64,False,Timestamp Depth frame da su dung.
+episodes/wm_standing_48/labels/future_observed_bev_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,depth_time_error_ns,"[802, 3]",int64,False,Sai so thoi gian cua target Depth frame.
+episodes/wm_standing_48/labels/future_observed_bev_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,anchor_pose_world_gt,"[802, 3]",float64,False,"Simulator ground-truth robot pose tai anchor, CHI nhan/evaluation."
+episodes/wm_standing_48/labels/future_observed_bev_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,future_pose_world_gt,"[802, 3, 3]",float64,False,"Simulator ground-truth robot poses cho future depth target, CHI nhan/evaluation."
+episodes/wm_standing_48/labels/future_observed_bev_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,occupancy,"[802, 3, 64, 64]",int8,False,"BEV -1 unknown, 0 observed free, 1 observed occupied; vai tro input/label phu thuoc file."
+episodes/wm_standing_48/labels/future_observed_bev_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,frame_valid,"[802, 3]",bool,False,Mask bo du lieu BEV o muc frame/horizon.
+episodes/wm_standing_48/labels/future_observed_bev_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,cell_loss_valid,"[802, 3, 64, 64]",bool,False,Mask cell observed va frame supported; chi tinh loss tai mask true.
+episodes/wm_standing_48/labels/future_trajectories_actions_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,future_stamp_ns,"[802, 30]",int64,False,"[N,30] moc thoi gian nhan quy dao nguoi tu t+0.1..t+3.0s."
+episodes/wm_standing_48/labels/future_trajectories_actions_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,human_xy_future_m,"[802, 30, 6, 2]",float64,False,"[N,30,6,2] quy dao 6 nguoi trong he robot that tai anchor, LABEL GT."
+episodes/wm_standing_48/labels/future_trajectories_actions_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,human_xy_at_anchor_m,"[802, 6, 2]",float64,False,"[N,6,2] vi tri nguoi tai anchor, LABEL GT."
+episodes/wm_standing_48/labels/future_trajectories_actions_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,human_valid,"[802, 30, 6]",bool,False,"Support noi suy GT, KHONG phai nhan da detect duoc nguoi."
+episodes/wm_standing_48/labels/future_trajectories_actions_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,executed_action_query_ns,"[802, 30]",int64,False,"[N,30] moc hoi cua 30 lenh tuong lai."
+episodes/wm_standing_48/labels/future_trajectories_actions_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,executed_action_future,"[802, 30, 3]",float32,False,"[N,30,3] lenh robot da thuc hien t..t+2.9s; action condition tren mot trajectory, khong phai counterfactual."
+episodes/wm_standing_48/labels/future_trajectories_actions_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,executed_action_stamp_ns,"[802, 30]",int64,False,Timestamp cua lenh tuong lai da ghi.
+episodes/wm_standing_48/labels/future_trajectories_actions_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,executed_action_available_ns,"[802, 30]",int64,False,Timestamp availability cua lenh da ghi.
+episodes/wm_standing_48/labels/future_trajectories_actions_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,group_id_future,"[802, 30, 6]",int32,False,Nhom nguoi tuong lai (LABEL simulator); khong phai observation.
+episodes/wm_standing_48/labels/future_trajectories_actions_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,group_mode_future,"[802, 30, 6]",int8,False,"Nhom 0:none, 1:walking, 2:standing (LABEL)."
+episodes/wm_standing_48/labels/future_trajectories_actions_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,persona_index,"[802, 6]",int8,False,"Danh muc persona; hien tai -1/unavailable, KHONG phai H1-H5 ground truth."
+episodes/wm_standing_48/labels/future_trajectories_actions_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,persona_valid,"[802, 6]",bool,False,"Mask persona; hien tai tat ca false, khong train head H1-H5."
+episodes/wm_standing_48/labels/future_trajectories_actions_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,human_ids,[6],int32,False,Danh sach ID con nguoi chi on dinh trong episode.
+episodes/wm_standing_48/labels/task_masks_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,wm_observed_bev_train_valid,[802],bool,False,"Mask ho tro task WM observed future BEV, KHONG phai quyen train test."
+episodes/wm_standing_48/labels/task_masks_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,executed_action_condition_valid,[802],bool,False,Mask action condition hop le.
+episodes/wm_standing_48/labels/task_masks_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,m1_track_aligned_valid,"[802, 30, 6]",bool,False,Mask lien ket tracker-sensor voi ground truth ID; hien tai false.
+episodes/wm_standing_48/labels/task_masks_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,persona_valid,"[802, 6]",bool,False,"Mask persona; hien tai tat ca false, khong train head H1-H5."
+episodes/wm_standing_48/labels/task_masks_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,rl_reward_valid,[802],bool,False,Mask reward RL; hien tai false.
+episodes/wm_standing_48/labels/task_masks_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,rl_reward,[802],float32,False,Reward RL; hien tai NaN/unavailable; KHONG doi NaN thanh zero.
+episodes/wm_walking_45/inputs/bev_anchor_estimated_SENSOR_ONLY.npz,OBSERVATION_INPUT,anchor_ns,[597],int64,False,"Thoi diem neo cua cua so, nanosecond simulation."
+episodes/wm_walking_45/inputs/bev_anchor_estimated_SENSOR_ONLY.npz,OBSERVATION_INPUT,depth_index,[597],int32,False,"[N,20] indices tro vao depth_SENSOR_ONLY.npy; khong phai mang pixel."
+episodes/wm_walking_45/inputs/bev_anchor_estimated_SENSOR_ONLY.npz,OBSERVATION_INPUT,depth_stamp_ns,[597],int64,False,Timestamp Depth frame da su dung.
+episodes/wm_walking_45/inputs/bev_anchor_estimated_SENSOR_ONLY.npz,OBSERVATION_INPUT,source_odom_stamp_ns,[597],int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_walking_45/inputs/bev_anchor_estimated_SENSOR_ONLY.npz,OBSERVATION_INPUT,source_odom_available_ns,[597],int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_walking_45/inputs/bev_anchor_estimated_SENSOR_ONLY.npz,OBSERVATION_INPUT,anchor_odom_stamp_ns,[597],int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_walking_45/inputs/bev_anchor_estimated_SENSOR_ONLY.npz,OBSERVATION_INPUT,anchor_odom_available_ns,[597],int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_walking_45/inputs/bev_anchor_estimated_SENSOR_ONLY.npz,OBSERVATION_INPUT,occupancy,"[597, 64, 64]",int8,False,"BEV -1 unknown, 0 observed free, 1 observed occupied; vai tro input/label phu thuoc file."
+episodes/wm_walking_45/inputs/bev_anchor_estimated_SENSOR_ONLY.npz,OBSERVATION_INPUT,frame_valid,[597],bool,False,Mask bo du lieu BEV o muc frame/horizon.
+episodes/wm_walking_45/inputs/observations_SENSOR_ONLY.npz,OBSERVATION_INPUT,scan__stamp_ns,[395],int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_walking_45/inputs/observations_SENSOR_ONLY.npz,OBSERVATION_INPUT,scan__available_ns,[395],int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_walking_45/inputs/observations_SENSOR_ONLY.npz,OBSERVATION_INPUT,scan__values,"[395, 360]",float32,False,Undocumented by this script; inspect source or protocol.
+episodes/wm_walking_45/inputs/observations_SENSOR_ONLY.npz,OBSERVATION_INPUT,scan__received_ns,[395],int64,False,Undocumented by this script; inspect source or protocol.
+episodes/wm_walking_45/inputs/observations_SENSOR_ONLY.npz,OBSERVATION_INPUT,scan__valid,"[395, 360]",bool,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_walking_45/inputs/observations_SENSOR_ONLY.npz,OBSERVATION_INPUT,imu__stamp_ns,[7881],int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_walking_45/inputs/observations_SENSOR_ONLY.npz,OBSERVATION_INPUT,imu__available_ns,[7881],int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_walking_45/inputs/observations_SENSOR_ONLY.npz,OBSERVATION_INPUT,imu__values,"[7881, 10]",float32,False,Undocumented by this script; inspect source or protocol.
+episodes/wm_walking_45/inputs/observations_SENSOR_ONLY.npz,OBSERVATION_INPUT,imu__received_ns,[7881],int64,False,Undocumented by this script; inspect source or protocol.
+episodes/wm_walking_45/inputs/observations_SENSOR_ONLY.npz,OBSERVATION_INPUT,odom__stamp_ns,[2251],int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_walking_45/inputs/observations_SENSOR_ONLY.npz,OBSERVATION_INPUT,odom__available_ns,[2251],int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_walking_45/inputs/observations_SENSOR_ONLY.npz,OBSERVATION_INPUT,odom__values,"[2251, 9]",float32,False,Undocumented by this script; inspect source or protocol.
+episodes/wm_walking_45/inputs/observations_SENSOR_ONLY.npz,OBSERVATION_INPUT,odom__received_ns,[2251],int64,False,Undocumented by this script; inspect source or protocol.
+episodes/wm_walking_45/inputs/observations_SENSOR_ONLY.npz,OBSERVATION_INPUT,action__stamp_ns,[2749],int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_walking_45/inputs/observations_SENSOR_ONLY.npz,OBSERVATION_INPUT,action__available_ns,[2749],int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_walking_45/inputs/observations_SENSOR_ONLY.npz,OBSERVATION_INPUT,action__values,"[2749, 3]",float32,False,Undocumented by this script; inspect source or protocol.
+episodes/wm_walking_45/inputs/observations_SENSOR_ONLY.npz,OBSERVATION_INPUT,action__received_ns,[2749],int64,False,Undocumented by this script; inspect source or protocol.
+episodes/wm_walking_45/inputs/observations_SENSOR_ONLY.npz,OBSERVATION_INPUT,depth__stamp_ns,[789],int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_walking_45/inputs/observations_SENSOR_ONLY.npz,OBSERVATION_INPUT,depth__available_ns,[789],int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_walking_45/inputs/observations_SENSOR_ONLY.npz,OBSERVATION_INPUT,depth__values,"[789, 1]",float32,False,Undocumented by this script; inspect source or protocol.
+episodes/wm_walking_45/inputs/observations_SENSOR_ONLY.npz,OBSERVATION_INPUT,depth__received_ns,[789],int64,False,Undocumented by this script; inspect source or protocol.
+episodes/wm_walking_45/inputs/observations_SENSOR_ONLY.npz,OBSERVATION_INPUT,amcl__stamp_ns,[216],int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_walking_45/inputs/observations_SENSOR_ONLY.npz,OBSERVATION_INPUT,amcl__available_ns,[216],int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_walking_45/inputs/observations_SENSOR_ONLY.npz,OBSERVATION_INPUT,amcl__values,"[216, 3]",float32,False,Undocumented by this script; inspect source or protocol.
+episodes/wm_walking_45/inputs/observations_SENSOR_ONLY.npz,OBSERVATION_INPUT,amcl__received_ns,[216],int64,False,Undocumented by this script; inspect source or protocol.
+episodes/wm_walking_45/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,anchor_ns,[597],int64,False,"Thoi diem neo cua cua so, nanosecond simulation."
+episodes/wm_walking_45/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,history_query_ns,"[597, 20]",int64,False,"20 query tu t-1.9s toi t, 10Hz; timestamp cua observation history."
+episodes/wm_walking_45/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,scan_stamp_ns,"[597, 20]",int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_walking_45/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,scan_available_ns,"[597, 20]",int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_walking_45/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,scan_valid,"[597, 20]",bool,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_walking_45/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,scan_ranges_m,"[597, 20, 360]",float32,False,"[N,20,360] LiDAR range (m) co mask; invalid ray da duoc ghi 0."
+episodes/wm_walking_45/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,scan_ray_valid,"[597, 20, 360]",bool,False,Mask cho moi ray LiDAR; khong lay value=0 lam khoang cach that.
+episodes/wm_walking_45/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,imu_stamp_ns,"[597, 20]",int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_walking_45/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,imu_available_ns,"[597, 20]",int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_walking_45/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,imu_valid,"[597, 20]",bool,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_walking_45/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,imu,"[597, 20, 10]",float32,False,"[N,20,10]: quaternion xyzw + angular velocity xyz + linear acceleration xyz."
+episodes/wm_walking_45/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,odom_stamp_ns,"[597, 20]",int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_walking_45/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,odom_available_ns,"[597, 20]",int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_walking_45/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,odom_valid,"[597, 20]",bool,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_walking_45/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,odom_local_pose_and_twist,"[597, 20, 9]",float32,False,"[N,20,9]: local XY/yaw + linear xyz + angular xyz; estimated, khong phai simulator GT."
+episodes/wm_walking_45/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,action_stamp_ns,"[597, 20]",int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_walking_45/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,action_available_ns,"[597, 20]",int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_walking_45/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,action_valid,"[597, 20]",bool,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_walking_45/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,action,"[597, 20, 3]",float32,False,"[N,20,3]: lenh da thuc hien trong history, vx/vy/wz (base axes)."
+episodes/wm_walking_45/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,depth_stamp_ns,"[597, 20]",int64,False,Timestamp Depth frame da su dung.
+episodes/wm_walking_45/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,depth_available_ns,"[597, 20]",int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_walking_45/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,depth_valid,"[597, 20]",bool,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_walking_45/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,depth_index,"[597, 20]",int32,False,"[N,20] indices tro vao depth_SENSOR_ONLY.npy; khong phai mang pixel."
+episodes/wm_walking_45/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,goal_xy_from_amcl,"[597, 2]",float64,False,"[N,2] goal trong he robot tinh theo AMCL nhan qua, co goal_valid."
+episodes/wm_walking_45/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,goal_valid,[597],bool,False,Mask goal con hop le; stale >1 giay -> zero + false.
+episodes/wm_walking_45/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,goal_stamp_ns,[597],int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_walking_45/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,goal_available_ns,[597],int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_walking_45/labels/future_observed_bev_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,anchor_ns,[597],int64,False,"Thoi diem neo cua cua so, nanosecond simulation."
+episodes/wm_walking_45/labels/future_observed_bev_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,offset_ns,[3],int64,False,[3] horizon +0.5/+1/+3 giay cho future observed BEV.
+episodes/wm_walking_45/labels/future_observed_bev_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,query_ns,"[597, 3]",int64,False,Moc thoi gian can lay nhan Depth tuong lai.
+episodes/wm_walking_45/labels/future_observed_bev_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,depth_index,"[597, 3]",int64,False,"[N,20] indices tro vao depth_SENSOR_ONLY.npy; khong phai mang pixel."
+episodes/wm_walking_45/labels/future_observed_bev_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,depth_stamp_ns,"[597, 3]",int64,False,Timestamp Depth frame da su dung.
+episodes/wm_walking_45/labels/future_observed_bev_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,depth_time_error_ns,"[597, 3]",int64,False,Sai so thoi gian cua target Depth frame.
+episodes/wm_walking_45/labels/future_observed_bev_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,anchor_pose_world_gt,"[597, 3]",float64,False,"Simulator ground-truth robot pose tai anchor, CHI nhan/evaluation."
+episodes/wm_walking_45/labels/future_observed_bev_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,future_pose_world_gt,"[597, 3, 3]",float64,False,"Simulator ground-truth robot poses cho future depth target, CHI nhan/evaluation."
+episodes/wm_walking_45/labels/future_observed_bev_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,occupancy,"[597, 3, 64, 64]",int8,False,"BEV -1 unknown, 0 observed free, 1 observed occupied; vai tro input/label phu thuoc file."
+episodes/wm_walking_45/labels/future_observed_bev_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,frame_valid,"[597, 3]",bool,False,Mask bo du lieu BEV o muc frame/horizon.
+episodes/wm_walking_45/labels/future_observed_bev_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,cell_loss_valid,"[597, 3, 64, 64]",bool,False,Mask cell observed va frame supported; chi tinh loss tai mask true.
+episodes/wm_walking_45/labels/future_trajectories_actions_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,future_stamp_ns,"[597, 30]",int64,False,"[N,30] moc thoi gian nhan quy dao nguoi tu t+0.1..t+3.0s."
+episodes/wm_walking_45/labels/future_trajectories_actions_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,human_xy_future_m,"[597, 30, 6, 2]",float64,False,"[N,30,6,2] quy dao 6 nguoi trong he robot that tai anchor, LABEL GT."
+episodes/wm_walking_45/labels/future_trajectories_actions_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,human_xy_at_anchor_m,"[597, 6, 2]",float64,False,"[N,6,2] vi tri nguoi tai anchor, LABEL GT."
+episodes/wm_walking_45/labels/future_trajectories_actions_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,human_valid,"[597, 30, 6]",bool,False,"Support noi suy GT, KHONG phai nhan da detect duoc nguoi."
+episodes/wm_walking_45/labels/future_trajectories_actions_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,executed_action_query_ns,"[597, 30]",int64,False,"[N,30] moc hoi cua 30 lenh tuong lai."
+episodes/wm_walking_45/labels/future_trajectories_actions_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,executed_action_future,"[597, 30, 3]",float32,False,"[N,30,3] lenh robot da thuc hien t..t+2.9s; action condition tren mot trajectory, khong phai counterfactual."
+episodes/wm_walking_45/labels/future_trajectories_actions_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,executed_action_stamp_ns,"[597, 30]",int64,False,Timestamp cua lenh tuong lai da ghi.
+episodes/wm_walking_45/labels/future_trajectories_actions_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,executed_action_available_ns,"[597, 30]",int64,False,Timestamp availability cua lenh da ghi.
+episodes/wm_walking_45/labels/future_trajectories_actions_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,group_id_future,"[597, 30, 6]",int32,False,Nhom nguoi tuong lai (LABEL simulator); khong phai observation.
+episodes/wm_walking_45/labels/future_trajectories_actions_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,group_mode_future,"[597, 30, 6]",int8,False,"Nhom 0:none, 1:walking, 2:standing (LABEL)."
+episodes/wm_walking_45/labels/future_trajectories_actions_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,persona_index,"[597, 6]",int8,False,"Danh muc persona; hien tai -1/unavailable, KHONG phai H1-H5 ground truth."
+episodes/wm_walking_45/labels/future_trajectories_actions_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,persona_valid,"[597, 6]",bool,False,"Mask persona; hien tai tat ca false, khong train head H1-H5."
+episodes/wm_walking_45/labels/future_trajectories_actions_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,human_ids,[6],int32,False,Danh sach ID con nguoi chi on dinh trong episode.
+episodes/wm_walking_45/labels/task_masks_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,wm_observed_bev_train_valid,[597],bool,False,"Mask ho tro task WM observed future BEV, KHONG phai quyen train test."
+episodes/wm_walking_45/labels/task_masks_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,executed_action_condition_valid,[597],bool,False,Mask action condition hop le.
+episodes/wm_walking_45/labels/task_masks_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,m1_track_aligned_valid,"[597, 30, 6]",bool,False,Mask lien ket tracker-sensor voi ground truth ID; hien tai false.
+episodes/wm_walking_45/labels/task_masks_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,persona_valid,"[597, 6]",bool,False,"Mask persona; hien tai tat ca false, khong train head H1-H5."
+episodes/wm_walking_45/labels/task_masks_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,rl_reward_valid,[597],bool,False,Mask reward RL; hien tai false.
+episodes/wm_walking_45/labels/task_masks_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,rl_reward,[597],float32,False,Reward RL; hien tai NaN/unavailable; KHONG doi NaN thanh zero.
+episodes/wm_walking_46/inputs/bev_anchor_estimated_SENSOR_ONLY.npz,OBSERVATION_INPUT,anchor_ns,[268],int64,False,"Thoi diem neo cua cua so, nanosecond simulation."
+episodes/wm_walking_46/inputs/bev_anchor_estimated_SENSOR_ONLY.npz,OBSERVATION_INPUT,depth_index,[268],int32,False,"[N,20] indices tro vao depth_SENSOR_ONLY.npy; khong phai mang pixel."
+episodes/wm_walking_46/inputs/bev_anchor_estimated_SENSOR_ONLY.npz,OBSERVATION_INPUT,depth_stamp_ns,[268],int64,False,Timestamp Depth frame da su dung.
+episodes/wm_walking_46/inputs/bev_anchor_estimated_SENSOR_ONLY.npz,OBSERVATION_INPUT,source_odom_stamp_ns,[268],int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_walking_46/inputs/bev_anchor_estimated_SENSOR_ONLY.npz,OBSERVATION_INPUT,source_odom_available_ns,[268],int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_walking_46/inputs/bev_anchor_estimated_SENSOR_ONLY.npz,OBSERVATION_INPUT,anchor_odom_stamp_ns,[268],int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_walking_46/inputs/bev_anchor_estimated_SENSOR_ONLY.npz,OBSERVATION_INPUT,anchor_odom_available_ns,[268],int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_walking_46/inputs/bev_anchor_estimated_SENSOR_ONLY.npz,OBSERVATION_INPUT,occupancy,"[268, 64, 64]",int8,False,"BEV -1 unknown, 0 observed free, 1 observed occupied; vai tro input/label phu thuoc file."
+episodes/wm_walking_46/inputs/bev_anchor_estimated_SENSOR_ONLY.npz,OBSERVATION_INPUT,frame_valid,[268],bool,False,Mask bo du lieu BEV o muc frame/horizon.
+episodes/wm_walking_46/inputs/observations_SENSOR_ONLY.npz,OBSERVATION_INPUT,scan__stamp_ns,[226],int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_walking_46/inputs/observations_SENSOR_ONLY.npz,OBSERVATION_INPUT,scan__available_ns,[226],int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_walking_46/inputs/observations_SENSOR_ONLY.npz,OBSERVATION_INPUT,scan__values,"[226, 360]",float32,False,Undocumented by this script; inspect source or protocol.
+episodes/wm_walking_46/inputs/observations_SENSOR_ONLY.npz,OBSERVATION_INPUT,scan__received_ns,[226],int64,False,Undocumented by this script; inspect source or protocol.
+episodes/wm_walking_46/inputs/observations_SENSOR_ONLY.npz,OBSERVATION_INPUT,scan__valid,"[226, 360]",bool,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_walking_46/inputs/observations_SENSOR_ONLY.npz,OBSERVATION_INPUT,imu__stamp_ns,[4510],int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_walking_46/inputs/observations_SENSOR_ONLY.npz,OBSERVATION_INPUT,imu__available_ns,[4510],int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_walking_46/inputs/observations_SENSOR_ONLY.npz,OBSERVATION_INPUT,imu__values,"[4510, 10]",float32,False,Undocumented by this script; inspect source or protocol.
+episodes/wm_walking_46/inputs/observations_SENSOR_ONLY.npz,OBSERVATION_INPUT,imu__received_ns,[4510],int64,False,Undocumented by this script; inspect source or protocol.
+episodes/wm_walking_46/inputs/observations_SENSOR_ONLY.npz,OBSERVATION_INPUT,odom__stamp_ns,[1288],int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_walking_46/inputs/observations_SENSOR_ONLY.npz,OBSERVATION_INPUT,odom__available_ns,[1288],int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_walking_46/inputs/observations_SENSOR_ONLY.npz,OBSERVATION_INPUT,odom__values,"[1288, 9]",float32,False,Undocumented by this script; inspect source or protocol.
+episodes/wm_walking_46/inputs/observations_SENSOR_ONLY.npz,OBSERVATION_INPUT,odom__received_ns,[1288],int64,False,Undocumented by this script; inspect source or protocol.
+episodes/wm_walking_46/inputs/observations_SENSOR_ONLY.npz,OBSERVATION_INPUT,action__stamp_ns,[1504],int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_walking_46/inputs/observations_SENSOR_ONLY.npz,OBSERVATION_INPUT,action__available_ns,[1504],int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_walking_46/inputs/observations_SENSOR_ONLY.npz,OBSERVATION_INPUT,action__values,"[1504, 3]",float32,False,Undocumented by this script; inspect source or protocol.
+episodes/wm_walking_46/inputs/observations_SENSOR_ONLY.npz,OBSERVATION_INPUT,action__received_ns,[1504],int64,False,Undocumented by this script; inspect source or protocol.
+episodes/wm_walking_46/inputs/observations_SENSOR_ONLY.npz,OBSERVATION_INPUT,depth__stamp_ns,[451],int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_walking_46/inputs/observations_SENSOR_ONLY.npz,OBSERVATION_INPUT,depth__available_ns,[451],int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_walking_46/inputs/observations_SENSOR_ONLY.npz,OBSERVATION_INPUT,depth__values,"[451, 1]",float32,False,Undocumented by this script; inspect source or protocol.
+episodes/wm_walking_46/inputs/observations_SENSOR_ONLY.npz,OBSERVATION_INPUT,depth__received_ns,[451],int64,False,Undocumented by this script; inspect source or protocol.
+episodes/wm_walking_46/inputs/observations_SENSOR_ONLY.npz,OBSERVATION_INPUT,amcl__stamp_ns,[116],int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_walking_46/inputs/observations_SENSOR_ONLY.npz,OBSERVATION_INPUT,amcl__available_ns,[116],int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_walking_46/inputs/observations_SENSOR_ONLY.npz,OBSERVATION_INPUT,amcl__values,"[116, 3]",float32,False,Undocumented by this script; inspect source or protocol.
+episodes/wm_walking_46/inputs/observations_SENSOR_ONLY.npz,OBSERVATION_INPUT,amcl__received_ns,[116],int64,False,Undocumented by this script; inspect source or protocol.
+episodes/wm_walking_46/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,anchor_ns,[268],int64,False,"Thoi diem neo cua cua so, nanosecond simulation."
+episodes/wm_walking_46/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,history_query_ns,"[268, 20]",int64,False,"20 query tu t-1.9s toi t, 10Hz; timestamp cua observation history."
+episodes/wm_walking_46/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,scan_stamp_ns,"[268, 20]",int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_walking_46/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,scan_available_ns,"[268, 20]",int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_walking_46/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,scan_valid,"[268, 20]",bool,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_walking_46/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,scan_ranges_m,"[268, 20, 360]",float32,False,"[N,20,360] LiDAR range (m) co mask; invalid ray da duoc ghi 0."
+episodes/wm_walking_46/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,scan_ray_valid,"[268, 20, 360]",bool,False,Mask cho moi ray LiDAR; khong lay value=0 lam khoang cach that.
+episodes/wm_walking_46/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,imu_stamp_ns,"[268, 20]",int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_walking_46/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,imu_available_ns,"[268, 20]",int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_walking_46/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,imu_valid,"[268, 20]",bool,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_walking_46/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,imu,"[268, 20, 10]",float32,False,"[N,20,10]: quaternion xyzw + angular velocity xyz + linear acceleration xyz."
+episodes/wm_walking_46/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,odom_stamp_ns,"[268, 20]",int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_walking_46/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,odom_available_ns,"[268, 20]",int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_walking_46/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,odom_valid,"[268, 20]",bool,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_walking_46/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,odom_local_pose_and_twist,"[268, 20, 9]",float32,False,"[N,20,9]: local XY/yaw + linear xyz + angular xyz; estimated, khong phai simulator GT."
+episodes/wm_walking_46/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,action_stamp_ns,"[268, 20]",int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_walking_46/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,action_available_ns,"[268, 20]",int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_walking_46/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,action_valid,"[268, 20]",bool,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_walking_46/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,action,"[268, 20, 3]",float32,False,"[N,20,3]: lenh da thuc hien trong history, vx/vy/wz (base axes)."
+episodes/wm_walking_46/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,depth_stamp_ns,"[268, 20]",int64,False,Timestamp Depth frame da su dung.
+episodes/wm_walking_46/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,depth_available_ns,"[268, 20]",int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_walking_46/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,depth_valid,"[268, 20]",bool,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_walking_46/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,depth_index,"[268, 20]",int32,False,"[N,20] indices tro vao depth_SENSOR_ONLY.npy; khong phai mang pixel."
+episodes/wm_walking_46/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,goal_xy_from_amcl,"[268, 2]",float64,False,"[N,2] goal trong he robot tinh theo AMCL nhan qua, co goal_valid."
+episodes/wm_walking_46/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,goal_valid,[268],bool,False,Mask goal con hop le; stale >1 giay -> zero + false.
+episodes/wm_walking_46/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,goal_stamp_ns,[268],int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_walking_46/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,goal_available_ns,[268],int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_walking_46/labels/future_observed_bev_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,anchor_ns,[268],int64,False,"Thoi diem neo cua cua so, nanosecond simulation."
+episodes/wm_walking_46/labels/future_observed_bev_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,offset_ns,[3],int64,False,[3] horizon +0.5/+1/+3 giay cho future observed BEV.
+episodes/wm_walking_46/labels/future_observed_bev_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,query_ns,"[268, 3]",int64,False,Moc thoi gian can lay nhan Depth tuong lai.
+episodes/wm_walking_46/labels/future_observed_bev_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,depth_index,"[268, 3]",int64,False,"[N,20] indices tro vao depth_SENSOR_ONLY.npy; khong phai mang pixel."
+episodes/wm_walking_46/labels/future_observed_bev_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,depth_stamp_ns,"[268, 3]",int64,False,Timestamp Depth frame da su dung.
+episodes/wm_walking_46/labels/future_observed_bev_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,depth_time_error_ns,"[268, 3]",int64,False,Sai so thoi gian cua target Depth frame.
+episodes/wm_walking_46/labels/future_observed_bev_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,anchor_pose_world_gt,"[268, 3]",float64,False,"Simulator ground-truth robot pose tai anchor, CHI nhan/evaluation."
+episodes/wm_walking_46/labels/future_observed_bev_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,future_pose_world_gt,"[268, 3, 3]",float64,False,"Simulator ground-truth robot poses cho future depth target, CHI nhan/evaluation."
+episodes/wm_walking_46/labels/future_observed_bev_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,occupancy,"[268, 3, 64, 64]",int8,False,"BEV -1 unknown, 0 observed free, 1 observed occupied; vai tro input/label phu thuoc file."
+episodes/wm_walking_46/labels/future_observed_bev_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,frame_valid,"[268, 3]",bool,False,Mask bo du lieu BEV o muc frame/horizon.
+episodes/wm_walking_46/labels/future_observed_bev_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,cell_loss_valid,"[268, 3, 64, 64]",bool,False,Mask cell observed va frame supported; chi tinh loss tai mask true.
+episodes/wm_walking_46/labels/future_trajectories_actions_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,future_stamp_ns,"[268, 30]",int64,False,"[N,30] moc thoi gian nhan quy dao nguoi tu t+0.1..t+3.0s."
+episodes/wm_walking_46/labels/future_trajectories_actions_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,human_xy_future_m,"[268, 30, 6, 2]",float64,False,"[N,30,6,2] quy dao 6 nguoi trong he robot that tai anchor, LABEL GT."
+episodes/wm_walking_46/labels/future_trajectories_actions_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,human_xy_at_anchor_m,"[268, 6, 2]",float64,False,"[N,6,2] vi tri nguoi tai anchor, LABEL GT."
+episodes/wm_walking_46/labels/future_trajectories_actions_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,human_valid,"[268, 30, 6]",bool,False,"Support noi suy GT, KHONG phai nhan da detect duoc nguoi."
+episodes/wm_walking_46/labels/future_trajectories_actions_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,executed_action_query_ns,"[268, 30]",int64,False,"[N,30] moc hoi cua 30 lenh tuong lai."
+episodes/wm_walking_46/labels/future_trajectories_actions_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,executed_action_future,"[268, 30, 3]",float32,False,"[N,30,3] lenh robot da thuc hien t..t+2.9s; action condition tren mot trajectory, khong phai counterfactual."
+episodes/wm_walking_46/labels/future_trajectories_actions_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,executed_action_stamp_ns,"[268, 30]",int64,False,Timestamp cua lenh tuong lai da ghi.
+episodes/wm_walking_46/labels/future_trajectories_actions_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,executed_action_available_ns,"[268, 30]",int64,False,Timestamp availability cua lenh da ghi.
+episodes/wm_walking_46/labels/future_trajectories_actions_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,group_id_future,"[268, 30, 6]",int32,False,Nhom nguoi tuong lai (LABEL simulator); khong phai observation.
+episodes/wm_walking_46/labels/future_trajectories_actions_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,group_mode_future,"[268, 30, 6]",int8,False,"Nhom 0:none, 1:walking, 2:standing (LABEL)."
+episodes/wm_walking_46/labels/future_trajectories_actions_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,persona_index,"[268, 6]",int8,False,"Danh muc persona; hien tai -1/unavailable, KHONG phai H1-H5 ground truth."
+episodes/wm_walking_46/labels/future_trajectories_actions_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,persona_valid,"[268, 6]",bool,False,"Mask persona; hien tai tat ca false, khong train head H1-H5."
+episodes/wm_walking_46/labels/future_trajectories_actions_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,human_ids,[6],int32,False,Danh sach ID con nguoi chi on dinh trong episode.
+episodes/wm_walking_46/labels/task_masks_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,wm_observed_bev_train_valid,[268],bool,False,"Mask ho tro task WM observed future BEV, KHONG phai quyen train test."
+episodes/wm_walking_46/labels/task_masks_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,executed_action_condition_valid,[268],bool,False,Mask action condition hop le.
+episodes/wm_walking_46/labels/task_masks_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,m1_track_aligned_valid,"[268, 30, 6]",bool,False,Mask lien ket tracker-sensor voi ground truth ID; hien tai false.
+episodes/wm_walking_46/labels/task_masks_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,persona_valid,"[268, 6]",bool,False,"Mask persona; hien tai tat ca false, khong train head H1-H5."
+episodes/wm_walking_46/labels/task_masks_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,rl_reward_valid,[268],bool,False,Mask reward RL; hien tai false.
+episodes/wm_walking_46/labels/task_masks_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,rl_reward,[268],float32,False,Reward RL; hien tai NaN/unavailable; KHONG doi NaN thanh zero.
+episodes/wm_walking_47/inputs/bev_anchor_estimated_SENSOR_ONLY.npz,OBSERVATION_INPUT,anchor_ns,[800],int64,False,"Thoi diem neo cua cua so, nanosecond simulation."
+episodes/wm_walking_47/inputs/bev_anchor_estimated_SENSOR_ONLY.npz,OBSERVATION_INPUT,depth_index,[800],int32,False,"[N,20] indices tro vao depth_SENSOR_ONLY.npy; khong phai mang pixel."
+episodes/wm_walking_47/inputs/bev_anchor_estimated_SENSOR_ONLY.npz,OBSERVATION_INPUT,depth_stamp_ns,[800],int64,False,Timestamp Depth frame da su dung.
+episodes/wm_walking_47/inputs/bev_anchor_estimated_SENSOR_ONLY.npz,OBSERVATION_INPUT,source_odom_stamp_ns,[800],int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_walking_47/inputs/bev_anchor_estimated_SENSOR_ONLY.npz,OBSERVATION_INPUT,source_odom_available_ns,[800],int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_walking_47/inputs/bev_anchor_estimated_SENSOR_ONLY.npz,OBSERVATION_INPUT,anchor_odom_stamp_ns,[800],int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_walking_47/inputs/bev_anchor_estimated_SENSOR_ONLY.npz,OBSERVATION_INPUT,anchor_odom_available_ns,[800],int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_walking_47/inputs/bev_anchor_estimated_SENSOR_ONLY.npz,OBSERVATION_INPUT,occupancy,"[800, 64, 64]",int8,False,"BEV -1 unknown, 0 observed free, 1 observed occupied; vai tro input/label phu thuoc file."
+episodes/wm_walking_47/inputs/bev_anchor_estimated_SENSOR_ONLY.npz,OBSERVATION_INPUT,frame_valid,[800],bool,False,Mask bo du lieu BEV o muc frame/horizon.
+episodes/wm_walking_47/inputs/observations_SENSOR_ONLY.npz,OBSERVATION_INPUT,scan__stamp_ns,[518],int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_walking_47/inputs/observations_SENSOR_ONLY.npz,OBSERVATION_INPUT,scan__available_ns,[518],int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_walking_47/inputs/observations_SENSOR_ONLY.npz,OBSERVATION_INPUT,scan__values,"[518, 360]",float32,False,Undocumented by this script; inspect source or protocol.
+episodes/wm_walking_47/inputs/observations_SENSOR_ONLY.npz,OBSERVATION_INPUT,scan__received_ns,[518],int64,False,Undocumented by this script; inspect source or protocol.
+episodes/wm_walking_47/inputs/observations_SENSOR_ONLY.npz,OBSERVATION_INPUT,scan__valid,"[518, 360]",bool,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_walking_47/inputs/observations_SENSOR_ONLY.npz,OBSERVATION_INPUT,imu__stamp_ns,[10360],int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_walking_47/inputs/observations_SENSOR_ONLY.npz,OBSERVATION_INPUT,imu__available_ns,[10360],int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_walking_47/inputs/observations_SENSOR_ONLY.npz,OBSERVATION_INPUT,imu__values,"[10360, 10]",float32,False,Undocumented by this script; inspect source or protocol.
+episodes/wm_walking_47/inputs/observations_SENSOR_ONLY.npz,OBSERVATION_INPUT,imu__received_ns,[10360],int64,False,Undocumented by this script; inspect source or protocol.
+episodes/wm_walking_47/inputs/observations_SENSOR_ONLY.npz,OBSERVATION_INPUT,odom__stamp_ns,[2960],int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_walking_47/inputs/observations_SENSOR_ONLY.npz,OBSERVATION_INPUT,odom__available_ns,[2960],int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_walking_47/inputs/observations_SENSOR_ONLY.npz,OBSERVATION_INPUT,odom__values,"[2960, 9]",float32,False,Undocumented by this script; inspect source or protocol.
+episodes/wm_walking_47/inputs/observations_SENSOR_ONLY.npz,OBSERVATION_INPUT,odom__received_ns,[2960],int64,False,Undocumented by this script; inspect source or protocol.
+episodes/wm_walking_47/inputs/observations_SENSOR_ONLY.npz,OBSERVATION_INPUT,action__stamp_ns,[4170],int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_walking_47/inputs/observations_SENSOR_ONLY.npz,OBSERVATION_INPUT,action__available_ns,[4170],int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_walking_47/inputs/observations_SENSOR_ONLY.npz,OBSERVATION_INPUT,action__values,"[4170, 3]",float32,False,Undocumented by this script; inspect source or protocol.
+episodes/wm_walking_47/inputs/observations_SENSOR_ONLY.npz,OBSERVATION_INPUT,action__received_ns,[4170],int64,False,Undocumented by this script; inspect source or protocol.
+episodes/wm_walking_47/inputs/observations_SENSOR_ONLY.npz,OBSERVATION_INPUT,depth__stamp_ns,[1037],int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_walking_47/inputs/observations_SENSOR_ONLY.npz,OBSERVATION_INPUT,depth__available_ns,[1037],int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_walking_47/inputs/observations_SENSOR_ONLY.npz,OBSERVATION_INPUT,depth__values,"[1037, 1]",float32,False,Undocumented by this script; inspect source or protocol.
+episodes/wm_walking_47/inputs/observations_SENSOR_ONLY.npz,OBSERVATION_INPUT,depth__received_ns,[1037],int64,False,Undocumented by this script; inspect source or protocol.
+episodes/wm_walking_47/inputs/observations_SENSOR_ONLY.npz,OBSERVATION_INPUT,amcl__stamp_ns,[188],int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_walking_47/inputs/observations_SENSOR_ONLY.npz,OBSERVATION_INPUT,amcl__available_ns,[188],int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_walking_47/inputs/observations_SENSOR_ONLY.npz,OBSERVATION_INPUT,amcl__values,"[188, 3]",float32,False,Undocumented by this script; inspect source or protocol.
+episodes/wm_walking_47/inputs/observations_SENSOR_ONLY.npz,OBSERVATION_INPUT,amcl__received_ns,[188],int64,False,Undocumented by this script; inspect source or protocol.
+episodes/wm_walking_47/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,anchor_ns,[800],int64,False,"Thoi diem neo cua cua so, nanosecond simulation."
+episodes/wm_walking_47/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,history_query_ns,"[800, 20]",int64,False,"20 query tu t-1.9s toi t, 10Hz; timestamp cua observation history."
+episodes/wm_walking_47/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,scan_stamp_ns,"[800, 20]",int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_walking_47/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,scan_available_ns,"[800, 20]",int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_walking_47/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,scan_valid,"[800, 20]",bool,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_walking_47/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,scan_ranges_m,"[800, 20, 360]",float32,False,"[N,20,360] LiDAR range (m) co mask; invalid ray da duoc ghi 0."
+episodes/wm_walking_47/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,scan_ray_valid,"[800, 20, 360]",bool,False,Mask cho moi ray LiDAR; khong lay value=0 lam khoang cach that.
+episodes/wm_walking_47/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,imu_stamp_ns,"[800, 20]",int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_walking_47/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,imu_available_ns,"[800, 20]",int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_walking_47/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,imu_valid,"[800, 20]",bool,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_walking_47/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,imu,"[800, 20, 10]",float32,False,"[N,20,10]: quaternion xyzw + angular velocity xyz + linear acceleration xyz."
+episodes/wm_walking_47/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,odom_stamp_ns,"[800, 20]",int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_walking_47/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,odom_available_ns,"[800, 20]",int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_walking_47/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,odom_valid,"[800, 20]",bool,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_walking_47/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,odom_local_pose_and_twist,"[800, 20, 9]",float32,False,"[N,20,9]: local XY/yaw + linear xyz + angular xyz; estimated, khong phai simulator GT."
+episodes/wm_walking_47/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,action_stamp_ns,"[800, 20]",int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_walking_47/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,action_available_ns,"[800, 20]",int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_walking_47/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,action_valid,"[800, 20]",bool,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_walking_47/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,action,"[800, 20, 3]",float32,False,"[N,20,3]: lenh da thuc hien trong history, vx/vy/wz (base axes)."
+episodes/wm_walking_47/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,depth_stamp_ns,"[800, 20]",int64,False,Timestamp Depth frame da su dung.
+episodes/wm_walking_47/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,depth_available_ns,"[800, 20]",int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_walking_47/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,depth_valid,"[800, 20]",bool,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_walking_47/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,depth_index,"[800, 20]",int32,False,"[N,20] indices tro vao depth_SENSOR_ONLY.npy; khong phai mang pixel."
+episodes/wm_walking_47/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,goal_xy_from_amcl,"[800, 2]",float64,False,"[N,2] goal trong he robot tinh theo AMCL nhan qua, co goal_valid."
+episodes/wm_walking_47/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,goal_valid,[800],bool,False,Mask goal con hop le; stale >1 giay -> zero + false.
+episodes/wm_walking_47/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,goal_stamp_ns,[800],int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_walking_47/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,goal_available_ns,[800],int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_walking_47/labels/future_observed_bev_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,anchor_ns,[800],int64,False,"Thoi diem neo cua cua so, nanosecond simulation."
+episodes/wm_walking_47/labels/future_observed_bev_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,offset_ns,[3],int64,False,[3] horizon +0.5/+1/+3 giay cho future observed BEV.
+episodes/wm_walking_47/labels/future_observed_bev_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,query_ns,"[800, 3]",int64,False,Moc thoi gian can lay nhan Depth tuong lai.
+episodes/wm_walking_47/labels/future_observed_bev_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,depth_index,"[800, 3]",int64,False,"[N,20] indices tro vao depth_SENSOR_ONLY.npy; khong phai mang pixel."
+episodes/wm_walking_47/labels/future_observed_bev_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,depth_stamp_ns,"[800, 3]",int64,False,Timestamp Depth frame da su dung.
+episodes/wm_walking_47/labels/future_observed_bev_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,depth_time_error_ns,"[800, 3]",int64,False,Sai so thoi gian cua target Depth frame.
+episodes/wm_walking_47/labels/future_observed_bev_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,anchor_pose_world_gt,"[800, 3]",float64,False,"Simulator ground-truth robot pose tai anchor, CHI nhan/evaluation."
+episodes/wm_walking_47/labels/future_observed_bev_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,future_pose_world_gt,"[800, 3, 3]",float64,False,"Simulator ground-truth robot poses cho future depth target, CHI nhan/evaluation."
+episodes/wm_walking_47/labels/future_observed_bev_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,occupancy,"[800, 3, 64, 64]",int8,False,"BEV -1 unknown, 0 observed free, 1 observed occupied; vai tro input/label phu thuoc file."
+episodes/wm_walking_47/labels/future_observed_bev_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,frame_valid,"[800, 3]",bool,False,Mask bo du lieu BEV o muc frame/horizon.
+episodes/wm_walking_47/labels/future_observed_bev_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,cell_loss_valid,"[800, 3, 64, 64]",bool,False,Mask cell observed va frame supported; chi tinh loss tai mask true.
+episodes/wm_walking_47/labels/future_trajectories_actions_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,future_stamp_ns,"[800, 30]",int64,False,"[N,30] moc thoi gian nhan quy dao nguoi tu t+0.1..t+3.0s."
+episodes/wm_walking_47/labels/future_trajectories_actions_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,human_xy_future_m,"[800, 30, 6, 2]",float64,False,"[N,30,6,2] quy dao 6 nguoi trong he robot that tai anchor, LABEL GT."
+episodes/wm_walking_47/labels/future_trajectories_actions_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,human_xy_at_anchor_m,"[800, 6, 2]",float64,False,"[N,6,2] vi tri nguoi tai anchor, LABEL GT."
+episodes/wm_walking_47/labels/future_trajectories_actions_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,human_valid,"[800, 30, 6]",bool,False,"Support noi suy GT, KHONG phai nhan da detect duoc nguoi."
+episodes/wm_walking_47/labels/future_trajectories_actions_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,executed_action_query_ns,"[800, 30]",int64,False,"[N,30] moc hoi cua 30 lenh tuong lai."
+episodes/wm_walking_47/labels/future_trajectories_actions_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,executed_action_future,"[800, 30, 3]",float32,False,"[N,30,3] lenh robot da thuc hien t..t+2.9s; action condition tren mot trajectory, khong phai counterfactual."
+episodes/wm_walking_47/labels/future_trajectories_actions_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,executed_action_stamp_ns,"[800, 30]",int64,False,Timestamp cua lenh tuong lai da ghi.
+episodes/wm_walking_47/labels/future_trajectories_actions_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,executed_action_available_ns,"[800, 30]",int64,False,Timestamp availability cua lenh da ghi.
+episodes/wm_walking_47/labels/future_trajectories_actions_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,group_id_future,"[800, 30, 6]",int32,False,Nhom nguoi tuong lai (LABEL simulator); khong phai observation.
+episodes/wm_walking_47/labels/future_trajectories_actions_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,group_mode_future,"[800, 30, 6]",int8,False,"Nhom 0:none, 1:walking, 2:standing (LABEL)."
+episodes/wm_walking_47/labels/future_trajectories_actions_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,persona_index,"[800, 6]",int8,False,"Danh muc persona; hien tai -1/unavailable, KHONG phai H1-H5 ground truth."
+episodes/wm_walking_47/labels/future_trajectories_actions_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,persona_valid,"[800, 6]",bool,False,"Mask persona; hien tai tat ca false, khong train head H1-H5."
+episodes/wm_walking_47/labels/future_trajectories_actions_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,human_ids,[6],int32,False,Danh sach ID con nguoi chi on dinh trong episode.
+episodes/wm_walking_47/labels/task_masks_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,wm_observed_bev_train_valid,[800],bool,False,"Mask ho tro task WM observed future BEV, KHONG phai quyen train test."
+episodes/wm_walking_47/labels/task_masks_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,executed_action_condition_valid,[800],bool,False,Mask action condition hop le.
+episodes/wm_walking_47/labels/task_masks_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,m1_track_aligned_valid,"[800, 30, 6]",bool,False,Mask lien ket tracker-sensor voi ground truth ID; hien tai false.
+episodes/wm_walking_47/labels/task_masks_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,persona_valid,"[800, 6]",bool,False,"Mask persona; hien tai tat ca false, khong train head H1-H5."
+episodes/wm_walking_47/labels/task_masks_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,rl_reward_valid,[800],bool,False,Mask reward RL; hien tai false.
+episodes/wm_walking_47/labels/task_masks_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,rl_reward,[800],float32,False,Reward RL; hien tai NaN/unavailable; KHONG doi NaN thanh zero.
+episodes/wm_walking_48/inputs/bev_anchor_estimated_SENSOR_ONLY.npz,OBSERVATION_INPUT,anchor_ns,[850],int64,False,"Thoi diem neo cua cua so, nanosecond simulation."
+episodes/wm_walking_48/inputs/bev_anchor_estimated_SENSOR_ONLY.npz,OBSERVATION_INPUT,depth_index,[850],int32,False,"[N,20] indices tro vao depth_SENSOR_ONLY.npy; khong phai mang pixel."
+episodes/wm_walking_48/inputs/bev_anchor_estimated_SENSOR_ONLY.npz,OBSERVATION_INPUT,depth_stamp_ns,[850],int64,False,Timestamp Depth frame da su dung.
+episodes/wm_walking_48/inputs/bev_anchor_estimated_SENSOR_ONLY.npz,OBSERVATION_INPUT,source_odom_stamp_ns,[850],int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_walking_48/inputs/bev_anchor_estimated_SENSOR_ONLY.npz,OBSERVATION_INPUT,source_odom_available_ns,[850],int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_walking_48/inputs/bev_anchor_estimated_SENSOR_ONLY.npz,OBSERVATION_INPUT,anchor_odom_stamp_ns,[850],int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_walking_48/inputs/bev_anchor_estimated_SENSOR_ONLY.npz,OBSERVATION_INPUT,anchor_odom_available_ns,[850],int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_walking_48/inputs/bev_anchor_estimated_SENSOR_ONLY.npz,OBSERVATION_INPUT,occupancy,"[850, 64, 64]",int8,False,"BEV -1 unknown, 0 observed free, 1 observed occupied; vai tro input/label phu thuoc file."
+episodes/wm_walking_48/inputs/bev_anchor_estimated_SENSOR_ONLY.npz,OBSERVATION_INPUT,frame_valid,[850],bool,False,Mask bo du lieu BEV o muc frame/horizon.
+episodes/wm_walking_48/inputs/observations_SENSOR_ONLY.npz,OBSERVATION_INPUT,scan__stamp_ns,[518],int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_walking_48/inputs/observations_SENSOR_ONLY.npz,OBSERVATION_INPUT,scan__available_ns,[518],int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_walking_48/inputs/observations_SENSOR_ONLY.npz,OBSERVATION_INPUT,scan__values,"[518, 360]",float32,False,Undocumented by this script; inspect source or protocol.
+episodes/wm_walking_48/inputs/observations_SENSOR_ONLY.npz,OBSERVATION_INPUT,scan__received_ns,[518],int64,False,Undocumented by this script; inspect source or protocol.
+episodes/wm_walking_48/inputs/observations_SENSOR_ONLY.npz,OBSERVATION_INPUT,scan__valid,"[518, 360]",bool,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_walking_48/inputs/observations_SENSOR_ONLY.npz,OBSERVATION_INPUT,imu__stamp_ns,[10358],int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_walking_48/inputs/observations_SENSOR_ONLY.npz,OBSERVATION_INPUT,imu__available_ns,[10358],int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_walking_48/inputs/observations_SENSOR_ONLY.npz,OBSERVATION_INPUT,imu__values,"[10358, 10]",float32,False,Undocumented by this script; inspect source or protocol.
+episodes/wm_walking_48/inputs/observations_SENSOR_ONLY.npz,OBSERVATION_INPUT,imu__received_ns,[10358],int64,False,Undocumented by this script; inspect source or protocol.
+episodes/wm_walking_48/inputs/observations_SENSOR_ONLY.npz,OBSERVATION_INPUT,odom__stamp_ns,[2959],int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_walking_48/inputs/observations_SENSOR_ONLY.npz,OBSERVATION_INPUT,odom__available_ns,[2959],int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_walking_48/inputs/observations_SENSOR_ONLY.npz,OBSERVATION_INPUT,odom__values,"[2959, 9]",float32,False,Undocumented by this script; inspect source or protocol.
+episodes/wm_walking_48/inputs/observations_SENSOR_ONLY.npz,OBSERVATION_INPUT,odom__received_ns,[2959],int64,False,Undocumented by this script; inspect source or protocol.
+episodes/wm_walking_48/inputs/observations_SENSOR_ONLY.npz,OBSERVATION_INPUT,action__stamp_ns,[4128],int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_walking_48/inputs/observations_SENSOR_ONLY.npz,OBSERVATION_INPUT,action__available_ns,[4128],int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_walking_48/inputs/observations_SENSOR_ONLY.npz,OBSERVATION_INPUT,action__values,"[4128, 3]",float32,False,Undocumented by this script; inspect source or protocol.
+episodes/wm_walking_48/inputs/observations_SENSOR_ONLY.npz,OBSERVATION_INPUT,action__received_ns,[4128],int64,False,Undocumented by this script; inspect source or protocol.
+episodes/wm_walking_48/inputs/observations_SENSOR_ONLY.npz,OBSERVATION_INPUT,depth__stamp_ns,[1036],int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_walking_48/inputs/observations_SENSOR_ONLY.npz,OBSERVATION_INPUT,depth__available_ns,[1036],int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_walking_48/inputs/observations_SENSOR_ONLY.npz,OBSERVATION_INPUT,depth__values,"[1036, 1]",float32,False,Undocumented by this script; inspect source or protocol.
+episodes/wm_walking_48/inputs/observations_SENSOR_ONLY.npz,OBSERVATION_INPUT,depth__received_ns,[1036],int64,False,Undocumented by this script; inspect source or protocol.
+episodes/wm_walking_48/inputs/observations_SENSOR_ONLY.npz,OBSERVATION_INPUT,amcl__stamp_ns,[228],int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_walking_48/inputs/observations_SENSOR_ONLY.npz,OBSERVATION_INPUT,amcl__available_ns,[228],int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_walking_48/inputs/observations_SENSOR_ONLY.npz,OBSERVATION_INPUT,amcl__values,"[228, 3]",float32,False,Undocumented by this script; inspect source or protocol.
+episodes/wm_walking_48/inputs/observations_SENSOR_ONLY.npz,OBSERVATION_INPUT,amcl__received_ns,[228],int64,False,Undocumented by this script; inspect source or protocol.
+episodes/wm_walking_48/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,anchor_ns,[850],int64,False,"Thoi diem neo cua cua so, nanosecond simulation."
+episodes/wm_walking_48/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,history_query_ns,"[850, 20]",int64,False,"20 query tu t-1.9s toi t, 10Hz; timestamp cua observation history."
+episodes/wm_walking_48/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,scan_stamp_ns,"[850, 20]",int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_walking_48/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,scan_available_ns,"[850, 20]",int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_walking_48/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,scan_valid,"[850, 20]",bool,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_walking_48/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,scan_ranges_m,"[850, 20, 360]",float32,False,"[N,20,360] LiDAR range (m) co mask; invalid ray da duoc ghi 0."
+episodes/wm_walking_48/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,scan_ray_valid,"[850, 20, 360]",bool,False,Mask cho moi ray LiDAR; khong lay value=0 lam khoang cach that.
+episodes/wm_walking_48/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,imu_stamp_ns,"[850, 20]",int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_walking_48/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,imu_available_ns,"[850, 20]",int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_walking_48/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,imu_valid,"[850, 20]",bool,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_walking_48/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,imu,"[850, 20, 10]",float32,False,"[N,20,10]: quaternion xyzw + angular velocity xyz + linear acceleration xyz."
+episodes/wm_walking_48/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,odom_stamp_ns,"[850, 20]",int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_walking_48/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,odom_available_ns,"[850, 20]",int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_walking_48/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,odom_valid,"[850, 20]",bool,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_walking_48/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,odom_local_pose_and_twist,"[850, 20, 9]",float32,False,"[N,20,9]: local XY/yaw + linear xyz + angular xyz; estimated, khong phai simulator GT."
+episodes/wm_walking_48/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,action_stamp_ns,"[850, 20]",int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_walking_48/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,action_available_ns,"[850, 20]",int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_walking_48/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,action_valid,"[850, 20]",bool,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_walking_48/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,action,"[850, 20, 3]",float32,False,"[N,20,3]: lenh da thuc hien trong history, vx/vy/wz (base axes)."
+episodes/wm_walking_48/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,depth_stamp_ns,"[850, 20]",int64,False,Timestamp Depth frame da su dung.
+episodes/wm_walking_48/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,depth_available_ns,"[850, 20]",int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_walking_48/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,depth_valid,"[850, 20]",bool,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_walking_48/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,depth_index,"[850, 20]",int32,False,"[N,20] indices tro vao depth_SENSOR_ONLY.npy; khong phai mang pixel."
+episodes/wm_walking_48/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,goal_xy_from_amcl,"[850, 2]",float64,False,"[N,2] goal trong he robot tinh theo AMCL nhan qua, co goal_valid."
+episodes/wm_walking_48/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,goal_valid,[850],bool,False,Mask goal con hop le; stale >1 giay -> zero + false.
+episodes/wm_walking_48/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,goal_stamp_ns,[850],int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_walking_48/inputs/samples_SENSOR_ONLY.npz,OBSERVATION_INPUT,goal_available_ns,[850],int64,False,Timestamp ns / availability ns / validity mask for the named modality.
+episodes/wm_walking_48/labels/future_observed_bev_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,anchor_ns,[850],int64,False,"Thoi diem neo cua cua so, nanosecond simulation."
+episodes/wm_walking_48/labels/future_observed_bev_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,offset_ns,[3],int64,False,[3] horizon +0.5/+1/+3 giay cho future observed BEV.
+episodes/wm_walking_48/labels/future_observed_bev_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,query_ns,"[850, 3]",int64,False,Moc thoi gian can lay nhan Depth tuong lai.
+episodes/wm_walking_48/labels/future_observed_bev_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,depth_index,"[850, 3]",int64,False,"[N,20] indices tro vao depth_SENSOR_ONLY.npy; khong phai mang pixel."
+episodes/wm_walking_48/labels/future_observed_bev_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,depth_stamp_ns,"[850, 3]",int64,False,Timestamp Depth frame da su dung.
+episodes/wm_walking_48/labels/future_observed_bev_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,depth_time_error_ns,"[850, 3]",int64,False,Sai so thoi gian cua target Depth frame.
+episodes/wm_walking_48/labels/future_observed_bev_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,anchor_pose_world_gt,"[850, 3]",float64,False,"Simulator ground-truth robot pose tai anchor, CHI nhan/evaluation."
+episodes/wm_walking_48/labels/future_observed_bev_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,future_pose_world_gt,"[850, 3, 3]",float64,False,"Simulator ground-truth robot poses cho future depth target, CHI nhan/evaluation."
+episodes/wm_walking_48/labels/future_observed_bev_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,occupancy,"[850, 3, 64, 64]",int8,False,"BEV -1 unknown, 0 observed free, 1 observed occupied; vai tro input/label phu thuoc file."
+episodes/wm_walking_48/labels/future_observed_bev_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,frame_valid,"[850, 3]",bool,False,Mask bo du lieu BEV o muc frame/horizon.
+episodes/wm_walking_48/labels/future_observed_bev_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,cell_loss_valid,"[850, 3, 64, 64]",bool,False,Mask cell observed va frame supported; chi tinh loss tai mask true.
+episodes/wm_walking_48/labels/future_trajectories_actions_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,future_stamp_ns,"[850, 30]",int64,False,"[N,30] moc thoi gian nhan quy dao nguoi tu t+0.1..t+3.0s."
+episodes/wm_walking_48/labels/future_trajectories_actions_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,human_xy_future_m,"[850, 30, 6, 2]",float64,False,"[N,30,6,2] quy dao 6 nguoi trong he robot that tai anchor, LABEL GT."
+episodes/wm_walking_48/labels/future_trajectories_actions_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,human_xy_at_anchor_m,"[850, 6, 2]",float64,False,"[N,6,2] vi tri nguoi tai anchor, LABEL GT."
+episodes/wm_walking_48/labels/future_trajectories_actions_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,human_valid,"[850, 30, 6]",bool,False,"Support noi suy GT, KHONG phai nhan da detect duoc nguoi."
+episodes/wm_walking_48/labels/future_trajectories_actions_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,executed_action_query_ns,"[850, 30]",int64,False,"[N,30] moc hoi cua 30 lenh tuong lai."
+episodes/wm_walking_48/labels/future_trajectories_actions_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,executed_action_future,"[850, 30, 3]",float32,False,"[N,30,3] lenh robot da thuc hien t..t+2.9s; action condition tren mot trajectory, khong phai counterfactual."
+episodes/wm_walking_48/labels/future_trajectories_actions_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,executed_action_stamp_ns,"[850, 30]",int64,False,Timestamp cua lenh tuong lai da ghi.
+episodes/wm_walking_48/labels/future_trajectories_actions_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,executed_action_available_ns,"[850, 30]",int64,False,Timestamp availability cua lenh da ghi.
+episodes/wm_walking_48/labels/future_trajectories_actions_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,group_id_future,"[850, 30, 6]",int32,False,Nhom nguoi tuong lai (LABEL simulator); khong phai observation.
+episodes/wm_walking_48/labels/future_trajectories_actions_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,group_mode_future,"[850, 30, 6]",int8,False,"Nhom 0:none, 1:walking, 2:standing (LABEL)."
+episodes/wm_walking_48/labels/future_trajectories_actions_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,persona_index,"[850, 6]",int8,False,"Danh muc persona; hien tai -1/unavailable, KHONG phai H1-H5 ground truth."
+episodes/wm_walking_48/labels/future_trajectories_actions_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,persona_valid,"[850, 6]",bool,False,"Mask persona; hien tai tat ca false, khong train head H1-H5."
+episodes/wm_walking_48/labels/future_trajectories_actions_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,human_ids,[6],int32,False,Danh sach ID con nguoi chi on dinh trong episode.
+episodes/wm_walking_48/labels/task_masks_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,wm_observed_bev_train_valid,[850],bool,False,"Mask ho tro task WM observed future BEV, KHONG phai quyen train test."
+episodes/wm_walking_48/labels/task_masks_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,executed_action_condition_valid,[850],bool,False,Mask action condition hop le.
+episodes/wm_walking_48/labels/task_masks_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,m1_track_aligned_valid,"[850, 30, 6]",bool,False,Mask lien ket tracker-sensor voi ground truth ID; hien tai false.
+episodes/wm_walking_48/labels/task_masks_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,persona_valid,"[850, 6]",bool,False,"Mask persona; hien tai tat ca false, khong train head H1-H5."
+episodes/wm_walking_48/labels/task_masks_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,rl_reward_valid,[850],bool,False,Mask reward RL; hien tai false.
+episodes/wm_walking_48/labels/task_masks_LABEL_ONLY.npz,SUPERVISION_GT_ONLY,rl_reward,[850],float32,False,Reward RL; hien tai NaN/unavailable; KHONG doi NaN thanh zero.
+episodes/wm_standing_45/inputs/depth_SENSOR_ONLY.npy,OBSERVATION_INPUT,<npy-array>,"[1038, 240, 424]",float32,False,"Raw float32 depth frames [F,240,424]; NaN/Inf retained; index via depth_index."
+episodes/wm_standing_46/inputs/depth_SENSOR_ONLY.npy,OBSERVATION_INPUT,<npy-array>,"[448, 240, 424]",float32,False,"Raw float32 depth frames [F,240,424]; NaN/Inf retained; index via depth_index."
+episodes/wm_standing_48/inputs/depth_SENSOR_ONLY.npy,OBSERVATION_INPUT,<npy-array>,"[1040, 240, 424]",float32,False,"Raw float32 depth frames [F,240,424]; NaN/Inf retained; index via depth_index."
+episodes/wm_walking_45/inputs/depth_SENSOR_ONLY.npy,OBSERVATION_INPUT,<npy-array>,"[789, 240, 424]",float32,False,"Raw float32 depth frames [F,240,424]; NaN/Inf retained; index via depth_index."
+episodes/wm_walking_46/inputs/depth_SENSOR_ONLY.npy,OBSERVATION_INPUT,<npy-array>,"[451, 240, 424]",float32,False,"Raw float32 depth frames [F,240,424]; NaN/Inf retained; index via depth_index."
+episodes/wm_walking_47/inputs/depth_SENSOR_ONLY.npy,OBSERVATION_INPUT,<npy-array>,"[1037, 240, 424]",float32,False,"Raw float32 depth frames [F,240,424]; NaN/Inf retained; index via depth_index."
+episodes/wm_walking_48/inputs/depth_SENSOR_ONLY.npy,OBSERVATION_INPUT,<npy-array>,"[1036, 240, 424]",float32,False,"Raw float32 depth frames [F,240,424]; NaN/Inf retained; index via depth_index."

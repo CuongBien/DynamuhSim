@@ -30,7 +30,7 @@ def make_world(runtime, socket_path, initial, mode):
     element(plugin,'socket',socket_path)
     # Copy distribution GUI plugins into this generated world only.
     # Gazebo GUI config files contain XML fragments, rather than one root.
-    gui_config=Path('/usr/share/gz/gz-sim8/gui/gui.config')
+    gui_config=Path('/opt/ros/jazzy/opt/gz_sim_vendor/share/gz/gz-sim8/gui/gui.config')
     fragment=re.sub(r'<\?xml[^>]*\?>','',gui_config.read_text())
     defaults=ET.fromstring('<config>'+fragment+'</config>')
     gui=element(world,'gui',fullscreen='false')

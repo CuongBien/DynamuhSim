@@ -722,7 +722,7 @@ run_trial() {
     echo "[5/8] Starting obstacle recorder..."
 
     python3 \
-        "$ROOT/record_obstacle.py" \
+        "$ROOT/record_obstacle_rvo2.py" \
         --output "$gt" \
         >"$recorder_log" 2>&1 &
 
