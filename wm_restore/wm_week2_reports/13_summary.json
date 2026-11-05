@@ -1,0 +1,114 @@
+{
+  "dataset_schema": "wm_sensor_action_dataset/1",
+  "accepted_episodes": 8,
+  "quarantined_capture_count": 2,
+  "exported_windows": 5106,
+  "wm_bev_valid_windows": 5094,
+  "split_summary": [
+    {
+      "split": "train",
+      "episodes": 5,
+      "windows": 2775,
+      "wm_bev_valid": 2763,
+      "invalid": 12
+    },
+    {
+      "split": "validation",
+      "episodes": 2,
+      "windows": 1652,
+      "wm_bev_valid": 1652,
+      "invalid": 0
+    },
+    {
+      "split": "test",
+      "episodes": 1,
+      "windows": 679,
+      "wm_bev_valid": 679,
+      "invalid": 0
+    }
+  ],
+  "action_coverage_trainval": [
+    {
+      "split": "train",
+      "unique_actions": 2949,
+      "forward_pct": 50.25432349949135,
+      "reverse_pct": 6.6802305866395395,
+      "lateral_pct": 56.08680908782638,
+      "rotate_pct": 39.74228552051543,
+      "stationary_pct": 25.093251949813496
+    },
+    {
+      "split": "validation",
+      "unique_actions": 1739,
+      "forward_pct": 40.885566417481314,
+      "reverse_pct": 2.070155261644623,
+      "lateral_pct": 44.9683726279471,
+      "rotate_pct": 30.132259919493965,
+      "stationary_pct": 40.65554916618746
+    }
+  ],
+  "readiness": [
+    {
+      "check": "Seed-family không xuyên split",
+      "passed": true,
+      "detail": "{'seed_45': np.int64(1), 'seed_46': np.int64(1), 'seed_47': np.int64(1), 'seed_48': np.int64(1), 'seed_49': np.int64(1)}"
+    },
+    {
+      "check": "Đúng số episode accepted",
+      "passed": true,
+      "detail": "8"
+    },
+    {
+      "check": "Train/validation cùng warehouse chưa phải OOD",
+      "passed": false,
+      "detail": "Entire paired-seed family; no overlapping windows split; same warehouse/avatar across splits, not environment generalization"
+    },
+    {
+      "check": "Association labels có sẵn",
+      "passed": false,
+      "detail": "False"
+    },
+    {
+      "check": "Persona labels có sẵn",
+      "passed": false,
+      "detail": "False"
+    },
+    {
+      "check": "RL reward có sẵn",
+      "passed": false,
+      "detail": "False"
+    },
+    {
+      "check": "Can thiệp có đối chứng từ cùng snapshot",
+      "passed": false,
+      "detail": "Chưa có replay branch IDs / outcomes theo action trong schema dataset01"
+    },
+    {
+      "check": "Test có walking holdout",
+      "passed": false,
+      "detail": "Only standing49 accepted; walking49 quarantined, no held-out walking episode in this batch"
+    },
+    {
+      "check": "Nav2 SUCCEEDED khớp actual_goal_reached",
+      "passed": false,
+      "detail": "['wm_standing_46']"
+    },
+    {
+      "check": "Trùng future query có cùng action",
+      "passed": true,
+      "detail": "0"
+    },
+    {
+      "check": "Không dùng history sensor sau query",
+      "passed": true,
+      "detail": "0"
+    }
+  ],
+  "caveats": [
+    "Test labels/imagery were not inspected during EDA",
+    "Observed BEV is depth-derived partial occupancy; unknown != free",
+    "Ground-truth human positions do not imply sensor association",
+    "Nav2 executed commands are observational, not paired interventions",
+    "Overlapping windows not independent; compare at episode/seed-family level"
+  ]
+}

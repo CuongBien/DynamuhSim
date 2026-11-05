@@ -1,0 +1,12 @@
+﻿check,passed,detail
+Seed-family không xuyên split,True,"{'seed_45': np.int64(1), 'seed_46': np.int64(1), 'seed_47': np.int64(1), 'seed_48': np.int64(1), 'seed_49': np.int64(1)}"
+Đúng số episode accepted,True,8
+Train/validation cùng warehouse chưa phải OOD,False,"Entire paired-seed family; no overlapping windows split; same warehouse/avatar across splits, not environment generalization"
+Association labels có sẵn,False,False
+Persona labels có sẵn,False,False
+RL reward có sẵn,False,False
+Can thiệp có đối chứng từ cùng snapshot,False,Chưa có replay branch IDs / outcomes theo action trong schema dataset01
+Test có walking holdout,False,"Only standing49 accepted; walking49 quarantined, no held-out walking episode in this batch"
+Nav2 SUCCEEDED khớp actual_goal_reached,False,['wm_standing_46']
+Trùng future query có cùng action,True,0
+Không dùng history sensor sau query,True,0

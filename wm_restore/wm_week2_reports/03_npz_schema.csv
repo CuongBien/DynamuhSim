@@ -1,0 +1,93 @@
+﻿file,key,shape,dtype
+inputs/samples_SENSOR_ONLY.npz,anchor_ns,"(851,)",int64
+inputs/samples_SENSOR_ONLY.npz,history_query_ns,"(851, 20)",int64
+inputs/samples_SENSOR_ONLY.npz,scan_stamp_ns,"(851, 20)",int64
+inputs/samples_SENSOR_ONLY.npz,scan_available_ns,"(851, 20)",int64
+inputs/samples_SENSOR_ONLY.npz,scan_valid,"(851, 20)",bool
+inputs/samples_SENSOR_ONLY.npz,scan_ranges_m,"(851, 20, 360)",float32
+inputs/samples_SENSOR_ONLY.npz,scan_ray_valid,"(851, 20, 360)",bool
+inputs/samples_SENSOR_ONLY.npz,imu_stamp_ns,"(851, 20)",int64
+inputs/samples_SENSOR_ONLY.npz,imu_available_ns,"(851, 20)",int64
+inputs/samples_SENSOR_ONLY.npz,imu_valid,"(851, 20)",bool
+inputs/samples_SENSOR_ONLY.npz,imu,"(851, 20, 10)",float32
+inputs/samples_SENSOR_ONLY.npz,odom_stamp_ns,"(851, 20)",int64
+inputs/samples_SENSOR_ONLY.npz,odom_available_ns,"(851, 20)",int64
+inputs/samples_SENSOR_ONLY.npz,odom_valid,"(851, 20)",bool
+inputs/samples_SENSOR_ONLY.npz,odom_local_pose_and_twist,"(851, 20, 9)",float32
+inputs/samples_SENSOR_ONLY.npz,action_stamp_ns,"(851, 20)",int64
+inputs/samples_SENSOR_ONLY.npz,action_available_ns,"(851, 20)",int64
+inputs/samples_SENSOR_ONLY.npz,action_valid,"(851, 20)",bool
+inputs/samples_SENSOR_ONLY.npz,action,"(851, 20, 3)",float32
+inputs/samples_SENSOR_ONLY.npz,depth_stamp_ns,"(851, 20)",int64
+inputs/samples_SENSOR_ONLY.npz,depth_available_ns,"(851, 20)",int64
+inputs/samples_SENSOR_ONLY.npz,depth_valid,"(851, 20)",bool
+inputs/samples_SENSOR_ONLY.npz,depth_index,"(851, 20)",int32
+inputs/samples_SENSOR_ONLY.npz,goal_xy_from_amcl,"(851, 2)",float64
+inputs/samples_SENSOR_ONLY.npz,goal_valid,"(851,)",bool
+inputs/samples_SENSOR_ONLY.npz,goal_stamp_ns,"(851,)",int64
+inputs/samples_SENSOR_ONLY.npz,goal_available_ns,"(851,)",int64
+inputs/bev_anchor_estimated_SENSOR_ONLY.npz,anchor_ns,"(851,)",int64
+inputs/bev_anchor_estimated_SENSOR_ONLY.npz,depth_index,"(851,)",int32
+inputs/bev_anchor_estimated_SENSOR_ONLY.npz,depth_stamp_ns,"(851,)",int64
+inputs/bev_anchor_estimated_SENSOR_ONLY.npz,source_odom_stamp_ns,"(851,)",int64
+inputs/bev_anchor_estimated_SENSOR_ONLY.npz,source_odom_available_ns,"(851,)",int64
+inputs/bev_anchor_estimated_SENSOR_ONLY.npz,anchor_odom_stamp_ns,"(851,)",int64
+inputs/bev_anchor_estimated_SENSOR_ONLY.npz,anchor_odom_available_ns,"(851,)",int64
+inputs/bev_anchor_estimated_SENSOR_ONLY.npz,occupancy,"(851, 64, 64)",int8
+inputs/bev_anchor_estimated_SENSOR_ONLY.npz,frame_valid,"(851,)",bool
+inputs/observations_SENSOR_ONLY.npz,scan__stamp_ns,"(519,)",int64
+inputs/observations_SENSOR_ONLY.npz,scan__available_ns,"(519,)",int64
+inputs/observations_SENSOR_ONLY.npz,scan__values,"(519, 360)",float32
+inputs/observations_SENSOR_ONLY.npz,scan__received_ns,"(519,)",int64
+inputs/observations_SENSOR_ONLY.npz,scan__valid,"(519, 360)",bool
+inputs/observations_SENSOR_ONLY.npz,imu__stamp_ns,"(10370,)",int64
+inputs/observations_SENSOR_ONLY.npz,imu__available_ns,"(10370,)",int64
+inputs/observations_SENSOR_ONLY.npz,imu__values,"(10370, 10)",float32
+inputs/observations_SENSOR_ONLY.npz,imu__received_ns,"(10370,)",int64
+inputs/observations_SENSOR_ONLY.npz,odom__stamp_ns,"(2962,)",int64
+inputs/observations_SENSOR_ONLY.npz,odom__available_ns,"(2962,)",int64
+inputs/observations_SENSOR_ONLY.npz,odom__values,"(2962, 9)",float32
+inputs/observations_SENSOR_ONLY.npz,odom__received_ns,"(2962,)",int64
+inputs/observations_SENSOR_ONLY.npz,action__stamp_ns,"(4015,)",int64
+inputs/observations_SENSOR_ONLY.npz,action__available_ns,"(4015,)",int64
+inputs/observations_SENSOR_ONLY.npz,action__values,"(4015, 3)",float32
+inputs/observations_SENSOR_ONLY.npz,action__received_ns,"(4015,)",int64
+inputs/observations_SENSOR_ONLY.npz,depth__stamp_ns,"(1038,)",int64
+inputs/observations_SENSOR_ONLY.npz,depth__available_ns,"(1038,)",int64
+inputs/observations_SENSOR_ONLY.npz,depth__values,"(1038, 1)",float32
+inputs/observations_SENSOR_ONLY.npz,depth__received_ns,"(1038,)",int64
+inputs/observations_SENSOR_ONLY.npz,amcl__stamp_ns,"(185,)",int64
+inputs/observations_SENSOR_ONLY.npz,amcl__available_ns,"(185,)",int64
+inputs/observations_SENSOR_ONLY.npz,amcl__values,"(185, 3)",float32
+inputs/observations_SENSOR_ONLY.npz,amcl__received_ns,"(185,)",int64
+inputs/depth_SENSOR_ONLY.npy,(array),"(1038, 240, 424)",float32
+labels/future_trajectories_actions_LABEL_ONLY.npz,future_stamp_ns,"(851, 30)",int64
+labels/future_trajectories_actions_LABEL_ONLY.npz,human_xy_future_m,"(851, 30, 6, 2)",float64
+labels/future_trajectories_actions_LABEL_ONLY.npz,human_xy_at_anchor_m,"(851, 6, 2)",float64
+labels/future_trajectories_actions_LABEL_ONLY.npz,human_valid,"(851, 30, 6)",bool
+labels/future_trajectories_actions_LABEL_ONLY.npz,executed_action_query_ns,"(851, 30)",int64
+labels/future_trajectories_actions_LABEL_ONLY.npz,executed_action_future,"(851, 30, 3)",float32
+labels/future_trajectories_actions_LABEL_ONLY.npz,executed_action_stamp_ns,"(851, 30)",int64
+labels/future_trajectories_actions_LABEL_ONLY.npz,executed_action_available_ns,"(851, 30)",int64
+labels/future_trajectories_actions_LABEL_ONLY.npz,group_id_future,"(851, 30, 6)",int32
+labels/future_trajectories_actions_LABEL_ONLY.npz,group_mode_future,"(851, 30, 6)",int8
+labels/future_trajectories_actions_LABEL_ONLY.npz,persona_index,"(851, 6)",int8
+labels/future_trajectories_actions_LABEL_ONLY.npz,persona_valid,"(851, 6)",bool
+labels/future_trajectories_actions_LABEL_ONLY.npz,human_ids,"(6,)",int32
+labels/future_observed_bev_LABEL_ONLY.npz,anchor_ns,"(851,)",int64
+labels/future_observed_bev_LABEL_ONLY.npz,offset_ns,"(3,)",int64
+labels/future_observed_bev_LABEL_ONLY.npz,query_ns,"(851, 3)",int64
+labels/future_observed_bev_LABEL_ONLY.npz,depth_index,"(851, 3)",int64
+labels/future_observed_bev_LABEL_ONLY.npz,depth_stamp_ns,"(851, 3)",int64
+labels/future_observed_bev_LABEL_ONLY.npz,depth_time_error_ns,"(851, 3)",int64
+labels/future_observed_bev_LABEL_ONLY.npz,anchor_pose_world_gt,"(851, 3)",float64
+labels/future_observed_bev_LABEL_ONLY.npz,future_pose_world_gt,"(851, 3, 3)",float64
+labels/future_observed_bev_LABEL_ONLY.npz,occupancy,"(851, 3, 64, 64)",int8
+labels/future_observed_bev_LABEL_ONLY.npz,frame_valid,"(851, 3)",bool
+labels/future_observed_bev_LABEL_ONLY.npz,cell_loss_valid,"(851, 3, 64, 64)",bool
+labels/task_masks_LABEL_ONLY.npz,wm_observed_bev_train_valid,"(851,)",bool
+labels/task_masks_LABEL_ONLY.npz,executed_action_condition_valid,"(851,)",bool
+labels/task_masks_LABEL_ONLY.npz,m1_track_aligned_valid,"(851, 30, 6)",bool
+labels/task_masks_LABEL_ONLY.npz,persona_valid,"(851, 6)",bool
+labels/task_masks_LABEL_ONLY.npz,rl_reward_valid,"(851,)",bool
+labels/task_masks_LABEL_ONLY.npz,rl_reward,"(851,)",float32
