@@ -39,10 +39,13 @@ def test_default_and_parametric_scenes_compile_headless_from_another_directory(
                 astuple(baseline_box), abs=1e-9
             )
 
-    model = mujoco.MjModel.from_xml_string(built.mjcf)
+    model = mujoco.MjModel.from_xml_string(built.mjcf, dict(built.visual_assets))
     data = mujoco.MjData(model)
     mujoco.mj_forward(model, data)
-    assert (model.nu, model.nmocap) == (2, 1)
+    assert model.nu == 2 and model.nskin > 0
+    assert model.nmocap == 1 + sum(
+        len(actor.character.parents) for actor in built.skin_actors
+    )
     for actor in (built.scene.robot, *built.scene.humans):
         assert generated.contains(actor.pose.x, actor.pose.y, actor.radius_m)
         assert generated.contains(actor.goal.x, actor.goal.y, actor.radius_m)

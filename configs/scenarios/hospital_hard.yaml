@@ -1,0 +1,51 @@
+defaults:
+  - head_on
+  - _self_
+id: hospital_hard
+world_id: hospital_hard
+robot:
+  initial_pose: [-18.0, 0.0, 0.0]
+  goal: [25.0, 0.0]
+humans:
+  - id: hard_walker_08_door_exit
+    initial_pose: [-2.8, 4.0, -1.5708]
+    goal: [-2.8, 0.0]
+  - id: hard_walker_09_door_entry
+    initial_pose: [-7.0, -1.35, 0.0]
+    goal: [-8.4, -4.0]
+  - id: hard_walker_10_cross_south_to_north
+    initial_pose: [2.8, -4.0, 1.5708]
+    goal: [2.8, 4.0]
+  - id: hard_walker_11_cross_north_to_south
+    initial_pose: [8.4, 4.0, -1.5708]
+    goal: [8.4, -4.0]
+  - id: hard_walker_12_group
+    initial_pose: [11.5, -0.4, 0.0]
+    goal: [19.0, -0.4]
+  - id: hard_walker_13_group
+    initial_pose: [11.5, 0.4, 0.0]
+    goal: [19.0, 0.4]
+  - id: hard_walker_14_trolley_pusher
+    initial_pose: [22.0, -1.2, 3.14159]
+    goal: [8.0, -1.2]
+  - id: medium_walker_01
+    initial_pose: [-10.0, 0.0, 3.14159]
+    goal: [-24.0, 0.0]
+  - id: medium_walker_02_head_on
+    initial_pose: [8.0, 0.0, 3.14159]
+    goal: [-16.0, 0.0]
+  - id: medium_walker_03_room_crossing
+    initial_pose: [-2.8, -4.0, 1.5708]
+    goal: [-2.8, 4.0]
+  - id: medium_walker_04_same_direction
+    initial_pose: [11.0, 0.0, 0.0]
+    goal: [23.0, 0.0]
+  - id: medium_walker_05_wait_then_cross
+    initial_pose: [19.6, -4.0, 1.5708]
+    goal: [19.6, 4.0]
+  - id: medium_walker_06_trolley_pusher
+    initial_pose: [-24.0, 0.6, 0.0]
+    goal: [-12.0, 0.6]
+  - id: medium_walker_07_yielding
+    initial_pose: [0.0, -1.35, 1.5708]
+    goal: [0.0, 1.35]

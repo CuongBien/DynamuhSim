@@ -9,6 +9,7 @@ from narrow_nav.core.types import Twist2D
 from narrow_nav.simulation import SimulationError
 from narrow_nav.simulation.configuration import compose_config
 from narrow_nav.simulation.mujoco_engine import MuJoCoEngine
+from narrow_nav.simulation.world_builder import MJCF_ROOT
 
 
 def test_reset_replays_and_clears_state_and_close_releases_native_objects():
@@ -28,9 +29,14 @@ def test_reset_replays_and_clears_state_and_close_releases_native_objects():
             == hashlib.sha256(metadata.resolved_config.encode()).hexdigest()
         )
         assert metadata.last_valid_tick == 0
-        assert (
-            len(metadata.model_sha256) == 64 and len(metadata.mjcf_source_sha256) == 3
-        )
+        assert len(metadata.model_sha256) == 64
+        sources = dict(metadata.mjcf_source_sha256)
+        for name in ("manifest.json", "character.npz"):
+            path = f"assets/humans/casual_male/{name}"
+            assert (
+                sources[path]
+                == hashlib.sha256((MJCF_ROOT / path).read_bytes()).hexdigest()
+            )
         ids.append(metadata.episode.episode_id)
         observations.append(observation)
         trace = []

@@ -1,7 +1,7 @@
 """Axis-aligned indoor layouts and planar clearance, in the world frame."""
 
 from dataclasses import dataclass
-from math import hypot
+from math import hypot, sqrt
 
 from narrow_nav.core.errors import ConfigurationError
 from narrow_nav.core.validation import finite, positive
@@ -30,11 +30,38 @@ class Rectangle:
             max(self.y_min - y, y - self.y_max, 0),
         )
 
+    def y_span(self, x: float) -> tuple[float, float] | None:
+        if self.x_min - GEOMETRY_TOLERANCE_M <= x <= self.x_max + GEOMETRY_TOLERANCE_M:
+            return self.y_min, self.y_max
+        return None
+
+
+@dataclass(frozen=True, slots=True)
+class Circle:
+    x: float
+    y: float
+    radius_m: float
+
+    @property
+    def bounds(self) -> Rectangle:
+        r = self.radius_m
+        return Rectangle(self.x - r, self.x + r, self.y - r, self.y + r)
+
+    def distance(self, x: float, y: float) -> float:
+        return max(0.0, hypot(self.x - x, self.y - y) - self.radius_m)
+
+    def y_span(self, x: float) -> tuple[float, float] | None:
+        dx = abs(x - self.x)
+        if dx > self.radius_m + GEOMETRY_TOLERANCE_M:
+            return None
+        dy = sqrt(max(0.0, self.radius_m**2 - dx**2))
+        return self.y - dy, self.y + dy
+
 
 @dataclass(frozen=True, slots=True)
 class WorldCollision:
     floors: tuple[Rectangle, ...]
-    walls: tuple[Rectangle, ...]
+    walls: tuple[Rectangle | Circle, ...]
 
     def contains(self, x: float, y: float, radius_m: float = 0.0) -> bool:
         """Test that a circular footprint lies in free space with positive clearance."""
@@ -42,6 +69,13 @@ class WorldCollision:
         finite(y, "y")
         if finite(radius_m, "radius_m") < 0:
             raise ConfigurationError("radius_m must be nonnegative")
+        if len(self.floors) == 1:
+            (floor,) = self.floors
+            if not (
+                floor.x_min + radius_m <= x <= floor.x_max - radius_m
+                and floor.y_min + radius_m <= y <= floor.y_max - radius_m
+            ):
+                return False
         return any(floor.contains(x, y) for floor in self.floors) and all(
             wall.distance(x, y) > radius_m + GEOMETRY_TOLERANCE_M for wall in self.walls
         )
@@ -50,15 +84,9 @@ class WorldCollision:
         """Measure the unobstructed span along Y through a free-space point."""
         if not self.contains(x, y):
             raise ConfigurationError("width measurement requires a free-space point")
-        section = [
-            wall
-            for wall in self.walls
-            if wall.x_min - GEOMETRY_TOLERANCE_M
-            <= x
-            <= wall.x_max + GEOMETRY_TOLERANCE_M
-        ]
-        south = max((wall.y_max for wall in section if wall.y_max < y), default=None)
-        north = min((wall.y_min for wall in section if wall.y_min > y), default=None)
+        section = [span for wall in self.walls if (span := wall.y_span(x)) is not None]
+        south = max((high for _, high in section if high < y), default=None)
+        north = min((low for low, _ in section if low > y), default=None)
         if south is None or north is None:
             raise ConfigurationError("width measurement requires walls on both sides")
         return north - south

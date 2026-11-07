@@ -9,4 +9,6 @@ from .world_geometry import WorldCollision
 
 def inspect_world(world: BuiltWorld | Path) -> WorldCollision:
     """Return free-space and clear-width queries for a built or on-disk scene."""
-    return inspect_mjcf(world.mjcf if isinstance(world, BuiltWorld) else world)
+    if isinstance(world, BuiltWorld):
+        return inspect_mjcf(world.mjcf, world.visual_assets)
+    return inspect_mjcf(world)

@@ -6,6 +6,7 @@ from math import hypot
 from pathlib import Path
 from threading import Lock
 from typing import TypeVar
+from xml.etree import ElementTree as ET
 
 from hydra import compose, initialize_config_dir
 from hydra.errors import HydraException
@@ -25,6 +26,7 @@ from narrow_nav.core.validation import (
 
 from .robot_controller import DriveProfile
 from .timing import Timing
+from .world_assets import MJCF_ROOT, WorldAsset, load_world_asset
 from .world_geometry import WorldCollision, WorldSpec
 
 T = TypeVar("T")
@@ -90,11 +92,19 @@ class Spawn:
 
 
 @dataclass(frozen=True, slots=True)
+class HumanProp:
+    entity_id: str
+    pose: Pose2D
+    seat_height_m: float | None = None
+
+
+@dataclass(frozen=True, slots=True)
 class SceneGeometry:
-    spec: WorldSpec
+    spec: WorldSpec | WorldAsset
     collision: WorldCollision
     robot: Spawn
     humans: tuple[Spawn, ...]
+    human_props: tuple[HumanProp, ...] = ()
 
 
 def _read_actor(actor: DictConfig, radius: float, collision: WorldCollision) -> Spawn:
@@ -111,10 +121,15 @@ def _read_actor(actor: DictConfig, radius: float, collision: WorldCollision) -> 
     return Spawn(actor_id, pose, goal, radius)
 
 
-def _scene_geometry(config: DictConfig) -> SceneGeometry:
-    """Resolve the layout and validate the configured footprints in world XY."""
-    world = _required_as(config, "worlds", DictConfig)
-    spec = WorldSpec(
+def _world_spec(world: DictConfig, mjcf_root: Path) -> WorldSpec | WorldAsset:
+    if "geometry_id" in world:
+        if set(world) - {"id", "geometry_id", "human_props"}:
+            raise ConfigurationError(
+                "worlds.geometry_id cannot be combined with parametric world fields"
+            )
+        geometry_id = _required_as(world, "geometry_id", str)
+        return load_world_asset(mjcf_root, geometry_id)
+    return WorldSpec(
         layout=OmegaConf.select(world, "layout", default="corridor"),
         corridor_length_m=positive(_required(world, "length_m"), "worlds.length_m"),
         corridor_width_m=positive(_required(world, "width_m"), "worlds.width_m"),
@@ -129,7 +144,52 @@ def _scene_geometry(config: DictConfig) -> SceneGeometry:
         passing_bay_length_m=OmegaConf.select(world, "passing_bay_length_m"),
         passing_bay_center_x_m=OmegaConf.select(world, "passing_bay_center_x_m"),
     )
-    collision = spec.collision()
+
+
+def _human_props(
+    world: DictConfig, spec: WorldSpec | WorldAsset
+) -> tuple[HumanProp, ...]:
+    if "human_props" not in world:
+        return ()
+    if not isinstance(spec, WorldAsset):
+        raise ConfigurationError("worlds.human_props requires authored geometry")
+    geoms = {node.get("name"): node for node in ET.fromstring(spec.worldbody)}
+    props = []
+    for entry in _required_as(world, "human_props", ListConfig):
+        prop = require_type(entry, DictConfig, "human prop")
+        geom_id = identifier(_required(prop, "geom"), "human prop geom")
+        geom = geoms.get(geom_id)
+        if (
+            geom is None
+            or geom.get("class") != "wall"
+            or geom.get("type") != "cylinder"
+        ):
+            raise ConfigurationError(
+                f"human prop {geom_id!r} must name a collision cylinder"
+            )
+        x, y, _ = map(float, geom.attrib["pos"].split())
+        pose = Pose2D(x, y, _required(prop, "yaw_rad"))
+        seat_height = None
+        if "seat" in prop:
+            seat = geoms.get(_required_as(prop, "seat", str))
+            if seat is None or seat.get("class") != "wall" or seat.get("type") != "box":
+                raise ConfigurationError(f"human prop {geom_id!r} must name a seat box")
+            sx, sy, sz = map(float, seat.attrib["pos"].split())
+            hx, hy, hz = map(float, seat.attrib["size"].split())
+            if abs(x - sx) > hx or abs(y - sy) > hy:
+                raise ConfigurationError(
+                    f"human prop {geom_id!r} must be placed over its seat"
+                )
+            seat_height = sz + hz
+        props.append(HumanProp(geom_id, pose, seat_height))
+    return tuple(props)
+
+
+def _scene_geometry(config: DictConfig, mjcf_root: Path) -> SceneGeometry:
+    """Resolve the layout and validate the configured footprints in world XY."""
+    world = _required_as(config, "worlds", DictConfig)
+    spec = _world_spec(world, mjcf_root)
+    collision = spec.collision if isinstance(spec, WorldAsset) else spec.collision()
     robot_radius = positive(_required(config, "robots.radius_m"), "robots.radius_m")
     human_radius = positive(
         _required(config, "scenarios.human_profile.radius_m"),
@@ -146,7 +206,11 @@ def _scene_geometry(config: DictConfig) -> SceneGeometry:
     )
     ordered_ids(tuple(human.entity_id for human in humans), "scenarios.humans")
     actors = (robot, *humans)
-    unique((actor.entity_id for actor in actors), "scenario actor IDs")
+    props = _human_props(world, spec)
+    unique(
+        (actor.entity_id for actor in (*actors, *props)),
+        "scene actor and human prop IDs",
+    )
     for index, actor in enumerate(actors):
         for other in actors[index + 1 :]:
             distance = hypot(actor.pose.x - other.pose.x, actor.pose.y - other.pose.y)
@@ -154,10 +218,12 @@ def _scene_geometry(config: DictConfig) -> SceneGeometry:
                 raise ConfigurationError(
                     f"initial footprints overlap: {actor.entity_id}, {other.entity_id}"
                 )
-    return SceneGeometry(spec, collision, robot, humans)
+    return SceneGeometry(spec, collision, robot, humans, props)
 
 
-def validate_scene_config(config: DictConfig) -> tuple[EpisodeConfig, SceneGeometry]:
+def validate_scene_config(
+    config: DictConfig, *, mjcf_root: Path = MJCF_ROOT
+) -> tuple[EpisodeConfig, SceneGeometry]:
     """Validate configuration and resolve its engine-independent scene geometry."""
     try:
         episode = EpisodeConfig(
@@ -171,6 +237,15 @@ def validate_scene_config(config: DictConfig) -> tuple[EpisodeConfig, SceneGeome
         timing_from_config(config, episode)
         if _required(config, "simulation.engine") != "mujoco":
             raise ConfigurationError("simulation.engine must be mujoco")
+        if OmegaConf.select(
+            config, "simulation.human_visuals", default="proxy"
+        ) not in (
+            "quaternius",
+            "proxy",
+        ):
+            raise ConfigurationError(
+                "simulation.human_visuals must be quaternius or proxy"
+            )
         world_id = identifier(_required(config, "worlds.id"), "worlds.id")
         if _required(config, "scenarios.world_id") != world_id:
             raise ConfigurationError("scenarios.world_id must match the selected world")
@@ -193,7 +268,7 @@ def validate_scene_config(config: DictConfig) -> tuple[EpisodeConfig, SceneGeome
             "scenarios.human_profile.max_acceleration_mps2",
         ):
             positive(_required(config, field), field)
-        scene = _scene_geometry(config)
+        scene = _scene_geometry(config, mjcf_root)
     except ConfigurationError:
         raise
     except (ContractError, OmegaConfBaseException) as exc:

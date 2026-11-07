@@ -10,10 +10,14 @@ from xml.etree import ElementTree as ET
 from omegaconf import DictConfig
 
 from narrow_nav.core.errors import ConfigurationError, ContractError
+from narrow_nav.core.metadata import EpisodeConfig
 from narrow_nav.core.types import NS_PER_SECOND
 from narrow_nav.core.validation import positive
+from narrow_nav.visualization.human_bundle import load_character
+from narrow_nav.visualization.human_skin import SkinActor, append_visuals
 
 from .configuration import (
+    HumanProp,
     SceneGeometry,
     Spawn,
     _required,
@@ -21,16 +25,18 @@ from .configuration import (
     validate_scene_config,
 )
 from .robot_controller import DriveProfile
+from .world_assets import MJCF_ROOT, WorldAsset
 from .world_geometry import Rectangle
-
-MJCF_ROOT = Path(__file__).resolve().parents[3] / "sim" / "mujoco"
 
 
 @dataclass(frozen=True, slots=True)
 class BuiltWorld:
     mjcf: str
     scene: SceneGeometry
+    episode: EpisodeConfig
     source_sha256: tuple[tuple[str, str], ...] = ()
+    skin_actors: tuple[SkinActor, ...] = ()
+    visual_assets: tuple[tuple[str, bytes], ...] = ()
 
 
 def _read_mjcf(root: Path, path: str, sources: list[tuple[str, str]]) -> ET.Element:
@@ -69,11 +75,18 @@ def _add_box(
     )
 
 
-def _add_environment(worldbody: ET.Element, scene: SceneGeometry) -> None:
-    for index, floor in enumerate(scene.collision.floors):
-        _add_box(worldbody, f"floor_{index}", "floor", floor, -0.1, 0)
-    for index, wall in enumerate(scene.collision.walls):
-        _add_box(worldbody, f"wall_{index}", "wall", wall, 0, scene.spec.wall_height_m)
+def _add_environment(
+    worldbody: ET.Element, scene: SceneGeometry, sources: list[tuple[str, str]]
+) -> None:
+    spec = scene.spec
+    if isinstance(spec, WorldAsset):
+        worldbody.extend(ET.fromstring(spec.worldbody))
+        sources.append((spec.relative_path, spec.fingerprint))
+    else:
+        for index, floor in enumerate(scene.collision.floors):
+            _add_box(worldbody, f"floor_{index}", "floor", floor, -0.1, 0)
+        for index, wall in enumerate(scene.collision.walls):
+            _add_box(worldbody, f"wall_{index}", "wall", wall, 0, spec.wall_height_m)
     for actor in (scene.robot, *scene.humans):
         for marker, point in (("start", actor.pose), ("goal", actor.goal)):
             ET.SubElement(
@@ -260,6 +273,8 @@ def _add_humans(
     humans: tuple[Spawn, ...],
     mjcf_root: Path,
     sources: list[tuple[str, str]],
+    *,
+    skinned: bool,
 ) -> None:
     if not humans:
         return
@@ -268,17 +283,56 @@ def _add_humans(
     )
     for spawn in humans:
         body = deepcopy(pedestrian)
-        body.find("geom[@name='collision']").set("size", _numbers(spawn.radius_m, 0.85))
-        body.find("geom[@name='visual']").set(
-            "size", _numbers(0.8 * spawn.radius_m, 0.78)
-        )
+        collision = body.find("geom[@name='collision']")
+        collision.set("size", _numbers(spawn.radius_m, 0.85))
+        visual = body.find("geom[@name='visual']")
+        if skinned:
+            body.remove(visual)
+        else:
+            visual.set("size", _numbers(0.8 * spawn.radius_m, 0.78))
         _place_actor(body, spawn, 0)
         worldbody.append(body)
 
 
+def _skin_actors(
+    scene: SceneGeometry, mjcf_root: Path, sources: list[tuple[str, str]]
+) -> tuple[SkinActor, ...]:
+    characters = {}
+    actors = []
+    for index, spawn in enumerate((*scene.humans, *scene.human_props)):
+        character_id = ("casual_male", "casual_female")[index % 2]
+        if character_id not in characters:
+            relative = Path("assets/humans") / character_id
+            try:
+                character = load_character(mjcf_root / relative)
+                if character.identifier != character_id:
+                    raise ValueError(f"expected character {character_id}")
+            except (OSError, KeyError, TypeError, ValueError) as exc:
+                raise ConfigurationError(f"{relative}: {exc}") from exc
+            sources.extend(
+                ((relative / file).as_posix(), digest)
+                for file, digest in character.source_sha256
+            )
+            characters[character_id] = character
+        pose = spawn.pose
+        actors.append(
+            SkinActor(
+                spawn.entity_id,
+                characters[character_id],
+                (pose.x, pose.y, pose.yaw),
+                fixed=isinstance(spawn, HumanProp),
+                seat_height_m=spawn.seat_height_m
+                if isinstance(spawn, HumanProp)
+                else None,
+                idle_offset_s=index * 0.41,
+            )
+        )
+    return tuple(actors)
+
+
 def build_world(config: DictConfig, *, mjcf_root: Path = MJCF_ROOT) -> BuiltWorld:
     """Generate a scene without opening a renderer or mutating the input files."""
-    episode, scene = validate_scene_config(config)
+    episode, scene = validate_scene_config(config, mjcf_root=mjcf_root)
     sources: list[tuple[str, str]] = []
     root = ET.Element("mujoco", model=config.worlds.id)
     defaults = _read_mjcf(mjcf_root, "templates/world_defaults.xml", sources)
@@ -287,12 +341,33 @@ def build_world(config: DictConfig, *, mjcf_root: Path = MJCF_ROOT) -> BuiltWorl
     )
     root.extend(defaults)
     worldbody = ET.SubElement(root, "worldbody")
-    _add_environment(worldbody, scene)
+    _add_environment(worldbody, scene, sources)
+    skinned = config.simulation.get("human_visuals") == "quaternius"
+    if skinned:
+        for prop in scene.human_props:
+            worldbody.find(f"geom[@name='{prop.entity_id}']").set("group", "3")
     try:
         _add_robot(worldbody, root, scene.robot, config, mjcf_root, sources)
-        _add_humans(worldbody, scene.humans, mjcf_root, sources)
+        _add_humans(worldbody, scene.humans, mjcf_root, sources, skinned=skinned)
     except ConfigurationError:
         raise
     except ContractError as exc:
         raise ConfigurationError(str(exc)) from exc
-    return BuiltWorld(ET.tostring(root, encoding="unicode"), scene, tuple(sources))
+    actors = _skin_actors(scene, mjcf_root, sources) if skinned else ()
+    assets = (
+        append_visuals(
+            root,
+            {actor.actor_id: actor.character for actor in actors},
+            initial_poses={actor.actor_id: actor.initial_bones() for actor in actors},
+        )
+        if actors
+        else {}
+    )
+    return BuiltWorld(
+        ET.tostring(root, encoding="unicode"),
+        scene,
+        episode,
+        tuple(sources),
+        actors,
+        tuple(assets.items()),
+    )

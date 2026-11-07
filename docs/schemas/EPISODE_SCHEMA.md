@@ -18,6 +18,8 @@ Trong TASK 01, `EpisodeConfig` giữ `scenario_id`, `episode_seed`, `control_dt_
 
 Seed episode do kế hoạch thực nghiệm cấp và được lưu cùng manifest. Từ seed đó, dẫn xuất luồng `spawn`, `sensor`, `robot_policy`, `human_backend` và `engine` theo công thức sau. Lấy 8 byte đầu của SHA-256 theo thứ tự big-endian trên chuỗi ASCII `narrow_nav/v1/<episode_seed>/<stream>/<scope>`. Seed ở hệ thập phân, không thêm số 0 ở đầu. Scope là `global`, `entity.<entity_id>` hoặc `sensor.<sensor_id>`. Ghi stream, scope, seed đã dùng và loại bộ sinh số ngẫu nhiên cho mỗi thành phần. Backend có thể thêm lần rút số trong luồng của nó mà vẫn giữ các luồng khác độc lập.
 
+Khi dùng skin Quaternius, `SimulationMetadata.mjcf_source_sha256` bao gồm manifest, mảng rig/animation và tệp texture nếu có của từng bundle đã nạp. `model_sha256` tính trên chuỗi MJCF lắp ghép. Chế độ render được ghi trong `resolved_config`.
+
 ## Bản ghi và căn chỉnh thời gian
 
 | Bản ghi | Nội dung |

@@ -14,6 +14,6 @@ export XDG_CACHE_HOME="$PWD/tmp/cache"
 export XDG_CONFIG_HOME="$PWD/tmp/config"
 export XDG_DATA_HOME="$PWD/tmp/data"
 export MESA_SHADER_CACHE_DIR="$PWD/tmp/mesa"
-unset PYTHONPATH
+export PYTHONPATH="$PWD/../src"
 
 exec .venv/bin/python -m human_visual.demo "$@"

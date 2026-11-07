@@ -41,6 +41,30 @@ python -m narrow_nav.simulation.mujoco.view_world robots=mecanum_robot
 
 Thêm cặp override world/scenario ở trên để đổi môi trường. Viewer mở từ trên xuống tại trạng thái ban đầu, tự căn theo kích thước world và ẩn hai bảng điều khiển. Cuộn chuột để zoom, kéo để đổi góc nhìn. Dùng Tab hoặc Shift+Tab để hiện lại các bảng.
 
+### World chuyển từ DynamuhSim
+
+Các world `corridor_070`, `corridor_090`, `corridor_120`, các mức `hospital_*`, `school_*` và `arena_*` dùng chung `MuJoCoEngine` với các world tham số. Chọn cặp world/scenario cùng tên, hoặc dùng `worlds=school_floor scenarios=school_floor_baseline` để chạy bản trường học với robot duy nhất.
+
+```bash
+.venv/bin/python -m narrow_nav.simulation.mujoco.view_world \
+  worlds=corridor_090 scenarios=corridor_090 robots=mecanum_robot
+env -u DISPLAY -u WAYLAND_DISPLAY .venv/bin/python -m narrow_nav.simulation.smoke \
+  --ticks 40 --vx 0.35 worlds=corridor_090 scenarios=corridor_090 robots=mecanum_robot
+```
+
+Lệnh đầu mở trạng thái ban đầu để kiểm tra bố cục. Lệnh thứ hai điều khiển bánh robot qua runtime và chạy 1.000 bước vật lý. Với vòng điều khiển riêng, nạp cùng cấu hình vào `MuJoCoEngine.load()`, gọi `reset()` rồi truyền `RobotAction` có timestamp hiện tại vào `step()`. Dùng `experiments.duration_ns=90000000000` nếu cần ngân sách 90 s cho các hành trình dài. [Nguồn hình học, bảng world và giới hạn](docs/architecture/04_MUJOCO_MODELING.md#world-chuyển-từ-dynamuhsim)
+
+### Mẫu người Quaternius
+
+Runtime và viewer dùng mặc định mesh nam/nữ Quaternius đã đóng gói trong checkout. Người có animation đứng chờ và giữ pose XY/yaw của body vật lý. Hình trụ collision nằm trong nhóm hiển thị ẩn. Dùng `simulation.human_visuals=proxy` để xem lại hình trụ minh họa hoặc chạy cấu hình gọn hơn khi chỉ đo vật lý.
+
+```bash
+.venv/bin/python -m narrow_nav.simulation.mujoco.view_world --focus-human human_01 \
+  worlds=corridor_090 scenarios=corridor_090 robots=mecanum_robot
+```
+
+Dùng chuột để xoay và zoom quanh người. Hãy bỏ `--focus-human` để mở toàn cảnh. `arena_rvo2` có cả hai mẫu nam/nữ. Trong `hospital_easy`, có thể lấy nét vào `hospital_room_05_seated_1`. [Mô hình render, collision và nguồn tài nguyên](docs/architecture/04_MUJOCO_MODELING.md#hình-ảnh-người-quaternius)
+
 Chạy smoke test headless 1.000 bước cho từng drivetrain.
 
 ```bash

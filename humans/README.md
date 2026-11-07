@@ -1,6 +1,6 @@
 # Quaternius human visual subsystem
 
-This is an isolated MuJoCo 4.0 visual subsystem. The external caller owns each actor's XY position, heading, and speed. The subsystem owns animation playback, local skeletal poses, and visual skinning. Its studio preview has one non-colliding floor and no robot or project environment.
+This is a MuJoCo 4.0 animation demo that runs in its own Python environment. It shares the rig and skin code in `src/narrow_nav/visualization/` with the simulator. The external caller owns each actor's XY position, heading, and speed. The subsystem owns animation playback, local skeletal poses, and visual skinning. Its studio preview has one non-colliding floor.
 
 ## Sources
 
@@ -51,6 +51,7 @@ For different local asset paths, use `-- --selection path/to/selection.json --so
 From the repository root, run `./humans/run_demo.sh`. The launcher uses the isolated environment and accepts the same flags as the Python command below. Relative output paths are resolved inside `humans/`.
 
 ```bash
+export PYTHONPATH="$PWD/../src"  # For direct Python commands run from humans/.
 .venv/bin/python -m human_visual.demo --duration 150 --agents 6 --seed 42
 ```
 

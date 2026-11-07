@@ -25,6 +25,7 @@ from ..robot_controller import DriveProfile
 from ..world_builder import BuiltWorld
 from ..world_geometry import WorldCollision
 from .geometry import collision_geometry
+from .human_visuals import HumanVisuals
 
 _BAD_WARNINGS = (
     mujoco.mjtWarning.mjWARN_BADQPOS,
@@ -42,20 +43,24 @@ class MuJoCoAdapter:
         self._data: mujoco.MjData | None = None
         self._metadata: EpisodeMetadata | None = None
         self._rng: Random | None = None
+        self._visuals: HumanVisuals | None = None
 
     @property
     def version(self) -> str:
         return mujoco.mj_versionString()
 
     def load(self, world: BuiltWorld, drive: DriveProfile) -> WorldCollision:
-        model = mujoco.MjSpec.from_string(world.mjcf).compile()
+        model = mujoco.MjSpec.from_string(
+            world.mjcf, assets=dict(world.visual_assets)
+        ).compile()
         data = mujoco.MjData(model)
         mujoco.mj_forward(model, data)
+        visuals = HumanVisuals(model, world.skin_actors)
         scene = world.scene
         walls = tuple(
             model.geom(index).name
             for index in range(model.ngeom)
-            if model.geom_bodyid[index] == 0 and model.geom_group[index] == 1
+            if model.geom_bodyid[index] == 0 and model.geom_group[index] in (1, 3)
         )
         registry = EntityRegistry(
             scene.robot.entity_id,
@@ -89,6 +94,7 @@ class MuJoCoAdapter:
         )
         self._geom_entities = tuple(geom_entities)
         self._actuator_ids = list(actuator_ids)
+        self._visuals = visuals
         self._metadata = self._rng = None
         return collision
 
@@ -108,6 +114,7 @@ class MuJoCoAdapter:
         mujoco.mj_resetData(model, data)
         self._rng = Random(engine_seed)
         mujoco.mj_forward(model, data)
+        self._visuals.update(model, data, 0.0)
         self._check_state(data, 0)
         self._metadata = metadata
         return AdapterSnapshot(self._extract(metadata.stamp(0)))
@@ -211,9 +218,11 @@ class MuJoCoAdapter:
             delta_yaw += wrap_yaw(yaw - previous_yaw)
             previous_yaw = yaw
             contacts.extend(self._contacts(data, time_ns))
+        self._visuals.update(model, data, end.timestamp.time_s)
         return AdapterStepResult(
             AdapterSnapshot(self._extract(end)), delta_yaw, tuple(contacts)
         )
 
     def close(self) -> None:
         self._data = self._model = self._metadata = self._rng = None
+        self._visuals = None

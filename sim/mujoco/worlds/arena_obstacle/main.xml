@@ -1,0 +1,15 @@
+<mujoco model="arena_obstacle">
+  <!-- Static collision reconstructed from src/custom_corridor/worlds/arena_obstacle.sdf @ 85287ff0781837b60ef6fde72d6244e3823291b5. -->
+  <include file="../../templates/world_defaults.xml" />
+  <worldbody>
+    <geom name="ground" class="floor" type="box" pos="-5 0 -0.05" size="12 7 0.05" rgba="0.85 0.85 0.85 1" />
+    <geom name="wall_west" class="wall" type="box" pos="-15 0 1" size="0.1 5.2 1" rgba="0.3 0.3 0.3 1" />
+    <geom name="wall_east" class="wall" type="box" pos="5 0 1" size="0.1 5.2 1" rgba="0.3 0.3 0.3 1" />
+    <geom name="wall_south" class="wall" type="box" pos="-5 -5 1" size="10.2 0.1 1" rgba="0.3 0.3 0.3 1" />
+    <geom name="wall_north" class="wall" type="box" pos="-5 5 1" size="10.2 0.1 1" rgba="0.3 0.3 0.3 1" />
+    <geom name="static_box_a" class="wall" type="box" pos="-9 1.8 1" size="0.6 0.6 1" rgba="0.8 0.4 0.2 1" />
+    <geom name="static_cylinder_b" class="wall" type="cylinder" pos="-8 -2.2 1" size="0.4 1" rgba="0.2 0.5 0.8 1" />
+    <geom name="static_box_c" class="wall" type="box" pos="-3 -2 1" size="0.75 0.4 1" rgba="0.8 0.4 0.2 1" />
+    <geom name="static_cylinder_d" class="wall" type="cylinder" pos="-2 2 1" size="0.4 1" rgba="0.2 0.5 0.8 1" />
+  </worldbody>
+</mujoco>

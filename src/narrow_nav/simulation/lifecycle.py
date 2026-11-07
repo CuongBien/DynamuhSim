@@ -24,7 +24,7 @@ from narrow_nav.core.validation import positive, require_type, uint64, unique
 
 from .backend import SimulationError, SimulationMetadata
 from .collision_monitor import Clearance, measure_clearance
-from .configuration import drive_from_config, timing_from_config, validate_config
+from .configuration import drive_from_config, timing_from_config
 from .robot_controller import DriveProfile
 from .state_extractor import executed_motion
 from .timing import Timing
@@ -101,7 +101,8 @@ class SimulationLifecycle:
         resolved = OmegaConf.create(
             OmegaConf.to_container(config, resolve=True, throw_on_missing=True)
         )
-        episode = validate_config(resolved)
+        built = build_world(resolved, mjcf_root=self._mjcf_root)
+        episode = built.episode
         timing = timing_from_config(resolved, episode)
         drive = drive_from_config(resolved)
         sensors = require_type(
@@ -124,7 +125,6 @@ class SimulationLifecycle:
             OmegaConf.select(resolved, "experiments.goal_tolerance_m", default=0.1),
             "goal_tolerance_m",
         )
-        built = build_world(resolved, mjcf_root=self._mjcf_root)
         collision = self._adapter.load(built, drive)
         OmegaConf.set_readonly(resolved, True)
         self._loaded = _Loaded(
