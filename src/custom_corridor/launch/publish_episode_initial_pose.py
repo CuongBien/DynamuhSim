@@ -3,7 +3,9 @@
 from __future__ import annotations
 
 import argparse
+import json
 import math
+import os
 import time
 from pathlib import Path
 
@@ -19,14 +21,17 @@ from tf2_ros import Buffer, TransformListener
 
 
 class InitialPoseGate(Node):
-    def __init__(self, pose: dict) -> None:
-        super().__init__("school_episode_initial_pose")
+    def __init__(self, pose: dict, covariance=None) -> None:
+        super().__init__("episode_initial_pose")
         self.pose = pose
+        self.covariance = covariance or dict(x=.04, y=.04, yaw=.01)
+        if any(not math.isfinite(v) or v <= 0 for v in self.covariance.values()):
+            raise ValueError("Initial pose variances must be positive and finite")
         self.latest_scan = None
         self.create_subscription(LaserScan, "/scan", self._scan_cb, 10)
         self.publisher = self.create_publisher(
             PoseWithCovarianceStamped, "/initialpose",
-            QoSProfile(depth=1, reliability=ReliabilityPolicy.BEST_EFFORT,
+            QoSProfile(depth=1, reliability=ReliabilityPolicy.RELIABLE,
                        durability=DurabilityPolicy.VOLATILE),
         )
         self.state_client = self.create_client(GetState, "/amcl/get_state")
@@ -59,9 +64,9 @@ class InitialPoseGate(Node):
         yaw = float(self.pose["yaw"])
         msg.pose.pose.orientation.z = math.sin(yaw / 2)
         msg.pose.pose.orientation.w = math.cos(yaw / 2)
-        msg.pose.covariance[0] = 0.04
-        msg.pose.covariance[7] = 0.04
-        msg.pose.covariance[35] = 0.01
+        msg.pose.covariance[0] = self.covariance['x']
+        msg.pose.covariance[7] = self.covariance['y']
+        msg.pose.covariance[35] = self.covariance['yaw']
         self.publisher.publish(msg)
         self.get_logger().info(
             f"Published /initialpose from episode: {self.pose['x']:.3f}, "
@@ -76,7 +81,8 @@ def main() -> int:
     config = yaml.safe_load(args.params_file.read_text(encoding="utf-8"))
     pose = config["amcl"]["ros__parameters"]["initial_pose"]
     rclpy.init(args=ros_args)
-    node = InitialPoseGate(pose)
+    covariance = json.loads(os.environ["DYNAMUHSIM_INITIAL_COVARIANCE"]) if "DYNAMUHSIM_INITIAL_COVARIANCE" in os.environ else None
+    node = InitialPoseGate(pose, covariance)
     deadline = time.monotonic() + 60.0
     published = False
     try:

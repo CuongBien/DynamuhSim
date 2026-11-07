@@ -42,7 +42,7 @@ def launch_setup(context, *args, **kwargs):
                 map_override["yaml_filename"] = cand_school
 
     if "yaml_filename" not in map_override:
-        map_override["yaml_filename"] = os.path.join(package_share, "maps", "corridor_090.yaml")
+        raise FileNotFoundError(f"Map '{map_name}' does not exist. Refusing to silently use corridor_090 with a different Gazebo world.")
 
     map_server_params = [nav2_params, map_override]
     episode_mode = LaunchConfiguration("episode_initial_pose").perform(context).lower() == "true"

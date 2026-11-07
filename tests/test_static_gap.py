@@ -23,7 +23,7 @@ class StaticGapTests(unittest.TestCase):
   with tempfile.TemporaryDirectory() as d:
    write_assets(d,spec);raw=(Path(d)/'gap.pgm').read_bytes().split(b'\n',3)[3];np.testing.assert_array_equal(np.frombuffer(raw,dtype='u1').reshape(160,280),np.flipud(map_array(spec)))
  def test_default_recorder_still_requires_human_ground_truth_subscription(self):
-  recorder=Recording.__new__(Recording);recorder.process=NS(poll=lambda:None);recorder.observed={t:{'count':5} for t in ['/camera/depth/image_rect_raw','/camera/camera_info']};recorder.node=NS(get_subscriptions_info_by_topic=lambda t:[] if t=='/common/ground_truth' else [NS(node_name='dataset_pilot_recorder')])
+  recorder=Recording.__new__(Recording);recorder.process=NS(poll=lambda:None);recorder.timestamp_errors=[];recorder.scene_count=5;recorder.observed={t:{'count':5} for t in ['/camera/depth/image_rect_raw','/camera/camera_info']};recorder.node=NS(get_publishers_info_by_topic=lambda t:[NS()],get_subscriptions_info_by_topic=lambda t:[] if t=='/common/ground_truth' else [NS(node_name='dataset_pilot_recorder')])
   self.assertFalse(recorder.ready());self.assertTrue(recorder.ready(required_topics=[t for t in TOPICS[:12] if t!='/common/ground_truth']))
  def test_zero_human_policy_is_explicit_and_native_costmaps_required(self):
   default=json.loads((ROOT/'configs/audit/capture_native_geometry.json').read_text());gap=json.loads((ROOT/'configs/audit/static_gap.json').read_text())

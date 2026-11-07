@@ -27,10 +27,12 @@ def generate_launch_description():
     resource = os.pathsep.join(filter(None, [str(share / "models"), str(turtle / "models"), os.getenv("GZ_SIM_RESOURCE_PATH")]))
     plugins = os.pathsep.join(filter(None, [str(plugin_share.parents[1] / "lib"), os.getenv("GZ_SIM_SYSTEM_PLUGIN_PATH")]))
     # GUI is a separately owned process after readiness, as in the group runner.
-    sim = ExecuteProcess(cmd=simulation_nodes.gazebo_command(os.environ["NAV2_PILOT_WORLD"], "false"), output="screen",
-                         additional_env=dict(GZ_OBSTACLE_TYPE="human", GZ_SIM_RESOURCE_PATH=resource,
-                                             GZ_SIM_SYSTEM_PLUGIN_PATH=plugins, GALLIUM_DRIVER="d3d12",
-                                             MESA_D3D12_DEFAULT_ADAPTER_NAME="NVIDIA"))
+    sim_env = dict(GZ_OBSTACLE_TYPE="human", GZ_SIM_RESOURCE_PATH=resource,
+                   GZ_SIM_SYSTEM_PLUGIN_PATH=plugins)
+    if Path('/usr/lib/wsl/lib/libd3d12core.so').is_file():
+        sim_env.update(GALLIUM_DRIVER="d3d12", MESA_D3D12_DEFAULT_ADAPTER_NAME="NVIDIA")
+    sim = ExecuteProcess(cmd=simulation_nodes.gazebo_command(os.environ["NAV2_PILOT_WORLD"], "false"),
+                         output="screen", additional_env=sim_env)
     robot = simulation_nodes.RobotAssets("mecanum_robot", os.environ["DATASET_ROBOT_SDF"],
                                     str(share / "config/mecanum_bridge.yaml"),
                                     os.environ.get("DATASET_ROBOT_URDF", str(share / "urdf/mecanum_robot.urdf")), "0.04")
@@ -43,9 +45,12 @@ def generate_launch_description():
     obstacle = simulation_nodes.obstacle_bridge_node()
     truth = Node(package="ros_gz_bridge", executable="parameter_bridge", name="nav2_pilot_ground_truth_bridge",
                  arguments=["/common/ground_truth@std_msgs/msg/String[gz.msgs.StringMsg"], output="screen")
+    world_map = Node(package="tf2_ros", executable="static_transform_publisher", name="warehouse_world_map",
+                     arguments=["--frame-id", "world", "--child-frame-id", "map"],
+                     parameters=[{"use_sim_time": True}], output="screen")
     nav = IncludeLaunchDescription(PythonLaunchDescriptionSource(str(share / "launch/nav2_corridor.launch.py")),
              launch_arguments=dict(map=os.environ.get("DYNAMUHSIM_CAPTURE_MAP", str(repo / "experiments/social_navigation/warehouse/warehouse.yaml")),
                                    params_file=os.environ["NAV2_PILOT_PARAMS"], robot_model="mecanum",
                                    controller="mppi", episode_initial_pose="true").items())
     return LaunchDescription([DeclareLaunchArgument("gui", default_value="false"), sim, spawn, bridge, image,
-                              optical, imu, state, obstacle, truth, TimerAction(period=6., actions=[nav])])
+                              optical, imu, state, obstacle, truth, world_map, TimerAction(period=6., actions=[nav])])

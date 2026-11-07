@@ -14,6 +14,7 @@ import math
 import os
 import signal
 import subprocess
+import sys
 import tempfile
 import time
 import traceback
@@ -119,6 +120,26 @@ def source_files(repo, profile, entrypoint):
     return files
 
 
+def check_domain_available(domain):
+    """Probe local DDS without a ROS CLI daemon before starting this episode."""
+    env = dict(os.environ, ROS_DOMAIN_ID=str(domain), ROS_AUTOMATIC_DISCOVERY_RANGE="LOCALHOST")
+    probe = """import json,time,rclpy
+from rclpy.node import Node
+rclpy.init()
+n=Node('dynamuhsim_domain_probe')
+end=time.monotonic()+3
+while time.monotonic()<end:rclpy.spin_once(n,timeout_sec=.1)
+print(json.dumps([name for name,namespace in n.get_node_names_and_namespaces() if name != n.get_name()]))
+n.destroy_node()
+rclpy.shutdown()
+"""
+    checked = subprocess.run([sys.executable, "-c", probe], env=env, capture_output=True, text=True, timeout=15, check=True)
+    nodes = json.loads(checked.stdout.strip().splitlines()[-1])
+    if nodes:
+        raise RuntimeError(f"ROS domain {domain} already contains nodes: {nodes}")
+    return dict(domain=domain, nodes=nodes, discovery_seconds=3, scope="LOCALHOST")
+
+
 def run_trial(profile, args, repo, entrypoint, *, dependencies=None, capture=None):
     deps = dependencies if dependencies is not None else load_dependencies(repo)
     social = repo / "experiments/social_navigation"
@@ -143,13 +164,16 @@ def run_trial(profile, args, repo, entrypoint, *, dependencies=None, capture=Non
     container_name = None
     sha = lambda path: hashlib.sha256(path.read_bytes()).hexdigest()
     try:
-        lock_path = benchmark / "common_gazebo/generated/domain91.lock"
+        domain = capture.plan.get("ros_domain_id", 91) if capture is not None else 91
+        lock_path = benchmark / f"common_gazebo/generated/domain{domain}.lock"
         lock_path.parent.mkdir(parents=True, exist_ok=True)
         lock = lock_path.open("a")
         fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
-        os.environ.update(ROS_DOMAIN_ID="91", GZ_PARTITION=profile.partition_prefix + str(os.getpid()),
+        os.environ.update(ROS_DOMAIN_ID=str(domain), GZ_PARTITION=profile.partition_prefix + str(os.getpid()),
                           ROS_LOG_DIR=str(runtime / "ros_logs"), QT_QPA_PLATFORM="xcb",
                           ROS_AUTOMATIC_DISCOVERY_RANGE="LOCALHOST", FASTDDS_BUILTIN_TRANSPORTS="UDPv4")
+        if capture is not None and "ros_domain_id" in capture.plan:
+            result["domain_preflight"] = check_domain_available(domain)
         guard = deps.gpu.RuntimeGuard(runtime)
         sources = source_files(repo, profile, entrypoint)
         if capture is not None:
@@ -160,7 +184,11 @@ def run_trial(profile, args, repo, entrypoint, *, dependencies=None, capture=Non
         if capture is not None:
             capture.prepare(runtime, result)
         result["rendering"] = deps.gpu.gpu_preflight(runtime)
-        launch_env, result["shutdown_preload"] = deps.shutdown.launch_environment(runtime)
+        if Path("/usr/lib/wsl/lib/libd3d12core.so").is_file():
+            launch_env, result["shutdown_preload"] = deps.shutdown.launch_environment(runtime)
+        else:
+            launch_env = dict(os.environ)
+            result["shutdown_preload"] = dict(mode="native_linux", reason="WSL D3D12 preload is inapplicable")
         socket_dir = tempfile.TemporaryDirectory(prefix="nav2v2_")
         socket_path = str(Path(socket_dir.name) / "worker.sock")
         initial = []
@@ -169,7 +197,9 @@ def run_trial(profile, args, repo, entrypoint, *, dependencies=None, capture=Non
             files.append(log)
             if profile.container_worker:
                 backend = load_file_module("_dynamuhsim_shared_backend", stage / "runtime.py")
-                command, container_name, image = backend.worker_command(runtime, Path(socket_dir.name), args.model, guard.token)
+                kwargs = ({"image": capture.plan["container_image"]}
+                          if capture is not None and "container_image" in capture.plan else {})
+                command, container_name, image = backend.worker_command(runtime, Path(socket_dir.name), args.model, guard.token, **kwargs)
                 result["container_image"] = image
             else:
                 command = profile.worker_command(social, runtime, socket_path, args)
@@ -185,6 +215,8 @@ def run_trial(profile, args, repo, entrypoint, *, dependencies=None, capture=Non
             initial = ready["humans"]
             result["ready"] = ready
             assert len(initial) == 6 and ready["requires_start_gate"]
+            if capture is not None and capture.plan.get("human_policy") == "crowd_orca_plus":
+                result.update(scenario=capture.plan["scenario"], seed=capture.plan["seed"], human_count=len(initial))
         deps.adapter.make_world(runtime, socket_path, initial, "walking")
         tree = configure_world(ET.parse(runtime / "warehouse.sdf"),
                                benchmark / "socnavgym_response_fix/build/libresponse_adapter.so",
@@ -229,6 +261,21 @@ def run_trial(profile, args, repo, entrypoint, *, dependencies=None, capture=Non
         def capture_tf():
             if not recording.rows["gazebo_poses"]:
                 return
+            if capture is not None and "synchronization_profile" in getattr(capture, "plan", {}):
+                from dynamuhsim.simulation.warehouse_sync import synchronized_pose_sample
+                # Transport callbacks can precede TF delivery. Select a recent pose
+                # with TF available at its exact timestamp, never relabel latest TF.
+                for scene in reversed(recording.rows["gazebo_poses"][-30:]):
+                    if "mecanum_robot" not in scene["poses"]:
+                        continue
+                    try:
+                        sample = synchronized_pose_sample(tfbuffer, deps.rclpy, scene, yaw)
+                        if not recording.rows["tf"] or sample["time"] > recording.rows["tf"][-1]["time"]:
+                            recording.rows["tf"].append(sample)
+                        return
+                    except Exception:
+                        continue
+                return
             try:
                 transform = tfbuffer.lookup_transform("map", "base_footprint", deps.rclpy.time.Time())
                 odom = tfbuffer.lookup_transform("map", "odom", deps.rclpy.time.Time())
@@ -270,14 +317,37 @@ def run_trial(profile, args, repo, entrypoint, *, dependencies=None, capture=Non
         assert wait(lambda: recording.counts["local_costmap"] > 0, 10), "Local costmap missing"
         capture_tf()
         assert recording.rows["tf"], "map->base TF missing"
-        if profile.groups and args.gui:
+        if capture is not None and "synchronization_profile" in getattr(capture, "plan", {}):
+            result["localization_before_goal"] = recording.rows["tf"][-1]
+            if result["localization_before_goal"]["xy_error_m"] > .08:
+                raise RuntimeError("AMCL/Gazebo initialization error exceeds 0.08m; no motion started")
+        if args.gui and (profile.groups or capture is not None):
             log = (runtime / "gui.log").open("w")
             files.append(log)
-            gui_process = subprocess.Popen(["gz", "sim", "-g"], stdout=log, stderr=subprocess.STDOUT,
+            gui_command = ["gz", "sim", "-g"]
+            if capture is not None and (capture.run_dir / "assets/warehouse_gui.config").is_file():
+                gui_command += ["--gui-config", str(capture.run_dir / "assets/warehouse_gui.config")]
+            gui_process = subprocess.Popen(gui_command, stdout=log, stderr=subprocess.STDOUT,
                                            start_new_session=True, env=launch_env)
             processes.append(gui_process)
             wait(lambda: False, 3.)
             result["gui_start_mode"] = "Separate GUI after server sensors/AMCL/Nav2 ready"
+        if capture is not None and getattr(args, "rviz", False):
+            from ament_index_python.packages import get_package_prefix
+            executable = Path(get_package_prefix("rviz2")) / "lib/rviz2/rviz2"
+            log = (runtime / "rviz.log").open("w")
+            files.append(log)
+            config_path = capture.run_dir / "assets/warehouse.rviz"
+            viewer_env = dict(launch_env)
+            overlay = capture.run_dir / "assets/rviz_overlay"
+            if overlay.is_dir():
+                viewer_env["AMENT_PREFIX_PATH"] = str(overlay) + os.pathsep + viewer_env.get("AMENT_PREFIX_PATH", "")
+            viewer = subprocess.Popen([str(executable), "-d", str(config_path), "--ros-args",
+                                       "-r", "__node:=rviz2", "-p", "use_sim_time:=true"],
+                                      stdout=log, stderr=subprocess.STDOUT, start_new_session=True, env=viewer_env)
+            processes.append(viewer)
+            result["rviz"] = dict(config=str(config_path), ros_domain_id=domain, use_sim_time=True, fixed_frame="map")
+            assert wait(lambda: any(name == "rviz2" for name, namespace in node.get_node_names_and_namespaces()), 15), "RViz did not join the pilot ROS domain"
         if capture is not None:
             capture.ready(node, wait, out, result, recording)
         result["amcl_publishers"] = deps.observer.publisher_evidence(node)
@@ -303,6 +373,11 @@ def run_trial(profile, args, repo, entrypoint, *, dependencies=None, capture=Non
         capture_tf()
         recording.phase = "finished"
         result.update(goal_metrics(robot_pose(), result["action_status"]))
+        samples = [s for s in recording.rows["tf"] if "xy_error_m" in s]
+        if samples:
+            result["localization_alignment"] = dict(comparison="same_simulation_timestamp",
+                samples=len(samples), final=samples[-1], max_xy_error_m=max(s["xy_error_m"] for s in samples),
+                within_015m=all(s["xy_error_m"] <= .15 for s in samples), ground_truth_used_by_navigation=False)
         if capture is not None:
             capture.finish(wait, recording, result)
         result.update(counts=dict(recording.counts), cmd_vel_publishers_after_goal=publishers(),
@@ -314,7 +389,11 @@ def run_trial(profile, args, repo, entrypoint, *, dependencies=None, capture=Non
         recording.phase = "finished"
         if result["status"] == "ERROR" and accepted_handles:
             try:
-                accepted_handles[-1].cancel_goal_async()
+                cancellation = accepted_handles[-1].cancel_goal_async()
+                deadline = time.monotonic() + 3
+                while not cancellation.done() and time.monotonic() < deadline:
+                    deps.rclpy.spin_once(node, timeout_sec=.02)
+                result["cancellation_acknowledged"] = cancellation.done()
             except Exception:
                 pass
         if capture is not None:
@@ -368,6 +447,8 @@ def run_trial(profile, args, repo, entrypoint, *, dependencies=None, capture=Non
         if media is not None:
             result["media"] = media
         (out / "result.json").write_text(json.dumps(result, indent=2) + "\n")
+        if capture is not None and hasattr(capture, "write_manifest"):
+            capture.write_manifest(result)
         print(json.dumps(result, indent=2))
     return 0 if result["status"] == "MEASURED" else 1
 

@@ -52,6 +52,7 @@ class GeometryTests(unittest.TestCase):
 
     def test_launch_override_is_only_set_for_version4(self):
         context=CaptureContext.__new__(CaptureContext)
+        context.plan={}
         with tempfile.TemporaryDirectory() as d,patch('dynamuhsim.runtime.capture.subprocess.Popen'):
             for version in [3,4]:
                 context.config={'schema':f'dynamuhsim_capture_config/{version}'};env={'DATASET_ROBOT_URDF':'stale'};files=[]

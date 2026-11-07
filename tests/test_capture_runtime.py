@@ -194,7 +194,8 @@ class RecordingTests(unittest.TestCase):
         for name in ['qos', 'storage']:
             self.assertEqual(hashlib.sha256((ROOT / 'configs/capture' / (name + '.yaml')).read_bytes()).hexdigest(), golden[name + '_sha256'])
         node = NS(create_publisher=lambda *a: NS(), create_subscription=lambda *a: None)
-        modules = {'std_msgs.msg': NS(String=NS), 'rclpy.qos': NS(QoSProfile=NS, ReliabilityPolicy=NS(BEST_EFFORT='best_effort')),
+        modules = {'std_msgs.msg': NS(String=NS), 'rclpy.qos': NS(QoSProfile=NS, ReliabilityPolicy=NS(BEST_EFFORT='best_effort'), qos_profile_sensor_data='sensor'),
+                   'rosgraph_msgs.msg': NS(Clock=type('Clock', (), {})),
                    'sensor_msgs.msg': NS(Image=type('Image', (), {}), CameraInfo=type('CameraInfo', (), {}))}
         with tempfile.TemporaryDirectory() as directory, patch.dict(sys.modules, modules), patch.object(shared.subprocess, 'Popen') as popen:
             recorder = Recording(node, directory)
@@ -210,6 +211,7 @@ class RecordingTests(unittest.TestCase):
             recorder = Recording.__new__(Recording)
             recorder.output, recorder.log = Path(directory), io.StringIO()
             recorder.command, recorder.observed = ["recorder"], {}
+            recorder.timestamp_errors, recorder.scene_count = [], 0
             process = unittest.mock.Mock(pid=123, returncode=7)
             process.poll.return_value = None
             process.wait.side_effect = [subprocess.TimeoutExpired("recorder", 30), None]
@@ -234,6 +236,7 @@ class RecordingTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory:
             recorder = Recording.__new__(Recording)
             recorder.output, recorder.seq = Path(directory), 0
+            recorder.last_scene_stamp, recorder.scene_count, recorder.timestamp_errors, recorder.marker_pub = None, 0, [], None
             recorder.message_type = lambda **values: NS(**values)
             events, scenes = [], []
             recorder.event_pub, recorder.scene_pub = NS(publish=events.append), NS(publish=scenes.append)
@@ -271,6 +274,7 @@ class RecordingTests(unittest.TestCase):
 class FakeCapture:
     def __init__(self, harness):
         self.h = harness
+        self.plan = {}
         self.config = dict(sim_budget_s=7.)
         self.runtime_dir = harness.stage / "generated/capture_api_run"
         harness.runtime = self.runtime_dir

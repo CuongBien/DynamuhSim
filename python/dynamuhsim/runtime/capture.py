@@ -74,22 +74,48 @@ def validate_config(config):
     return copy.deepcopy(config)
 
 
-def capture_sources(repo):
-    files = source_files(repo, PROFILES["socnavgym_group_nav2"], repo / "tools/capture_episode.py")
+def capture_sources(repo, profile="socnavgym_group_nav2"):
+    files = source_files(repo, PROFILES[profile], repo / "tools/capture_episode.py")
     files += [repo / "python/dynamuhsim/simulation/robot_geometry.py", repo / "tools/capture_warehouse.launch.py", repo / "configs/capture/storage.yaml", repo / "configs/capture/qos.yaml",
               repo / "src/custom_corridor/models/mecanum_robot/model.sdf", repo / "src/custom_corridor/urdf/mecanum_robot.urdf",
               repo / "src/custom_corridor/config/mecanum_bridge.yaml",
               stage_directory(repo, 'depth_proxy_ablation') / 'depth_proxy_filter.cc', stage_directory(repo, 'depth_proxy_ablation') / 'CMakeLists.txt',
               stage_directory(repo, 'depth_proxy_ablation') / 'generated/build_jazzy/libdepth_proxy_filter.so',
               repo / 'python/dynamuhsim/runtime/native/check_friction.cc', repo / 'python/dynamuhsim/runtime/native/generated/check_friction']
+    if profile == "shared_nav2_pilot":
+        # Raw capture needs neither depth ON/OFF experiments nor their plugin.
+        files = [p for p in files if "depth_proxy_ablation" not in p.parts]
+        social = repo / "experiments/social_navigation"
+        files += [social / "navigation/common_response/generated/crowd_kernel_n6.py",
+                  social / "navigation/common_response/inputs/images.json",
+                  social / "navigation/common_response/inputs/protocol.json",
+                  social / "navigation/common_response/inputs/layout.json",
+                  social / "crowdsimplus_adapter/kernel.py",
+                  social / "warehouse/layout.json", repo / "tools/run_task01.sh",
+                  repo / "configs/capture/rviz_indexed_8bit_image.frag",
+                  repo / "configs/capture/warehouse_gui.config",
+                  repo / "src/custom_corridor/rviz/warehouse.rviz"]
     return sorted(set(files))
 
 
-def prepare_run(repo, run_dir, config_path, scenario, seed, gui=False, *, planner_diagnostics=False, human_motion_profile="legacy", encounter_profile=None, human_goal_clock="native_wall", human_lifecycle_profile="native"):
+def prepare_run(repo, run_dir, config_path, scenario, seed, gui=False, *, planner_diagnostics=False, human_motion_profile="legacy", encounter_profile=None, human_goal_clock="native_wall", human_lifecycle_profile="native", human_policy="socnavgym_group", ros_domain_id=92, rviz=False):
     repo, run_dir, config_path = Path(repo).resolve(), Path(run_dir).resolve(), Path(config_path).resolve()
     run_dir.relative_to(repo)
+    if run_dir.exists():
+        raise FileExistsError("Capture output already exists; preserve it and use a new run directory: " + str(run_dir))
     config = validate_config(json.loads(config_path.read_text()))
-    if scenario not in ["standing", "walking"] or type(seed) is not int or seed not in config["allowed_seeds"]:
+    single_policy = human_policy == "crowd_orca_plus"
+    if human_policy not in ["socnavgym_group", "crowd_orca_plus"]:
+        raise ValueError("Unsupported human policy")
+    if type(ros_domain_id) is not int or not 0 <= ros_domain_id <= 101:
+        raise ValueError("Expected ROS domain in 0..101")
+    if single_policy and (scenario != "crossing" or seed != 42 or human_motion_profile != "legacy" or encounter_profile is not None or human_goal_clock != "native_wall" or human_lifecycle_profile != "native"):
+        raise ValueError("Single-policy pilot requires crossing/42 and no additional human motion treatment")
+    if single_policy:
+        # The legacy capture seed cohort does not govern the shared pilot.
+        config["allowed_seeds"] = [42]
+        config["sim_budget_s"] = 45.0
+    if scenario not in (["crossing"] if single_policy else ["standing", "walking"]) or type(seed) is not int or seed not in config["allowed_seeds"]:
         raise ValueError("Scenario/seed not allowed by capture config")
     if human_motion_profile not in ["legacy", "group_orca_v1", "group_goal_v1", "group_cohesion_v1", "group_cohesion_v2"]:
         raise ValueError("Unsupported human motion profile")
@@ -108,12 +134,22 @@ def prepare_run(repo, run_dir, config_path, scenario, seed, gui=False, *, planne
             raise ValueError("Encounter profiles require walking scenario")
         encounter = fixture(encounter_profile)
         initial_clearance(encounter, json.loads((repo / "experiments/social_navigation/warehouse/layout.json").read_text())["obstacles"])
-    files = capture_sources(repo) + [config_path]
+    profile = "shared_nav2_pilot" if single_policy else "socnavgym_group_nav2"
+    if single_policy:
+        shared = json.loads((stage_directory(repo, profile) / "protocol.json").read_text())
+        if shared["seed"] != seed or shared["population"] != 6 or "crossing_near" not in shared["scene"]:
+            raise ValueError("Shared pilot fixture no longer matches crossing/42/six humans")
+        local_image = subprocess.check_output(
+            ["docker", "image", "inspect", "dynamuhsim-crowdsimplus:round2", "--format", "{{.Id}}"], text=True).strip()
+        from dynamuhsim.simulation.warehouse_sync import check_map_world
+        warehouse = repo / "experiments/social_navigation/warehouse"
+        alignment = check_map_world(warehouse / "warehouse.sdf", warehouse / "warehouse.yaml", warehouse / "layout.json")
+    files = capture_sources(repo, profile) + [config_path]
     for path in files:
         path.relative_to(repo)
         if not path.is_file():
             raise FileNotFoundError("Prepare dependency first: " + str(path))
-    PROFILES["socnavgym_group_nav2"].validate_gates(repo / "experiments/social_navigation/benchmark")
+    PROFILES[profile].validate_gates(repo / "experiments/social_navigation/benchmark")
     run_dir.mkdir(parents=True, exist_ok=False)
     assets = run_dir / "assets"
     assets.mkdir()
@@ -126,14 +162,41 @@ def prepare_run(repo, run_dir, config_path, scenario, seed, gui=False, *, planne
     if friction["recognized_gz_base_link_frames"] != 4:
         raise RuntimeError("Native SDFormat friction frames were not recognized")
     geometry = None
-    if config["schema"] in ["dynamuhsim_capture_config/4", "dynamuhsim_capture_config/5", "dynamuhsim_capture_config/6", "dynamuhsim_capture_config/7"]:
+    if single_policy or config["schema"] in ["dynamuhsim_capture_config/4", "dynamuhsim_capture_config/5", "dynamuhsim_capture_config/6", "dynamuhsim_capture_config/7"]:
         from dynamuhsim.simulation.robot_geometry import aligned_urdf
         geometry = aligned_urdf(repo / "src/custom_corridor/models/mecanum_robot/model.sdf", repo / "src/custom_corridor/urdf/mecanum_robot.urdf", assets / "mecanum_aligned.urdf")
         files.append(assets / "mecanum_aligned.urdf")
     preflight = dict(camera=camera, native_friction=friction)
     if geometry is not None:preflight["geometry"] = geometry
+    if single_policy:
+        preflight["map_world_alignment"] = alignment
+        for name in ["warehouse.yaml", "warehouse.pgm"]:
+            shutil.copyfile(warehouse / name, assets / name)
+            files.append(assets / name)
+        shutil.copyfile(repo / "src/custom_corridor/rviz/warehouse.rviz", assets / "warehouse.rviz")
+        files.append(assets / "warehouse.rviz")
+        shutil.copyfile(repo / "configs/capture/warehouse_gui.config", assets / "warehouse_gui.config")
+        files.append(assets / "warehouse_gui.config")
+        if rviz:
+            from dynamuhsim.simulation.rviz_assets import prepare_rviz_overlay
+            preflight["rviz_rendering"] = prepare_rviz_overlay(repo, assets)
+            files.extend(p for p in (assets / "rviz_overlay").rglob("*") if p.is_file())
     dump(run_dir / "preflight.json", preflight)
     plan = dict(schema="dynamuhsim_capture_plan/1", config=config, scenario=scenario, seed=seed, gui=bool(gui))
+    if rviz:plan["rviz"] = True
+    if single_policy:
+        from dynamuhsim.simulation.warehouse_sync import PROFILE, INITIAL_COVARIANCE, AMCL, GOAL_CHECKER
+        plan.update(trial_profile=profile, human_policy=human_policy, ros_domain_id=ros_domain_id,
+                    container_image=local_image,
+                    fixture="crossing_near", scenario_mapping="crossing uses the existing shared pilot crossing_near fixture",
+                    human_count=6, episodes=1, nav2_treatment="unchanged MPPI; declared AMCL initialization/model and precise goal checker",
+                    synchronization_profile=PROFILE, geometry_profile="native_sdf_urdf_v1",
+                    localization=dict(amcl=AMCL, initial_covariance=INITIAL_COVARIANCE,
+                                      initial_pose_source="known stationary Gazebo spawn; no ground-truth localization feedback",
+                                      goal_checker=GOAL_CHECKER),
+                    human_navigation_algorithms=["CrowdSimPlus ORCA+"],
+                    safety_constraints=["CrowdSimPlus.constrain_agent_action_exact"],
+                    robot_parameters="runtime/nav2_runtime.yaml", sensor_config="assets/mecanum_camera.sdf")
     if human_motion_profile != "legacy":
         from dynamuhsim.simulation.human_motion_profiles import profile_config
         dump(assets / "human_motion.json", profile_config(human_motion_profile))
@@ -176,15 +239,20 @@ def verify_run(repo, run_dir):
         path = PurePosixPath(name)
         if path.is_absolute() or ".." in path.parts or sha(repo / name) != digest:
             raise RuntimeError("Frozen capture input changed: " + name)
-    required_sources = {str(path.relative_to(repo)) for path in capture_sources(repo)}
+    plan = json.loads((run_dir / "plan.json").read_text())
+    required_sources = {str(path.relative_to(repo)) for path in capture_sources(repo, plan.get("trial_profile", "socnavgym_group_nav2"))}
     if not required_sources.issubset(manifest["source_sha256"]):
         raise RuntimeError("Required source missing from capture freeze")
     for name in ["plan.json", "preflight.json", "assets/mecanum_camera.sdf"]:
         if str((run_dir / name).relative_to(repo)) not in manifest["source_sha256"]:
             raise RuntimeError("Required run input missing from freeze: " + name)
     plan = json.loads((run_dir / "plan.json").read_text())
-    if plan.get("config", {}).get("schema") in ["dynamuhsim_capture_config/4", "dynamuhsim_capture_config/5", "dynamuhsim_capture_config/6", "dynamuhsim_capture_config/7"] and str((run_dir / "assets/mecanum_aligned.urdf").relative_to(repo)) not in manifest["source_sha256"]:
+    if (plan.get("geometry_profile") == "native_sdf_urdf_v1" or plan.get("config", {}).get("schema") in ["dynamuhsim_capture_config/4", "dynamuhsim_capture_config/5", "dynamuhsim_capture_config/6", "dynamuhsim_capture_config/7"]) and str((run_dir / "assets/mecanum_aligned.urdf").relative_to(repo)) not in manifest["source_sha256"]:
         raise RuntimeError("Aligned robot description missing from freeze")
+    if "synchronization_profile" in plan:
+        for name in ["warehouse.yaml", "warehouse.pgm", "warehouse.rviz"]:
+            if str((run_dir / "assets" / name).relative_to(repo)) not in manifest["source_sha256"]:
+                raise RuntimeError("Synchronized map/RViz asset missing from freeze: " + name)
     if "human_motion_profile" in plan:
         from dynamuhsim.simulation.human_motion_profiles import validate_profile
         asset = run_dir / "assets/human_motion.json"
@@ -234,7 +302,7 @@ class CaptureContext:
     def prepare(self, runtime, result):
         verify_run(self.repo, self.run_dir)
         shutil.copyfile(self.run_dir / "assets/mecanum_camera.sdf", runtime / "mecanum_camera.sdf")
-        if self.config["schema"] in ["dynamuhsim_capture_config/4", "dynamuhsim_capture_config/5", "dynamuhsim_capture_config/6", "dynamuhsim_capture_config/7"]:
+        if self.plan.get("geometry_profile") == "native_sdf_urdf_v1" or self.config["schema"] in ["dynamuhsim_capture_config/4", "dynamuhsim_capture_config/5", "dynamuhsim_capture_config/6", "dynamuhsim_capture_config/7"]:
             shutil.copyfile(self.run_dir / "assets/mecanum_aligned.urdf", runtime / "mecanum_aligned.urdf")
             result["robot_geometry_alignment"] = json.loads((self.run_dir / "preflight.json").read_text())["geometry"]
         if "human_motion_profile" in self.plan:
@@ -251,16 +319,28 @@ class CaptureContext:
             result["human_lifecycle_profile"] = self.plan["human_lifecycle_profile"]
             result["goal_clock_validation"] = self.plan["goal_clock_validation"]
         result.update(capture_schema="dynamuhsim_capture/2", capture_freeze_sha256=sha(self.run_dir / "capture_freeze.json"),
-                      experiment="Versioned capture API; native camera and moderate Nav2 treatment",
+                      experiment=("Single CrowdSimPlus ORCA+ capture; unchanged MPPI, explicit warehouse synchronization profile"
+                                  if self.plan.get("human_policy") == "crowd_orca_plus"
+                                  else "Versioned capture API; native camera and moderate Nav2 treatment"),
                       capture_recipe_schema=self.config["schema"],
                       camera_runtime_corrections=json.loads((self.run_dir / "preflight.json").read_text()))
 
     def configure_world(self, tree):
+        if self.plan.get("human_policy") == "crowd_orca_plus":
+            return
         import xml.etree.ElementTree as ET
         library = self.repo / "experiments/social_navigation/perception/depth_proxy_ablation/generated/build_jazzy/libdepth_proxy_filter.so"
         ET.SubElement(tree.getroot().find("world"), "plugin", filename=str(library), name="depth_proxy_experiment::Filter")
 
     def configure_nav(self, config, output):
+        if self.plan.get("human_policy") == "crowd_orca_plus":
+            if "synchronization_profile" in self.plan:
+                from dynamuhsim.simulation.warehouse_sync import configure_navigation
+                result = configure_navigation(config)
+                dump(output / "config_changes.json", config_changes(config, result))
+                return result
+            dump(output / "config_changes.json", {})
+            return copy.deepcopy(config)
         result = apply_nav2_treatment(config, self.config["nav2"], navigation=self.config.get("navigation"), controller=self.config.get("controller"))
         dump(output / "config_changes.json", config_changes(config, result))
         return result
@@ -272,34 +352,57 @@ class CaptureContext:
             from .planner_diagnostics import NativeCostmaps, TOPICS
             self.diagnostics = NativeCostmaps(node, output, telemetry)
             extra_topics = TOPICS
-        self.recorder = Recording(node, output, extra_topics=extra_topics)
-        self.pairs = Pairs(node, output, lambda: telemetry.phase)
+        self.recorder = Recording(node, output, extra_topics=extra_topics, visualize_scene=self.plan.get("rviz", False))
+        if self.plan.get("human_policy") != "crowd_orca_plus":
+            self.pairs = Pairs(node, output, lambda: telemetry.phase)
         telemetry.scene_sink = self.recorder.scene
 
     def start_bridge(self, runtime, output, env, processes, files):
         env.pop("DYNAMUHSIM_CAPTURE_MAP", None)
-        if self.config["schema"] in ["dynamuhsim_capture_config/4", "dynamuhsim_capture_config/5", "dynamuhsim_capture_config/6", "dynamuhsim_capture_config/7"]:env["DATASET_ROBOT_URDF"] = str(runtime / "mecanum_aligned.urdf")
+        if self.plan.get("geometry_profile") == "native_sdf_urdf_v1" or self.config["schema"] in ["dynamuhsim_capture_config/4", "dynamuhsim_capture_config/5", "dynamuhsim_capture_config/6", "dynamuhsim_capture_config/7"]:env["DATASET_ROBOT_URDF"] = str(runtime / "mecanum_aligned.urdf")
         else:env.pop("DATASET_ROBOT_URDF", None)
+        if "synchronization_profile" in self.plan:
+            env["DYNAMUHSIM_CAPTURE_MAP"] = str(self.run_dir / "assets/warehouse.yaml")
+            env["DYNAMUHSIM_INITIAL_COVARIANCE"] = json.dumps(self.plan["localization"]["initial_covariance"])
+        if self.plan.get("human_policy") == "crowd_orca_plus":
+            return
         log = (output / "pair_bridge.log").open("w")
         files.append(log)
         command = ["ros2", "run", "ros_gz_bridge", "parameter_bridge", "/proxy_check/on/depth@sensor_msgs/msg/Image[gz.msgs.Image"]
         processes.append(subprocess.Popen(command, stdout=log, stderr=subprocess.STDOUT, start_new_session=True, env=env))
 
     def ready(self, node, wait, output, result, telemetry):
-        if not wait(lambda: self.recorder.ready() and self.pairs.ready(), 30):
-            raise RuntimeError("Full recorder/paired depth/calibration not ready")
+        if not wait(lambda: self.recorder.ready() and (self.pairs is None or self.pairs.ready()), 30):
+            result["recorder_readiness"] = self.recorder.readiness()
+            raise RuntimeError("Full recorder/depth/calibration not ready: " + json.dumps(result["recorder_readiness"]))
         additional = None
         if self.diagnostics is not None:
             if not wait(self.diagnostics.ready, 15):raise RuntimeError("Native global/local costmaps missing")
             from .planner_diagnostics import PLANNER_PARAMETERS
             additional = PLANNER_PARAMETERS
-        result["live_parameters"] = capture_live_parameters(node, wait, self.config["nav2"], self.config.get("navigation"), additional=additional, controller=self.config.get("controller"))
+        if self.plan.get("human_policy") == "crowd_orca_plus":
+            result["single_policy"] = {k: self.plan[k] for k in ["human_policy", "scenario", "seed", "fixture", "human_count", "episodes", "nav2_treatment", "human_navigation_algorithms", "safety_constraints"]}
+            if "synchronization_profile" in self.plan:
+                from dynamuhsim.simulation.warehouse_sync import parameter_contract
+                expected = parameter_contract()
+                expected["/controller_server"]["FollowPath.plugin"] = "nav2_mppi_controller::MPPIController"
+                expected["/map_server"] = dict(use_sim_time=True, yaml_filename=str(self.run_dir / "assets/warehouse.yaml"))
+                if self.plan.get("rviz"):
+                    expected["/rviz2"] = dict(use_sim_time=True)
+                result["live_parameters"] = capture_parameter_contract(node, wait, expected)
+                result["map_world_alignment"] = json.loads((self.run_dir / "preflight.json").read_text())["map_world_alignment"]
+            else:
+                result["live_parameters"] = dict(contract="unchanged shared pilot", runtime_sha256=result["runtime_nav_params_sha256"])
+        else:
+            result["live_parameters"] = capture_live_parameters(node, wait, self.config["nav2"], self.config.get("navigation"), additional=additional, controller=self.config.get("controller"))
         dump(output / "live_parameters.json", result["live_parameters"])
         self.recorder.event("ready", round(telemetry.simtime() * 1e9), scenario=self.plan["scenario"], seed=self.plan["seed"])
 
     def check_health(self):
         if self.recorder is not None and self.recorder.process.poll() is not None:
             raise RuntimeError("Recorder exited during capture; preserve the failed episode")
+        if self.recorder is not None and self.recorder.timestamp_errors:
+            raise RuntimeError("Capture timestamps regressed; preserve the failed episode")
 
     def started(self, start):
         self.recorder.event("goal_accepted", round(start * 1e9), goal_world=[-20., 0., 0.])
@@ -322,18 +425,64 @@ class CaptureContext:
             result["depth_pairs"] = self.pairs.close()
         if self.recorder is not None:
             result["recording"] = self.recorder.close()
-            if result["recording"]["returncode"] != 0 or not result["recording"]["metadata_present"]:
+            if (result["recording"]["returncode"] != 0 or not result["recording"]["metadata_present"]
+                    or result["recording"]["shutdown_escalated"] or result["recording"]["timestamp_errors"]
+                    or result["recording"]["missing_required_messages"]):
                 raise RuntimeError("MCAP recorder did not close successfully")
 
     def stop_server(self, guard, original_stop):
         from .transport_shutdown import stop_launch_bridges
         return stop_paused(guard, original_stop, before_stop=lambda: stop_launch_bridges(guard, self.run_dir / "episode/launch.log"))
 
+    def write_manifest(self, result):
+        """Publish a receipt after recorder and owned processes have shut down."""
+        gates = dict(episode_complete=result.get("status") == "MEASURED",
+                     physical_goal_reached=result.get("actual_goal_reached", False),
+                     recorder_clean=result.get("recording", {}).get("returncode") == 0
+                        and not result.get("recording", {}).get("shutdown_escalated", True),
+                     owned_process_cleanup=result.get("cleanup", {}).get("status") == "PASS")
+        raw_check = None
+        if result.get("recording", {}).get("metadata_present"):
+            try:
+                from .capture_recording import validate_recorded_messages
+                raw_check = validate_recorded_messages(self.run_dir / "episode/raw_bag")
+            except Exception as error:
+                raw_check = dict(passed=False, error=str(error))
+        gates["raw_topics_and_timestamps"] = raw_check is not None and raw_check["passed"]
+        audit_path = self.runtime_dir / "policy_audit.json"
+        policy_audit = json.loads(audit_path.read_text()) if audit_path.exists() else None
+        if self.plan.get("human_policy") == "crowd_orca_plus":
+            gates["single_orca_policy"] = (policy_audit is not None
+                and set(policy_audit.get("policy_predict_calls", {})) == {"crowd_sim_plus.envs.policy.orca_plus"}
+                and policy_audit.get("human_act_calls", 0) > 0
+                and policy_audit.get("human_act_calls") == policy_audit.get("safety_constraint_calls"))
+        if "synchronization_profile" in self.plan:
+            gates["localization_alignment"] = result.get("localization_alignment", {}).get("within_015m", False)
+        if self.plan.get("rviz"):
+            rviz_log = self.runtime_dir / "rviz.log"
+            text = rviz_log.read_text(errors="replace") if rviz_log.exists() else ""
+            gates["rviz_display"] = bool(text) and "[ERROR]" not in text and "incompatible QoS" not in text
+        receipt = dict(schema="dynamuhsim_capture_episode/1", plan=self.plan,
+                       status="PASS" if all(gates.values()) else "FAIL", gates=gates,
+                       raw_validation=raw_check, policy_audit=policy_audit,
+                       source_freeze=self.manifest, result=result,
+                       artifacts=dict(raw_bag="episode/raw_bag", worker_log="runtime/worker.log",
+                                      robot_parameters="runtime/nav2_runtime.yaml", sensor_config="runtime/mecanum_camera.sdf",
+                                      launch_log="episode/launch.log", recorder_log="episode/recorder.log"),
+                       historical_data_modified=False)
+        path = self.run_dir / "manifest.json"
+        with path.open("x") as stream:
+            stream.write(json.dumps(receipt, indent=2, allow_nan=False) + "\n")
+
 
 def capture_live_parameters(node, wait, treatment, navigation=None, *, additional=None, controller=None):
-    from rclpy.parameter_client import AsyncParameterClient
     expected = nav2_parameter_contract(treatment, navigation, controller=controller)
     expected.update(additional or {})
+    return capture_parameter_contract(node, wait, expected)
+
+
+def capture_parameter_contract(node, wait, expected):
+    from rclpy.parameter_client import AsyncParameterClient
     observed = {}
     for remote, parameters in expected.items():
         client = AsyncParameterClient(node, remote)
