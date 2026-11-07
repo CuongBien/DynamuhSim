@@ -1,0 +1,12 @@
+<mujocoinclude>
+  <compiler angle="radian"/>
+  <option timestep="0.002" integrator="implicitfast" cone="elliptic"/>
+  <default>
+    <default class="floor">
+      <geom type="box" group="0" contype="1" conaffinity="2" friction="1 0.005 0.0001" rgba="0.65 0.65 0.65 1"/>
+    </default>
+    <default class="wall">
+      <geom type="box" group="1" contype="4" conaffinity="2" rgba="0.45 0.47 0.50 1"/>
+    </default>
+  </default>
+</mujocoinclude>

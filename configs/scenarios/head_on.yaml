@@ -1,0 +1,14 @@
+id: head_on
+world_id: ${worlds.id}
+robot:
+  id: robot
+  initial_pose: [-3.0, -0.2, 0.0]
+  goal: [3.0, -0.2]
+humans:
+  - id: human_01
+    initial_pose: [3.0, 0.2, -3.141592653589793]
+    goal: [-3.0, 0.2]
+human_profile:
+  radius_m: 0.25
+  max_speed_mps: 1.4
+  max_acceleration_mps2: 1.5

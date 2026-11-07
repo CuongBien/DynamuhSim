@@ -1,0 +1,70 @@
+"""Run a headless physics smoke check and print measurements as JSON."""
+
+from argparse import ArgumentParser
+from dataclasses import asdict
+from json import dumps
+from time import perf_counter
+
+from narrow_nav.core.actions import RobotAction
+from narrow_nav.core.types import Twist2D
+
+from .configuration import compose_config
+from .mujoco_engine import MuJoCoEngine
+
+
+def main() -> None:
+    parser = ArgumentParser(description=__doc__)
+    parser.add_argument("--ticks", type=int, default=40)
+    parser.add_argument("--vx", type=float, default=0.0)
+    parser.add_argument("--vy", type=float, default=0.0)
+    parser.add_argument("--wz", type=float, default=0.0)
+    parser.add_argument("--config-dir", default="configs")
+    parser.add_argument("overrides", nargs="*")
+    args = parser.parse_args()
+    if args.ticks < 1:
+        parser.error("--ticks must be positive")
+    config = compose_config(args.config_dir, args.overrides)
+    command = Twist2D(args.vx, args.vy, args.wz)
+    engine = MuJoCoEngine()
+    try:
+        engine.load(config)
+        engine.reset()
+        start = engine.get_ground_truth().robot
+        begin = perf_counter()
+        for _ in range(args.ticks):
+            robot = engine.get_ground_truth().robot
+            result = engine.step(RobotAction(robot.entity_id, command, robot.timestamp))
+            if result.terminated or result.truncated:
+                break
+        elapsed = perf_counter() - begin
+        end = engine.get_ground_truth().robot
+        metadata = engine.get_metadata()
+        print(
+            dumps(
+                {
+                    "robot_profile": config.robots.id,
+                    "mujoco": metadata.engine_version,
+                    "episode_seed": metadata.episode.config.episode_seed,
+                    "physics_steps": metadata.clocks.physics_steps,
+                    "robot_ticks": end.timestamp.tick,
+                    "simulated_seconds": end.timestamp.time_s,
+                    "step_wall_seconds": elapsed,
+                    "sim_seconds_per_wall_second": end.timestamp.time_s / elapsed,
+                    "displacement_world_m": [
+                        end.pose.x - start.pose.x,
+                        end.pose.y - start.pose.y,
+                    ],
+                    "yaw_rad": end.pose.yaw,
+                    "clearance": asdict(engine.get_clearance()),
+                    "status": metadata.status,
+                    "unavailable_sensors": metadata.unavailable_sensors,
+                },
+                indent=2,
+            )
+        )
+    finally:
+        engine.close()
+
+
+if __name__ == "__main__":
+    main()

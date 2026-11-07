@@ -1,0 +1,12 @@
+"""Inspect compiled collision geometry without exposing native simulator objects."""
+
+from pathlib import Path
+
+from .mujoco.geometry import inspect_mjcf
+from .world_builder import BuiltWorld
+from .world_geometry import WorldCollision
+
+
+def inspect_world(world: BuiltWorld | Path) -> WorldCollision:
+    """Return free-space and clear-width queries for a built or on-disk scene."""
+    return inspect_mjcf(world.mjcf if isinstance(world, BuiltWorld) else world)

@@ -1,0 +1,10 @@
+<mujoco model="pedestrian">
+  <worldbody>
+    <body name="pedestrian" mocap="true">
+      <geom name="collision" type="cylinder" size="0.25 0.85" pos="0 0 0.85"
+            group="3" contype="8" conaffinity="2" rgba="0.55 0.25 0.22 0.35"/>
+      <geom name="visual" type="cylinder" size="0.20 0.78" pos="0 0 0.78"
+            mass="0" group="5" contype="0" conaffinity="0" rgba="0.72 0.30 0.22 1"/>
+    </body>
+  </worldbody>
+</mujoco>

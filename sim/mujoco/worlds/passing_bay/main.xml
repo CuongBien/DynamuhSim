@@ -1,0 +1,19 @@
+<mujoco model="passing_bay">
+  <include file="../../templates/world_defaults.xml" />
+  <worldbody>
+    <geom class="floor" name="floor_0" pos="0 0 -0.05" size="5 0.7 0.05" />
+    <geom class="floor" name="floor_1" pos="0 1.2 -0.05" size="1.25 0.5 0.05" />
+    <geom class="wall" name="wall_0" pos="0 -0.775 1.25" size="5.15 0.075 1.25" />
+    <geom class="wall" name="wall_1" pos="5.075 0 1.25" size="0.075 0.7 1.25" />
+    <geom class="wall" name="wall_2" pos="3.275 0.775 1.25" size="1.875 0.075 1.25" />
+    <geom class="wall" name="wall_3" pos="1.325 1.2 1.25" size="0.075 0.5 1.25" />
+    <geom class="wall" name="wall_4" pos="0 1.775 1.25" size="1.4 0.075 1.25" />
+    <geom class="wall" name="wall_5" pos="-1.325 1.2 1.25" size="0.075 0.5 1.25" />
+    <geom class="wall" name="wall_6" pos="-3.275 0.775 1.25" size="1.875 0.075 1.25" />
+    <geom class="wall" name="wall_7" pos="-5.075 0 1.25" size="0.075 0.7 1.25" />
+    <site name="robot/start" pos="-3 0 0.005" size="0.045 0.005" type="cylinder" rgba="0.2 0.4 0.8 0.6" />
+    <site name="robot/goal" pos="3 0 0.005" size="0.045 0.005" type="cylinder" rgba="0.2 0.7 0.4 0.6" />
+    <site name="human_01/start" pos="3 0 0.005" size="0.045 0.005" type="cylinder" rgba="0.2 0.4 0.8 0.6" />
+    <site name="human_01/goal" pos="0 1.2 0.005" size="0.045 0.005" type="cylinder" rgba="0.2 0.7 0.4 0.6" />
+  </worldbody>
+</mujoco>
