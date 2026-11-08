@@ -37,6 +37,17 @@ Robot dùng một trong hai profile MuJoCo hiện có. Người trong scenario d
 
 Các phần phụ thuộc Gazebo/ROS như HuNav/RVO2, Nav2, bridge, bản đồ PGM, bộ chạy dataset, trolley động, animation COLLADA và pipeline camera/depth thuộc migration riêng. Tên `arena_rvo2` và `school_arena_hunav` dùng để nhận diện bố cục nguồn. Những cấu hình này chạy được vòng vật lý robot, reset, đọc trạng thái và contact với runtime hiện tại.
 
+### Hốc nhường đường trong các world trường học
+
+Geom có tiền tố `yield_bay_` tạo các hốc ba vách màu xanh, với miệng riêng trên tường hành lang và sàn liền ở Z = 0. Khoảng thông thủy là 0,90 m dọc hành lang và 0,95 m tính từ mặt tường vào hốc. Robot có đường kính footprint đến 0,50 m có thể đi thẳng vào giữa và đỗ lọt sau miệng hốc. Cửa lớp nằm ở hai bên vách ngăn. Trong `school_arena_1`, jamb của một số hốc thu hẹp hai cửa lớp liền kề xuống 0,70 m.
+
+- `school_arena`, `school_arena_hunav` và `school_floor` có 13 hốc mỗi bản. Sáu hốc dọc A cách nhau 4,90 m, B–E có một hốc mỗi đoạn, và ba hốc dọc F cách nhau 4,70–4,90 m.
+- `school_arena_1` có 8 hốc trên trục X, từ −14 m đến +14 m với bước 4 m.
+
+Các bản school lớn có tường biên phía đông nối đến lớp 11. Giữa tường này và khối cầu thang có lối sàn phẳng rộng thông thủy 1,08 m, mở cả hai đầu để nối trực tiếp hành lang B và F. Tuyến vòng qua C–D–E cũng đi được. Vách đầu đông nam khép mép hành lang A–B. Trong `school_arena_1`, tường phía nam nối từ phòng 15 đến tường cuối hành lang. Hai bản `school_arena` và `school_arena_hunav` đặt ba lô phía tây sát đoạn tường đặc để giữ thông thủy cho robot khi biên đã khép kín.
+
+Test kiểm thông thủy và lối vào của từng hốc trên MJCF đã biên dịch, lối qua cửa lớp ở mẫu đầu tiên và quá trình mecanum chạy bằng actuator rồi dừng trong hốc của `school_floor`.
+
 ## Hình ảnh người Quaternius
 
 `simulation.human_visuals=quaternius` dùng hai bundle chuẩn hóa `casual_male` và `casual_female` trong `sim/mujoco/assets/humans/`. Đây là các mesh mặc quần áo Smooth Casual, cao 1,75 m và 1,65 m, với rig 42 bone và màu material gốc. Bundle giữ URL, CC0-1.0, SHA-256 của FBX nguồn và SHA-256 mảng runtime. Hai bundle là bản sao theo byte của dữ liệu đã dựng cho demo. Quy trình dựng lại dùng converter Blender ngoại tuyến trong `humans/`. [Quy trình và nguồn](../../humans/README.md#sources)

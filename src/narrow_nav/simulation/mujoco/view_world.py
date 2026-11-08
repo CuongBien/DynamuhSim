@@ -1,7 +1,7 @@
 """Open a configured world in the interactive MuJoCo viewer."""
 
 from argparse import ArgumentParser
-from math import atan, degrees
+from math import atan, atan2, degrees
 from pathlib import Path
 from time import perf_counter, sleep
 
@@ -12,6 +12,18 @@ from ..configuration import HumanProp, compose_config
 from ..world_builder import MJCF_ROOT, build_world
 from ..world_geometry import Circle
 from .human_visuals import HumanVisuals
+
+
+def _bay_camera_target(
+    model: mujoco.MjModel, bay_id: str
+) -> tuple[float, float, float]:
+    prefix = f"yield_bay_{bay_id}"
+    low, high, back = (
+        model.geom(f"{prefix}_{wall}") for wall in ("low", "high", "back")
+    )
+    x, y = (low.pos[:2] + high.pos[:2]) / 2
+    azimuth = degrees(atan2(back.pos[1] - y, back.pos[0] - x))
+    return float(x), float(y), azimuth
 
 
 def main() -> None:
@@ -29,6 +41,9 @@ def main() -> None:
     focus_options.add_argument(
         "--focus-robot", action="store_true", help="start with a close-up of the robot"
     )
+    focus_options.add_argument(
+        "--focus-bay", metavar="ID", help="start above a school yield bay, e.g. a_01"
+    )
     args = parser.parse_args()
 
     world = build_world(compose_config(args.config_dir, args.overrides))
@@ -45,6 +60,12 @@ def main() -> None:
     model = mujoco.MjSpec.from_string(
         world.mjcf, assets=dict(world.visual_assets)
     ).compile()
+    bay_focus = None
+    if args.focus_bay is not None:
+        try:
+            bay_focus = _bay_camera_target(model, args.focus_bay)
+        except KeyError:
+            parser.error(f"yield bay {args.focus_bay!r} is not in the selected world")
     walls = tuple(
         wall.bounds if isinstance(wall, Circle) else wall
         for wall in world.scene.collision.walls
@@ -58,11 +79,11 @@ def main() -> None:
     camera = mujoco.MjvCamera()
     mujoco.mjv_defaultFreeCamera(model, camera)
     frame_height = 1.15 * max(y_max - y_min, (x_max - x_min) / 1.25)
-    view.fovy = (
-        42
-        if focus is not None or args.focus_robot
-        else degrees(2 * atan(frame_height / (2 * camera.distance)))
-    )
+    if focus is not None or args.focus_robot or bay_focus is not None:
+        view.fovy = 42
+        model.vis.map.znear = min(model.vis.map.znear, 0.05 / model.stat.extent)
+    else:
+        view.fovy = degrees(2 * atan(frame_height / (2 * camera.distance)))
     model.vis.headlight.active = 1
     model.vis.headlight.ambient[:] = (0.65, 0.65, 0.65)
     model.vis.headlight.diffuse[:] = (0.55, 0.55, 0.55)
@@ -76,7 +97,13 @@ def main() -> None:
             mujoco.mjv_defaultFreeCamera(model, window.cam)
             window.opt.geomgroup[3] = 0  # Human collision footprints.
             window.opt.geomgroup[5] = 1  # Actor visual meshes and bodies.
-            if args.focus_robot:
+            if bay_focus is not None:
+                x, y, azimuth = bay_focus
+                window.cam.lookat[:] = (x, y, 0.40)
+                window.cam.azimuth = azimuth
+                window.cam.elevation = -76
+                window.cam.distance = 5.5
+            elif args.focus_robot:
                 pose = world.scene.robot.pose
                 window.cam.lookat[:] = (pose.x, pose.y, 0.25)
                 window.cam.azimuth = degrees(pose.yaw) + 145

@@ -60,6 +60,21 @@ env -u DISPLAY -u WAYLAND_DISPLAY .venv/bin/python -m narrow_nav.simulation.smok
 
 Lệnh đầu mở trạng thái ban đầu để kiểm tra bố cục. Lệnh thứ hai điều khiển bánh robot qua runtime và chạy 1.000 bước vật lý. Với vòng điều khiển riêng, nạp cùng cấu hình vào `MuJoCoEngine.load()`, gọi `reset()` rồi truyền `RobotAction` có timestamp hiện tại vào `step()`. Dùng `experiments.duration_ns=90000000000` nếu cần ngân sách 90 s cho các hành trình dài. [Nguồn hình học, bảng world và giới hạn](docs/architecture/04_MUJOCO_MODELING.md#world-chuyển-từ-dynamuhsim)
 
+### Hốc nhường đường trong trường học
+
+Các hốc màu xanh có ba vách collision và miệng riêng mở ra hành lang. Mỗi hốc rộng thông thủy 0,90 m và sâu 0,95 m. Các bản school lớn có 13 hốc phân bố trên sáu đoạn hành lang. Bản `school_arena_1` có 8 hốc cách nhau 4 m.
+
+```bash
+# Toàn cảnh các hốc, với một robot để dễ quan sát.
+.venv/bin/python -m narrow_nav.simulation.mujoco.view_world \
+  worlds=school_floor scenarios=school_floor_baseline robots=mecanum_robot
+
+# Xem cận robot đỗ trong hốc đầu tiên và hướng ra miệng hốc.
+.venv/bin/python -m narrow_nav.simulation.mujoco.view_world --focus-bay a_01 \
+  worlds=school_floor scenarios=school_floor_baseline robots=mecanum_robot \
+  'scenarios.robot.initial_pose=[-12.55,-9.10,1.5707963267948966]'
+```
+
 ### Mẫu người Quaternius
 
 Runtime và viewer dùng mặc định mesh nam/nữ Quaternius đã đóng gói trong checkout. Người có animation đứng chờ và giữ pose XY/yaw của body vật lý. Hình trụ collision nằm trong nhóm hiển thị ẩn. Dùng `simulation.human_visuals=proxy` để xem lại hình trụ minh họa hoặc chạy cấu hình gọn hơn khi chỉ đo vật lý.
