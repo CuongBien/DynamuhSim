@@ -4,7 +4,7 @@ NarrowNav nghiên cứu tác động của dự đoán chuyển động người
 
 ## Phạm vi
 
-TASK 00 chốt tài liệu, quyền sở hữu và interface. TASK 01 triển khai các kiểu dữ liệu, cổng `core` và bộ nạp cấu hình Hydra. Việc triển khai MuJoCo runtime, controller, cảm biến, dataset, mô hình dự đoán, Risk Map, PPO và ROS 2 thuộc các task sau. ADR xác lập MuJoCo là engine duy nhất cho mọi thí nghiệm mô phỏng. [ADR-0001](../decisions/ADR-0001-mujoco-only.md)
+Checkout hiện có kiểu dữ liệu và cổng `core`, bộ nạp Hydra, world MJCF và runtime MuJoCo của TASK 03. Việc tiếp theo là nối controller người và kiểm chứng tương tác trong TASK 04A. Bảng dưới mô tả thiết kế toàn hệ thống, gồm cả các module dự kiến. MuJoCo là engine duy nhất cho các thí nghiệm mô phỏng. [Lộ trình](../ROADMAP.md) · [ADR-0001](../decisions/ADR-0001-mujoco-only.md)
 
 | Lớp | Trách nhiệm thiết kế |
 | --- | --- |
@@ -18,4 +18,4 @@ Các lớp nghiên cứu sử dụng hợp đồng phiên bản hóa. Robot poli
 
 ## Trình tự kiểm chứng
 
-Xác nhận quy ước tọa độ, đồng hồ và chuyển động trước khi đối chứng hành vi người. Chốt độ tin cậy của các kênh cảm biến và quy tắc chia tập trước khi huấn luyện dự đoán. Đóng băng baseline và điều kiện so sánh trước khi đánh giá navigation hoặc chuyển giao sang robot thật. [Lộ trình](../ROADMAP.md)
+Xác nhận tọa độ, đồng hồ và người di chuyển trước khi đối chứng hành vi. Pilot dataset cần cả hành vi tương tác đã kiểm chứng, cảm biến và bộ ghi episode. Chốt QA và split trước khi huấn luyện dự đoán. Khóa baseline và điều kiện so sánh trước khi đánh giá điều hướng hoặc chuyển giao sang robot thật. [Lộ trình](../ROADMAP.md)

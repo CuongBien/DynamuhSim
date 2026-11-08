@@ -4,7 +4,9 @@ Dự án nghiên cứu dự đoán quỹ đạo di chuyển của người để
 
 ## Trạng thái
 
-TASK 03 cung cấp runtime episode headless cho hành lang thẳng, góc khuất và hốc tránh, với robot vi sai hoặc mecanum và người mocap đứng yên. Package Python `narrow_nav` giữ các hợp đồng dữ liệu v1. Điểm vào của Hydra là `configs/config.yaml`. Hai gitlink có sẵn dưới `experiments/social_navigation/vendor/` nằm ngoài package.
+**Hiện tại · TASK 03.** Runtime episode headless chạy với robot vi sai hoặc mecanum và người mocap đứng yên. `humans=scripted` chọn cấu hình Hydra. Runtime vẫn phát lệnh vận tốc zero cho người, còn các slot cảm biến trả `missing`. Các hợp đồng dữ liệu v1 đã có trong package `narrow_nav`. [Runtime hiện tại](docs/architecture/05_MUJOCO_RUNTIME.md)
+
+**Việc tiếp theo · TASK 04A.** Nối backend `scripted` và kiểm chứng một người đi đến đích khi robot đứng yên. Sau đó đối chứng ORCA và Social Force, rồi thu dataset hành vi khi cảm biến và đường ghi/đọc episode đã qua kiểm định. [Lộ trình và tiêu chí chuyển bước](docs/ROADMAP.md) · [Giao thức hành vi](docs/protocols/HUMAN_BEHAVIOR_PROTOCOL.md)
 
 ## Cài đặt và kiểm tra
 
@@ -27,7 +29,7 @@ narrow-nav-config worlds=corridor_090 scenarios=corridor_090 humans=scripted \
   seed=123 simulation.control_dt_ns=40000000
 ```
 
-Lệnh trên chọn hành lang rộng 0,90 m, bước điều khiển 40 ms, bước vật lý 2 ms và thời lượng episode 20 s. Dùng `--config-dir` khi gọi từ ngoài repository. Chuyển stdout vào `runs/<run_id>/resolved.yaml` để giữ bản YAML đã resolve. Tính SHA-256 trên chính các byte đã lưu để gắn vào metadata.
+Lệnh trên resolve YAML cho hành lang rộng 0,90 m, bước điều khiển 40 ms, bước vật lý 2 ms và ngân sách episode 20 s. Dùng `--config-dir` khi gọi từ ngoài repository. Chuyển stdout vào `runs/<run_id>/resolved.yaml` để giữ bản YAML đã resolve. Tính SHA-256 trên chính các byte đã lưu để gắn vào metadata.
 
 Trong cấu hình mẫu, `initial_pose` là `[x, y, yaw]`, `goal` là `[x, y]` và cả hai dùng frame `world`. Chiều dài theo X và chiều rộng thông thủy theo Y được đo từ tâm hành lang, với tọa độ tính bằng mét và yaw bằng radian.
 
@@ -72,7 +74,7 @@ Với `blind_corner`, `passing_bay` và các world `school_*`, thêm `corridor_w
   worlds=school_floor scenarios=school_floor robots=mecanum_robot corridor_width=w070
 ```
 
-[Lệnh chạy từng world và cách tái sử dụng cho dataset](docs/MUJOCO_WORLD_COMMANDS.md) · [Ma trận và cách đo](docs/architecture/04_MUJOCO_MODELING.md#ngữ-cảnh-bề-rộng-hành-lang)
+[Lệnh mở và kiểm tra từng world](docs/MUJOCO_WORLD_COMMANDS.md) · [Ma trận và cách đo](docs/architecture/04_MUJOCO_MODELING.md#ngữ-cảnh-bề-rộng-hành-lang)
 
 ### Hốc nhường đường trong trường học
 
@@ -113,6 +115,7 @@ env -u DISPLAY -u WAYLAND_DISPLAY python -m narrow_nav.simulation.smoke --ticks 
 
 | Nội dung | Tài liệu |
 | --- | --- |
+| Trạng thái triển khai và thứ tự công việc | [Lộ trình](docs/ROADMAP.md), [Cấu trúc checkout](Architect.md) |
 | Phạm vi hệ thống, quyền sở hữu và luồng dữ liệu | [Tổng quan](docs/architecture/00_SYSTEM_OVERVIEW.md), [Ranh giới module](docs/architecture/01_MODULE_BOUNDARIES.md), [Luồng dữ liệu](docs/architecture/02_DATA_FLOW.md), [Quy tắc phụ thuộc](docs/architecture/03_DEPENDENCY_RULES.md) |
 | Dữ liệu giữa các module | [State và action](docs/schemas/STATE_AND_ACTION_SCHEMA.md), [Episode](docs/schemas/EPISODE_SCHEMA.md) |
 | Giả thuyết và đối chứng | [Mục tiêu](docs/research/RESEARCH_OBJECTIVES.md), [Câu hỏi](docs/research/RESEARCH_QUESTIONS.md), [Ma trận baseline](docs/research/BASELINE_MATRIX.md) |

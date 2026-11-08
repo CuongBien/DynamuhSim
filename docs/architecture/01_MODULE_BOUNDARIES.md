@@ -1,13 +1,13 @@
 # 01 · Ranh giới module
 
-TASK 03 có bộ điều phối episode, điều khiển drivetrain và adapter MuJoCo bên cạnh bộ dựng MJCF. Controller hành vi người và các module nghiên cứu sẽ được bổ sung theo lộ trình. [API runtime](05_MUJOCO_RUNTIME.md)
+TASK 03 có bộ điều phối episode, điều khiển drivetrain và adapter MuJoCo bên cạnh bộ dựng MJCF. Bảng dưới mô tả quyền sở hữu, gồm cả các phần dự kiến. `src/narrow_nav/humans/` là vị trí cho backend điều hướng người ở TASK 04A. Thư mục `humans/` ở gốc checkout chứa demo hình ảnh Quaternius. [API runtime](05_MUJOCO_RUNTIME.md) · [Lộ trình](../ROADMAP.md)
 
 ## Nền tảng mô phỏng
 
 | Module và vị trí | Sở hữu | Hợp đồng qua biên |
 | --- | --- | --- |
 | **core** · `src/narrow_nav/core/` | Kiểu state, action, observation, context và dữ liệu episode. Kiểm tra dữ liệu dùng chung. Khai báo cổng `SimulatorAdapter`, `RobotPolicy`, `HumanControllerBackend`. | Kiểu giá trị độc lập với engine. Giao diện adapter dùng kiểu `core` ở hai phía. Core không nạp YAML, asset hay ghi output. |
-| **configs** · `configs/` | YAML có phiên bản trong `simulation/`, `worlds/`, `scenarios/`, `humans/`, `robots/` và `experiments/`. | `simulation/configuration.py` compose các nhóm Hydra, resolve tham chiếu và kiểm tra ID, kích thước, bounds, giới hạn, seed và đồng hồ. Kiểm định frame, backend thực thi và fingerprint tài nguyên thuộc runtime về sau. |
+| **configs** · `configs/` | YAML có phiên bản trong `simulation/`, `worlds/`, `corridor_width/`, `scenarios/`, `humans/`, `robots/` và `experiments/`. | `simulation/configuration.py` compose các nhóm Hydra, resolve tham chiếu và kiểm tra ID, kích thước, bounds, giới hạn, seed và đồng hồ. Runtime ghi fingerprint tài nguyên. Kiểm định backend thực thi và frame cảm biến thuộc các mốc triển khai tương ứng. |
 | **sim/mujoco** · `sim/mujoco/` | MJCF tham chiếu trong `worlds/`, actor trong `models/` và cấu hình MJCF chung trong `templates/`. | Bộ dựng nạp template từ đường dẫn đã resolve. Adapter quản lý việc biên dịch và ánh xạ đối tượng native sang ID nghiệp vụ. [Mô hình MuJoCo](04_MUJOCO_MODELING.md) |
 | **simulation** · `src/narrow_nav/simulation/` | Vòng đời episode, đồng hồ điều khiển, routing quan sát/ground truth, dựng `HumanContext`, giới hạn chuyển động chung, dừng episode và công bố bản ghi. | Điều phối gọi các cổng của `core`. Adapter tại `simulation/mujoco/` nắm model/data native, ánh xạ lệnh sang cơ cấu, chạy substep, đọc trạng thái, tiếp xúc và sensor, rồi trả các snapshot đã tách khỏi bộ nhớ engine. |
 | **humans** · `src/narrow_nav/humans/` | Các backend ORCA, Social Force, scripted và backend mở rộng, cùng trạng thái nội bộ riêng. | `HumanControllerBackend.reset` nhận config backend, seed luồng và ID người. `propose(HumanContext)` trả đúng một `HumanMotion` cho mỗi ID người của episode. Backend chỉ đề xuất lệnh. Limiter chung và cập nhật vị trí vật lý thuộc runtime. |

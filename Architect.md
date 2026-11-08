@@ -1,123 +1,17 @@
+# Cấu trúc NarrowNav
 
-NarrowNav-Research/
-│
-├── README.md
-├── AGENTS.md                  # Quy tắc làm việc cho Codex/AI
-├── CONTRIBUTING.md
-├── pyproject.toml             # Python package
-├── uv.lock                    # Khóa dependency Python
-├── .gitignore
-├── dvc.yaml                   # Pipeline dữ liệu
-│
-├── docs/                      # [01] TÀI LIỆU NGHIÊN CỨU
-│   ├── architecture/
-│   ├── research/
-│   ├── protocols/
-│   ├── schemas/
-│   ├── decisions/
-│   └── migration/
-│
-├── configs/                   # [02] CẤU HÌNH TẬP TRUNG
-│   ├── simulation/
-│   ├── worlds/
-│   ├── scenarios/
-│   ├── human_controllers/
-│   ├── robots/
-│   ├── sensors/
-│   ├── dataset/
-│   ├── world_model/
-│   ├── navigation/
-│   ├── evaluation/
-│   └── experiments/
-│
-├── sim/                       # [03] TÀI NGUYÊN MUJOCO
-│   └── mujoco/
-│       ├── models/
-│       │   ├── robots/
-│       │   ├── humans/
-│       │   └── objects/
-│       ├── sensors/
-│       ├── worlds/
-│       ├── assets/
-│       └── templates/
-│
-├── src/                       # [04] MÃ NGUỒN NGHIÊN CỨU
-│   └── narrow_nav/
-│       ├── core/
-│       ├── simulation/
-│       ├── humans/
-│       ├── perception/
-│       ├── dataset/
-│       ├── prediction/
-│       ├── risk/
-│       ├── navigation/
-│       ├── evaluation/
-│       └── visualization/
-│
-├── ros2_ws/                   # [05] ROS 2 / NAV2 / ROBOT
-│   └── src/
-│       ├── narrow_nav_interfaces/
-│       ├── narrow_nav_bridge/
-│       ├── narrow_nav_bringup/
-│       ├── narrow_nav_description/
-│       └── narrow_nav_hardware/
-│
-├── scripts/                   # [06] ENTRYPOINTS / CLI
-│   ├── simulation/
-│   ├── dataset/
-│   ├── training/
-│   ├── evaluation/
-│   └── deployment/
-│
-├── data/                      # [07] DỮ LIỆU NGHIÊN CỨU
-│   ├── external/
-│   ├── raw/
-│   ├── validated/
-│   ├── processed/
-│   ├── splits/
-│   └── manifests/
-│
-├── experiments/               # [08] ĐỊNH NGHĨA THỰC NGHIỆM
-│   ├── human_behavior/
-│   ├── dataset_validation/
-│   ├── trajectory_prediction/
-│   ├── navigation/
-│   ├── ablations/
-│   ├── generalization/
-│   └── sim_to_real/
-│
-├── runs/                      # [09] OUTPUT MỖI LẦN CHẠY
-│   ├── simulation/
-│   ├── data_generation/
-│   ├── training/
-│   └── evaluation/
-│
-├── artifacts/                 # [10] CHECKPOINT / MODEL
-│   ├── checkpoints/
-│   ├── models/
-│   └── releases/
-│
-├── tests/                     # [11] KIỂM THỬ
-│   ├── unit/
-│   ├── integration/
-│   ├── simulation/
-│   ├── data_quality/
-│   └── regression/
-│
-├── reports/                   # [12] KẾT QUẢ ĐÃ XÁC THỰC
-│   ├── dataset/
-│   ├── benchmark/
-│   ├── prediction/
-│   ├── navigation/
-│   └── figures/
-│
-├── paper/                     # [13] CÔNG BỐ KHOA HỌC
-│   ├── manuscript/
-│   ├── tables/
-│   ├── figures/
-│   └── supplementary/
-│
-└── deployment/                # [14] ĐÓNG GÓI & TRIỂN KHAI
-    ├── docker/
-    ├── environments/
-    └── hardware_configs/
+## Có trong checkout
+
+| Vị trí | Nội dung |
+| --- | --- |
+| `configs/` | Cấu hình Hydra cho mô phỏng, world, bề rộng hành lang, scenario, profile người, robot và smoke test. Nhóm profile người là `configs/humans/`. |
+| `sim/mujoco/` | World, MJCF actor, template và asset. |
+| `src/narrow_nav/core/` | Kiểu dữ liệu và cổng v1, gồm `HumanControllerBackend`. |
+| `src/narrow_nav/simulation/` | Runtime episode, bộ dựng world, adapter MuJoCo và các điểm vào để kiểm tra cấu hình, xem world và chạy smoke. |
+| `src/narrow_nav/visualization/`, `humans/` | Mã skin và animation dùng chung cùng demo Quaternius. |
+| `experiments/social_navigation/vendor/` | Gitlink Python-RVO2 và SocNavGym để tham khảo khi tích hợp backend. |
+| `tests/` | Kiểm thử đơn vị, tích hợp và mô phỏng. |
+
+## Đang lên kế hoạch
+
+Backend điều hướng người đặt ở `src/narrow_nav/humans/` theo hợp đồng của `core`. Mốc đầu là thực thi `scripted` qua runtime MuJoCo. Module dataset, dự báo, điều hướng và tích hợp ROS 2 thuộc các mốc sau. Khi ghi kết quả thực nghiệm, đặt cấu hình đã resolve, manifest và output dưới `runs/<run_id>/`. [Lộ trình](docs/ROADMAP.md) · [Ranh giới module](docs/architecture/01_MODULE_BOUNDARIES.md)

@@ -11,6 +11,11 @@ Giao thức này quy định các cổng kiểm định khi có runtime. Trướ
 | G4 · Tái lập | Lặp lại cùng seed, cấu hình, phần mềm và nền tảng. So spawn, ID entity, tick, trạng thái kết thúc và chuỗi mẫu. Dùng so sánh chính xác cho ID/tick và dung sai đã khai báo cho đại lượng liên tục. Đổi một seed trong fixture có ngẫu nhiên để kiểm ngẫu nhiên thực sự đi qua đúng luồng. |
 | G5 · Sẵn sàng đối chứng | Kiểm manifest, hình học, profile chuyển động, snapshot ban đầu và robot policy giữa các cặp. Chạy pilot trên các nhóm scenario. Chốt rule tính metric và điều kiện lỗi trước khi mở tập đánh giá. |
 
+## Áp dụng theo mốc
+
+- TASK 04A kiểm cấu hình, đồng hồ, vận tốc thực thi, khả năng tái lập và các loại tiếp xúc hoặc phép đo khoảng hở mà profile hành vi công bố. Dùng lệnh robot cố định và danh sách sensor rỗng cho fixture hành vi ban đầu. Giữ cấu hình và số đo để tái hiện lần chạy. [Giao thức hành vi](HUMAN_BEHAVIOR_PROTOCOL.md)
+- TASK 04B kiểm thêm G3 và đối chiếu episode đã ghi với kết quả runtime, gồm timestamp, prefix hợp lệ, trạng thái kết thúc và quyền truy cập từng kênh. TASK 04C dùng manifest hoàn chỉnh và các cặp nhánh để kiểm QA và split trước khi công bố tập huấn luyện. [Lộ trình](../ROADMAP.md) · [Schema episode](../schemas/EPISODE_SCHEMA.md)
+
 ## Tính số đo và xử lý lỗi
 
 - Tính va chạm theo cặp ID đã phân loại. Dùng sự kiện tiếp xúc trong toàn khoảng step để xác định có va chạm. Nếu cần số đợt va chạm, gộp các mẫu tiếp xúc liên tiếp của cùng cặp theo quy tắc đã chốt.

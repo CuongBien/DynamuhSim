@@ -1,5 +1,7 @@
 # State và action
 
+Runtime TASK 03 hiện áp lệnh cho robot và trả lệnh người bằng zero cùng các slot cảm biến `missing`. Hợp đồng dưới đây cũng quy định các cổng và quy tắc cần đáp ứng khi nối backend người ở TASK 04A và nguồn cảm biến ở TASK 04B. [Runtime hiện tại](../architecture/05_MUJOCO_RUNTIME.md) · [Lộ trình](../ROADMAP.md)
+
 Hợp đồng logic `schema_version = 1` cho dữ liệu qua cổng `core`. Kiểu lưu trên đĩa sẽ được chọn khi có task ghi episode. Các trường dưới đây là bắt buộc trừ khi được ghi rõ là tùy chọn.
 
 ## Hệ tọa độ, đơn vị và định danh

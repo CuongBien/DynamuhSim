@@ -17,7 +17,9 @@
 | Người | `simulation.human_control_dt_ns` | 100 ms |
 | Quan sát | `simulation.observation_dt_ns` | 50 ms |
 
-Tất cả period là số nguyên dương và chia hết cho bước vật lý. Đồng hồ người và quan sát có thể lệch biên tick robot. Metadata công bố mốc lịch gần nhất của từng đồng hồ. Mỗi step robot tăng đúng một tick và chạy đủ substep. Sai lệch giữa thời gian MuJoCo và lưới nguyên được kiểm bằng dung sai lớn hơn giữa 1 ns và `1e-10 × thời gian mô phỏng`. Người giữ pose spawn ở TASK 03. Lịch người và lịch quan sát hiện ghi nhận mốc đến hạn, còn controller và nguồn lấy mẫu sẽ được nối vào sau.
+Tất cả period là số nguyên dương và chia hết cho bước vật lý. Đồng hồ người và quan sát có thể lệch biên tick robot. Metadata công bố mốc lịch gần nhất của từng đồng hồ. Mỗi step robot tăng đúng một tick và chạy đủ substep. Sai lệch giữa thời gian MuJoCo và lưới nguyên được kiểm bằng dung sai lớn hơn giữa 1 ns và `1e-10 × thời gian mô phỏng`.
+
+Ở TASK 03, `humans=scripted` chọn YAML, `step()` tạo lệnh người bằng zero và adapter chỉ áp lệnh bánh robot. Lịch người và quan sát hiện ghi mốc đến hạn. TASK 04A nối backend người và thực thi lệnh người, TASK 04B bổ sung nguồn lấy mẫu. [Lộ trình](../ROADMAP.md)
 
 Bộ điều khiển giới hạn chuẩn Euclid của vận tốc phẳng, biên vận tốc góc, và tốc độ quay bánh theo profile. Sau đó nội suy từ lệnh limited trước với một hệ số đủ thỏa giới hạn gia tốc tuyến tính và góc. Vi sai yêu cầu vận tốc ngang bằng zero. Mecanum chấp nhận đủ ba thành phần twist. Adapter giữ tốc độ bánh mục tiêu trong tick và MuJoCo tính chuyển động từ mô-men, ma sát, trọng lực và tiếp xúc. `executed` lấy dịch chuyển thực chia cho thời lượng tick, dùng frame robot tại đầu khoảng và tổng biến thiên yaw qua các substep. Ưu tiên kết thúc là contact robot nếu cấu hình bật, đạt đích, rồi hết ngân sách tick.
 

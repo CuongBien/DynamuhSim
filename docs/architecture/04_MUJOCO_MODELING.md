@@ -14,7 +14,7 @@ World dùng mét, radian, XY nằm ngang, +Z hướng lên và mặt sàn ở Z 
 
 | World | Hình học và biến cấu hình | Số đo mặc định |
 | --- | --- | --- |
-| `corridor` | World tham số giữ cho fixture và các lệnh cũ. `worlds.length_m` và `worlds.width_m` đặt kích thước. Ma trận nghiên cứu dùng ba world cố định 30 m. | Dài 10 m, thông thủy 2,0 m. |
+| `corridor` | World tham số dùng cho fixture. `worlds.length_m` và `worlds.width_m` đặt kích thước. Ba world cố định 30 m có sẵn để khảo sát bề rộng ở các mốc sau. | Dài 10 m, thông thủy 2,0 m. |
 | `blind_corner` | Nhánh cùng bề rộng nối về +Y ở đầu +X. `turn_length_m` đo từ mép trên của hành lang chính tới cuối nhánh. Một hốc nằm trên vách +Y của đoạn thẳng trước khi rẽ. | Hai nhánh rộng 1,6 m, nhánh rẽ dài 4 m. Hốc rộng 1,20 m dọc X, sâu 1,10 m từ mặt tường, tâm miệng ở X = 1,20 m. Góc vẫn che khuất tia từ spawn tới đích. |
 | `passing_bay` | Hốc ở phía +Y. `passing_bay_width_m` là tổng thông thủy từ tường phía nam tới tường trong hốc. `passing_bay_length_m` và `passing_bay_center_x_m` định kích thước và vị trí hốc dọc X. | Hành lang 1,4 m, hốc 2,4 m, dài 2,5 m và đặt giữa hành lang. |
 
@@ -57,7 +57,7 @@ Kiểm thử headless biên dịch 21 tổ hợp preset bằng MuJoCo và đo ti
 
 Mười hốc có miệng riêng rộng 1,30 m và sâu 1,20 m, xen kẽ hai bên dọc X với bước 5,60 m. Các ID `n_01`–`n_05` và `s_01`–`s_05` dùng được với `--focus-bay`. X của tâm hốc phía bắc lần lượt là −23,50, −12,30, −1,10, 10,10 và 21,30 m. X của tâm hốc phía nam là −17,90, −6,70, 4,50, 15,70 và 26,90 m. Điểm giữa hốc nằm tại Y = +2,10 m phía bắc và Y = −2,10 m phía nam. Kiểm thử xác nhận các cửa và hốc mở tới hành lang cho footprint bán kính 0,25 m. Mecanum vào hốc `n_01` bằng actuator qua runtime.
 
-Ba mức thay đổi mật độ actor ở đầu episode. Các lượt ra cửa và cắt ngang hành lang được định nghĩa bằng pose và goal trong YAML. Người ngồi chờ là props tĩnh có geom ID `hospital_waiting_*`. Khi dùng bố cục này để tạo dữ liệu, phân biệt nó với bản hospital cũ theo `model_sha256` và `mjcf_source_sha256`. [Lệnh chạy và tái sử dụng](../MUJOCO_WORLD_COMMANDS.md#tái-sử-dụng-cho-dữ-liệu-và-thuật-toán)
+Ba mức thay đổi mật độ actor ở đầu episode. Pose và goal trong YAML chuẩn bị cho các lượt ra cửa và cắt ngang khi backend người được kết nối. Người ngồi chờ là props tĩnh có geom ID `hospital_waiting_*`. Dùng `model_sha256` và `mjcf_source_sha256` để phân biệt các phiên bản bố cục. [Lệnh kiểm tra cấu hình](../MUJOCO_WORLD_COMMANDS.md#kiểm-tra-cấu-hình-trước-khi-triển-khai-hành-vi)
 
 ### Hốc nhường đường trong các world trường học
 

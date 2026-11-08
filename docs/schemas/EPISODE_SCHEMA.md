@@ -1,6 +1,6 @@
 # Episode
 
-Hợp đồng logic `schema_version = 1`. Mỗi episode ghi một lần thử reset và các step thành công liên tục của đúng một scenario. Định dạng file và cơ chế ghi được chọn trong task có persistence.
+Hợp đồng logic `schema_version = 1` cho episode mô phỏng. Mỗi episode ghi một lần thử reset và các step thành công liên tục của đúng một scenario. Runtime hiện trả metadata và snapshot trong bộ nhớ. Định dạng file và cơ chế ghi/đọc thuộc TASK 04B. [Lộ trình](../ROADMAP.md)
 
 Trong TASK 01, `EpisodeConfig` giữ `scenario_id`, `episode_seed`, `control_dt_ns`, `physics_dt_ns`, `duration_ns` và phiên bản schema. Bước điều khiển phải chia hết cho bước vật lý, thời lượng phải chia hết cho bước điều khiển. `max_ticks` và `timestamp(tick)` được suy ra từ các trường này.
 
@@ -31,6 +31,8 @@ Khi dùng skin Quaternius, `SimulationMetadata.mjcf_source_sha256` bao gồm man
 Một manifest nối các kênh theo episode ID. Bản ghi step bắt đầu ở 0 và liên tục. Mốc cuối của step trước là mốc đầu của step sau. Mẫu sensor được ghi đúng một lần theo `(sensor_id, sample_index)` trong kênh sensor khi lần đầu sẵn sàng ở một biên công bố. Khi lưu, slot hợp lệ của `Observation` tham chiếu mẫu tương ứng và có thể tái sử dụng mẫu đó ở các tick sau. Các mẫu đang chờ sau mốc đóng episode không được công bố.
 
 Tách kênh quan sát, lệnh `requested/limited` và kênh kiểm định gồm ground truth, `executed`, tiếp xúc. Đánh giá hoặc tạo nhãn có thể join bằng episode ID và tick. Reader cho suy luận chỉ lấy dữ liệu có quyền và có thời điểm sẵn sàng không muộn hơn tick quyết định. Tách split theo episode và nhóm scenario/seed đã khai báo trước khi tạo cửa sổ thời gian để tránh chia sẻ các đoạn chồng lấn giữa tập.
+
+TASK 04C tạo cửa sổ cho mô hình trên lưới 10 Hz từ bản ghi giữ nhịp gốc. Các episode và nhánh robot từ cùng trạng thái gốc dùng chung một split. Chuỗi lệnh ứng viên dùng làm input phải có sẵn tại mốc quyết định. Chuyển động robot và người đo được sau mốc đó thuộc kênh nhãn hoặc kiểm định. [Luồng dữ liệu](../architecture/02_DATA_FLOW.md)
 
 ## Kết thúc và lỗi
 

@@ -1,25 +1,32 @@
 # 02 · Luồng dữ liệu
 
+Hiện tại `step(RobotAction)` nhận lệnh robot từ bên gọi và trả snapshot trong bộ nhớ. Người giữ pose spawn, cảm biến trả slot `missing` và chưa có bộ ghi episode. [Runtime hiện tại](05_MUJOCO_RUNTIME.md)
+
+## Luồng đích của TASK 04
+
 ```mermaid
 flowchart TD
     Config["YAML đã resolve và seed"] --> Loop["Bộ điều phối simulation"]
     MJCF["MJCF và asset"] --> Adapter["Adapter MuJoCo"]
     Loop -->|Reset và lệnh đã giới hạn| Adapter
-    Adapter -->|Snapshot trạng thái thật và tiếp xúc| Truth["GroundTruthState"]
-    Adapter -->|Mẫu cảm biến| Sensor["Observation"]
+    Adapter -->|Snapshot vật lý, tiếp xúc và mẫu cảm biến| Loop
+    Loop --> Truth["GroundTruthState"]
+    Loop -->|Mẫu đã sẵn sàng| Sensor["Observation"]
     Truth -->|Chiếu context tại t_k| HumanContext["HumanContext"]
     HumanContext --> Human["HumanControllerBackend"]
     Sensor --> Robot["RobotPolicy"]
     Human -->|HumanMotion yêu cầu| Loop
     Robot -->|RobotAction yêu cầu| Loop
-    Truth -->|Chuyển động thực thi và nhãn| Records["Bản ghi episode"]
-    Sensor -->|Kênh quan sát| Records
-    Loop -->|Lệnh và trạng thái kết thúc| Records
+    Truth --> Labels["Kênh kiểm định và nhãn"]
+    Loop -->|Executed và tiếp xúc| Labels
+    Sensor --> Observations["Kênh quan sát"]
+    Loop -->|Requested và limited| Actions["Kênh lệnh"]
+    Loop -->|Trạng thái kết thúc| Manifest["Manifest episode"]
 ```
 
 ## Reset và một bước điều khiển
 
-TASK 03 nhận lệnh robot qua `step(RobotAction)`, giữ người tại spawn và công bố các slot cảm biến chưa khả dụng. Luồng dưới đây mô tả cả các cổng dành cho controller và cảm biến khi được kết nối. [Runtime hiện tại](05_MUJOCO_RUNTIME.md)
+TASK 04A kết nối nhánh `HumanContext → HumanControllerBackend` và có thể chạy với lệnh robot cố định, danh sách sensor rỗng. TASK 04B bổ sung lấy mẫu và lưu các kênh. Các bước sau mô tả vòng lặp khi các cổng đã được kết nối. [Lộ trình](../ROADMAP.md)
 
 1. Entry point resolve YAML, tham chiếu asset và seed, tạo adapter, robot policy và backend người. Bộ điều phối reset cả ba, lấy snapshot vật lý và quan sát có sẵn ở `t_0`, rồi công bố bản ghi reset.
 2. Tại `t_k`, robot policy nhận `Observation` mới nhất tại mốc điều khiển này. Backend người nhận `HumanContext` chiếu từ snapshot cùng mốc, gồm người, robot và vật cản cần để mô hình hóa tương tác. Context này chỉ dành cho mô hình hành vi người.

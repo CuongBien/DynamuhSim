@@ -173,9 +173,9 @@ Chạy 1.000 bước vật lý với lệnh tiến cố định trong cùng cấ
 env -u DISPLAY -u WAYLAND_DISPLAY .venv/bin/python -m narrow_nav.simulation.smoke --ticks 40 --vx 0.35 worlds=school_floor scenarios=school_floor_baseline robots=mecanum_robot corridor_width=w070
 ```
 
-## Tái sử dụng cho dữ liệu và thuật toán
+## Kiểm tra cấu hình trước khi triển khai hành vi
 
-Ví dụ xuất cấu hình đã resolve và chạy một pilot headless cho `hospital_hard` với cùng seed. Chạy từ thư mục gốc dự án.
+Ví dụ xuất cấu hình đã resolve và chạy smoke headless cho `hospital_hard` với cùng seed. Chạy từ thư mục gốc dự án. `smoke.json` chứa thống kê kiểm tra runtime. Pilot dataset có điều kiện nghiệm thu riêng ở TASK 04C. [Lộ trình](ROADMAP.md)
 
 ```bash
 mkdir -p runs/hospital_hard_seed42
@@ -185,4 +185,4 @@ env -u DISPLAY -u WAYLAND_DISPLAY .venv/bin/python -m narrow_nav.simulation.smok
 
 - Trong mã chạy thí nghiệm, dùng `compose_config(overrides=...)`, `MuJoCoEngine.load(config)`, `reset()` và `step(RobotAction)`. Controller robot nhận `Observation`. Dùng `GroundTruthState` qua kênh riêng cho nhãn và đánh giá.
 - Người trong `scenarios.humans` có ID, spawn và goal theo hệ tọa độ `world`. Runtime hiện tại giữ họ tại spawn. Chuyển động theo goal cần backend được kết nối qua hợp đồng của dự án. Người ngồi chờ hospital thuộc `worlds.human_props`, là hình học collision tĩnh và không nằm trong `GroundTruthState.humans`.
-- Khi ghi dataset, lưu seed, cấu hình đã resolve, phiên bản MuJoCo và fingerprint model/MJCF từ `engine.get_metadata()` cùng manifest. Các ID hospital vẫn được dùng sau khi đổi bố cục và mật độ. Dùng fingerprint để phân biệt dữ liệu mới với dữ liệu sinh từ bố cục cũ. [Schema episode](schemas/EPISODE_SCHEMA.md) · [Giao thức đối chứng](protocols/HUMAN_BEHAVIOR_PROTOCOL.md)
+- Các ID hospital vẫn được dùng sau khi đổi bố cục và mật độ. Dùng fingerprint model/MJCF từ `engine.get_metadata()` để phân biệt các phiên bản bố cục. Khi triển khai bộ ghi, lưu fingerprint, seed, cấu hình đã resolve và phiên bản MuJoCo theo manifest. [Schema episode](schemas/EPISODE_SCHEMA.md) · [Giao thức đối chứng](protocols/HUMAN_BEHAVIOR_PROTOCOL.md)
