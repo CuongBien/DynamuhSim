@@ -13,6 +13,9 @@ dependencies = ["hydra-core>=1.3.2,<1.4", "omegaconf>=2.3,<2.4"]
 [project.optional-dependencies]
 dev = ["pytest>=8.4,<10", "ruff>=0.11,<1"]
 sim = ["mujoco>=4.0"]
+human-models = [
+    "jupedsim==1.4.2",
+]
 
 [project.scripts]
 narrow-nav-config = "narrow_nav.simulation.configuration:main"
