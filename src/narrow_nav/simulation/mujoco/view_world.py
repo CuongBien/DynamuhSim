@@ -42,7 +42,7 @@ def main() -> None:
         "--focus-robot", action="store_true", help="start with a close-up of the robot"
     )
     focus_options.add_argument(
-        "--focus-bay", metavar="ID", help="start above a school yield bay, e.g. a_01"
+        "--focus-bay", metavar="ID", help="start above a yield bay, e.g. a_01 or n_01"
     )
     args = parser.parse_args()
 

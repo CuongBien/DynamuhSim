@@ -116,8 +116,9 @@ def test_hospital_people_replace_only_the_visual_part_of_static_props():
         compose_config(overrides=["worlds=hospital_easy", "scenarios=hospital_easy"])
     )
     model = mujoco.MjModel.from_xml_string(built.mjcf, dict(built.visual_assets))
-    assert len(built.scene.humans) == 3
-    assert len(built.skin_actors) == 6
+    assert len(built.scene.humans) == 6
+    assert len(built.scene.human_props) == 10
+    assert len(built.skin_actors) == 16
     for prop in built.scene.human_props:
         geom = model.geom(prop.entity_id)
         assert geom.bodyid.item() == 0
@@ -125,4 +126,4 @@ def test_hospital_people_replace_only_the_visual_part_of_static_props():
         assert geom.contype.item() != 0
         assert geom.rgba[-1] > 0
         assert model.skin(f"hv/{prop.entity_id}/skin_0").id >= 0
-    assert sum(actor.seat_height_m is not None for actor in built.skin_actors) == 2
+    assert sum(actor.seat_height_m is not None for actor in built.skin_actors) == 10

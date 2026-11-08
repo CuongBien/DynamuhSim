@@ -2,12 +2,10 @@
   <!-- Static collision reconstructed from src/custom_corridor/worlds/corridor_070.sdf @ 85287ff0781837b60ef6fde72d6244e3823291b5. -->
   <include file="../../templates/world_defaults.xml" />
   <worldbody>
-    <geom name="ground" class="floor" type="box" pos="0 0 -0.05" size="17 5 0.05" rgba="0.7 0.7 0.7 1" />
+    <geom name="ground" class="floor" type="box" pos="0 0 -0.05" size="15 0.35 0.05" rgba="0.7 0.7 0.7 1" />
     <geom name="left_wall" class="wall" type="box" pos="0 -0.4 1" size="15 0.05 1" rgba="0.7 0.7 0.7 1" />
-    <geom name="right_wall_front" class="wall" type="box" pos="-6.8 0.4 1" size="8.2 0.05 1" rgba="0.7 0.7 0.7 1" />
-    <geom name="right_wall_back" class="wall" type="box" pos="8.8 0.4 1" size="6.2 0.05 1" rgba="0.7 0.7 0.7 1" />
-    <geom name="recess_side_left" class="wall" type="box" pos="1.35 0.65 1" size="0.05 0.3 1" rgba="0.7 0.7 0.7 1" />
-    <geom name="recess_side_right" class="wall" type="box" pos="2.65 0.65 1" size="0.05 0.3 1" rgba="0.7 0.7 0.7 1" />
-    <geom name="recess_back" class="wall" type="box" pos="2 1 1" size="0.7 0.05 1" rgba="0.7 0.7 0.7 1" />
+    <geom name="right_wall" class="wall" type="box" pos="0 0.4 1" size="15 0.05 1" rgba="0.7 0.7 0.7 1" />
+    <geom class="wall" name="west_end" type="box" pos="-15.05 0 1" size="0.05 0.45 1" rgba="0.7 0.7 0.7 1" />
+    <geom class="wall" name="east_end" type="box" pos="15.05 0 1" size="0.05 0.45 1" rgba="0.7 0.7 0.7 1" />
   </worldbody>
 </mujoco>

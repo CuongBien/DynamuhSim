@@ -1,7 +1,7 @@
 """Compose and validate repository YAML without starting a simulation."""
 
 from argparse import ArgumentParser
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from math import hypot
 from pathlib import Path
 from threading import Lock
@@ -17,6 +17,7 @@ from narrow_nav.core.errors import ConfigurationError, ContractError
 from narrow_nav.core.metadata import EpisodeConfig
 from narrow_nav.core.types import Point2D, Pose2D
 from narrow_nav.core.validation import (
+    finite,
     identifier,
     ordered_ids,
     positive,
@@ -24,6 +25,7 @@ from narrow_nav.core.validation import (
     unique,
 )
 
+from .corridor_width import AxisResize, CorridorResize
 from .robot_controller import DriveProfile
 from .timing import Timing
 from .world_assets import MJCF_ROOT, WorldAsset, load_world_asset
@@ -117,12 +119,22 @@ class SceneGeometry:
     human_props: tuple[HumanProp, ...] = ()
 
 
-def _read_actor(actor: DictConfig, radius: float, collision: WorldCollision) -> Spawn:
+def _read_actor(
+    actor: DictConfig,
+    radius: float,
+    collision: WorldCollision,
+    resize: CorridorResize | None,
+    offsets: dict[str, tuple[float, float]],
+) -> Spawn:
     actor_id = identifier(_required(actor, "id"), "actor ID")
     if actor_id == "world":
         raise ConfigurationError("actor ID 'world' is reserved for the scene")
     pose = Pose2D(*_coordinates(actor, "initial_pose", 3))
     goal = Point2D(*_coordinates(actor, "goal", 2))
+    if resize is not None:
+        dx, dy = offsets.get(actor_id, (0.0, 0.0))
+        pose = Pose2D(*resize.actor_point(pose.x + dx, pose.y + dy, radius), pose.yaw)
+        goal = Point2D(*resize.actor_point(goal.x + dx, goal.y + dy, radius))
     for field, point in (("initial_pose", pose), ("goal", goal)):
         if not collision.contains(point.x, point.y, radius):
             raise ConfigurationError(
@@ -131,15 +143,68 @@ def _read_actor(actor: DictConfig, radius: float, collision: WorldCollision) -> 
     return Spawn(actor_id, pose, goal, radius)
 
 
-def _world_spec(world: DictConfig, mjcf_root: Path) -> WorldSpec | WorldAsset:
+def _offsets(config: DictConfig, field: str) -> dict[str, tuple[float, float]]:
+    if field not in config:
+        return {}
+    values = _required_as(config, field, DictConfig)
+    offsets = {}
+    for name in values:
+        x, y = _coordinates(values, name, 2)
+        offsets[name] = (finite(x, field), finite(y, field))
+    return offsets
+
+
+def _authored_resize(world: DictConfig, width: float) -> CorridorResize:
+    if "width_bands" not in world:
+        raise ConfigurationError(f"world {world.id!r} has no corridor-width context")
+    bands = _required_as(world, "width_bands", DictConfig)
+    if not bands or set(bands) - {"x", "y"}:
+        raise ConfigurationError("worlds.width_bands must specify X or Y bands")
+    axes = []
+    for axis in ("x", "y"):
+        intervals = (
+            require_type(bands[axis], ListConfig, f"width band {axis}")
+            if axis in bands
+            else ()
+        )
+        pairs = []
+        for interval in intervals:
+            if not isinstance(interval, ListConfig) or len(interval) != 2:
+                raise ConfigurationError("corridor width band must be [low, high]")
+            pairs.append(
+                tuple(finite(value, "corridor width band") for value in interval)
+            )
+        axes.append(AxisResize(tuple(pairs), width))
+    if not any(axis.bands for axis in axes):
+        raise ConfigurationError("worlds.width_bands must contain a corridor band")
+    return CorridorResize(*axes)
+
+
+def _world_spec(
+    world: DictConfig, mjcf_root: Path, width: float | None
+) -> tuple[WorldSpec | WorldAsset, CorridorResize | None]:
     if "geometry_id" in world:
-        if set(world) - {"id", "geometry_id", "human_props"}:
+        if set(world) - {
+            "id",
+            "geometry_id",
+            "human_props",
+            "width_bands",
+            "width_geom_offsets",
+        }:
             raise ConfigurationError(
                 "worlds.geometry_id cannot be combined with parametric world fields"
             )
         geometry_id = _required_as(world, "geometry_id", str)
-        return load_world_asset(mjcf_root, geometry_id)
-    return WorldSpec(
+        resize = _authored_resize(world, width) if width is not None else None
+        offsets = (
+            tuple(_offsets(world, "width_geom_offsets").items())
+            if resize is not None
+            else ()
+        )
+        return load_world_asset(
+            mjcf_root, geometry_id, resize=resize, offsets=offsets
+        ), resize
+    base = WorldSpec(
         layout=OmegaConf.select(world, "layout", default="corridor"),
         corridor_length_m=positive(_required(world, "length_m"), "worlds.length_m"),
         corridor_width_m=positive(_required(world, "width_m"), "worlds.width_m"),
@@ -154,6 +219,26 @@ def _world_spec(world: DictConfig, mjcf_root: Path) -> WorldSpec | WorldAsset:
         passing_bay_length_m=OmegaConf.select(world, "passing_bay_length_m"),
         passing_bay_center_x_m=OmegaConf.select(world, "passing_bay_center_x_m"),
     )
+    if width is None:
+        return base, None
+    if base.layout == "corridor":
+        raise ConfigurationError(f"world {world.id!r} has no corridor-width context")
+    original_width = base.corridor_width_m
+    half = original_width / 2
+    right = base.corridor_length_m / 2
+    is_corner = base.layout == "blind_corner"
+    x = (
+        AxisResize(((right - original_width, right),), width, right)
+        if is_corner
+        else AxisResize()
+    )
+    resize = CorridorResize(
+        x, AxisResize(((-half, half),), width), half if is_corner else None
+    )
+    bay_width = base.passing_bay_width_m
+    if bay_width is not None:
+        bay_width += width - original_width
+    return replace(base, corridor_width_m=width, passing_bay_width_m=bay_width), resize
 
 
 def _human_props(
@@ -198,19 +283,37 @@ def _human_props(
 def _scene_geometry(config: DictConfig, mjcf_root: Path) -> SceneGeometry:
     """Resolve the layout and validate the configured footprints in world XY."""
     world = _required_as(config, "worlds", DictConfig)
-    spec = _world_spec(world, mjcf_root)
+    width = (
+        positive(_required(config, "corridor_width.width_m"), "corridor_width.width_m")
+        if "corridor_width" in config
+        else None
+    )
+    spec, resize = _world_spec(world, mjcf_root, width)
     collision = spec.collision if isinstance(spec, WorldAsset) else spec.collision()
     robot_radius = positive(_required(config, "robots.radius_m"), "robots.radius_m")
     human_radius = positive(
         _required(config, "scenarios.human_profile.radius_m"),
         "scenarios.human_profile.radius_m",
     )
+    offsets = (
+        _offsets(_required_as(config, "scenarios", DictConfig), "width_actor_offsets")
+        if resize is not None
+        else {}
+    )
     robot = _read_actor(
-        _required_as(config, "scenarios.robot", DictConfig), robot_radius, collision
+        _required_as(config, "scenarios.robot", DictConfig),
+        robot_radius,
+        collision,
+        resize,
+        offsets,
     )
     humans = tuple(
         _read_actor(
-            require_type(actor, DictConfig, "human actor"), human_radius, collision
+            require_type(actor, DictConfig, "human actor"),
+            human_radius,
+            collision,
+            resize,
+            offsets,
         )
         for actor in _required_as(config, "scenarios.humans", ListConfig)
     )

@@ -23,20 +23,21 @@ Nếu nâng cấp một `.venv` đang dùng MuJoCo 3.x, kích hoạt môi trư�
 Để compose, kiểm tra và in cấu hình đã resolve, truyền override nhóm hoặc trường theo cú pháp Hydra.
 
 ```bash
-narrow-nav-config worlds=corridor scenarios=head_on humans=scripted \
-  seed=123 worlds.width_m=2.8 simulation.control_dt_ns=40000000
+narrow-nav-config worlds=corridor_090 scenarios=corridor_090 humans=scripted \
+  seed=123 simulation.control_dt_ns=40000000
 ```
 
-Lệnh trên chọn hành lang rộng 2,8 m, bước điều khiển 40 ms, bước vật lý 2 ms và thời lượng episode 20 s. Dùng `--config-dir` khi gọi từ ngoài repository. Chuyển stdout vào `runs/<run_id>/resolved.yaml` để giữ bản YAML đã resolve. Tính SHA-256 trên chính các byte đã lưu để gắn vào metadata.
+Lệnh trên chọn hành lang rộng 0,90 m, bước điều khiển 40 ms, bước vật lý 2 ms và thời lượng episode 20 s. Dùng `--config-dir` khi gọi từ ngoài repository. Chuyển stdout vào `runs/<run_id>/resolved.yaml` để giữ bản YAML đã resolve. Tính SHA-256 trên chính các byte đã lưu để gắn vào metadata.
 
 Trong cấu hình mẫu, `initial_pose` là `[x, y, yaw]`, `goal` là `[x, y]` và cả hai dùng frame `world`. Chiều dài theo X và chiều rộng thông thủy theo Y được đo từ tâm hành lang, với tọa độ tính bằng mét và yaw bằng radian.
 
-Để thử cấu hình góc khuất hoặc hốc tránh, dùng cặp override `worlds=blind_corner scenarios=blind_corner` hoặc `worlds=passing_bay scenarios=passing_bay`. `build_world()` dựng MJCF từ cấu hình đã resolve. `inspect_world()` kiểm tra hình học đã biên dịch. [Báo cáo mô hình MuJoCo](docs/architecture/04_MUJOCO_MODELING.md)
+`blind_corner` có một hốc nhường đường trước góc khuất. `passing_bay` là bài toán hành lang thẳng có hốc tránh. `build_world()` dựng MJCF từ cấu hình đã resolve. `inspect_world()` kiểm tra hình học đã biên dịch. [Báo cáo mô hình MuJoCo](docs/architecture/04_MUJOCO_MODELING.md)
 
 Để xem scene trong cửa sổ MuJoCo, chạy lệnh sau trong phiên desktop có màn hình.
 
 ```bash
-python -m narrow_nav.simulation.mujoco.view_world robots=mecanum_robot
+python -m narrow_nav.simulation.mujoco.view_world \
+  worlds=corridor_090 scenarios=corridor_090 robots=mecanum_robot
 ```
 
 Thêm cặp override world/scenario ở trên để đổi môi trường. Viewer mở từ trên xuống tại trạng thái ban đầu, tự căn theo kích thước world và ẩn hai bảng điều khiển. Cuộn chuột để zoom, kéo để đổi góc nhìn. Dùng Tab hoặc Shift+Tab để hiện lại các bảng.
@@ -60,9 +61,22 @@ env -u DISPLAY -u WAYLAND_DISPLAY .venv/bin/python -m narrow_nav.simulation.smok
 
 Lệnh đầu mở trạng thái ban đầu để kiểm tra bố cục. Lệnh thứ hai điều khiển bánh robot qua runtime và chạy 1.000 bước vật lý. Với vòng điều khiển riêng, nạp cùng cấu hình vào `MuJoCoEngine.load()`, gọi `reset()` rồi truyền `RobotAction` có timestamp hiện tại vào `step()`. Dùng `experiments.duration_ns=90000000000` nếu cần ngân sách 90 s cho các hành trình dài. [Nguồn hình học, bảng world và giới hạn](docs/architecture/04_MUJOCO_MODELING.md#world-chuyển-từ-dynamuhsim)
 
+### Ngữ cảnh bề rộng hành lang
+
+Dùng `corridor_070`, `corridor_090` hoặc `corridor_120` để chọn một trong ba hành lang thẳng 30 m có bề rộng cố định. Ba mức hospital dùng cùng mặt bằng hành lang 3 m, 12 ghế chờ ngoài phòng và 10 hốc nhường đường xen kẽ hai bên.
+
+Với `blind_corner`, `passing_bay` và các world `school_*`, thêm `corridor_width=w070`, `corridor_width=w090` hoặc `corridor_width=w120` để chọn thông thủy 0,70 m, 0,90 m hoặc 1,20 m. Bỏ override để dùng kích thước gốc.
+
+```bash
+.venv/bin/python -m narrow_nav.simulation.mujoco.view_world \
+  worlds=school_floor scenarios=school_floor robots=mecanum_robot corridor_width=w070
+```
+
+[Lệnh chạy từng world và cách tái sử dụng cho dataset](docs/MUJOCO_WORLD_COMMANDS.md) · [Ma trận và cách đo](docs/architecture/04_MUJOCO_MODELING.md#ngữ-cảnh-bề-rộng-hành-lang)
+
 ### Hốc nhường đường trong trường học
 
-Các hốc màu xanh có ba vách collision và miệng riêng mở ra hành lang. Mỗi hốc rộng thông thủy 0,90 m và sâu 0,95 m. Các bản school lớn có 13 hốc phân bố trên sáu đoạn hành lang. Bản `school_arena_1` có 8 hốc cách nhau 4 m.
+Các hốc màu xanh có ba vách collision và miệng riêng mở ra hành lang. Ở cấu hình gốc mỗi hốc rộng thông thủy 0,90 m và sâu 0,95 m. Các bản school lớn có 13 hốc phân bố trên sáu đoạn hành lang. Bản `school_arena_1` có 8 hốc cách nhau 4 m.
 
 ```bash
 # Toàn cảnh các hốc, với một robot để dễ quan sát.
@@ -84,7 +98,7 @@ Runtime và viewer dùng mặc định mesh nam/nữ Quaternius đã đóng gói
   worlds=corridor_090 scenarios=corridor_090 robots=mecanum_robot
 ```
 
-Dùng chuột để xoay và zoom quanh người. Hãy bỏ `--focus-human` để mở toàn cảnh. `arena_rvo2` có cả hai mẫu nam/nữ. Trong `hospital_easy`, có thể lấy nét vào `hospital_room_05_seated_1`. [Mô hình render, collision và nguồn tài nguyên](docs/architecture/04_MUJOCO_MODELING.md#hình-ảnh-người-quaternius)
+Dùng chuột để xoay và zoom quanh người. Hãy bỏ `--focus-human` để mở toàn cảnh. `arena_rvo2` có cả hai mẫu nam/nữ. Trong hospital, dùng `--focus-human hospital_waiting_n_01_1` để xem một người ngồi chờ. [Mô hình render, collision và nguồn tài nguyên](docs/architecture/04_MUJOCO_MODELING.md#hình-ảnh-người-quaternius)
 
 Chạy smoke test headless 1.000 bước cho từng drivetrain.
 

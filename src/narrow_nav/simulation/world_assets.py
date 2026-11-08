@@ -1,6 +1,7 @@
 """Resolve the restricted, static MJCF geometry used by authored worlds."""
 
 from dataclasses import dataclass
+from fnmatch import fnmatchcase
 from hashlib import sha256
 from pathlib import Path
 from xml.etree import ElementTree as ET
@@ -8,6 +9,7 @@ from xml.etree import ElementTree as ET
 from narrow_nav.core.errors import ConfigurationError
 from narrow_nav.core.validation import finite, identifier, positive
 
+from .corridor_width import CorridorResize
 from .world_geometry import GEOMETRY_TOLERANCE_M, Circle, Rectangle, WorldCollision
 
 MJCF_ROOT = Path(__file__).resolve().parents[3] / "sim" / "mujoco"
@@ -29,7 +31,13 @@ def _numbers(node: ET.Element, attribute: str, length: int) -> tuple[float, ...]
     return tuple(finite(value, attribute) for value in values)
 
 
-def load_world_asset(root: Path, geometry_id: str) -> WorldAsset:
+def load_world_asset(
+    root: Path,
+    geometry_id: str,
+    *,
+    resize: CorridorResize | None = None,
+    offsets: tuple[tuple[str, tuple[float, float]], ...] = (),
+) -> WorldAsset:
     """Read one standalone world and validate geometry before using it for spawns."""
     identifier(geometry_id, "worlds.geometry_id")
     relative_path = f"worlds/{geometry_id}/main.xml"
@@ -81,6 +89,20 @@ def load_world_asset(root: Path, geometry_id: str) -> WorldAsset:
                 shape != "box" or abs(z + size[-1]) > GEOMETRY_TOLERANCE_M
             ):
                 raise ValueError("the floor must be a box with top at Z=0")
+            if resize is not None and kind == "wall":
+                for pattern, (dx, dy) in offsets:
+                    if fnmatchcase(name, pattern):
+                        x, y = x + dx, y + dy
+                        break
+                if shape == "box":
+                    x0, x1 = resize.x.map(x - size[0]), resize.x.map(x + size[0])
+                    y0, y1 = resize.y.map(y - size[1]), resize.y.map(y + size[1])
+                    x, y = (x0 + x1) / 2, (y0 + y1) / 2
+                    size = ((x1 - x0) / 2, (y1 - y0) / 2, size[2])
+                    node.set("size", " ".join(format(value, ".17g") for value in size))
+                else:
+                    x, y = resize.x.map(x), resize.y.map(y)
+                node.set("pos", " ".join(format(value, ".17g") for value in (x, y, z)))
             footprint = (
                 Rectangle(x - size[0], x + size[0], y - size[1], y + size[1])
                 if shape == "box"

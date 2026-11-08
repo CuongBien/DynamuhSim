@@ -114,10 +114,12 @@ class WorldSpec:
         floor = Rectangle(left, right, south, north)
         floors = (floor,)
         boundary = ((left, south), (right, south), (right, north), (left, north))
+        end_of_straight_wall = right
 
         if self.layout == "blind_corner":
             turn = positive(self.turn_length_m, "turn_length_m")
             inner = right - 2 * half_width
+            end_of_straight_wall = inner
             if inner - left <= thickness:
                 raise ConfigurationError(
                     "blind_corner requires a main leg longer than its width and wall thickness"
@@ -132,7 +134,10 @@ class WorldSpec:
                 (inner, north),
                 (left, north),
             )
-        elif self.layout == "passing_bay":
+        elif self.layout not in ("corridor", "passing_bay"):
+            raise ConfigurationError(f"unknown world layout {self.layout!r}")
+
+        if self.layout in ("blind_corner", "passing_bay"):
             bay_width = positive(self.passing_bay_width_m, "passing_bay_width_m")
             bay_length = positive(self.passing_bay_length_m, "passing_bay_length_m")
             center = finite(self.passing_bay_center_x_m, "passing_bay_center_x_m")
@@ -141,24 +146,21 @@ class WorldSpec:
                 raise ConfigurationError(
                     "passing_bay_width_m must exceed corridor_width_m"
                 )
-            if entry - left <= thickness or right - exit_ <= thickness:
+            if entry - left <= thickness or end_of_straight_wall - exit_ <= thickness:
                 raise ConfigurationError(
                     "passing bay must fit inside the corridor with room for both wall returns"
                 )
             top = bay_width - half_width
             floors += (Rectangle(entry, exit_, north, top),)
+            # The last edge of the boundary is the north wall of the main leg.
             boundary = (
-                (left, south),
-                (right, south),
-                (right, north),
+                *boundary[:-1],
                 (exit_, north),
                 (exit_, top),
                 (entry, top),
                 (entry, north),
-                (left, north),
+                boundary[-1],
             )
-        elif self.layout != "corridor":
-            raise ConfigurationError(f"unknown world layout {self.layout!r}")
 
         return WorldCollision(floors, _wall_boxes(boundary, thickness))
 

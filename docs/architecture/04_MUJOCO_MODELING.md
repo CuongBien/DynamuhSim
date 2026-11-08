@@ -14,28 +14,50 @@ World dùng mét, radian, XY nằm ngang, +Z hướng lên và mặt sàn ở Z 
 
 | World | Hình học và biến cấu hình | Số đo mặc định |
 | --- | --- | --- |
-| `corridor` | Hành lang thẳng với hai tường song song, hai tường đầu và sàn hình chữ nhật. `worlds.length_m` và `worlds.width_m` lần lượt là `corridor_length_m` và `corridor_width_m` của builder. | Dài 10 m, thông thủy 2,0 m. |
-| `blind_corner` | Nhánh cùng bề rộng nối về +Y ở đầu +X. `turn_length_m` đo từ mép trên của hành lang chính tới cuối nhánh. | Hai nhánh rộng 1,6 m, nhánh rẽ dài 4 m. Tia giữa hai điểm qua góc đụng tường ở 2,207 m trên đoạn 7,725 m. |
+| `corridor` | World tham số giữ cho fixture và các lệnh cũ. `worlds.length_m` và `worlds.width_m` đặt kích thước. Ma trận nghiên cứu dùng ba world cố định 30 m. | Dài 10 m, thông thủy 2,0 m. |
+| `blind_corner` | Nhánh cùng bề rộng nối về +Y ở đầu +X. `turn_length_m` đo từ mép trên của hành lang chính tới cuối nhánh. Một hốc nằm trên vách +Y của đoạn thẳng trước khi rẽ. | Hai nhánh rộng 1,6 m, nhánh rẽ dài 4 m. Hốc rộng 1,20 m dọc X, sâu 1,10 m từ mặt tường, tâm miệng ở X = 1,20 m. Góc vẫn che khuất tia từ spawn tới đích. |
 | `passing_bay` | Hốc ở phía +Y. `passing_bay_width_m` là tổng thông thủy từ tường phía nam tới tường trong hốc. `passing_bay_length_m` và `passing_bay_center_x_m` định kích thước và vị trí hốc dọc X. | Hành lang 1,4 m, hốc 2,4 m, dài 2,5 m và đặt giữa hành lang. |
 
-`wall_height_m` và `wall_thickness_m` dùng chung cho ba layout. `robots.radius_m` và `scenarios.human_profile.radius_m` là `robot_radius_m` và `human_radius_m` của hai footprint. Scene `head_on` đặt hai làn tại Y = ±0,2 m để cùng cấu hình spawn còn hợp lệ ở bề rộng 1,0 m. Hai scenario bổ sung đặt đích sau góc rẽ và trong hốc.
+`wall_height_m` và `wall_thickness_m` dùng chung cho ba layout. `blind_corner` và `passing_bay` dùng chung ba trường `passing_bay_*` để dựng sàn và tường hốc. Với góc khuất, hốc phải nằm trong đoạn thẳng với đủ vách giữa hốc và góc rẽ. `robots.radius_m` và `scenarios.human_profile.radius_m` là bán kính footprint. Scene `head_on` đặt hai làn tại Y = ±0,2 m để cùng cấu hình spawn còn hợp lệ ở bề rộng 1,0 m. Hai scenario bổ sung đặt đích sau góc rẽ và trong hốc.
 
 ## World chuyển từ DynamuhSim
 
-Các scene tĩnh được dựng lại từ kích thước và tọa độ collision của `src/custom_corridor/worlds/` tại commit `85287ff0781837b60ef6fde72d6244e3823291b5`. Package nguồn khai báo Apache-2.0. MJCF ghi tệp nguồn tương ứng, giữ world XY và mặt sàn Z = 0. Kích thước hộp trong MJCF là nửa kích thước hộp SDF. Trụ đứng giữ bán kính và dùng nửa chiều cao. Sàn plane ở các bản trường học trở thành hộp dày 0,1 m, với kích thước XY lấy từ plane trong SDF. Vật cản cố định như ghế, thùng rác và proxy người ngồi trong bệnh viện giữ hình học collision nguồn. [World nguồn](https://github.com/CuongBien/DynamuhSim/tree/85287ff0781837b60ef6fde72d6244e3823291b5/src/custom_corridor/worlds) · [Khai báo giấy phép](https://github.com/CuongBien/DynamuhSim/blob/85287ff0781837b60ef6fde72d6244e3823291b5/src/custom_corridor/package.xml)
+Các scene tĩnh lấy bố cục ban đầu từ `src/custom_corridor/worlds/` tại commit `85287ff0781837b60ef6fde72d6244e3823291b5`. Package nguồn khai báo Apache-2.0. MJCF ghi nguồn tương ứng và dùng world XY với mặt sàn Z = 0. Kích thước hộp trong MJCF là nửa kích thước đầy đủ. Trụ đứng dùng bán kính và nửa chiều cao. Sàn plane ở các bản trường học trở thành hộp dày 0,1 m. Corridor 30 m và hospital đã được chỉnh lại hình học cho ma trận hiện tại. [World nguồn](https://github.com/CuongBien/DynamuhSim/tree/85287ff0781837b60ef6fde72d6244e3823291b5/src/custom_corridor/worlds) · [Khai báo giấy phép](https://github.com/CuongBien/DynamuhSim/blob/85287ff0781837b60ef6fde72d6244e3823291b5/src/custom_corridor/package.xml)
 
 | Cặp `worlds` / `scenarios` | Hình học và actor |
 | --- | --- |
-| `corridor_070`, `corridor_090`, `corridor_120` | Tường dọc 30 m, thông thủy 0,70 / 0,90 / 1,20 m. Hốc phía +Y tại X = 2 m, thông thủy rộng thêm 0,60 m. Mỗi scenario có một người. |
+| `corridor_070`, `corridor_090`, `corridor_120` | Ba hành lang thẳng 30 m, thông thủy cố định 0,70 / 0,90 / 1,20 m theo ID. Hai tường đầu khép tuyến. Mỗi scenario có một người. |
 | `arena_obstacle`, `arena_dataset`, `arena_rvo2` | Hộp và trụ tĩnh theo bố cục nguồn. `arena_dataset` dùng chung MJCF với `arena_obstacle` và khởi tạo robot duy nhất. `arena_rvo2` giữ bố cục riêng với bốn người tại spawn. |
-| `hospital_easy`, `hospital_medium`, `hospital_hard` | Tường phòng, cửa và đồ đạc. Hai mức medium/hard dùng chung hình học tĩnh. Số người lần lượt là 3, 7 và 14. |
-| `school_arena`, `school_arena_1`, `school_arena_hunav`, `school_floor` | Bốn bố cục tĩnh riêng. Các scenario có lần lượt 8, 0, 8 và 10 người. Dùng `worlds=school_floor scenarios=school_floor_baseline` để bỏ người. |
+| `hospital_easy`, `hospital_medium`, `hospital_hard` | Cùng mặt bằng hành lang 3 m, ghế chờ và hốc nhường đường. Ba mức có 6, 12 và 20 người trong scenario, cộng 10 người ngồi cố định ở mỗi mức. |
+| `school_arena`, `school_arena_1`, `school_arena_hunav`, `school_floor` | Ba bố cục tĩnh. `school_arena_hunav` dùng chung MJCF với `school_arena`. Các scenario có lần lượt 8, 0, 8 và 10 người. Dùng `worlds=school_floor scenarios=school_floor_baseline` để bỏ người. |
 
 YAML `configs/worlds/` chọn `geometry_id` tương ứng với `sim/mujoco/worlds/<geometry_id>/main.xml`. Mỗi tệp MJCF nạp độc lập với shared defaults. Khi compose, `simulation/world_assets.py` kiểm tra hình học và tạo footprint từ cùng geom mà builder ghép vào scene. Geom tĩnh thuộc group 0 (sàn) hoặc group 1 (tường và vật cản). Các trụ giữ footprint tròn khi đo khoảng hở và được ghi là `robot_wall` khi có contact thật. Runtime ghi SHA-256 của MJCF world vào metadata cùng các template đã nạp. Thay spawn/goal qua `configs/scenarios/` hoặc Hydra override. Với world đã dựng sẵn, chỉnh kích thước trong MJCF.
 
-Robot dùng một trong hai profile MuJoCo hiện có. Người trong scenario dùng body mocap của dự án và giữ vị trí trong runtime hiện tại. Spawn robot lấy từ launch nguồn khi có. Goal được khai báo mới trong YAML và một spawn tại `hospital_easy` được dời 0,5 m theo +Y để thoát ghế nguồn. `arena_dataset` bắt đầu với danh sách người rỗng vì proxy nguồn chưa được đặt trong vùng đi được. Các bản backup trùng hình học và bản sửa ID riêng của Gazebo được gộp vào world tương ứng.
+Robot dùng một trong hai profile MuJoCo hiện có. Người trong scenario dùng body mocap của dự án và giữ vị trí trong runtime hiện tại. Spawn và goal nằm trong YAML theo từng scenario. `arena_dataset` bắt đầu với danh sách người rỗng vì proxy nguồn chưa được đặt trong vùng đi được. Các bản backup trùng hình học và bản sửa ID riêng của Gazebo được gộp vào world tương ứng.
 
 Các phần phụ thuộc Gazebo/ROS như HuNav/RVO2, Nav2, bridge, bản đồ PGM, bộ chạy dataset, trolley động, animation COLLADA và pipeline camera/depth thuộc migration riêng. Tên `arena_rvo2` và `school_arena_hunav` dùng để nhận diện bố cục nguồn. Những cấu hình này chạy được vòng vật lý robot, reset, đọc trạng thái và contact với runtime hiện tại.
+
+### Ngữ cảnh bề rộng hành lang
+
+Nhóm Hydra `corridor_width` cung cấp `w070`, `w090` và `w120`, tương ứng 0,70 m, 0,90 m và 1,20 m. Áp dụng cho `blind_corner`, `passing_bay` và bốn ID `school_*`, tạo 18 tổ hợp world–bề rộng. Scenario `school_floor_baseline` thêm ba tổ hợp. Nhóm mặc định bỏ trống để giữ cấu hình gốc. Hospital, corridor và arena từ chối preset này. [Lệnh chạy từng world](../MUJOCO_WORLD_COMMANDS.md)
+
+- `school_arena` và `school_arena_hunav` trùng hình học tĩnh. Hai scenario giữ ID cũ, dùng cùng vị trí và đích cho tám người, với một số yaw chênh dưới 0,000004 rad do làm tròn. `school_floor` có vị trí vật cản khác và thêm hai người. `school_arena_1` là hành lang thẳng riêng.
+- Ba ID hospital dùng chung `hospital_medium/main.xml`. Mỗi ID giữ một mật độ và bố trí người riêng để đối chứng.
+- `corridor_070`, `corridor_090` và `corridor_120` là ba điều kiện bề rộng cố định. Hình học chỉ gồm sàn và tường, với một người trong mỗi scenario.
+
+Preset đặt khoảng cách giữa hai mặt tường collision, đo vuông góc với đoạn hành lang và tại mặt cắt không có đồ đạc. `blind_corner` dùng cùng bề rộng ở hai nhánh và giữ hốc sâu 1,10 m. `passing_bay` giữ phần mở rộng thêm 1,00 m. Các world school khai báo `width_bands` theo cặp biên `[thấp, cao]` trên X hoặc Y trong tọa độ nguồn. Builder thay kích thước và vị trí geom trên các dải đó, gồm lối cạnh cầu thang B–F. Hai hốc A05 và D01 của các bản school lớn có bề rộng miệng thay đổi theo trục giao. Miệng nhỏ nhất đo được là 0,583 m ở A05 với `w070`.
+
+Vị trí spawn và goal trong YAML và Hydra override dùng hệ tọa độ nguồn. Builder chuyển chúng theo bố cục đã chọn, rồi kiểm tra footprint. `width_geom_offsets` và `width_actor_offsets` ghi các dịch chuyển trước khi đổi kích thước, chỉ áp dụng khi có preset. Chúng dời một số đồ đạc và hai điểm của các actor tương ứng để tránh chắn lối hoặc chồng footprint. Khoảng đi được thực tế tại chỗ có vật cản có thể hẹp hơn bề rộng danh định.
+
+Kiểm thử headless biên dịch 21 tổ hợp preset bằng MuJoCo và đo tia đến hai mặt tường với dung sai 0,000001 m. Kiểm thử actuator chạy mecanum qua lối cạnh cầu thang `school_floor` với cả ba preset và đi vào hốc `blind_corner` ở preset 0,70 m.
+
+### Hành lang và khu chờ bệnh viện
+
+`hospital_medium/main.xml` là MJCF chung cho ba mức. Trục X chạy dọc tuyến, dài 56 m từ mặt trong tường đầu này đến mặt trong tường đầu kia. Tường dọc có mặt trong tại Y = ±1,50 m. Mỗi bên có 10 cửa phòng mở rộng 1,10 m giữa hai jamb, với tâm X từ −25,20 m đến +25,20 m và bước 5,60 m. Mỗi ghế chờ rộng 1,60 m và sâu 0,45 m, đặt phía hành lang sát đoạn tường đặc. Tại một ghế có người ngồi ở X = −27,30 m, khoảng thông thủy đo đến tường đối diện là 2,46 m.
+
+Mười hốc có miệng riêng rộng 1,30 m và sâu 1,20 m, xen kẽ hai bên dọc X với bước 5,60 m. Các ID `n_01`–`n_05` và `s_01`–`s_05` dùng được với `--focus-bay`. X của tâm hốc phía bắc lần lượt là −23,50, −12,30, −1,10, 10,10 và 21,30 m. X của tâm hốc phía nam là −17,90, −6,70, 4,50, 15,70 và 26,90 m. Điểm giữa hốc nằm tại Y = +2,10 m phía bắc và Y = −2,10 m phía nam. Kiểm thử xác nhận các cửa và hốc mở tới hành lang cho footprint bán kính 0,25 m. Mecanum vào hốc `n_01` bằng actuator qua runtime.
+
+Ba mức thay đổi mật độ actor ở đầu episode. Các lượt ra cửa và cắt ngang hành lang được định nghĩa bằng pose và goal trong YAML. Người ngồi chờ là props tĩnh có geom ID `hospital_waiting_*`. Khi dùng bố cục này để tạo dữ liệu, phân biệt nó với bản hospital cũ theo `model_sha256` và `mjcf_source_sha256`. [Lệnh chạy và tái sử dụng](../MUJOCO_WORLD_COMMANDS.md#tái-sử-dụng-cho-dữ-liệu-và-thuật-toán)
 
 ### Hốc nhường đường trong các world trường học
 
@@ -52,7 +74,7 @@ Test kiểm thông thủy và lối vào của từng hốc trên MJCF đã biê
 
 `simulation.human_visuals=quaternius` dùng hai bundle chuẩn hóa `casual_male` và `casual_female` trong `sim/mujoco/assets/humans/`. Đây là các mesh mặc quần áo Smooth Casual, cao 1,75 m và 1,65 m, với rig 42 bone và màu material gốc. Bundle giữ URL, CC0-1.0, SHA-256 của FBX nguồn và SHA-256 mảng runtime. Hai bundle là bản sao theo byte của dữ liệu đã dựng cho demo. Quy trình dựng lại dùng converter Blender ngoại tuyến trong `humans/`. [Quy trình và nguồn](../../humans/README.md#sources)
 
-Bộ dựng chọn luân phiên hai mẫu theo thứ tự ID trong scenario. Bone mocap chỉ dùng cho skin render. Adapter lấy XY/yaw từ body vật lý và lấy mẫu clip idle theo thời gian mô phỏng ở biên control tick. Reset lặp lại pose ban đầu. Người giữ XY/yaw tại spawn với runtime hiện tại. Viewer dùng cùng lớp skin và cập nhật idle trong lúc xem. Các pose ngồi ở `hospital_easy` được dựng trên rig thật theo chiều cao ghế, dùng như vật cản tĩnh với pose cố định.
+Bộ dựng chọn luân phiên hai mẫu theo thứ tự ID trong scenario. Bone mocap chỉ dùng cho skin render. Adapter lấy XY/yaw từ body vật lý và lấy mẫu clip idle theo thời gian mô phỏng ở biên control tick. Reset lặp lại pose ban đầu. Người giữ XY/yaw tại spawn với runtime hiện tại. Viewer dùng cùng lớp skin và cập nhật idle trong lúc xem. Các pose ngồi của hospital được dựng theo chiều cao ghế hành lang và dùng như vật cản tĩnh.
 
 Hình trụ collision của người dùng geom group 3, ẩn mặc định trong viewer. Hai cấu hình render `quaternius` và `proxy` giữ cùng footprint, contact mask và ID vật lý. Các vật cản là người cố định trong bệnh viện giữ phân loại `robot_wall`; người thuộc scenario giữ `robot_human`. Tài nguyên mesh xuất hiện trong kết quả render MuJoCo. Các slot cảm biến depth và LiDAR vẫn ở trạng thái chưa khả dụng của runtime hiện tại.
 

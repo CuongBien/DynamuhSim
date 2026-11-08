@@ -11,7 +11,7 @@ import pytest
 from narrow_nav.core.actions import RobotAction
 from narrow_nav.core.errors import ConfigurationError
 from narrow_nav.core.types import Twist2D
-from narrow_nav.simulation.configuration import compose_config
+from narrow_nav.simulation.configuration import compose_config, validate_scene_config
 from narrow_nav.simulation.geometry_inspector import inspect_world
 from narrow_nav.simulation.mujoco_engine import MuJoCoEngine
 from narrow_nav.simulation.world_builder import MJCF_ROOT, build_world
@@ -24,9 +24,9 @@ _WORLD_SCENARIOS = (
     ("arena_obstacle", "arena_obstacle", 1),
     ("arena_dataset", "arena_dataset", 0),
     ("arena_rvo2", "arena_rvo2", 4),
-    ("hospital_easy", "hospital_easy", 3),
-    ("hospital_medium", "hospital_medium", 7),
-    ("hospital_hard", "hospital_hard", 14),
+    ("hospital_easy", "hospital_easy", 6),
+    ("hospital_medium", "hospital_medium", 12),
+    ("hospital_hard", "hospital_hard", 20),
     ("school_arena", "school_arena", 8),
     ("school_arena_1", "school_arena_1", 0),
     ("school_arena_hunav", "school_arena_hunav", 8),
@@ -235,7 +235,8 @@ def test_school_route_connects_inside_the_perimeter(world, radius):
         assert seen[cell(15, -2)]
 
 
-def test_school_mecanum_crosses_the_aisle_beside_the_stairs():
+@pytest.mark.parametrize("preset", [None, "w070", "w090", "w120"])
+def test_school_mecanum_crosses_the_aisle_beside_the_stairs(preset):
     config = compose_config(
         overrides=[
             "worlds=school_floor",
@@ -243,8 +244,10 @@ def test_school_mecanum_crosses_the_aisle_beside_the_stairs():
             "robots=mecanum_robot",
             f"scenarios.robot.initial_pose=[15,-4.1,{pi / 2}]",
             "scenarios.robot.goal=[15,1.0]",
+            *([f"corridor_width={preset}"] if preset else []),
         ]
     )
+    _, scene = validate_scene_config(config)
     engine = MuJoCoEngine()
     try:
         engine.load(config)
@@ -258,7 +261,7 @@ def test_school_mecanum_crosses_the_aisle_beside_the_stairs():
             if result.terminated:
                 break
         assert result.end_reason == "goal_reached"
-        assert result.ground_truth.robot.pose.y > 0.90
+        assert result.ground_truth.robot.pose.y > scene.robot.goal.y - 0.10
     finally:
         engine.close()
 
@@ -267,13 +270,92 @@ def test_school_mecanum_crosses_the_aisle_beside_the_stairs():
     ("world", "width"),
     [("corridor_070", 0.7), ("corridor_090", 0.9), ("corridor_120", 1.2)],
 )
-def test_corridor_width_and_recess_from_compiled_collision(world, width):
+def test_corridor_has_a_fixed_width_and_closed_straight_walls(world, width):
     config = compose_config(overrides=[f"worlds={world}", f"scenarios={world}"])
     geometry = inspect_world(build_world(config))
-    assert geometry.clear_width(0) == pytest.approx(width, abs=1e-9)
-    assert geometry.clear_width(2) == pytest.approx(width + 0.6, abs=1e-9)
-    assert geometry.contains(2, width / 2 + 0.3, 0.25)
-    assert not geometry.contains(0, width / 2 + 0.3, 0.25)
+    for x in (-14, 0, 2, 14):
+        assert geometry.clear_width(x) == pytest.approx(width, abs=1e-9)
+        assert not geometry.contains(x, width / 2 + 0.03)
+    assert not geometry.contains(-15.02, 0)
+    assert not geometry.contains(15.02, 0)
+
+
+def test_hospital_has_open_doors_waiting_seats_and_separate_yield_bays():
+    path = MJCF_ROOT / "worlds" / "hospital_medium" / "main.xml"
+    model = mujoco.MjModel.from_xml_path(str(path))
+    collision = inspect_world(path)
+    assert collision.clear_width(0) == pytest.approx(3.0, abs=1e-9)
+    assert collision.clear_width(-26.9) == pytest.approx(2.475, abs=1e-9)
+    assert collision.clear_width(-27.3) == pytest.approx(2.46, abs=1e-9)
+    assert all(collision.contains(x, 0, 0.25) for x in np.linspace(-27.7, 27.7, 223))
+
+    centers = []
+    for side, sign in (("n", 1), ("s", -1)):
+        for x in np.linspace(-25.2, 25.2, 10):
+            assert all(
+                collision.contains(x, sign * y, 0.25) for y in (1.2, 1.6, 2.0, 2.4)
+            )
+        for index in range(1, 7):
+            seat = model.geom(f"waiting_bench_{side}_{index:02d}_seat")
+            assert abs(seat.pos[1]) + seat.size[1] < 1.5
+        for index in range(1, 6):
+            bay = f"yield_bay_{side}_{index:02d}"
+            low, high, back = (
+                model.geom(f"{bay}_{end}") for end in ("low", "high", "back")
+            )
+            assert high.pos[0] - high.size[0] - low.pos[0] - low.size[
+                0
+            ] == pytest.approx(1.30)
+            assert sign * back.pos[1] - back.size[1] - 1.5 == pytest.approx(1.20)
+            centers.append((back.pos[0], side))
+            assert all(
+                collision.contains(back.pos[0], sign * y, 0.25)
+                for y in np.linspace(0, 2.35, 24)
+            )
+    ordered = sorted(centers)
+    assert all(
+        b - a == pytest.approx(5.6) and side_a != side_b
+        for (a, side_a), (b, side_b) in pairwise(ordered)
+    )
+
+
+@pytest.mark.parametrize(
+    ("world", "x", "goal_y", "width_override"),
+    [
+        ("hospital_easy", -23.5, 2.1, []),
+        ("blind_corner", 1.2, 1.40, ["corridor_width=w070"]),
+    ],
+)
+def test_mecanum_can_drive_into_a_yield_bay(world, x, goal_y, width_override):
+    config = compose_config(
+        overrides=[
+            f"worlds={world}",
+            f"scenarios={world}",
+            "robots=mecanum_robot",
+            "simulation.human_visuals=proxy",
+            f"scenarios.robot.initial_pose=[{x},0,{pi / 2}]",
+            f"scenarios.robot.goal=[{x},{goal_y}]",
+            *width_override,
+        ]
+    )
+    _, scene = validate_scene_config(config)
+    assert scene.robot.pose.x == scene.robot.goal.x == x
+    engine = MuJoCoEngine()
+    try:
+        engine.load(config)
+        engine.reset()
+        for _ in range(160):
+            robot = engine.get_ground_truth().robot
+            result = engine.step(
+                RobotAction(robot.entity_id, Twist2D(0.35, 0, 0), robot.timestamp)
+            )
+            assert not result.contacts
+            if result.terminated:
+                break
+        assert result.end_reason == "goal_reached"
+        assert result.ground_truth.robot.pose.y >= scene.robot.goal.y - 0.1
+    finally:
+        engine.close()
 
 
 def test_arena_cylinder_uses_round_clearance_and_native_contact():
