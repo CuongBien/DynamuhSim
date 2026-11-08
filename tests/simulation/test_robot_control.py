@@ -4,7 +4,7 @@ import mujoco
 import pytest
 
 from narrow_nav.core.actions import RobotAction
-from narrow_nav.core.errors import ContractError
+from narrow_nav.core.errors import ConfigurationError, ContractError
 from narrow_nav.core.types import Twist2D
 from narrow_nav.simulation.configuration import compose_config
 from narrow_nav.simulation.mujoco_engine import MuJoCoEngine
@@ -84,3 +84,54 @@ def test_mecanum_sdf_dimensions_and_physical_strafe():
     turn = _run(engine, Twist2D(0, 0, 0.8), 20)
     assert turn.ground_truth.robot.pose.yaw > 0.5
     engine.close()
+
+
+@pytest.mark.parametrize(
+    ("overrides", "lidar_height", "camera_height"),
+    [
+        ((), 0.20, 0.50),
+        (
+            ("robots.wheel_radius_m=0.05", "robots.depth_camera_height_m=0.55"),
+            0.20,
+            0.55,
+        ),
+    ],
+)
+def test_mecanum_sensor_heights_and_mounts(overrides, lidar_height, camera_height):
+    built = build_world(compose_config(overrides=("robots=mecanum_robot", *overrides)))
+    model = mujoco.MjModel.from_xml_string(built.mjcf, dict(built.visual_assets))
+    data = mujoco.MjData(model)
+    mujoco.mj_forward(model, data)
+    ground = data.site("robot/base_footprint").xpos[2]
+    lidar = data.site("robot/base_scan_origin").xpos
+    camera = data.camera("robot/depth_camera")
+    assert ground == pytest.approx(0)
+    assert lidar[2] - ground == pytest.approx(lidar_height)
+    assert camera.xpos[2] - ground == pytest.approx(camera_height)
+    assert tuple(-camera.xmat.reshape(3, 3)[:, 2]) == pytest.approx((1, 0, 0))
+    assert model.body_subtreemass[model.body("robot").id] == pytest.approx(4.7)
+
+    def limits(name):
+        geom = model.geom(f"robot/{name}")
+        half_height = geom.size[
+            1 if geom.type.item() == mujoco.mjtGeom.mjGEOM_CYLINDER else 2
+        ]
+        center = data.geom(geom.id).xpos[2]
+        return center - half_height, center + half_height
+
+    deck = limits("chassis_collision")[1]
+    assert limits("lidar_pedestal_post") == pytest.approx(
+        (deck, limits("lidar_collision")[0])
+    )
+    mast_bottom, mast_top = limits("camera_mast_post")
+    assert mast_bottom == pytest.approx(deck)
+    assert mast_top == pytest.approx(data.geom("robot/camera_bracket").xpos[2])
+    assert limits("camera_bracket")[1] == pytest.approx(limits("camera_housing")[0])
+
+
+def test_mecanum_rejects_a_sensor_mount_below_the_deck():
+    config = compose_config(
+        overrides=("robots=mecanum_robot", "robots.lidar_height_m=0.1")
+    )
+    with pytest.raises(ConfigurationError, match="lidar_pedestal half-height"):
+        build_world(config)

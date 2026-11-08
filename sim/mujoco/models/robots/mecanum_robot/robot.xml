@@ -3,7 +3,7 @@
   <worldbody>
     <body name="mecanum_robot" pos="0 0 0.04">
       <freejoint name="base_free" />
-      <inertial pos="0 0 0.04" mass="3.5" diaginertia="0.01598 0.02473 0.037" />
+      <inertial pos="0 0 0.04" mass="3.285" diaginertia="0.01499837143 0.02321087143 0.03472714286" />
       <geom name="chassis_collision" type="box" size="0.12 0.10 0.04" pos="0 0 0.04" group="2" contype="2" conaffinity="13" rgba="0.25 0.35 0.45 0.45" />
       <geom name="chassis_visual" type="box" size="0.12 0.10 0.04" pos="0 0 0.04" group="5" contype="0" conaffinity="0" rgba="0.2 0.35 0.65 1" />
       <geom name="top_plate_visual" type="box" size="0.11 0.09 0.005" pos="0 0 0.085" group="5" contype="0" conaffinity="0" rgba="0.25 0.25 0.25 1" />
@@ -12,16 +12,42 @@
         <inertial pos="0 0 0" mass="0.02" diaginertia="1e-5 1e-5 1e-5" />
         <site name="imu_link_origin" size="0.002" />
       </body>
-      <body name="base_scan" pos="0 0 0.12">
-        <inertial pos="0 0 0" mass="0.12" diaginertia="4e-5 4e-5 4e-5" />
-        <site name="base_scan_origin" size="0.002" />
-        <geom name="lidar_collision" type="cylinder" size="0.035 0.02" group="2" contype="2" conaffinity="13" rgba="0.1 0.1 0.1 1" />
+      <body name="lidar_pedestal" pos="0.065 0 0.08">
+        <geom name="lidar_pedestal_post" type="cylinder" pos="0 0 0.026" size="0.016 0.026"
+              mass="0.025" group="2" contype="2" conaffinity="13" rgba="0.34 0.37 0.41 1" />
       </body>
-      <body name="camera_link" pos="0.12 0 0.08">
-        <inertial pos="0 0 0" mass="0.06" diaginertia="1e-5 1e-5 1e-5" />
+      <body name="base_scan" pos="0.065 0 0.16">
+        <inertial pos="0 0 -0.0075" mass="0.135" diaginertia="5.8e-5 5.8e-5 7.4e-5" />
+        <site name="base_scan_origin" size="0.002" />
+        <geom name="lidar_collision" type="cylinder" pos="0 0 -0.0075" size="0.034 0.0205"
+              group="2" contype="2" conaffinity="13" rgba="0.11 0.13 0.16 1" />
+        <geom name="lidar_optical_band" type="cylinder" size="0.0345 0.004"
+              mass="0" group="5" contype="0" conaffinity="0" rgba="0.045 0.06 0.075 1" />
+        <geom name="lidar_top_cap" type="cylinder" pos="0 0 0.013" size="0.030 0.0015"
+              mass="0" group="5" contype="0" conaffinity="0" rgba="0.23 0.26 0.31 1" />
+      </body>
+      <body name="camera_mast" pos="-0.065 0 0.08">
+        <geom name="camera_mast_foot" type="box" pos="0 0 0.004" size="0.028 0.023 0.004"
+              mass="0.025" group="2" contype="2" conaffinity="13" rgba="0.18 0.21 0.25 1" />
+        <geom name="camera_mast_post" type="box" pos="0 0 0.1805" size="0.010 0.010 0.1805"
+              mass="0.12" group="2" contype="2" conaffinity="13" rgba="0.67 0.71 0.76 1" />
+      </body>
+      <body name="camera_link" pos="-0.042 0 0.46">
+        <inertial pos="-0.004 0 -0.003" mass="0.09" diaginertia="7e-5 1.5e-5 7e-5" />
         <site name="camera_link_origin" size="0.002" />
-        <geom name="camera_visual" type="box" size="0.0125 0.045 0.0125" group="5" contype="0" conaffinity="0" rgba="0.3 0.3 0.3 1" />
-        <camera name="depth_camera" xyaxes="0 -1 0 0 0 1" resolution="424 240" fovy="56.484894271" />
+        <geom name="camera_bracket" type="box" pos="-0.018 0 -0.019" size="0.023 0.029 0.0065"
+              group="2" contype="2" conaffinity="13" rgba="0.20 0.24 0.29 1" />
+        <geom name="camera_housing" type="box" size="0.0125 0.045 0.0125"
+              group="2" contype="2" conaffinity="13" rgba="0.72 0.75 0.79 1" />
+        <geom name="camera_face" type="box" pos="0.0127 0 0" size="0.0008 0.041 0.010"
+              mass="0" group="5" contype="0" conaffinity="0" rgba="0.045 0.05 0.06 1" />
+        <replicate count="3" offset="0 0.025 0" sep="_">
+          <geom name="camera_lens" type="cylinder" pos="0.0138 -0.025 0" size="0.0038 0.0006"
+                quat="0.7071067811865476 0 0.7071067811865476 0"
+                mass="0" group="5" contype="0" conaffinity="0" rgba="0.16 0.27 0.34 1" />
+        </replicate>
+        <camera name="depth_camera" pos="0.015 0 0" xyaxes="0 -1 0 0 0 1"
+                resolution="424 240" fovy="56.484894271" />
       </body>
       <!--Driven hubs spin about +Y. Passive 45-degree rollers carry floor contacts.-->
       <body name="front_left_wheel" pos="0.08 0.1 0">

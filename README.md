@@ -41,6 +41,12 @@ python -m narrow_nav.simulation.mujoco.view_world robots=mecanum_robot
 
 Thêm cặp override world/scenario ở trên để đổi môi trường. Viewer mở từ trên xuống tại trạng thái ban đầu, tự căn theo kích thước world và ẩn hai bảng điều khiển. Cuộn chuột để zoom, kéo để đổi góc nhìn. Dùng Tab hoặc Shift+Tab để hiện lại các bảng.
 
+Dùng `--focus-robot` để xem cận LiDAR YDLIDAR X3 và trụ lắp camera RealSense D435i trên mecanum.
+
+```bash
+.venv/bin/python -m narrow_nav.simulation.mujoco.view_world --focus-robot robots=mecanum_robot
+```
+
 ### World chuyển từ DynamuhSim
 
 Các world `corridor_070`, `corridor_090`, `corridor_120`, các mức `hospital_*`, `school_*` và `arena_*` dùng chung `MuJoCoEngine` với các world tham số. Chọn cặp world/scenario cùng tên, hoặc dùng `worlds=school_floor scenarios=school_floor_baseline` để chạy bản trường học với robot duy nhất.

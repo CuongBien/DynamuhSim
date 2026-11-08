@@ -22,8 +22,12 @@ def main() -> None:
     parser.add_argument(
         "overrides", nargs="*", help="Hydra overrides, e.g. robots=mecanum_robot"
     )
-    parser.add_argument(
+    focus_options = parser.add_mutually_exclusive_group()
+    focus_options.add_argument(
         "--focus-human", metavar="ID", help="start the camera near a human"
+    )
+    focus_options.add_argument(
+        "--focus-robot", action="store_true", help="start with a close-up of the robot"
     )
     args = parser.parse_args()
 
@@ -56,7 +60,7 @@ def main() -> None:
     frame_height = 1.15 * max(y_max - y_min, (x_max - x_min) / 1.25)
     view.fovy = (
         42
-        if focus is not None
+        if focus is not None or args.focus_robot
         else degrees(2 * atan(frame_height / (2 * camera.distance)))
     )
     model.vis.headlight.active = 1
@@ -72,7 +76,13 @@ def main() -> None:
             mujoco.mjv_defaultFreeCamera(model, window.cam)
             window.opt.geomgroup[3] = 0  # Human collision footprints.
             window.opt.geomgroup[5] = 1  # Actor visual meshes and bodies.
-            if focus is not None:
+            if args.focus_robot:
+                pose = world.scene.robot.pose
+                window.cam.lookat[:] = (pose.x, pose.y, 0.25)
+                window.cam.azimuth = degrees(pose.yaw) + 145
+                window.cam.elevation = -18
+                window.cam.distance = 1.05
+            elif focus is not None:
                 seated = (
                     isinstance(focus, HumanProp) and focus.seat_height_m is not None
                 )

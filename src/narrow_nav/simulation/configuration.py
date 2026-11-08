@@ -76,6 +76,16 @@ def drive_from_config(config: DictConfig) -> DriveProfile:
     )
 
 
+def mecanum_sensor_heights(config: DictConfig) -> tuple[float, float]:
+    """Resolve nominal floor-relative LiDAR and depth camera heights in metres."""
+    lidar = "robots.lidar_height_m"
+    camera = "robots.depth_camera_height_m"
+    return (
+        positive(OmegaConf.select(config, lidar, default=0.20), lidar),
+        positive(OmegaConf.select(config, camera, default=0.50), camera),
+    )
+
+
 def _coordinates(actor: DictConfig, field: str, dimensions: int) -> ListConfig:
     values = _required_as(actor, field, ListConfig)
     if len(values) != dimensions:
@@ -255,8 +265,11 @@ def validate_scene_config(
         backend = identifier(_required(config, "humans.backend"), "humans.backend")
         if backend == "scripted":
             positive(_required(config, "humans.speed_mps"), "humans.speed_mps")
-        if _required(config, "robots.drive") not in ("differential", "mecanum"):
+        drive = _required(config, "robots.drive")
+        if drive not in ("differential", "mecanum"):
             raise ConfigurationError("robots.drive must be differential or mecanum")
+        if drive == "mecanum":
+            mecanum_sensor_heights(config)
         _required_as(config, "experiments.terminate_on_contact", bool)
 
         for field in (

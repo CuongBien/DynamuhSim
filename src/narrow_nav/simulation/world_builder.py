@@ -22,6 +22,7 @@ from .configuration import (
     Spawn,
     _required,
     drive_from_config,
+    mecanum_sensor_heights,
     validate_scene_config,
 )
 from .robot_controller import DriveProfile
@@ -134,7 +135,10 @@ def _add_robot(
             body, spawn.radius_m, drive, mass, wheel_mass, wheel_width
         )
     else:
-        _configure_mecanum(body, spawn.radius_m, drive, mass, wheel_mass, wheel_width)
+        mounts_mass = _configure_mecanum_mounts(body, drive.wheel_radius_m, config)
+        _configure_mecanum(
+            body, spawn.radius_m, drive, mass, wheel_mass, wheel_width, mounts_mass
+        )
 
     _place_actor(body, spawn, drive.wheel_radius_m)
     worldbody.append(body)
@@ -188,6 +192,45 @@ def _configure_differential(
         )
 
 
+def _configure_mecanum_mounts(
+    body: ET.Element, wheel_radius: float, config: DictConfig
+) -> float:
+    """Place sensor origins relative to the nominal ground under the wheel axles."""
+    lidar = body.find("body[@name='base_scan']")
+    camera = body.find("body[@name='camera_link']")
+    lidar_height, camera_height = mecanum_sensor_heights(config)
+    lidar_z, camera_z = lidar_height - wheel_radius, camera_height - wheel_radius
+    for sensor, z in ((lidar, lidar_z), (camera, camera_z)):
+        x, y, _ = map(float, sensor.get("pos").split())
+        sensor.set("pos", _numbers(x, y, z))
+
+    housing = lidar.find("geom[@name='lidar_collision']")
+    lidar_bottom = (
+        lidar_z
+        + float(housing.get("pos").split()[-1])
+        - float(housing.get("size").split()[-1])
+    )
+    bracket = camera.find("geom[@name='camera_bracket']")
+    bracket_center = camera_z + float(bracket.get("pos").split()[-1])
+    imu = body.find("body[@name='imu_link']")
+    mounts_mass = sum(
+        float(link.find("inertial").get("mass")) for link in (imu, lidar, camera)
+    )
+    for mount_name, post_name, top in (
+        ("lidar_pedestal", "lidar_pedestal_post", lidar_bottom),
+        ("camera_mast", "camera_mast_post", bracket_center),
+    ):
+        mount = body.find(f"body[@name='{mount_name}']")
+        deck = float(mount.get("pos").split()[-1])
+        half_height = positive((top - deck) / 2, f"{mount_name} half-height")
+        post = mount.find(f"geom[@name='{post_name}']")
+        *cross_section, _ = map(float, post.get("size").split())
+        post.set("size", _numbers(*cross_section, half_height))
+        post.set("pos", _numbers(0, 0, half_height))
+        mounts_mass += sum(float(geom.get("mass")) for geom in mount.findall("geom"))
+    return mounts_mass
+
+
 def _configure_mecanum(
     body: ET.Element,
     radius: float,
@@ -195,13 +238,10 @@ def _configure_mecanum(
     mass: float,
     wheel_mass: float,
     wheel_width: float,
+    mounts_mass: float,
 ) -> None:
     wheel_radius, separation = drive.wheel_radius_m, drive.wheel_separation_m
     chassis = body.find("inertial")
-    mounts_mass = sum(
-        float(body.find(f"body[@name='{name}']/inertial").get("mass"))
-        for name in ("imu_link", "base_scan", "camera_link")
-    )
     chassis_mass = mass - 4 * wheel_mass - mounts_mass
     if chassis_mass <= 0:
         raise ConfigurationError(
@@ -226,11 +266,13 @@ def _configure_mecanum(
         raise ConfigurationError(
             "mecanum chassis and separated wheels must fit inside the robot footprint"
         )
-    chassis.set("mass", _numbers(chassis_mass))
+    inertia_scale = chassis_mass / float(chassis.get("mass"))
+    nominal_inertia = map(float, chassis.get("diaginertia").split())
     chassis.set(
         "diaginertia",
-        _numbers(*(value * chassis_mass / 3.5 for value in (0.01598, 0.02473, 0.037))),
+        _numbers(*(value * inertia_scale for value in nominal_inertia)),
     )
+    chassis.set("mass", _numbers(chassis_mass))
     body.find("site[@name='base_footprint']").set("pos", _numbers(0, 0, -wheel_radius))
     for name, x_sign, y_sign, roller_sign in zip(
         drive.wheels, (1, 1, -1, -1), (1, -1, 1, -1), (-1, 1, 1, -1), strict=True

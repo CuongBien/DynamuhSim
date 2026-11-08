@@ -23,9 +23,11 @@ Bộ điều khiển giới hạn chuẩn Euclid của vận tốc phẳng, biê
 
 ## Mecanum chuyển từ SDF
 
-Profile `robots=mecanum_robot` chuyển hình học từ mẫu Small Mecanum Robot của DynamuhSim Team sang MJCF. Chassis hộp 0,24 × 0,20 × 0,08 m nặng 3,5 kg. Bốn bánh đường kính 0,08 m, rộng 0,03 m, cách trục trước–sau 0,16 m và trái–phải 0,20 m. Mỗi bánh nặng 0,25 kg tính cả con lăn. Các cụm lắp IMU, LiDAR và camera đưa tổng khối lượng lên 4,7 kg. Footprint tròn 0,18 m bao quanh chassis và cụm bánh.
+Profile `robots=mecanum_robot` chuyển hình học từ mẫu Small Mecanum Robot của DynamuhSim Team sang MJCF. Chassis hộp 0,24 × 0,20 × 0,08 m. Bốn bánh đường kính 0,08 m, rộng 0,03 m, cách trục trước–sau 0,16 m và trái–phải 0,20 m. Mỗi bánh nặng 0,25 kg tính cả con lăn. Tổng khối lượng danh định là 4,7 kg, trong đó chassis chiếm 3,285 kg và cụm cảm biến cùng giá đỡ chiếm 0,415 kg. Khối lượng và quán tính của trụ và giá đỡ là giả định mô hình. Footprint tròn 0,18 m bao quanh chassis và cụm bánh.
 
-Mỗi hub có hinge chủ động theo +Y và 12 con lăn thụ động có trục nghiêng 45°. Trục con lăn xen kẽ theo bốn hướng trong mẫu SDF. Tiếp xúc con lăn–sàn thay cho ma sát định hướng của SDF. Kích thước và quán tính con lăn là giả định mô hình. Bốn servo giới hạn mô-men điều khiển theo thứ tự trước trái, trước phải, sau trái, sau phải. Camera giữ hướng nhìn +X, độ phân giải 424 × 240 và FOV ngang 87°. MJCF có camera và mốc lắp IMU/LiDAR.
+Mỗi hub có hinge chủ động theo +Y và 12 con lăn thụ động có trục nghiêng 45°. Trục con lăn xen kẽ theo bốn hướng trong mẫu SDF. Tiếp xúc con lăn–sàn thay cho ma sát định hướng của SDF. Kích thước và quán tính con lăn là giả định mô hình. Bốn servo giới hạn mô-men điều khiển theo thứ tự trước trái, trước phải, sau trái, sau phải.
+
+Mặt phẳng quét của YDLIDAR X3 lấy mốc tại `robot/base_scan_origin`, mặc định cao **0,20 m**. Tâm quang học của D435i tại `robot/depth_camera` cao **0,50 m**, hướng +X, độ phân giải 424 × 240 và FOV ngang 87°. Hai độ cao tính từ `robot/base_footprint` theo +Z khi robot đứng phẳng. Cấu hình `robots.lidar_height_m` và `robots.depth_camera_height_m` điều chỉnh cùng chiều dài chân đế hoặc trụ. Vỏ X3 dùng hình trụ xấp xỉ. Vỏ D435i có kích thước danh định 90 × 25 × 25 mm và gắn vào trụ vuông 20 × 20 mm phía sau LiDAR bằng giá đỡ trên đỉnh. Trụ và vỏ dùng geom collision, các chi tiết mặt quang học dùng geom hiển thị riêng. [Datasheet X3](https://m.media-amazon.com/images/I/81iFu4AxzoL.pdf) · [RealSense D435i](https://www.realsenseai.com/products/depth-camera-d435i/)
 
 ## Quan sát và contact
 
