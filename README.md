@@ -4,9 +4,9 @@ Dự án nghiên cứu dự đoán quỹ đạo di chuyển của người để
 
 ## Trạng thái
 
-**Hiện tại · TASK 03.** Runtime episode headless chạy với robot vi sai hoặc mecanum và người mocap đứng yên. `humans=scripted` chọn cấu hình Hydra. Runtime vẫn phát lệnh vận tốc zero cho người, còn các slot cảm biến trả `missing`. Các hợp đồng dữ liệu v1 đã có trong package `narrow_nav`. [Runtime hiện tại](docs/architecture/05_MUJOCO_RUNTIME.md)
+**Hiện tại.** Runtime headless chạy với robot vi sai hoặc mecanum. Entry point smoke hỗ trợ `humans=scripted` và baseline `humans=orca` qua cùng limiter và mocap. Caller dùng `MuJoCoEngine()` có thể tái hiện profile người đứng yên. Các slot cảm biến vẫn trả `missing`. [Runtime hiện tại](docs/architecture/05_MUJOCO_RUNTIME.md) · [ORCA và lệnh chạy](docs/backends/ORCA_PURE.md)
 
-**Việc tiếp theo · TASK 04A.** Nối backend `scripted` và kiểm chứng một người đi đến đích khi robot đứng yên. Sau đó đối chứng ORCA và Social Force, rồi thu dataset hành vi khi cảm biến và đường ghi/đọc episode đã qua kiểm định. [Lộ trình và tiêu chí chuyển bước](docs/ROADMAP.md) · [Giao thức hành vi](docs/protocols/HUMAN_BEHAVIOR_PROTOCOL.md)
+**Việc tiếp theo.** Nối bridge JuPedSim, rồi kiểm từng model. Thu dataset hành vi sau khi cảm biến và đường ghi/đọc episode đã qua kiểm định. [Tiến độ mô hình người](docs/reports/human_models/PROGRESS.md) · [Giao thức hành vi](docs/protocols/HUMAN_BEHAVIOR_PROTOCOL.md)
 
 ## Cài đặt và kiểm tra
 

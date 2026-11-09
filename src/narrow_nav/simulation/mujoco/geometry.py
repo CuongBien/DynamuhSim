@@ -22,7 +22,7 @@ def inspect_mjcf(
 
 
 def collision_geometry(model: mujoco.MjModel, data: mujoco.MjData) -> WorldCollision:
-    floors, walls = [], []
+    floors, walls, wall_ids = [], [], []
     for geom_id in range(model.ngeom):
         group = int(model.geom_group[geom_id])
         if group not in (0, 1, 3) or model.geom_bodyid[geom_id] != 0:
@@ -33,6 +33,8 @@ def collision_geometry(model: mujoco.MjModel, data: mujoco.MjData) -> WorldColli
         half_x, half_y, _ = map(float, model.geom_size[geom_id])
         orientation = tuple(data.geom_xmat[geom_id])
         shape = model.geom_type[geom_id]
+        if group != 0:
+            wall_ids.append(model.geom(geom_id).name)
         if (
             group != 0
             and shape == mujoco.mjtGeom.mjGEOM_CYLINDER
@@ -60,4 +62,4 @@ def collision_geometry(model: mujoco.MjModel, data: mujoco.MjData) -> WorldColli
         raise ConfigurationError(
             "compiled world must contain collision floors and walls"
         )
-    return WorldCollision(tuple(floors), tuple(walls))
+    return WorldCollision(tuple(floors), tuple(walls), tuple(wall_ids))

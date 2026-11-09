@@ -1,6 +1,6 @@
 # 02 · Luồng dữ liệu
 
-Hiện tại `step(RobotAction)` nhận lệnh robot từ bên gọi và trả snapshot trong bộ nhớ. Người giữ pose spawn, cảm biến trả slot `missing` và chưa có bộ ghi episode. [Runtime hiện tại](05_MUJOCO_RUNTIME.md)
+Hiện tại `step(RobotAction)` nhận lệnh robot từ bên gọi và trả snapshot trong bộ nhớ. Profile active dùng backend `scripted` đã inject để điều khiển người, còn profile stationary phục vụ caller cũ. Cảm biến trả slot `missing` và chưa có bộ ghi episode. [Runtime hiện tại](05_MUJOCO_RUNTIME.md) · [Biên điều khiển người](HUMAN_2D_3D_BRIDGE_NOTES.md)
 
 ## Luồng đích của TASK 04
 

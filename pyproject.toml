@@ -16,12 +16,22 @@ sim = ["mujoco>=4.0"]
 human-models = [
     "jupedsim==1.4.2",
 ]
+human-orca = ["pyrvo2==0.0.0"]
+human-jupedsim = ["jupedsim==1.4.2"]
+human-all = ["jupedsim==1.4.2", "pyrvo2==0.0.0"]
 
 [project.scripts]
 narrow-nav-config = "narrow_nav.simulation.configuration:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]
+
+[tool.uv.sources]
+# Match the Python-RVO2 gitlink. Its legacy setup.py reports version 0.0.0.
+pyrvo2 = { git = "https://github.com/sybrenstuvel/Python-RVO2.git", rev = "c2c46ba8d59556aa10faf03479293236efea154d" }
+
+[tool.uv.extra-build-dependencies]
+pyrvo2 = ["Cython==3.1.4", "setuptools==80.9.0"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

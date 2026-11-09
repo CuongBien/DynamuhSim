@@ -1,9 +1,12 @@
 """Axis-aligned indoor layouts and planar clearance, in the world frame."""
 
-from dataclasses import dataclass
-from math import hypot, sqrt
+from dataclasses import dataclass, field
+from itertools import combinations
+from math import cos, hypot, pi, sin, sqrt
 
 from narrow_nav.core.errors import ConfigurationError
+from narrow_nav.core.states import Obstacle
+from narrow_nav.core.types import Point2D
 from narrow_nav.core.validation import finite, positive
 
 XY = tuple[float, float]
@@ -30,6 +33,11 @@ class Rectangle:
             max(self.y_min - y, y - self.y_max, 0),
         )
 
+    def signed_distance(self, x: float, y: float) -> float:
+        if self.contains(x, y):
+            return -min(x - self.x_min, self.x_max - x, y - self.y_min, self.y_max - y)
+        return self.distance(x, y)
+
     def y_span(self, x: float) -> tuple[float, float] | None:
         if self.x_min - GEOMETRY_TOLERANCE_M <= x <= self.x_max + GEOMETRY_TOLERANCE_M:
             return self.y_min, self.y_max
@@ -42,13 +50,21 @@ class Circle:
     y: float
     radius_m: float
 
+    def __post_init__(self) -> None:
+        finite(self.x, "circle x")
+        finite(self.y, "circle y")
+        positive(self.radius_m, "circle radius_m")
+
     @property
     def bounds(self) -> Rectangle:
         r = self.radius_m
         return Rectangle(self.x - r, self.x + r, self.y - r, self.y + r)
 
     def distance(self, x: float, y: float) -> float:
-        return max(0.0, hypot(self.x - x, self.y - y) - self.radius_m)
+        return max(0.0, self.signed_distance(x, y))
+
+    def signed_distance(self, x: float, y: float) -> float:
+        return hypot(self.x - x, self.y - y) - self.radius_m
 
     def y_span(self, x: float) -> tuple[float, float] | None:
         dx = abs(x - self.x)
@@ -62,6 +78,61 @@ class Circle:
 class WorldCollision:
     floors: tuple[Rectangle, ...]
     walls: tuple[Rectangle | Circle, ...]
+    wall_ids: tuple[str, ...] = field(default=(), compare=False)
+
+    def obstacles(self) -> tuple[Obstacle, ...]:
+        obstacles = []
+        for entity_id, wall in zip(self.wall_ids, self.walls, strict=True):
+            if isinstance(wall, Rectangle):
+                vertices = (
+                    Point2D(wall.x_min, wall.y_min),
+                    Point2D(wall.x_max, wall.y_min),
+                    Point2D(wall.x_max, wall.y_max),
+                    Point2D(wall.x_min, wall.y_max),
+                )
+            else:
+                # Circumscribed polygon for context; clearance uses the original circle.
+                radius = wall.radius_m / cos(pi / 16)
+                vertices = tuple(
+                    Point2D(
+                        wall.x + radius * cos(k * pi / 8),
+                        wall.y + radius * sin(k * pi / 8),
+                    )
+                    for k in range(16)
+                )
+            obstacles.append(Obstacle(entity_id, (vertices,)))
+        return tuple(obstacles)
+
+    def human_paths_clear(
+        self, starts: tuple[XY, ...], ends: tuple[XY, ...], radii: tuple[float, ...]
+    ) -> bool:
+        paths = tuple(zip(starts, ends, radii, strict=True))
+        for (x, y), (ex, ey), radius in paths:
+            if (x, y) == (ex, ey):
+                continue
+            mx, my = (x + ex) / 2, (y + ey) / 2
+            # Distance to a solid is 1-Lipschitz along the entire segment.
+            margin = radius + hypot(ex - x, ey - y) / 2 + GEOMETRY_TOLERANCE_M
+            if (
+                not any(floor.contains(mx, my) for floor in self.floors)
+                or not self.contains(ex, ey, radius)
+                or any(wall.distance(mx, my) <= margin for wall in self.walls)
+            ):
+                return False
+        for ((ax, ay), (aex, aey), ar), ((bx, by), (bex, bey), br) in combinations(
+            paths, 2
+        ):
+            dx, dy = ax - bx, ay - by
+            vx, vy = aex - bex - dx, aey - bey - dy
+            length_squared = vx * vx + vy * vy
+            fraction = (
+                min(1.0, max(0.0, -(dx * vx + dy * vy) / length_squared))
+                if length_squared
+                else 0.0
+            )
+            if hypot(dx + fraction * vx, dy + fraction * vy) < ar + br:
+                return False
+        return True
 
     def contains(self, x: float, y: float, radius_m: float = 0.0) -> bool:
         """Test that a circular footprint lies in free space with positive clearance."""
@@ -90,6 +161,14 @@ class WorldCollision:
         if south is None or north is None:
             raise ConfigurationError("width measurement requires walls on both sides")
         return north - south
+
+
+def opening_clearance(width_m: float, radius_m: float, *other_radii_m: float) -> float:
+    """Necessary transverse slack for discs at a straight opening, in metres."""
+    width = positive(width_m, "opening width_m")
+    return width - 2 * sum(
+        positive(radius, "footprint radius_m") for radius in (radius_m, *other_radii_m)
+    )
 
 
 @dataclass(frozen=True, slots=True)

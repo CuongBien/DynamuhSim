@@ -1,5 +1,6 @@
 """Typed ports and results shared by future adapters, controllers and orchestration."""
 
+from collections.abc import Mapping
 from dataclasses import dataclass
 from typing import Literal, Protocol, TypeVar
 
@@ -49,6 +50,23 @@ class ContactEvent:
 
 
 @dataclass(frozen=True, slots=True)
+class Clearance:
+    """Signed planar footprint separation in metres at a snapshot."""
+
+    robot_wall_m: float
+    robot_human_m: float | None
+    human_wall_m: float | None = None
+    human_human_m: float | None = None
+
+    def __post_init__(self) -> None:
+        finite(self.robot_wall_m, "robot_wall_m")
+        for name in ("robot_human_m", "human_wall_m", "human_human_m"):
+            value = getattr(self, name)
+            if value is not None:
+                finite(value, name)
+
+
+@dataclass(frozen=True, slots=True)
 class AdapterSnapshot:
     ground_truth: GroundTruthState
     sensor_samples: tuple[SensorObservation, ...] = ()
@@ -81,10 +99,12 @@ class AdapterStepResult:
     snapshot: AdapterSnapshot
     robot_delta_yaw: float
     contacts: tuple[ContactEvent, ...] = ()
+    human_motion_blocked_substeps: int = 0
 
     def __post_init__(self) -> None:
         require_type(self.snapshot, AdapterSnapshot, "snapshot")
         finite(self.robot_delta_yaw, "robot_delta_yaw")
+        integer(self.human_motion_blocked_substeps, "human_motion_blocked_substeps")
         require_type(self.contacts, tuple, "contacts")
         for contact in self.contacts:
             require_type(contact, ContactEvent, "contact")
@@ -102,6 +122,8 @@ class SimulationStepResult:
     terminated: bool = False
     truncated: bool = False
     end_reason: str | None = None
+    clearance: Clearance | None = None
+    human_motion_blocked_substeps: int = 0
 
     def __post_init__(self) -> None:
         require_type(self.requested, MotionBatch, "requested")
@@ -115,6 +137,9 @@ class SimulationStepResult:
 
         require_type(self.observation, Observation, "observation")
         require_type(self.ground_truth, GroundTruthState, "ground_truth")
+        if self.clearance is not None:
+            require_type(self.clearance, Clearance, "clearance")
+        integer(self.human_motion_blocked_substeps, "human_motion_blocked_substeps")
         start_stamp, end_stamp = self.requested.stamp, self.ground_truth.stamp
         if (
             self.observation.stamp != end_stamp
@@ -220,8 +245,27 @@ class RobotPolicy(Protocol[PolicyConfigT_contra]):
 
 
 class HumanControllerBackend(Protocol[BackendConfigT_contra]):
+    """One controller per episode, reset with its own seed and sorted roster."""
+
     def reset(
         self, config: BackendConfigT_contra, seed: int, entity_ids: tuple[str, ...]
     ) -> None: ...
 
     def propose(self, context: HumanContext) -> tuple[HumanMotionRequest, ...]: ...
+
+
+@dataclass(frozen=True, slots=True)
+class HumanBackendConfig:
+    parameters: Mapping[str, object]
+    control_dt_ns: int
+    goal_tolerance_m: float
+    max_acceleration_mps2: float
+    max_speed_mps: float | None = None
+
+
+class RegisteredHumanBackend(HumanControllerBackend[HumanBackendConfig], Protocol):
+    @property
+    def backend_id(self) -> str: ...
+
+    @property
+    def backend_version(self) -> str: ...

@@ -34,6 +34,7 @@ def test_step_keeps_motion_stages_and_checks_alignment():
         ),
     )
     result = SimulationStepResult(requested, limited, executed, Observation(end), truth)
+    assert result.clearance is None and result.human_motion_blocked_substeps == 0
     assert result.human_motion_results[0].limited.velocity.linear_x == 0.5
     with pytest.raises(ContractError, match="metadata"):
         replace(result, observation=Observation(start))

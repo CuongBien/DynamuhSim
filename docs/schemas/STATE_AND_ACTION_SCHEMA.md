@@ -1,6 +1,6 @@
 # State và action
 
-Runtime TASK 03 hiện áp lệnh cho robot và trả lệnh người bằng zero cùng các slot cảm biến `missing`. Hợp đồng dưới đây cũng quy định các cổng và quy tắc cần đáp ứng khi nối backend người ở TASK 04A và nguồn cảm biến ở TASK 04B. [Runtime hiện tại](../architecture/05_MUJOCO_RUNTIME.md) · [Lộ trình](../ROADMAP.md)
+Runtime hiện áp lệnh robot và lệnh người từ backend `scripted` trong profile active. Profile stationary giữ lệnh người bằng zero. Các slot cảm biến hiện trả `missing`. [Runtime hiện tại](../architecture/05_MUJOCO_RUNTIME.md)
 
 Hợp đồng logic `schema_version = 1` cho dữ liệu qua cổng `core`. Kiểu lưu trên đĩa sẽ được chọn khi có task ghi episode. Các trường dưới đây là bắt buộc trừ khi được ghi rõ là tùy chọn.
 
@@ -37,7 +37,7 @@ Payload hợp lệ chỉ có số hữu hạn. Dùng mặt nạ và giá trị t
 | Giai đoạn | Quyền sở hữu và ý nghĩa |
 | --- | --- |
 | `requested` | Đề xuất của robot policy và backend người tại `t_k`. Giá trị hữu hạn vượt giới hạn profile được ghi lại nguyên dạng để phân tích. |
-| `limited` | Bộ điều phối áp giới hạn tốc độ trước, rồi giới hạn mức thay đổi lệnh trong một control tick. Robot giới hạn chuẩn Euclid của vận tốc phẳng, vận tốc góc và tốc độ bánh theo profile. Mốc tính thay đổi là lệnh limited ở tick trước theo quy ước frame của lệnh, lấy lệnh zero ở tick đầu. Profile cố định trong run và phải cho phép lệnh zero. Adapter dùng limited làm mục tiêu trong khoảng. Người giữ lệnh zero trong TASK 03. |
+| `limited` | Bộ điều phối áp giới hạn tốc độ trước, rồi giới hạn mức thay đổi lệnh theo period của actor. Robot giới hạn chuẩn Euclid của vận tốc phẳng, vận tốc góc và tốc độ bánh theo profile. Người dùng period người và giữ lệnh giữa hai callback. Mốc tính thay đổi là lệnh limited trước đó, lấy zero ở đầu episode. Adapter dùng limited làm mục tiêu trong khoảng. |
 | `executed` | Bộ điều phối tính từ dịch chuyển vật lý trên khoảng chia cho thời lượng. Người dùng sai phân XY trong `world`. Robot dùng sai phân XY trong `world` chiếu về `robot_base` tại đầu khoảng và sai phân yaw liên tục chia cho thời lượng. Adapter cung cấp độ biến thiên yaw liên tục qua substep để qua biên ±π chính xác. |
 
 `executed` là chuyển động trung bình, còn twist/vận tốc trong state là giá trị tức thời tại snapshot. Tiếp xúc, trượt và giới hạn cơ cấu có thể tạo chênh lệch giữa `limited` và `executed`. `executed` được ghi cho kiểm định và nhãn, với quyền truy cập tương ứng ground truth.
@@ -49,7 +49,7 @@ Payload hợp lệ chỉ có số hữu hạn. Dùng mặt nạ và giá trị t
 | `SimulatorAdapter.reset` | Nhận metadata episode, đặc tả scene đã resolve với trạng thái spawn, cùng seed engine và các `SensorSeed`. Trả `AdapterSnapshot` ở tick 0 với ground truth, mẫu sensor thu tại reset nếu có và registry ID frame. |
 | `SimulatorAdapter.advance` | Nhận batch limited tại `t_k`. Trả `AdapterStepResult` với snapshot ở `t_{k+1}`, mẫu sensor mới thu, tiếp xúc trong khoảng và biến thiên yaw liên tục của robot. Adapter chuyển kết quả sang kiểu giá trị của `core`. |
 | `RobotPolicy.reset` và `propose` | Reset nhận `RobotMission` với ID và mục tiêu được phép công bố, cấu hình policy và seed luồng. `propose(Observation)` trả một `RobotAction` cho robot. |
-| `HumanControllerBackend.reset` và `propose` | Reset nhận cấu hình backend, seed luồng và danh sách ID người. `propose(HumanContext)` trả batch `HumanMotion` theo ID. |
+| `HumanControllerBackend.reset` và `propose` | Reset nhận cấu hình backend, seed luồng và danh sách ID người. `HumanBackendConfig.max_speed_mps` có mặc định tùy chọn cho caller cũ. Lifecycle truyền trần m/s của profile cho ORCA. `propose(HumanContext)` trả batch `HumanMotion` theo ID. |
 
 Các cổng dùng `Protocol` tổng quát theo kiểu cấu hình scene, policy hoặc backend. Module triển khai cung cấp kiểu cụ thể ở biên lắp ghép.
 
@@ -58,5 +58,9 @@ Các cổng dùng `Protocol` tổng quát theo kiểu cấu hình scene, policy 
 - Bộ điều phối giữ mẫu đang chờ. `capture_time_ns ≤ available_time_ns ≤ Observation.time_ns` cho mẫu công bố. Ở mỗi slot, chọn mẫu có `sample_index` lớn nhất đã sẵn sàng. Khi chưa có mẫu, trả `missing`. Khi mẫu báo lỗi, trả `invalid`. Khi mẫu valid quá tuổi tối đa tính từ capture, trả `stale`. Không dùng dữ liệu từ tương lai hoặc ground truth để bù.
 - Kiểm tra giá trị hữu hạn, kích thước đúng, ID đúng và duy nhất, frame đã đăng ký, tick/time đúng mốc, tính nhất quán metadata và ràng buộc cấu trúc của lệnh như `vy = 0` ở robot vi sai. Kiểm sensor theo schema của nó. Kiểm dữ liệu ở cả hai phía của biên. Trả snapshot độc lập với bộ nhớ có thể thay đổi trong engine hoặc controller.
 - Dữ liệu đầu vào sai dừng step trước khi tiến vật lý. Nếu callback đã chạy hoặc quá trình tiến vật lý/kiểm đầu ra thất bại, bỏ kết quả step và đóng episode theo trạng thái `failed`. Không retry tick trên instance đang ở trạng thái dở dang. Bắt đầu lại bằng reset với episode ID mới.
+
+Lifecycle kiểm snapshot reset/advance theo stamp đầy đủ và roster scene. `HumanContext.from_ground_truth` xoay vận tốc tuyến tính robot từ `robot_base` sang `world` cho nhánh backend người. `validate_human_requests` kiểm batch đối với roster và timestamp. Actor đã đến đích vẫn gửi yêu cầu zero.
+
+Mở rộng tương thích schema v1. `SimulationStepResult.clearance` tùy chọn chứa bốn giá trị khoảng hở footprint cuối tick theo m. Giá trị `None` của một cặp nghĩa là không có đủ actor cho cặp đó. `human_motion_blocked_substeps` mặc định 0 và đếm substep trong tick mà guard giữ root người. Đây là kênh kiểm định, tách khỏi `contacts` và `Observation`. [Hợp đồng runtime người](../protocols/HUMAN_MODELS_RUNTIME_CONTRACT.md)
 
 Cách ghi trạng thái kết thúc và phân tuyến dữ liệu được quy định trong [schema episode](EPISODE_SCHEMA.md) và [luồng dữ liệu](../architecture/02_DATA_FLOW.md).

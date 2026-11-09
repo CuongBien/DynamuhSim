@@ -4,6 +4,7 @@ from dataclasses import asdict, dataclass
 from typing import Any, Self
 
 from .errors import ContractError
+from .geometry import body_velocity_to_world
 from .metadata import SnapshotMetadata
 from .types import (
     ROBOT_BASE_FRAME,
@@ -170,3 +171,24 @@ class HumanContext:
             for obstacle in self.obstacles
         )
         unique(ids, "context entity IDs")
+
+    @classmethod
+    def from_ground_truth(
+        cls,
+        truth: GroundTruthState,
+        *,
+        robot_radius_m: float,
+        human_radius_m: float,
+        obstacles: tuple[Obstacle, ...] = (),
+    ) -> Self:
+        robot = truth.robot
+        return cls(
+            truth.stamp,
+            robot.entity_id,
+            robot.pose,
+            body_velocity_to_world(robot.velocity, robot.pose),
+            robot_radius_m,
+            human_radius_m,
+            truth.humans,
+            obstacles,
+        )

@@ -43,6 +43,24 @@ class HumanMotion:
 HumanMotionRequest = HumanMotion
 
 
+def validate_human_requests(
+    requests: tuple[HumanMotionRequest, ...],
+    timestamp: Timestamp,
+    *,
+    entity_ids: tuple[str, ...] | None = None,
+) -> None:
+    """Check a batch against its tick and, at the backend boundary, its roster."""
+    require_type(requests, tuple, "human motions")
+    for request in requests:
+        require_type(request, HumanMotion, "human motion")
+        if request.timestamp != timestamp:
+            raise ContractError("motion timestamps must match batch stamp")
+    ids = tuple(request.entity_id for request in requests)
+    ordered_ids(ids, "humans")
+    if entity_ids is not None and ids != entity_ids:
+        raise ContractError("human motions must match the current human IDs")
+
+
 @dataclass(frozen=True, slots=True)
 class HumanMotionResult:
     requested: HumanMotionRequest
@@ -71,15 +89,9 @@ class MotionBatch:
     def __post_init__(self) -> None:
         require_type(self.stamp, SnapshotMetadata, "stamp")
         require_type(self.robot, RobotAction, "robot")
-        require_type(self.humans, tuple, "humans")
-        for human in self.humans:
-            require_type(human, HumanMotion, "human")
-        ordered_ids(tuple(human.entity_id for human in self.humans), "humans")
+        validate_human_requests(self.humans, self.stamp.timestamp)
         unique(self.entity_ids, "entity IDs")
-        if any(
-            motion.timestamp != self.stamp.timestamp
-            for motion in (self.robot, *self.humans)
-        ):
+        if self.robot.timestamp != self.stamp.timestamp:
             raise ContractError("motion timestamps must match batch stamp")
 
     @property
