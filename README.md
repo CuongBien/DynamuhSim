@@ -4,7 +4,7 @@ Dự án nghiên cứu dự đoán quỹ đạo di chuyển của người để
 
 ## Trạng thái
 
-**Hiện tại · TASK 03.** Runtime episode headless chạy với robot vi sai hoặc mecanum và người mocap đứng yên. `humans=scripted` chọn cấu hình Hydra. Runtime vẫn phát lệnh vận tốc zero cho người, còn các slot cảm biến trả `missing`. Các hợp đồng dữ liệu v1 đã có trong package `narrow_nav`. [Runtime hiện tại](docs/architecture/05_MUJOCO_RUNTIME.md)
+**Hiện tại · TASK 03 và thu depth D435i.** Runtime episode chạy với robot vi sai hoặc mecanum và người mocap đứng yên. `humans=scripted` chọn cấu hình Hydra và runtime vẫn phát lệnh vận tốc zero cho người. Profile `sensors=d435i` thu depth cho mecanum qua hợp đồng dữ liệu v1. [Runtime hiện tại](docs/architecture/05_MUJOCO_RUNTIME.md) · [Thu depth D435i](docs/MUJOCO_D435I_DEPTH.md)
 
 **Việc tiếp theo · TASK 04A.** Nối backend `scripted` và kiểm chứng một người đi đến đích khi robot đứng yên. Sau đó đối chứng ORCA và Social Force, rồi thu dataset hành vi khi cảm biến và đường ghi/đọc episode đã qua kiểm định. [Lộ trình và tiêu chí chuyển bước](docs/ROADMAP.md) · [Giao thức hành vi](docs/protocols/HUMAN_BEHAVIOR_PROTOCOL.md)
 
@@ -50,6 +50,17 @@ Dùng `--focus-robot` để xem cận LiDAR YDLIDAR X3 và trụ lắp camera Re
 .venv/bin/python -m narrow_nav.simulation.mujoco.view_world --focus-robot robots=mecanum_robot
 ```
 
+Để lái robot bằng bàn phím và xem trực tiếp camera depth D435i, chạy `teleop_depth` với cặp world/scenario cần thử. Bỏ override sẽ mở `corridor_090` với `mecanum_robot` và ngân sách 600 s. Với `sensors=d435i`, cửa sổ hiển thị scene bên trái, depth đã xử lý và ảnh sạch cùng mốc bên phải. Nhấn V để chuyển ô dưới sang mask hoặc sai số. Lệnh đi qua `step(RobotAction)` nên dùng limiter, timing và điều kiện kết thúc của runtime. Để lưu episode và báo cáo xem lại, dùng [recorder D435i](docs/MUJOCO_D435I_DEPTH.md).
+
+```bash
+.venv/bin/python -m narrow_nav.simulation.mujoco.teleop_depth \
+  sensors=d435i worlds=hospital_easy scenarios=hospital_easy robots=mecanum_robot
+```
+
+W/S hoặc ↑/↓ để tiến/lùi, A/D đi ngang, Q/E hoặc ←/→ để quay, giữ Space để dừng, `-`/`=` để chỉnh tốc độ, R để reset, C để đổi chế độ camera, P để tạm dừng, H để xem trợ giúp, Esc để thoát. Episode dừng khi chạm tường nếu `experiments.terminate_on_contact=true`.
+
+[Lệnh teleop D435i cho toàn bộ môi trường và các biến thể bề rộng](docs/MUJOCO_TELEOP_DEPTH.md#chọn-môi-trường)
+
 ### World chuyển từ DynamuhSim
 
 Các world `corridor_070`, `corridor_090`, `corridor_120`, các mức `hospital_*`, `school_*` và `arena_*` dùng chung `MuJoCoEngine` với các world tham số. Chọn cặp world/scenario cùng tên, hoặc dùng `worlds=school_floor scenarios=school_floor_baseline` để chạy bản trường học với robot duy nhất.
@@ -78,14 +89,14 @@ Với `blind_corner`, `passing_bay` và các world `school_*`, thêm `corridor_w
 
 ### Hốc nhường đường trong trường học
 
-Các hốc màu xanh có ba vách collision và miệng riêng mở ra hành lang. Ở cấu hình gốc mỗi hốc rộng thông thủy 0,90 m và sâu 0,95 m. Các bản school lớn có 13 hốc phân bố trên sáu đoạn hành lang. Bản `school_arena_1` có 8 hốc cách nhau 4 m.
+Các hốc màu xanh có ba vách collision và khối tường phía trên, chừa miệng cao 0,80 m cho robot. Ở cấu hình gốc mỗi hốc rộng thông thủy 0,90 m và sâu 0,95 m. Các bản school lớn có 13 hốc phân bố trên sáu đoạn hành lang. Bản `school_arena_1` có 8 hốc cách nhau 4 m. [Đổi chiều cao miệng hốc](docs/architecture/04_MUJOCO_MODELING.md#chiều-cao-miệng-hốc-nhường-đường)
 
 ```bash
 # Toàn cảnh các hốc, với một robot để dễ quan sát.
 .venv/bin/python -m narrow_nav.simulation.mujoco.view_world \
   worlds=school_floor scenarios=school_floor_baseline robots=mecanum_robot
 
-# Xem cận robot đỗ trong hốc đầu tiên và hướng ra miệng hốc.
+# Xem cận khối tường phía trên hốc đầu tiên.
 .venv/bin/python -m narrow_nav.simulation.mujoco.view_world --focus-bay a_01 \
   worlds=school_floor scenarios=school_floor_baseline robots=mecanum_robot \
   'scenarios.robot.initial_pose=[-12.55,-9.10,1.5707963267948966]'
@@ -109,7 +120,7 @@ env -u DISPLAY -u WAYLAND_DISPLAY python -m narrow_nav.simulation.smoke --ticks 
 env -u DISPLAY -u WAYLAND_DISPLAY python -m narrow_nav.simulation.smoke --ticks 40 --vy 0.25 robots=mecanum_robot
 ```
 
-`MuJoCoEngine` hỗ trợ `load`, `reset`, `step`, `stop`, đọc observation/ground truth/metadata và `close`. Depth, LiDAR, IMU và odometry được đánh dấu chưa khả dụng. [API runtime và model mecanum](docs/architecture/05_MUJOCO_RUNTIME.md)
+`MuJoCoEngine` hỗ trợ `load`, `reset`, `step`, `stop`, đọc observation/ground truth/metadata và `close`. Profile `sensors=d435i` công bố depth. LiDAR, IMU và odometry hiện chưa có nguồn. [API runtime và model mecanum](docs/architecture/05_MUJOCO_RUNTIME.md)
 
 ## Tài liệu
 

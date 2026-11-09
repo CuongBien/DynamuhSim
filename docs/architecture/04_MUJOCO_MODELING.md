@@ -10,7 +10,7 @@ Ba tệp `worlds/{corridor,blind_corner,passing_bay}/main.xml` là bản tham ch
 
 ## Hệ tọa độ và collision
 
-World dùng mét, radian, XY nằm ngang, +Z hướng lên và mặt sàn ở Z = 0. Trục X dọc hành lang chính, gốc ở tâm hình chữ nhật hành lang chính. Chiều rộng thông thủy đo giữa hai mặt trong của tường dọc theo Y. Sàn dày 0,1 m. Tường có đáy tại Z = 0, đùn ra phía ngoài biên và nối kín tại các góc. Sàn và tường là các hộp collision tĩnh ở group 0 và 1. Điểm spawn/goal là site MJCF. Kiểm tra vị trí dùng footprint tròn và khoảng cách tới hộp tường trong XY. Tolerance cho kích thước và khoảng hở là `1e-9 m`.
+World dùng mét, radian, XY nằm ngang, +Z hướng lên và mặt sàn ở Z = 0. Trục X dọc hành lang chính, gốc ở tâm hình chữ nhật hành lang chính. Chiều rộng thông thủy đo giữa hai mặt trong của tường dọc theo Y. Sàn dày 0,1 m. Vách đứng có đáy tại Z = 0, đùn ra phía ngoài biên và nối kín tại các góc. Sàn và tường là các hộp collision tĩnh ở group 0 và 1. Điểm spawn/goal là site MJCF. Kiểm tra vị trí dùng footprint tròn và khoảng cách tới vách trong XY. Tolerance cho kích thước và khoảng hở là `1e-9 m`.
 
 | World | Hình học và biến cấu hình | Số đo mặc định |
 | --- | --- | --- |
@@ -69,6 +69,20 @@ Geom có tiền tố `yield_bay_` tạo các hốc ba vách màu xanh, với mi�
 Các bản school lớn có tường biên phía đông nối đến lớp 11. Giữa tường này và khối cầu thang có lối sàn phẳng rộng thông thủy 1,08 m, mở cả hai đầu để nối trực tiếp hành lang B và F. Tuyến vòng qua C–D–E cũng đi được. Vách đầu đông nam khép mép hành lang A–B. Trong `school_arena_1`, tường phía nam nối từ phòng 15 đến tường cuối hành lang. Hai bản `school_arena` và `school_arena_hunav` đặt ba lô phía tây sát đoạn tường đặc để giữ thông thủy cho robot khi biên đã khép kín.
 
 Test kiểm thông thủy và lối vào của từng hốc trên MJCF đã biên dịch, lối qua cửa lớp ở mẫu đầu tiên và quá trình mecanum chạy bằng actuator rồi dừng trong hốc của `school_floor`.
+
+### Chiều cao miệng hốc nhường đường
+
+Sửa `yield_bay_opening_height_m` trong [configs/config.yaml](../../configs/config.yaml). Giá trị mặc định `0.8` là khoảng thông thủy tính bằng mét từ sàn đến mặt dưới của khối tường. Cấu hình dùng chung cho `blind_corner`, `passing_bay`, nhóm hospital và nhóm school. Giá trị phải lớn hơn 0 và thấp hơn đỉnh tường. Chọn khoảng thông thủy cao hơn đỉnh cụm cảm biến của robot để robot lọt vào.
+
+Khối tường phủ toàn bộ chiều sâu hốc từ cao độ đã chọn tới đỉnh tường. MuJoCo dùng khối này cho va chạm 3D và render depth. Bản đồ footprint XY giữ lối đi phía dưới. Preset `corridor_width` vẫn đổi kích thước XY, còn chiều cao miệng hốc lấy từ khóa trên. Hình học cửa phòng và nhánh rẽ giữ nguyên. Các MJCF tham chiếu mở trực tiếp có chiều cao 0,80 m.
+
+Ví dụ mở camera D435i đối diện hốc bắc đầu tiên của bệnh viện, với chiều cao thông thủy 0,90 m cho riêng lần chạy.
+
+```bash
+.venv/bin/python -m narrow_nav.simulation.mujoco.teleop_depth sensors=d435i \
+  worlds=hospital_easy scenarios=hospital_easy yield_bay_opening_height_m=0.9 \
+  'scenarios.robot.initial_pose=[-23.5,0.35,1.5707963267948966]'
+```
 
 ## Hình ảnh người Quaternius
 

@@ -16,15 +16,21 @@ from narrow_nav.core.actions import HumanMotion, MotionBatch, RobotAction
 from narrow_nav.core.errors import ConfigurationError, ContractError
 from narrow_nav.core.metadata import EpisodeConfig, EpisodeMetadata
 from narrow_nav.core.observations import Observation, SensorSlot
-from narrow_nav.core.protocols import SimulationStepResult, SimulatorAdapter
+from narrow_nav.core.protocols import (
+    AdapterSnapshot,
+    SensorSeed,
+    SimulationStepResult,
+    SimulatorAdapter,
+)
 from narrow_nav.core.seed import derive_seed
-from narrow_nav.core.states import GroundTruthState
+from narrow_nav.core.states import CleanDepthFrame, GroundTruthState
 from narrow_nav.core.types import NS_PER_SECOND, Twist2D, Velocity2D
 from narrow_nav.core.validation import positive, require_type, uint64, unique
 
-from .backend import SimulationError, SimulationMetadata
+from .backend import DepthStreamMetadata, SimulationError, SimulationMetadata
 from .collision_monitor import Clearance, measure_clearance
 from .configuration import drive_from_config, timing_from_config
+from .depth_config import DEPTH_FRAME_ID, DEPTH_MODEL_VERSION, DEPTH_SENSOR_ID
 from .robot_controller import DriveProfile
 from .state_extractor import executed_motion
 from .timing import Timing
@@ -86,6 +92,7 @@ class SimulationLifecycle:
         self._metadata: SimulationMetadata | None = None
         self._truth: GroundTruthState | None = None
         self._observation: Observation | None = None
+        self._clean_depth: tuple[CleanDepthFrame, ...] = ()
         self._last_limited = _STOP
 
     def _require_loaded(self) -> _Loaded:
@@ -131,6 +138,7 @@ class SimulationLifecycle:
             resolved, episode, built, timing, drive, collision, slots, goal_tolerance
         )
         self._metadata = self._truth = self._observation = None
+        self._clean_depth = ()
         self._last_limited = _STOP
 
     def reset(
@@ -154,6 +162,18 @@ class SimulationLifecycle:
             commit,
             dirty,
         )
+        profile = loaded.world.depth_camera
+        depth_stream = (
+            DepthStreamMetadata(
+                profile,
+                derive_seed(seed, "sensor", "sensor.depth"),
+                DEPTH_MODEL_VERSION,
+                DEPTH_SENSOR_ID,
+                DEPTH_FRAME_ID,
+            )
+            if profile is not None
+            else None
+        )
         metadata = SimulationMetadata(
             episode=header,
             resolved_config=yaml,
@@ -165,26 +185,84 @@ class SimulationLifecycle:
             engine_seed=derive_seed(seed, "engine"),
             timing=loaded.timing,
             clocks=loaded.timing.clocks(0),
-            unavailable_sensors=_UNAVAILABLE_SENSORS,
+            unavailable_sensors=tuple(
+                sensor
+                for sensor in _UNAVAILABLE_SENSORS
+                if sensor != DEPTH_SENSOR_ID or depth_stream is None
+            ),
+            depth_stream=depth_stream,
         )
         self._ordinal += 1
         self._metadata = metadata
         self._truth = self._observation = None
+        self._clean_depth = ()
         self._last_limited = _STOP
         try:
+            seeds = (
+                (SensorSeed(DEPTH_SENSOR_ID, depth_stream.seed),)
+                if depth_stream
+                else ()
+            )
             snapshot = self._adapter.reset(
-                loaded.world, header, metadata.engine_seed, ()
+                loaded.world, header, metadata.engine_seed, seeds
             )
             truth = snapshot.ground_truth
             if self._goal_reached(loaded, truth):
                 raise SimulationError("initial state already satisfies the goal")
-            observation = Observation(truth.stamp, loaded.sensor_slots)
+            observation = self._make_observation(loaded, snapshot, -1)
         except Exception as exc:
             self._fail("reset_failed", 0, exc)
             raise
         self._truth, self._observation = truth, observation
+        self._clean_depth = snapshot.clean_depth
         self._metadata = replace(metadata, last_valid_tick=0)
         return observation
+
+    def _make_observation(
+        self, loaded: _Loaded, snapshot: AdapterSnapshot, start_time_ns: int
+    ) -> Observation:
+        stamp = snapshot.ground_truth.stamp
+        profile = loaded.world.depth_camera
+        if profile is None:
+            return Observation(stamp, loaded.sensor_slots)
+        period = profile.period_ns
+        indices = range(
+            start_time_ns // period + 1, stamp.timestamp.time_ns // period + 1
+        )
+        samples, clean_frames = snapshot.sensor_samples, snapshot.clean_depth
+        if len(samples) != len(indices) or len(clean_frames) != len(indices):
+            raise ContractError("depth capture count does not match its schedule")
+        shape = (profile.calibration.height, profile.calibration.width)
+        source = "d435i_noisy" if profile.noise.enabled else "d435i_ideal"
+        for index, sample, clean in zip(indices, samples, clean_frames, strict=True):
+            if (
+                sample.sensor_id != DEPTH_SENSOR_ID
+                or sample.source != source
+                or sample.frame_id != clean.frame_id
+                or sample.frame_id != DEPTH_FRAME_ID
+                or sample.sample_index != clean.sample_index
+                or sample.sample_index != index
+                or sample.capture_time_ns != clean.capture_time_ns
+                or sample.capture_time_ns != index * period
+                or sample.available_time_ns != sample.capture_time_ns
+                or sample.payload is None
+                or sample.payload.shape != shape
+                or sample.payload.valid_mask is None
+                or clean.payload.shape != shape
+                or sample.payload is clean.payload
+            ):
+                raise ContractError("invalid D435i capture pair")
+        if not samples:
+            return Observation(stamp, self.get_observation().sensors)
+        return Observation(
+            stamp,
+            tuple(
+                SensorSlot(DEPTH_SENSOR_ID, "valid", samples[-1])
+                if slot.sensor_id == DEPTH_SENSOR_ID
+                else slot
+                for slot in loaded.sensor_slots
+            ),
+        )
 
     @staticmethod
     def _goal_reached(loaded: _Loaded, truth: GroundTruthState) -> bool:
@@ -231,7 +309,9 @@ class SimulationLifecycle:
         try:
             advance = self._adapter.advance(limited)
             truth = advance.snapshot.ground_truth
-            observation = Observation(truth.stamp, loaded.sensor_slots)
+            observation = self._make_observation(
+                loaded, advance.snapshot, start.stamp.timestamp.time_ns
+            )
             reason = None
             if loaded.config.experiments.terminate_on_contact and any(
                 event.kind in ("robot_wall", "robot_human")
@@ -248,6 +328,7 @@ class SimulationLifecycle:
                 executed_motion(start, truth, advance.robot_delta_yaw),
                 observation,
                 truth,
+                sensor_samples=advance.snapshot.sensor_samples,
                 contacts=advance.contacts,
                 terminated=reason in ("robot_contact", "goal_reached"),
                 truncated=reason == "time_budget",
@@ -258,6 +339,7 @@ class SimulationLifecycle:
             raise
         self._last_limited = velocity
         self._truth, self._observation = truth, observation
+        self._clean_depth = advance.snapshot.clean_depth
         status = (
             "terminated"
             if result.terminated
@@ -290,6 +372,11 @@ class SimulationLifecycle:
             raise SimulationError("no valid ground truth; reset first")
         return self._truth
 
+    def get_clean_depth(self) -> tuple[CleanDepthFrame, ...]:
+        """Privileged frames captured at reset or during the last successful step."""
+        self.get_ground_truth()
+        return self._clean_depth
+
     def get_metadata(self) -> SimulationMetadata:
         if self._metadata is None:
             raise SimulationError("no episode metadata; reset first")
@@ -305,4 +392,5 @@ class SimulationLifecycle:
         if not self._closed:
             self._adapter.close()
             self._loaded = self._metadata = self._truth = self._observation = None
+            self._clean_depth = ()
             self._closed = True

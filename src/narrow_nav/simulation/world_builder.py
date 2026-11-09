@@ -25,6 +25,7 @@ from .configuration import (
     mecanum_sensor_heights,
     validate_scene_config,
 )
+from .depth_config import DepthCameraConfig, depth_from_config
 from .robot_controller import DriveProfile
 from .world_assets import MJCF_ROOT, WorldAsset
 from .world_geometry import Rectangle
@@ -38,6 +39,7 @@ class BuiltWorld:
     source_sha256: tuple[tuple[str, str], ...] = ()
     skin_actors: tuple[SkinActor, ...] = ()
     visual_assets: tuple[tuple[str, bytes], ...] = ()
+    depth_camera: DepthCameraConfig | None = None
 
 
 def _read_mjcf(root: Path, path: str, sources: list[tuple[str, str]]) -> ET.Element:
@@ -88,6 +90,15 @@ def _add_environment(
             _add_box(worldbody, f"floor_{index}", "floor", floor, -0.1, 0)
         for index, wall in enumerate(scene.collision.walls):
             _add_box(worldbody, f"wall_{index}", "wall", wall, 0, spec.wall_height_m)
+        if spec.layout in ("blind_corner", "passing_bay"):
+            _add_box(
+                worldbody,
+                "yield_bay_main_cap",
+                "wall",
+                scene.collision.floors[-1],
+                spec.yield_bay_opening_height_m,
+                spec.wall_height_m,
+            )
     for actor in (scene.robot, *scene.humans):
         for marker, point in (("start", actor.pose), ("goal", actor.goal)):
             ET.SubElement(
@@ -288,7 +299,10 @@ def _configure_mecanum(
             "diaginertia",
             _numbers(*(value * scale for value in (0.00012, 0.00020, 0.00012))),
         )
-        wheel.find("geom").set("size", _numbers(wheel_radius, wheel_width / 2))
+        # Keep the display hub inside the rollers so their diagonal axes are visible.
+        wheel.find("geom").set(
+            "size", _numbers(wheel_radius - 2 * roller_radius, 0.3 * wheel_width)
+        )
         roller = wheel.find("replicate/body")
         roller.set("pos", _numbers(0, 0, roller_radius - wheel_radius))
         geom = roller.find("geom")
@@ -375,6 +389,7 @@ def _skin_actors(
 def build_world(config: DictConfig, *, mjcf_root: Path = MJCF_ROOT) -> BuiltWorld:
     """Generate a scene without opening a renderer or mutating the input files."""
     episode, scene = validate_scene_config(config, mjcf_root=mjcf_root)
+    depth = depth_from_config(config)
     sources: list[tuple[str, str]] = []
     root = ET.Element("mujoco", model=config.worlds.id)
     defaults = _read_mjcf(mjcf_root, "templates/world_defaults.xml", sources)
@@ -390,6 +405,37 @@ def build_world(config: DictConfig, *, mjcf_root: Path = MJCF_ROOT) -> BuiltWorl
             worldbody.find(f"geom[@name='{prop.entity_id}']").set("group", "3")
     try:
         _add_robot(worldbody, root, scene.robot, config, mjcf_root, sources)
+        if depth is not None:
+            calibration = depth.calibration
+            camera = worldbody.find(
+                f".//camera[@name='{scene.robot.entity_id}/depth_camera']"
+            )
+            if camera is None:
+                raise ConfigurationError("D435i camera is missing from the robot MJCF")
+            width, height = calibration.width, calibration.height
+            camera.attrib.pop("fovy", None)
+            camera.set("resolution", f"{width} {height}")
+            # Square virtual pixels. Only focal/sensor-size ratios enter projection.
+            camera.set("sensorsize", _numbers(width * 1e-5, height * 1e-5))
+            camera.set("focalpixel", _numbers(calibration.fx_px, calibration.fy_px))
+            # MuJoCo shifts the frustum centre opposite the optical-axis image
+            # offset. RealSense indexes pixel centres from the top-left.
+            camera.set(
+                "principalpixel",
+                _numbers(
+                    width / 2 - calibration.cx_px - 0.5,
+                    height / 2 - calibration.cy_px - 0.5,
+                ),
+            )
+            camera.set("ipd", _numbers(calibration.baseline_m))
+            visual = root.find("visual")
+            if visual is None:
+                visual = ET.SubElement(root, "visual")
+            buffer = visual.find("global")
+            if buffer is None:
+                buffer = ET.SubElement(visual, "global")
+            buffer.set("offwidth", str(max(width, int(buffer.get("offwidth", 640)))))
+            buffer.set("offheight", str(max(height, int(buffer.get("offheight", 480)))))
         _add_humans(worldbody, scene.humans, mjcf_root, sources, skinned=skinned)
     except ConfigurationError:
         raise
@@ -412,4 +458,5 @@ def build_world(config: DictConfig, *, mjcf_root: Path = MJCF_ROOT) -> BuiltWorl
         tuple(sources),
         actors,
         tuple(assets.items()),
+        depth,
     )

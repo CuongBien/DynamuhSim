@@ -16,14 +16,23 @@ from narrow_nav.core.protocols import (
     SensorSeed,
 )
 from narrow_nav.core.states import GroundTruthState, HumanState, RobotState
-from narrow_nav.core.types import NS_PER_SECOND, Pose2D, Twist2D, Velocity2D
+from narrow_nav.core.types import (
+    NS_PER_SECOND,
+    ROBOT_BASE_FRAME,
+    WORLD_FRAME,
+    Pose2D,
+    Twist2D,
+    Velocity2D,
+)
 
 from ..backend import SimulationError
 from ..collision_monitor import contact_events
+from ..depth_config import DEPTH_FRAME_ID, DEPTH_SENSOR_ID
 from ..entity_registry import EntityRegistry
 from ..robot_controller import DriveProfile
 from ..world_builder import BuiltWorld
 from ..world_geometry import WorldCollision
+from .depth_camera import D435iCapture
 from .geometry import collision_geometry
 from .human_visuals import HumanVisuals
 
@@ -44,6 +53,8 @@ class MuJoCoAdapter:
         self._metadata: EpisodeMetadata | None = None
         self._rng: Random | None = None
         self._visuals: HumanVisuals | None = None
+        self._depth: D435iCapture | None = None
+        self._depth_context: mujoco.MjrContext | None = None
 
     @property
     def version(self) -> str:
@@ -86,6 +97,9 @@ class MuJoCoAdapter:
         )
         collision = collision_geometry(model, data)
 
+        if self._depth is not None:
+            self._depth.close()
+            self._depth = None
         self._model, self._data = model, data
         self._drive, self._registry = drive, registry
         self._robot_body = model.body(registry.robot).id
@@ -117,7 +131,26 @@ class MuJoCoAdapter:
         self._visuals.update(model, data, 0.0)
         self._check_state(data, 0)
         self._metadata = metadata
-        return AdapterSnapshot(self._extract(metadata.stamp(0)))
+        truth = self._extract(metadata.stamp(0))
+        if scene.depth_camera is None:
+            return AdapterSnapshot(truth)
+        if self._depth is None:
+            self._depth = D435iCapture(
+                model,
+                f"{scene.scene.robot.entity_id}/depth_camera",
+                scene.depth_camera,
+                context=self._depth_context,
+            )
+        seed = next(
+            stream.seed
+            for stream in sensor_seeds
+            if stream.sensor_id == DEPTH_SENSOR_ID
+        )
+        self._depth.noise.reset(seed)
+        sample, clean = self._depth.capture(model, data, 0)
+        return AdapterSnapshot(
+            truth, (sample,), (WORLD_FRAME, ROBOT_BASE_FRAME, DEPTH_FRAME_ID), (clean,)
+        )
 
     @staticmethod
     def _check_state(data: mujoco.MjData, time_ns: int) -> None:
@@ -207,6 +240,8 @@ class MuJoCoAdapter:
         previous_yaw = self._yaw(data, self._robot_body)
         delta_yaw = 0.0
         contacts = []
+        samples, clean_frames = [], []
+        depth = self._depth
         for offset in range(
             episode.physics_dt_ns, episode.control_dt_ns + 1, episode.physics_dt_ns
         ):
@@ -218,11 +253,29 @@ class MuJoCoAdapter:
             delta_yaw += wrap_yaw(yaw - previous_yaw)
             previous_yaw = yaw
             contacts.extend(self._contacts(data, time_ns))
-        self._visuals.update(model, data, end.timestamp.time_s)
-        return AdapterStepResult(
-            AdapterSnapshot(self._extract(end)), delta_yaw, tuple(contacts)
+            if depth is not None and time_ns % depth.profile.period_ns == 0:
+                self._visuals.update(model, data, time_ns / NS_PER_SECOND)
+                sample, clean = depth.capture(model, data, time_ns)
+                samples.append(sample)
+                clean_frames.append(clean)
+        if not samples or samples[-1].capture_time_ns != end.timestamp.time_ns:
+            self._visuals.update(model, data, end.timestamp.time_s)
+        truth = self._extract(end)
+        snapshot = (
+            AdapterSnapshot(
+                truth,
+                tuple(samples),
+                (WORLD_FRAME, ROBOT_BASE_FRAME, DEPTH_FRAME_ID),
+                tuple(clean_frames),
+            )
+            if depth is not None
+            else AdapterSnapshot(truth)
         )
+        return AdapterStepResult(snapshot, delta_yaw, tuple(contacts))
 
     def close(self) -> None:
+        if self._depth is not None:
+            self._depth.close()
+            self._depth = None
         self._data = self._model = self._metadata = self._rng = None
         self._visuals = None

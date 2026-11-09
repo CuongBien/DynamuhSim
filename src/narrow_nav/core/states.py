@@ -5,6 +5,7 @@ from typing import Any, Self
 
 from .errors import ContractError
 from .metadata import SnapshotMetadata
+from .observations import SensorPayload
 from .types import (
     ROBOT_BASE_FRAME,
     WORLD_FRAME,
@@ -17,6 +18,7 @@ from .types import (
 from .validation import (
     frame_is,
     identifier,
+    integer,
     ordered_ids,
     positive,
     require_type,
@@ -104,6 +106,24 @@ class GroundTruthState:
     @property
     def entity_ids(self) -> tuple[str, ...]:
         return (self.robot.entity_id, *(human.entity_id for human in self.humans))
+
+
+@dataclass(frozen=True, slots=True)
+class CleanDepthFrame:
+    """Privileged axial metric depth in the optical frame at capture time."""
+
+    sample_index: int
+    capture_time_ns: int
+    frame_id: str
+    payload: SensorPayload
+
+    def __post_init__(self) -> None:
+        integer(self.sample_index, "sample_index")
+        integer(self.capture_time_ns, "capture_time_ns")
+        identifier(self.frame_id, "frame_id")
+        payload = require_type(self.payload, SensorPayload, "clean depth payload")
+        if len(payload.shape) != 2 or payload.valid_mask is None:
+            raise ContractError("clean depth requires a two-dimensional image and mask")
 
 
 def _validate_humans(humans: tuple[HumanState, ...], stamp: SnapshotMetadata) -> None:

@@ -38,6 +38,76 @@ def test_bay_width_and_position_change_collision_geometry():
     assert not collision.contains(0, 1.4, 0.25)
 
 
+@pytest.mark.parametrize(
+    ("world", "scenario", "cap", "side", "wall_top", "overrides"),
+    [
+        (
+            "blind_corner",
+            "blind_corner",
+            "yield_bay_main_cap",
+            1,
+            2.5,
+            ("corridor_width=w070",),
+        ),
+        (
+            "school_floor",
+            "school_floor_baseline",
+            "yield_bay_a_01_cap",
+            -1,
+            2.6,
+            ("corridor_width=w070",),
+        ),
+        (
+            "hospital_medium",
+            "hospital_medium",
+            "yield_bay_n_01_cap",
+            1,
+            2.5,
+            (),
+        ),
+    ],
+)
+@pytest.mark.parametrize("opening_m", (None, 1.05))
+def test_yield_bay_blocks_upper_rays_and_keeps_floor_open(
+    world, scenario, cap, side, wall_top, overrides, opening_m
+):
+    config = [
+        f"worlds={world}",
+        f"scenarios={scenario}",
+        "simulation.human_visuals=proxy",
+        *overrides,
+    ]
+    if opening_m is not None:
+        config.append(f"yield_bay_opening_height_m={opening_m}")
+    expected = 0.8 if opening_m is None else opening_m
+    built = build_world(compose_config(overrides=config))
+    model = mujoco.MjModel.from_xml_string(built.mjcf)
+    data = mujoco.MjData(model)
+    mujoco.mj_forward(model, data)
+    block = model.geom(cap)
+    assert block.pos[2] - block.size[2] == pytest.approx(expected)
+    assert block.pos[2] + block.size[2] == pytest.approx(wall_top)
+    assert block.contype != 0
+    assert built.scene.collision.contains(*block.pos[:2], radius_m=0.25)
+    assert inspect_world(built).contains(*block.pos[:2], radius_m=0.25)
+
+    geom_id = np.empty(1, dtype=np.int32)
+    wall_group = np.array([0, 1, 0, 0, 0, 0], dtype=np.uint8)
+    direction = np.array([0, side, 0], dtype=float)
+    # Start on the corridor side of the mouth after applying the width preset.
+    mouth_distance = 0.25
+    x = block.pos[0]
+    y = block.pos[1] - side * (block.size[1] + mouth_distance)
+    below, above = (
+        mujoco.mj_ray(
+            model, data, np.array([x, y, z]), direction, wall_group, True, -1, geom_id
+        )
+        for z in (expected - 0.05, expected + 0.05)
+    )
+    assert below > above == pytest.approx(mouth_distance)
+    assert geom_id[0] == block.id
+
+
 def test_blind_corner_wall_blocks_line_of_sight():
     world = build_world(
         compose_config(overrides=["worlds=blind_corner", "scenarios=blind_corner"])
@@ -69,6 +139,23 @@ def test_blind_corner_wall_blocks_line_of_sight():
         (["worlds.width_m=0.8"], "collision-free"),
         (["scenarios.robot.id=world"], "reserved"),
         (["worlds.wall_height_m=-1"], "worlds.wall_height_m"),
+        (["yield_bay_opening_height_m=0"], "yield_bay_opening_height_m"),
+        (
+            [
+                "worlds=passing_bay",
+                "scenarios=passing_bay",
+                "yield_bay_opening_height_m=2.5",
+            ],
+            "below the wall top",
+        ),
+        (
+            [
+                "worlds=school_floor",
+                "scenarios=school_floor_baseline",
+                "yield_bay_opening_height_m=2.6",
+            ],
+            "below the wall top",
+        ),
         (["worlds=blind_corner", "worlds.turn_length_m=0"], "turn_length_m"),
         (
             ["worlds=passing_bay", "worlds.passing_bay_width_m=1.3"],

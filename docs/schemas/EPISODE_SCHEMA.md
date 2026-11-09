@@ -1,6 +1,6 @@
 # Episode
 
-Hợp đồng logic `schema_version = 1` cho episode mô phỏng. Mỗi episode ghi một lần thử reset và các step thành công liên tục của đúng một scenario. Runtime hiện trả metadata và snapshot trong bộ nhớ. Định dạng file và cơ chế ghi/đọc thuộc TASK 04B. [Lộ trình](../ROADMAP.md)
+Hợp đồng logic `schema_version = 1` cho episode mô phỏng. Mỗi episode ghi một lần thử reset và các step thành công liên tục của đúng một scenario. Recorder D435i triển khai tập kênh dưới đây bằng JSONL và NPZ. [Thu depth D435i](../MUJOCO_D435I_DEPTH.md) · [Lộ trình](../ROADMAP.md)
 
 Trong TASK 01, `EpisodeConfig` giữ `scenario_id`, `episode_seed`, `control_dt_ns`, `physics_dt_ns`, `duration_ns` và phiên bản schema. Bước điều khiển phải chia hết cho bước vật lý, thời lượng phải chia hết cho bước điều khiển. `max_ticks` và `timestamp(tick)` được suy ra từ các trường này.
 
@@ -29,6 +29,8 @@ Khi dùng skin Quaternius, `SimulationMetadata.mjcf_source_sha256` bao gồm man
 | Sự kiện tiếp xúc | Danh sách sự kiện adapter quan sát sau các substep trong `(t_k, t_{k+1}]`. Mỗi sự kiện mang `time_ns`, cặp ID đã chuẩn hóa (entity hoặc vật cản trong registry scenario) và `kind` nếu phân loại được. Các loại là `robot_wall`, `robot_human`, `human_wall` và `human_human`. Giữ sự kiện thoáng qua ở giữa hai control tick. |
 
 Một manifest nối các kênh theo episode ID. Bản ghi step bắt đầu ở 0 và liên tục. Mốc cuối của step trước là mốc đầu của step sau. Mẫu sensor được ghi đúng một lần theo `(sensor_id, sample_index)` trong kênh sensor khi lần đầu sẵn sàng ở một biên công bố. Khi lưu, slot hợp lệ của `Observation` tham chiếu mẫu tương ứng và có thể tái sử dụng mẫu đó ở các tick sau. Các mẫu đang chờ sau mốc đóng episode không được công bố.
+
+Định dạng `narrow_nav_depth_npz_v1` đặt các mẫu đo dưới `observations/` và frame sạch dưới `ground_truth/`. `observations.jsonl` tham chiếu mẫu đo bằng index, kể cả khi dùng lại qua nhiều tick. File đo và sạch mang thời điểm capture của substep, còn dòng JSONL mang thời điểm công bố ở biên điều khiển. Manifest ghi calibration, cấu hình và phiên bản nhiễu, RNG/seed và convention pixel invalid. Recorder công bố cả run bằng một lần đổi tên thư mục staging sau khi ghi manifest. Lỗi runtime có thể công bố prefix đã ghi kèm trạng thái failed. [Chi tiết định dạng và lệnh](../MUJOCO_D435I_DEPTH.md#dataset-tái-lập-và-báo-cáo)
 
 Tách kênh quan sát, lệnh `requested/limited` và kênh kiểm định gồm ground truth, `executed`, tiếp xúc. Đánh giá hoặc tạo nhãn có thể join bằng episode ID và tick. Reader cho suy luận chỉ lấy dữ liệu có quyền và có thời điểm sẵn sàng không muộn hơn tick quyết định. Tách split theo episode và nhóm scenario/seed đã khai báo trước khi tạo cửa sổ thời gian để tránh chia sẻ các đoạn chồng lấn giữa tập.
 

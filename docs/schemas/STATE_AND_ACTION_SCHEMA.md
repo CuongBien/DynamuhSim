@@ -1,6 +1,6 @@
 # State và action
 
-Runtime TASK 03 hiện áp lệnh cho robot và trả lệnh người bằng zero cùng các slot cảm biến `missing`. Hợp đồng dưới đây cũng quy định các cổng và quy tắc cần đáp ứng khi nối backend người ở TASK 04A và nguồn cảm biến ở TASK 04B. [Runtime hiện tại](../architecture/05_MUJOCO_RUNTIME.md) · [Lộ trình](../ROADMAP.md)
+Runtime hiện áp lệnh cho robot và trả lệnh người bằng zero. Profile D435i công bố depth, các sensor chưa có nguồn trả `missing`. [Runtime hiện tại](../architecture/05_MUJOCO_RUNTIME.md) · [Lộ trình](../ROADMAP.md)
 
 Hợp đồng logic `schema_version = 1` cho dữ liệu qua cổng `core`. Kiểu lưu trên đĩa sẽ được chọn khi có task ghi episode. Các trường dưới đây là bắt buộc trừ khi được ghi rõ là tùy chọn.
 
@@ -21,6 +21,7 @@ Hợp đồng logic `schema_version = 1` cho dữ liệu qua cổng `core`. Ki�
 | `RobotAction` | `entity_id`, `velocity: Twist2D` trong `robot_base` và `timestamp`. Profile vi sai yêu cầu `linear_y = 0` cho requested và limited, còn executed có thể có thành phần ngang. Profile mecanum nhận cả hai thành phần tuyến tính. |
 | `HumanMotion` | `entity_id`, `velocity: Velocity2D` trong `world` và `timestamp`. `HumanMotionRequest` dùng cùng biểu diễn ở giai đoạn đề xuất. `HumanMotionResult` nhóm ba giai đoạn cho một người. |
 | `GroundTruthState` | Metadata snapshot, đúng một `RobotState` và danh sách `HumanState` theo thứ tự tăng dần của `entity_id`. Là snapshot vật lý dùng cho mô hình hành vi người, chẩn đoán, kiểm định và nhãn ngoại tuyến. |
+| `CleanDepthFrame` | Dữ liệu kiểm định gồm `sample_index`, `capture_time_ns`, `frame_id` và payload ảnh có mask. Adapter trả riêng trong `AdapterSnapshot.clean_depth`. Runtime chỉ cấp qua `get_clean_depth()` tại biên thành công gần nhất. |
 | `Observation` | Metadata snapshot và danh sách slot theo `sensor_id`. Mỗi slot có `status` là `valid`, `missing`, `invalid` hoặc `stale`. Slot `valid` chứa mẫu mới nhất đã sẵn sàng. Các trạng thái còn lại không có payload và có mã lý do. |
 | `HumanContext` | Metadata snapshot, ID, pose và vận tốc phẳng của robot trong `world`, trạng thái người, bán kính robot và bán kính dùng chung của profile người. Mỗi vật cản có ID và danh sách polygon trong `world` với ít nhất ba đỉnh XY mỗi polygon, không lặp đỉnh đóng. Runtime dựng cùng một phép chiếu cho mọi backend. |
 
@@ -29,6 +30,8 @@ Hợp đồng logic `schema_version = 1` cho dữ liệu qua cổng `core`. Ki�
 Mỗi `SensorObservation` có `sensor_id`, ID nguồn `source`, `frame_id`, `sample_index` tăng từ 0 theo thứ tự capture của từng sensor, `capture_time_ns`, `available_time_ns` và trạng thái `valid` hoặc `invalid`. Mẫu valid dùng `SensorPayload` với `shape`, giá trị phẳng theo thứ tự hàng và mặt nạ tùy chọn có cùng kích thước. Nguồn sensor khai báo đơn vị và ý nghĩa từng kênh. Mẫu invalid chỉ có metadata và mã lý do. Cấu hình sensor về sau quy định lịch lấy mẫu trên lưới bước vật lý, độ trễ, tuổi tối đa, chính sách dữ liệu thiếu và kênh bắt buộc. Profile kiểm định chuyển động có thể dùng danh sách sensor rỗng và robot policy dùng lệnh cố định.
 
 Payload hợp lệ chỉ có số hữu hạn. Dùng mặt nạ và giá trị thay thế đã khai báo cho điểm đo không hợp lệ, ví dụ điểm depth ngoài miền. Kênh odometry dùng phép đo hoặc mô hình ước lượng đã khai báo, với đặc tính lỗi được kiểm định riêng. Pose vật lý tuyệt đối chỉ thuộc kênh ground truth.
+
+Depth D435i dùng `shape=(height, width)`, thứ tự hàng từ trên xuống, Z theo trục quang học bằng mét trong `depth_optical` (+X phải, +Y xuống, +Z tiến). Hai kênh dùng `0.0` và mask false cho pixel invalid. Mẫu đo có độ trễ mô phỏng bằng 0. `SimulationStepResult.sensor_samples` chứa mọi mẫu đo mới trong tick, slot trong `Observation` chỉ giữ mẫu đo mới nhất. Mẫu đo và frame sạch ghép theo sample index, frame và thời điểm capture. [Profile D435i](../MUJOCO_D435I_DEPTH.md)
 
 ## Ba giai đoạn của chuyển động
 

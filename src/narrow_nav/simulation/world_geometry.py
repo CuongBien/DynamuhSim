@@ -8,6 +8,18 @@ from narrow_nav.core.validation import finite, positive
 
 XY = tuple[float, float]
 GEOMETRY_TOLERANCE_M = 1e-9
+DEFAULT_YIELD_BAY_OPENING_HEIGHT_M = 0.8
+
+
+def is_yield_bay_cap(name: str) -> bool:
+    return name.startswith("yield_bay_") and name.endswith("_cap")
+
+
+def validate_bay_opening_height(height_m: float, wall_top_m: float) -> None:
+    if positive(height_m, "yield_bay_opening_height_m") >= wall_top_m:
+        raise ConfigurationError(
+            "yield_bay_opening_height_m must be below the wall top"
+        )
 
 
 @dataclass(frozen=True, slots=True)
@@ -103,6 +115,7 @@ class WorldSpec:
     passing_bay_width_m: float | None = None
     passing_bay_length_m: float | None = None
     passing_bay_center_x_m: float | None = None
+    yield_bay_opening_height_m: float = DEFAULT_YIELD_BAY_OPENING_HEIGHT_M
 
     def collision(self) -> WorldCollision:
         """Extrude the exterior of a counterclockwise floor boundary into solid walls."""
@@ -138,6 +151,9 @@ class WorldSpec:
             raise ConfigurationError(f"unknown world layout {self.layout!r}")
 
         if self.layout in ("blind_corner", "passing_bay"):
+            validate_bay_opening_height(
+                self.yield_bay_opening_height_m, self.wall_height_m
+            )
             bay_width = positive(self.passing_bay_width_m, "passing_bay_width_m")
             bay_length = positive(self.passing_bay_length_m, "passing_bay_length_m")
             center = finite(self.passing_bay_center_x_m, "passing_bay_center_x_m")

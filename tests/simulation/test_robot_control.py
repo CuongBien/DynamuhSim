@@ -8,6 +8,7 @@ from narrow_nav.core.errors import ConfigurationError, ContractError
 from narrow_nav.core.types import Twist2D
 from narrow_nav.simulation.configuration import compose_config
 from narrow_nav.simulation.mujoco_engine import MuJoCoEngine
+from narrow_nav.simulation.robot_controller import MECANUM_WHEELS
 from narrow_nav.simulation.world_builder import build_world
 
 
@@ -63,6 +64,10 @@ def test_mecanum_sdf_dimensions_and_physical_strafe():
     assert tuple(model.body("robot/front_left_wheel").pos) == pytest.approx(
         (0.08, 0.10, 0)
     )
+    for name in MECANUM_WHEELS:
+        hub = model.geom(f"robot/{name}_hub_visual")
+        assert tuple(hub.size[:2]) == pytest.approx((0.028, 0.009))
+        assert hub.contype == hub.conaffinity == 0
     assert tuple(model.cam_resolution[model.camera("robot/depth_camera").id]) == (
         424,
         240,
@@ -73,13 +78,14 @@ def test_mecanum_sdf_dimensions_and_physical_strafe():
     )
     engine = MuJoCoEngine()
     engine.load(config)
-    engine.reset()
-    initial = engine.get_ground_truth().robot.pose
-    strafe = _run(engine, Twist2D(0, 0.4, 0), 20)
-    pose = strafe.ground_truth.robot.pose
-    assert pose.y - initial.y > 0.25
-    assert abs(pose.x - initial.x) < 0.02 and abs(pose.yaw) < 0.05
-    assert strafe.executed.robot.velocity.linear_y > 0.25
+    for direction in (1, -1):
+        engine.reset()
+        initial = engine.get_ground_truth().robot.pose
+        strafe = _run(engine, Twist2D(0, direction * 0.4, 0), 20)
+        pose = strafe.ground_truth.robot.pose
+        assert direction * (pose.y - initial.y) > 0.25
+        assert abs(pose.x - initial.x) < 0.02 and abs(pose.yaw - initial.yaw) < 0.05
+        assert direction * strafe.executed.robot.velocity.linear_y > 0.25
     engine.reset()
     turn = _run(engine, Twist2D(0, 0, 0.8), 20)
     assert turn.ground_truth.robot.pose.yaw > 0.5

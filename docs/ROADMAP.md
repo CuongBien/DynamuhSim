@@ -1,6 +1,6 @@
 # Lộ trình NarrowNav
 
-**Hiện tại · TASK 03. Việc tiếp theo · TASK 04A.** Runtime MuJoCo đã chạy headless với robot vi sai và mecanum. Người trong scenario vẫn đứng tại spawn. `humans=scripted` chọn YAML, adapter hiện chỉ thực thi lệnh bánh robot. Các slot depth, LiDAR, IMU và odometry chưa có mẫu. [Runtime hiện tại](architecture/05_MUJOCO_RUNTIME.md)
+**Hiện tại · TASK 03. Việc tiếp theo · TASK 04A.** Runtime MuJoCo đã chạy headless với robot vi sai và mecanum. Người trong scenario vẫn đứng tại spawn. `humans=scripted` chọn YAML, adapter hiện chỉ thực thi lệnh bánh robot. Profile D435i và recorder depth đã có. LiDAR, IMU và odometry vẫn chờ TASK 04B. [Thu depth D435i](MUJOCO_D435I_DEPTH.md) [Runtime hiện tại](architecture/05_MUJOCO_RUNTIME.md)
 
 | Task dự kiến | Đầu ra và điều kiện chuyển bước |
 | --- | --- |

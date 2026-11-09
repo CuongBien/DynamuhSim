@@ -1,6 +1,6 @@
 # 02 · Luồng dữ liệu
 
-Hiện tại `step(RobotAction)` nhận lệnh robot từ bên gọi và trả snapshot trong bộ nhớ. Người giữ pose spawn, cảm biến trả slot `missing` và chưa có bộ ghi episode. [Runtime hiện tại](05_MUJOCO_RUNTIME.md)
+Hiện tại `step(RobotAction)` nhận lệnh robot từ bên gọi và trả snapshot trong bộ nhớ. Người giữ pose spawn. Profile `sensors=d435i` thu depth sau substep đến hạn. Mẫu đo đi vào `Observation`, còn frame sạch đi qua `get_clean_depth()` tới kiểm định. Recorder ghi hai kênh riêng theo episode ID và sample index. Các sensor chưa có nguồn vẫn trả `missing`. [Runtime hiện tại](05_MUJOCO_RUNTIME.md) · [Thu depth D435i](../MUJOCO_D435I_DEPTH.md)
 
 ## Luồng đích của TASK 04
 

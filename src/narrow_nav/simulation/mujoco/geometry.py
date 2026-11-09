@@ -6,7 +6,7 @@ import mujoco
 
 from narrow_nav.core.errors import ConfigurationError
 
-from ..world_geometry import Circle, Rectangle, WorldCollision
+from ..world_geometry import Circle, Rectangle, WorldCollision, is_yield_bay_cap
 
 
 def inspect_mjcf(
@@ -28,6 +28,8 @@ def collision_geometry(model: mujoco.MjModel, data: mujoco.MjData) -> WorldColli
         if group not in (0, 1, 3) or model.geom_bodyid[geom_id] != 0:
             continue
         if not (model.geom_contype[geom_id] or model.geom_conaffinity[geom_id]):
+            continue
+        if is_yield_bay_cap(model.geom(geom_id).name):
             continue
         x, y, _ = map(float, data.geom_xpos[geom_id])
         half_x, half_y, _ = map(float, model.geom_size[geom_id])

@@ -26,10 +26,15 @@ from narrow_nav.core.validation import (
 )
 
 from .corridor_width import AxisResize, CorridorResize
+from .depth_config import depth_from_config
 from .robot_controller import DriveProfile
 from .timing import Timing
 from .world_assets import MJCF_ROOT, WorldAsset, load_world_asset
-from .world_geometry import WorldCollision, WorldSpec
+from .world_geometry import (
+    DEFAULT_YIELD_BAY_OPENING_HEIGHT_M,
+    WorldCollision,
+    WorldSpec,
+)
 
 T = TypeVar("T")
 _HYDRA_LOCK = Lock()
@@ -181,7 +186,11 @@ def _authored_resize(world: DictConfig, width: float) -> CorridorResize:
 
 
 def _world_spec(
-    world: DictConfig, mjcf_root: Path, width: float | None
+    world: DictConfig,
+    mjcf_root: Path,
+    width: float | None,
+    *,
+    bay_opening_height_m: float = DEFAULT_YIELD_BAY_OPENING_HEIGHT_M,
 ) -> tuple[WorldSpec | WorldAsset, CorridorResize | None]:
     if "geometry_id" in world:
         if set(world) - {
@@ -202,7 +211,11 @@ def _world_spec(
             else ()
         )
         return load_world_asset(
-            mjcf_root, geometry_id, resize=resize, offsets=offsets
+            mjcf_root,
+            geometry_id,
+            resize=resize,
+            offsets=offsets,
+            bay_opening_height_m=bay_opening_height_m,
         ), resize
     base = WorldSpec(
         layout=OmegaConf.select(world, "layout", default="corridor"),
@@ -218,6 +231,7 @@ def _world_spec(
         passing_bay_width_m=OmegaConf.select(world, "passing_bay_width_m"),
         passing_bay_length_m=OmegaConf.select(world, "passing_bay_length_m"),
         passing_bay_center_x_m=OmegaConf.select(world, "passing_bay_center_x_m"),
+        yield_bay_opening_height_m=bay_opening_height_m,
     )
     if width is None:
         return base, None
@@ -288,7 +302,13 @@ def _scene_geometry(config: DictConfig, mjcf_root: Path) -> SceneGeometry:
         if "corridor_width" in config
         else None
     )
-    spec, resize = _world_spec(world, mjcf_root, width)
+    bay_opening_height_m = positive(
+        config.get("yield_bay_opening_height_m", DEFAULT_YIELD_BAY_OPENING_HEIGHT_M),
+        "yield_bay_opening_height_m",
+    )
+    spec, resize = _world_spec(
+        world, mjcf_root, width, bay_opening_height_m=bay_opening_height_m
+    )
     collision = spec.collision if isinstance(spec, WorldAsset) else spec.collision()
     robot_radius = positive(_required(config, "robots.radius_m"), "robots.radius_m")
     human_radius = positive(
@@ -373,6 +393,7 @@ def validate_scene_config(
             raise ConfigurationError("robots.drive must be differential or mecanum")
         if drive == "mecanum":
             mecanum_sensor_heights(config)
+        depth_from_config(config)
         _required_as(config, "experiments.terminate_on_contact", bool)
 
         for field in (

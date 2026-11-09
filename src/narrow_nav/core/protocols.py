@@ -7,7 +7,7 @@ from .actions import HumanMotionRequest, HumanMotionResult, MotionBatch, RobotAc
 from .errors import ContractError
 from .metadata import EpisodeMetadata
 from .observations import Observation, SensorObservation
-from .states import GroundTruthState, HumanContext
+from .states import CleanDepthFrame, GroundTruthState, HumanContext
 from .types import ROBOT_BASE_FRAME, WORLD_FRAME, Point2D
 from .validation import (
     finite,
@@ -53,6 +53,7 @@ class AdapterSnapshot:
     ground_truth: GroundTruthState
     sensor_samples: tuple[SensorObservation, ...] = ()
     frame_ids: tuple[str, ...] = (WORLD_FRAME, ROBOT_BASE_FRAME)
+    clean_depth: tuple[CleanDepthFrame, ...] = ()
 
     def __post_init__(self) -> None:
         require_type(self.ground_truth, GroundTruthState, "ground_truth")
@@ -74,6 +75,17 @@ class AdapterSnapshot:
             ((sample.sensor_id, sample.sample_index) for sample in self.sensor_samples),
             "samples",
         )
+        require_type(self.clean_depth, tuple, "clean_depth")
+        for frame in self.clean_depth:
+            require_type(frame, CleanDepthFrame, "clean_depth frame")
+            if (
+                frame.frame_id not in frames
+                or frame.capture_time_ns > self.ground_truth.stamp.timestamp.time_ns
+            ):
+                raise ContractError(
+                    "clean depth must use a registered frame and capture time"
+                )
+        unique((frame.sample_index for frame in self.clean_depth), "clean depth")
 
 
 @dataclass(frozen=True, slots=True)

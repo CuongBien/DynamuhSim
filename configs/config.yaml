@@ -5,8 +5,11 @@ defaults:
   - scenarios: head_on
   - humans: scripted
   - robots: mobile_robot
+  - sensors: null
   - experiments: smoke
   - _self_
 
 schema_version: 1
 seed: 42
+# Vertical clearance from the floor to the solid block above a yield bay.
+yield_bay_opening_height_m: 0.8

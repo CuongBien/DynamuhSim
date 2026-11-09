@@ -1,0 +1,26 @@
+schema_version: 1
+id: d435i
+calibration:
+  # Rectified depth stream from one D435i, rs-enumerate-devices -c.
+  source: https://github.com/realsenseai/realsense-ros/issues/2788
+  width: 424
+  height: 240
+  fx_px: 212.114547729492
+  fy_px: 212.114547729492
+  cx_px: 211.713150024414
+  cy_px: 117.93009185791
+  baseline_m: 0.0501048229634762
+noise:
+  enabled: true
+  min_depth_m: 0.105
+  max_depth_m: 6.0
+  disparity_step_px: 0.03125
+  depth_unit_m: 0.001
+  disparity_sigma_px: 0.08
+  edge_threshold_px: 1.0
+  edge_dropout_probability: 0.30
+  edge_mismatch_probability: 0.15
+  hole_tile_px: 8
+  hole_probability: 0.01
+  temporal_sigma_px: 0.02
+  temporal_correlation: 0.75

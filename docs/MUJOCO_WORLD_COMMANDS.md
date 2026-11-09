@@ -2,6 +2,8 @@
 
 Chạy từ thư mục gốc dự án trong phiên desktop có màn hình. Mỗi dòng lệnh mở một cửa sổ MuJoCo với robot mecanum. Viewer hiển thị vị trí xuất phát của robot và người. Cuộn chuột để zoom, kéo chuột để đổi góc nhìn. Đóng cửa sổ trước khi chạy lệnh tiếp theo.
 
+Để lái robot và xem ảnh D435i đã xử lý, dùng danh sách teleop có đủ các world, kể cả nhóm arena. [Lệnh teleop D435i](MUJOCO_TELEOP_DEPTH.md#chọn-môi-trường)
+
 ```bash
 cd ~/nav_ws
 ```
@@ -46,7 +48,8 @@ Hai tường dọc và hai tường đầu tạo một hành lang có bề rộn
 .venv/bin/python -m narrow_nav.simulation.mujoco.view_world worlds=corridor_070 scenarios=corridor_070 robots=mecanum_robot
 ```
 
-### `corridor_090` · 0,90 m
+### `corridor_090` · 0,90 mnày là theo hướng computer vision hướng này ở vn khá là kén tìm mấy kcn chắc là có bên ngoài đa số là LLM thôi
+
 
 ```bash
 .venv/bin/python -m narrow_nav.simulation.mujoco.view_world worlds=corridor_090 scenarios=corridor_090 robots=mecanum_robot

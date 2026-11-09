@@ -10,7 +10,15 @@ from narrow_nav.core.errors import ConfigurationError
 from narrow_nav.core.validation import finite, identifier, positive
 
 from .corridor_width import CorridorResize
-from .world_geometry import GEOMETRY_TOLERANCE_M, Circle, Rectangle, WorldCollision
+from .world_geometry import (
+    DEFAULT_YIELD_BAY_OPENING_HEIGHT_M,
+    GEOMETRY_TOLERANCE_M,
+    Circle,
+    Rectangle,
+    WorldCollision,
+    is_yield_bay_cap,
+    validate_bay_opening_height,
+)
 
 MJCF_ROOT = Path(__file__).resolve().parents[3] / "sim" / "mujoco"
 DEFAULTS_INCLUDE = "../../templates/world_defaults.xml"
@@ -37,6 +45,7 @@ def load_world_asset(
     *,
     resize: CorridorResize | None = None,
     offsets: tuple[tuple[str, tuple[float, float]], ...] = (),
+    bay_opening_height_m: float = DEFAULT_YIELD_BAY_OPENING_HEIGHT_M,
 ) -> WorldAsset:
     """Read one standalone world and validate geometry before using it for spawns."""
     identifier(geometry_id, "worlds.geometry_id")
@@ -89,6 +98,16 @@ def load_world_asset(
                 shape != "box" or abs(z + size[-1]) > GEOMETRY_TOLERANCE_M
             ):
                 raise ValueError("the floor must be a box with top at Z=0")
+            cap = is_yield_bay_cap(name)
+            if cap:
+                if kind != "wall" or shape != "box" or z - size[2] <= 0:
+                    raise ValueError(
+                        f"yield bay cap must be an elevated wall box: {name}"
+                    )
+                top = z + size[2]
+                validate_bay_opening_height(bay_opening_height_m, top)
+                z = (top + bay_opening_height_m) / 2
+                size = (*size[:2], (top - bay_opening_height_m) / 2)
             if resize is not None and kind == "wall":
                 for pattern, (dx, dy) in offsets:
                     if fnmatchcase(name, pattern):
@@ -99,10 +118,14 @@ def load_world_asset(
                     y0, y1 = resize.y.map(y - size[1]), resize.y.map(y + size[1])
                     x, y = (x0 + x1) / 2, (y0 + y1) / 2
                     size = ((x1 - x0) / 2, (y1 - y0) / 2, size[2])
-                    node.set("size", " ".join(format(value, ".17g") for value in size))
                 else:
                     x, y = resize.x.map(x), resize.y.map(y)
+            if cap or (resize is not None and kind == "wall"):
+                node.set("size", " ".join(format(value, ".17g") for value in size))
                 node.set("pos", " ".join(format(value, ".17g") for value in (x, y, z)))
+            if cap:
+                # Overhead geometry stays in MJCF, outside the ground-plane map.
+                continue
             footprint = (
                 Rectangle(x - size[0], x + size[0], y - size[1], y + size[1])
                 if shape == "box"
