@@ -7,8 +7,12 @@ from .world_builder import BuiltWorld
 from .world_geometry import WorldCollision
 
 
-def inspect_world(world: BuiltWorld | Path) -> WorldCollision:
+def inspect_world(
+    world: BuiltWorld | Path, *, allow_rotated_walls: bool = False
+) -> WorldCollision:
     """Return free-space and clear-width queries for a built or on-disk scene."""
     if isinstance(world, BuiltWorld):
-        return inspect_mjcf(world.mjcf, world.visual_assets)
-    return inspect_mjcf(world)
+        return inspect_mjcf(
+            world.mjcf, world.visual_assets, allow_rotated_walls=allow_rotated_walls
+        )
+    return inspect_mjcf(world, allow_rotated_walls=allow_rotated_walls)

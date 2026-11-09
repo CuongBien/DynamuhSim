@@ -5,6 +5,7 @@ from itertools import combinations
 from math import cos, hypot, pi, sin, sqrt
 
 from narrow_nav.core.errors import ConfigurationError
+from narrow_nav.core.planar_world import PlanarWorld
 from narrow_nav.core.states import Obstacle
 from narrow_nav.core.types import Point2D
 from narrow_nav.core.validation import finite, positive
@@ -45,6 +46,50 @@ class Rectangle:
 
 
 @dataclass(frozen=True, slots=True)
+class RotatedRectangle:
+    local: Rectangle
+    x: float
+    y: float
+    yaw: float
+
+    def _local_xy(self, x: float, y: float) -> XY:
+        dx, dy = x - self.x, y - self.y
+        c, s = cos(self.yaw), sin(self.yaw)
+        return c * dx + s * dy, -s * dx + c * dy
+
+    def distance(self, x: float, y: float) -> float:
+        return self.local.distance(*self._local_xy(x, y))
+
+    def signed_distance(self, x: float, y: float) -> float:
+        return self.local.signed_distance(*self._local_xy(x, y))
+
+    def y_span(self, x: float) -> tuple[float, float] | None:
+        ys = []
+        ring = _box_vertices(self)
+        for (ax, ay), (bx, by) in zip(ring, (*ring[1:], ring[0]), strict=True):
+            if min(ax, bx) <= x <= max(ax, bx):
+                if ax == bx:
+                    ys.extend((ay, by))
+                else:
+                    ys.append(ay + (by - ay) * (x - ax) / (bx - ax))
+        return (min(ys), max(ys)) if ys else None
+
+
+def _box_vertices(box: Rectangle | RotatedRectangle) -> tuple[XY, ...]:
+    rect = box.local if isinstance(box, RotatedRectangle) else box
+    ring = (
+        (rect.x_min, rect.y_min),
+        (rect.x_max, rect.y_min),
+        (rect.x_max, rect.y_max),
+        (rect.x_min, rect.y_max),
+    )
+    if isinstance(box, RotatedRectangle):
+        c, s = cos(box.yaw), sin(box.yaw)
+        return tuple((box.x + c * x - s * y, box.y + s * x + c * y) for x, y in ring)
+    return ring
+
+
+@dataclass(frozen=True, slots=True)
 class Circle:
     x: float
     y: float
@@ -77,31 +122,46 @@ class Circle:
 @dataclass(frozen=True, slots=True)
 class WorldCollision:
     floors: tuple[Rectangle, ...]
-    walls: tuple[Rectangle | Circle, ...]
+    walls: tuple[Rectangle | RotatedRectangle | Circle, ...]
     wall_ids: tuple[str, ...] = field(default=(), compare=False)
 
-    def obstacles(self) -> tuple[Obstacle, ...]:
+    def obstacles(self, *, circle_sides: int = 16) -> tuple[Obstacle, ...]:
         obstacles = []
         for entity_id, wall in zip(self.wall_ids, self.walls, strict=True):
-            if isinstance(wall, Rectangle):
-                vertices = (
-                    Point2D(wall.x_min, wall.y_min),
-                    Point2D(wall.x_max, wall.y_min),
-                    Point2D(wall.x_max, wall.y_max),
-                    Point2D(wall.x_min, wall.y_max),
+            if isinstance(wall, Circle):
+                radius = wall.radius_m / cos(pi / circle_sides)
+                ring = tuple(
+                    (
+                        wall.x + radius * cos(2 * k * pi / circle_sides),
+                        wall.y + radius * sin(2 * k * pi / circle_sides),
+                    )
+                    for k in range(circle_sides)
                 )
             else:
-                # Circumscribed polygon for context; clearance uses the original circle.
-                radius = wall.radius_m / cos(pi / 16)
-                vertices = tuple(
-                    Point2D(
-                        wall.x + radius * cos(k * pi / 8),
-                        wall.y + radius * sin(k * pi / 8),
-                    )
-                    for k in range(16)
-                )
-            obstacles.append(Obstacle(entity_id, (vertices,)))
+                ring = _box_vertices(wall)
+            obstacles.append(
+                Obstacle(entity_id, (tuple(Point2D(x, y) for x, y in ring),))
+            )
         return tuple(obstacles)
+
+    def planar_world(self) -> PlanarWorld:
+        """Export the compiled collision footprint for a 2D consumer."""
+        sides = 64
+        return PlanarWorld(
+            tuple(
+                tuple(Point2D(x, y) for x, y in _box_vertices(floor))
+                for floor in self.floors
+            ),
+            self.obstacles(circle_sides=sides),
+            max(
+                (
+                    wall.radius_m * (1 / cos(pi / sides) - 1)
+                    for wall in self.walls
+                    if isinstance(wall, Circle)
+                ),
+                default=0.0,
+            ),
+        )
 
     def human_paths_clear(
         self, starts: tuple[XY, ...], ends: tuple[XY, ...], radii: tuple[float, ...]

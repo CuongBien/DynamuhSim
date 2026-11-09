@@ -23,3 +23,5 @@ Executed của người là sai phân vị trí native giữa hai snapshot chia 
 MuJoCo tiếp tục sở hữu pose thực thi, physics, sensor và contact. Backend 2D dùng snapshot hiện tại để đề xuất lệnh, rồi đối chiếu đầu vào tiếp theo với chuyển động native đo được. Bridge cần xác minh API từng model khi đồng bộ trạng thái sau limiter hoặc guard, và mô tả cách đưa robot MuJoCo vào tương tác dưới dạng external. Cơ chế robot 2D tự chọn vận tốc cần một điều kiện được định nghĩa riêng. Chưa có bằng chứng cho phép dùng một phép cập nhật native chung cho SFM, AVM và CSM.
 
 Fixture scripted thẳng chỉ mở cổng kiểm định đường truyền lệnh. Geometry đầy đủ, policy nhường/đi vòng, nhãn, persistence và sai khác đã ghi vẫn là điều kiện cho benchmark. [Sổ sai khác](../research/HUMAN_MODEL_DEVIATIONS.md) · [Báo cáo TASK 02](../reports/human_models/TASK_02_REPORT.md)
+
+TASK 04 đã kiểm chứng bridge hình học và nhịp dự báo bằng probe native. Khả năng ghép robot động còn bị chặn ở JuPedSim 1.4.2. [Bridge và số đo](JUPEDSIM_MUJOCO_2D_3D_BRIDGE.md)

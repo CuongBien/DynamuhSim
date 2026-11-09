@@ -23,6 +23,7 @@ Hợp đồng logic `schema_version = 1` cho dữ liệu qua cổng `core`. Ki�
 | `GroundTruthState` | Metadata snapshot, đúng một `RobotState` và danh sách `HumanState` theo thứ tự tăng dần của `entity_id`. Là snapshot vật lý dùng cho mô hình hành vi người, chẩn đoán, kiểm định và nhãn ngoại tuyến. |
 | `Observation` | Metadata snapshot và danh sách slot theo `sensor_id`. Mỗi slot có `status` là `valid`, `missing`, `invalid` hoặc `stale`. Slot `valid` chứa mẫu mới nhất đã sẵn sàng. Các trạng thái còn lại không có payload và có mã lý do. |
 | `HumanContext` | Metadata snapshot, ID, pose và vận tốc phẳng của robot trong `world`, trạng thái người, bán kính robot và bán kính dùng chung của profile người. Mỗi vật cản có ID và danh sách polygon trong `world` với ít nhất ba đỉnh XY mỗi polygon, không lặp đỉnh đóng. Runtime dựng cùng một phép chiếu cho mọi backend. |
+| `PlanarWorld` | Kiểu giá trị v1 cho tầng lắp ghép bridge 2D. `floors` là các vòng polygon sàn, `solids` là danh sách `Obstacle` collision tĩnh. Mỗi đỉnh là `Point2D` trong `world`, đơn vị m. Mặt sàn ở Z = 0. `projection_error_m` là cận xấp xỉ footprint tĩnh, đơn vị m. Tách khỏi snapshot `HumanContext` và `Observation`. |
 
 `Pose2D` chứa `x`, `y`, `yaw`, `frame_id`. `Velocity2D` chứa `linear_x`, `linear_y`, `frame_id`. `Twist2D` thêm `angular_z`. `RobotState` và `HumanState` cung cấp `to_dict()` và `from_dict()` cho round-trip JSON.
 
