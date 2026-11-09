@@ -1,0 +1,16 @@
+schema_version: 1
+id: OT_Same_Direction
+runtime_id: ot_same_direction
+source_line: 249
+geometry: {kind: straight_corridor, min_length_m: 10, environments: [corridor, warehouse]}
+widths_m: {easy: [2.1], critical: [1.6, 1.2], hard: [0.9]}
+density: {counts: [1], layout: same_direction}
+subtypes:
+  pedestrian_overtaking: {human_speed_mps: 1.1}
+  robot_overtaking: {human_speed_mps: 0.4}
+human_policies: {cooperative: move_aside, neutral: steady, non_cooperative: weave}
+robot_actions: [advance, follow, yield]
+labels: {max_heading_difference_deg: 20, max_initial_separation_m: 4}
+quality_reference: {intimate_space_m: 0.45}
+failure_modes: [rear_collision, person_pinned_to_wall, side_scrape]
+blockers: [ot_subtype_allocation_and_speed_profiles]

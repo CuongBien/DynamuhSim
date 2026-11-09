@@ -8,6 +8,7 @@ from .actions import HumanMotionRequest, HumanMotionResult, MotionBatch, RobotAc
 from .errors import ContractError
 from .metadata import EpisodeMetadata
 from .observations import Observation, SensorObservation
+from .planar_world import PlanarWorld
 from .states import GroundTruthState, HumanContext
 from .types import ROBOT_BASE_FRAME, WORLD_FRAME, Point2D
 from .validation import (
@@ -261,6 +262,7 @@ class HumanBackendConfig:
     goal_tolerance_m: float
     max_acceleration_mps2: float
     max_speed_mps: float | None = None
+    planar_world: PlanarWorld | None = None
 
 
 class RegisteredHumanBackend(HumanControllerBackend[HumanBackendConfig], Protocol):

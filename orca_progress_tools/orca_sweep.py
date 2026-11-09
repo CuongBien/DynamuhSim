@@ -20,6 +20,7 @@ from narrow_nav.core.actions import RobotAction
 from narrow_nav.core.types import Twist2D
 from narrow_nav.simulation.configuration import compose_config
 from narrow_nav.simulation.mujoco_engine import MuJoCoEngine
+from narrow_nav.humans.registry import create_human_backend
 
 
 @dataclass(frozen=True)
@@ -126,7 +127,9 @@ def run_case(case: Case, seed: int, args, root: Path) -> dict:
     engine = None
     try:
         config = compose_config("configs", overrides)
-        engine = MuJoCoEngine()
+        engine = MuJoCoEngine(
+            human_backend=create_human_backend(config.humans.backend)
+        )
         engine.load(config)
         engine.reset(seed=seed)
         before = engine.get_ground_truth()

@@ -263,6 +263,7 @@ class SimulationLifecycle:
                         ),
                         loaded.human_limits.max_acceleration_mps2,
                         max_speed_mps=loaded.human_limits.max_speed_mps,
+                        planar_world=loaded.collision.planar_world(),
                     ),
                     metadata.human_backend_seed,
                     tuple(human.entity_id for human in truth.humans),

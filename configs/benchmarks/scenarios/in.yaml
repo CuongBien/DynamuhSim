@@ -1,0 +1,13 @@
+schema_version: 1
+id: IN_Crossing_Paths
+runtime_id: in_crossing_paths
+source_line: 223
+geometry: {kind: x_or_t_intersection, environments: [corridor, warehouse, hospital]}
+widths_m: {easy: [2.1], critical: [1.2], hard: [0.9]}
+density: {counts: [1, 2], layout: lateral_single_or_two_successive}
+human_policies: {cooperative: slow_to_yield, neutral: maintain_speed, non_cooperative: accelerate_across}
+robot_actions: [advance, stop, yield]
+labels: {heading_deg: 90, heading_tolerance_deg: 20, max_predicted_arrival_difference_s: 2}
+quality_reference: {crossing_distance_gt_m: 1.2}
+failure_modes: [intersection_collision, cut_in_front, passive_obstacle_deadlock]
+blockers: [in_approved_mjcf_conflict_point_and_arrival_definition]

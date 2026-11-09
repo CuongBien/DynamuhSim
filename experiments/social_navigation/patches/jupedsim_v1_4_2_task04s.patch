@@ -1,0 +1,453 @@
+--- a/libsimulator/src/Simulation.hpp
++++ b/libsimulator/src/Simulation.hpp
+@@ -21,8 +21,15 @@
+ #include <boost/iterator/zip_iterator.hpp>
+ 
+ #include <memory>
++#include <optional>
+ #include <unordered_map>
+ #include <vector>
++
++struct SfmCoupledState {
++    GenericAgent::ID id;
++    Point position;
++    Point velocity;
++};
+ 
+ class Simulation
+ {
+@@ -41,6 +48,10 @@
+     RoutingEngine* _routingEngine;
+     CollisionGeometry* _geometry;
+     std::vector<GenericAgent> _agents;
++    // TASK 04S. External actors never enter the stage, tactical or update rosters.
++    std::vector<GenericAgent> _externalSfmActors;
++    std::optional<uint64_t> _sfmSampleTimeNs;
++    uint64_t _sfmValidUntilIteration{};
+     std::vector<GenericAgent::ID> _removedAgentsInLastIteration;
+     std::unordered_map<Journey::ID, std::unique_ptr<Journey>> _journeys;
+     PerfStats _perfStats{};
+@@ -55,6 +66,14 @@
+     Simulation(Simulation&& other) = delete;
+     Simulation& operator=(Simulation&& other) = delete;
+     ~Simulation() = default;
++    GenericAgent::ID RegisterExternalSfmActor(double radius);
++    void ApplySfmCoupledState(
++        uint64_t timestampNs,
++        uint64_t steps,
++        const std::vector<SfmCoupledState>& external,
++        const std::vector<SfmCoupledState>& pedestrians);
++    const GenericAgent& ExternalSfmActor(GenericAgent::ID id) const;
++    uint64_t SfmSampleTimeNs() const;
+     const SimulationClock& Clock() const;
+     void SetTracing(bool on);
+     PerfStats GetLastStats() const;
+--- a/libsimulator/src/Simulation.cpp
++++ b/libsimulator/src/Simulation.cpp
+@@ -8,7 +8,10 @@
+ #include "Stage.hpp"
+ #include "Visitor.hpp"
+ 
++#include <cmath>
++#include <limits>
+ #include <memory>
++#include <unordered_set>
+ #include <variant>
+ 
+ Simulation::Simulation(
+@@ -43,8 +46,134 @@
+     return _perfStats;
+ };
+ 
++namespace
++{
++constexpr uint64_t sfmStepNs = 10'000'000;
++
++auto FindSfmAgent(auto& agents, GenericAgent::ID id)
++{
++    return std::find_if(agents.begin(), agents.end(), [id](const auto& agent) {
++        return agent.id == id;
++    });
++}
++
++bool IsFinite(Point p)
++{
++    return std::isfinite(p.x) && std::isfinite(p.y);
++}
++}
++
++GenericAgent::ID Simulation::RegisterExternalSfmActor(double radius)
++{
++    if(ModelType() != OperationalModelType::SOCIAL_FORCE || DT() != 0.01) {
++        throw SimulationError("experimental SFM coupling requires SFM with dt=10 ms");
++    }
++    if(Iteration() != 0 || _sfmSampleTimeNs || !std::isfinite(radius) || radius <= 0) {
++        throw SimulationError("register external actor before synchronization with positive radius");
++    }
++    SocialForceModelData model{};
++    model.radius = radius;
++    _externalSfmActors.emplace_back(
++        GenericAgent::ID::Invalid,
++        Journey::ID::Invalid,
++        BaseStage::ID::Invalid,
++        Point{},
++        Point{},
++        model);
++    return _externalSfmActors.back().id;
++}
++
++const GenericAgent& Simulation::ExternalSfmActor(GenericAgent::ID id) const
++{
++    const auto actor = FindSfmAgent(_externalSfmActors, id);
++    if(actor == _externalSfmActors.end() || !_sfmSampleTimeNs) {
++        throw SimulationError("external SFM actor has no synchronized state");
++    }
++    return *actor;
++}
++
++uint64_t Simulation::SfmSampleTimeNs() const
++{
++    return _sfmSampleTimeNs.value();
++}
++
++void Simulation::ApplySfmCoupledState(
++    uint64_t timestampNs,
++    uint64_t steps,
++    const std::vector<SfmCoupledState>& external,
++    const std::vector<SfmCoupledState>& pedestrians)
++{
++    if(ModelType() != OperationalModelType::SOCIAL_FORCE || DT() != 0.01) {
++        throw SimulationError("experimental SFM coupling requires SFM with dt=10 ms");
++    }
++    if(Iteration() > std::numeric_limits<uint64_t>::max() / sfmStepNs ||
++       timestampNs != Iteration() * sfmStepNs ||
++       (_sfmSampleTimeNs && timestampNs <= *_sfmSampleTimeNs) || steps < 1 || steps > 10) {
++        throw SimulationError("stale, duplicate or off-grid SFM synchronization window");
++    }
++    if(!_removedAgentsInLastIteration.empty()) {
++        throw SimulationError("cannot rebase while agent removal is pending");
++    }
++
++    // Validate all samples and prepare the index before modifying any live state.
++    auto people = _agents;
++    auto actors = _externalSfmActors;
++    const auto prepare = [this](auto& roster, const auto& states) {
++        if(roster.size() != states.size()) {
++            throw SimulationError("SFM synchronization requires the full roster");
++        }
++        std::unordered_set<uint64_t> seen;
++        for(const auto& state : states) {
++            const auto agent = FindSfmAgent(roster, state.id);
++            if(agent == roster.end() || !seen.insert(state.id.getID()).second) {
++                throw SimulationError("unknown or duplicate SFM synchronization ID");
++            }
++            if(!IsFinite(state.position) || !IsFinite(state.velocity) ||
++               !_geometry->InsideGeometry(state.position)) {
++                throw SimulationError("invalid SFM synchronization position or velocity");
++            }
++            auto& model = std::get<SocialForceModelData>(agent->model);
++            const auto walls = _geometry->LineSegmentsInDistanceTo(model.radius, state.position);
++            if(std::begin(walls) != std::end(walls)) {
++                throw SimulationError("SFM synchronization footprint intersects geometry");
++            }
++            agent->pos = state.position;
++            model.velocity = state.velocity;
++        }
++    };
++    prepare(people, pedestrians);
++    prepare(actors, external);
++
++    for(auto person = people.begin(); person != people.end(); ++person) {
++        const auto coincident = [&person](const auto& other) {
++            return (person->pos - other.pos).isZeroLength();
++        };
++        if(std::any_of(std::next(person), people.end(), coincident) ||
++           std::any_of(actors.begin(), actors.end(), coincident)) {
++            throw SimulationError("coincident centers in SFM synchronization");
++        }
++    }
++
++    NeighborhoodSearch<GenericAgent> index{2.2};
++    index.Update(people);
++    // Keep the live objects, so native agent handles, intent and stage state survive.
++    for(size_t i = 0; i < _agents.size(); ++i) {
++        _agents[i].pos = people[i].pos;
++        std::get<SocialForceModelData>(_agents[i].model).velocity =
++            std::get<SocialForceModelData>(people[i].model).velocity;
++    }
++    _externalSfmActors = std::move(actors);
++    _neighborhoodSearch = std::move(index);
++    _sfmSampleTimeNs = timestampNs;
++    _sfmValidUntilIteration = Iteration() + steps;
++}
++
+ void Simulation::Iterate()
+ {
++    if((!_externalSfmActors.empty() || _sfmSampleTimeNs) &&
++       Iteration() >= _sfmValidUntilIteration) {
++        throw SimulationError("missing or expired external SFM synchronization window");
++    }
+     // LOG_DEBUG("Iteration {} / Time {}s", _clock.Iteration(), _clock.ElapsedTime());
+     auto t = _perfStats.TraceIterate();
+     _agentRemovalSystem.Run(_agents, _removedAgentsInLastIteration, _stageManager);
+@@ -55,8 +184,17 @@
+     _tacticalDecisionSystem.Run(*_routingEngine, _agents);
+     {
+         auto t2 = _perfStats.TraceOperationalDecisionSystemRun();
+-        _operationalDecisionSystem.Run(
+-            _clock.dT(), _clock.ElapsedTime(), _neighborhoodSearch, *_geometry, _agents);
++        if(_externalSfmActors.empty()) {
++            _operationalDecisionSystem.Run(
++                _clock.dT(), _clock.ElapsedTime(), _neighborhoodSearch, *_geometry, _agents);
++        } else {
++            auto neighbors = _neighborhoodSearch;
++            for(const auto& actor : _externalSfmActors) {
++                neighbors.AddAgent(actor);
++            }
++            _operationalDecisionSystem.Run(
++                _clock.dT(), _clock.ElapsedTime(), neighbors, *_geometry, _agents);
++        }
+     }
+     _clock.Advance();
+ }
+--- a/libjupedsim/include/jupedsim/simulation.h
++++ b/libjupedsim/include/jupedsim/simulation.h
+@@ -276,6 +276,32 @@
+  */
+ JUPEDSIM_API size_t JPS_Simulation_RemovedAgents(JPS_Simulation handle, const JPS_AgentId** data);
+ 
++typedef struct JPS_SfmCoupledState {
++    JPS_AgentId id;
++    JPS_Point position;
++    JPS_Point velocity;
++} JPS_SfmCoupledState;
++
++/** Experimental SFM-only ABI, 10 ms step. Updates do not advance the clock. */
++JUPEDSIM_API bool JPS_Simulation_RegisterExternalSfmActor(
++    JPS_Simulation, double radius, JPS_AgentId* id, JPS_ErrorMessage*);
++JUPEDSIM_API bool JPS_Simulation_ApplySfmCoupledState(
++    JPS_Simulation,
++    uint64_t timestampNs,
++    uint64_t steps,
++    const JPS_SfmCoupledState* external,
++    size_t externalCount,
++    const JPS_SfmCoupledState* pedestrians,
++    size_t pedestrianCount,
++    JPS_ErrorMessage*);
++JUPEDSIM_API bool JPS_Simulation_GetExternalSfmActor(
++    JPS_Simulation,
++    JPS_AgentId,
++    JPS_SfmCoupledState* state,
++    double* radius,
++    uint64_t* timestampNs,
++    JPS_ErrorMessage*);
++
+ /*
+  * Advances the simulation by one step.
+  * @param handle of the Simulation
+--- a/libjupedsim/src/simulation.cpp
++++ b/libjupedsim/src/simulation.cpp
+@@ -481,6 +481,93 @@
+     return agents.size();
+ }
+ 
++namespace
++{
++bool CoupledSfmCall(JPS_ErrorMessage* error, auto operation)
++{
++    try {
++        operation();
++        return true;
++    } catch(const std::exception& ex) {
++        if(error) {
++            *error = reinterpret_cast<JPS_ErrorMessage>(new JPS_ErrorMessage_t{ex.what()});
++        }
++    } catch(...) {
++        if(error) {
++            *error = reinterpret_cast<JPS_ErrorMessage>(
++                new JPS_ErrorMessage_t{"Unknown SFM synchronization error."});
++        }
++    }
++    return false;
++}
++
++std::vector<SfmCoupledState> CoupledStates(const JPS_SfmCoupledState* states, size_t count)
++{
++    std::vector<SfmCoupledState> result;
++    result.reserve(count);
++    for(size_t i = 0; i < count; ++i) {
++        const auto& state = states[i];
++        result.push_back({
++            GenericAgent::ID{state.id}, intoPoint(state.position), intoPoint(state.velocity)});
++    }
++    return result;
++}
++}
++
++bool JPS_Simulation_RegisterExternalSfmActor(
++    JPS_Simulation handle, double radius, JPS_AgentId* id, JPS_ErrorMessage* error)
++{
++    return CoupledSfmCall(error, [&] {
++        if(!handle || !id) {
++            throw SimulationError("invalid external SFM registration arguments");
++        }
++        *id = reinterpret_cast<Simulation*>(handle)->RegisterExternalSfmActor(radius).getID();
++    });
++}
++
++bool JPS_Simulation_ApplySfmCoupledState(
++    JPS_Simulation handle,
++    uint64_t timestampNs,
++    uint64_t steps,
++    const JPS_SfmCoupledState* external,
++    size_t externalCount,
++    const JPS_SfmCoupledState* pedestrians,
++    size_t pedestrianCount,
++    JPS_ErrorMessage* error)
++{
++    return CoupledSfmCall(error, [&] {
++        if(!handle || (!external && externalCount) || (!pedestrians && pedestrianCount)) {
++            throw SimulationError("invalid SFM synchronization arguments");
++        }
++        reinterpret_cast<Simulation*>(handle)->ApplySfmCoupledState(
++            timestampNs,
++            steps,
++            CoupledStates(external, externalCount),
++            CoupledStates(pedestrians, pedestrianCount));
++    });
++}
++
++bool JPS_Simulation_GetExternalSfmActor(
++    JPS_Simulation handle,
++    JPS_AgentId id,
++    JPS_SfmCoupledState* state,
++    double* radius,
++    uint64_t* timestampNs,
++    JPS_ErrorMessage* error)
++{
++    return CoupledSfmCall(error, [&] {
++        if(!handle || !state || !radius || !timestampNs) {
++            throw SimulationError("invalid external SFM readback arguments");
++        }
++        const auto simulation = reinterpret_cast<const Simulation*>(handle);
++        const auto& actor = simulation->ExternalSfmActor(GenericAgent::ID{id});
++        const auto& model = std::get<SocialForceModelData>(actor.model);
++        *state = {id, intoJPS_Point(actor.pos), intoJPS_Point(model.velocity)};
++        *radius = model.radius;
++        *timestampNs = simulation->SfmSampleTimeNs();
++    });
++}
++
+ bool JPS_Simulation_Iterate(JPS_Simulation handle, JPS_ErrorMessage* errorMessage)
+ {
+     assert(handle);
+--- a/python_bindings_jupedsim/simulation.cpp
++++ b/python_bindings_jupedsim/simulation.cpp
+@@ -10,8 +10,27 @@
+ 
+ namespace py = pybind11;
+ 
++namespace
++{
++void CheckCoupledSfmCall(bool success, JPS_ErrorMessage error)
++{
++    if(!success) {
++        const auto message = std::string(JPS_ErrorMessage_GetMessage(error));
++        JPS_ErrorMessage_Free(error);
++        throw std::runtime_error{message};
++    }
++}
++}
++
+ void init_simulation(py::module_& m)
+ {
++    using CoupledPoint = std::tuple<double, double>;
++    py::class_<JPS_SfmCoupledState>(m, "SfmCoupledState")
++        .def(py::init([](JPS_AgentId id, CoupledPoint xy, CoupledPoint vxy) {
++            const auto [x, y] = xy;
++            const auto [vx, vy] = vxy;
++            return JPS_SfmCoupledState{id, {x, y}, {vx, vy}};
++        }));
+     py::class_<JPS_OperationalModel_Wrapper>(m, "OperationalModel");
+     py::class_<JPS_Simulation_Wrapper>(m, "Simulation")
+         .def(
+@@ -31,6 +50,44 @@
+             py::arg("model"),
+             py::arg("geometry"),
+             py::arg("dt"))
++        .def("register_external_sfm_actor", [](const JPS_Simulation_Wrapper& w, double radius) {
++            JPS_ErrorMessage error{};
++            JPS_AgentId id{};
++            const auto ok = JPS_Simulation_RegisterExternalSfmActor(w.handle, radius, &id, &error);
++            CheckCoupledSfmCall(ok, error);
++            return id;
++        })
++        .def(
++            "apply_sfm_coupled_state",
++            [](const JPS_Simulation_Wrapper& w,
++               uint64_t timestampNs,
++               uint64_t steps,
++               const std::vector<JPS_SfmCoupledState>& external,
++               const std::vector<JPS_SfmCoupledState>& pedestrians) {
++                JPS_ErrorMessage error{};
++                const auto ok = JPS_Simulation_ApplySfmCoupledState(
++                    w.handle,
++                    timestampNs,
++                    steps,
++                    external.data(),
++                    external.size(),
++                    pedestrians.data(),
++                    pedestrians.size(),
++                    &error);
++                CheckCoupledSfmCall(ok, error);
++            })
++        .def("external_sfm_actor", [](const JPS_Simulation_Wrapper& w, JPS_AgentId id) {
++            JPS_ErrorMessage error{};
++            JPS_SfmCoupledState state{};
++            double radius{};
++            uint64_t timestampNs{};
++            const auto ok = JPS_Simulation_GetExternalSfmActor(
++                w.handle, id, &state, &radius, &timestampNs, &error);
++            CheckCoupledSfmCall(ok, error);
++            return py::make_tuple(
++                state.id, intoTuple(state.position), intoTuple(state.velocity), radius,
++                timestampNs, true);
++        })
+         .def(
+             "add_waypoint_stage",
+             [](JPS_Simulation_Wrapper& w, std::tuple<double, double> position, double distance) {
+--- a/python_modules/jupedsim/jupedsim/simulation.py
++++ b/python_modules/jupedsim/jupedsim/simulation.py
+@@ -326,6 +326,32 @@
+         """
+         return self._obj.removed_agents()
+ 
++    def register_external_sfm_actor(self, radius: float) -> int:
++        """Register a neighborhood-only kinematic actor in experimental SFM."""
++        return self._obj.register_external_sfm_actor(radius)
++
++    def apply_sfm_coupled_state(
++        self,
++        timestamp_ns: int,
++        steps: int,
++        *,
++        external: list[tuple[int, tuple[float, float], tuple[float, float]]],
++        pedestrians: list[tuple[int, tuple[float, float], tuple[float, float]]],
++    ) -> None:
++        """Atomically apply world XY and m/s samples without advancing native time."""
++        self._obj.apply_sfm_coupled_state(
++            timestamp_ns,
++            steps,
++            [py_jps.SfmCoupledState(*state) for state in external],
++            [py_jps.SfmCoupledState(*state) for state in pedestrians],
++        )
++
++    def external_sfm_actor(
++        self, actor_id: int
++    ) -> tuple[int, tuple[float, float], tuple[float, float], float, int, bool]:
++        """Read ID, world XY, world velocity, radius, sample ns and kinematic flag."""
++        return self._obj.external_sfm_actor(actor_id)
++
+     def iterate(self, count: int = 1) -> None:
+         """Advance the simulation by the given number of iterations.
+ 

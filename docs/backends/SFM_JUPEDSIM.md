@@ -1,6 +1,8 @@
 # JuPedSim SocialForceModel
 
-**Trạng thái · BLOCKED_CAPABILITY.** TASK 05 yêu cầu TASK 04 đạt cổng robot động. ID dự kiến là `sfm_jupedsim`. Registry hiện từ chối ID này. Các kiểm tra TASK 05 đọc API của wheel và chạy lại fixture CFM v1 của bridge. [Báo cáo TASK 04](../reports/human_models/TASK_04_REPORT.md) · [Báo cáo TASK 05](../reports/human_models/TASK_05_REPORT.md)
+**Cập nhật 04U.** Registry hỗ trợ SFM trên wheel cô lập 04U qua API dùng chung và tiếp tục hỗ trợ build 04S qua legacy API. [Hợp đồng 04U](JUPEDSIM_EXTERNAL_ACTOR_CONTRACT.md) · [Regression 05R](../reports/human_models/TASK_04U_REPORT.md)
+
+**Trạng thái 05R · IMPLEMENTATION_PASS và SYNC_PASS trên build 04S.** Registry nhận `sfm_jupedsim` trong interpreter cô lập `1.4.2+task04s`. Wheel stock vẫn bị chặn do thiếu API. TASK 05 đọc API của wheel và chạy lại fixture CFM v1 của bridge. TASK 04R thử SFM thật qua profile chẩn đoán dựng lại trạng thái, tách khỏi registry nghiên cứu. [Báo cáo TASK 04](../reports/human_models/TASK_04_REPORT.md) · [Báo cáo TASK 05](../reports/human_models/TASK_05_REPORT.md)
 
 ## API và tham số đã xác minh
 
@@ -31,3 +33,13 @@ Khi mở cổng, bán kính lấy từ scene MuJoCo đã resolve để giữ cù
 | `non_cooperative` | Card có điều kiện giữ hướng, không giảm tốc, tăng tốc hoặc lạng hướng tùy tình huống. API cho chỉnh tốc độ mong muốn và hệ số lực, nhưng chưa có bằng chứng một bộ hệ số tái hiện các hành vi đó. |
 
 Phản ứng lực mô tả tương tác vận động. Nhãn về ý định nhường đường cần một phép đo hoặc điều kiện thí nghiệm riêng. Tách mọi logic bổ sung thành profile extension có provenance nếu được đặc tả. Mọi biến thể tham số sau này cần ghi trong cấu hình scene đã resolve. [Card FA](../research/HUMAN_MODEL_FINAL.md#L156) · [Card ND](../research/HUMAN_MODEL_FINAL.md#L185) · [Card IN](../research/HUMAN_MODEL_FINAL.md#L236)
+
+## Kết quả sửa cổng 04R
+
+Các nhánh advance/stop/yield/reverse dùng cùng scene và seed, tách từ 0,70 s. Cùng XY và ngoài vùng overlap, đổi vận tốc robot không đổi đề xuất SFM trong một bước. Chuyển động robot qua nhiều bước làm thay đổi khoảng cách/hướng lân cận và đề xuất người. Chênh lệch nhiều bước bao gồm sai số do proxy tự tích phân. Ca hẹp ghi guard và kết thúc ở overlap thật theo footprint. Các số đo thuộc `sfm_reconstruction_probe`. Backend `sfm_jupedsim`, YAML, episode nghiệm thu và viewer vẫn chờ cổng upstream. [Báo cáo và lệnh chạy](../reports/human_models/TASK_04R_REPORT.md)
+
+## TASK 05R
+
+Chọn Hydra `humans=sfm_jupedsim` với interpreter cô lập của 04S. Registry kiểm distribution, API native và nguồn import trong prefix, rồi ghi SHA-256 của extension trong backend version. Collision projection từ adapter đi qua `HumanBackendConfig.planar_world`. Robot là external actor giữ mẫu, người được rebase vào cùng native agent trước mỗi callback. Cả 50 và 100 ms đều dùng lưới native 10 ms. MuJoCo, limiter và guard giữ quyền thực thi.
+
+Bốn nhánh Easy đạt hard constraints. Critical và Hard vẫn có contact. Nhịp 50 ms giảm sai lệch do hold nhưng chưa giải quyết contact của các ca đo. [Báo cáo 05R và lệnh chạy](../reports/human_models/TASK_05R_REPORT.md)

@@ -1,0 +1,12 @@
+schema_version: 1
+id: ND_Doorway_Passing
+runtime_id: nd_doorway_passing
+source_line: 172
+geometry: {kind: two_rooms_one_door, environments: [hospital, school, warehouse]}
+widths_m: {easy: [1.2], critical: [0.9], hard: [0.6]}
+density: {counts: [1, 2], layout: opposite_single_or_two_in_file}
+human_policies: {cooperative: wait_at_line, neutral: neutral, non_cooperative: enter_without_slowing}
+robot_actions: [advance, stop, yield, reverse]
+labels: {both_within_door_center_m: 3, both_paths_cross_aperture: true}
+failure_modes: [bottleneck_deadlock, jamb_collision, indefinite_reverse]
+blockers: [nd_approved_mjcf_spawn_policy_and_action_schedule]

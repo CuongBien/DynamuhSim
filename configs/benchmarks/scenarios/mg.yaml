@@ -1,0 +1,16 @@
+schema_version: 1
+id: MG_Small_Group
+runtime_id: mg_small_group
+source_line: 275
+geometry: {kind: small_group_area, environments: [arena, warehouse, hospital]}
+width_range_m: [1.6, 2.1]
+widths_m: {easy: [], critical: [], hard: []}
+density:
+  counts: [3, 4, 5, 6, 7, 8, 9]
+  strata: {moderate: [3, 4], dense: [5, 9]}
+  layout: paired_conversation_plus_opposing_or_dense_counterflow
+human_policies: {cohesive_group: maintain_group_spacing, independent: avoid_independently}
+robot_actions: [advance, yield, follow]
+labels: {min_simultaneous_humans: 3, robot_radius_m: 4}
+failure_modes: [freezing, group_collision, group_split]
+blockers: [mg_geometry_density_allocation_and_native_cohesion_definition]

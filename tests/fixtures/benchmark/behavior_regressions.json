@@ -1,0 +1,23 @@
+{
+  "sources": [
+    "runs/task_06_07/avm-04u-timeouts.json",
+    "runs/task_06_07/contested/csm_jupedsim/door_060_contested_advance/episode.json",
+    "runs/task_06_07/native-sensitivity.json",
+    "docs/reports/human_models/TASK_06_CLOSEOUT_REPORT.md",
+    "docs/reports/human_models/TASK_07_REPORT.md"
+  ],
+  "avm_crossing": {
+    "pre_goal_freeze_s": 5.25,
+    "guard_substeps": 2743,
+    "end_reason": "time_budget",
+    "contacts": 0,
+    "final_native_prediction_separation_m": 0.4998034224768435,
+    "final_gt_separation_m": 0.5000024805129145
+  },
+  "csm_contested": {
+    "sequential_clearance_m": 0.1,
+    "side_by_side_slack_m": -0.26,
+    "failures": ["human_goal_not_reached"]
+  },
+  "native_velocity_delta_m": {"avm": 0.0008084234702607715, "csm": 0.0}
+}

@@ -1,0 +1,12 @@
+schema_version: 1
+id: BC_Corner_Turn
+runtime_id: bc_corner_turn
+source_line: 197
+geometry: {kind: l_corner, environments: [corridor, hospital]}
+widths_m: {easy: [2.1], critical: [1.2], hard: [0.9]}
+density: {counts: [1], layout: opposing_at_corner}
+human_policies: {cooperative: wide_turn_or_avoid_on_detection, neutral: neutral, non_cooperative: fast_inner_turn}
+robot_actions: [advance, stop, yield]
+labels: {perpendicular_approaches: true, occluded_until_both_within_corner_m: 2}
+failure_modes: [corner_collision, wall_scrape, freezing]
+blockers: [bc_locked_routes_corner_and_perception_policy]

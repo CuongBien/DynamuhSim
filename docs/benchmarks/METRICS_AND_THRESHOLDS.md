@@ -1,0 +1,16 @@
+# Benchmark metrics
+
+| Measure | Definition |
+| --- | --- |
+| S / C / TO / FP | Engine goal status, episodes of robot–wall or robot–human solver contact, time budget and repeated failures to improve the robot's best goal distance for more than 5 s. A contact episode groups contiguous substep reports for the same pair and class. |
+| Episode task pass | Goal reached, observed zero robot contacts, no timeout or FP, available geometric checks and no unsafe overlap or unclassified solver contact. |
+| Stall and motion | Time below 0.02 m/s, XY path sum, speed from GT velocity, acceleration as the norm of the velocity difference over the tick, and jerk as absolute second difference of speed over the squared tick. Reported at 50 ms and separate from the 10 Hz export. |
+| SPL | Goal indicator times the approved reference path length divided by the larger of measured path and reference length. Missing reference leaves SPL null. |
+| Clearance | Minimum, mean and maximum signed surface distance for robot–wall, robot–human, human–wall and human–human at the committed trace ticks. |
+| PSC and encounters | Fraction of robot control intervals ending with any human centre within 0.5 m. Encounters count entries into this zone per actor ID, including actors already inside on the initial sample. |
+| TTC | First possible time of robot/human disc contact under instantaneous constant relative velocity, minimized over available samples. Overlap yields zero. `no_predicted_contact` and `unavailable` have separate statuses and null values. |
+| Human goals and coverage | First observed goal-entry time using resolved tolerance, per-person kinematics, number of actors/trajectories, Card, density, policy, subtype and action. Human goals beyond robot termination are unobserved. |
+
+The 30 s budget, 5 s freeze limit and 0.5 m PSC threshold follow the research source. The operational progress epsilon is 1 µm. Intentional zero-command waits pause the robot FP clock, and still contribute to stall time. The stall threshold, detector details and encounter definition are technical conventions in the deviation ledger. Card thresholds for jerk, clearance, crossing distance, OT intimate distance and related quality scores retain their source interpretation. No quality threshold changes a recorded failure into success. Survey/learned realism, legibility and unapproved PI, group cohesion and Card crossing-distance measures are listed as unavailable. [Research metrics](../research/HUMAN_MODEL_FINAL.md) [Deviation ledger](../research/HUMAN_MODEL_DEVIATIONS.md)
+
+SR and CR report their measured denominators and 95% Wilson intervals. Label-conditioned SR is separate. Paired comparisons require the same Card, seed, geometry, routes, action schedule, label context and resolved non-human controls, with valid infrastructure and labels on both sides. Continuous quality also requires both episodes to pass the hard constraints. They report excluded keys, metric availability and mean left-minus-right differences. The 95% percentile bootstrap samples Card/seed clusters with 2,000 deterministic draws. One cluster yields a mean and a null interval. Histograms use the labeled hard-pass subset, five equal-width bins when variable, and explicit missing and excluded counts.

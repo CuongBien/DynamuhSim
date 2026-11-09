@@ -16,7 +16,7 @@ from narrow_nav.core.actions import RobotAction
 from narrow_nav.core.types import Twist2D
 from narrow_nav.simulation.configuration import compose_config
 from narrow_nav.simulation.mujoco_engine import MuJoCoEngine
-
+from narrow_nav.humans.registry import create_human_backend
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
@@ -40,7 +40,9 @@ def main():
     if args.width:
         options.append("corridor_width=" + args.width)
     config = compose_config("configs", options)
-    engine = MuJoCoEngine()
+    engine = MuJoCoEngine(
+        human_backend=create_human_backend(config.humans.backend)
+    )
     try:
         engine.load(config)
         engine.reset(seed=args.seed)

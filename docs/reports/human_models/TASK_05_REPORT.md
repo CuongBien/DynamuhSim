@@ -26,3 +26,7 @@ Probe lỗ di động từ pose robot thật có sai số footprint lấy mẫu 
 - Đã lưu [kiểm chứng API và profile SFM](../../backends/SFM_JUPEDSIM.md), báo cáo này và [tiến độ](PROGRESS.md). Sai khác đã được theo dõi tại `hm_jps_001`. Ngân sách và ngưỡng nghiên cứu giữ theo nguồn. [Sổ sai khác](../../research/HUMAN_MODEL_DEVIATIONS.md)
 - Backend `jupedsim_sfm.py`, YAML `sfm_jupedsim.yaml` và suite nghiệm thu SFM đang chờ TASK 04. Free walking, đối đầu, vượt bên, tường/cửa, robot stop/advance, replay, vận tốc/gia tốc, GT/contact SFM và đồ thị chuỗi thời gian chưa được thực hiện. Dữ liệu probe CFM v1 không được dùng làm bằng chứng SFM.
 - Cổng kế tiếp là chứng minh cách ghép pose và vận tốc robot MuJoCo vào tương tác, xử lý footprint chồng lấn và giữ nhịp bridge. Sau đó mới đăng ký `sfm_jupedsim` và kiểm định một episode native.
+
+## Kiểm tra cổng lại trong TASK 05R
+
+**BLOCKED_UPSTREAM_API.** TASK 04R dùng đúng `SocialForceModel` và `SocialForceModelAgentParameters` của wheel 1.4.2 trong probe đo với MuJoCo thật. Robot trong probe bị tích phân như agent JuPedSim sau khi nhận pose/vận tốc đo ở mỗi boundary. Sai lệch này chặn dùng kết quả làm nghiệm thu backend. Cổng 05R vẫn chờ API external và rebase. [Bằng chứng 04R](TASK_04R_REPORT.md) · [Đề xuất upstream](../../decisions/ADR-0007-jupedsim-external-actor.md)
