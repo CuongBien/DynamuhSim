@@ -1,8 +1,8 @@
 # 02 · Luồng dữ liệu
 
-Hiện tại `step(RobotAction)` nhận lệnh robot từ bên gọi và trả snapshot trong bộ nhớ. Người giữ pose spawn. Profile `sensors=d435i` thu depth sau substep đến hạn. Mẫu đo đi vào `Observation`, còn frame sạch đi qua `get_clean_depth()` tới kiểm định. Recorder ghi hai kênh riêng theo episode ID và sample index. Các sensor chưa có nguồn vẫn trả `missing`. [Runtime hiện tại](05_MUJOCO_RUNTIME.md) · [Thu depth D435i](../MUJOCO_D435I_DEPTH.md)
+`step(RobotAction)` nhận lệnh robot từ bên gọi và trả snapshot trong bộ nhớ. Profile active nhận một backend người đã inject. Profile stationary giữ người tại spawn. `sensors=d435i` thu sau substep đến hạn, đưa mẫu đo vào `Observation` và cấp frame sạch qua `get_clean_depth()` cho kiểm định. Các sensor chưa có nguồn trả `missing`. [Runtime](05_MUJOCO_RUNTIME.md) · [Biên điều khiển người](HUMAN_2D_3D_BRIDGE_NOTES.md)
 
-## Luồng đích của TASK 04
+## Luồng runtime và các cổng lắp ghép
 
 ```mermaid
 flowchart TD
@@ -12,13 +12,14 @@ flowchart TD
     Adapter -->|Snapshot vật lý, tiếp xúc và mẫu cảm biến| Loop
     Loop --> Truth["GroundTruthState"]
     Loop -->|Mẫu đã sẵn sàng| Sensor["Observation"]
+    Loop -->|Depth sạch| Labels
     Truth -->|Chiếu context tại t_k| HumanContext["HumanContext"]
     HumanContext --> Human["HumanControllerBackend"]
     Sensor --> Robot["RobotPolicy"]
     Human -->|HumanMotion yêu cầu| Loop
     Robot -->|RobotAction yêu cầu| Loop
     Truth --> Labels["Kênh kiểm định và nhãn"]
-    Loop -->|Executed và tiếp xúc| Labels
+    Loop -->|Executed, tiếp xúc và khoảng hở| Labels
     Sensor --> Observations["Kênh quan sát"]
     Loop -->|Requested và limited| Actions["Kênh lệnh"]
     Loop -->|Trạng thái kết thúc| Manifest["Manifest episode"]
@@ -26,13 +27,13 @@ flowchart TD
 
 ## Reset và một bước điều khiển
 
-TASK 04A kết nối nhánh `HumanContext → HumanControllerBackend` và có thể chạy với lệnh robot cố định, danh sách sensor rỗng. TASK 04B bổ sung lấy mẫu và lưu các kênh. Các bước sau mô tả vòng lặp khi các cổng đã được kết nối. [Lộ trình](../ROADMAP.md)
+Smoke và các entry point thực nghiệm lắp backend người. Robot policy là bên gọi cổng `step`, ví dụ bộ phát lệnh twist cố định. Runtime thực hiện các bước sau.
 
-1. Entry point resolve YAML, tham chiếu asset và seed, tạo adapter, robot policy và backend người. Bộ điều phối reset cả ba, lấy snapshot vật lý và quan sát có sẵn ở `t_0`, rồi công bố bản ghi reset.
+1. Entry point resolve YAML và lắp adapter cùng backend người đã chọn. Runtime reset MuJoCo và camera nếu có, lấy snapshot cùng các mẫu đầu tiên ở `t_0`, rồi reset backend với seed người và roster của scene trước khi công bố kết quả. Robot policy do bên gọi quản lý.
 2. Tại `t_k`, robot policy nhận `Observation` mới nhất tại mốc điều khiển này. Backend người nhận `HumanContext` chiếu từ snapshot cùng mốc, gồm người, robot và vật cản cần để mô hình hóa tương tác. Context này chỉ dành cho mô hình hành vi người.
-3. Thu đủ đề xuất lệnh tại `t_k` trước khi thay đổi trạng thái vật lý. Kiểm tra ID, frame, kích thước và tính hữu hạn. Bộ điều phối áp giới hạn chung trên mỗi lệnh để tạo `limited`, rồi adapter áp lệnh mục tiêu trong các substep của khoảng `[t_k, t_{k+1})`.
-4. Tại `t_{k+1}`, adapter trả snapshot trạng thái thật, tiếp xúc và các mẫu cảm biến mới thu. Bộ điều phối đưa mẫu vào hàng đợi và công bố mẫu đã sẵn sàng để tạo `Observation` mới. Nó tính chuyển động thực thi từ trạng thái vật lý đo được và xét điều kiện kết thúc. Bản ghi step gắn lệnh với trạng thái cuối khoảng. Không đưa mẫu có thời điểm sẵn sàng sau `t_k` vào quyết định tại `t_k`.
-5. Công bố snapshot theo [schema episode](../schemas/EPISODE_SCHEMA.md). Lỗi runtime được ghi riêng khỏi kết thúc hợp lệ. Vòng điều khiển chỉ tiếp tục khi step hoàn thành và episode còn mở.
+3. Tại `t_k`, runtime xác thực lệnh và áp limiter để tạo `limited`. Backend người chỉ được gọi khi đến nhịp người. Hai batch requested và limited của người được giữ qua các tick xen giữa. Adapter giữ mục tiêu bánh robot, kiểm đường đi và áp dịch chuyển người theo từng substep.
+4. Sau mỗi substep, adapter lấy tiếp xúc native và render D435i nếu đến lịch. Tại `t_{k+1}`, runtime kiểm stamp và roster, tính executed từ dịch chuyển vật lý, đo khoảng hở và xét điều kiện kết thúc. Với D435i, mẫu đo sẵn sàng tại thời điểm capture. Observation mới lấy mẫu mới nhất, hoặc giữ mẫu đã công bố nếu tick này chưa đến lịch.
+5. Runtime công bố kết quả đồng bộ theo [schema episode](../schemas/EPISODE_SCHEMA.md). Recorder D435i ghi riêng depth đo, lệnh và ground truth kèm depth sạch. Benchmark người hiện dùng cấu hình sensor rỗng và lấy lệnh, ground truth, clearance và contact để đánh giá. Lỗi runtime được ghi riêng với tick lỗi và prefix hợp lệ cuối. [Recorder D435i](../MUJOCO_D435I_DEPTH.md) · [QA benchmark](../benchmarks/DATA_QA_PROTOCOL.md)
 
 ## Phân tuyến về sau
 

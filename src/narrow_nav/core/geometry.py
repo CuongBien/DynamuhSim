@@ -2,7 +2,7 @@
 
 from math import cos, pi, remainder, sin, tau
 
-from .types import ROBOT_BASE_FRAME, WORLD_FRAME, Point2D, Pose2D
+from .types import ROBOT_BASE_FRAME, WORLD_FRAME, Point2D, Pose2D, Twist2D, Velocity2D
 from .validation import finite, frame_is
 
 
@@ -29,3 +29,9 @@ def body_to_world(point: Point2D, robot_pose: Pose2D) -> Point2D:
     frame_is(robot_pose.frame_id, WORLD_FRAME, "robot_pose")
     x, y = _rotate(point.x, point.y, robot_pose.yaw)
     return Point2D(x + robot_pose.x, y + robot_pose.y)
+
+
+def body_velocity_to_world(twist: Twist2D, robot_pose: Pose2D) -> Velocity2D:
+    frame_is(twist.frame_id, ROBOT_BASE_FRAME, "twist")
+    frame_is(robot_pose.frame_id, WORLD_FRAME, "robot_pose")
+    return Velocity2D(*_rotate(twist.linear_x, twist.linear_y, robot_pose.yaw))

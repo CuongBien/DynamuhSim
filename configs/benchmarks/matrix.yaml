@@ -1,0 +1,11 @@
+schema_version: 1
+source_sha256: a6848d5ded183ebe046d529a832d93000c44118344bdda487919784df8716030
+seed_start: 1000
+backends:
+  orca: {integration: PASS, behavior: fixture_failures_retained, evidence: docs/reports/human_models/TASK_03_REPORT.md}
+  sfm_jupedsim: {integration: MODEL_INTEGRATION_PASS, behavior: INTERACTION_FAIL, evidence: docs/reports/human_models/TASK_05R_REPORT.md}
+  avm_jupedsim: {integration: MODEL_INTEGRATION_PASS, behavior: PARTIAL, evidence: docs/reports/human_models/TASK_06_CLOSEOUT_REPORT.md}
+  csm_jupedsim: {integration: MODEL_INTEGRATION_PASS, behavior: backend_PASS_with_scenario_failures, evidence: docs/reports/human_models/TASK_07_REPORT.md}
+branch_b_cards: [FA_Corridor_Passing, ND_Doorway_Passing, IN_Crossing_Paths]
+branch_b_actions: [stop, yield, reverse]
+# Use bindings.yaml with --bindings to compile the TASK 08B research plan.

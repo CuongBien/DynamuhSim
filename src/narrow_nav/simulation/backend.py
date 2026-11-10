@@ -8,7 +8,7 @@ from omegaconf import DictConfig
 from narrow_nav.core.actions import RobotAction
 from narrow_nav.core.metadata import EpisodeMetadata
 from narrow_nav.core.observations import Observation
-from narrow_nav.core.protocols import SimulationStepResult
+from narrow_nav.core.protocols import ContactKind, SimulationStepResult
 from narrow_nav.core.states import CleanDepthFrame, GroundTruthState
 
 from .depth_config import DepthCameraConfig
@@ -48,13 +48,18 @@ class SimulationMetadata:
     timing: Timing
     clocks: ClockState
     unavailable_sensors: tuple[str, ...]
-    human_motion_mode: Literal["stationary"] = "stationary"
+    human_motion_mode: Literal["stationary", "kinematic"] = "stationary"
     status: EpisodeStatus = "running"
     end_reason: str | None = None
     last_valid_tick: int | None = None
     failure: str | None = None
     failure_tick: int | None = None
     depth_stream: DepthStreamMetadata | None = None
+    human_backend_id: str | None = None
+    human_backend_version: str | None = None
+    human_backend_seed: int | None = None
+    not_observable_solver: tuple[ContactKind, ...] = ()
+    failure_traceback: str | None = None
 
 
 class SimulationBackend(Protocol):

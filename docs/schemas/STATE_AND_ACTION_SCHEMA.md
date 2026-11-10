@@ -1,8 +1,8 @@
 # State và action
 
-Runtime hiện áp lệnh cho robot và trả lệnh người bằng zero. Profile D435i công bố depth, các sensor chưa có nguồn trả `missing`. [Runtime hiện tại](../architecture/05_MUJOCO_RUNTIME.md) · [Lộ trình](../ROADMAP.md)
+Runtime áp lệnh robot và dùng lệnh người từ backend đã inject trong profile active. Profile stationary dùng lệnh người bằng zero. Profile D435i công bố depth đo và cấp frame sạch riêng, còn slot sensor chưa có nguồn trả `missing`. [Runtime](../architecture/05_MUJOCO_RUNTIME.md)
 
-Hợp đồng logic `schema_version = 1` cho dữ liệu qua cổng `core`. Kiểu lưu trên đĩa sẽ được chọn khi có task ghi episode. Các trường dưới đây là bắt buộc trừ khi được ghi rõ là tùy chọn.
+Hợp đồng logic `schema_version = 1` cho dữ liệu qua cổng `core`. Định dạng lưu depth hiện hành được quy định trong [schema episode](EPISODE_SCHEMA.md). Các trường dưới đây là bắt buộc trừ khi được ghi rõ là tùy chọn.
 
 ## Hệ tọa độ, đơn vị và định danh
 
@@ -24,6 +24,8 @@ Hợp đồng logic `schema_version = 1` cho dữ liệu qua cổng `core`. Ki�
 | `CleanDepthFrame` | Dữ liệu kiểm định gồm `sample_index`, `capture_time_ns`, `frame_id` và payload ảnh có mask. Adapter trả riêng trong `AdapterSnapshot.clean_depth`. Runtime chỉ cấp qua `get_clean_depth()` tại biên thành công gần nhất. |
 | `Observation` | Metadata snapshot và danh sách slot theo `sensor_id`. Mỗi slot có `status` là `valid`, `missing`, `invalid` hoặc `stale`. Slot `valid` chứa mẫu mới nhất đã sẵn sàng. Các trạng thái còn lại không có payload và có mã lý do. |
 | `HumanContext` | Metadata snapshot, ID, pose và vận tốc phẳng của robot trong `world`, trạng thái người, bán kính robot và bán kính dùng chung của profile người. Mỗi vật cản có ID và danh sách polygon trong `world` với ít nhất ba đỉnh XY mỗi polygon, không lặp đỉnh đóng. Runtime dựng cùng một phép chiếu cho mọi backend. |
+| `PlanarWorld` | Kiểu giá trị v1 cho tầng lắp ghép bridge 2D. `floors` là các vòng polygon sàn, `solids` là danh sách `Obstacle` collision tĩnh. Mỗi đỉnh là `Point2D` trong `world`, đơn vị m. Mặt sàn ở Z = 0. `projection_error_m` là cận xấp xỉ footprint tĩnh, đơn vị m. Tách khỏi snapshot `HumanContext` và `Observation`. |
+| `HumanBackendConfig.planar_world` | Tùy chọn v1, giá trị `PlanarWorld` từ collision đã load. Các backend JuPedSim yêu cầu trường này để tạo geometry native. External actor và state rebase theo [hợp đồng 04U](../backends/JUPEDSIM_EXTERNAL_ACTOR_CONTRACT.md). |
 
 `Pose2D` chứa `x`, `y`, `yaw`, `frame_id`. `Velocity2D` chứa `linear_x`, `linear_y`, `frame_id`. `Twist2D` thêm `angular_z`. `RobotState` và `HumanState` cung cấp `to_dict()` và `from_dict()` cho round-trip JSON.
 
@@ -40,7 +42,7 @@ Depth D435i dùng `shape=(height, width)`, thứ tự hàng từ trên xuống, 
 | Giai đoạn | Quyền sở hữu và ý nghĩa |
 | --- | --- |
 | `requested` | Đề xuất của robot policy và backend người tại `t_k`. Giá trị hữu hạn vượt giới hạn profile được ghi lại nguyên dạng để phân tích. |
-| `limited` | Bộ điều phối áp giới hạn tốc độ trước, rồi giới hạn mức thay đổi lệnh trong một control tick. Robot giới hạn chuẩn Euclid của vận tốc phẳng, vận tốc góc và tốc độ bánh theo profile. Mốc tính thay đổi là lệnh limited ở tick trước theo quy ước frame của lệnh, lấy lệnh zero ở tick đầu. Profile cố định trong run và phải cho phép lệnh zero. Adapter dùng limited làm mục tiêu trong khoảng. Người giữ lệnh zero trong TASK 03. |
+| `limited` | Bộ điều phối áp giới hạn tốc độ trước, rồi giới hạn mức thay đổi lệnh theo period của actor. Robot giới hạn chuẩn Euclid của vận tốc phẳng, vận tốc góc và tốc độ bánh theo profile. Người dùng period người và giữ lệnh giữa hai callback. Mốc tính thay đổi là lệnh limited trước đó, lấy zero ở đầu episode. Adapter dùng limited làm mục tiêu trong khoảng. |
 | `executed` | Bộ điều phối tính từ dịch chuyển vật lý trên khoảng chia cho thời lượng. Người dùng sai phân XY trong `world`. Robot dùng sai phân XY trong `world` chiếu về `robot_base` tại đầu khoảng và sai phân yaw liên tục chia cho thời lượng. Adapter cung cấp độ biến thiên yaw liên tục qua substep để qua biên ±π chính xác. |
 
 `executed` là chuyển động trung bình, còn twist/vận tốc trong state là giá trị tức thời tại snapshot. Tiếp xúc, trượt và giới hạn cơ cấu có thể tạo chênh lệch giữa `limited` và `executed`. `executed` được ghi cho kiểm định và nhãn, với quyền truy cập tương ứng ground truth.
@@ -52,7 +54,7 @@ Depth D435i dùng `shape=(height, width)`, thứ tự hàng từ trên xuống, 
 | `SimulatorAdapter.reset` | Nhận metadata episode, đặc tả scene đã resolve với trạng thái spawn, cùng seed engine và các `SensorSeed`. Trả `AdapterSnapshot` ở tick 0 với ground truth, mẫu sensor thu tại reset nếu có và registry ID frame. |
 | `SimulatorAdapter.advance` | Nhận batch limited tại `t_k`. Trả `AdapterStepResult` với snapshot ở `t_{k+1}`, mẫu sensor mới thu, tiếp xúc trong khoảng và biến thiên yaw liên tục của robot. Adapter chuyển kết quả sang kiểu giá trị của `core`. |
 | `RobotPolicy.reset` và `propose` | Reset nhận `RobotMission` với ID và mục tiêu được phép công bố, cấu hình policy và seed luồng. `propose(Observation)` trả một `RobotAction` cho robot. |
-| `HumanControllerBackend.reset` và `propose` | Reset nhận cấu hình backend, seed luồng và danh sách ID người. `propose(HumanContext)` trả batch `HumanMotion` theo ID. |
+| `HumanControllerBackend.reset` và `propose` | Reset nhận cấu hình backend, seed luồng và danh sách ID người. `HumanBackendConfig.max_speed_mps` có mặc định tùy chọn cho caller cũ. Lifecycle truyền trần m/s của profile cho ORCA. `propose(HumanContext)` trả batch `HumanMotion` theo ID. |
 
 Các cổng dùng `Protocol` tổng quát theo kiểu cấu hình scene, policy hoặc backend. Module triển khai cung cấp kiểu cụ thể ở biên lắp ghép.
 
@@ -61,5 +63,9 @@ Các cổng dùng `Protocol` tổng quát theo kiểu cấu hình scene, policy 
 - Bộ điều phối giữ mẫu đang chờ. `capture_time_ns ≤ available_time_ns ≤ Observation.time_ns` cho mẫu công bố. Ở mỗi slot, chọn mẫu có `sample_index` lớn nhất đã sẵn sàng. Khi chưa có mẫu, trả `missing`. Khi mẫu báo lỗi, trả `invalid`. Khi mẫu valid quá tuổi tối đa tính từ capture, trả `stale`. Không dùng dữ liệu từ tương lai hoặc ground truth để bù.
 - Kiểm tra giá trị hữu hạn, kích thước đúng, ID đúng và duy nhất, frame đã đăng ký, tick/time đúng mốc, tính nhất quán metadata và ràng buộc cấu trúc của lệnh như `vy = 0` ở robot vi sai. Kiểm sensor theo schema của nó. Kiểm dữ liệu ở cả hai phía của biên. Trả snapshot độc lập với bộ nhớ có thể thay đổi trong engine hoặc controller.
 - Dữ liệu đầu vào sai dừng step trước khi tiến vật lý. Nếu callback đã chạy hoặc quá trình tiến vật lý/kiểm đầu ra thất bại, bỏ kết quả step và đóng episode theo trạng thái `failed`. Không retry tick trên instance đang ở trạng thái dở dang. Bắt đầu lại bằng reset với episode ID mới.
+
+Lifecycle kiểm snapshot reset/advance theo stamp đầy đủ và roster scene. `HumanContext.from_ground_truth` xoay vận tốc tuyến tính robot từ `robot_base` sang `world` cho nhánh backend người. `validate_human_requests` kiểm batch đối với roster và timestamp. Actor đã đến đích vẫn gửi yêu cầu zero.
+
+Mở rộng tương thích schema v1. `SimulationStepResult.clearance` tùy chọn chứa bốn giá trị khoảng hở footprint cuối tick theo m. Giá trị `None` của một cặp nghĩa là không có đủ actor cho cặp đó. `human_motion_blocked_substeps` mặc định 0 và đếm substep trong tick mà guard giữ root người. Đây là kênh kiểm định, tách khỏi `contacts` và `Observation`. [Biên điều khiển người](../architecture/HUMAN_2D_3D_BRIDGE_NOTES.md)
 
 Cách ghi trạng thái kết thúc và phân tuyến dữ liệu được quy định trong [schema episode](EPISODE_SCHEMA.md) và [luồng dữ liệu](../architecture/02_DATA_FLOW.md).

@@ -1,0 +1,566 @@
+# TASK 08B locked research conditions. Keep the same file for all phases.
+schema_version: 1
+branch_b_levels:
+  FA_Corridor_Passing: critical
+  ND_Doorway_Passing: critical
+  IN_Crossing_Paths: critical
+conditions:
+  FA_Corridor_Passing/easy/advance:
+    approval: &research_lock docs/benchmarks/SCENARIO_MATRIX.md#task-08b-research-lock
+    width_m: 2.1
+    width_probe_xy_m: [0.0, 0.0]
+    density: 1
+    human_policy: neutral
+    human_preferred_speed_mps: 0.8
+    human_spawn_jitter_xy_m: [0.15, 0]
+    verify_routes: true
+    overrides:
+      - worlds.width_m=2.1
+      - worlds.length_m=12.0
+      - scenarios.id=fa_corridor_passing
+      - scenarios.robot.initial_pose=[-3.5,-0.14,0.0]
+      - scenarios.robot.goal=[3.0,-0.14]
+      - 'scenarios.humans=[{id:human_01,initial_pose:[3.4,0.19,-3.141592653589793],goal:[-3.9,0.19]}]'
+    commands:
+      - {at_ns: 0, body: [0.5, 0.0, 0.0]}
+      - {at_ns: 16000000000, body: [0.0, 0.0, 0.0]}
+  FA_Corridor_Passing/critical/advance: &fa_advance
+    approval: *research_lock
+    width_m: 1.2
+    width_probe_xy_m: [0.0, 0.0]
+    density: 1
+    human_policy: neutral
+    human_preferred_speed_mps: 0.8
+    human_spawn_jitter_xy_m: [0.15, 0]
+    verify_routes: true
+    overrides:
+      - worlds.width_m=1.2
+      - worlds.length_m=12.0
+      - scenarios.id=fa_corridor_passing
+      - scenarios.robot.initial_pose=[-3.5,-0.14,0.0]
+      - scenarios.robot.goal=[3.0,-0.14]
+      - 'scenarios.humans=[{id:human_01,initial_pose:[3.4,0.19,-3.141592653589793],goal:[-3.9,0.19]}]'
+    commands:
+      - {at_ns: 0, body: [0.5, 0.0, 0.0]}
+      - {at_ns: 16000000000, body: [0.0, 0.0, 0.0]}
+  FA_Corridor_Passing/critical/stop:
+    <<: *fa_advance
+    branch_window_ns: [4000000000, 6000000000]
+    commands:
+      - {at_ns: 0, body: [0.5, 0.0, 0.0]}
+      - {at_ns: 4000000000, body: [0.0, 0.0, 0.0], intentional_wait: true}
+      - {at_ns: 6000000000, body: [0.5, 0.0, 0.0]}
+      - {at_ns: 16000000000, body: [0.0, 0.0, 0.0]}
+  FA_Corridor_Passing/critical/yield:
+    <<: *fa_advance
+    branch_window_ns: [4000000000, 7000000000]
+    commands:
+      - {at_ns: 0, body: [0.5, 0.0, 0.0]}
+      - {at_ns: 4000000000, body: [0.25, -0.2, 0.0]}
+      - {at_ns: 5000000000, body: [0.25, 0.0, 0.0]}
+      - {at_ns: 6000000000, body: [0.25, 0.2, 0.0]}
+      - {at_ns: 7000000000, body: [0.5, 0.0, 0.0]}
+      - {at_ns: 16000000000, body: [0.0, 0.0, 0.0]}
+  FA_Corridor_Passing/critical/reverse:
+    <<: *fa_advance
+    branch_window_ns: [4000000000, 6000000000]
+    commands:
+      - {at_ns: 0, body: [0.5, 0.0, 0.0]}
+      - {at_ns: 4000000000, body: [-0.2, 0.0, 0.0]}
+      - {at_ns: 5000000000, body: [0.0, 0.0, 0.0], intentional_wait: true}
+      - {at_ns: 6000000000, body: [0.5, 0.0, 0.0]}
+      - {at_ns: 16000000000, body: [0.0, 0.0, 0.0]}
+  FA_Corridor_Passing/hard/advance:
+    approval: *research_lock
+    width_m: 0.9
+    width_probe_xy_m: [0.0, 0.0]
+    density: 2
+    human_policy: neutral
+    human_preferred_speed_mps: 0.8
+    human_spawn_jitter_xy_m: [0.15, 0]
+    verify_routes: true
+    overrides:
+      - worlds.width_m=0.9
+      - worlds.length_m=12.0
+      - scenarios.id=fa_corridor_passing
+      - scenarios.robot.initial_pose=[-3.5,-0.14,0.0]
+      - scenarios.robot.goal=[3.0,-0.14]
+      - >-
+        scenarios.humans=[
+        {id:human_01,initial_pose:[3.4,0.19,-3.141592653589793],goal:[-3.9,0.19]},
+        {id:human_02,initial_pose:[4.2,-0.15,-3.141592653589793],goal:[-4.7,-0.15]}]
+    commands:
+      - {at_ns: 0, body: [0.5, 0.0, 0.0]}
+      - {at_ns: 16000000000, body: [0.0, 0.0, 0.0]}
+  ND_Doorway_Passing/easy/advance:
+    approval: *research_lock
+    width_m: 1.2
+    width_probe_xy_m: [0.0, 0.0]
+    density: 1
+    human_policy: neutral
+    human_preferred_speed_mps: 0.8
+    human_spawn_jitter_xy_m: [0.15, 0]
+    verify_routes: true
+    adjudicated: [hm_spec_001]
+    label_context:
+      center_xy_m: [0.0, 0.0]
+      crossing_axis: 0
+    overrides:
+      - worlds=benchmark_doorway
+      - corridor_width=w120
+      - corridor_width.width_m=1.2
+      - scenarios.id=nd_doorway_passing
+      - scenarios.robot.initial_pose=[-2.7,0.0,0.0]
+      - scenarios.robot.goal=[2.65,0.0]
+      - 'scenarios.humans=[{id:human_01,initial_pose:[2.45,0.0,-3.141592653589793],goal:[-3.3,0.0]}]'
+    commands:
+      - {at_ns: 0, body: [0.5, 0.0, 0.0]}
+      - {at_ns: 14400000000, body: [0.0, 0.0, 0.0]}
+  ND_Doorway_Passing/critical/advance: &nd_advance
+    approval: *research_lock
+    width_m: 0.9
+    width_probe_xy_m: [0.0, 0.0]
+    density: 1
+    human_policy: neutral
+    human_preferred_speed_mps: 0.8
+    human_spawn_jitter_xy_m: [0.15, 0]
+    verify_routes: true
+    label_context:
+      center_xy_m: [0.0, 0.0]
+      crossing_axis: 0
+    overrides:
+      - worlds=benchmark_doorway
+      - corridor_width=w120
+      - corridor_width.width_m=0.9
+      - scenarios.id=nd_doorway_passing
+      - scenarios.robot.initial_pose=[-2.7,0.0,0.0]
+      - scenarios.robot.goal=[2.65,0.0]
+      - 'scenarios.humans=[{id:human_01,initial_pose:[2.45,0.0,-3.141592653589793],goal:[-3.3,0.0]}]'
+    commands:
+      - {at_ns: 0, body: [0.5, 0.0, 0.0]}
+      - {at_ns: 14400000000, body: [0.0, 0.0, 0.0]}
+  ND_Doorway_Passing/critical/stop:
+    <<: *nd_advance
+    branch_window_ns: [2500000000, 4500000000]
+    commands:
+      - {at_ns: 0, body: [0.5, 0.0, 0.0]}
+      - {at_ns: 2500000000, body: [0.0, 0.0, 0.0], intentional_wait: true}
+      - {at_ns: 4500000000, body: [0.5, 0.0, 0.0]}
+      - {at_ns: 14400000000, body: [0.0, 0.0, 0.0]}
+  ND_Doorway_Passing/critical/yield:
+    <<: *nd_advance
+    branch_window_ns: [2500000000, 5500000000]
+    commands:
+      - {at_ns: 0, body: [0.5, 0.0, 0.0]}
+      - {at_ns: 2500000000, body: [0.25, -0.2, 0.0]}
+      - {at_ns: 3500000000, body: [0.25, 0.0, 0.0]}
+      - {at_ns: 4500000000, body: [0.25, 0.2, 0.0]}
+      - {at_ns: 5500000000, body: [0.5, 0.0, 0.0]}
+      - {at_ns: 14400000000, body: [0.0, 0.0, 0.0]}
+  ND_Doorway_Passing/critical/reverse:
+    <<: *nd_advance
+    adjudicated: [hm_spec_004]
+    branch_window_ns: [2500000000, 4500000000]
+    commands:
+      - {at_ns: 0, body: [0.5, 0.0, 0.0]}
+      - {at_ns: 2500000000, body: [-0.2, 0.0, 0.0]}
+      - {at_ns: 3500000000, body: [0.0, 0.0, 0.0], intentional_wait: true}
+      - {at_ns: 4500000000, body: [0.5, 0.0, 0.0]}
+      - {at_ns: 14400000000, body: [0.0, 0.0, 0.0]}
+  ND_Doorway_Passing/hard/advance:
+    approval: *research_lock
+    width_m: 0.6
+    width_probe_xy_m: [0.0, 0.0]
+    density: 2
+    human_policy: neutral
+    human_preferred_speed_mps: 0.8
+    human_spawn_jitter_xy_m: [0.15, 0]
+    verify_routes: true
+    label_context:
+      center_xy_m: [0.0, 0.0]
+      crossing_axis: 0
+    overrides:
+      - worlds=benchmark_doorway
+      - corridor_width=w120
+      - corridor_width.width_m=0.6
+      - scenarios.id=nd_doorway_passing
+      - scenarios.robot.initial_pose=[-2.7,0.0,0.0]
+      - scenarios.robot.goal=[2.65,0.0]
+      - >-
+        scenarios.humans=[
+        {id:human_01,initial_pose:[2.45,0.0,-3.141592653589793],goal:[-3.3,0.0]},
+        {id:human_02,initial_pose:[3.25,0.0,-3.141592653589793],goal:[-4.1,0.0]}]
+    commands:
+      - {at_ns: 0, body: [0.5, 0.0, 0.0]}
+      - {at_ns: 14400000000, body: [0.0, 0.0, 0.0]}
+  BC_Corner_Turn/easy/advance:
+    approval: *research_lock
+    width_m: 2.1
+    width_probe_xy_m: [-1.8, 0.0]
+    width_probe_x_xy_m: [3.95, 2.0]
+    density: 1
+    human_policy: neutral
+    human_preferred_speed_mps: 0.8
+    human_spawn_jitter_xy_m: [0, 0.12]
+    verify_routes: true
+    label_context:
+      center_xy_m: [3.4, 0.12]
+    overrides:
+      - worlds=blind_corner
+      - worlds.width_m=2.1
+      - worlds.length_m=10.0
+      - worlds.passing_bay_width_m=3.0
+      - worlds.passing_bay_center_x_m=-2.8
+      - scenarios.id=bc_corner_turn
+      - scenarios.robot.initial_pose=[0.55,0.12,0.0]
+      - scenarios.robot.goal=[4.05,2.7]
+      - 'scenarios.humans=[{id:human_01,initial_pose:[3.4,3.9,-1.5707963267948966],goal:[3.4,-0.12]}]'
+    commands:
+      - {at_ns: 0, body: [0.5, 0.0, 0.0]}
+      - {at_ns: 7000000000, body: [0.0, 0.48, 0.0]}
+      - {at_ns: 13500000000, body: [0.0, 0.0, 0.0]}
+  BC_Corner_Turn/critical/advance:
+    approval: *research_lock
+    width_m: 1.2
+    width_probe_xy_m: [-1.8, 0.0]
+    width_probe_x_xy_m: [4.4, 2.0]
+    density: 1
+    human_policy: neutral
+    human_preferred_speed_mps: 0.8
+    human_spawn_jitter_xy_m: [0, 0.12]
+    verify_routes: true
+    label_context:
+      center_xy_m: [4.1, 0.12]
+    overrides:
+      - worlds=blind_corner
+      - worlds.width_m=1.2
+      - worlds.length_m=10.0
+      - worlds.passing_bay_width_m=3.0
+      - worlds.passing_bay_center_x_m=-2.8
+      - scenarios.id=bc_corner_turn
+      - scenarios.robot.initial_pose=[1.0,0.12,0.0]
+      - scenarios.robot.goal=[4.5,2.7]
+      - 'scenarios.humans=[{id:human_01,initial_pose:[4.1,3.9,-1.5707963267948966],goal:[4.1,-0.12]}]'
+    commands:
+      - {at_ns: 0, body: [0.5, 0.0, 0.0]}
+      - {at_ns: 7000000000, body: [0.0, 0.48, 0.0]}
+      - {at_ns: 13500000000, body: [0.0, 0.0, 0.0]}
+  BC_Corner_Turn/hard/advance:
+    approval: *research_lock
+    width_m: 0.9
+    width_probe_xy_m: [-1.8, 0.0]
+    width_probe_x_xy_m: [4.55, 2.0]
+    density: 1
+    human_policy: neutral
+    human_preferred_speed_mps: 0.8
+    human_spawn_jitter_xy_m: [0, 0.12]
+    verify_routes: true
+    label_context:
+      center_xy_m: [4.43, 0.12]
+    overrides:
+      - worlds=blind_corner
+      - worlds.width_m=0.9
+      - worlds.length_m=10.0
+      - worlds.passing_bay_width_m=3.0
+      - worlds.passing_bay_center_x_m=-2.8
+      - scenarios.id=bc_corner_turn
+      - scenarios.robot.initial_pose=[1.15,0.12,0.0]
+      - scenarios.robot.goal=[4.65,2.7]
+      - 'scenarios.humans=[{id:human_01,initial_pose:[4.43,3.9,-1.5707963267948966],goal:[4.43,-0.12]}]'
+    commands:
+      - {at_ns: 0, body: [0.5, 0.0, 0.0]}
+      - {at_ns: 7000000000, body: [0.0, 0.48, 0.0]}
+      - {at_ns: 13500000000, body: [0.0, 0.0, 0.0]}
+  IN_Crossing_Paths/easy/advance:
+    approval: *research_lock
+    width_m: 2.1
+    width_probe_xy_m: [-2.0, 0.0]
+    width_probe_x_xy_m: [0.0, -2.0]
+    density: 1
+    human_policy: neutral
+    human_preferred_speed_mps: 0.8
+    human_spawn_jitter_xy_m: [0, 0.15]
+    verify_routes: true
+    label_context:
+      center_xy_m: [0.0, 0.0]
+      approach_speed_mps: {"robot": 0.5, "human_01": 0.8}
+    overrides:
+      - worlds=benchmark_intersection
+      - corridor_width=w120
+      - corridor_width.width_m=2.1
+      - scenarios.id=in_crossing_paths
+      - scenarios.robot.initial_pose=[-2.6,0.0,0.0]
+      - scenarios.robot.goal=[2.65,0.0]
+      - 'scenarios.humans=[{id:human_01,initial_pose:[0.0,-3.25,1.5707963267948966],goal:[0.0,3.25]}]'
+    commands:
+      - {at_ns: 0, body: [0.5, 0.0, 0.0]}
+      - {at_ns: 13000000000, body: [0.0, 0.0, 0.0]}
+  IN_Crossing_Paths/critical/advance: &in_advance
+    approval: *research_lock
+    width_m: 1.2
+    width_probe_xy_m: [-2.0, 0.0]
+    width_probe_x_xy_m: [0.0, -2.0]
+    density: 1
+    human_policy: neutral
+    human_preferred_speed_mps: 0.8
+    human_spawn_jitter_xy_m: [0, 0.15]
+    verify_routes: true
+    label_context:
+      center_xy_m: [0.0, 0.0]
+      approach_speed_mps: {"robot": 0.5, "human_01": 0.8}
+    overrides:
+      - worlds=benchmark_intersection
+      - corridor_width=w120
+      - corridor_width.width_m=1.2
+      - scenarios.id=in_crossing_paths
+      - scenarios.robot.initial_pose=[-2.6,0.0,0.0]
+      - scenarios.robot.goal=[2.65,0.0]
+      - 'scenarios.humans=[{id:human_01,initial_pose:[0.0,-3.25,1.5707963267948966],goal:[0.0,3.25]}]'
+    commands:
+      - {at_ns: 0, body: [0.5, 0.0, 0.0]}
+      - {at_ns: 13000000000, body: [0.0, 0.0, 0.0]}
+  IN_Crossing_Paths/critical/stop:
+    <<: *in_advance
+    branch_window_ns: [2000000000, 4000000000]
+    commands:
+      - {at_ns: 0, body: [0.5, 0.0, 0.0]}
+      - {at_ns: 2000000000, body: [0.0, 0.0, 0.0], intentional_wait: true}
+      - {at_ns: 4000000000, body: [0.5, 0.0, 0.0]}
+      - {at_ns: 13000000000, body: [0.0, 0.0, 0.0]}
+  IN_Crossing_Paths/critical/yield:
+    <<: *in_advance
+    branch_window_ns: [2000000000, 4000000000]
+    commands:
+      - {at_ns: 0, body: [0.5, 0.0, 0.0]}
+      - {at_ns: 2000000000, body: [0.15, 0.0, 0.0]}
+      - {at_ns: 4000000000, body: [0.5, 0.0, 0.0]}
+      - {at_ns: 13000000000, body: [0.0, 0.0, 0.0]}
+  IN_Crossing_Paths/critical/reverse:
+    <<: *in_advance
+    adjudicated: [hm_spec_004]
+    action_deviation: docs/benchmarks/SCENARIO_MATRIX.md#branch-b
+    branch_window_ns: [2000000000, 4000000000]
+    commands:
+      - {at_ns: 0, body: [0.5, 0.0, 0.0]}
+      - {at_ns: 2000000000, body: [-0.2, 0.0, 0.0]}
+      - {at_ns: 3000000000, body: [0.0, 0.0, 0.0], intentional_wait: true}
+      - {at_ns: 4000000000, body: [0.5, 0.0, 0.0]}
+      - {at_ns: 13000000000, body: [0.0, 0.0, 0.0]}
+  IN_Crossing_Paths/hard/advance:
+    approval: *research_lock
+    width_m: 0.9
+    width_probe_xy_m: [-2.0, 0.0]
+    width_probe_x_xy_m: [0.0, -2.0]
+    density: 1
+    human_policy: neutral
+    human_preferred_speed_mps: 0.8
+    human_spawn_jitter_xy_m: [0, 0.15]
+    verify_routes: true
+    label_context:
+      center_xy_m: [0.0, 0.0]
+      approach_speed_mps: {"robot": 0.5, "human_01": 0.8}
+    overrides:
+      - worlds=benchmark_intersection
+      - corridor_width=w120
+      - corridor_width.width_m=0.9
+      - scenarios.id=in_crossing_paths
+      - scenarios.robot.initial_pose=[-2.6,0.0,0.0]
+      - scenarios.robot.goal=[2.65,0.0]
+      - 'scenarios.humans=[{id:human_01,initial_pose:[0.0,-3.25,1.5707963267948966],goal:[0.0,3.25]}]'
+    commands:
+      - {at_ns: 0, body: [0.5, 0.0, 0.0]}
+      - {at_ns: 12700000000, body: [0.0, 0.0, 0.0]}
+  OT_Same_Direction/easy/advance/pedestrian_overtaking:
+    approval: *research_lock
+    width_m: 2.1
+    width_probe_xy_m: [0.0, 0.0]
+    density: 1
+    human_policy: neutral
+    subtype: pedestrian_overtaking
+    human_spawn_jitter_xy_m: [0.15, 0]
+    verify_routes: true
+    overrides:
+      - worlds.width_m=2.1
+      - worlds.length_m=16.0
+      - scenarios.id=ot_same_direction
+      - scenarios.robot.initial_pose=[-3.8,-0.34,0.0]
+      - scenarios.robot.goal=[4.5,-0.34]
+      - 'scenarios.humans=[{id:human_01,initial_pose:[-6.1,0.34,0.0],goal:[6.4,0.34]}]'
+    commands:
+      - {at_ns: 0, body: [0.55, 0.0, 0.0]}
+      - {at_ns: 17000000000, body: [0.0, 0.0, 0.0]}
+  OT_Same_Direction/easy/advance/robot_overtaking:
+    approval: *research_lock
+    width_m: 2.1
+    width_probe_xy_m: [0.0, 0.0]
+    density: 1
+    human_policy: neutral
+    subtype: robot_overtaking
+    human_spawn_jitter_xy_m: [0.15, 0]
+    verify_routes: true
+    overrides:
+      - worlds.width_m=2.1
+      - worlds.length_m=16.0
+      - scenarios.id=ot_same_direction
+      - scenarios.robot.initial_pose=[-3.8,-0.34,0.0]
+      - scenarios.robot.goal=[4.5,-0.34]
+      - 'scenarios.humans=[{id:human_01,initial_pose:[-2.2,0.34,0.0],goal:[6.4,0.34]}]'
+    commands:
+      - {at_ns: 0, body: [0.55, 0.0, 0.0]}
+      - {at_ns: 17000000000, body: [0.0, 0.0, 0.0]}
+  OT_Same_Direction/critical/advance/pedestrian_overtaking:
+    approval: *research_lock
+    width_m: 1.6
+    width_probe_xy_m: [0.0, 0.0]
+    density: 1
+    human_policy: neutral
+    subtype: pedestrian_overtaking
+    human_spawn_jitter_xy_m: [0.15, 0]
+    verify_routes: true
+    adjudicated: [hm_spec_006]
+    overrides:
+      - worlds.width_m=1.6
+      - worlds.length_m=16.0
+      - scenarios.id=ot_same_direction
+      - scenarios.robot.initial_pose=[-3.8,-0.29,0.0]
+      - scenarios.robot.goal=[4.5,-0.29]
+      - 'scenarios.humans=[{id:human_01,initial_pose:[-6.1,0.29,0.0],goal:[6.4,0.29]}]'
+    commands:
+      - {at_ns: 0, body: [0.55, 0.0, 0.0]}
+      - {at_ns: 17000000000, body: [0.0, 0.0, 0.0]}
+  OT_Same_Direction/critical/advance/robot_overtaking:
+    approval: *research_lock
+    width_m: 1.6
+    width_probe_xy_m: [0.0, 0.0]
+    density: 1
+    human_policy: neutral
+    subtype: robot_overtaking
+    human_spawn_jitter_xy_m: [0.15, 0]
+    verify_routes: true
+    adjudicated: [hm_spec_006]
+    overrides:
+      - worlds.width_m=1.6
+      - worlds.length_m=16.0
+      - scenarios.id=ot_same_direction
+      - scenarios.robot.initial_pose=[-3.8,-0.29,0.0]
+      - scenarios.robot.goal=[4.5,-0.29]
+      - 'scenarios.humans=[{id:human_01,initial_pose:[-2.2,0.29,0.0],goal:[6.4,0.29]}]'
+    commands:
+      - {at_ns: 0, body: [0.55, 0.0, 0.0]}
+      - {at_ns: 17000000000, body: [0.0, 0.0, 0.0]}
+  OT_Same_Direction/hard/advance/pedestrian_overtaking:
+    approval: *research_lock
+    width_m: 0.9
+    width_probe_xy_m: [0.0, 0.0]
+    density: 1
+    human_policy: neutral
+    subtype: pedestrian_overtaking
+    human_spawn_jitter_xy_m: [0.15, 0]
+    verify_routes: true
+    overrides:
+      - worlds.width_m=0.9
+      - worlds.length_m=16.0
+      - scenarios.id=ot_same_direction
+      - scenarios.robot.initial_pose=[-3.8,-0.19,0.0]
+      - scenarios.robot.goal=[4.5,-0.19]
+      - 'scenarios.humans=[{id:human_01,initial_pose:[-6.1,0.19,0.0],goal:[6.4,0.19]}]'
+    commands:
+      - {at_ns: 0, body: [0.55, 0.0, 0.0]}
+      - {at_ns: 17000000000, body: [0.0, 0.0, 0.0]}
+  OT_Same_Direction/hard/advance/robot_overtaking:
+    approval: *research_lock
+    width_m: 0.9
+    width_probe_xy_m: [0.0, 0.0]
+    density: 1
+    human_policy: neutral
+    subtype: robot_overtaking
+    human_spawn_jitter_xy_m: [0.15, 0]
+    verify_routes: true
+    overrides:
+      - worlds.width_m=0.9
+      - worlds.length_m=16.0
+      - scenarios.id=ot_same_direction
+      - scenarios.robot.initial_pose=[-3.8,-0.19,0.0]
+      - scenarios.robot.goal=[4.5,-0.19]
+      - 'scenarios.humans=[{id:human_01,initial_pose:[-2.2,0.19,0.0],goal:[6.4,0.19]}]'
+    commands:
+      - {at_ns: 0, body: [0.55, 0.0, 0.0]}
+      - {at_ns: 17000000000, body: [0.0, 0.0, 0.0]}
+  MG_Small_Group/easy/advance:
+    approval: *research_lock
+    width_m: 2.1
+    width_probe_xy_m: [0.0, 0.0]
+    density: 3
+    human_policy: independent
+    human_preferred_speed_mps: 0.8
+    human_spawn_jitter_xy_m: [0.15, 0]
+    verify_routes: true
+    adjudicated: [hm_spec_005]
+    overrides:
+      - worlds.width_m=2.1
+      - worlds.length_m=14.0
+      - scenarios.id=mg_small_group
+      - scenarios.robot.initial_pose=[-4.0,-0.13,0.0]
+      - scenarios.robot.goal=[4.0,-0.13]
+      - >-
+        scenarios.humans=[
+        {id:human_01,initial_pose:[-2.8,-0.36,0.0],goal:[4.7,-0.36]},
+        {id:human_02,initial_pose:[-2.8,0.36,0.0],goal:[4.7,0.36]},
+        {id:human_03,initial_pose:[-1.1,0.31,-3.141592653589793],goal:[-5.1,0.31]}]
+    commands:
+      - {at_ns: 0, body: [0.52, 0.0, 0.0]}
+      - {at_ns: 19000000000, body: [0.0, 0.0, 0.0]}
+  MG_Small_Group/critical/advance:
+    approval: *research_lock
+    width_m: 1.8
+    width_probe_xy_m: [0.0, 0.0]
+    density: 5
+    human_policy: independent
+    human_preferred_speed_mps: 0.8
+    human_spawn_jitter_xy_m: [0.15, 0]
+    verify_routes: true
+    adjudicated: [hm_spec_005]
+    overrides:
+      - worlds.width_m=1.8
+      - worlds.length_m=14.0
+      - scenarios.id=mg_small_group
+      - scenarios.robot.initial_pose=[-4.0,-0.13,0.0]
+      - scenarios.robot.goal=[4.0,-0.13]
+      - >-
+        scenarios.humans=[
+        {id:human_01,initial_pose:[-2.8,-0.36,0.0],goal:[4.7,-0.36]},
+        {id:human_02,initial_pose:[-2.8,0.36,0.0],goal:[4.7,0.36]},
+        {id:human_03,initial_pose:[-1.1,0.31,-3.141592653589793],goal:[-5.1,0.31]},
+        {id:human_04,initial_pose:[-0.3,-0.31,-3.141592653589793],goal:[-5.4,-0.31]},
+        {id:human_05,initial_pose:[0.5,0.31,-3.141592653589793],goal:[-5.7,0.31]}]
+    commands:
+      - {at_ns: 0, body: [0.52, 0.0, 0.0]}
+      - {at_ns: 19000000000, body: [0.0, 0.0, 0.0]}
+  MG_Small_Group/hard/advance:
+    approval: *research_lock
+    width_m: 1.6
+    width_probe_xy_m: [0.0, 0.0]
+    density: 7
+    human_policy: independent
+    human_preferred_speed_mps: 0.8
+    human_spawn_jitter_xy_m: [0.15, 0]
+    verify_routes: true
+    adjudicated: [hm_spec_005]
+    overrides:
+      - worlds.width_m=1.6
+      - worlds.length_m=14.0
+      - scenarios.id=mg_small_group
+      - scenarios.robot.initial_pose=[-4.0,-0.13,0.0]
+      - scenarios.robot.goal=[4.0,-0.13]
+      - >-
+        scenarios.humans=[
+        {id:human_01,initial_pose:[-2.8,-0.36,0.0],goal:[4.7,-0.36]},
+        {id:human_02,initial_pose:[-2.8,0.36,0.0],goal:[4.7,0.36]},
+        {id:human_03,initial_pose:[-1.1,0.31,-3.141592653589793],goal:[-5.1,0.31]},
+        {id:human_04,initial_pose:[-0.3,-0.31,-3.141592653589793],goal:[-5.4,-0.31]},
+        {id:human_05,initial_pose:[0.5,0.31,-3.141592653589793],goal:[-5.7,0.31]},
+        {id:human_06,initial_pose:[1.3,-0.31,-3.141592653589793],goal:[-6.0,-0.31]},
+        {id:human_07,initial_pose:[2.1,0.31,-3.141592653589793],goal:[-6.3,0.31]}]
+    commands:
+      - {at_ns: 0, body: [0.52, 0.0, 0.0]}
+      - {at_ns: 19000000000, body: [0.0, 0.0, 0.0]}

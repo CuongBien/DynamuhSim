@@ -25,3 +25,22 @@ def test_core_modules_import_only_stdlib_or_core():
                 else:
                     assert node.level == 0
                     assert node.module.split(".")[0] in sys.stdlib_module_names
+
+
+def test_human_backends_do_not_import_the_physics_engine_or_adapter():
+    human_dir = Path(narrow_nav.core.__file__).resolve().parent.parent / "humans"
+    for file in human_dir.rglob("*.py"):
+        for node in ast.walk(ast.parse(file.read_text(encoding="utf-8"))):
+            if isinstance(node, ast.Import):
+                modules = [alias.name for alias in node.names]
+            elif isinstance(node, ast.ImportFrom):
+                modules = [node.module or ""]
+                if not node.module or node.module == "narrow_nav":
+                    modules.extend(alias.name for alias in node.names)
+            else:
+                continue
+            assert not any(
+                module.split(".")[0] in ("mujoco", "simulation")
+                or module.startswith("narrow_nav.simulation")
+                for module in modules
+            ), file

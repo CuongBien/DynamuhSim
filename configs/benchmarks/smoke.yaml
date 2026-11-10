@@ -1,0 +1,10 @@
+schema_version: 1
+id: benchmark_smoke
+backend: orca
+seed: 11
+overrides:
+  - simulation.human_visuals=proxy
+  - simulation.observation_sensors=[]
+  - experiments.duration_ns=500000000
+commands:
+  - {at_ns: 0, body: [0.35, 0.0, 0.0]}

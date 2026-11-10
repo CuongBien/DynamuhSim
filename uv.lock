@@ -670,8 +670,18 @@ dev = [
     { name = "pytest" },
     { name = "ruff" },
 ]
+human-all = [
+    { name = "jupedsim" },
+    { name = "pyrvo2" },
+]
+human-jupedsim = [
+    { name = "jupedsim" },
+]
 human-models = [
     { name = "jupedsim" },
+]
+human-orca = [
+    { name = "pyrvo2" },
 ]
 sim = [
     { name = "mujoco" },
@@ -680,13 +690,17 @@ sim = [
 [package.metadata]
 requires-dist = [
     { name = "hydra-core", specifier = ">=1.3.2,<1.4" },
+    { name = "jupedsim", marker = "extra == 'human-all'", specifier = "==1.4.2" },
+    { name = "jupedsim", marker = "extra == 'human-jupedsim'", specifier = "==1.4.2" },
     { name = "jupedsim", marker = "extra == 'human-models'", specifier = "==1.4.2" },
     { name = "mujoco", marker = "extra == 'sim'", specifier = ">=4.0" },
     { name = "omegaconf", specifier = ">=2.3,<2.4" },
+    { name = "pyrvo2", marker = "extra == 'human-all'", git = "https://github.com/sybrenstuvel/Python-RVO2.git?rev=c2c46ba8d59556aa10faf03479293236efea154d" },
+    { name = "pyrvo2", marker = "extra == 'human-orca'", git = "https://github.com/sybrenstuvel/Python-RVO2.git?rev=c2c46ba8d59556aa10faf03479293236efea154d" },
     { name = "pytest", marker = "extra == 'dev'", specifier = ">=8.4,<10" },
     { name = "ruff", marker = "extra == 'dev'", specifier = ">=0.11,<1" },
 ]
-provides-extras = ["dev", "sim", "human-models"]
+provides-extras = ["dev", "sim", "human-models", "human-orca", "human-jupedsim", "human-all"]
 
 [[package]]
 name = "numpy"
@@ -993,6 +1007,11 @@ sdist = { url = "https://files.pythonhosted.org/packages/e4/11/b213bebff18258436
 wheels = [
     { url = "https://files.pythonhosted.org/packages/38/bb/d215ee7c73b61497b28a5503f9f53523f294fcc936762b7caf90e0c1c2b5/pyparsing-3.3.3-py3-none-any.whl", hash = "sha256:ece8c00a69cf01b45d0b1dedabb469c90d8caf996d4fda40f147627a122849a4", size = 126420, upload-time = "2026-09-20T20:59:04.025Z" },
 ]
+
+[[package]]
+name = "pyrvo2"
+version = "0.0.0"
+source = { git = "https://github.com/sybrenstuvel/Python-RVO2.git?rev=c2c46ba8d59556aa10faf03479293236efea154d#c2c46ba8d59556aa10faf03479293236efea154d" }
 
 [[package]]
 name = "pyside6"

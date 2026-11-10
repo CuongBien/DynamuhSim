@@ -27,6 +27,7 @@ from narrow_nav.core.validation import (
 
 from .corridor_width import AxisResize, CorridorResize
 from .depth_config import depth_from_config
+from .human_motion import HumanMotionLimits
 from .robot_controller import DriveProfile
 from .timing import Timing
 from .world_assets import MJCF_ROOT, WorldAsset, load_world_asset
@@ -387,7 +388,12 @@ def validate_scene_config(
             identifier(_required(config, f"{group}.id"), f"{group}.id")
         backend = identifier(_required(config, "humans.backend"), "humans.backend")
         if backend == "scripted":
-            positive(_required(config, "humans.speed_mps"), "humans.speed_mps")
+            if finite(_required(config, "humans.speed_mps"), "humans.speed_mps") < 0:
+                raise ConfigurationError("humans.speed_mps must be nonnegative")
+            positive(
+                OmegaConf.select(config, "humans.goal_tolerance_m", default=0.1),
+                "humans.goal_tolerance_m",
+            )
         drive = _required(config, "robots.drive")
         if drive not in ("differential", "mecanum"):
             raise ConfigurationError("robots.drive must be differential or mecanum")
@@ -401,10 +407,12 @@ def validate_scene_config(
             "robots.max_angular_speed_radps",
             "robots.max_linear_acceleration_mps2",
             "robots.max_angular_acceleration_radps2",
-            "scenarios.human_profile.max_speed_mps",
-            "scenarios.human_profile.max_acceleration_mps2",
         ):
             positive(_required(config, field), field)
+        HumanMotionLimits(
+            _required(config, "scenarios.human_profile.max_speed_mps"),
+            _required(config, "scenarios.human_profile.max_acceleration_mps2"),
+        )
         scene = _scene_geometry(config, mjcf_root)
     except ConfigurationError:
         raise

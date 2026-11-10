@@ -27,6 +27,7 @@ class Timing:
         return self.robot_control_dt_ns // self.physics_dt_ns
 
     def clocks(self, robot_tick: int) -> ClockState:
+        integer(robot_tick, "robot_tick")
         time_ns = robot_tick * self.robot_control_dt_ns
         return ClockState(
             physics_steps=robot_tick * self.substeps_per_tick,
@@ -37,6 +38,22 @@ class Timing:
             // self.observation_dt_ns
             * self.observation_dt_ns,
         )
+
+    def human_control_due(self, robot_tick: int) -> bool:
+        """Check the callback schedule for a robot-boundary human controller."""
+        integer(robot_tick, "robot_tick")
+        if self.human_control_dt_ns % self.robot_control_dt_ns:
+            raise ConfigurationError(
+                "human control must align with robot tick boundaries"
+            )
+        return (robot_tick * self.robot_control_dt_ns) % self.human_control_dt_ns == 0
+
+    def human_substeps(self, internal_dt_ns: int) -> int:
+        """Count internal bridge steps in one human control period."""
+        dt = integer(internal_dt_ns, "internal_dt_ns", minimum=1)
+        if self.human_control_dt_ns % dt:
+            raise ConfigurationError("internal_dt_ns must divide human_control_dt_ns")
+        return self.human_control_dt_ns // dt
 
 
 @dataclass(frozen=True, slots=True)

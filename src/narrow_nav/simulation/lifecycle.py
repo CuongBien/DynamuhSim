@@ -7,23 +7,37 @@ from math import hypot
 from pathlib import Path
 from platform import python_version
 from subprocess import CalledProcessError, check_output
+from traceback import format_exception
 from typing import Protocol
 from uuid import uuid4
 
 from omegaconf import DictConfig, ListConfig, OmegaConf
 
-from narrow_nav.core.actions import HumanMotion, MotionBatch, RobotAction
+from narrow_nav.core.actions import (
+    HumanMotion,
+    MotionBatch,
+    RobotAction,
+    validate_human_requests,
+)
 from narrow_nav.core.errors import ConfigurationError, ContractError
 from narrow_nav.core.metadata import EpisodeConfig, EpisodeMetadata
 from narrow_nav.core.observations import Observation, SensorSlot
 from narrow_nav.core.protocols import (
     AdapterSnapshot,
+    AdapterStepResult,
+    HumanBackendConfig,
+    RegisteredHumanBackend,
     SensorSeed,
     SimulationStepResult,
     SimulatorAdapter,
 )
 from narrow_nav.core.seed import derive_seed
-from narrow_nav.core.states import CleanDepthFrame, GroundTruthState
+from narrow_nav.core.states import (
+    CleanDepthFrame,
+    GroundTruthState,
+    HumanContext,
+    Obstacle,
+)
 from narrow_nav.core.types import NS_PER_SECOND, Twist2D, Velocity2D
 from narrow_nav.core.validation import positive, require_type, uint64, unique
 
@@ -31,14 +45,16 @@ from .backend import DepthStreamMetadata, SimulationError, SimulationMetadata
 from .collision_monitor import Clearance, measure_clearance
 from .configuration import drive_from_config, timing_from_config
 from .depth_config import DEPTH_FRAME_ID, DEPTH_MODEL_VERSION, DEPTH_SENSOR_ID
+from .human_motion import HumanMotionLimits
 from .robot_controller import DriveProfile
 from .state_extractor import executed_motion
 from .timing import Timing
 from .world_builder import MJCF_ROOT, BuiltWorld, build_world
-from .world_geometry import WorldCollision
+from .world_geometry import GEOMETRY_TOLERANCE_M, WorldCollision
 
 _UNAVAILABLE_SENSORS = ("depth", "imu", "lidar", "odometry")
 _STOP = Twist2D(0, 0, 0)
+_HUMAN_STOP = Velocity2D(0, 0)
 
 
 class RuntimeAdapter(SimulatorAdapter[BuiltWorld], Protocol):
@@ -60,6 +76,8 @@ class _Loaded:
     collision: WorldCollision
     sensor_slots: tuple[SensorSlot, ...]
     goal_tolerance_m: float
+    human_limits: HumanMotionLimits
+    human_obstacles: tuple[Obstacle, ...]
 
 
 def _git_provenance(repo: Path) -> tuple[str, bool]:
@@ -82,8 +100,15 @@ def _git_provenance(repo: Path) -> tuple[str, bool]:
 class SimulationLifecycle:
     """Typed episode facade, with native operations delegated to the adapter."""
 
-    def __init__(self, adapter: RuntimeAdapter, *, mjcf_root: Path = MJCF_ROOT) -> None:
+    def __init__(
+        self,
+        adapter: RuntimeAdapter,
+        *,
+        mjcf_root: Path = MJCF_ROOT,
+        human_backend: RegisteredHumanBackend | None = None,
+    ) -> None:
         self._adapter = adapter
+        self._human_backend = human_backend
         self._mjcf_root = mjcf_root.resolve()
         self._run_id = uuid4().hex
         self._ordinal = 0
@@ -94,6 +119,9 @@ class SimulationLifecycle:
         self._observation: Observation | None = None
         self._clean_depth: tuple[CleanDepthFrame, ...] = ()
         self._last_limited = _STOP
+        self._human_commands: tuple[
+            tuple[HumanMotion, ...], tuple[HumanMotion, ...]
+        ] = ((), ())
 
     def _require_loaded(self) -> _Loaded:
         if self._closed:
@@ -111,6 +139,16 @@ class SimulationLifecycle:
         built = build_world(resolved, mjcf_root=self._mjcf_root)
         episode = built.episode
         timing = timing_from_config(resolved, episode)
+        if self._human_backend is not None:
+            if resolved.humans.backend != self._human_backend.backend_id:
+                raise ConfigurationError(
+                    "humans.backend does not match the injected backend"
+                )
+            timing.human_control_due(0)
+        profile = resolved.scenarios.human_profile
+        human_limits = HumanMotionLimits(
+            profile.max_speed_mps, profile.max_acceleration_mps2
+        )
         drive = drive_from_config(resolved)
         sensors = require_type(
             OmegaConf.select(
@@ -133,13 +171,24 @@ class SimulationLifecycle:
             "goal_tolerance_m",
         )
         collision = self._adapter.load(built, drive)
+        obstacles = collision.obstacles() if self._human_backend is not None else ()
         OmegaConf.set_readonly(resolved, True)
         self._loaded = _Loaded(
-            resolved, episode, built, timing, drive, collision, slots, goal_tolerance
+            resolved,
+            episode,
+            built,
+            timing,
+            drive,
+            collision,
+            slots,
+            goal_tolerance,
+            human_limits,
+            obstacles,
         )
         self._metadata = self._truth = self._observation = None
         self._clean_depth = ()
         self._last_limited = _STOP
+        self._human_commands = ((), ())
 
     def reset(
         self, seed: int | None = None, scenario: str | None = None
@@ -191,28 +240,70 @@ class SimulationLifecycle:
                 if sensor != DEPTH_SENSOR_ID or depth_stream is None
             ),
             depth_stream=depth_stream,
+            human_motion_mode="stationary"
+            if self._human_backend is None
+            else "kinematic",
+            human_backend_id=None
+            if self._human_backend is None
+            else self._human_backend.backend_id,
+            human_backend_version=None
+            if self._human_backend is None
+            else self._human_backend.backend_version,
+            human_backend_seed=None
+            if self._human_backend is None
+            else derive_seed(seed, "human_backend"),
+            not_observable_solver=getattr(self._adapter, "not_observable_solver", ()),
         )
         self._ordinal += 1
         self._metadata = metadata
         self._truth = self._observation = None
         self._clean_depth = ()
         self._last_limited = _STOP
+        self._human_commands = ((), ())
         try:
             seeds = (
                 (SensorSeed(DEPTH_SENSOR_ID, depth_stream.seed),)
                 if depth_stream
                 else ()
             )
-            snapshot = self._adapter.reset(
-                loaded.world, header, metadata.engine_seed, seeds
+            snapshot = require_type(
+                self._adapter.reset(loaded.world, header, metadata.engine_seed, seeds),
+                AdapterSnapshot,
+                "reset snapshot",
             )
             truth = snapshot.ground_truth
+            self._validate_truth(loaded, header, 0, truth)
             if self._goal_reached(loaded, truth):
                 raise SimulationError("initial state already satisfies the goal")
             observation = self._make_observation(loaded, snapshot, -1)
         except Exception as exc:
             self._fail("reset_failed", 0, exc)
             raise
+        zero = tuple(
+            HumanMotion(human.entity_id, _HUMAN_STOP, truth.stamp.timestamp)
+            for human in truth.humans
+        )
+        if self._human_backend is not None:
+            try:
+                self._human_backend.reset(
+                    HumanBackendConfig(
+                        OmegaConf.to_container(loaded.config.humans, resolve=True),
+                        loaded.timing.human_control_dt_ns,
+                        positive(
+                            loaded.config.humans.get("goal_tolerance_m", 0.1),
+                            "humans.goal_tolerance_m",
+                        ),
+                        loaded.human_limits.max_acceleration_mps2,
+                        max_speed_mps=loaded.human_limits.max_speed_mps,
+                        planar_world=loaded.collision.planar_world(),
+                    ),
+                    metadata.human_backend_seed,
+                    tuple(human.entity_id for human in truth.humans),
+                )
+            except Exception as exc:
+                self._fail("human_backend_reset_failed", 0, exc)
+                raise
+        self._human_commands = (zero, zero)
         self._truth, self._observation = truth, observation
         self._clean_depth = snapshot.clean_depth
         self._metadata = replace(metadata, last_valid_tick=0)
@@ -265,6 +356,19 @@ class SimulationLifecycle:
         )
 
     @staticmethod
+    def _validate_truth(
+        loaded: _Loaded, header: EpisodeMetadata, tick: int, truth: GroundTruthState
+    ) -> None:
+        if truth.stamp != header.stamp(tick):
+            raise ContractError("adapter snapshot must match the episode stamp")
+        scene = loaded.world.scene
+        if truth.entity_ids != (
+            scene.robot.entity_id,
+            *(human.entity_id for human in scene.humans),
+        ):
+            raise ContractError("adapter snapshot must match the configured actor IDs")
+
+    @staticmethod
     def _goal_reached(loaded: _Loaded, truth: GroundTruthState) -> bool:
         pose, goal = truth.robot.pose, loaded.world.scene.robot.goal
         return hypot(pose.x - goal.x, pose.y - goal.y) <= loaded.goal_tolerance_m
@@ -276,6 +380,43 @@ class SimulationLifecycle:
             end_reason=reason,
             failure_tick=tick,
             failure=f"{type(error).__name__}: {error}",
+            failure_traceback="".join(format_exception(error)),
+        )
+
+    def _human_motions(
+        self, loaded: _Loaded, start: GroundTruthState
+    ) -> tuple[tuple[HumanMotion, ...], tuple[HumanMotion, ...]]:
+        stamp = start.stamp.timestamp
+        requested, limited = self._human_commands
+        if self._human_backend is None or not loaded.timing.human_control_due(
+            stamp.tick
+        ):
+            return (
+                tuple(replace(motion, timestamp=stamp) for motion in requested),
+                tuple(replace(motion, timestamp=stamp) for motion in limited),
+            )
+        context = HumanContext.from_ground_truth(
+            start,
+            robot_radius_m=loaded.world.scene.robot.radius_m,
+            human_radius_m=loaded.config.scenarios.human_profile.radius_m,
+            obstacles=loaded.human_obstacles,
+        )
+        requested = self._human_backend.propose(context)
+        validate_human_requests(
+            requested,
+            stamp,
+            entity_ids=tuple(human.entity_id for human in start.humans),
+        )
+        return requested, tuple(
+            replace(
+                motion,
+                velocity=loaded.human_limits.limit(
+                    motion.velocity,
+                    previous.velocity,
+                    loaded.timing.human_control_dt_ns,
+                ),
+            )
+            for motion, previous in zip(requested, limited, strict=True)
         )
 
     def step(self, robot_action: RobotAction) -> SimulationStepResult:
@@ -298,17 +439,46 @@ class SimulationLifecycle:
             self._last_limited,
             loaded.timing.robot_control_dt_ns / NS_PER_SECOND,
         )
-        humans = tuple(
-            HumanMotion(human.entity_id, Velocity2D(0, 0), start.stamp.timestamp)
-            for human in start.humans
-        )
-        requested = MotionBatch(start.stamp, robot_action, humans)
+        try:
+            human_requests, human_limits = self._human_motions(loaded, start)
+        except Exception as exc:
+            self._fail("human_backend_failed", tick, exc)
+            raise
+        requested = MotionBatch(start.stamp, robot_action, human_requests)
         limited = MotionBatch(
-            start.stamp, replace(robot_action, velocity=velocity), humans
+            start.stamp, replace(robot_action, velocity=velocity), human_limits
         )
         try:
-            advance = self._adapter.advance(limited)
+            advance = require_type(
+                self._adapter.advance(limited), AdapterStepResult, "adapter step"
+            )
             truth = advance.snapshot.ground_truth
+            self._validate_truth(loaded, metadata.episode, tick, truth)
+            speed_bound = (
+                loaded.human_limits.max_speed_mps
+                * loaded.timing.robot_control_dt_ns
+                / NS_PER_SECOND
+            )
+            if any(
+                hypot(after.pose.x - before.pose.x, after.pose.y - before.pose.y)
+                > speed_bound + GEOMETRY_TOLERANCE_M
+                for before, after in zip(start.humans, truth.humans, strict=True)
+            ):
+                raise SimulationError(
+                    "human displacement exceeds max speed for the control tick"
+                )
+            clearance = measure_clearance(loaded.collision, loaded.world.scene, truth)
+            if self._human_backend is not None and any(
+                distance is not None and distance < -GEOMETRY_TOLERANCE_M
+                for distance in (clearance.human_wall_m, clearance.human_human_m)
+            ):
+                raise SimulationError(
+                    "executed human footprints overlap solid geometry"
+                )
+            if advance.human_motion_blocked_substeps > loaded.timing.substeps_per_tick:
+                raise ContractError(
+                    "blocked human substeps exceed the control tick budget"
+                )
             observation = self._make_observation(
                 loaded, advance.snapshot, start.stamp.timestamp.time_ns
             )
@@ -333,11 +503,14 @@ class SimulationLifecycle:
                 terminated=reason in ("robot_contact", "goal_reached"),
                 truncated=reason == "time_budget",
                 end_reason=reason,
+                clearance=clearance,
+                human_motion_blocked_substeps=advance.human_motion_blocked_substeps,
             )
         except Exception as exc:
             self._fail("step_failed", tick, exc)
             raise
         self._last_limited = velocity
+        self._human_commands = (human_requests, human_limits)
         self._truth, self._observation = truth, observation
         self._clean_depth = advance.snapshot.clean_depth
         status = (

@@ -1,0 +1,12 @@
+schema_version: 1
+id: FA_Corridor_Passing
+runtime_id: fa_corridor_passing
+source_line: 143
+geometry: {kind: straight_corridor, min_length_m: 8}
+widths_m: {easy: [2.1], critical: [1.2], hard: [0.9]}
+density: {counts: [1, 2], layout: head_on_single_or_two_abreast_or_staggered}
+human_policies: {cooperative: keep_right, neutral: neutral, non_cooperative: straight_keep_speed}
+robot_actions: [advance, stop, yield, reverse]
+labels: {heading_deg: 180, heading_tolerance_deg: 15, min_initial_separation_m: 5}
+failure_modes: [collision, head_on_deadlock, reciprocal_dance]
+blockers: [fa_locked_spawn_policy_and_action_schedule]

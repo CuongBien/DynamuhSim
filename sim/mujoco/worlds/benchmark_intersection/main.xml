@@ -1,0 +1,15 @@
+<mujoco model="benchmark_intersection">
+  <include file="../../templates/world_defaults.xml" />
+  <worldbody>
+    <!-- Four corner solids bound the two crossing axes at the same aperture. -->
+    <geom class="floor" type="box" name="floor" pos="0 0 -0.05" size="5 5 0.05" />
+    <geom class="wall" type="box" name="southwest" pos="-3.3 -3.3 1.25" size="2.7 2.7 1.25" />
+    <geom class="wall" type="box" name="southeast" pos="3.3 -3.3 1.25" size="2.7 2.7 1.25" />
+    <geom class="wall" type="box" name="northwest" pos="-3.3 3.3 1.25" size="2.7 2.7 1.25" />
+    <geom class="wall" type="box" name="northeast" pos="3.3 3.3 1.25" size="2.7 2.7 1.25" />
+    <geom class="wall" type="box" name="west" pos="-5.15 0 1.25" size="0.85 1.1 1.25" />
+    <geom class="wall" type="box" name="east" pos="5.15 0 1.25" size="0.85 1.1 1.25" />
+    <geom class="wall" type="box" name="south" pos="0 -5.15 1.25" size="1.1 0.85 1.25" />
+    <geom class="wall" type="box" name="north" pos="0 5.15 1.25" size="1.1 0.85 1.25" />
+  </worldbody>
+</mujoco>

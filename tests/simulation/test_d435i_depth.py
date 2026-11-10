@@ -8,8 +8,11 @@ import mujoco
 import numpy as np
 import pytest
 
+from narrow_nav.core.actions import RobotAction
 from narrow_nav.core.errors import ConfigurationError
 from narrow_nav.core.seed import derive_seed
+from narrow_nav.core.types import Twist2D
+from narrow_nav.humans.registry import create_human_backend
 from narrow_nav.simulation.configuration import compose_config
 from narrow_nav.simulation.d435i_noise import D435iNoiseModel
 from narrow_nav.simulation.depth_config import depth_from_config
@@ -148,6 +151,104 @@ def test_runtime_replays_seeds_and_keeps_samples_on_the_physics_grid(egl):
         assert step.observation.sensors == reset.sensors
         assert step.sensor_samples == () and engine.get_clean_depth() == ()
         assert engine.stop().sensor_samples[0].capture_time_ns == 80000000
+    finally:
+        engine.close()
+
+
+def test_robot_human_and_depth_share_one_runtime_and_replay(egl):
+    config = compose_config(
+        overrides=(
+            "robots=mecanum_robot",
+            "sensors=d435i",
+            "humans=scripted",
+            "scenarios.humans.0.initial_pose=[0,-0.2,-3.141592653589793]",
+            "scenarios.humans.0.goal=[-2,-0.2]",
+            "simulation.observation_dt_ns=20000000",
+            "experiments.duration_ns=200000000",
+        )
+    )
+    engine = MuJoCoEngine(human_backend=create_human_backend(config.humans.backend))
+    try:
+        engine.load(config)
+        replays = []
+        for _ in range(2):
+            observation = engine.reset(seed=71)
+            start = engine.get_ground_truth()
+            metadata = engine.get_metadata()
+            stream = metadata.depth_stream
+            assert metadata.human_backend_id == "scripted"
+            assert metadata.human_backend_seed == derive_seed(71, "human_backend")
+            assert stream.seed == derive_seed(71, "sensor", "sensor.depth")
+            assert "depth" not in metadata.unavailable_sensors
+            assert observation.stamp == start.stamp
+            (depth_slot,) = (
+                slot for slot in observation.sensors if slot.sensor_id == "depth"
+            )
+            assert depth_slot.status == "valid"
+            samples, clean_frames = [depth_slot.sample], list(engine.get_clean_depth())
+            poses = []
+
+            for tick in range(4):
+                step = engine.step(
+                    RobotAction(
+                        start.robot.entity_id, Twist2D(0.3, 0, 0), start.robot.timestamp
+                    )
+                )
+                end = step.ground_truth
+                (motion,) = step.human_motion_results
+                assert motion.requested.entity_id == start.humans[0].entity_id
+                assert motion.requested.timestamp == start.stamp.timestamp
+                assert start.stamp.timestamp.time_ns == tick * 50_000_000
+                assert step.observation.stamp == end.stamp
+                assert end.stamp.timestamp.time_ns == (tick + 1) * 50_000_000
+                assert (
+                    motion.requested.velocity.linear_x
+                    < motion.limited.velocity.linear_x
+                    < 0
+                )
+                assert motion.executed.velocity.linear_x == pytest.approx(
+                    motion.limited.velocity.linear_x, abs=1e-9
+                )
+                assert end.humans[0].pose.x - start.humans[0].pose.x == pytest.approx(
+                    motion.limited.velocity.linear_x * 0.05, abs=1e-9
+                )
+                assert step.human_motion_blocked_substeps == 0
+                assert step.clearance.human_wall_m > 0
+                assert step.contacts == ()
+                (depth_slot,) = (
+                    slot
+                    for slot in step.observation.sensors
+                    if slot.sensor_id == "depth"
+                )
+                assert depth_slot.sample is step.sensor_samples[-1]
+                samples.extend(step.sensor_samples)
+                clean_frames.extend(engine.get_clean_depth())
+                poses.append((end.robot.pose, end.humans[0].pose))
+                start = end
+
+            assert start.robot.pose.x > -3.0
+            assert [sample.capture_time_ns for sample in samples] == list(
+                range(0, 200_000_001, 20_000_000)
+            )
+            shape = (
+                stream.profile.calibration.height,
+                stream.profile.calibration.width,
+            )
+            for sample, clean in zip(samples, clean_frames, strict=True):
+                assert sample.sample_index == clean.sample_index
+                assert (
+                    sample.capture_time_ns
+                    == clean.capture_time_ns
+                    == sample.available_time_ns
+                )
+                assert sample.frame_id == clean.frame_id == stream.frame_id
+                assert sample.source == "d435i_noisy"
+                assert sample.payload.shape == clean.payload.shape == shape
+                assert any(sample.payload.valid_mask) and any(clean.payload.valid_mask)
+                assert sample.payload != clean.payload
+            assert engine.get_metadata().status == "truncated"
+            replays.append((poses, samples, clean_frames))
+        assert replays[0] == replays[1]
     finally:
         engine.close()
 

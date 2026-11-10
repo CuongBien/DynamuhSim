@@ -18,6 +18,8 @@ Trong TASK 01, `EpisodeConfig` giữ `scenario_id`, `episode_seed`, `control_dt_
 
 Seed episode do kế hoạch thực nghiệm cấp và được lưu cùng manifest. Từ seed đó, dẫn xuất luồng `spawn`, `sensor`, `robot_policy`, `human_backend` và `engine` theo công thức sau. Lấy 8 byte đầu của SHA-256 theo thứ tự big-endian trên chuỗi ASCII `narrow_nav/v1/<episode_seed>/<stream>/<scope>`. Seed ở hệ thập phân, không thêm số 0 ở đầu. Scope là `global`, `entity.<entity_id>` hoặc `sensor.<sensor_id>`. Ghi stream, scope, seed đã dùng và loại bộ sinh số ngẫu nhiên cho mỗi thành phần. Backend có thể thêm lần rút số trong luồng của nó mà vẫn giữ các luồng khác độc lập.
 
+Metadata runtime profile active ghi `human_backend_id`, `human_backend_version` và `human_backend_seed` với scope global.
+
 Khi dùng skin Quaternius, `SimulationMetadata.mjcf_source_sha256` bao gồm manifest, mảng rig/animation và tệp texture nếu có của từng bundle đã nạp. `model_sha256` tính trên chuỗi MJCF lắp ghép. Chế độ render được ghi trong `resolved_config`.
 
 ## Bản ghi và căn chỉnh thời gian
@@ -28,6 +30,8 @@ Khi dùng skin Quaternius, `SimulationMetadata.mjcf_source_sha256` bao gồm man
 | `step` | `step_index = k`, `start_time_ns = t_k`, `end_time_ns = t_{k+1}`. Ghi ba batch chuyển động mang tick `k`, `Observation` và `GroundTruthState` mang tick `k + 1`, các mẫu sensor mới sẵn sàng trong `(t_k, t_{k+1}]`, sự kiện tiếp xúc và cờ kết thúc. |
 | Sự kiện tiếp xúc | Danh sách sự kiện adapter quan sát sau các substep trong `(t_k, t_{k+1}]`. Mỗi sự kiện mang `time_ns`, cặp ID đã chuẩn hóa (entity hoặc vật cản trong registry scenario) và `kind` nếu phân loại được. Các loại là `robot_wall`, `robot_human`, `human_wall` và `human_human`. Giữ sự kiện thoáng qua ở giữa hai control tick. |
 
+Mở rộng tùy chọn v1 trong runtime. `not_observable_solver` liệt kê các nhóm cặp ngoài phạm vi solver. Clearance cuối tick và `human_motion_blocked_substeps` thuộc kênh kiểm định. Khi lỗi callback hoặc vật lý, `failure_traceback` đi cùng lỗi và tick trong metadata. Giá trị mặc định giữ khả năng dùng caller v1. [Biên điều khiển người](../architecture/HUMAN_2D_3D_BRIDGE_NOTES.md)
+
 Một manifest nối các kênh theo episode ID. Bản ghi step bắt đầu ở 0 và liên tục. Mốc cuối của step trước là mốc đầu của step sau. Mẫu sensor được ghi đúng một lần theo `(sensor_id, sample_index)` trong kênh sensor khi lần đầu sẵn sàng ở một biên công bố. Khi lưu, slot hợp lệ của `Observation` tham chiếu mẫu tương ứng và có thể tái sử dụng mẫu đó ở các tick sau. Các mẫu đang chờ sau mốc đóng episode không được công bố.
 
 Định dạng `narrow_nav_depth_npz_v1` đặt các mẫu đo dưới `observations/` và frame sạch dưới `ground_truth/`. `observations.jsonl` tham chiếu mẫu đo bằng index, kể cả khi dùng lại qua nhiều tick. File đo và sạch mang thời điểm capture của substep, còn dòng JSONL mang thời điểm công bố ở biên điều khiển. Manifest ghi calibration, cấu hình và phiên bản nhiễu, RNG/seed và convention pixel invalid. Recorder công bố cả run bằng một lần đổi tên thư mục staging sau khi ghi manifest. Lỗi runtime có thể công bố prefix đã ghi kèm trạng thái failed. [Chi tiết định dạng và lệnh](../MUJOCO_D435I_DEPTH.md#dataset-tái-lập-và-báo-cáo)
@@ -35,6 +39,8 @@ Một manifest nối các kênh theo episode ID. Bản ghi step bắt đầu ở
 Tách kênh quan sát, lệnh `requested/limited` và kênh kiểm định gồm ground truth, `executed`, tiếp xúc. Đánh giá hoặc tạo nhãn có thể join bằng episode ID và tick. Reader cho suy luận chỉ lấy dữ liệu có quyền và có thời điểm sẵn sàng không muộn hơn tick quyết định. Tách split theo episode và nhóm scenario/seed đã khai báo trước khi tạo cửa sổ thời gian để tránh chia sẻ các đoạn chồng lấn giữa tập.
 
 TASK 04C tạo cửa sổ cho mô hình trên lưới 10 Hz từ bản ghi giữ nhịp gốc. Các episode và nhánh robot từ cùng trạng thái gốc dùng chung một split. Chuỗi lệnh ứng viên dùng làm input phải có sẵn tại mốc quyết định. Chuyển động robot và người đo được sau mốc đó thuộc kênh nhãn hoặc kiểm định. [Luồng dữ liệu](../architecture/02_DATA_FLOW.md)
+
+Profile kiểm định người xuất GT trên các mốc nguyên 100 ms từ snapshot hợp lệ, giữ nhịp physics, điều khiển và contact gốc. Khi dùng TTC footprint, tại mốc đo dùng vị trí tương đối `p` (m) và vận tốc tương đối `v` (m/s) trong `world`. TTC là thời gian không âm nhỏ nhất `t` thỏa `‖p + v t‖ ≤ r_a + r_b`, bằng 0 nếu đã giao lấn hoặc chạm và vô cực về mặt toán học nếu hai footprint không gặp nhau theo mô hình vận tốc hằng. Jerk là đạo hàm gia tốc theo thời gian, đơn vị m/s³. Tầng evaluation phải công bố cửa sổ đo, quy tắc sai phân và cách biểu diễn TTC vô cực khi ghi file. Các định nghĩa này không thêm trường v1. [Timing và hình học](../protocols/HUMAN_MODELS_TIMING_GEOMETRY.md)
 
 ## Kết thúc và lỗi
 

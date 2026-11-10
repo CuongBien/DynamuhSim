@@ -1,9 +1,13 @@
 """Axis-aligned indoor layouts and planar clearance, in the world frame."""
 
-from dataclasses import dataclass
-from math import hypot, sqrt
+from dataclasses import dataclass, field
+from itertools import combinations
+from math import cos, hypot, pi, sin, sqrt
 
 from narrow_nav.core.errors import ConfigurationError
+from narrow_nav.core.planar_world import PlanarWorld
+from narrow_nav.core.states import Obstacle
+from narrow_nav.core.types import Point2D
 from narrow_nav.core.validation import finite, positive
 
 XY = tuple[float, float]
@@ -42,10 +46,59 @@ class Rectangle:
             max(self.y_min - y, y - self.y_max, 0),
         )
 
+    def signed_distance(self, x: float, y: float) -> float:
+        if self.contains(x, y):
+            return -min(x - self.x_min, self.x_max - x, y - self.y_min, self.y_max - y)
+        return self.distance(x, y)
+
     def y_span(self, x: float) -> tuple[float, float] | None:
         if self.x_min - GEOMETRY_TOLERANCE_M <= x <= self.x_max + GEOMETRY_TOLERANCE_M:
             return self.y_min, self.y_max
         return None
+
+
+@dataclass(frozen=True, slots=True)
+class RotatedRectangle:
+    local: Rectangle
+    x: float
+    y: float
+    yaw: float
+
+    def _local_xy(self, x: float, y: float) -> XY:
+        dx, dy = x - self.x, y - self.y
+        c, s = cos(self.yaw), sin(self.yaw)
+        return c * dx + s * dy, -s * dx + c * dy
+
+    def distance(self, x: float, y: float) -> float:
+        return self.local.distance(*self._local_xy(x, y))
+
+    def signed_distance(self, x: float, y: float) -> float:
+        return self.local.signed_distance(*self._local_xy(x, y))
+
+    def y_span(self, x: float) -> tuple[float, float] | None:
+        ys = []
+        ring = _box_vertices(self)
+        for (ax, ay), (bx, by) in zip(ring, (*ring[1:], ring[0]), strict=True):
+            if min(ax, bx) <= x <= max(ax, bx):
+                if ax == bx:
+                    ys.extend((ay, by))
+                else:
+                    ys.append(ay + (by - ay) * (x - ax) / (bx - ax))
+        return (min(ys), max(ys)) if ys else None
+
+
+def _box_vertices(box: Rectangle | RotatedRectangle) -> tuple[XY, ...]:
+    rect = box.local if isinstance(box, RotatedRectangle) else box
+    ring = (
+        (rect.x_min, rect.y_min),
+        (rect.x_max, rect.y_min),
+        (rect.x_max, rect.y_max),
+        (rect.x_min, rect.y_max),
+    )
+    if isinstance(box, RotatedRectangle):
+        c, s = cos(box.yaw), sin(box.yaw)
+        return tuple((box.x + c * x - s * y, box.y + s * x + c * y) for x, y in ring)
+    return ring
 
 
 @dataclass(frozen=True, slots=True)
@@ -54,13 +107,21 @@ class Circle:
     y: float
     radius_m: float
 
+    def __post_init__(self) -> None:
+        finite(self.x, "circle x")
+        finite(self.y, "circle y")
+        positive(self.radius_m, "circle radius_m")
+
     @property
     def bounds(self) -> Rectangle:
         r = self.radius_m
         return Rectangle(self.x - r, self.x + r, self.y - r, self.y + r)
 
     def distance(self, x: float, y: float) -> float:
-        return max(0.0, hypot(self.x - x, self.y - y) - self.radius_m)
+        return max(0.0, self.signed_distance(x, y))
+
+    def signed_distance(self, x: float, y: float) -> float:
+        return hypot(self.x - x, self.y - y) - self.radius_m
 
     def y_span(self, x: float) -> tuple[float, float] | None:
         dx = abs(x - self.x)
@@ -73,7 +134,77 @@ class Circle:
 @dataclass(frozen=True, slots=True)
 class WorldCollision:
     floors: tuple[Rectangle, ...]
-    walls: tuple[Rectangle | Circle, ...]
+    walls: tuple[Rectangle | RotatedRectangle | Circle, ...]
+    wall_ids: tuple[str, ...] = field(default=(), compare=False)
+
+    def obstacles(self, *, circle_sides: int = 16) -> tuple[Obstacle, ...]:
+        obstacles = []
+        for entity_id, wall in zip(self.wall_ids, self.walls, strict=True):
+            if isinstance(wall, Circle):
+                radius = wall.radius_m / cos(pi / circle_sides)
+                ring = tuple(
+                    (
+                        wall.x + radius * cos(2 * k * pi / circle_sides),
+                        wall.y + radius * sin(2 * k * pi / circle_sides),
+                    )
+                    for k in range(circle_sides)
+                )
+            else:
+                ring = _box_vertices(wall)
+            obstacles.append(
+                Obstacle(entity_id, (tuple(Point2D(x, y) for x, y in ring),))
+            )
+        return tuple(obstacles)
+
+    def planar_world(self) -> PlanarWorld:
+        """Export the compiled collision footprint for a 2D consumer."""
+        sides = 64
+        return PlanarWorld(
+            tuple(
+                tuple(Point2D(x, y) for x, y in _box_vertices(floor))
+                for floor in self.floors
+            ),
+            self.obstacles(circle_sides=sides),
+            max(
+                (
+                    wall.radius_m * (1 / cos(pi / sides) - 1)
+                    for wall in self.walls
+                    if isinstance(wall, Circle)
+                ),
+                default=0.0,
+            ),
+        )
+
+    def human_paths_clear(
+        self, starts: tuple[XY, ...], ends: tuple[XY, ...], radii: tuple[float, ...]
+    ) -> bool:
+        paths = tuple(zip(starts, ends, radii, strict=True))
+        for (x, y), (ex, ey), radius in paths:
+            if (x, y) == (ex, ey):
+                continue
+            mx, my = (x + ex) / 2, (y + ey) / 2
+            # Distance to a solid is 1-Lipschitz along the entire segment.
+            margin = radius + hypot(ex - x, ey - y) / 2 + GEOMETRY_TOLERANCE_M
+            if (
+                not any(floor.contains(mx, my) for floor in self.floors)
+                or not self.contains(ex, ey, radius)
+                or any(wall.distance(mx, my) <= margin for wall in self.walls)
+            ):
+                return False
+        for ((ax, ay), (aex, aey), ar), ((bx, by), (bex, bey), br) in combinations(
+            paths, 2
+        ):
+            dx, dy = ax - bx, ay - by
+            vx, vy = aex - bex - dx, aey - bey - dy
+            length_squared = vx * vx + vy * vy
+            fraction = (
+                min(1.0, max(0.0, -(dx * vx + dy * vy) / length_squared))
+                if length_squared
+                else 0.0
+            )
+            if hypot(dx + fraction * vx, dy + fraction * vy) < ar + br:
+                return False
+        return True
 
     def contains(self, x: float, y: float, radius_m: float = 0.0) -> bool:
         """Test that a circular footprint lies in free space with positive clearance."""
@@ -104,6 +235,14 @@ class WorldCollision:
         return north - south
 
 
+def opening_clearance(width_m: float, radius_m: float, *other_radii_m: float) -> float:
+    """Necessary transverse slack for discs at a straight opening, in metres."""
+    width = positive(width_m, "opening width_m")
+    return width - 2 * sum(
+        positive(radius, "footprint radius_m") for radius in (radius_m, *other_radii_m)
+    )
+
+
 @dataclass(frozen=True, slots=True)
 class WorldSpec:
     layout: str
@@ -124,6 +263,8 @@ class WorldSpec:
         positive(self.wall_height_m, "wall_height_m")
         thickness = positive(self.wall_thickness_m, "wall_thickness_m")
         left, right, south, north = -half_length, half_length, -half_width, half_width
+        # Keep adjoining floor boxes connected after MJCF center/size roundoff.
+        floor_join = north - GEOMETRY_TOLERANCE_M / 2
         floor = Rectangle(left, right, south, north)
         floors = (floor,)
         boundary = ((left, south), (right, south), (right, north), (left, north))
@@ -138,7 +279,7 @@ class WorldSpec:
                     "blind_corner requires a main leg longer than its width and wall thickness"
                 )
             top = north + turn
-            floors += (Rectangle(inner, right, north, top),)
+            floors += (Rectangle(inner, right, floor_join, top),)
             boundary = (
                 (left, south),
                 (right, south),
@@ -167,7 +308,7 @@ class WorldSpec:
                     "passing bay must fit inside the corridor with room for both wall returns"
                 )
             top = bay_width - half_width
-            floors += (Rectangle(entry, exit_, north, top),)
+            floors += (Rectangle(entry, exit_, floor_join, top),)
             # The last edge of the boundary is the north wall of the main leg.
             boundary = (
                 *boundary[:-1],

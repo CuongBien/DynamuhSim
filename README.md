@@ -4,9 +4,9 @@ Dự án nghiên cứu dự đoán quỹ đạo di chuyển của người để
 
 ## Trạng thái
 
-**Hiện tại · TASK 03 và thu depth D435i.** Runtime episode chạy với robot vi sai hoặc mecanum và người mocap đứng yên. `humans=scripted` chọn cấu hình Hydra và runtime vẫn phát lệnh vận tốc zero cho người. Profile `sensors=d435i` thu depth cho mecanum qua hợp đồng dữ liệu v1. [Runtime hiện tại](docs/architecture/05_MUJOCO_RUNTIME.md) · [Thu depth D435i](docs/MUJOCO_D435I_DEPTH.md)
+**Hiện tại.** Runtime MuJoCo headless hỗ trợ robot vi sai hoặc mecanum. Smoke chọn một backend người cho episode qua `humans=`, với các lựa chọn scripted, ORCA, SFM, AVM và CSM V2. Ba model sau dùng bridge JuPedSim. Python caller inject backend khi tạo engine để chạy profile active. `MuJoCoEngine()` giữ người tại pose spawn. Profile `sensors=d435i` trên mecanum hoạt động cùng profile active hoặc stationary. [Runtime](docs/architecture/05_MUJOCO_RUNTIME.md) · [Depth D435i](docs/MUJOCO_D435I_DEPTH.md) · [Môi trường backend](docs/setup/HUMAN_MODELS_ENV.md)
 
-**Việc tiếp theo · TASK 04A.** Nối backend `scripted` và kiểm chứng một người đi đến đích khi robot đứng yên. Sau đó đối chứng ORCA và Social Force, rồi thu dataset hành vi khi cảm biến và đường ghi/đọc episode đã qua kiểm định. [Lộ trình và tiêu chí chuyển bước](docs/ROADMAP.md) · [Giao thức hành vi](docs/protocols/HUMAN_BEHAVIOR_PROTOCOL.md)
+Thu dataset hành vi nghiên cứu sau khi kiểm định profile cảm biến và luồng ghi/đọc episode trên kịch bản dự kiến. [Tiến độ mô hình người](docs/reports/human_models/PROGRESS.md) · [Giao thức hành vi](docs/protocols/HUMAN_BEHAVIOR_PROTOCOL.md)
 
 ## Cài đặt và kiểm tra
 
@@ -104,7 +104,7 @@ Các hốc màu xanh có ba vách collision và khối tường phía trên, ch�
 
 ### Mẫu người Quaternius
 
-Runtime và viewer dùng mặc định mesh nam/nữ Quaternius đã đóng gói trong checkout. Người có animation đứng chờ và giữ pose XY/yaw của body vật lý. Hình trụ collision nằm trong nhóm hiển thị ẩn. Dùng `simulation.human_visuals=proxy` để xem lại hình trụ minh họa hoặc chạy cấu hình gọn hơn khi chỉ đo vật lý.
+Runtime và viewer dùng mặc định mesh nam/nữ Quaternius đã đóng gói trong checkout. Animation người theo pose XY/yaw của body vật lý và chuyển động thực thi. Profile stationary dùng animation đứng chờ. Hình trụ collision nằm trong nhóm hiển thị ẩn. Dùng `simulation.human_visuals=proxy` để xem lại hình trụ minh họa hoặc chạy cấu hình gọn hơn khi chỉ đo vật lý.
 
 ```bash
 .venv/bin/python -m narrow_nav.simulation.mujoco.view_world --focus-human human_01 \
@@ -118,6 +118,13 @@ Chạy smoke test headless 1.000 bước cho từng drivetrain.
 ```bash
 env -u DISPLAY -u WAYLAND_DISPLAY python -m narrow_nav.simulation.smoke --ticks 40 --vx 0.35
 env -u DISPLAY -u WAYLAND_DISPLAY python -m narrow_nav.simulation.smoke --ticks 40 --vy 0.25 robots=mecanum_robot
+```
+
+Chạy cả mecanum, người scripted và D435i trong một runtime headless với EGL.
+
+```bash
+env -u DISPLAY -u WAYLAND_DISPLAY MUJOCO_GL=egl python -m narrow_nav.simulation.smoke \
+  --ticks 4 --vx 0.3 robots=mecanum_robot humans=scripted sensors=d435i
 ```
 
 `MuJoCoEngine` hỗ trợ `load`, `reset`, `step`, `stop`, đọc observation/ground truth/metadata và `close`. Profile `sensors=d435i` công bố depth. LiDAR, IMU và odometry hiện chưa có nguồn. [API runtime và model mecanum](docs/architecture/05_MUJOCO_RUNTIME.md)

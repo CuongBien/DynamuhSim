@@ -1,6 +1,6 @@
 # 01 · Ranh giới module
 
-TASK 03 có bộ điều phối episode, điều khiển drivetrain và adapter MuJoCo bên cạnh bộ dựng MJCF. Bảng dưới mô tả quyền sở hữu, gồm cả các phần dự kiến. `src/narrow_nav/humans/` là vị trí cho backend điều hướng người ở TASK 04A. Thư mục `humans/` ở gốc checkout chứa demo hình ảnh Quaternius. [API runtime](05_MUJOCO_RUNTIME.md) · [Lộ trình](../ROADMAP.md)
+Runtime có bộ điều phối episode, điều khiển drivetrain, adapter MuJoCo và bộ dựng MJCF. `src/narrow_nav/humans/` chứa registry và backend `scripted`. Thư mục `humans/` ở gốc checkout chứa demo hình ảnh Quaternius. Bảng dưới mô tả quyền sở hữu, gồm cả các phần dự kiến. [API runtime](05_MUJOCO_RUNTIME.md) · [Lộ trình](../ROADMAP.md)
 
 ## Nền tảng mô phỏng
 
