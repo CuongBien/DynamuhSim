@@ -77,7 +77,7 @@ def cases(backend):
             (scene, "advance", False)
             for scene in ("free", "crossing", extra, "door_120", "door_090", "door_060")
         )
-        result.append(("head_on", "advance", True))
+    result.append(("head_on", "advance", True))
     return result
 
 
@@ -197,6 +197,8 @@ def _metrics(rows, contacts, metadata, comparisons, sync, failure):
         human_progress, metadata.timing.robot_control_dt_ns / NS_PER_SECOND
     )
     result.update(
+        human_final_goal_distance_m=rows[-1]["human_goal_distance_m"],
+        human_at_goal_final=rows[-1]["human_at_goal"],
         max_human_pre_goal_freeze_s=freeze,
         max_prediction_error_m=max(
             (w["position_error_m"] for w in comparisons), default=None
@@ -330,6 +332,7 @@ def main():
     args = parser.parse_args()
     args.output.mkdir(parents=True, exist_ok=True)
     summary = []
+    invalid = False
     for backend in args.backend or BACKENDS:
         original = None
         selected = cases(backend)
@@ -351,11 +354,28 @@ def main():
             if scene == "head_on" and action == "advance":
                 if replay:
                     keys = ("trace", "contacts", "prediction_windows", "metrics")
-                    record["replay_exact"] = all(
-                        original[key] == result[key] for key in keys
+                    provenance = (
+                        "resolved_config",
+                        "model_sha256",
+                        "mjcf_source_sha256",
+                        "engine_version",
+                        "human_backend_version",
+                        "human_backend_seed",
+                    )
+                    record["replay_exact"] = (
+                        original["episode_id"] != result["episode_id"]
+                        and all(original[key] == result[key] for key in keys)
+                        and all(
+                            original["metadata"][key] == result["metadata"][key]
+                            for key in provenance
+                        )
                     )
                 else:
                     original = result
+            invalid |= (
+                record["metrics"]["verdict"] == "INVALID_INFRA"
+                or record.get("replay_exact") is False
+            )
             summary.append(record)
             print(
                 case_id,
@@ -368,7 +388,8 @@ def main():
             [r for r in summary if r["backend"] == backend],
         )
     _write_json(args.output / "summary.json", summary)
+    return 2 if invalid else 0
 
 
 if __name__ == "__main__":
-    main()
+    raise SystemExit(main())

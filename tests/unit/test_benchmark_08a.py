@@ -16,8 +16,8 @@ from narrow_nav.evaluation.metrics import contacts_by_kind, evaluate, ttc
 from narrow_nav.evaluation.qa import scenario_label, schedule
 from narrow_nav.evaluation.reporting import report_run
 from narrow_nav.evaluation.runner import write_json
-from narrow_nav.evaluation.scenario_cards import CARD_IDS, compile_plan
-from scripts.benchmarks.plan import _manifest, _reuse, _select
+from narrow_nav.evaluation.scenario_cards import CARD_IDS, _yaml, compile_plan
+from scripts.benchmarks.plan import _manifest, _prepare, _reuse, _select
 
 ROOT = Path(__file__).resolve().parents[2]
 DT = 50_000_000
@@ -89,6 +89,83 @@ def test_binding_controls_and_explicit_branch():
     mismatch["conditions"][f"{card}/critical/stop"]["overrides"] = ["humans=orca"]
     with pytest.raises(ValueError, match="only override"):
         compile_plan(ROOT, 1, mismatch)
+
+
+def test_locked_bindings_preserve_pairs_and_overtaking_allocation():
+    binding = _yaml(ROOT / "configs/benchmarks/bindings.yaml")
+    plans = [compile_plan(ROOT, phase, binding) for phase in range(3)]
+    assert len({plan["plan_id"] for plan in plans}) == 1
+    slots = [{slot["slot_id"]: slot for slot in plan["slots"]} for plan in plans]
+    assert all(not slot["blocked"] for plan in slots for slot in plan.values())
+    assert all(
+        slot["binding"] == slots[2][key]["binding"] for key, slot in slots[0].items()
+    )
+    assert {
+        slot["binding"]["width_m"]
+        for slot in slots[0].values()
+        if slot["card_id"] == CARD_IDS[1]
+    } == {1.2}
+    for slot in slots[1].values():
+        if slot["branch"] == "b":
+            control = slots[1][slot["advance_slot_id"]]
+            for key in ("backend", "level", "seed"):
+                assert slot[key] == control[key]
+            assert slot["binding"]["overrides"] == control["binding"]["overrides"]
+    for phase, level, expected in (
+        (0, "easy", (1, 1)),
+        (1, "critical", (3, 2)),
+        (2, "critical", (10, 10)),
+    ):
+        counts = Counter(
+            slot["binding"]["subtype"]
+            for slot in slots[phase].values()
+            if slot["card_id"] == CARD_IDS[4]
+            and slot["backend"] == "orca"
+            and slot["level"] == level
+        )
+        assert counts == dict(
+            zip(("pedestrian_overtaking", "robot_overtaking"), expected, strict=True)
+        )
+    del binding["conditions"][f"{CARD_IDS[4]}/easy/advance/robot_overtaking"]
+    with pytest.raises(ValueError, match="both subtype bindings"):
+        compile_plan(ROOT, 0, binding)
+
+
+def test_locked_geometry_and_shared_spawn_rng():
+    pytest.importorskip("mujoco")
+    pytest.importorskip("shapely", minversion="2.0")
+    bindings = _yaml(ROOT / "configs/benchmarks/bindings.yaml")
+    plan = compile_plan(ROOT, 2, bindings)
+    cases = {}
+    for slot in plan["slots"]:
+        if slot["backend"] != "orca":
+            continue
+        bind = slot["binding"]
+        key = (slot["card_id"], slot["level"], slot["action"], bind.get("subtype"))
+        if key in cases:
+            continue
+        card = plan["cards"][slot["card_id"]]
+        config, case = _prepare(slot, card)
+        assert case["geometry_check"]["aperture_m"] == pytest.approx(bind["width_m"])
+        assert case["geometry_check"]["robot_reference_wall_clearance_m"] > 0
+        assert case["geometry_check"]["human_reference_wall_clearance_m"] > 0
+        cases[key] = slot, config, case
+    assert len(cases) == len(bindings["conditions"]) == 30
+
+    slot, config, case = cases[(CARD_IDS[1], "critical", "advance", None)]
+    _, stop_config, _ = cases[(CARD_IDS[1], "critical", "stop", None)]
+    assert config == stop_config
+    same_seed, other_backend = _prepare(
+        {**slot, "backend": "csm_jupedsim"}, plan["cards"][CARD_IDS[1]]
+    )
+    next_seed, _ = _prepare({**slot, "seed": 1001}, plan["cards"][CARD_IDS[1]])
+    assert same_seed.scenarios == config.scenarios
+    assert other_backend["paired_key"] == case["paired_key"]
+    assert (
+        next_seed.scenarios.humans[0].initial_pose
+        != config.scenarios.humans[0].initial_pose
+    )
+    assert next_seed.scenarios.robot == config.scenarios.robot
 
 
 def test_manifest_tampering_and_filter_are_explicit(tmp_path):

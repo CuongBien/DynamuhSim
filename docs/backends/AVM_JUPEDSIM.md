@@ -1,5 +1,9 @@
 # JuPedSim AnticipationVelocityModel
 
+**TASK 08C · Tích hợp và replay đạt trên MuJoCo. Hành vi còn `PARTIAL` ở ca đối xứng và tranh cửa.** Profile `goal_approach=braking_envelope` xử lý overshoot gần waypoint. Backend giảm chuẩn lệnh dự báo theo khoảng cách còn lại, chu kỳ người và trần gia tốc của scene. Công thức chừa quãng đường cho một kỳ giữ lệnh rồi hãm. Khi vị trí đo đã trong dung sai, backend yêu cầu zero qua limiter hiện hành. Hướng lệnh khi di chuyển và dự báo native vẫn đến từ AVM. Dùng `humans.goal_approach=native` để tái hiện cách phát lệnh cũ trên cùng cấu hình. [Cấu hình AVM](../../configs/humans/avm_jupedsim.yaml) · [Kiểm định TASK 08C](../reports/human_models/PROGRESS.md#kiểm-định-task-08c)
+
+Giao cắt 90° với thời điểm đến đối xứng có thể duy trì hai quỹ đạo phản chiếu và bế tắc trong native. Trong MuJoCo, guard giữ footprint ngoài giao lấn khi dự báo cố đi vào. Đối chứng dời điểm xuất phát của một người 3 cm theo hướng tiến cho thấy cả hai có thể qua và dừng trong dung sai. Ca đối xứng gốc vẫn được kiểm thử ở seed 11. Việc tăng `anticipation_time` không cho kết quả nhất quán tại 0,8 m/s nên giữ giá trị 1,0 s. [Fixture kiểm định](../../tests/integration/test_jupedsim_universal.py) · [Hợp đồng 04U](JUPEDSIM_EXTERNAL_ACTOR_CONTRACT.md)
+
 **Closeout TASK 06 · `PARTIAL`.** Sweep trên wheel 04U xác nhận AVM phản ứng với vận tốc robot trước tiếp xúc. Giao cắt người–người đối xứng và ca tranh cửa 0,60 m vẫn chưa hoàn thành. [Số đo và phân loại](../reports/human_models/TASK_06_CLOSEOUT_REPORT.md)
 
 **Cập nhật 04U.** Wheel cô lập `1.4.2+task04u` cung cấp external actor và human rebase cho AVM. Registry mở `humans=avm_jupedsim` trên build này. Phần TASK 06 ghi trạng thái lịch sử của stock và 04S. [Hợp đồng 04U](JUPEDSIM_EXTERNAL_ACTOR_CONTRACT.md) · [Kiểm định MuJoCo](../reports/human_models/TASK_04U_REPORT.md)

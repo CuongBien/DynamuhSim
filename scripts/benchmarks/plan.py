@@ -11,9 +11,10 @@ import sys
 from dataclasses import asdict
 from importlib.metadata import PackageNotFoundError, version
 from importlib.util import find_spec
-from math import isclose, isfinite
+from math import cos, hypot, isclose, isfinite, sin
 from pathlib import Path
 
+from narrow_nav.core.seed import derive_seed, make_rng
 from narrow_nav.core.types import Point2D
 from narrow_nav.evaluation.qa import schedule
 from narrow_nav.evaluation.runner import execute, write_json
@@ -101,8 +102,54 @@ def _backend(name, catalog):
     return backend
 
 
+def _check_routes(polygon, scene, commands, episode, config):
+    """Check the prescribed, collision-free reference paths before stepping."""
+    from shapely.geometry import LineString, Point
+
+    def clearance(actor, points):
+        path = LineString(points)
+        margin = polygon.boundary.distance(path) - actor.radius_m
+        if not polygon.contains(path) or margin <= 1e-9:
+            raise ValueError(f"reference route for {actor.entity_id} crosses a wall")
+        return path, margin
+
+    robot = scene.robot
+    x, y, yaw = robot.pose.x, robot.pose.y, robot.pose.yaw
+    points = [(x, y)]
+    times, twists = commands
+    if any(twists[-1][0]):
+        raise ValueError("verified open-loop schedule must end with a zero command")
+    for start, end, (body, _) in zip(
+        times, [*times[1:], episode.duration_ns], twists, strict=True
+    ):
+        vx, vy, omega = body
+        if omega or hypot(vx, vy) > config.robots.max_linear_speed_mps:
+            raise ValueError(
+                "verified open-loop routes require bounded, fixed-yaw commands"
+            )
+        dt = (end - start) / 1e9
+        x += dt * (vx * cos(yaw) - vy * sin(yaw))
+        y += dt * (vx * sin(yaw) + vy * cos(yaw))
+        points.append((x, y))
+    path, margin = clearance(robot, points)
+    if (
+        path.distance(Point(robot.goal.x, robot.goal.y))
+        > config.experiments.goal_tolerance_m
+    ):
+        raise ValueError("nominal robot commands miss the goal")
+    return {
+        "robot_reference_wall_clearance_m": margin,
+        "human_reference_wall_clearance_m": min(
+            clearance(
+                actor, [(actor.pose.x, actor.pose.y), (actor.goal.x, actor.goal.y)]
+            )[1]
+            for actor in scene.humans
+        ),
+    }
+
+
 def _prepare(slot, card):
-    from omegaconf import OmegaConf
+    from omegaconf import OmegaConf, read_write
 
     from narrow_nav.simulation.configuration import compose_config
     from narrow_nav.simulation.geometry_inspector import inspect_world
@@ -117,15 +164,38 @@ def _prepare(slot, card):
     if card is not None:
         overrides += [
             "simulation.observation_sensors=[]",
+            "simulation.human_visuals=proxy",
             "experiments.duration_ns=30000000000",
         ]
-        if card["id"].startswith("OT"):
-            speed = card["subtypes"][bind["subtype"]]["human_speed_mps"]
+        speed = (
+            card["subtypes"][bind["subtype"]]["human_speed_mps"]
+            if card.get("subtypes")
+            else bind.get("human_preferred_speed_mps")
+        )
+        if speed is not None:
             field = "speed_mps" if slot["backend"] == "orca" else "desired_speed"
             overrides.append(f"humans.{field}={speed}")
     config = compose_config(ROOT / "configs", (*overrides, *bind["overrides"]))
+    spawn_rng = None
+    if jitter := bind.get("human_spawn_jitter_xy_m"):
+        rng = make_rng(slot["seed"], "spawn")
+        dx, dy = (rng.uniform(-span, span) for span in jitter)
+        with read_write(config):
+            for human in config.scenarios.humans:
+                human.initial_pose[0] += dx
+                human.initial_pose[1] += dy
+        spawn_rng = {
+            "stream": "spawn",
+            "scope": "global",
+            "seed": derive_seed(slot["seed"], "spawn"),
+            "generator": "random.Random",
+            "human_offset_xy_m": [dx, dy],
+        }
     world = build_world(config)
     scene = world.scene
+    commands = schedule(
+        bind["commands"], world.episode.control_dt_ns, world.episode.duration_ns
+    )
     if config.humans.backend != slot["backend"] or (
         config.simulation.physics_dt_ns != TIMING["physics_dt_ns"]
         or config.simulation.control_dt_ns != TIMING["robot_control_dt_ns"]
@@ -171,6 +241,21 @@ def _prepare(slot, card):
                 width - 2 * (scene.robot.radius_m + human_radius)
             ),
         }
+        if "width_probe_x_xy_m" in bind:
+            cross_width = walkable.opening_width(
+                Point2D(*bind["width_probe_x_xy_m"]),
+                axis=(1.0, 0.0),
+                half_span_m=bind["width_m"],
+            )
+            if not isclose(cross_width, width, abs_tol=1e-9, rel_tol=0):
+                raise ValueError("the two corridor legs must have the same aperture")
+            geometry_check["aperture_x_m"] = cross_width
+        if bind.get("verify_routes"):
+            geometry_check.update(
+                _check_routes(
+                    walkable.native_polygon(), scene, commands, world.episode, config
+                )
+            )
         code = card["id"][:2]
         if code in ("BC", "IN", "ND"):
             center = labels.get("center_xy_m", [])
@@ -200,9 +285,6 @@ def _prepare(slot, card):
         not isfinite(shortest) or shortest <= 0 or not bind.get("shortest_path_source")
     ):
         raise ValueError("SPL reference path needs a positive length and source")
-    commands = schedule(
-        bind["commands"], world.episode.control_dt_ns, world.episode.duration_ns
-    )
     normalized = OmegaConf.to_container(config, resolve=True)
     del normalized["humans"]
     model_sha = hashlib.sha256(world.mjcf.encode()).hexdigest()
@@ -212,6 +294,7 @@ def _prepare(slot, card):
         "card": card,
         "visible": visible,
         "geometry_check": geometry_check,
+        "spawn_rng": spawn_rng,
         "timing": TIMING,
         "schedule": commands,
         "goal_tolerance": config.humans.goal_tolerance_m,
@@ -280,7 +363,7 @@ def _validate(data, selected, runtime=False, prepare=False):
                 availability[name] = {"blocked": str(exc)}
     if prepare:
         for slot in selected:
-            if slot["blocked"] or "blocked" in availability.get(slot["backend"], {}):
+            if slot["blocked"]:
                 continue
             try:
                 _prepare(slot, data["cards"].get(slot["card_id"]))
@@ -413,6 +496,7 @@ def _run_locked(data, selected, args, runtime, engine_factory):
             if slot["backend"] in MODELS
             else None,
             "geometry_check": case["geometry_check"],
+            "spawn_rng": case["spawn_rng"],
             "config_sha256": case["config_sha256"],
             "model_sha256": case["model_sha256"],
             "asset_hashes": case["asset_hashes"],
@@ -469,6 +553,7 @@ def main(argv=None):
                 "branch",
                 "level",
                 "action",
+                "subtype",
                 "seed_id",
                 "seed",
                 "introduced",
@@ -479,7 +564,10 @@ def main(argv=None):
             with args.output.with_suffix(".csv").open("w", newline="") as file:
                 writer = csv.DictWriter(file, fields, extrasaction="ignore")
                 writer.writeheader()
-                writer.writerows(result["slots"])
+                writer.writerows(
+                    {**slot, "subtype": (slot["binding"] or {}).get("subtype")}
+                    for slot in result["slots"]
+                )
             _validate(result, result["slots"])
         elif args.command == "report":
             from narrow_nav.evaluation.reporting import report_run

@@ -250,6 +250,8 @@ class WorldSpec:
         positive(self.wall_height_m, "wall_height_m")
         thickness = positive(self.wall_thickness_m, "wall_thickness_m")
         left, right, south, north = -half_length, half_length, -half_width, half_width
+        # Keep adjoining floor boxes connected after MJCF center/size roundoff.
+        floor_join = north - GEOMETRY_TOLERANCE_M / 2
         floor = Rectangle(left, right, south, north)
         floors = (floor,)
         boundary = ((left, south), (right, south), (right, north), (left, north))
@@ -264,7 +266,7 @@ class WorldSpec:
                     "blind_corner requires a main leg longer than its width and wall thickness"
                 )
             top = north + turn
-            floors += (Rectangle(inner, right, north, top),)
+            floors += (Rectangle(inner, right, floor_join, top),)
             boundary = (
                 (left, south),
                 (right, south),
@@ -290,7 +292,7 @@ class WorldSpec:
                     "passing bay must fit inside the corridor with room for both wall returns"
                 )
             top = bay_width - half_width
-            floors += (Rectangle(entry, exit_, north, top),)
+            floors += (Rectangle(entry, exit_, floor_join, top),)
             # The last edge of the boundary is the north wall of the main leg.
             boundary = (
                 *boundary[:-1],

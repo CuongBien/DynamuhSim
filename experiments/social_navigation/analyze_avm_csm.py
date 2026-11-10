@@ -8,9 +8,11 @@ from math import dist, hypot, pi
 from pathlib import Path
 
 import jupedsim
+from omegaconf import OmegaConf
 from shapely.geometry import box
 
 from narrow_nav.core.seed import derive_seed
+from narrow_nav.humans.goal import goal_speed_limit
 from narrow_nav.humans.registry import create_human_backend
 
 from .evaluate_avm_csm import ACTIONS, BACKENDS, BRANCH_START_NS, _write_json
@@ -210,6 +212,11 @@ def _verify_trace(episode):
                 limited == last and row["human_requested"] == rows[i]["human_requested"]
             )
         last = limited
+    config = OmegaConf.create(metadata["resolved_config"])
+    goal_braking = (
+        episode["backend"] == "avm_jupedsim"
+        and config.humans.get("goal_approach") == "braking_envelope"
+    )
     for i, sample in enumerate(episode["sync"]):
         assert sample["time_ns"] == i * period
         assert sample["iteration_before"] == 10 * i
@@ -220,18 +227,23 @@ def _verify_trace(episode):
         (person,) = sample["pedestrians"]
         assert person["position"] == before["human_xy"]
         assert person["velocity"] == before["human_velocity"]
-        assert (
-            dist(
-                command["human_requested"],
-                tuple(
-                    (p - x) / 0.1
-                    for p, x in zip(
-                        person["prediction"], person["position"], strict=True
-                    )
-                ),
-            )
-            < 1e-12
+        expected = tuple(
+            (p - x) / 0.1
+            for p, x in zip(person["prediction"], person["position"], strict=True)
         )
+        if goal_braking:
+            distance = before["human_goal_distance_m"]
+            cap = (
+                0
+                if before["human_at_goal"]
+                else goal_speed_limit(
+                    distance, 0.1, config.scenarios.human_profile.max_acceleration_mps2
+                )
+            )
+            speed = hypot(*expected)
+            if speed > cap:
+                expected = tuple(value * (cap / speed) for value in expected)
+        assert dist(command["human_requested"], expected) < 1e-12
 
 
 def evidence(root):

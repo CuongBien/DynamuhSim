@@ -3,7 +3,7 @@
 import json
 from dataclasses import asdict, replace
 from importlib.metadata import version
-from math import dist, isfinite, pi
+from math import dist, hypot, isfinite, pi
 from pathlib import Path
 
 import pytest
@@ -22,6 +22,7 @@ from narrow_nav.core.errors import ConfigurationError, ContractError
 from narrow_nav.core.geometry import body_velocity_to_world
 from narrow_nav.core.states import HumanContext
 from narrow_nav.core.types import ROBOT_BASE_FRAME, Twist2D, Velocity2D
+from narrow_nav.humans.goal import goal_speed_limit
 from narrow_nav.humans.registry import create_human_backend
 from narrow_nav.simulation.configuration import compose_config
 from narrow_nav.simulation.mujoco_engine import MuJoCoEngine
@@ -226,12 +227,27 @@ def _run(backend_id, overrides, duration, command, mjcf_root=MJCF_ROOT):
                     assert p.position == _xy(old.pose) and p.velocity == _v(
                         old.velocity
                     )
-                    assert _v(motion.requested.velocity) == pytest.approx(
-                        tuple(
-                            (end - start) / 0.1
-                            for start, end in zip(p.position, p.prediction, strict=True)
-                        )
+                    expected = tuple(
+                        (end - start) / 0.1
+                        for start, end in zip(p.position, p.prediction, strict=True)
                     )
+                    if config.humans.get("goal_approach") == "braking_envelope":
+                        distance = dist(p.position, _xy(old.goal))
+                        cap = (
+                            0
+                            if distance <= config.humans.goal_tolerance_m
+                            else goal_speed_limit(
+                                distance,
+                                0.1,
+                                config.scenarios.human_profile.max_acceleration_mps2,
+                            )
+                        )
+                        speed = hypot(*expected)
+                        if speed > cap:
+                            expected = tuple(
+                                value * (cap / speed) for value in expected
+                            )
+                    assert _v(motion.requested.velocity) == pytest.approx(expected)
                 sync.append(asdict(sample))
             else:
                 assert rows[-1]["requested"] == [
@@ -324,7 +340,7 @@ def _write(tmp_path, name, trace):
     safe = not trace["contacts"] and all(
         value is None or value >= 0 for value in clearance.values()
     )
-    if name in PAIR_HUMANS:
+    if name in (*PAIR_HUMANS, "crossing_asymmetric"):
         reached = len(trace["goals_seen"]) == 2
     elif name == "doorway":
         reached = trace["metadata"]["end_reason"] == "goal_reached" and bool(
@@ -406,7 +422,26 @@ def test_mujoco_human_pair_with_stationary_robot(backend, fixture, tmp_path):
         max(dist(row["robot"], trace["rows"][0]["robot"]) for row in trace["rows"])
         < 1e-3
     )
+    if fixture == "crossing" and backend in ("avm_jupedsim", "csm_jupedsim"):
+        assert trace["metadata"]["end_reason"] == "time_budget"
+        assert not trace["goals_seen"]
+        if backend == "avm_jupedsim":
+            assert sum(row["guard_substeps"] for row in trace["rows"]) > 0
     _write(tmp_path, fixture, trace)
+
+
+@requires_04u
+def test_avm_crossing_with_arrival_offset_settles_at_both_goals(tmp_path):
+    crossing = PAIR_HUMANS["crossing"].replace("[0,-2,", "[0,-1.97,")
+    trace = _run("avm_jupedsim", (*HUMAN_PAIR, crossing), 8_000_000_000, lambda _: 0)
+    assert trace["goals_seen"] == ["human_a", "human_b"]
+    assert not trace["contacts"]
+    assert min(row["clearance"]["human_human_m"] for row in trace["rows"]) >= 0
+    for row in trace["rows"][-10:]:
+        assert row["human_velocity"] == [(0, 0), (0, 0)]
+        assert dist(row["humans"][0], (2, 0)) <= 0.1
+        assert dist(row["humans"][1], (0, 2)) <= 0.1
+    _write(tmp_path, "crossing_asymmetric", trace)
 
 
 @requires_04u
@@ -434,6 +469,11 @@ def test_mujoco_doorway_with_waiting_space(backend, tmp_path):
         tmp_path,
     )
     assert trace["human_movement_m"] > 0.2
+    if backend == "avm_jupedsim":
+        assert trace["goals_seen"] == ["human_01"]
+        for row in trace["rows"][-10:]:
+            assert row["human_velocity"] == [(0, 0)]
+            assert dist(row["humans"][0], (-3, 0.05)) <= 0.1
     _write(tmp_path, "doorway", trace)
 
 

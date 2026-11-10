@@ -118,7 +118,7 @@ def _collect(root, data):
 
 
 def _distributions(rows_by_condition):
-    for (backend, card, level, action), rows in rows_by_condition.items():
+    for (backend, card, level, action, subtype), rows in rows_by_condition.items():
         eligible = [
             row
             for row in rows
@@ -147,6 +147,7 @@ def _distributions(rows_by_condition):
                 "card_id": card,
                 "level": level,
                 "action": action,
+                "subtype": subtype,
                 "metric": metric,
                 "available": len(values),
                 "missing": len(eligible) - len(values),
@@ -167,7 +168,13 @@ def report_run(root: Path, output: Path):
     by_condition = defaultdict(list)
     for row in episodes:
         by_condition[
-            (row["backend"], row["card_id"], row["level"], row["action"])
+            (
+                row["backend"],
+                row["card_id"],
+                row["level"],
+                row["action"],
+                row["subtype"],
+            )
         ].append(row)
     conditions = [
         {
@@ -175,6 +182,7 @@ def report_run(root: Path, output: Path):
             "card_id": key[1],
             "level": key[2],
             "action": key[3],
+            "subtype": key[4],
             **condition_summary(rows),
         }
         for key, rows in by_condition.items()

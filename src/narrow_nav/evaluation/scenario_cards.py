@@ -2,6 +2,7 @@
 
 import hashlib
 import json
+from math import isfinite
 from pathlib import Path
 
 from omegaconf import OmegaConf
@@ -117,7 +118,28 @@ def _execution(card, level, action, binding):
         )
     if card.get("subtypes") and binding.get("subtype") not in card["subtypes"]:
         raise ValueError("select an explicit overtaking subtype")
-    allowed = ("worlds=", "worlds.", "scenarios=", "scenarios.", "corridor_width=")
+    if "human_preferred_speed_mps" in binding:
+        speed = binding["human_preferred_speed_mps"]
+        if not isfinite(speed) or speed <= 0:
+            raise ValueError("human preferred speed must be finite and positive")
+    if "human_spawn_jitter_xy_m" in binding:
+        jitter = binding["human_spawn_jitter_xy_m"]
+        if (
+            not isinstance(jitter, list)
+            or len(jitter) != 2
+            or any(not isfinite(span) or span < 0 for span in jitter)
+        ):
+            raise ValueError(
+                "human spawn jitter requires two nonnegative bounds in world XY"
+            )
+    allowed = (
+        "worlds=",
+        "worlds.",
+        "scenarios=",
+        "scenarios.",
+        "corridor_width=",
+        "corridor_width.width_m=",
+    )
     if (
         not isinstance(binding["overrides"], list)
         or not binding["overrides"]
@@ -131,6 +153,7 @@ def _execution(card, level, action, binding):
         raise ValueError(
             "binding requires measured width point and robot command schedule"
         )
+    schedule(binding["commands"], 50_000_000, 30_000_000_000)
     return binding
 
 
@@ -155,6 +178,15 @@ def _branch_schedule(control, branch, action):
         raise ValueError("Stop needs an explicitly logged zero-command wait")
     if action == "reverse" and not any(body[0] < 0 for body, _ in interval):
         raise ValueError("Reverse needs a negative body-X command")
+    if action == "yield" and not any(
+        0 <= command_at(alternative, tick)[0][0] < command_at(advance, tick)[0][0]
+        or command_at(alternative, tick)[0][1:] != command_at(advance, tick)[0][1:]
+        for tick in points
+        if start <= tick < end
+    ):
+        raise ValueError(
+            "Yield needs a reduced forward speed or a lateral/turn command"
+        )
     if all(
         command_at(advance, tick) == command_at(alternative, tick) for tick in points
     ):
@@ -206,6 +238,25 @@ def compile_plan(repo: Path, phase: int | str, bindings=None):
             for _, card, branch, nominal, action, _, _ in _slots(matrix)
             if (level := selected.get(card) if branch == "b" else nominal) is not None
         }
+        overtaking = "OT_Same_Direction"
+        subtypes = sorted(cards[overtaking]["subtypes"])
+        subtype_keys = {}
+        for level in LEVELS:
+            base = f"{overtaking}/{level}/advance"
+            variants = [f"{base}/{subtype}" for subtype in subtypes]
+            present = by_condition.keys() & set(variants)
+            if present:
+                if base in by_condition or len(present) != len(variants):
+                    raise ValueError(
+                        "OT allocation needs both subtype bindings and no base binding"
+                    )
+                for key, subtype in zip(variants, subtypes, strict=True):
+                    if by_condition[key].get("subtype") != subtype:
+                        raise ValueError(
+                            "OT binding subtype disagrees with its condition key"
+                        )
+                subtype_keys[base] = variants
+                legal_keys.update(variants)
         if not by_condition.keys() <= legal_keys:
             raise ValueError("binding contains unknown or unselected conditions")
         slots = []
@@ -214,7 +265,12 @@ def compile_plan(repo: Path, phase: int | str, bindings=None):
                 continue
             chosen = selected.get(card_id) if branch == "b" else level
             card = cards[card_id]
-            binding = by_condition.get(f"{card_id}/{chosen}/{action}")
+            key = f"{card_id}/{chosen}/{action}"
+            if key in subtype_keys:
+                variants = subtype_keys[key]
+                binding = by_condition[variants[index % len(variants)]]
+            else:
+                binding = by_condition.get(key)
             blocked = _blockers(card, branch, level, action)
             if binding is not None:
                 binding = _execution(card, chosen, action, binding)
@@ -229,8 +285,12 @@ def compile_plan(repo: Path, phase: int | str, bindings=None):
                     keys = (
                         "width_m",
                         "width_probe_xy_m",
+                        "width_probe_x_xy_m",
                         "density",
                         "human_policy",
+                        "human_preferred_speed_mps",
+                        "human_spawn_jitter_xy_m",
+                        "verify_routes",
                         "subtype",
                         "overrides",
                         "shortest_path_m",
