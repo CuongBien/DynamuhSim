@@ -288,6 +288,60 @@ class WorldSpec:
                 (inner, north),
                 (left, north),
             )
+        elif self.layout == "l_corridor":
+            arm_x = positive(self.corridor_length_m, "corridor_length_m")
+            arm_y = positive(
+                self.turn_length_m
+                if self.turn_length_m is not None
+                else self.corridor_length_m,
+                "turn_length_m",
+            )
+            if arm_x <= thickness or arm_y <= thickness:
+                raise ConfigurationError(
+                    "l_corridor requires arm lengths greater than wall_thickness_m"
+                )
+            left = -(arm_x + half_width)
+            right = half_width
+            top = arm_y + half_width
+            floors = (
+                Rectangle(left, right, south, north),
+                Rectangle(-half_width, right, floor_join, top),
+            )
+            boundary = (
+                (left, south),
+                (right, south),
+                (right, top),
+                (-half_width, top),
+                (-half_width, north),
+                (left, north),
+            )
+        elif self.layout == "intersection":
+            arm = positive(self.corridor_length_m, "corridor_length_m")
+            if arm <= thickness:
+                raise ConfigurationError(
+                    "intersection requires arm length greater than wall_thickness_m"
+                )
+            end = arm + half_width
+            south_join = south + GEOMETRY_TOLERANCE_M / 2
+            floors = (
+                Rectangle(-end, end, south, north),
+                Rectangle(-half_width, half_width, -end, south_join),
+                Rectangle(-half_width, half_width, floor_join, end),
+            )
+            boundary = (
+                (-end, south),
+                (-half_width, south),
+                (-half_width, -end),
+                (half_width, -end),
+                (half_width, south),
+                (end, south),
+                (end, north),
+                (half_width, north),
+                (half_width, end),
+                (-half_width, end),
+                (-half_width, north),
+                (-end, north),
+            )
         elif self.layout not in ("corridor", "passing_bay"):
             raise ConfigurationError(f"unknown world layout {self.layout!r}")
 

@@ -236,7 +236,7 @@ def _world_spec(
     )
     if width is None:
         return base, None
-    if base.layout == "corridor":
+    if base.layout not in ("blind_corner", "passing_bay"):
         raise ConfigurationError(f"world {world.id!r} has no corridor-width context")
     original_width = base.corridor_width_m
     half = original_width / 2

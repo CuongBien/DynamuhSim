@@ -176,6 +176,62 @@ Chạy 1.000 bước vật lý với lệnh tiến cố định trong cùng cấ
 env -u DISPLAY -u WAYLAND_DISPLAY .venv/bin/python -m narrow_nav.simulation.smoke --ticks 40 --vx 0.35 worlds=school_floor scenarios=school_floor_baseline robots=mecanum_robot corridor_width=w070
 ```
 
+## Ba môi trường tham số chuẩn (Ngã 4, Chữ L, Chữ I)
+
+Ba cặp `worlds`/`scenarios` chuẩn dùng tham số `worlds.width_m` (`0.9`, `1.5`, `2.1` m) và `worlds.length_m` (`5`, `10`, `15`, `20` m), tổng cộng 36 tổ hợp:
+
+- `corridor_i`: hành lang thẳng chữ I, dài `worlds.length_m`, rộng `worlds.width_m`.
+- `corridor_l`: hành lang chữ L (hai nhánh Tây và Bắc vuông góc tại `(0, 0)`), mỗi nhánh dài `worlds.length_m`, rộng `worlds.width_m`.
+- `intersection`: giao lộ ngã 4 đối xứng tại `(0, 0)`, mỗi nhánh dài `worlds.length_m`, rộng `worlds.width_m`.
+
+Ví dụ mở một cấu hình cụ thể trong viewer, lái bằng teleop D435i, hoặc kiểm tra headless với `smoke`:
+
+```bash
+# Giao lộ ngã 4 · rộng 0,9 m · mỗi nhánh dài 5 m
+.venv/bin/python -m narrow_nav.simulation.mujoco.view_world \
+  worlds=intersection scenarios=intersection robots=mecanum_robot \
+  worlds.width_m=0.9 worlds.length_m=5.0
+
+# Hành lang chữ L · teleop + D435i · rộng 1,5 m · mỗi nhánh dài 15 m
+.venv/bin/python -m narrow_nav.simulation.mujoco.teleop_depth sensors=d435i \
+  worlds=corridor_l scenarios=corridor_l worlds.width_m=1.5 worlds.length_m=15.0
+
+# Hành lang thẳng chữ I · headless smoke · rộng 2,1 m · dài 20 m
+env -u DISPLAY -u WAYLAND_DISPLAY .venv/bin/python -m narrow_nav.simulation.smoke \
+  --ticks 40 --vx 0.35 worlds=corridor_i scenarios=corridor_i \
+  robots=mecanum_robot worlds.width_m=2.1 worlds.length_m=20.0
+```
+
+Chạy lần lượt toàn bộ 36 tổ hợp (mở viewer từng môi trường, đóng cửa sổ để chuyển sang môi trường kế tiếp):
+
+```bash
+for env_name in intersection corridor_l corridor_i; do
+  for w in 0.9 1.5 2.1; do
+    for l in 5 10 15 20; do
+      echo "=== $env_name | width=${w}m | length=${l}m ==="
+      .venv/bin/python -m narrow_nav.simulation.mujoco.view_world \
+        "worlds=$env_name" "scenarios=$env_name" robots=mecanum_robot \
+        "worlds.width_m=$w" "worlds.length_m=$l"
+    done
+  done
+done
+```
+
+Chạy kiểm tra headless toàn bộ 36 tổ hợp qua `smoke`:
+
+```bash
+for env_name in intersection corridor_l corridor_i; do
+  for w in 0.9 1.5 2.1; do
+    for l in 5 10 15 20; do
+      echo "=== $env_name | width=${w}m | length=${l}m ==="
+      env -u DISPLAY -u WAYLAND_DISPLAY .venv/bin/python -m narrow_nav.simulation.smoke \
+        --ticks 20 --vx 0.35 "worlds=$env_name" "scenarios=$env_name" \
+        robots=mecanum_robot "worlds.width_m=$w" "worlds.length_m=$l"
+    done
+  done
+done
+```
+
 ## Kiểm tra cấu hình trước khi triển khai hành vi
 
 Ví dụ xuất cấu hình đã resolve và chạy smoke headless cho `hospital_hard` với cùng seed. Chạy từ thư mục gốc dự án. `smoke.json` chứa thống kê kiểm tra runtime. Pilot dataset có điều kiện nghiệm thu riêng ở TASK 04C. [Lộ trình](ROADMAP.md)

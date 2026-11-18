@@ -62,6 +62,9 @@ def test_width_context_compiles_and_matches_wall_faces(world, scenario, preset, 
     [
         ("arena_dataset", "arena_dataset"),
         ("corridor", "head_on"),
+        ("corridor_i", "corridor_i"),
+        ("corridor_l", "corridor_l"),
+        ("intersection", "intersection"),
         *(
             (name, name)
             for name in (

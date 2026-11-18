@@ -14,11 +14,13 @@ World dùng mét, radian, XY nằm ngang, +Z hướng lên và mặt sàn ở Z 
 
 | World | Hình học và biến cấu hình | Số đo mặc định |
 | --- | --- | --- |
-| `corridor` | World tham số dùng cho fixture. `worlds.length_m` và `worlds.width_m` đặt kích thước. Ba world cố định 30 m có sẵn để khảo sát bề rộng ở các mốc sau. | Dài 10 m, thông thủy 2,0 m. |
+| `corridor` / `corridor_i` | World tham số cho hành lang thẳng chữ I. `worlds.length_m` và `worlds.width_m` đặt kích thước thông thủy. `corridor_i` dùng cặp scenario `corridor_i` đặt actor trên trục tâm cho mọi mức rộng `0,9 / 1,5 / 2,1 m` và dài `5 / 10 / 15 / 20 m`. | `corridor`: dài 10 m, rộng 2,0 m; `corridor_i`: dài 10 m, rộng 1,5 m. |
+| `l_corridor` (`corridor_l`) | Hành lang chữ L không hốc nhường đường. Góc rẽ đặt tại tâm `(0, 0)`, nhánh Tây dọc `-X` và nhánh Bắc dọc `+Y`, mỗi nhánh dài `worlds.length_m` tính từ mép ô giao góc `±width_m/2` (hoặc dùng thêm `turn_length_m` cho nhánh Bắc). | Mỗi nhánh dài 10 m, thông thủy 1,5 m. |
+| `intersection` | Giao lộ ngã 4 đối xứng tâm `(0, 0)` với bốn nhánh Tây/Đông/Nam/Bắc, mỗi nhánh dài `worlds.length_m` tính từ mép ô giao lộ `±width_m/2` và thông thủy `worlds.width_m`. | Mỗi nhánh dài 10 m, thông thủy 1,5 m. |
 | `blind_corner` | Nhánh cùng bề rộng nối về +Y ở đầu +X. `turn_length_m` đo từ mép trên của hành lang chính tới cuối nhánh. Một hốc nằm trên vách +Y của đoạn thẳng trước khi rẽ. | Hai nhánh rộng 1,6 m, nhánh rẽ dài 4 m. Hốc rộng 1,20 m dọc X, sâu 1,10 m từ mặt tường, tâm miệng ở X = 1,20 m. Góc vẫn che khuất tia từ spawn tới đích. |
 | `passing_bay` | Hốc ở phía +Y. `passing_bay_width_m` là tổng thông thủy từ tường phía nam tới tường trong hốc. `passing_bay_length_m` và `passing_bay_center_x_m` định kích thước và vị trí hốc dọc X. | Hành lang 1,4 m, hốc 2,4 m, dài 2,5 m và đặt giữa hành lang. |
 
-`wall_height_m` và `wall_thickness_m` dùng chung cho ba layout. `blind_corner` và `passing_bay` dùng chung ba trường `passing_bay_*` để dựng sàn và tường hốc. Với góc khuất, hốc phải nằm trong đoạn thẳng với đủ vách giữa hốc và góc rẽ. `robots.radius_m` và `scenarios.human_profile.radius_m` là bán kính footprint. Scene `head_on` đặt hai làn tại Y = ±0,2 m để cùng cấu hình spawn còn hợp lệ ở bề rộng 1,0 m. Hai scenario bổ sung đặt đích sau góc rẽ và trong hốc.
+`wall_height_m` và `wall_thickness_m` dùng chung cho năm layout tham số (`corridor`, `l_corridor`, `intersection`, `blind_corner`, `passing_bay`). `blind_corner` và `passing_bay` dùng chung ba trường `passing_bay_*` để dựng sàn và tường hốc. Với góc khuất, hốc phải nằm trong đoạn thẳng với đủ vách giữa hốc và góc rẽ. `robots.radius_m` và `scenarios.human_profile.radius_m` là bán kính footprint. Scene `head_on` đặt hai làn tại Y = ±0,2 m để cùng cấu hình spawn còn hợp lệ ở bề rộng 1,0 m. Hai scenario bổ sung đặt đích sau góc rẽ và trong hốc.
 
 ## World chuyển từ DynamuhSim
 

@@ -162,6 +162,8 @@ def test_blind_corner_wall_blocks_line_of_sight():
             "passing_bay_width_m",
         ),
         (["worlds=passing_bay", "worlds.passing_bay_center_x_m=4.8"], "wall returns"),
+        (["worlds=corridor_l", "worlds.length_m=0.15"], "arm lengths"),
+        (["worlds=intersection", "worlds.length_m=0.15"], "arm length"),
         (["robots.radius_m=0.16"], "robot footprint"),
         (["robots.mass_kg=0.4"], "total wheel mass"),
     ],
@@ -169,3 +171,96 @@ def test_blind_corner_wall_blocks_line_of_sight():
 def test_invalid_geometry_rejected(overrides, error):
     with pytest.raises(ConfigurationError, match=error):
         build_world(compose_config(overrides=overrides))
+
+
+@pytest.mark.parametrize("world", ["corridor_i", "corridor_l", "intersection"])
+@pytest.mark.parametrize("width_m", [0.9, 1.5, 2.1])
+@pytest.mark.parametrize("length_m", [5.0, 10.0, 15.0, 20.0])
+def test_standard_parametric_environments_compile_and_match_dimensions(
+    world, width_m, length_m
+):
+    overrides = [
+        f"worlds={world}",
+        f"scenarios={world}",
+        f"worlds.width_m={width_m}",
+        f"worlds.length_m={length_m}",
+        "simulation.human_visuals=proxy",
+    ]
+    # Validate default differential footprint as well as mecanum.
+    compose_config(overrides=overrides)
+    config = compose_config(overrides=[*overrides, "robots=mecanum_robot"])
+    built = build_world(config)
+    collision = inspect_world(built)
+    model = mujoco.MjModel.from_xml_string(built.mjcf)
+    data = mujoco.MjData(model)
+    mujoco.mj_forward(model, data)
+
+    wall_group = np.array([0, 1, 0, 0, 0, 0], dtype=np.uint8)
+    geom_id = np.empty(1, dtype=np.int32)
+
+    def span(x: float, y: float, axis: int) -> float:
+        origin = np.array([x, y, 0.2])
+        direction = np.eye(3)[axis]
+        hits = [
+            mujoco.mj_ray(
+                model, data, origin, sign * direction, wall_group, True, -1, geom_id
+            )
+            for sign in (-1, 1)
+        ]
+        assert min(hits) > 0, (world, width_m, length_m, origin, hits)
+        return float(sum(hits))
+
+    if world == "corridor_i":
+        assert span(0.0, 0.0, 0) == pytest.approx(length_m, abs=1e-6)
+        assert span(0.0, 0.0, 1) == pytest.approx(width_m, abs=1e-6)
+        assert collision.clear_width(0.0, 0.0) == pytest.approx(width_m, abs=1e-9)
+    elif world == "corridor_l":
+        arm_mid = width_m / 2 + length_m / 2
+        assert span(-arm_mid, 0.0, 1) == pytest.approx(width_m, abs=1e-6)
+        assert span(0.0, arm_mid, 0) == pytest.approx(width_m, abs=1e-6)
+        assert span(-arm_mid, 0.0, 0) == pytest.approx(length_m + width_m, abs=1e-6)
+        assert span(0.0, arm_mid, 1) == pytest.approx(length_m + width_m, abs=1e-6)
+        assert collision.clear_width(-arm_mid, 0.0) == pytest.approx(width_m, abs=1e-9)
+    else:
+        arm_mid = width_m / 2 + length_m / 2
+        for x in (-arm_mid, arm_mid):
+            assert span(x, 0.0, 1) == pytest.approx(width_m, abs=1e-6)
+            assert collision.clear_width(x, 0.0) == pytest.approx(width_m, abs=1e-9)
+        for y in (-arm_mid, arm_mid):
+            assert span(0.0, y, 0) == pytest.approx(width_m, abs=1e-6)
+        assert span(0.0, 0.0, 0) == pytest.approx(2 * length_m + width_m, abs=1e-6)
+        assert span(0.0, 0.0, 1) == pytest.approx(2 * length_m + width_m, abs=1e-6)
+
+    for contact in data.contact:
+        assert 1 not in (
+            model.geom_group[contact.geom1],
+            model.geom_group[contact.geom2],
+        )
+
+
+def test_corridor_l_blocks_line_of_sight_around_corner():
+    built = build_world(
+        compose_config(
+            overrides=[
+                "worlds=corridor_l",
+                "scenarios=corridor_l",
+                "worlds.width_m=0.9",
+                "worlds.length_m=5.0",
+                "simulation.human_visuals=proxy",
+            ]
+        )
+    )
+    model = mujoco.MjModel.from_xml_string(built.mjcf)
+    data = mujoco.MjData(model)
+    mujoco.mj_forward(model, data)
+    origin = np.array([-4.0, 0.0, 0.3])
+    target = np.array([0.0, 4.0, 0.3])
+    direction = target - origin
+    distance = np.linalg.norm(direction)
+    wall_group = np.array([0, 1, 0, 0, 0, 0], dtype=np.uint8)
+    geom_id = np.empty(1, dtype=np.int32)
+    hit = mujoco.mj_ray(
+        model, data, origin, direction / distance, wall_group, True, -1, geom_id
+    )
+    assert 0 < hit < distance
+    assert model.geom(geom_id[0]).name.startswith("wall_")
